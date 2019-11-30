@@ -14,8 +14,8 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

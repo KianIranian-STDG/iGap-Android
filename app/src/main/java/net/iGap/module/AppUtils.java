@@ -32,6 +32,7 @@ import androidx.core.content.FileProvider;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -262,16 +263,11 @@ public final class AppUtils {
 
                     view.setImageBitmap(bitmap);
                     final String savedPath = AppUtils.saveMapToFile(bitmap, message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                if (message.getLocation() != null) {
-                                    message.getLocation().setImagePath(savedPath);
-                                }
-                            }
-                        });
-                    }
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        if (message.getLocation() != null) {
+                            message.getLocation().setImagePath(savedPath);
+                        }
+                    });
                 }
             });
         }
@@ -456,7 +452,7 @@ public final class AppUtils {
                     messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, G.fragmentActivity.getString(R.string.location_message));
                     break;
                 case LOG:
-                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(G.fragmentActivity,message.getLogs(), false).toString());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(G.fragmentActivity, message.getLogs(), false).toString());
                     break;
                 case VIDEO_TEXT:
                 case VIDEO:
@@ -564,7 +560,7 @@ public final class AppUtils {
     }
 
     public static String computeLastMessage(long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             String lastMessage = "";
             RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
             for (RealmRoomMessage realmRoomMessage : realmList) {
@@ -574,7 +570,7 @@ public final class AppUtils {
                 }
             }
             return lastMessage;
-        }
+        });
     }
 
     public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {
@@ -664,15 +660,15 @@ public final class AppUtils {
     public static void shareItem(Intent intent, StructMessageInfo messageInfo) {
 
         try {
-            String message = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessage() : messageInfo.messageText;
+            String message = messageInfo.realmRoomMessage.getForwardMessage() != null ? messageInfo.realmRoomMessage.getForwardMessage().getMessage() : messageInfo.realmRoomMessage.getMessage();
             if (message != null) {
                 intent.putExtra(Intent.EXTRA_TEXT, message);
             }
             String filePath;
-            if (messageInfo.forwardedFrom != null) {
-                filePath = messageInfo.forwardedFrom.getAttachment().getLocalFilePath() != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.forwardedFrom.getAttachment().getCacheId(), messageInfo.forwardedFrom.getAttachment().getName(), messageInfo.messageType);
+            if (messageInfo.realmRoomMessage.getForwardMessage() != null) {
+                filePath = messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() != null ? messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getCacheId(), messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getName(), messageInfo.realmRoomMessage.getMessageType());
             } else {
-                filePath = messageInfo.getAttachment().localFilePath != null ? messageInfo.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(messageInfo.getAttachment().cashID, messageInfo.getAttachment().name, messageInfo.messageType);
+                filePath = messageInfo.getAttachment().getLocalFilePath() != null ? messageInfo.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.getAttachment().getCacheId(), messageInfo.getAttachment().getCacheId(), messageInfo.realmRoomMessage.getMessageType());
             }
 
             if (filePath != null) {

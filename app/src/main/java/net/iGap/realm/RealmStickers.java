@@ -4,6 +4,7 @@ package net.iGap.realm;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
+import net.iGap.DbManager;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
@@ -81,8 +82,8 @@ public class RealmStickers extends RealmObject {
     }
 
     public static List<com.vanniktech.emoji.sticker.struct.StructGroupSticker> getAllStickers(boolean isFavorite) {
-        List<com.vanniktech.emoji.sticker.struct.StructGroupSticker> stickers = new ArrayList<>();
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            List<com.vanniktech.emoji.sticker.struct.StructGroupSticker> stickers = new ArrayList<>();
             RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, isFavorite).findAll();
 
             for (RealmStickers item : realmStickers) {
@@ -121,12 +122,12 @@ public class RealmStickers extends RealmObject {
                 itemSticker.setStickers(stickerDetails);
                 stickers.add(itemSticker);
             }
-        }
-        return stickers;
+            return stickers;
+        });
     }
 
     public static com.vanniktech.emoji.sticker.struct.StructGroupSticker getEachSticker(String groupId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
 
             if (realmStickers == null) return null;
@@ -165,31 +166,20 @@ public class RealmStickers extends RealmObject {
             itemSticker.setStickers(stickerDetails);
 
             return itemSticker;
-        }
+        });
     }
 
     public static RealmStickers checkStickerExist(String groupId, Realm realm) {
-        RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
-
-        if (realmStickers == null) return realmStickers;
-
-        return realmStickers;
+        return realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
     }
 
-    public static RealmStickers updateFavorite(String groupId, boolean isFavorite) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
-            if (realmStickers != null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmStickers.setFavorite(isFavorite);
-                    }
-                });
-            }
-
-            return realmStickers;
+    public static RealmStickers updateFavorite(Realm realm, String groupId, boolean isFavorite) {
+        RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
+        if (realmStickers != null) {
+            realmStickers.setFavorite(isFavorite);
         }
+
+        return realmStickers;
     }
 
     public long getCreatedAt() {
@@ -327,7 +317,7 @@ public class RealmStickers extends RealmObject {
     }
 
     public static void updateStickers(List<StructGroupSticker> mData, Realm.Transaction.OnSuccess onSuccess) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -353,6 +343,6 @@ public class RealmStickers extends RealmObject {
                     }
                 }
             }, onSuccess);
-        }
+        });
     }
 }

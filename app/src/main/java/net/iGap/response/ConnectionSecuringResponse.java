@@ -90,8 +90,8 @@ public class ConnectionSecuringResponse extends MessageHandler {
          * if socket is not connect don't need to try for disconnect again because after establish
          * internet connection these steps will be done
          */
-        if (WebSocketClient.isConnect()) {
-            WebSocketClient.getInstance().disconnect();
+        if (WebSocketClient.getInstance().isConnect()) {
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
         super.timeOut();
     }

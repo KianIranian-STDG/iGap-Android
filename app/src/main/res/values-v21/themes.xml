@@ -6,7 +6,8 @@
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -16,14 +17,17 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_dark</item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme.baseLightTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -35,13 +39,16 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_light</item>
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme.baseRedTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -52,14 +59,17 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_red</item>
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme.basePinkTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -71,13 +81,16 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_pink</item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme.basePurpleTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -88,14 +101,17 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_purple</item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme.baseBlueTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -106,14 +122,17 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_blue</item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme.baseGreenTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -125,13 +144,16 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_green</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme.baseAmberTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -142,14 +164,17 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_amber</item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme.baseOrangeTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -161,13 +186,16 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_orange</item>
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme.baseDarkGrayTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
         <item name="iGapAvatarBackground">@drawable/circle_mic</item>
-        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color
+        </item>
         <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
         <item name="iGapButtonSelector">@drawable/button_selector</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
@@ -179,6 +207,8 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_dark_gray</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

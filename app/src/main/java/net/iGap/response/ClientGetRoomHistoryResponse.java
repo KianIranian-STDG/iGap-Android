@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.DataBinderMapperImpl;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomHistory;
@@ -46,8 +48,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction = identityParams.direction;
 
             final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -59,7 +60,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         }
                     }
                 });
-            }
+            });
             G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory, direction);
 
         } else {

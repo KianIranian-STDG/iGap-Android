@@ -353,8 +353,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         if (typeCreate.equals("CHANNEL")) {
             ((ActivityMain) getActivity()).removeAllFragmentFromMain();
             return true;
-        }
-        else
+        } else
             return false;
     }
 

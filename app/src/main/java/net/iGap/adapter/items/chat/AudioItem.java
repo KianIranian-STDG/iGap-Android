@@ -98,10 +98,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        if (mMessage.forwardedFrom != null) {
-            holder.mMessageID = mMessage.forwardedFrom.getMessageId() + "";
+        if (mMessage.getForwardMessage() != null) {
+            holder.mMessageID = mMessage.getForwardMessage().getMessageId() + "";
         } else {
-            holder.mMessageID = mMessage.messageID;
+            holder.mMessageID = mMessage.getMessageId() + "";
         }
 
         holder.seekBar.setTag(holder.mMessageID);
@@ -159,8 +159,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             if (holder.mFilePath.length() < 1)
                 return;
 
-            if (mMessage != null && mMessage.getAttachment() != null) {
-                name = mMessage.getAttachment().name;
+            if (mMessage != null && structMessage.getAttachment() != null) {
+                name = structMessage.getAttachment().getName();
             }
 
             if (holder.mMessageID.equals(MusicPlayer.messageId)) {
@@ -204,16 +204,16 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
 
 
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getAttachment() != null) {
-                if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
+        if (mMessage.getForwardMessage() != null) {
+            if (mMessage.getForwardMessage().getAttachment() != null) {
+                if (mMessage.getForwardMessage().getAttachment().isFileExistsOnLocal()) {
 
                 } else {
-                    holder.songSize.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
+                    holder.songSize.setText(AndroidUtils.humanReadableByteCount(mMessage.getForwardMessage().getAttachment().getSize(), true));
                 }
-                holder.songFileName.setText(mMessage.forwardedFrom.getAttachment().getName());
-                if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
-                    String artistName = AndroidUtils.getAudioArtistName(mMessage.forwardedFrom.getAttachment().getLocalFilePath());
+                holder.songFileName.setText(mMessage.getForwardMessage().getAttachment().getName());
+                if (mMessage.getForwardMessage().getAttachment().isFileExistsOnLocal()) {
+                    String artistName = AndroidUtils.getAudioArtistName(mMessage.getForwardMessage().getAttachment().getLocalFilePath());
                     if (!TextUtils.isEmpty(artistName)) {
                         holder.songArtist.setText(artistName);
                     } else {
@@ -223,16 +223,16 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             }
 
         } else {
-            if (mMessage.attachment != null) {
-                if (mMessage.attachment.isFileExistsOnLocal()) {
+            if (structMessage.getAttachment() != null) {
+                if (structMessage.getAttachment().isFileExistsOnLocal()) {
 
                 } else {
-                    holder.songSize.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+                    holder.songSize.setText(AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true));
                 }
-                holder.songFileName.setText(mMessage.attachment.name);
+                holder.songFileName.setText(structMessage.getAttachment().getName());
             }
-            if (!TextUtils.isEmpty(mMessage.songArtist)) {
-                holder.songArtist.setText(mMessage.songArtist);
+            if (!TextUtils.isEmpty(structMessage.songArtist)) {
+                holder.songArtist.setText(structMessage.songArtist);
             } else {
                 holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
             }
@@ -240,7 +240,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         setTextIfNeeded(holder.messageView);
 
-        final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
+        final long _st = (int) ((mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getDuration() : structMessage.getAttachment().getDuration()) * 1000);
 
         holder.songTimeTv.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
 

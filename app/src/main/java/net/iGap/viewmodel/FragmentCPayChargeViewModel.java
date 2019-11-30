@@ -7,10 +7,9 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.repository.CPayRepository;
 import net.iGap.model.cPay.CPayWalletAmountModel;
 import net.iGap.model.cPay.ChargeWalletBodyModel;
@@ -33,7 +32,7 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
 
     public void getRequestAmountFromServer() {
         getLoaderListener().setValue(true);
-        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque), this,this);
+        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque), this, this);
     }
 
     @Override

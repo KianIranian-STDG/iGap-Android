@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.fragments.FragmentiGapMap;
 
 import io.realm.Realm;
@@ -19,7 +20,7 @@ public class RealmGeoGetConfiguration extends RealmObject {
     private String mapCache;
 
     public static void putOrUpdate(final String mapCache) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -34,7 +35,7 @@ public class RealmGeoGetConfiguration extends RealmObject {
                     realmGeoGetConfiguration.setMapCache(mapCache);
                 }
             });
-        }
+        });
     }
 
     public String getMapCache() {

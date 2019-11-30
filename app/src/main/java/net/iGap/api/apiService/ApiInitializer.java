@@ -15,7 +15,7 @@ import retrofit2.Response;
 
 public class ApiInitializer<T> {
 
-    public void initAPI (Call<T> retrofitCall, HandShakeCallback handShakeCallback, ResponseCallback<T> retrofitCallback) {
+    public void initAPI(Call<T> retrofitCall, HandShakeCallback handShakeCallback, ResponseCallback<T> retrofitCallback) {
 
         retrofitCallback.setProgressIndicator(true);
         retrofitCall.enqueue(new Callback<T>() {
@@ -71,7 +71,7 @@ public class ApiInitializer<T> {
 
     }
 
-    public void initAPI (Call<T> retrofitCall, ResponseCallback<T> retrofitCallback) {
+    public void initAPI(Call<T> retrofitCall, ResponseCallback<T> retrofitCallback) {
 
         retrofitCallback.setProgressIndicator(true);
         retrofitCall.enqueue(new Callback<T>() {

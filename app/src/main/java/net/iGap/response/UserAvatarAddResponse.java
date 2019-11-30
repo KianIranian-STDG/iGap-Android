@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoUserAvatarAdd;
 import net.iGap.realm.RealmAvatar;
@@ -38,14 +40,14 @@ public class UserAvatarAddResponse extends MessageHandler {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmAvatar.putOrUpdate(realm, G.userId, userAvatarAddResponse.getAvatar());
+                            RealmAvatar.putOrUpdate(realm, AccountManager.getInstance().getCurrentUser().getId(), userAvatarAddResponse.getAvatar());
                         }
                     });
-                }
+                });
             }
         }).start();
 

@@ -27,6 +27,7 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationBinding;
@@ -52,7 +53,6 @@ public class FragmentNotificationViewModel {
     public ObservableField<String> notificationState = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     public ObservableField<String> vibrate = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     public ObservableField<String> sound = new ObservableField<>();
-    private Realm realm;
     private RealmNotificationSetting realmNotificationSetting;
     private ProtoGlobal.Room.Type roomType;
     private FragmentNotificationBinding fragmentNotificationBinding;
@@ -67,7 +67,6 @@ public class FragmentNotificationViewModel {
         this.fragmentNotificationBinding = fragmentNotificationBinding;
         this.roomId = roomId;
 
-        realm = Realm.getDefaultInstance();
         roomType = RealmRoom.detectType(roomId);
         getInfo();
 
@@ -314,7 +313,7 @@ public class FragmentNotificationViewModel {
     private void getInfo() {
         switch (roomType) {
             case GROUP: {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                     if (realmRoom != null && realmRoom.getGroupRoom() != null) {
@@ -328,12 +327,12 @@ public class FragmentNotificationViewModel {
                             getRealm();
                         }
                     }
-                }
+                });
             }
 
             break;
             case CHANNEL: {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                     if (realmRoom != null && realmRoom.getChannelRoom() != null) {
@@ -347,11 +346,11 @@ public class FragmentNotificationViewModel {
                             getRealm();
                         }
                     }
-                }
+                });
                 break;
             }
             case CHAT: {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                     if (realmRoom != null && realmRoom.getChatRoom() != null) {
@@ -365,7 +364,7 @@ public class FragmentNotificationViewModel {
                             getRealm();
                         }
                     }
-                }
+                });
 
                 break;
             }
@@ -391,9 +390,5 @@ public class FragmentNotificationViewModel {
         } else {
             realmLedColor = -8257792;
         }
-    }
-
-    public void destroy() {
-        realm.close();
     }
 }

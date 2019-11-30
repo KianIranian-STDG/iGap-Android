@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -32,6 +33,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
@@ -97,14 +99,23 @@ public class HelperLogMessage {
     }
 
     private static SpannableStringBuilder extractLog(Context context, StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            String authorName = getAuthorName(log, realm);
-            String targetName = getTargetName(log, realm);
-            String finalTypeRoom = getRoomTypeString(log, realm);
-            String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
-            return getLogMessage(context, authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
-        }
+        SpannableStringBuilder spannableStringBuilder = DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                String authorName = getAuthorName(log, realm);
+                String targetName = getTargetName(log, realm);
+                String finalTypeRoom = getRoomTypeString(log, realm);
+                String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
+                return getLogMessage(context, authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
+            } catch (Exception e) {
+                return null;
+            }
+        });
 
+        if (spannableStringBuilder == null) {
+            throw new InvalidProtocolBufferException("Bug");
+        } else {
+            return spannableStringBuilder;
+        }
     }
 
     private static String getAuthorName(StructMyLog log, Realm realm) throws InvalidProtocolBufferException {
@@ -198,7 +209,7 @@ public class HelperLogMessage {
                 messageID = R.string.Room_Deleted_log;
                 break;
             case MISSED_VOICE_CALL:
-                if (G.authorHash.equals(author.getHash())) {
+                if (RealmUserInfo.getCurrentUserAuthorHash().equals(author.getHash())) {
                     messageID = R.string.not_answerd_call;
                 } else {
                     messageID = R.string.MISSED_VOICE_CALL;
@@ -404,7 +415,7 @@ public class HelperLogMessage {
     }
 
     private static void gotToUserRoom(final long id) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
             if (realmRoom != null) {
                 //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
@@ -461,11 +472,11 @@ public class HelperLogMessage {
 
                 new RequestChatGetRoom().chatGetRoom(id);
             }
-        }
+        });
     }
 
     private static void goToRoom(Long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             //ToDo:fixed it and change to do not use G.currentActivity
             if (realmRoom != null) {
@@ -473,7 +484,7 @@ public class HelperLogMessage {
             } else {
                 RealmRoom.needUpdateRoomInfo(roomId);
             }
-        }
+        });
     }
 
 

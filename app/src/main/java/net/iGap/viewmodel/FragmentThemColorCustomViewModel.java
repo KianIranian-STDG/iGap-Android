@@ -150,16 +150,16 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
                             break;
                         case R.string.app_notif_color:
 
-                          //  G.notificationColor = "#" + Integer.toHexString(picker.getColor());
-                         //   editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+                            //  G.notificationColor = "#" + Integer.toHexString(picker.getColor());
+                            //   editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
                             editor.apply();
                             notificationColorClick(0, true);
 
                             break;
                         case R.string.toggle_botton_color:
 
-                         //   G.toggleButtonColor = "#" + Integer.toHexString(picker.getColor());
-                       //     editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
+                            //   G.toggleButtonColor = "#" + Integer.toHexString(picker.getColor());
+                            //     editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
                             editor.apply();
                             toggleBottomClick(0);
 
@@ -248,7 +248,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgTitleBarColor.getBackground();
-        //    bgShape.setColor(Color.parseColor(G.appBarColor));
+            //    bgShape.setColor(Color.parseColor(G.appBarColor));
         }
     }
 
@@ -256,7 +256,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgNotificationColor.getBackground();
-          //  bgShape.setColor(Color.parseColor(G.notificationColor));
+            //  bgShape.setColor(Color.parseColor(G.notificationColor));
         }
 
     }
@@ -275,7 +275,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgToggleBottonColor.getBackground();
-           // bgShape.setColor(Color.parseColor(G.toggleButtonColor));
+            // bgShape.setColor(Color.parseColor(G.toggleButtonColor));
         }
     }
 

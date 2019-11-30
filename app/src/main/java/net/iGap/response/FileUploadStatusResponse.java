@@ -10,23 +10,16 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
-import net.iGap.helper.HelperSetAction;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.proto.ProtoFileUploadStatus;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
-
-import io.realm.Realm;
+import net.iGap.request.RequestFileUploadStatus;
 
 public class FileUploadStatusResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public FileUploadStatusResponse(int actionId, Object protoClass, String identity) {
+    public FileUploadStatusResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -38,7 +31,7 @@ public class FileUploadStatusResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoFileUploadStatus.FileUploadStatusResponse.Builder builder = (ProtoFileUploadStatus.FileUploadStatusResponse.Builder) message;
-        HelperUploadFile.onFileUploadStatusResponse.onFileUploadStatus(builder.getStatus(), builder.getProgress(), builder.getRecheckDelayMs(), this.identity, builder.getResponse());
+        ((RequestFileUploadStatus.OnFileUploadStatus) identity).onFileUploadStatus(builder.getStatus(), builder.getProgress(), builder.getRecheckDelayMs());
     }
 
     @Override
@@ -49,43 +42,7 @@ public class FileUploadStatusResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        HelperUploadFile.onFileUpload.onFileUploadTimeOut(this.identity);
-        HelperSetAction.sendCancel(Long.parseLong(this.identity));
-        makeFailed();
-    }
-
-    /**
-     * make messages failed
-     */
-    private void makeFailed() {
-        // message failed
-        long roomId = -1;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (message != null) {
-                        message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                    }
-                }
-            });
-            if (message != null) {
-                roomId = message.getRoomId();
-            }
-        }
-
-        final long finalRoomId = roomId;
-        if (finalRoomId != -1) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    G.refreshRealmUi();
-                    G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identity));
-
-                }
-            });
-        }
+        ((RequestFileUploadStatus.OnFileUploadStatus) identity).onFileUploadStatusError(majorCode, minorCode);
     }
 }
 

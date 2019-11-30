@@ -2,6 +2,7 @@ package net.iGap.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.api.repository.CPayRepository;
@@ -34,7 +35,7 @@ public class FragmentCPayEditViewModel extends BaseCPayViewModel<RegisterPlaqueM
 
     private void registerPlaque(String plaque) {
 
-        String phone = ActivityMain.userPhoneNumber;
+        String phone = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
         if (phone.startsWith("98")) {
             phone = "0" + phone.substring(2);
         } else if (phone.startsWith("+98")) {

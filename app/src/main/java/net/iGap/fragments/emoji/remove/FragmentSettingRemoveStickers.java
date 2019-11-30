@@ -29,7 +29,6 @@ import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
 import net.iGap.realm.RealmStickers;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -72,7 +72,7 @@ public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListen
         cPayChargeViewModel.setPlaque(plaqueText);
         cPayChargeViewModel.getRequestAmountFromServer();
 
-        binding.plaqueBg.setBackground(new Theme().tintDrawable(binding.plaqueBg.getBackground(),getContext(),R.attr.iGapCardViewColor));
+        binding.plaqueBg.setBackground(new Theme().tintDrawable(binding.plaqueBg.getBackground(), getContext(), R.attr.iGapCardViewColor));
         initPlaque();
         setupSpinner();
         initCallback();

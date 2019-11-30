@@ -20,6 +20,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -185,19 +186,17 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
                 break;
             case WALLET_MENU:/** tested **/
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                    if (!G.isWalletRegister) {
-                        new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
-                    } else {
-                        boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
-                        activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                        String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
+                        if (!G.isWalletRegister) {
 
+                            new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
+                        } else {
+                            boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
+                            activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
+                        }
+                    });
                 break;
             case NEARBY_MENU:/** tested **/
                 try {
@@ -373,12 +372,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onSuccess(MciPurchaseResponse data) {
                 HelperUrl.closeDialogWaiting();
-                new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), data.getToken(), new PaymentCallBack() {
-                    @Override
-                    public void onPaymentFinished(PaymentResult result) {
-
-                    }
-                });
+                new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), data.getToken(), null);
             }
 
             @Override

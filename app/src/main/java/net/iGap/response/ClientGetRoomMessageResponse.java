@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomMessage;
 import net.iGap.proto.ProtoError;
@@ -36,7 +37,7 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder builder = (ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder) message;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra extra = (RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra) identity;
 
             realm.executeTransaction(new Realm.Transaction() {
@@ -48,8 +49,7 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
             if (extra.getOnClientGetRoomMessage() != null) {
                 extra.getOnClientGetRoomMessage().onClientGetRoomMessageResponse(builder.getMessage());
             }
-        }
-
+        });
     }
 
     @Override

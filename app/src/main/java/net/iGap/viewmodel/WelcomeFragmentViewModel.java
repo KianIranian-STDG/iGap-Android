@@ -8,13 +8,13 @@ import net.iGap.module.SingleLiveEvent;
 
 public class WelcomeFragmentViewModel extends ViewModel {
 
-    private SingleLiveEvent<Long> goToRegistrationNicknamePage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goToRegistrationNicknamePage = new SingleLiveEvent<>();
 
-    public WelcomeFragmentViewModel(long userId) {
-        new Handler().postDelayed(() -> goToRegistrationNicknamePage.postValue(userId), 1000);
+    public WelcomeFragmentViewModel() {
+        new Handler().postDelayed(() -> goToRegistrationNicknamePage.postValue(true), 1000);
     }
 
-    public SingleLiveEvent<Long> getGoToRegistrationNicknamePage() {
+    public SingleLiveEvent<Boolean> getGoToRegistrationNicknamePage() {
         return goToRegistrationNicknamePage;
     }
 }

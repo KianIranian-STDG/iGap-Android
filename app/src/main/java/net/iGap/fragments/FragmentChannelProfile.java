@@ -2,10 +2,8 @@ package net.iGap.fragments;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -39,7 +37,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChannelAvatarDelete;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;

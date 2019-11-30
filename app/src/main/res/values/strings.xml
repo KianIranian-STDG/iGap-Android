@@ -1411,8 +1411,6 @@ Want to get it?</string>
     <string name="solid_colors">Solid colors</string>
     <string name="wallpapers">Wallpapers</string>
     <string name="planDB">iGapLocalDatabase.realm</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
-
     <string name="realmDatabaseEncrypt">iGapLocalDatabaseEncrypted.realm</string>
     <string name="realmDatabaseNonEncrypt">iGapLocalDatabase.realm</string>
     <string name="check_internet_connection">check internet connection</string>
@@ -2263,6 +2261,8 @@ Want to get it?</string>
     <string name="open_url">Open Link</string>
     <string name="copied">Copied</string>
     <string name="message_is_long">رسالتك طويلة جدًا. \n سيتم إخفاء الرسالة</string>
+    <string name="add_new_account">Add New Account</string>
+    <string name="profile">Profile</string>
 
     <string name="elecBill_Entry_lengthError">Bill ID must be 13 character.</string>
     <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
@@ -2389,5 +2389,6 @@ Want to get it?</string>
     <string name="msg_security_two_step_verification">In Order to retrieve your accountPlease Answer the following security questions,after answering correctly your two step verification password will be disabled and need to be activated again</string>
     <string name="show_and_login_using_qr_title">Scan this QR Code using your other device to log in to your iGap Account</string>
     <string name="two_step_verficatiion_header">You have enabled Two-Step verification; so your account is protected with an additional password</string>
+    <string name="login_exist_account_error">This account is login on this device</string>
 
 </resources>

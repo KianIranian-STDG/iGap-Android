@@ -359,7 +359,7 @@ public class FragmentGallery extends BaseFragment {
     private void openVideoForEdit(String path) {
         if (getActivity() == null) return;
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1)) {
+        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
             Intent intent = new Intent(getActivity(), ActivityTrimVideo.class);
             intent.putExtra("PATH", path);
             getActivity().startActivityForResult(intent, AttachFile.request_code_trim_video);

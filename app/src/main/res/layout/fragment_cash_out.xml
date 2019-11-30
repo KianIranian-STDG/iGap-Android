@@ -25,9 +25,9 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabTextColor="#80ffffff"
-            app:tabSelectedTextColor="#ffffff"
-            app:tabIndicatorColor="@android:color/white"
+            app:tabTextColor="?attr/iGapTitleTextColor"
+            app:tabSelectedTextColor="?attr/colorAccent"
+            app:tabIndicatorColor="?attr/colorAccent"
             app:tabMode="scrollable"
             app:tabGravity="fill"
             android:layoutDirection="ltr" />

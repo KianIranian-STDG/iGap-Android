@@ -75,7 +75,7 @@ public class StructListOfContact implements Comparable<StructListOfContact> {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj instanceof StructListOfContact){
+        if (obj instanceof StructListOfContact) {
             return this.phone.equals(((StructListOfContact) obj).phone);
         }
         return super.equals(obj);

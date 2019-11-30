@@ -23,6 +23,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -44,7 +45,6 @@ import static android.view.Gravity.CENTER;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 import static java.lang.Boolean.TRUE;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
@@ -71,21 +71,23 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getAttachment() != null) {
-                holder.cslf_txt_file_name.setText(mMessage.forwardedFrom.getAttachment().getName());
-                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
+        if (mMessage.getForwardMessage() != null) {
+            if (mMessage.getForwardMessage().getAttachment() != null) {
+                holder.cslf_txt_file_name.setText(mMessage.getForwardMessage().getAttachment().getName());
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.getForwardMessage().getAttachment().getSize(), true));
             }
         } else {
-            if (mMessage.attachment != null) {
-                holder.cslf_txt_file_name.setText(mMessage.attachment.name);
-                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+            if (structMessage.getAttachment() != null) {
+                holder.cslf_txt_file_name.setText(structMessage.getAttachment().getName());
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true));
             }
         }
 
         setTextIfNeeded(holder.messageView);
+        RealmRoomMessage roomMessage = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
+        });
 
-        RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst());
         if (roomMessage != null) {
             holder.thumbnail.setVisibility(View.VISIBLE);
             if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {

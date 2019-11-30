@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
 
 import java.util.List;

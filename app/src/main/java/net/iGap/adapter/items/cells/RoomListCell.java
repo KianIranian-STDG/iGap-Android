@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 
 import com.vanniktech.emoji.EmojiTextView;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -40,7 +41,6 @@ import net.iGap.view.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
-import static net.iGap.G.userId;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.adapter.items.chat.ViewMaker.setTextSize;
 import static net.iGap.adapter.items.chat.ViewMaker.setTypeFace;
@@ -116,7 +116,7 @@ public class RoomListCell extends FrameLayout {
             haveAvatar = true;
             final boolean isMyCloud;
 
-            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
 
             if (isMyCloud) {
                 avatarHandler.removeImageViewFromHandler(avatarImageView);
@@ -128,7 +128,7 @@ public class RoomListCell extends FrameLayout {
         } else {
             final boolean isMyCloud;
 
-            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
 
             if (isMyCloud) {
                 avatarHandler.removeImageViewFromHandler(avatarImageView);
@@ -527,7 +527,7 @@ public class RoomListCell extends FrameLayout {
     private void getLastMessage(RealmRoom room, EmojiTextView lastMessageTv) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
 
-        if (room.getActionState() != null && room.getActionStateUserId() != userId) {
+        if (room.getActionState() != null && room.getActionStateUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
 
             SpannableString typingSpannableString = new SpannableString(room.getActionState());
             typingSpannableString.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);

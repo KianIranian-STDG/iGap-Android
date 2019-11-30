@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.IVandActivityViewHolder;
 import net.iGap.adapter.items.ProgressBarViewHolder;

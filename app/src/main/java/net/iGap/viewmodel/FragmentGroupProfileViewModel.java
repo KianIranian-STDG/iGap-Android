@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentGroupProfile;
@@ -48,7 +49,6 @@ import net.iGap.request.RequestUserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmList;
 
 public class FragmentGroupProfileViewModel extends ViewModel {
@@ -112,12 +112,11 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public boolean isPopup = false;
     private long startMessageId = 0;
     public boolean isNeedgetContactlist = true;
-    private Realm realmGroupProfile;
     private FragmentGroupProfile fragment;
     private String memberCount;
 
     public FragmentGroupProfileViewModel() {
-        realmGroupProfile = Realm.getDefaultInstance();
+
     }
 
     public void init(FragmentGroupProfile fragmentGroupProfile, long roomId, boolean isNotJoin) {
@@ -127,7 +126,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         this.isNotJoin = isNotJoin;
 
         //group info
-        realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        });
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
@@ -279,7 +280,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     public void onClickRippleGroupAvatar() {
-        if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+        if (DbManager.getInstance().doRealmTask(realm -> { return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();}) != null) {
             goToShowAvatarPage.setValue(roomId);
         }
     }
@@ -359,7 +360,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
     public void addNewMember() {
         List<StructContactInfo> userList = Contacts.retrieve(null);
-        RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), roomId);
+        RealmList<RealmMember> memberList = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmMember.getMembers(realm, roomId);
+        });
 
         //ToDo: change algorithm order is n2
         for (int i = 0; i < memberList.size(); i++) {
@@ -378,26 +381,19 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         showDialogLeaveGroup.setValue(true);
     }
 
-    public void checkGroupIsEditable(){
+    public void checkGroupIsEditable() {
         if (realmRoom == null) return;
         role = realmRoom.getGroupRoom().getRole();
         showEditButton.setValue(isEditable());
     }
 
-    private boolean isEditable(){
-        return role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER ;
+    private boolean isEditable() {
+        return role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER;
     }
 
-    public boolean checkIsEditableAndReturnState(){
+    public boolean checkIsEditableAndReturnState() {
         checkGroupIsEditable();
         return isEditable();
-    }
-
-    private Realm getRealm() {
-        if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
-            realmGroupProfile = Realm.getDefaultInstance();
-        }
-        return realmGroupProfile;
     }
 
     public void setTextGroupLik() {
@@ -421,7 +417,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
             realmRoom.removeAllChangeListeners();
         }
 
-        realmGroupProfile.close();
         super.onCleared();
     }
 
@@ -486,7 +481,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                     @Override
                     public void run() {
                         setMemberCount(roomIdUser);
-                        RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
+                        RealmRegisteredInfo realmRegistered = DbManager.getInstance().doRealmTask(realm -> {
+                            return RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+                        });
 
                         if (realmRegistered == null) {
                             if (roomIdUser == roomId) {
@@ -529,7 +526,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     private void setMemberCount(final long roomId) {
-        memberCount = RealmRoom.getMemberCount(getRealm(), roomId);
+        memberCount = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRoom.getMemberCount(realm, roomId);
+        });
         G.handler.post(new Runnable() {
             @Override
             public void run() {
@@ -540,6 +539,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                 }
             }
         });
+
     }
 
     private void initRecycleView() {

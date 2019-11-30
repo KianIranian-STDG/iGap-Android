@@ -16,7 +16,7 @@
         android:id="@+id/expireTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/green"
+        android:textColor="?attr/colorAccent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgQrCodeNewDevice" />

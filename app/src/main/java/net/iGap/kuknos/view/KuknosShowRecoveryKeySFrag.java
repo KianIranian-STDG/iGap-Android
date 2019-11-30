@@ -21,7 +21,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeySVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosShowRecoveryKeySFrag extends BaseFragment {
 

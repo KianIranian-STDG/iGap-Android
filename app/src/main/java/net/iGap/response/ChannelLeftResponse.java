@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoError;
@@ -35,7 +36,7 @@ public class ChannelLeftResponse extends MessageHandler {
         super.handler();
         ProtoChannelLeft.ChannelLeftResponse.Builder builder = (ProtoChannelLeft.ChannelLeftResponse.Builder) message;
 
-        if (G.userId == builder.getMemberId()) {
+        if (AccountManager.getInstance().getCurrentUser().getId() == builder.getMemberId()) {
             RealmRoom.deleteRoom(builder.getRoomId());
 
             if (G.onChannelLeft != null) {

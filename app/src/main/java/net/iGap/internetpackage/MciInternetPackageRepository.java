@@ -1,24 +1,14 @@
 package net.iGap.internetpackage;
 
-import android.util.Log;
-
 import net.iGap.api.MciApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MciInternetPackageRepository {
 

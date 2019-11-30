@@ -1755,6 +1755,8 @@
     <string name="open_url">открытый URL</string>
     <string name="copied">скопирована</string>
     <string name="all_calls">звонки</string>
+    <string name="url_copied">ссылка скопирована</string>
+    <string name="profile">профиль</string>
 
     <string name="elecBill_Entry_lengthError">Идентификатор счета должен быть 13 символов.</string>
     <string name="elecBill_Entry_barcodeError">Сканирование штрих-кода не удалось. Пожалуйста, попробуйте еще раз.</string>
@@ -1826,6 +1828,7 @@
     <string name="elecBill_error_zeroResultBill">Никакие счета не зарегистрированы под вашим именем.</string>
     <string name="elecBill_success_title">успех</string>
     <string name="elecBill_success_pay">Оплата прошла успешно.</string>
+    <string name="login_exist_account_error">This account is login on this device</string>
     <string name="delete_from_storage">Удалить из хранилища</string>
     <string name="map_registration_enable">Включить видимость поблизости</string>
 

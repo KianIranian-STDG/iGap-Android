@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -256,7 +257,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         payment.isCredit = false;
         payment.orderId = null;
         payment.price = Long.parseLong(mPrice[0]);
-        startActivityForResult(new HelperWallet().goToWallet(payment, getContext(), new Intent(context, WalletActivity.class), "0" + G.userId, false), 66);
+        startActivityForResult(new HelperWallet().goToWallet(payment, getContext(), new Intent(context, WalletActivity.class), "0" + AccountManager.getInstance().getCurrentUser().getId(), false), 66);
         cancelBtn.performClick();
     }
 

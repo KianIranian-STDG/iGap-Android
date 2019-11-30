@@ -25,8 +25,6 @@ import net.iGap.module.SingleLiveEvent;
 
 import java.util.Locale;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class FragmentLanguageViewModel extends ViewModel {
 
     private SharedPreferences sharedPreferences;
@@ -222,9 +220,9 @@ public class FragmentLanguageViewModel extends ViewModel {
         goBack.setValue(true);
     }
 
-    private void updateLocalDateTime(){
+    private void updateLocalDateTime() {
 
-        switch (G.selectedLanguage){
+        switch (G.selectedLanguage) {
             case "fa":
             case "ur"://kurdi
                 sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 1).apply();//shamsi

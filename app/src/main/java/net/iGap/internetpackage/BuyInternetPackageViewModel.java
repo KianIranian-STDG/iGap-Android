@@ -5,12 +5,11 @@ import android.view.View;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
@@ -163,7 +162,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         if (selectedPackageType > 0) {
             enabledPaymentButton.set(false);
             showLoadingView.set(View.VISIBLE);
-            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType),this, new ResponseCallback<MciPurchaseResponse>() {
+            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType), this, new ResponseCallback<MciPurchaseResponse>() {
                 @Override
                 public void onSuccess(MciPurchaseResponse data) {
                     showLoadingView.set(View.INVISIBLE);

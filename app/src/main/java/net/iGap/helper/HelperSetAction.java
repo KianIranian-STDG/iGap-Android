@@ -10,6 +10,7 @@
 package net.iGap.helper;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -95,15 +96,18 @@ public class HelperSetAction {
             if (roomId == 0 || messageId == 0) {
                 return;
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            chatType = DbManager.getInstance().doRealmTask(realm -> {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && realmRoom.getType() != null) {
-                    chatType = realmRoom.getType();
+                    return realmRoom.getType();
                 } else {
-                    return;
+                    return null;
                 }
-            }
+            });
 
+            if (chatType == null) {
+                return;
+            }
         }
 
         /**
@@ -135,6 +139,34 @@ public class HelperSetAction {
             }
         }
     }
+
+    public static ProtoGlobal.ClientAction getAction(ProtoGlobal.RoomMessageType type) {
+
+        ProtoGlobal.ClientAction action = null;
+
+        if ((type == ProtoGlobal.RoomMessageType.IMAGE) || (type == ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_IMAGE;
+        } else if ((type == ProtoGlobal.RoomMessageType.VIDEO) || (type == ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_VIDEO;
+        } else if ((type == ProtoGlobal.RoomMessageType.AUDIO) || (type == ProtoGlobal.RoomMessageType.AUDIO_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_AUDIO;
+        } else if (type == ProtoGlobal.RoomMessageType.VOICE) {
+            action = ProtoGlobal.ClientAction.SENDING_VOICE;
+        } else if ((type == ProtoGlobal.RoomMessageType.GIF) || type == ProtoGlobal.RoomMessageType.GIF_TEXT) {
+            action = ProtoGlobal.ClientAction.SENDING_GIF;
+        } else if ((type == ProtoGlobal.RoomMessageType.FILE) || (type == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
+            action = ProtoGlobal.ClientAction.SENDING_FILE;
+        } else if (type == ProtoGlobal.RoomMessageType.LOCATION) {
+            action = ProtoGlobal.ClientAction.SENDING_LOCATION;
+        } else if (type == ProtoGlobal.RoomMessageType.CONTACT) {
+            action = ProtoGlobal.ClientAction.CHOOSING_CONTACT;
+        } else if (type == ProtoGlobal.RoomMessageType.STICKER) {
+            action = ProtoGlobal.ClientAction.SENDING_IMAGE;
+        }
+
+        return action;
+    }
+
 
     private static void timeOutChecking(final StructAction structAction) {
         G.handler.postDelayed(new Runnable() {

@@ -10,6 +10,7 @@
 
 package net.iGap.module;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;
@@ -248,14 +249,13 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
      * @param fakeMessageId messageId that create when created this message
      */
     private void makeFailed(final long fakeMessageId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
-                }
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransaction(realm1 -> {
+                    RealmRoomMessage.setStatusFailedInChat(realm1, fakeMessageId);
+                });
             });
-        }
+        }).start();
     }
 
     @Override

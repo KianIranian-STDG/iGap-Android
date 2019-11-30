@@ -48,10 +48,10 @@ public class StatusBarUtil {
             activity.getWindow().setStatusBarColor(calculateStatusColor(color, statusBarAlpha));
             activity.getWindow().setNavigationBarColor(new Theme().getDividerColor(activity));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                View decor = activity.getWindow().getDecorView() ;
-                if (G.themeColor != Theme.DARK){
+                View decor = activity.getWindow().getDecorView();
+                if (G.themeColor != Theme.DARK) {
                     decor.setSystemUiVisibility(decor.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                }else {
+                } else {
                     decor.setSystemUiVisibility(0);
                 }
             }

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoInfoPage;
 import net.iGap.request.RequestInfoPage;
@@ -46,11 +47,9 @@ public class InfoPageResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
         if (identity instanceof RequestInfoPage.OnInfoPage) {
-            ((RequestInfoPage.OnInfoPage) identity).onError(majorCode, minorCode);
+            ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+            ((RequestInfoPage.OnInfoPage) identity).onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
         }
     }
 }

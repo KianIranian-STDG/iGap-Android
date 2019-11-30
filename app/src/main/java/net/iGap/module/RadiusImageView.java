@@ -15,7 +15,7 @@ import net.iGap.adapter.items.chat.ViewMaker;
 public class RadiusImageView extends AppCompatImageView {
 
     private float radius = ViewMaker.i_Dp(R.dimen.dp10);
-    private boolean radiusRightSide = true ;
+    private boolean radiusRightSide = true;
 
     public RadiusImageView(Context context) {
         super(context);
@@ -30,7 +30,7 @@ public class RadiusImageView extends AppCompatImageView {
 
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.RadiusImageView);
         radius = typedArray.getDimension(R.styleable.RadiusImageView_riv_radius, radius);
-        radiusRightSide = typedArray.getBoolean(R.styleable.RadiusImageView_riv_radius_right_side , true);
+        radiusRightSide = typedArray.getBoolean(R.styleable.RadiusImageView_riv_radius_right_side, true);
         typedArray.recycle();
 
     }
@@ -55,14 +55,14 @@ public class RadiusImageView extends AppCompatImageView {
         finalRadius[6] = radius;
         finalRadius[7] = radius;
 
-        if (!radiusRightSide){
+        if (!radiusRightSide) {
             finalRadius[2] = 0;
             finalRadius[3] = 0;
             finalRadius[4] = 0;
             finalRadius[5] = 0;
         }
 
-        clipPath.addRoundRect(rect, finalRadius , Path.Direction.CW);
+        clipPath.addRoundRect(rect, finalRadius, Path.Direction.CW);
         canvas.clipPath(clipPath);
         super.onDraw(canvas);
     }

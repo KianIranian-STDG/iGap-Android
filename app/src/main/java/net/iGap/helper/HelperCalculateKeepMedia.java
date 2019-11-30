@@ -13,6 +13,7 @@ package net.iGap.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmRoomMessage;
@@ -32,7 +33,7 @@ public class HelperCalculateKeepMedia {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmResults<RealmRoomMessage> mRealmList = realm.where(RealmRoomMessage.class).findAll();
                     SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -51,7 +52,7 @@ public class HelperCalculateKeepMedia {
                         }
                     }
 
-                }
+                });
             }
         }).start();
     }

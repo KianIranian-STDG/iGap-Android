@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.DataUsageAdapter;
@@ -76,7 +77,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     }
 
     private void initData(boolean type) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmResults<RealmDataUsage> wifiRealmDataUsages;
             RealmResults<RealmDataUsage> dataRealmDataUsages;
             if (type) {
@@ -106,7 +107,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
                     totalSendByte += usage.getUploadSize();
                 }
             }
-        }
+        });
     }
 
     @Override

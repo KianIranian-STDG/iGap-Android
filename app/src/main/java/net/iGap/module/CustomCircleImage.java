@@ -16,8 +16,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 
 /**
  * circle button for indicate current page in fragment Introduce
@@ -25,8 +25,8 @@ import net.iGap.R;
 
 public class CustomCircleImage extends View {
 
-    private static final int CIRCLE_RADIUS = (int) G.context.getResources().getDimension(R.dimen.dp12);
-    private static final int CIRCLE_SPACE = (int) G.context.getResources().getDimension(R.dimen.dp16);
+    private final int CIRCLE_RADIUS = (int) getResources().getDimension(R.dimen.dp12);
+    private final int CIRCLE_SPACE = (int) getResources().getDimension(R.dimen.dp16);
     private Paint fiiPain;
     private Paint strokePain;
     private int count;
@@ -36,7 +36,7 @@ public class CustomCircleImage extends View {
     private int current;
     private int position;
     private float offsetX;
-    private float tt = G.context.getResources().getDimension(R.dimen.dp16);
+    private float tt = getResources().getDimension(R.dimen.dp16);
 
     public CustomCircleImage(Context context) {
         super(context);
@@ -57,15 +57,15 @@ public class CustomCircleImage extends View {
 
         fiiPain = new Paint();
         fiiPain.setStyle(Paint.Style.FILL);
-        fiiPain.setColor(getResources().getColor(R.color.circleIndicatorSelected));
+        fiiPain.setColor(new Theme().getDarkAccentColor(getContext()));
         fiiPain.setAntiAlias(true);
 
         strokePain = new Paint();
         strokePain.setStyle(Paint.Style.FILL);
-        strokePain.setColor(getResources().getColor(R.color.circleIndicator));
+        strokePain.setColor(new Theme().getAccentColor(getContext()));
         strokePain.setAntiAlias(true);
 
-        screenWidth = G.context.getResources().getDisplayMetrics().widthPixels;
+        screenWidth = getResources().getDisplayMetrics().widthPixels;
     }
 
     private void width() {

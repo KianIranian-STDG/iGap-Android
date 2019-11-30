@@ -19,10 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -32,6 +33,7 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnCallLogClear;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
@@ -78,8 +80,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private boolean mIsMultiSelectEnable = false;
     private List<RealmCallLog> mSelectedLogList = new ArrayList<>();
     private ViewGroup mMultiSelectLayout, mFiltersLayout;
-    private Realm mRealm;
-
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
         FragmentCall fragmentCall = new FragmentCall();
@@ -92,7 +92,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRealm = Realm.getDefaultInstance();
         RealmCallLog.manageClearCallLog();
         return inflater.inflate(R.layout.fragment_call, container, false);
     }
@@ -100,7 +99,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mRealm.close();
     }
 
     @Override
@@ -142,7 +140,9 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
 
         if (realmResults == null) {
-            realmResults = getRealmResult(mSelectedStatus, mRealm);
+            realmResults = DbManager.getInstance().doRealmTask(realm -> {
+                return getRealmResult(mSelectedStatus, realm);
+            });
         }
 
         realmResults.addChangeListener((realmCallLogs, changeSet) -> {
@@ -258,20 +258,19 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         //clear all logs
         mBtnDeleteAllLogs.setOnClickListener(v -> {
             if (G.userLogin) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                new MaterialDialog.Builder(v.getContext()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                    try (Realm realm_ = Realm.getDefaultInstance()) {
-                        setViewState(false);
-                        RealmCallLog realmCallLog = realm_.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
-                        mSelectedLogList.clear();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                            DbManager.getInstance().doRealmTask(realm -> {
+                                //ToDo: add callback to proto request
+                                setViewState(false);
+                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
+                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                                view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                                mSelectedLogList.clear();
+                            });
                 }).negativeText(R.string.B_cancel).show();
             } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
 
         });
@@ -326,7 +325,10 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
         if (realmResults != null) realmResults.removeAllChangeListeners();
         mSelectedStatus = filter;
-        realmResults = getRealmResult(mSelectedStatus, mRealm);
+        realmResults = DbManager.getInstance().doRealmTask(realm -> {
+            return getRealmResult(mSelectedStatus, realm);
+        });
+
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
     }
@@ -405,7 +407,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
-            if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
 
             refreshCallList(0, true);
 
@@ -419,7 +421,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             mHelperToolbar.getScannerButton().setVisibility(View.GONE);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
-            if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
 
             refreshCallList(0, true);
 
@@ -432,28 +434,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     }
 
     //*************************************************************************************************************
-
-    public void openDialogMenu() {
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.clean_log));
-        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (G.userLogin) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                        positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                        emptuListView.setVisibility(View.VISIBLE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }).negativeText(R.string.B_cancel).show();
-            } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-            }
-        });
-        topSheetDialog.show();
-    }
 
     @Override
     public void onCallLogClear() {
@@ -650,7 +630,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                         if (canclick) {
                             long userId = callLog.getUser().getId();
 
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
                                 CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId, false, ProtoSignalingOffer.SignalingOffer.Type.valueOf(callLog.getType()));
                                 callSelectFragment.show(getFragmentManager(), null);
                             }

@@ -4,7 +4,6 @@ import android.os.Build;
 import android.util.Log;
 
 import net.iGap.BuildConfig;
-import net.iGap.G;
 import net.iGap.api.CPayApi;
 import net.iGap.api.CharityApi;
 
@@ -16,7 +15,6 @@ import javax.net.ssl.SSLContext;
 
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

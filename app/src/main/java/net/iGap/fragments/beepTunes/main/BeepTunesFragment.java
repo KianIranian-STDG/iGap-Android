@@ -1,6 +1,5 @@
 package net.iGap.fragments.beepTunes.main;
 
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,12 +17,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.api.beepTunes.PlayingSong;
 
 public class BeepTunesFragment extends BaseFragment {

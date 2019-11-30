@@ -167,6 +167,9 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapPrimaryIconTextColor);
     }
 
+    public int getUserProfileTabSelector(Context context) {
+        return getDrawableAttr(context, R.attr.iGapProfileStroke);
+    }
     public int getSendMessageOtherTextColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapSendMessageOtherTextColor);
     }
@@ -193,6 +196,10 @@ public class Theme {
 
     public int getAccentColor(Context context) {
         return getColorFromAttr(context, R.attr.colorAccent);
+    }
+
+    public int getDarkAccentColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorAccentDark);
     }
 
     public int getPrimaryDarkColor(Context context) {

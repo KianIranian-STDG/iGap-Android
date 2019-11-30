@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -26,7 +27,7 @@ public class HelperUpdateMessageStatue {
         if (!response.getId().isEmpty()) { // I'm sender
             RealmClientCondition.deleteOfflineAction(messageId, status);
         } else {  // I'm recipient
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -55,7 +56,7 @@ public class HelperUpdateMessageStatue {
                         }
                     }
                 });
-            }
+            });
         }
     }
 }

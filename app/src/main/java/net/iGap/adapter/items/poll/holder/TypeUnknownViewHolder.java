@@ -6,7 +6,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.adapter.items.poll.PollItem;

@@ -72,4 +72,16 @@ public class HelperCheckInternetConnection {
     public enum ConnectivityType {
         MOBILE, WIFI
     }
+
+    public static boolean isConnectivityWifi() {
+        boolean connectivityType = true;
+        try {
+            if (HelperCheckInternetConnection.currentConnectivityType != null) {
+                connectivityType = HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI;
+            }
+        } catch (Exception ignored) {
+        }
+
+        return connectivityType;
+    }
 }

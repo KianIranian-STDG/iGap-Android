@@ -17,7 +17,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -26,16 +25,16 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.WebSocketClient;
-import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.UserStatusController;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.model.PassCode;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
@@ -43,7 +42,6 @@ import net.iGap.module.StatusBarUtil;
 
 import java.io.File;
 import java.io.IOException;
-
 
 import static net.iGap.G.updateResources;
 
@@ -85,6 +83,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
         if (G.ISRealmOK) {
+            DbManager.getInstance().openUiRealm();
             /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
             /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
@@ -101,7 +100,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
             boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
 
-            if (G.isPassCode && !allowScreen) {
+            if (PassCode.getInstance().isPassCode() && !allowScreen) {
                 try {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 } catch (Exception e) {
@@ -165,9 +164,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                 /**
                  * if user isn't login and page come in foreground try for reconnect
                  */
-                if (!G.userLogin) {
-                    WebSocketClient.reconnect(true);
-                }
             } else {
                 G.isChangeScrFg = true;
             }
@@ -195,16 +191,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                 G.isAppInFg = false;
             }
             G.isScrInFg = false;
-            try {
-
-                HelperDataUsage.insertDataUsage(null, true, true);
-                HelperDataUsage.insertDataUsage(null, true, false);
-
-                HelperDataUsage.insertDataUsage(null, false, true);
-                HelperDataUsage.insertDataUsage(null, false, false);
-
-            } catch (Exception e) {
-            }
 
             if (!AttachFile.isInAttach && canSetUserStatus) {
                 UserStatusController.getInstance().setOffline();
@@ -259,6 +245,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISRealmOK) {
+            DbManager.getInstance().closeUiRealm();
             unregisterReceiver(myBroadcast);
         }
     }

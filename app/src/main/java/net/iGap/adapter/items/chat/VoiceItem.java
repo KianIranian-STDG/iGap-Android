@@ -24,6 +24,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -50,7 +51,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static net.iGap.fragments.FragmentChat.getRealmChat;
+import static java.lang.Long.parseLong;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
 
@@ -94,20 +95,20 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.waveView.setTag(mMessage.messageID);
+        holder.waveView.setTag(mMessage.getMessageId());
 
         ValueAnimator anim = ValueAnimator.ofInt(0, 100);
-        anim.setDuration((long) ((mMessage.attachment.duration) / 0.001));
+        anim.setDuration((long) ((structMessage.getAttachment().getDuration()) / 0.001));
         anim.addUpdateListener(animation -> {
             int animProgress = (Integer) animation.getAnimatedValue();
             holder.waveView.setProgress(animProgress);
         });
 
-        holder.mMessageID = mMessage.messageID;
+        holder.mMessageID = mMessage.getMessageId() + "";
         animationPlayer(holder, anim);
 
         holder.complete = (result, messageOne, MessageTow) -> {
-            if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
+            if (holder.waveView.getTag().equals(mMessage.getMessageId()) && (mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
 
                 switch (messageOne) {
                     case PLAY:
@@ -120,7 +121,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         if (result) {
                             G.handler.post(() -> {
 
-                                if (mMessage.messageID.equals(MusicPlayer.messageId)) {
+                                if ((mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
                                     holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
                                     if (HelperCalander.isPersianUnicode) {
                                         holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
@@ -158,9 +159,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 //            Log.i(TAG, "selected voice    id: " + holder.mMessageID + " status: " + playStatus);
 
 
-            G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+            G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
 
-            RealmClientCondition.addOfflineListen(holder.mRoomId, Long.parseLong(holder.mMessageID));
+            RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
 
             if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                 MusicPlayer.onCompleteChat = holder.complete;
@@ -178,7 +179,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 messageClickListener.onPlayMusic(holder.mMessageID);
                 holder.mTimeMusic = MusicPlayer.musicTime;
             }
-            MusicPlayer.messageId = mMessage.messageID;
+            MusicPlayer.messageId = mMessage.getMessageId() + "";
             animationPlayer(holder, anim);
         });
 
@@ -197,13 +198,15 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         super.bindView(holder, payloads);
 
-        ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+        ProtoGlobal.RoomMessageType _type = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
         holder.mType = type;
         AppUtils.rightFileThumbnailIcon(holder.thumbnail, _type, null);
 
-        holder.mRoomId = mMessage.roomId;
+        holder.mRoomId = mMessage.getRoomId();
 
-        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID));
+        RealmRegisteredInfo registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getUserId() : mMessage.getUserId());
+        });
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());
@@ -211,11 +214,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.author.setText("");
         }
 
-        final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
+        final long _st = (int) ((mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getDuration() : structMessage.getAttachment().getDuration()) * 1000);
 
         holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
 
-        if (holder.waveView.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
+        if (holder.waveView.getTag().equals(mMessage.getMessageId()) && MusicPlayer.messageId.equals(mMessage.getMessageId() + "")) {
             MusicPlayer.onCompleteChat = holder.complete;
 
             if (MusicPlayer.musicProgress > 0) {
@@ -303,9 +306,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         holder.author.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
-        if (mMessage.status != null) {
+        if (mMessage.getStatus() != null) {
             try {
-                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status);
+                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus());
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }

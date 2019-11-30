@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,6 +28,8 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
+import net.iGap.dialog.account.AccountDialogListener;
+import net.iGap.dialog.account.AccountsDialog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
@@ -38,6 +38,7 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
@@ -57,6 +58,14 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
 
+    public static FragmentUserProfile newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        FragmentUserProfile fragment = new FragmentUserProfile();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,13 +91,19 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        viewModel.openAccountsDialog.observe(getViewLifecycleOwner(), show -> {
+            if (show == null) return;
+            if (show) {
+                openAccountsDialog();
+            }
+        });
+
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
         viewModel.setCurrentFragment.observe(getViewLifecycleOwner(), isEdit -> {
             if (isEdit != null) {
-                Log.wtf(this.getClass().getName(), "setCurrentFragment, isEditMode: " + isEdit);
                 if (isEdit) {
                     FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
@@ -97,7 +112,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                         fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
                     }
                     fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
-                    binding.addAvatar.setVisibility(View.VISIBLE);
                 } else {
                     FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
@@ -106,7 +120,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
-                    binding.addAvatar.setVisibility(View.GONE);
                 }
             }
         });
@@ -177,19 +190,18 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 getChildFragmentManager().popBackStack();
             }
         });
+    }
 
-        getChildFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Log.wtf(this.getClass().getName(), "-------------------------------------------");
-                for (int i = 0; i < getChildFragmentManager().getBackStackEntryCount(); i++) {
-                    Log.wtf(this.getClass().getName(), "fragment: " + getChildFragmentManager().getBackStackEntryAt(i).getName());
+    private void openAccountsDialog() {
+
+        if (getActivity() != null) {
+            new AccountsDialog().setData(avatarHandler, new AccountDialogListener() {
+                @Override
+                public void onAccountClick(boolean isAssigned, long id) {
+
                 }
-                Log.wtf(this.getClass().getName(), "-------------------------------------------");
-            }
-        });
-
-        Log.wtf(this.getClass().getName(), "onViewCreated");
+            }).show(getActivity().getSupportFragmentManager(), "account");
+        }
 
     }
 
@@ -201,7 +213,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
          */
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
         if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();

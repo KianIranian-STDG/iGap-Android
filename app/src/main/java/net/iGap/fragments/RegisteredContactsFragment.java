@@ -37,6 +37,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -77,7 +79,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Case;
-import io.realm.Realm;
 
 import static net.iGap.helper.ContactManager.CONTACT_LIMIT;
 
@@ -109,7 +110,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private ProgressBar prgWaitingLoadList, prgMainLoader;
     private ViewGroup mLayoutMultiSelected;
     private TextView mTxtSelectedCount;
-    private Realm realm;
     private ActionMode mActionMode;
 
     private int mPageMode = NEW_CHAT;
@@ -132,17 +132,9 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         return contactsFragment;
     }
 
-    private Realm getRealm() {
-        if (realm == null || realm.isClosed()) {
-            realm = Realm.getDefaultInstance();
-        }
-        return realm;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realm = Realm.getDefaultInstance();
         if (isSwipe) {
             return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
         } else {
@@ -480,13 +472,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        realm.close();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
 
     }
@@ -685,13 +670,17 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     public void loadContacts() {
-        results = getRealm().copyFromRealm(getRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+        results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+        });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
 
     private void loadContact(String key) {
-        results = getRealm().copyFromRealm(getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+        results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.copyFromRealm(realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+        });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
@@ -732,7 +721,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         public String getBubbleText(int position) {
             if (usersList.size() > position) {
                 return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
-            }else {
+            } else {
                 return "-";
             }
         }
@@ -783,7 +772,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext() ,contact.getId(), contact.getLast_seen(), false));
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
@@ -900,7 +889,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     if (!isMultiSelect) {
                         if (isCallAction) {
                             long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
 
 
                                 new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
@@ -970,7 +959,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 btnVoiceCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
-                    if (userId != 134 && G.userId != userId) {
+                    if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
                         CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                         popBackStackFragment();
                     }
@@ -981,7 +970,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     if (!isMultiSelect) {
                         if (isCallAction) {
                             long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
                                 CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                                 callSelectFragment.show(getFragmentManager(), null);
                             }

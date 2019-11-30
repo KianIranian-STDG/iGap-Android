@@ -10,6 +10,7 @@
 
 package net.iGap.module.structs;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmRoom;
@@ -41,7 +42,7 @@ public class StructChannelExtra {
         structChannelExtra.thumbsDown = "0";
         structChannelExtra.viewsLabel = "1";
         if (RealmRoom.showSignature(roomId)) {
-            structChannelExtra.signature = G.displayName;
+            structChannelExtra.signature = AccountManager.getInstance().getCurrentUser().getName();
         } else {
             structChannelExtra.signature = "";
         }

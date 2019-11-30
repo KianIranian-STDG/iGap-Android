@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserPrivacyGetRule;
 import net.iGap.request.RequestUserPrivacySetRule;
@@ -27,7 +28,7 @@ public class RealmPrivacy extends RealmObject {
     private String whoCanVideoCallToMe;
 
     public static void updatePrivacy(final String avatar, final String channel, final String Group, final String lastSeen, final String voiceCall, final String videoCall) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmPrivacy realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
 
             if (realmPrivacy != null) {
@@ -61,9 +62,7 @@ public class RealmPrivacy extends RealmObject {
                     }
                 });
             }
-
-        }
-
+        });
     }
 
     public static void sendUpdatePrivacyToServer(ProtoGlobal.PrivacyType privacyType, ProtoGlobal.PrivacyLevel privacyLevel) {

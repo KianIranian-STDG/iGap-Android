@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -16,8 +17,6 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
-
-import io.realm.Realm;
 
 public class GoToChatActivity {
 
@@ -66,26 +65,30 @@ public class GoToChatActivity {
         String roomName = "";
 
         if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
-
-            try (Realm realm = Realm.getDefaultInstance()) {
+            roomName = DbManager.getInstance().doRealmTask(realm -> {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
 
                 if (realmRoom != null) {
-                    roomName = realmRoom.getTitle();
-
                     if (realmRoom.getReadOnly()) {
                         if (activity != null && !(activity).isFinishing()) {
                             new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
                         }
-                        return;
+                        return null;
                     }
+                    return realmRoom.getTitle();
                 } else if (peerID > 0) {
                     RealmRegisteredInfo _RegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, peerID);
 
                     if (_RegisteredInfo != null) {
-                        roomName = _RegisteredInfo.getDisplayName();
+                        return _RegisteredInfo.getDisplayName();
                     }
                 }
+
+                return "";
+            });
+
+            if (roomName == null) {
+                return;
             }
         }
 
@@ -107,7 +110,7 @@ public class GoToChatActivity {
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
                     //revert main rooms list from share mode
-                    if (activity instanceof ActivityMain){
+                    if (activity instanceof ActivityMain) {
                         ((ActivityMain) activity).checkHasSharedData(false);
                     }
                 }
@@ -157,22 +160,16 @@ public class GoToChatActivity {
     }
 
     private void loadChatFragment(FragmentActivity activity) {
-        Log.wtf(this.getClass().getName(), "loadChatFragment");
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
         if (G.twoPaneMode) {
-            Log.wtf(this.getClass().getName(), "loadChatFragment");
             if (activity instanceof ActivityMain) {
                 ((ActivityMain) activity).goToChatPage(fragmentChat);
             } else {
                 Log.wtf(this.getClass().getName(), "loadChatFragment");
             }
         } else {
-            if (activity.getSupportFragmentManager() != null) {
-                new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
-                Log.e(TAG, "loadChatFragment: activity.getSupportFragmentManager() != null");
-            } else
-                Log.e(TAG, "loadChatFragment: activity.getSupportFragmentManager() == null");
+            new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
         }
     }
 

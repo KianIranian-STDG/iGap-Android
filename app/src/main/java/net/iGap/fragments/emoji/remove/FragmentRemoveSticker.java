@@ -17,11 +17,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -190,7 +191,7 @@ public class FragmentRemoveSticker extends BaseFragment {
                     txtRemove.setOnClickListener(v -> {
 
                         if (getActivity() == null) return;
-                        int pos = getAdapterPosition() ;
+                        int pos = getAdapterPosition();
 
                         new MaterialDialog.Builder(getActivity())
                                 .title(getResources().getString(R.string.remove_sticker))
@@ -204,19 +205,30 @@ public class FragmentRemoveSticker extends BaseFragment {
 
             private void removeStickerByApi(int pos) {
 
-                if ( mData.size() > pos) {
+                if (mData.size() > pos) {
 
                     progressBar.setVisibility(View.VISIBLE);
                     mAPIService.removeSticker(mData.get(pos).getId()).enqueue(new Callback<StructStickerResult>() {
                         @Override
                         public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                            progressBar.setVisibility(View.GONE);
                             if (response.body() != null && response.body().isSuccess()) {
-                                RealmStickers.updateFavorite(mData.get(pos).getId(), false);
-                                mData.remove(pos);
-                                updateAdapter();
-                                FragmentChat.onUpdateSticker.update();
+                                DbManager.getInstance().doRealmTask(realm -> {
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmStickers.updateFavorite(realm, mData.get(pos).getId(), false);
+                                        }
+                                    }, () -> {
+                                        progressBar.setVisibility(View.GONE);
+                                        mData.remove(pos);
+                                        updateAdapter();
+                                        FragmentChat.onUpdateSticker.update();
+                                    });
+                                });
+                            } else {
+                                progressBar.setVisibility(View.GONE);
                             }
+
                         }
 
                         @Override

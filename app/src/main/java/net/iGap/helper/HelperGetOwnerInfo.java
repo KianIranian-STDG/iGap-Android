@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.interfaces.OnClientGetRoomResponse;
 import net.iGap.interfaces.OnUserInfoResponse;
@@ -40,7 +41,7 @@ public class HelperGetOwnerInfo {
 
     private static void checkRoomExist(long id, final Listener listener) {
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
 
             if (realmRoom == null) {
@@ -74,12 +75,12 @@ public class HelperGetOwnerInfo {
                     listener.OnResponse();
                 }
             }
-        }
+        });
     }
 
     private static void checkUserExist(long userId, final Listener listener) {
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
             if (registeredInfo == null) {
@@ -111,8 +112,7 @@ public class HelperGetOwnerInfo {
                     listener.OnResponse();
                 }
             }
-
-        }
+        });
     }
 
     enum RoomType {

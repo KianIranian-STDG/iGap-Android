@@ -10,7 +10,6 @@
 
 package net.iGap.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,13 +28,11 @@ import java.util.ArrayList;
 public class AdapterDialog extends BaseAdapter implements Filterable {
 
     public static int mSelectedVariation = -1;
-    private Context context;
     private ArrayList<StructCountry> countryList;
     private ArrayList<StructCountry> mStringFilterList;
     private ValueFilter valueFilter;
 
-    public AdapterDialog(Context context, ArrayList<StructCountry> countryList) {
-        this.context = context;
+    public AdapterDialog(ArrayList<StructCountry> countryList) {
         this.countryList = countryList;
         mStringFilterList = countryList;
     }
@@ -63,7 +60,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
         if (convertView == null) {
             // If there's no view to re-use, inflate a brand new view for row
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.rg_adapter_dialog, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.rg_adapter_dialog, parent, false);
             viewHolder.countyImage = convertView.findViewById(R.id.countyImage);
             viewHolder.countryCode = convertView.findViewById(R.id.countryCode);
             viewHolder.countryName = convertView.findViewById(R.id.countryName);

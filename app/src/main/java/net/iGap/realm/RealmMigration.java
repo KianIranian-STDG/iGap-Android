@@ -10,14 +10,19 @@
 
 package net.iGap.realm;
 
+import net.iGap.AccountManager;
+import net.iGap.G;
 import net.iGap.kuknos.service.model.RealmKuknos;
+import net.iGap.model.AccountUser;
+import net.iGap.model.PassCode;
 
 import io.realm.DynamicRealm;
+import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
-import static net.iGap.Config.REALM_LATEST_MIGRATION_VERSION;
+import static net.iGap.Config.REALM_SCHEMA_VERSION;
 
 public class RealmMigration implements io.realm.RealmMigration {
 
@@ -160,7 +165,10 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 13) {
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
-                realmUserInfo.addField(RealmUserInfoFields.IS_PASS_CODE, boolean.class, FieldAttribute.REQUIRED).addField(RealmUserInfoFields.IS_FINGER_PRINT, boolean.class, FieldAttribute.REQUIRED).addField(RealmUserInfoFields.KIND_PASS_CODE, int.class, FieldAttribute.REQUIRED).addField(RealmUserInfoFields.PASS_CODE, String.class);
+                realmUserInfo.addField("isPassCode", boolean.class, FieldAttribute.REQUIRED)
+                        .addField("isFingerPrint", boolean.class, FieldAttribute.REQUIRED)
+                        .addField("kindPassCode", int.class, FieldAttribute.REQUIRED)
+                        .addField("passCode", String.class);
             }
             oldVersion++;
         }
@@ -616,7 +624,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 38
+        if (oldVersion == 38) { // REALM_LATEST_MIGRATION_VERSION = 38
 
             RealmObjectSchema realmKuknos = schema.create(RealmKuknos.class.getSimpleName())
                     .addField("kuknosSeedKey", String.class)
@@ -631,5 +639,80 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 39) {
+            DynamicRealmObject realmUserInfo = realm.where("RealmUserInfo").findFirst();
+            if (realmUserInfo != null) {
+                DynamicRealmObject userInfo = realmUserInfo.getObject("userInfo");
+                if (userInfo != null) {
+                    String userImageAvatarPath = null;
+                    long userId = userInfo.getLong("id");
+                    Number id = realm.where("RealmAvatar").equalTo("ownerId", userId).max("id");
+                    if (id != null) {
+                        userImageAvatarPath = realm.where("RealmAvatar").equalTo("id", id.longValue()).findFirst().getObject("file").getString("url");
+                    }
+                    AccountManager.getInstance().addAccount(new AccountUser(
+                            userId,
+                            null,
+                            userInfo.getString("displayName"),
+                            userInfo.getString("phoneNumber"),
+                            0,
+                            true));
+                }
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 40) {
+            DynamicRealmObject realmUserInfo = realm.where("RealmUserInfo").findFirst();
+            boolean isPassCode = false;
+            boolean isPattern = false;
+            boolean isFingerPrint = false;
+            String passCode = null;
+            int kindPassCode = 0;
+
+            if (realmUserInfo != null) {
+                isPassCode = realmUserInfo.getBoolean("isPassCode");
+                isPattern = realmUserInfo.getBoolean("isPattern");
+                isFingerPrint = realmUserInfo.getBoolean("isFingerPrint");
+                passCode = realmUserInfo.getString("passCode");
+                kindPassCode = realmUserInfo.getInt("kindPassCode");
+            }
+            PassCode.initPassCode(G.context, isPassCode, isPattern, isFingerPrint, passCode, kindPassCode);
+
+            RealmObjectSchema realmUserInfoShem = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfoShem != null) {
+                if (realmUserInfoShem.hasField("importContactLimit")) {
+                    realmUserInfoShem.removeField("importContactLimit");
+                }
+                if (realmUserInfoShem.hasField("isPassCode")) {
+                    realmUserInfoShem.removeField("isPassCode");
+                }
+                if (realmUserInfoShem.hasField("isPattern")) {
+                    realmUserInfoShem.removeField("isPattern");
+                }
+                if (realmUserInfoShem.hasField("isFingerPrint")) {
+                    realmUserInfoShem.removeField("isFingerPrint");
+                }
+                if (realmUserInfoShem.hasField("passCode")) {
+                    realmUserInfoShem.removeField("passCode");
+                }
+                if (realmUserInfoShem.hasField("kindPassCode")) {
+                    realmUserInfoShem.removeField("kindPassCode");
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        return REALM_SCHEMA_VERSION;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof RealmMigration);
     }
 }

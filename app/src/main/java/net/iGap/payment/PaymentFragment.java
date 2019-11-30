@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -89,7 +88,9 @@ public class PaymentFragment extends BaseAPIViewFrag {
         paymentViewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
             if (getActivity() != null && paymentResult != null) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
-                callBack.onPaymentFinished(paymentResult);
+                if (callBack != null) {
+                    callBack.onPaymentFinished(paymentResult);
+                }
             }
         });
 

@@ -1405,7 +1405,6 @@
     <string name="separate_notifications">اعلانات جداگانه</string>
     <string name="mark_as_unread">خوانده شده</string>
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
 
     <string name="start">شروع</string>
     <string name="bot">ربات</string>
@@ -2250,6 +2249,8 @@
     <string name="open_url">باز کردن لینک</string>
     <string name="copied">کپی شد.</string>
     <string name="message_is_long">پیام شما طولانی است.\nپیام تبدیل خواهد شد به</string>
+    <string name="add_new_account">افزودن حساب جدید</string>
+    <string name="profile">نمایه</string>
 
     <string name="elecBill_Entry_lengthError">شناسه قبض باید 13 کاراکتر باشد.</string>
     <string name="elecBill_Entry_barcodeError">اسکن بارکد انجام نشد. لطفا دوباره تلاش کنید.</string>
@@ -2322,6 +2323,7 @@
     <string name="elecBill_error_notPossible">این عملیات در حال حاضر امکان پذیر نیست.</string>
     <string name="elecBill_success_title">موفقیت</string>
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
+    <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
     <string name="delete_from_storage">حذف از حافظه</string>
     <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
 </resources>

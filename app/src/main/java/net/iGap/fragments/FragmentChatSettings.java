@@ -62,7 +62,7 @@ public class FragmentChatSettings extends BaseFragment {
                 return (T) new FragmentChatSettingViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
             }
         }).get(FragmentChatSettingViewModel.class);
-        adapter = new ThemeColorListAdapter((oldThemePosition, newThemePosition) -> viewModel.setTheme(oldThemePosition,newThemePosition));
+        adapter = new ThemeColorListAdapter((oldThemePosition, newThemePosition) -> viewModel.setTheme(oldThemePosition, newThemePosition));
     }
 
     @Override
@@ -105,7 +105,7 @@ public class FragmentChatSettings extends BaseFragment {
 
         viewModel.getGoToChatBackgroundPage().observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChatBackground.newInstance()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(),new FragmentChatBackground()).setReplace(false).load();
             }
         });
 

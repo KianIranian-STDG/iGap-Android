@@ -1,5 +1,6 @@
 package net.iGap.helper;
 
+import net.iGap.DbManager;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 
@@ -42,9 +43,9 @@ public class ContactManager {
         if (results == null) {
             // contact paging and remove it for crash
             /*getIgapContact();*/
-            try (Realm realm = Realm.getDefaultInstance()) {
-                results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
-            }
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            });
             /*contactSize = results.size();*/
         }
 
@@ -63,9 +64,9 @@ public class ContactManager {
     private static void getIgapContact() {
         if (results == null) {
             //todo : fixed query
-            try (Realm realm = Realm.getDefaultInstance()) {
-                results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
-            }
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            });
         }
     }
 

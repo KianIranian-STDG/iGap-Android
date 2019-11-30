@@ -2,7 +2,6 @@ package net.iGap.adapter.items.poll;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

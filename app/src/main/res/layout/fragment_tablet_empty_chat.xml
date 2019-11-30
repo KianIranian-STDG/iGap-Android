@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:background="?attr/iGapDefaultChatBackground"
-        android:src="@drawable/chat_default_background_pattern"/>
+        android:src="@drawable/chat_default_background_pattern" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/v"

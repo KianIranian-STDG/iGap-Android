@@ -42,9 +42,6 @@ public class UserRegisterResponse extends MessageHandler {
         } else {
             throw new ClassCastException("identity must be : " + OnUserRegistration.class.getName());
         }
-        G.userId = builder.getUserId();
-        G.authorHash = builder.getAuthorHash();
-        G.displayName = builder.getUsername();
 
         HelperTracker.sendTracker(HelperTracker.TRACKER_SUBMIT_NUMBER);
     }

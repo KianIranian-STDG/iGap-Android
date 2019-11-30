@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesLocalSongAdapter;
@@ -34,8 +36,6 @@ import net.iGap.realm.RealmDownloadSong;
 
 import java.util.List;
 
-import io.realm.Realm;
-
 import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.FAVORITE_FRAGMENT;
 import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.SYNC_FRAGMENT;
 
@@ -46,7 +46,6 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
 
     private BeepTunesMainViewModel viewModel;
     private BeepTunesMainAdapter adapter;
-    private Realm realm;
 
     private BeepTunesProfileFragment profileFragment;
     private MutableLiveData<PlayingSong> toAlbumAdapter;
@@ -98,12 +97,16 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
 
         profileFragment.setCallBack(type -> {
             if (type.equals(SYNC_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class).findAll());
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.copyFromRealm(realm.where(RealmDownloadSong.class).findAll());
+                });
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
             } else if (type.equals(FAVORITE_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
-                        .equalTo("isFavorite", true).findAll());
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.copyFromRealm(realm.where(RealmDownloadSong.class)
+                            .equalTo("isFavorite", true).findAll());
+                });
 
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Favorite Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
@@ -123,7 +126,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
                 .setRightSmallAvatarShown(true)
                 .setLeftIcon(R.string.back_icon);
         viewGroup.addView(helperToolbar.getView());
-        avatarHandler.getAvatar(new ParamWithAvatarType(helperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(helperToolbar.getAvatarSmall(), AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     @Override
@@ -134,20 +137,6 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     @Override
     public void onSmallAvatarClickListener(View view) {
         profileFragment.show(getChildFragmentManager(), null);
-    }
-
-
-    private Realm getRealm() {
-        if (realm == null)
-            realm = Realm.getDefaultInstance();
-        return realm;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (realm != null)
-            realm.close();
     }
 
     @Override

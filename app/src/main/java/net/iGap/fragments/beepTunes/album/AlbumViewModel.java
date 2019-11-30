@@ -10,6 +10,7 @@ import com.downloader.Error;
 import com.downloader.PRDownloader;
 import com.downloader.Progress;
 
+import net.iGap.DbManager;
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.ApiServiceProvider;
@@ -30,18 +31,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private static final String TAG = "aabolfazlAlbum";
 
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private List<DownloadSong> downloadQueue = new ArrayList<>();
-
-    private Realm realm;
 
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
@@ -51,11 +45,10 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     @Override
     public void onCreateViewModel() {
         super.onCreateViewModel();
-        realm = Realm.getDefaultInstance();
     }
 
     void getAlbumSong(long id) {
-        new ApiInitializer<AlbumTrack>(). initAPI(apiService.getAlbumTrack(id), this, new ResponseCallback<AlbumTrack>() {
+        new ApiInitializer<AlbumTrack>().initAPI(apiService.getAlbumTrack(id), this, new ResponseCallback<AlbumTrack>() {
             @Override
             public void onSuccess(AlbumTrack data) {
                 trackMutableLiveData.postValue(data.getData());
@@ -177,7 +170,9 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         song.setDisplayName(downloadSong.getTrack().getName());
         song.setArtistId(downloadSong.getArtistId());
         song.setAlbumId(downloadSong.getAlbumId());
-        realm.executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(song));
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(realm2 -> realm2.copyToRealmOrUpdate(song));
+        });
 
         removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);
@@ -222,11 +217,5 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     MutableLiveData<DownloadSong> getDownloadStatusMutableLiveData() {
         return downloadStatusMutableLiveData;
-    }
-
-    @Override
-    public void onDestroyViewModel() {
-        if (realm != null)
-            realm.close();
     }
 }

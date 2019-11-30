@@ -8,9 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.MultiSelectStruct;
 
 import java.util.ArrayList;

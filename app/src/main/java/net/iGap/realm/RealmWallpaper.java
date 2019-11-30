@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.module.SerializationUtils;
 import net.iGap.module.TimeUtils;
@@ -31,7 +32,7 @@ public class RealmWallpaper extends RealmObject {
     private RealmList<RealmWallpaperProto> realmWallpaperProto;
 
     public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath, int type_) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, type_).findFirst();
 
             realm.executeTransaction(new Realm.Transaction() {
@@ -70,8 +71,7 @@ public class RealmWallpaper extends RealmObject {
                     }
                 }
             });
-
-        }
+        });
     }
 
     public RealmList<RealmWallpaperProto> getWallPaperList() {
@@ -79,7 +79,7 @@ public class RealmWallpaper extends RealmObject {
     }
 
     public static void updateWallpaper(List<ProtoGlobal.Wallpaper> wallpaperList) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -89,7 +89,7 @@ public class RealmWallpaper extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public void setWallPaperList(Realm realm, List<ProtoGlobal.Wallpaper> wallpaperListProto) {

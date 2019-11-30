@@ -10,17 +10,17 @@ package net.iGap.viewmodel;
  */
 
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountManager;
 import net.iGap.helper.HelperLogout;
-import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.request.RequestUserSessionLogout;
 
 import java.util.Locale;
 
@@ -39,6 +39,8 @@ public class FragmentSettingViewModel extends ViewModel {
     public SingleLiveEvent<Boolean> showDialogLogout = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showError = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> updateForOtherAccount = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goToRegisterPage = new SingleLiveEvent<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
 
     public String phoneNumber;
@@ -55,6 +57,14 @@ public class FragmentSettingViewModel extends ViewModel {
 
     public MutableLiveData<Integer> getShowLoading() {
         return showLoading;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateForOtherAccount() {
+        return updateForOtherAccount;
+    }
+
+    public SingleLiveEvent<Boolean> getGoToRegisterPage() {
+        return goToRegisterPage;
     }
 
     public void onLanguageClick() {
@@ -83,21 +93,21 @@ public class FragmentSettingViewModel extends ViewModel {
 
     public void logout() {
         showLoading.setValue(View.VISIBLE);
-        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
+        new HelperLogout().logoutUserWithRequest(new HelperLogout.LogOutUserCallBack() {
             @Override
-            public void onUserSessionLogout() {
-                HelperLogout.logout();
+            public void onLogOut(boolean haveAnotherAccount) {
+                Log.wtf(this.getClass().getName(), "haveAnotherAccount: " + haveAnotherAccount);
                 showLoading.postValue(View.GONE);
+                Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser().toString());
+                if (haveAnotherAccount) {
+                    updateForOtherAccount.postValue(true);
+                } else {
+                    goToRegisterPage.postValue(true);
+                }
             }
 
             @Override
             public void onError() {
-                showLoading.postValue(View.GONE);
-                showError.postValue(true);
-            }
-
-            @Override
-            public void onTimeOut() {
                 showLoading.postValue(View.GONE);
                 showError.postValue(true);
             }

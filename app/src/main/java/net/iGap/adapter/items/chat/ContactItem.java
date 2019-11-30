@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,10 +22,11 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -36,13 +36,10 @@ import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
-import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
 
@@ -82,15 +79,15 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getRoomMessageContact() != null) {
-                holder.contactName.setText(mMessage.forwardedFrom.getRoomMessageContact().getFirstName() + " " + mMessage.forwardedFrom.getRoomMessageContact().getLastName());
-                holder.contactNumberTv.setText(mMessage.forwardedFrom.getRoomMessageContact().getLastPhoneNumber());
+        if (mMessage.getForwardMessage() != null) {
+            if (mMessage.getForwardMessage().getRoomMessageContact() != null) {
+                holder.contactName.setText(mMessage.getForwardMessage().getRoomMessageContact().getFirstName() + " " + mMessage.getForwardMessage().getRoomMessageContact().getLastName());
+                holder.contactNumberTv.setText(mMessage.getForwardMessage().getRoomMessageContact().getLastPhoneNumber());
             }
         } else {
-            if (mMessage.userInfo != null) {
-                holder.contactName.setText(mMessage.userInfo.displayName);
-                holder.contactNumberTv.setText(mMessage.userInfo.phone);
+            if (mMessage.getRoomMessageContact() != null) {
+                holder.contactName.setText(mMessage.getRoomMessageContact().getFirstName() + " " + mMessage.getRoomMessageContact().getLastName());
+                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getLastPhoneNumber());
             }
         }
     }
@@ -265,14 +262,14 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         }
 
         private void getContactInfo(String userPhoneNumber) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 contactId = RealmRegisteredInfo.getUserInfo(realm, userPhoneNumber);
 
                 if (contactId > 0)
                     contactStatus = IN_CONTACT_AND_HAVE_IGAP;
                 else
                     contactStatus = NOT_CONTACT_AND_HAVE_NOT_IGAP;
-            }
+            });
 
             Log.i("aabolfazl", "getContactInfo: " + contactStatus);
         }

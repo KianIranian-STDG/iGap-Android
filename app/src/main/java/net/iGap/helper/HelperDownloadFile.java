@@ -406,16 +406,8 @@ public class HelperDownloadFile {
                         item.downloadedByte = progress.currentBytes;
                         if (item.progress < 100 && !item.isPause) {
                             updateView(item);
-                            try {
-                                boolean connectivityType = true;
-                                if (HelperCheckInternetConnection.currentConnectivityType != null) {
-
-                                    connectivityType = HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI;
-                                }
-                                if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-                                    HelperDataUsage.progressDownload(connectivityType, downloadByte, item.type);
-                                }
-                            } catch (Exception e) {
+                            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                                HelperDataUsage.progressDownload(downloadByte, item.type);
                             }
                         }
                     }
@@ -429,8 +421,8 @@ public class HelperDownloadFile {
                                 @Override
                                 public void run() {
                                     finishDownload(item.cashId, item.offset, item.selector, item.progress);
-                                    if (item.selector.toString().toLowerCase().contains("file") && HelperCheckInternetConnection.currentConnectivityType != null) {
-                                        HelperDataUsage.insertDataUsage(HelperDataUsage.convetredDownloadType, HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI, true);
+                                    if (item.selector.toString().toLowerCase().contains("file")) {
+                                        HelperDataUsage.increaseDownloadFiles(item.type);
                                     }
                                 }
                             });
@@ -519,15 +511,18 @@ public class HelperDownloadFile {
                 } catch (IOException e) {
                 }
             }
-            switch (item.selector) {
-                case FILE:
-                    RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
-                    break;
-                case SMALL_THUMBNAIL:
-                case LARGE_THUMBNAIL:
-                    RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
-                    break;
-            }
+            new Thread(() -> {
+                switch (item.selector) {
+                    case FILE:
+                        RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
+                        break;
+                    case SMALL_THUMBNAIL:
+                    case LARGE_THUMBNAIL:
+                        RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
+                        break;
+                }
+            }).start();
+
         }
     }
 

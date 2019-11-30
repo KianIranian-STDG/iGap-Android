@@ -49,6 +49,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -154,16 +156,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static BluetoothCallbacks bluetoothCallbacks;
     private static RemoteControlClient remoteControlClient;
     private static ComponentName remoteComponentName;
-    private static Realm mRealm;
     private static boolean isRegisterSensor = false;
-
-    private static Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
-    }
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
@@ -693,10 +686,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
             if (isVoice) {
                 String voiceName = "";
-                RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst());
+                RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst());
+                });
                 if (realmRoomMessage != null) {
                     if (realmRoomMessage.getUserId() != 0) {
-                        if (realmRoomMessage.getUserId() == G.userId) {
+                        if (realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
                             voiceName = G.context.getResources().getString(R.string.you);
                         } else {
                             voiceName = RealmRegisteredInfo.getNameWithId(realmRoomMessage.getUserId());
@@ -742,8 +737,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (messageID != null && messageID.length() > 0) {
 
                 try {
-                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
-
+                    RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
+                        return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
+                    });
                     if (realmRoomMessage != null) {
                         String type = realmRoomMessage.getMessageType().toString();
 
@@ -1032,7 +1028,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         boolean isOnListMusic = false;
         mediaList = new ArrayList<>();
 
-        List<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        List<RealmRoomMessage> roomMessages = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        });
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) { //TODO Saeed Mozaffari; write better code for detect voice and audio instead get all roomMessages
@@ -1293,8 +1291,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static boolean downloadNextMusic(String messageId) {
 
         boolean result = false;
+        RealmResults<RealmRoomMessage> roomMessages = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAll().sort(RealmRoomMessageFields.CREATE_TIME);
 
-        RealmResults<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAll().sort(RealmRoomMessageFields.CREATE_TIME);
+        });
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage rm : roomMessages) {
@@ -1592,7 +1592,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     @Override
     public void onCreate() {
         super.onCreate();
-        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -1647,7 +1646,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mRealm.close();
         try {
             getNotificationManager().cancel(notificationId);
         } catch (NullPointerException e) {

@@ -11,12 +11,10 @@
 package net.iGap;
 
 import android.accounts.Account;
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Environment;
@@ -44,14 +42,17 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.*;
+import net.iGap.model.PassCode;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
+import net.iGap.webservice.JobServiceReconnect;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
@@ -70,7 +71,6 @@ import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import ir.metrix.sdk.Metrix;
-import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
@@ -136,16 +136,12 @@ public class G extends ApplicationContext {
     public static String symmetricMethod;
     public static Ipromote ipromote;
     //    public static String menuBackgroundColor;
-    public static String authorHash;
-    public static String displayName;
     public static boolean isAppInFg = false;
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
     public static boolean isUserStatusOnline = false;
     public static boolean isSecure = false;
-    public static boolean allowForConnect = true; //set allowForConnect to realm , if don't set client try for connect
     public static boolean userLogin = false;
-    public static boolean socketConnection = false;
     public static boolean canRunReceiver = false;
     public static boolean firstTimeEnterToApp = true; // use this field for get room list
     public static boolean firstEnter = true;
@@ -179,7 +175,6 @@ public class G extends ApplicationContext {
     public static int maxChatBox = 0;
     public static int bothChatDeleteTime = DEFAULT_BOTH_CHAT_DELETE_TIME;
     public static long currentTime;
-    public static long userId;
     public static String serverHashContact = null;
     public static String localHashContact = null;
     public static long latestHearBeatTime = System.currentTimeMillis();
@@ -277,7 +272,6 @@ public class G extends ApplicationContext {
     public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatusChat;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;
-    public static OnClientJoinByUsername onClientJoinByUsername;
     public static OnClientResolveUsername onClientResolveUsername;
     public static OnClientSubscribeToRoom onClientSubscribeToRoom;
     public static OnClientUnsubscribeFromRoom onClientUnsubscribeFromRoom;
@@ -356,7 +350,6 @@ public class G extends ApplicationContext {
     public static ISignalingGetCallLog iSignalingGetCallLog;
     public static ISignalingCallBack iSignalingCallBack;
     public static ISignalingErrore iSignalingErrore;
-    public static boolean isPassCode;
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
@@ -382,6 +375,7 @@ public class G extends ApplicationContext {
     public static boolean isNeedToCheckProfileWallpaper = false;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
+    public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {
@@ -393,31 +387,33 @@ public class G extends ApplicationContext {
 
     public static String getApiToken() {
         String result = "Bearer ";
-        try (Realm realm = Realm.getDefaultInstance()) {
+        result += DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
-                result += realmUserInfo.getAccessToken();
+                 return realmUserInfo.getAccessToken();
             }
-        }
+            return null;
+        });
         return result;
-
     }
 
     public static void refreshRealmUi() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                realm.refresh();
-            }
+            refreshUiRealm();
         } else {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.refresh();
-                    }
+                    refreshUiRealm();
                 }
             });
         }
+    }
+
+    private static void refreshUiRealm() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.refresh();
+        });
     }
 
     public static Context updateResources(Context baseContext) {
@@ -452,7 +448,23 @@ public class G extends ApplicationContext {
     public void onCreate() {
         Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate();
-        RaadApp.onCreate(getApplicationContext());
+        context = getApplicationContext();
+        Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
+
+        JobServiceReconnect.scheduleJob(getApplicationContext());
+        PassCode.initPassCode(getApplicationContext());
+        //init account manager for handle multi account
+
+        try {
+            Realm.init(this);
+        } catch (Exception e) {
+            G.ISRealmOK = false;
+        } catch (Error e) {
+            G.ISRealmOK = false;
+        }
+        AccountManager.initial(this);
+
         LooperThreadHelper.getInstance();
         Metrix.initialize(this, "jpbnabzrmeqvxme");
         Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
@@ -463,15 +475,6 @@ public class G extends ApplicationContext {
             Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
-                CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
-            }
-        }).start();
-
-        context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -479,7 +482,7 @@ public class G extends ApplicationContext {
             @Override
             public void run() {
                 RaadApp.onCreate(getApplicationContext());
-                Raad.init(getApplicationContext());
+                /*Raad.init(getApplicationContext());*/
                 WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
             }
         }).start();

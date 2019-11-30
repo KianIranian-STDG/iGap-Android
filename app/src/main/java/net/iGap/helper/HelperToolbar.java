@@ -38,6 +38,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -46,6 +48,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
@@ -674,7 +677,7 @@ public class HelperToolbar {
 
     public void checkPassCodeVisibility() {
         if (passCodeBtn != null) {
-            if (G.isPassCode) {
+            if (PassCode.getInstance().isPassCode()) {
                 passCodeBtn.setVisibility(View.VISIBLE);
                 ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
 
@@ -1017,18 +1020,21 @@ public class HelperToolbar {
     private void onScannerClickListener() {
         String phoneNumber = "0";
 
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (userInfo != null) {
-                phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-            } else {
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
-            }
-        } catch (Exception e) {
+        try {
+            phoneNumber = DbManager.getInstance().doRealmTask(realm -> {
+                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (userInfo != null) {
+                    return userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    return AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2) ;
+                }
+            });
+
+        }catch (Exception e){
             //maybe exception was for realm substring
-            try {
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
-            } catch (Exception ex) {
+            try{
+                phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+            }catch (Exception ex){
                 //nothing
             }
         }
@@ -1036,7 +1042,7 @@ public class HelperToolbar {
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
-            mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber,true),WALLET_REQUEST_CODE);
+            mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber, true),WALLET_REQUEST_CODE);
         }
     }
 

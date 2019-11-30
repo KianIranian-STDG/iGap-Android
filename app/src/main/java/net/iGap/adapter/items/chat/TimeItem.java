@@ -10,7 +10,6 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
@@ -85,7 +83,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             text.setSingleLine(true);
             text.setPadding(ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4));
             text.setTextColor(new Theme().getTitleTextColor(text.getContext()));
-            text.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.background_log_time),view.getContext(),R.attr.iGapDividerLine));
+            text.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.background_log_time), view.getContext(), R.attr.iGapDividerLine));
 
             text.setText("Today");
             text.setAllCaps(false);

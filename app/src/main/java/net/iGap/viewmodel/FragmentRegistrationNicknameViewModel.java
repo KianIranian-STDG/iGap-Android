@@ -9,7 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -17,82 +17,70 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.interfaces.OnInfoCountryResponse;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.interfaces.OnUserAvatarResponse;
-import net.iGap.interfaces.OnUserInfoResponse;
-import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
-import net.iGap.interfaces.OnUserProfileSetRepresentative;
+import net.iGap.model.LocationModel;
+import net.iGap.model.repository.ErrorWithWaitTime;
+import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.CountryListComparator;
-import net.iGap.module.CountryReader;
-import net.iGap.module.FileUploadStructure;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestUserAvatarAdd;
-import net.iGap.request.RequestUserInfo;
-import net.iGap.request.RequestUserProfileSetNickname;
-import net.iGap.request.RequestUserProfileSetRepresentative;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import io.realm.Realm;
 
 public class FragmentRegistrationNicknameViewModel extends ViewModel implements OnUserAvatarResponse {
 
     public long userId;
-    private boolean existAvatar = false;
+    private boolean existAvatar = true;
     private String pathImageUser;
     private int idAvatar;
-    private String regex;
+
     private AvatarHandler avatarHandler;
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
-    private SharedPreferences sharedPreferences;
+
+    private RegisterRepository repository;
 
     public MutableLiveData<Boolean> hideKeyboard = new MutableLiveData<>();
     public MutableLiveData<Integer> progressValue = new MutableLiveData<>();
-    public MutableLiveData<BindingAdapter.AvatarImage> avatarImagePath = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showErrorName = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showErrorLastName = new MutableLiveData<>();
+    public ObservableField<BindingAdapter.AvatarImage> avatarImagePath = new ObservableField<>();
     public MutableLiveData<Boolean> showReagentPhoneNumberError = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showDialog = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
     public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public MutableLiveData<Long> goToMain = new MutableLiveData<>();
-    public MutableLiveData<Integer> showRequestError = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
     public ObservableInt showCameraImage = new ObservableInt(View.VISIBLE);
     public ObservableField<String> reagentCountryCode = new ObservableField<>("+98");
     public ObservableInt reagentPhoneNumberMaskMaxCount = new ObservableInt(11);
     public ObservableField<String> reagentPhoneNumberMask = new ObservableField<>("###-###-####");
     public ObservableField<String> reagentPhoneNumber = new ObservableField<>("");
+    public ObservableInt showErrorName = new ObservableInt();
+    public ObservableInt showErrorLastName = new ObservableInt();
 
-    public FragmentRegistrationNicknameViewModel(Long userId, AvatarHandler avatarHandler, SharedPreferences sharedPreferences) {
-        this.userId = userId;
+    public FragmentRegistrationNicknameViewModel(AvatarHandler avatarHandler, StringBuilder stringBuilder) {
+        repository = RegisterRepository.getInstance();
         this.avatarHandler = avatarHandler;
-        this.sharedPreferences = sharedPreferences;
-        //ToDo: create repository and move this to that
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null) {
-                RealmAvatar.deleteAvatarWithOwnerId(G.userId);
-            }
-        }
+
+        repository.removeUserAvatar();
 
         G.onUserAvatarResponse = this;
 
-        CountryReader countryReade = new CountryReader();
-        StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.context);
-
-        String list = fileListBuilder.toString();
+        String list = stringBuilder.toString();
         // Split line by line Into array
         String[] listArray = list.split("\\r?\\n");
         //Convert array
@@ -112,10 +100,8 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
 
         Collections.sort(structCountryArrayList, new CountryListComparator());
 
-        reagentCountryCode.set("+" + sharedPreferences.getInt("callingCode", 98));
-        String pattern = sharedPreferences.getString("pattern", "");
-        reagentPhoneNumberMask.set((pattern != null && !pattern.equals("")) ? pattern.replace("X", "#").replace(" ", "-") : "##################");
-        regex = sharedPreferences.getString("regex", "");
+        reagentCountryCode.set("+" + repository.getCallingCode());
+        reagentPhoneNumberMask.set(repository.getPattern().replace("X", "#").replace(" ", "-"));
     }
 
     public ArrayList<StructCountry> getStructCountryArrayList() {
@@ -123,8 +109,10 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     }
 
     public void selectAvatarOnClick() {
-        if (!existAvatar) {
+        if (existAvatar) {
             showDialog.setValue(true);
+        } else {
+            Log.wtf(this.getClass().getName(), "selectAvatarOnClick: else");
         }
     }
 
@@ -132,26 +120,22 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         showDialogSelectCountry.setValue(true);
     }
 
-    public void setCountry(StructCountry country) {
+    public void setCountry(@NotNull StructCountry country) {
         prgVisibility.set(View.VISIBLE);
-        new RequestInfoCountry().infoCountry(country.getAbbreviation(), new OnInfoCountryResponse() {
+        repository.getCountryInfo(country.getAbbreviation(), new RegisterRepository.RepositoryCallback<LocationModel>() {
             @Override
-            public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
-                G.handler.post(() -> {
-                    prgVisibility.set(View.GONE);
-                    reagentCountryCode.set("+" + callingCode);
-                    if (pattern.equals("")) {
-                        reagentPhoneNumberMask.set("##################");
-                    } else {
-                        reagentPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
-                    }
-                    regex = regexR;
-                });
+            public void onSuccess(LocationModel data) {
+                prgVisibility.set(View.GONE);
+                reagentCountryCode.set("+" + data.getCountryCode());
+                if (data.getPhoneMask().equals("")) {
+                    reagentPhoneNumberMask.set("##################");
+                } else {
+                    reagentPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
+                }
             }
 
             @Override
-            public void onError(int majorCode, int minorCode) {
-                //empty
+            public void onError() {
                 prgVisibility.set(View.GONE);
             }
         });
@@ -165,148 +149,95 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         }
     }
 
-    public void OnClickBtnLetsGo(String name, String lastName) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            if (name.length() > 0) {
-                showErrorName.setValue(false);
-                if (lastName.length() > 0) {
-                    showErrorLastName.setValue(false);
-                    if (reagentPhoneNumber.get().isEmpty() || isValidReagentPhoneNumber()) {
-                        showReagentPhoneNumberError.setValue(false);
-                        hideKeyboard.setValue(true);
-                        prgVisibility.set(View.VISIBLE);
-                        setNickName(name, lastName, reagentPhoneNumber.get().isEmpty());
-                    } else {
-                        showReagentPhoneNumberError.setValue(true);
-                    }
+    public void OnClickBtnLetsGo(@NotNull String name, String lastName) {
+        if (name.length() > 0) {
+            showErrorName.set(0);
+            if (lastName.length() > 0) {
+                showErrorLastName.set(0);
+                if (reagentPhoneNumber.get().isEmpty() || reagentPhoneNumber.get().length() > 0 && repository.getRegex().equals("") || (!repository.getRegex().equals("") && reagentPhoneNumber.get().replace("-", "").matches(repository.getRegex()))) {
+                    showReagentPhoneNumberError.setValue(false);
+                    hideKeyboard.setValue(true);
+                    prgVisibility.set(View.VISIBLE);
+                    repository.setNickName(
+                            name,
+                            lastName,
+                            reagentCountryCode.get().replace("+", "") + reagentPhoneNumber.get().replace("-", ""),
+                            new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
+                                @Override
+                                public void onSuccess() {
+
+                                }
+
+                                @Override
+                                public void onError(ErrorWithWaitTime error) {// if error is not null set reagent request is have error
+                                    if (error != null) {
+                                        prgVisibility.set(View.GONE);
+                                        if (error.getMajorCode() == 10177 && error.getMinorCode() == 2) {
+                                            HelperError.showSnackMessage(G.context.getString(R.string.referral_error_yourself), false);
+                                        }
+                                    } else {
+                                        prgVisibility.set(View.GONE);
+                                    }
+                                }
+                            });
                 } else {
-                    showErrorLastName.setValue(true);
+                    showReagentPhoneNumberError.setValue(true);
                 }
             } else {
-                showErrorName.setValue(true);
+                showErrorLastName.set(R.string.Toast_Write_NickName);
             }
+        } else {
+            showErrorName.set(R.string.Toast_Write_NickName);
         }
-    }
-
-    private boolean isValidReagentPhoneNumber() {
-        return reagentPhoneNumber.get().length() > 0 && regex.equals("") || (!regex.equals("") && reagentPhoneNumber.get().replace("-", "").matches(regex));
-    }
-
-    private void setNickName(String name, String lastName, boolean isReagentIsEmpty) {
-        new RequestUserProfileSetNickname().userProfileNickName(name + " " + lastName, new OnUserProfileSetNickNameResponse() {
-            @Override
-            public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                if (isReagentIsEmpty) {
-                    getUserInfo();
-                } else {
-                    setReagent();
-                }
-            }
-
-            @Override
-            public void onUserProfileNickNameError(int majorCode, int minorCode) {
-                G.handler.post(() -> prgVisibility.set(View.GONE));
-            }
-
-            @Override
-            public void onUserProfileNickNameTimeOut() {
-                G.handler.post(() -> prgVisibility.set(View.GONE));
-            }
-        });
-    }
-
-    private void setReagent() {
-        new RequestUserProfileSetRepresentative().userProfileSetRepresentative(
-                reagentCountryCode.get().replace("+", "") + reagentPhoneNumber.get().replace("-", ""),
-                new OnUserProfileSetRepresentative() {
-                    @Override
-                    public void onSetRepresentative(String phone) {
-                        try (Realm realm = Realm.getDefaultInstance()) {
-                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                            RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
-                        }
-                        getUserInfo();
-                    }
-
-                    @Override
-                    public void onErrorSetRepresentative(int majorCode, int minorCode) {
-                        G.handler.post(() -> {
-                            prgVisibility.set(View.GONE);
-                            if (majorCode == 10177  && minorCode == 2) {
-                                HelperError.showSnackMessage(G.context.getString(R.string.referral_error_yourself), false);
-                            }
-                        });
-                    }
-                });
-    }
-
-    private void getUserInfo() {
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                G.handler.post(() -> {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, user));
-                    }
-                    G.displayName = user.getDisplayName();
-                    prgVisibility.set(View.GONE);
-                    goToMain.setValue(userId);
-                });
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-                prgVisibility.set(View.GONE);
-                showRequestError.postValue(R.string.error);
-            }
-
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
-                prgVisibility.set(View.GONE);
-                showRequestError.setValue(R.string.error);
-            }
-        };
-        new RequestUserInfo().userInfo(G.userId);
     }
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-        avatarHandler.avatarAdd(G.userId, pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
+        existAvatar = true;
+        avatarHandler.avatarAdd(AccountManager.getInstance().getCurrentUser().getId(), pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
             existAvatar = true;
             prgVisibility.set(View.GONE);
             showCameraImage.set(View.GONE);
-            avatarImagePath.setValue(new BindingAdapter.AvatarImage(avatarPath, false, null));
+            avatarImagePath.set(new BindingAdapter.AvatarImage(avatarPath, false, null));
         }));
     }
 
     @Override
     public void onAvatarAddTimeOut() {
+        existAvatar = true;
         prgVisibility.set(View.GONE);
     }
 
     @Override
     public void onAvatarError() {
+        existAvatar = true;
         prgVisibility.set(View.GONE);
     }
 
     public void uploadAvatar(String path) {
+        existAvatar = false;
         pathImageUser = path;
         int lastUploadedAvatarId = idAvatar + 1;
         prgVisibility.set(View.VISIBLE);
-        HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathImageUser), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (progress < 100) {
-                    G.handler.post(() -> progressValue.setValue(progress));
-                } else {
-                    new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                }
+            public void onProgress(String id, int progress) {
+                progressValue.postValue(progress);
             }
 
             @Override
-            public void OnError() {
+            public void onFinish(String id, String token) {
+                Log.wtf(this.getClass().getName(), "onFinish: id: " + id);
+                existAvatar = true;
+                new RequestUserAvatarAdd().userAddAvatar(token);
+            }
+
+            @Override
+            public void onError(String id) {
+                Log.wtf(this.getClass().getName(), "onError: id: " + id);
+                existAvatar = true;
                 prgVisibility.set(View.GONE);
             }
-        });
+        }));
     }
 }

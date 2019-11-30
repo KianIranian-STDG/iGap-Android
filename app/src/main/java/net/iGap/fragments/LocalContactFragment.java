@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -38,7 +40,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 
@@ -210,7 +211,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     public void onRightIconClickListener(View view) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + "+" + ActivityMain.userPhoneNumber);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + "+" + AccountManager.getInstance().getCurrentUser().getPhoneNumber());
         sendIntent.setType("text/plain");
         Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
         getActivity().startActivity(openInChooser);
@@ -306,7 +307,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                     contacts.get(i).setPhone(s);
                 }
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
                 ArrayList<StructListOfContact> slc = new ArrayList();
@@ -320,10 +321,10 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                         }
                     }
                     if (!helpIndex) {
-                        if (isSearch){
+                        if (isSearch) {
                             slc.add(contacts.get(i));
-                        }else{
-                            if (!phoneContactsList.contains(contacts.get(i))){
+                        } else {
+                            if (!phoneContactsList.contains(contacts.get(i))) {
                                 slc.add(contacts.get(i));
                             }
                         }
@@ -331,7 +332,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                     }
                 }
                 return slc;
-            }
+            });
 
         }
 

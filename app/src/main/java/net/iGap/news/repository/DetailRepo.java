@@ -1,5 +1,6 @@
 package net.iGap.news.repository;
 
+import net.iGap.DbManager;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.news.repository.api.NewsAPIRepository;
@@ -15,7 +16,6 @@ import io.realm.Realm;
 public class DetailRepo {
 
     private NewsAPIRepository repository = new NewsAPIRepository();
-    private Realm realm;
     private RealmUserInfo userInfo;
 
     public DetailRepo() {
@@ -51,22 +51,12 @@ public class DetailRepo {
     }
 
     private void updateUserInfo() {
-        userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        closeRealm();
+        DbManager.getInstance().doRealmTask(realm -> {
+            userInfo = realm.where(RealmUserInfo.class).findFirst();
+        });
 
         if (userInfo.getEmail() == null)
             new RequestUserProfileGetEmail().userProfileGetEmail();
-    }
-
-    private Realm getRealm() {
-        if (realm == null || realm.isClosed()) {
-            realm = Realm.getDefaultInstance();
-        }
-        return realm;
-    }
-
-    private void closeRealm() {
-        realm.close();
     }
 
 }

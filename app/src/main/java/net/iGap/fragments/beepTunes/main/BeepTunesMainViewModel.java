@@ -1,8 +1,5 @@
 package net.iGap.fragments.beepTunes.main;
 
-import android.util.Log;
-import android.view.View;
-
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.BeepTunesApi;
@@ -13,10 +10,6 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.module.api.beepTunes.FirstPage;
 import net.iGap.viewmodel.BaseViewModel;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BeepTunesMainViewModel extends BaseViewModel {
     private static final String TAG = "aabolfazlBeepTunes";
@@ -45,7 +38,7 @@ public class BeepTunesMainViewModel extends BaseViewModel {
 
             @Override
             public void setProgressIndicator(boolean visibility) {
-                progressMutableLiveData.postValue(visibility ? 0:1);
+                progressMutableLiveData.postValue(visibility ? 0 : 1);
             }
         });
     }

@@ -102,7 +102,6 @@ public class CashOutFragment extends Fragment {
                 textView.setId(android.R.id.text1);
                 textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextColor(Color.WHITE);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_MEDIUM));
 

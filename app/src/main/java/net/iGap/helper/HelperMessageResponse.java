@@ -10,6 +10,8 @@
 
 package net.iGap.helper;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;
@@ -19,11 +21,10 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoom;
 
 import io.realm.Realm;
-
-import static net.iGap.G.authorHash;
 
 /**
  * helper message response for get message and detect message that is for
@@ -33,8 +34,7 @@ public class HelperMessageResponse {
 
 
     public static void handleMessage(final long roomId, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType, final ProtoResponse.Response response, final String identity) {
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -49,7 +49,7 @@ public class HelperMessageResponse {
                      * be recipient but sender. so I check current userId with room message user id,
                      * and if not equals and response is null, so we sure recipient is another user
                      */
-                    if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
+                    if (!roomMessage.getAuthor().getHash().equals(RealmUserInfo.getCurrentUserAuthorHash())) {
                         /**
                          * i'm recipient
                          *
@@ -88,11 +88,11 @@ public class HelperMessageResponse {
                          * update unread count if new messageId that received is bigger than latest messageId that exist
                          */
 
-                        if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
+                        if (!roomMessage.getAuthor().getHash().equals(RealmUserInfo.getCurrentUserAuthorHash()) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
                             room.setUnreadCount(room.getUnreadCount() + 1);
                         }
 
-                        if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
+                        if (!roomMessage.getAuthor().getHash().equals(RealmUserInfo.getCurrentUserAuthorHash())) {
 
                             if (room.getFirstUnreadMessage() == null) {
                                 room.setFirstUnreadMessage(realmRoomMessage);
@@ -100,7 +100,7 @@ public class HelperMessageResponse {
 
                             if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && RealmNotificationRoomMessage.canShowNotif(realm, roomMessage.getMessageId(), roomId)) {
                                 RealmNotificationRoomMessage.putToDataBase(realm, roomMessage.getMessageId(), roomId);
-                                HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);
+                                HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm, AccountManager.getInstance().getCurrentUser());
                             }
                         }
 
@@ -129,6 +129,6 @@ public class HelperMessageResponse {
                  */
                 G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
             }
-        }
+        });
     }
 }

@@ -77,7 +77,7 @@ public class FragmentEditUserProfile extends BaseFragment implements FragmentEdi
             });
 
             ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
-            AdapterDialog adapterDialog = new AdapterDialog(getContext(), viewModel.getStructCountryArrayList());
+            AdapterDialog adapterDialog = new AdapterDialog(viewModel.getStructCountryArrayList());
             listView.setAdapter(adapterDialog);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 viewModel.setCountry(adapterDialog.getItem(position));

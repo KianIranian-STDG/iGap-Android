@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.proto.ProtoClientCondition;
@@ -54,7 +55,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void setClearId(final long roomId, final long clearId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -64,11 +65,11 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void setVersion(final long roomId, final long version, final ClientConditionVersion conditionVersion) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -84,38 +85,17 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
-    }
-
-    public static void addOfflineEdit(long roomId, final long messageId, final String message) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
-                    }
-                }
-            });
-        }
+        });
     }
 
     public static void addOfflineDelete(Realm realm, RealmClientCondition realmClientCondition, long messageId, ProtoGlobal.Room.Type roomType, boolean bothDelete) {
         realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, messageId, roomType, bothDelete));
     }
 
-    public static void addOfflineSeenAsync(final long roomId, final long messageId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                    if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, messageId));
-                    }
-                }
-            });
+    public static void addOfflineSeen(Realm realm, final long roomId, final long messageId) {
+        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+        if (realmClientCondition != null) {
+            realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, messageId));
         }
     }
 
@@ -125,17 +105,23 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void addOfflineListen(final long roomId, final long messageId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                    if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineListen().add(RealmOfflineListen.put(realm, messageId));
-                    }
-                }
-            });
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                            if (realmClientCondition != null) {
+                                realmClientCondition.getOfflineListen().add(RealmOfflineListen.put(realm, messageId));
+                            }
+                        }
+                    });
+                });
+            }
+        }).start();
+
     }
 
     public static void deleteOfflineAction(final long messageId, ProtoGlobal.RoomMessageStatus messageStatus) {
@@ -147,7 +133,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void deleteOfflineAction(final long messageId, final ClientConditionOffline messageStatus) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -175,11 +161,11 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void clearOfflineAction() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -191,7 +177,7 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     /**
@@ -202,7 +188,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static ProtoClientCondition.ClientCondition.Builder computeClientCondition(Long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             ProtoClientCondition.ClientCondition.Builder clientCondition = ProtoClientCondition.ClientCondition.newBuilder();
 
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).count() == 0) {
@@ -302,7 +288,7 @@ public class RealmClientCondition extends RealmObject {
 
             }
             return clientCondition;
-        }
+        });
     }
 
     public long getRoomId() {

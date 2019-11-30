@@ -1,16 +1,8 @@
 package net.iGap.libs.bottomNavigation.Util;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.util.TypedValue;
-import android.view.View;
 import android.widget.TextView;
-
-import androidx.cardview.widget.CardView;
-
-import net.iGap.G;
-import net.iGap.R;
 
 import static net.iGap.G.context;
 

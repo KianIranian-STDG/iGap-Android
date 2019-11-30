@@ -15,6 +15,7 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.activities.ActivityCall;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -51,8 +52,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import io.realm.Realm;
 
 public class WebRTC {
 
@@ -262,8 +261,7 @@ public class WebRTC {
             }
 
             PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
-        }
-        catch (UnsatisfiedLinkError e) {
+        } catch (UnsatisfiedLinkError e) {
             e.printStackTrace();
         }
     }
@@ -271,12 +269,12 @@ public class WebRTC {
     PeerConnection peerConnectionInstance() {
         if (peerConnection == null) {
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
                 for (RealmIceServer ice : realmCallConfig.getIceServer()) {
                     iceServers.add(new PeerConnection.IceServer(ice.getUrl(), ice.getUsername(), ice.getCredential()));
                 }
-            }
+            });
 
             PeerConnection.RTCConfiguration configuration = new PeerConnection.RTCConfiguration(iceServers);
             configuration.bundlePolicy = PeerConnection.BundlePolicy.MAXBUNDLE;

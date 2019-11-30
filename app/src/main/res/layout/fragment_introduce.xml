@@ -49,16 +49,15 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintWidth_percent=".5" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/changeLanguage"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            style="@style/iGapOutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/int_btnStart"
             android:layout_centerHorizontal="true"
             android:onClick="@{()->viewModel.onLanguageChangeClick()}"
             android:text="@string/change_language_title"
-            android:textColor="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

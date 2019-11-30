@@ -20,6 +20,7 @@ import com.vanniktech.emoji.ios.IosEmojiProvider;
 import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -30,13 +31,11 @@ import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
 
 import org.jetbrains.annotations.NotNull;
@@ -72,14 +71,11 @@ import static net.iGap.G.DIR_VIDEOS;
 import static net.iGap.G.IGAP;
 import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
-import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
-import static net.iGap.G.displayName;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
 import static net.iGap.G.selectedLanguage;
-import static net.iGap.G.userId;
 import static net.iGap.G.userTextSize;
 
 /**
@@ -99,10 +95,9 @@ public final class StartupActions {
         new Thread(this::manageTime).start();
         new Thread(StartupActions::getiGapAccountInstance).start();
         new Thread(CallObserver::new).start();
-        new Thread(HelperUploadFile::new).start();
 
-        if (realmConfiguration()) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+        if (G.ISRealmOK/*realmConfiguration()*/) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(@NotNull Realm realm) {
@@ -134,10 +129,8 @@ public final class StartupActions {
                         }
                     }
                 });
-            }
-
+            });
             new Thread(() -> checkDataUsage()).start();
-            new Thread(() -> mainUserInfo()).start();
             new Thread(this::connectToServer).start();
             Log.wtf(this.getClass().getName(), "StartupActions");
         }
@@ -145,11 +138,11 @@ public final class StartupActions {
     }
 
     private void checkDataUsage() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
             if (realmDataUsage.size() == 0)
                 HelperDataUsage.initializeRealmDataUsage();
-        }
+        });
     }
 
     private void manageTime() {
@@ -529,30 +522,6 @@ public final class StartupActions {
     }
 
     /**
-     * fill main user info in global variables
-     */
-    private void mainUserInfo() {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-
-            if (userInfo != null && userInfo.getUserRegistrationState()) {
-
-                userId = userInfo.getUserId();
-                G.isPassCode = userInfo.isPassCode();
-
-                if (userInfo.getAuthorHash() != null) {
-                    authorHash = userInfo.getAuthorHash();
-                }
-
-                if (userInfo.getUserInfo().getDisplayName() != null) {
-                    displayName = userInfo.getUserInfo().getDisplayName();
-                }
-
-            }
-        }
-    }
-
-    /**
      * initialize realm and manage migration
      */
     private boolean realmConfiguration() {
@@ -569,12 +538,12 @@ public final class StartupActions {
             return false;
         }
 
-        RealmConfiguration configuredRealm = getInstance();
-        Realm.setDefaultConfiguration(configuredRealm);
+        /*RealmConfiguration configuredRealm = getInstance();
+        Realm.setDefaultConfiguration(configuredRealm);*/
         return true;
     }
 
-    public Realm getPlainInstance() {
+    /*public Realm getPlainInstance() {
         RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .name(context.getResources().getString(R.string.planDB))
                 .schemaVersion(REALM_SCHEMA_VERSION)
@@ -588,7 +557,7 @@ public final class StartupActions {
                 .migration(new RealmMigration())
                 .build();
         return Realm.getInstance(configuration);
-    }
+    }*/
 
     public RealmConfiguration getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
@@ -608,9 +577,10 @@ public final class StartupActions {
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
-
-        RealmConfiguration newConfig = new RealmConfiguration.Builder()
-                .name(context.getResources().getString(R.string.encriptedDB))
+        RealmConfiguration newConfig;
+        Log.wtf(this.getClass().getName(), "state true");
+        newConfig = new RealmConfiguration.Builder()
+                .name(net.iGap.AccountManager.defaultDBName)
                 .encryptionKey(mKey)
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override
@@ -646,6 +616,7 @@ public final class StartupActions {
                 return null;
             } catch (Exception e) {
                 //TODO : what is that, exception in catch, realm may be null and close it
+                e.printStackTrace();
                 realm.close();
                 return null;
             }

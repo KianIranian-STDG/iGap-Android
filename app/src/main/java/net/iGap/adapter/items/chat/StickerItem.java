@@ -49,7 +49,6 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(mMessage));
         super.bindView(holder, payloads);
 
         holder.getChatBloke().setBackgroundResource(0);
@@ -61,13 +60,13 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
                 if (FragmentChat.isInSelectionMode) {
                     holder.itemView.performLongClick();
                 } else {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                     } else {
-                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                     }
                 }
             }
@@ -82,10 +81,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
     public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
-            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        }
-
+        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override

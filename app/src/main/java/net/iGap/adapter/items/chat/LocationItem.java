@@ -64,13 +64,13 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         holder.mapPosition.setImageResource(R.drawable.map);
         RealmRoomMessageLocation item = null;
 
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getLocation() != null) {
-                item = mMessage.forwardedFrom.getLocation();
+        if (mMessage.getForwardMessage() != null) {
+            if (mMessage.getForwardMessage().getLocation() != null) {
+                item = mMessage.getForwardMessage().getLocation();
             }
         } else {
-            if (mMessage.location != null) {
-                item = mMessage.location;
+            if (mMessage.getLocation() != null) {
+                item = mMessage.getLocation();
             }
         }
 
@@ -106,7 +106,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                         public void Allow() {
                             G.handler.post(() -> {
                                 FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
-                                        RealmRoom.detectType(mMessage.roomId).getNumber(), mMessage.roomId, mMessage.senderID);
+                                        RealmRoom.detectType(mMessage.getRoomId()).getNumber(), mMessage.getRoomId(), mMessage.getUserId() + "");
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             });
                         }

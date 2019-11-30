@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
@@ -40,6 +41,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import io.realm.Realm;
 
@@ -63,7 +65,7 @@ public class AvatarHandler {
         }
     }
 
-    private HashSet<AvatarHandler> allAvatarHandler = new HashSet<>();
+    private static CopyOnWriteArraySet<AvatarHandler> allAvatarHandler = new CopyOnWriteArraySet<>();
 
     private ConcurrentHashMap<ImageView, ImageHashValue> imageViewHashValue;
     private ConcurrentHashMap<Long, HashSet<ImageView>> avatarHashImages;
@@ -120,13 +122,23 @@ public class AvatarHandler {
         synchronized (mutex2) {
             for (AvatarHandler avatarHandler : allAvatarHandler) {
                 if (!avatarHandler.equals(this)) {
-                    avatarHandler.notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId);
+                    avatarHandler.notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId, false);
                 }
             }
         }
     }
 
+    public void notifyAllAvatar(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
+        for (AvatarHandler avatarHandler : allAvatarHandler) {
+            avatarHandler.notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId, false);
+        }
+    }
+
     private void notifyMe(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
+        notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId, true);
+    }
+
+    private void notifyMe(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId, boolean returnCache) {
         ArrayList<Long> myLimitedList;
         ConcurrentHashMap<Long, CacheValue> myAvatarCache;
         int limit;
@@ -141,7 +153,7 @@ public class AvatarHandler {
         }
 
         CacheValue cache = myAvatarCache.get(avatarOwnerId);
-        if (cache != null && cache.fileId == fileId) {
+        if (returnCache && cache != null && cache.fileId == fileId) {
             return;
         }
 
@@ -203,7 +215,7 @@ public class AvatarHandler {
         LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -221,7 +233,7 @@ public class AvatarHandler {
                             AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId(), a.getId());
                         }
                     });
-                }
+                });
             }
         });
     }
@@ -231,19 +243,16 @@ public class AvatarHandler {
             @Override
             public void run() {
                 baseParam.useCache = false;
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
                             RealmAvatar.deleteAvatar(realm, avatarOwnerId);
                         }
                     }, () -> {
-                        G.refreshRealmUi();
                         getAvatar(baseParam);
-                    }, error -> {
                     });
-                }
-
+                });
             }
         });
     }
@@ -346,9 +355,9 @@ public class AvatarHandler {
         LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     getAvatarImage(baseParam, realm);
-                }
+                });
             }
         });
     }
@@ -384,7 +393,7 @@ public class AvatarHandler {
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
                         final ArrayList<Long> fileIdList = new ArrayList<>();
                         final ArrayList<Long> avatarIdList = new ArrayList<>();
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -396,7 +405,7 @@ public class AvatarHandler {
                                     }
                                 }
                             });
-                        }
+                        });
                         for (int i = 0; i < ownerIdList.size(); i++) {
                             AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i), avatarIdList.get(i));
                         }
@@ -483,7 +492,7 @@ public class AvatarHandler {
      * @return initials[0] , color[1]
      */
     public String[] showInitials(long ownerId, AvatarType avatarType) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             String initials = null;
             String color = null;
             if (avatarType == AvatarType.USER) {
@@ -512,7 +521,7 @@ public class AvatarHandler {
                 return new String[]{initials, color};
             }
             return null;
-        }
+        });
     }
 
     public enum AvatarType {

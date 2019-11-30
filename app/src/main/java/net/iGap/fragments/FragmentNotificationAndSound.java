@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;

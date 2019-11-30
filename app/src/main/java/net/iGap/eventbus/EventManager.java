@@ -42,6 +42,14 @@ public class EventManager {
     public static final int ON_INIT_PAY_ERROR = 4;
     public static final int ON_PAYMENT_RESULT_RECIEVED = 3;
 
+    public static final int ON_UPLOAD_PROGRESS = 5;
+    public static final int ON_UPLOAD_COMPRESS = 6;
+
+    public static final int SOCKET_CONNECT_DENY = 7;
+    public static final int SOCKET_CONNECT_OK = 8;
+    public static final int SOCKET_CONNECT_ERROR = 9;
+    public static final int SOCKET_DISCONNECT = 10;
+
 
     private static EventManager eventListenerInstance;
 

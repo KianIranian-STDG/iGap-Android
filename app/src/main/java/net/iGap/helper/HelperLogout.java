@@ -10,21 +10,30 @@
 
 package net.iGap.helper;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.Theme;
-import net.iGap.activities.ActivityRegistration;
+import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.interfaces.OnUserSessionLogout;
+import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
-import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.request.RequestClientGetRoomList;
+import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.response.ClientGetRoomListResponse;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import io.realm.Realm;
 
 import static org.paygear.utils.Utils.signOutWallet;
 
@@ -37,43 +46,83 @@ public final class HelperLogout {
     /**
      * truncate realm and go to ActivityIntroduce for register again
      */
-    public static void logout() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                ClientGetRoomListResponse.roomListFetched = false;
-                RequestClientGetRoomList.isPendingGetRoomList = false;
-                FragmentMain.mOffset = 0;
-                signOutWallet();
-                HelperRealm.realmTruncate();
+    private void logout() {
+
+        ClientGetRoomListResponse.roomListFetched = false;
+        RequestClientGetRoomList.isPendingGetRoomList = false;
+        FragmentMain.mOffset = 0;
+        signOutWallet();
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(@NotNull Realm realm) {
+                    realm.deleteAll();
+                }
+            });
+            AppUtils.cleanBadge();
+            new LoginActions();
+        });
+    }
+
+    public boolean logoutAllUser() {
+        boolean tmp = logoutUser(AccountManager.getInstance().getCurrentUser());
+        if (tmp) {
+            return logoutAllUser();
+        } else {
+            return false;
+        }
+    }
+
+    private boolean logoutUser(AccountUser accountUser) {
+        if (accountUser.isAssigned()) {
+            logout();
+            boolean tmp = AccountManager.getInstance().removeUser(accountUser);
+            if (!tmp) {
                 clearPreferences();
                 resetStaticField();
+            }
+            return tmp;
+        } else {
+            return false;
+        }
+    }
 
-                AppUtils.cleanBadge();
-                new LoginActions();
-                Intent intent = new Intent(G.context, ActivityRegistration.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                G.context.startActivity(intent);
-                if (G.currentActivity != null) {
-                    G.currentActivity.finish();
-                }
+    public boolean logoutUser() {
+        Log.wtf(this.getClass().getName(), "logoutUser");
+        return logoutUser(AccountManager.getInstance().getCurrentUser());
+    }
 
-                try {
-                    NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    nMgr.cancelAll();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+    public void logoutUserWithRequest(LogOutUserCallBack logOutUserCallBack) {
+        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
+            @Override
+            public void onUserSessionLogout() {
+                G.userLogin = false;
+                WebSocketClient.getInstance().disconnectSocket(false);
+                G.handler.removeCallbacksAndMessages(null);
+                G.pullRequestQueueRunned = new AtomicBoolean(false);
+                logOutUserCallBack.onLogOut(logoutUser(AccountManager.getInstance().getCurrentUser()));
+                /*new LoginActions();*/
+            }
 
-                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
-                    MusicPlayer.stopSound();
-                    MusicPlayer.closeLayoutMediaPlayer();
-                }
+            @Override
+            public void onError() {
+                logOutUserCallBack.onError();
+            }
+
+            @Override
+            public void onTimeOut() {
+                logOutUserCallBack.onError();
             }
         });
     }
 
-    private static void clearPreferences() {
+    public interface LogOutUserCallBack {
+        void onLogOut(boolean haveAnotherAccount);
+
+        void onError();
+    }
+
+    private void clearPreferences() {
         SharedPreferences sharedPreferencesFile = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         sharedPreferencesFile.edit().clear().apply();
 
@@ -82,11 +131,10 @@ public final class HelperLogout {
     }
 
 
-    private static void resetStaticField() {
+    private void resetStaticField() {
         G.userLogin = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
-        G.isPassCode = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
         G.themeColor = Theme.DEFAULT;

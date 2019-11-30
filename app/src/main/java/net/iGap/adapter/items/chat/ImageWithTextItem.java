@@ -51,8 +51,6 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(mMessage));
-
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.messageView);
@@ -63,13 +61,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
                 if (FragmentChat.isInSelectionMode) {
                     holder.itemView.performLongClick();
                 } else {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                     } else {
-                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                     }
                 }
             }
@@ -81,14 +79,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
+
 //            BitmapFactory.Options options = new BitmapFactory.Options();
 //            options.inPreferredConfig = Bitmap.Config.RGB_565;
 //            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        }
+        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override

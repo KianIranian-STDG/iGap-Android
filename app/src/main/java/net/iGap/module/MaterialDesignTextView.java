@@ -16,7 +16,6 @@ import android.util.AttributeSet;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.Emojione;
 
