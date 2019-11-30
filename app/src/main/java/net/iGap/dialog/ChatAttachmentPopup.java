@@ -867,12 +867,12 @@ public class ChatAttachmentPopup {
         isCameraStart = state;
         try {
             G.handler.postDelayed(() -> {
-
-                if (state)
-                    fotoapparatSwitcher.start();
-                else
-                    fotoapparatSwitcher.stop();
-
+                if (fotoapparatSwitcher != null) {
+                    if (state)
+                        fotoapparatSwitcher.start();
+                    else
+                        fotoapparatSwitcher.stop();
+                }
             }, 50);
         } catch (Exception e) {
             e.getMessage();
