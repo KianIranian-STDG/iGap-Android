@@ -85,7 +85,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
     public static final String CALL_TYPE = "CALL_TYPE";
-    private static final int SENSOR_SENSITIVITY = 4;
 
     //public static TextView txtTimeChat, txtTimerMain;
     public static boolean allowOpenCall = true;
@@ -108,11 +107,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private int frameHeight;
     private int rotateFrame;
     private int phoneWidth;
-    private int phoneHeight;
 
-    private boolean isRotated = false;
     private boolean isFrameChange = true;
-    private boolean isVerticalOrient = true;
     private boolean isFirst = true;
     private LocalBroadcastManager localBroadcastManager;
     private Observer<String> timerObserver;
@@ -126,18 +122,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                 switch (intent.getAction()) {
                     case Intent.ACTION_HEADSET_PLUG:
                         int state = intent.getIntExtra("state", -1);
-                        switch (state) {
-                            case 0:
-                                audioManager.setSpeakerphoneOn(true);
-                                viewModel.setHandsFreeConnected(false);
-                                break;
-                            case 1:
-                                audioManager.setSpeakerphoneOn(false);
-                                viewModel.setHandsFreeConnected(true);
-                                break;
-                            default:
-                                audioManager.setSpeakerphoneOn(true);
-                                viewModel.setHandsFreeConnected(false);
+                        if (state == 1) {
+                            audioManager.setSpeakerphoneOn(false);
+                            viewModel.setHandsFreeConnected(true);
+                        } else {
+                            audioManager.setSpeakerphoneOn(true);
+                            viewModel.setHandsFreeConnected(false);
                         }
                         if (ringtonePlayer != null && ringtonePlayer.isPlaying()) {
                             cancelRingtone();
@@ -163,27 +153,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                         audioManager.setSpeakerphoneOn(true);
                         break;
                 }
-/*        if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-
-            if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
-                final int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
-                final int prevState = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR);
-
-                if (state == BluetoothDevice.BOND_BONDED && prevState == BluetoothDevice.BOND_BONDING) {
-                    G.isBluetoothConnected = true;
-
-                } else if (state == BluetoothDevice.BOND_NONE && prevState == BluetoothDevice.BOND_BONDED) {
-                    G.isBluetoothConnected = false;
-                } else if (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1) == BluetoothAdapter.STATE_OFF) {
-                    G.isBluetoothConnected = false;
-                } else {
-                    G.isBluetoothConnected = false;
-                }
-
-            }
-
-            // Bluetooth is disconnected, do handling here
-        }*/
             }
         }
     };
@@ -214,10 +183,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            phoneHeight = displayMetrics.heightPixels;
             phoneWidth = displayMetrics.widthPixels;
         } else {
-            phoneHeight = displayMetrics.widthPixels;
             phoneWidth = displayMetrics.heightPixels;
         }
 
@@ -788,7 +755,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    isVerticalOrient = true;
                     rotateScreen(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight());
                 }
             });

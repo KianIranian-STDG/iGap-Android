@@ -418,7 +418,7 @@ public class G extends ApplicationContext {
 
     public static Context updateResources(Context baseContext) {
         if (G.selectedLanguage == null) {
-            G.selectedLanguage = Locale.getDefault().getLanguage();
+            G.selectedLanguage = "fa";
         }
 
         Locale locale = new Locale(G.selectedLanguage);

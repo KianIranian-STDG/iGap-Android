@@ -349,31 +349,36 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                             }
 
                             isConnected = true;
-                            G.handler.postDelayed(() -> {
-                                changeViewState.setValue(false);
-                                playSound.setValue(R.raw.igap_connect);
-                                setPhoneSpeaker();
-                                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-                                    showRendererSurface.set(View.VISIBLE);
-                                    showUserAvatar.set(View.GONE);
-                                    showSwitchCamera.set(View.VISIBLE);
-                                    showPeerSurface.set(View.VISIBLE);
-                                }
-                                playRingTone.setValue(false);
-                                startTimer();
-                            }, 350);
+
+                            changeViewState.postValue(false);
+                            playSound.postValue(R.raw.igap_connect);
+                            setPhoneSpeaker();
+                            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                                showRendererSurface.set(View.VISIBLE);
+                                showUserAvatar.set(View.GONE);
+                                showSwitchCamera.set(View.VISIBLE);
+                                showPeerSurface.set(View.VISIBLE);
+                            }
+                            playRingTone.postValue(false);
+                            startTimer();
+                            /*G.handler.postDelayed(() -> {
+
+                            }, 350);*/
                         }
 
                         break;
                     case DISCONNECTED:
                         showRippleView.postValue(true);
                         txtAviVisibility.set(View.GONE);
-                        G.handler.postDelayed(() -> {
-                            playSound.setValue(R.raw.igap_discounect);
-                            setPhoneSpeaker();
-                            stopTimer();
-                            endVoiceAndFinish();
-                        }, 1000);
+
+                        playSound.postValue(R.raw.igap_discounect);
+                        setPhoneSpeaker();
+                        stopTimer();
+                        endVoiceAndFinish();
+
+                        /*G.handler.postDelayed(() -> {
+
+                        }, 1000);*/
                         if (!isSendLeave) {
                             new RequestSignalingLeave().signalingLeave();
                         }
@@ -398,11 +403,12 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         new RequestSignalingLeave().signalingLeave();
 
                         isConnected = false;
-                        G.handler.postDelayed(() -> {
-                            stopTimer();
-                            endVoiceAndFinish();
-                        }, 500);
+                        stopTimer();
+                        endVoiceAndFinish();
+                        /*G.handler.postDelayed(() -> {
 
+                        }, 500);
+*/
                         break;
                     case NOT_ANSWERED:
                     case UNAVAILABLE:
@@ -490,7 +496,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setAudioManagerSpeakerphoneOn.setValue(on);
+        setAudioManagerSpeakerphoneOn.postValue(on);
     }
 
     public void endCall() {

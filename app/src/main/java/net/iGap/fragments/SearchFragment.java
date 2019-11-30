@@ -205,7 +205,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     preventRepeatSearch = text;
                 }
             } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
         } else {
             preventRepeatSearch = "";
@@ -233,6 +233,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     public void run() {
                         loadingProgressBar.setVisibility(View.GONE);
                         fillAfterResponse();
+                        HelperError.showSnackMessage(getString(R.string.connection_error), false);
                     }
                 });
             }
@@ -374,7 +375,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             if (results != null) {
 
                 if (results.size() > 0)
-                    addHeader(G.fragmentActivity.getResources().getString(R.string.Groups));
+                    addHeader(getString(R.string.Groups));
 
 
                 for (RealmRoom realmRoom : results) {
@@ -722,8 +723,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onSearchClickListener(View view) {
-        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+        if (getContext() != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+        }
 
     }
 

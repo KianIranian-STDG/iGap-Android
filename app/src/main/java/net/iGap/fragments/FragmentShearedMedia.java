@@ -23,6 +23,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +73,7 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
@@ -107,11 +110,13 @@ import java.util.List;
 
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShearedMedia extends BaseFragment implements ToolbarListener {
@@ -378,7 +383,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             }
         });
 
-        btnGoToPage = (MaterialDesignTextView) view.findViewById(R.id.asm_btn_goToPage);
+        btnGoToPage = view.findViewById(R.id.asm_btn_goToPage);
         btnGoToPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -394,7 +399,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             }
         });
 
-        MaterialDesignTextView btnForwardSelected = (MaterialDesignTextView) view.findViewById(R.id.asm_btn_forward_selected);
+        MaterialDesignTextView btnForwardSelected = view.findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -831,9 +836,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         listCount = mRealmList.size();
 
         mNewList = addTimeToList(mRealmList);
-        adapter = new LinkAdapter(fragmentActivity, mNewList);
+        adapter = new LinkAdapter(recyclerView.getContext(), mNewList);
 
-        recyclerView.setLayoutManager(new PreCachingLayoutManager(fragmentActivity, 5000));
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(adapter);
 
         isChangeSelectType = false;
@@ -1486,7 +1491,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     }
                 });
 
-                messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+                messageProgress = itemView.findViewById(R.id.progress);
                 AppUtils.setProgresColor(messageProgress.progressBar);
 
                 messageProgress.withDrawable(R.drawable.ic_download, true);
@@ -1812,13 +1817,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 imvPicFile = itemView.findViewById(R.id.smsl_imv_file_pic);
 
-                layoutInfo = (LinearLayout) itemView.findViewById(R.id.smsl_ll_video);
+                layoutInfo = itemView.findViewById(R.id.smsl_ll_video);
 
-                txtVideoIcon = (TextView) itemView.findViewById(R.id.smsl_txt_video_icon);
+                txtVideoIcon = itemView.findViewById(R.id.smsl_txt_video_icon);
 
-                txtVideoTime = (TextView) itemView.findViewById(R.id.smsl_txt_video_time);
+                txtVideoTime = itemView.findViewById(R.id.smsl_txt_video_time);
 
-                txtVideoSize = (TextView) itemView.findViewById(R.id.smsl_txt_video_size);
+                txtVideoSize = itemView.findViewById(R.id.smsl_txt_video_size);
             }
         }
     }
@@ -1952,9 +1957,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 tvIconFile.setVisibility(View.GONE);
                 imvPicFile.setVisibility(View.VISIBLE);
 
-                txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
-                txtFileSize = (TextView) itemView.findViewById(R.id.smslf_txt_file_size);
-                txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
+                txtFileName = itemView.findViewById(R.id.smslf_txt_file_name);
+                txtFileSize = itemView.findViewById(R.id.smslf_txt_file_size);
+                txtFileInfo = itemView.findViewById(R.id.smslf_txt_file_info);
             }
         }
     }
@@ -2062,9 +2067,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 imvPicFile = itemView.findViewById(R.id.smslf_imv_icon_file);
 
-                txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
-                txtFileSize = (TextView) itemView.findViewById(R.id.smslf_txt_file_size);
-                txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
+                txtFileName = itemView.findViewById(R.id.smslf_txt_file_name);
+                txtFileSize = itemView.findViewById(R.id.smslf_txt_file_size);
+                txtFileInfo = itemView.findViewById(R.id.smslf_txt_file_info);
             }
         }
     }
@@ -2222,7 +2227,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             public ViewHolder(View view) {
                 super(view);
 
-                gifView = (GifImageView) itemView.findViewById(R.id.smslg_gif_view);
+                gifView = itemView.findViewById(R.id.smslg_gif_view);
             }
         }
     }
@@ -2333,9 +2338,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 iconPicFile = itemView.findViewById(R.id.smslf_imv_icon_file);
 
-                txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
-                txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
-                txtFileSize = (TextView) itemView.findViewById(R.id.smslf_txt_file_size);
+                txtFileName = itemView.findViewById(R.id.smslf_txt_file_name);
+                txtFileInfo = itemView.findViewById(R.id.smslf_txt_file_info);
+                txtFileSize = itemView.findViewById(R.id.smslf_txt_file_size);
             }
         }
     }
@@ -2356,7 +2361,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 View view = setLayoutHeaderTime(viewGroup);
                 viewHolder = new ViewHolderTime(view);
             } else {
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.share_media_sub_layout_link, null);
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.share_media_layout_link, null);
+                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                view.setLayoutParams(lp);
                 viewHolder = new LinkAdapter.ViewHolder(view);
             }
 
@@ -2369,27 +2376,107 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             if (holder.getItemViewType() == 1) {
                 LinkAdapter.ViewHolder vh = (LinkAdapter.ViewHolder) holder;
-
-                vh.txtLink.setText(HelperUrl.setUrlLink(getActivity(), mList.get(position).item.getMessage(), true, false, "", true));
-
-                vh.txtLink.setMovementMethod(LinkMovementMethod.getInstance());
-                vh.messageProgress.setVisibility(View.GONE);
+                vh.bind(mList.get(position).item.getMessage());
             }
         }
 
         @Override
         void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
-
+            /*String link = ((ViewHolder) holder).rawLink;
+            if (getActivity() == null || link == null) return;
+            if (HelperUrl.isTextEmail(link)){
+                HelperUrl.openEmail(getActivity() , link);
+            }else {
+                HelperUrl.openWebBrowser(getActivity() , link);
+            }*/
         }
 
         public class ViewHolder extends mHolder {
-            public TextView txtLink;
+            private EmojiTextViewE tvMessage;
+            private LinearLayout lytLinks ;
+            String rawLink = "";
 
             public ViewHolder(View view) {
                 super(view);
 
-                txtLink = (TextView) itemView.findViewById(R.id.smsll_txt_shared_link);
+                tvMessage = itemView.findViewById(R.id.tvMessage);
+                lytLinks = itemView.findViewById(R.id.lytLinks);
             }
+
+            public void bind(String message){
+
+                tvMessage.setText(message);
+                Linkify.addLinks(tvMessage, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
+
+                String[] links = getUrlsFromText(tvMessage);
+                if (links.length != 0){
+
+                    int txtColor = new Theme().getLinkColor(tvMessage.getContext());
+                    lytLinks.removeAllViews();
+                    for (String link : links) {
+
+                        if (message.contains(link)) {
+                            tvMessage.setText(message.replace(link, "").trim());
+                        } else if (message.contains(link.replace("http://", ""))) {
+                            tvMessage.setText(message.replace(link.replace("http://", ""), "").trim());
+                        }else if (message.contains(link.replace("mailto:", ""))) {
+                            tvMessage.setText(message.replace(link.replace("mailto:", ""), "").trim());
+                        }
+
+                        if (link.startsWith("mailto:")){
+                            link = link.replace("mailto:" , "");
+                        }
+
+                        rawLink = link ;
+
+                        TextView tvLink = new TextView(tvMessage.getContext());
+                        tvLink.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvLink.setSingleLine(true);
+                        tvLink.setLinkTextColor(txtColor);
+                        tvLink.setTextColor(txtColor);
+                        Utils.setTextSize(tvLink, R.dimen.standardTextSize);
+                        tvLink.setText(link);
+                        lytLinks.addView(tvLink);
+                        enableLinkOperation(tvLink);
+
+                    }
+
+                }
+                messageProgress.setVisibility(View.GONE);
+            }
+
+            private void enableLinkOperation(TextView txt) {
+
+                if (getActivity() != null){
+                    BetterLinkMovementMethod
+                            .linkify(Linkify.ALL, txt)
+                            .setOnLinkClickListener((tv, url) -> {
+                                if (HelperUrl.isTextEmail(url.replace("mailto:" , ""))){
+                                    HelperUrl.openEmail(getActivity() , url.replace("mailto:" , ""));
+                                }else {
+                                    HelperUrl.openWebBrowser(getActivity() , url);
+                                }
+                                return true;
+                            })
+                            .setOnLinkLongClickListener((tv, url) -> {
+                                if (HelperUrl.isTextLink(url)){
+                                    G.isLinkClicked = true ;
+                                    HelperUrl.openLinkDialog(getActivity() , url.replace("mailto:" , ""));
+                                }
+                                return true;
+                            });
+                }
+            }
+
+            private String[] getUrlsFromText(TextView textView){
+                URLSpan[] spans = textView.getUrls();
+                String[] results = new String[spans.length];
+                for(int i=0 ; i<spans.length ; i++) {
+                    results[i] = spans[i].getURL();
+                }
+                return results;
+            }
+
         }
     }
 

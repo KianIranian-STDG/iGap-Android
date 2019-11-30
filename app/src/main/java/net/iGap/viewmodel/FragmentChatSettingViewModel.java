@@ -253,7 +253,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
 
     public void dateIsChange() {
         int dateTypeResId;
-        switch (sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0)) {
+        switch (sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 1)) {
             case 1:
                 dateTypeResId = R.string.shamsi;
                 break;

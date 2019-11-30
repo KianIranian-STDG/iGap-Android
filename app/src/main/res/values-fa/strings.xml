@@ -1394,7 +1394,7 @@
     <string name="new_pattern_passCode">ایجاد الگوی جدید</string>
     <string name="repeat_pattern_passCode">تکرار الگو</string>
     <string name="repeat_pattern_pattern">رمز عبور با الگو</string>
-    <string name="solid_colors">رنگ های پس زمین</string>
+    <string name="solid_colors">رنگ های پس زمینه</string>
     <string name="wallpapers">تصاویر پس زمینه</string>
 
     <string name="verify_register_sms">ارسال پیامک</string>
@@ -2325,4 +2325,5 @@
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
     <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
     <string name="delete_from_storage">حذف از حافظه</string>
+    <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
 </resources>

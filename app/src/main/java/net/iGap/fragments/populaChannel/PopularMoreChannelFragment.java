@@ -1,8 +1,8 @@
 package net.iGap.fragments.populaChannel;
 
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,127 +11,155 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popularChannel.PopularChannelMoreSliderAdapter;
 import net.iGap.adapter.items.popularChannel.PopularMoreChannelAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Channel;
+import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.viewmodel.PopularMoreChannelViewModel;
 
 
-public class PopularMoreChannelFragment extends BaseAPIViewFrag implements ToolbarListener {
+public class PopularMoreChannelFragment extends BaseAPIViewFrag {
 
-    private View rootView;
     private View sliderCv;
     private TextView emptyTextView;
     private BannerSlider slider;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private NestedScrollView scrollView;
     private HelperToolbar helperToolbar;
 
-    private String id;
-    private int page = 1;
-    private String title = "";
-    private String scale;
-    private int pageMax = 20;
-    private int itemSize;
-    private boolean isLoadMore = false;
-
-    private PopularChannelMoreSliderAdapter sliderAdapter;
     private PopularMoreChannelViewModel popularMoreChannelViewModel;
-    private PopularMoreChannelAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        popularMoreChannelViewModel = ViewModelProviders.of(this).get(PopularMoreChannelViewModel.class);
+        popularMoreChannelViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                String id = null;
+                String title = null;
+                if (getArguments() != null) {
+                    id = getArguments().getString("id", "");
+                    title = getArguments().getString("title", "");
+                }
+                return (T) new PopularMoreChannelViewModel(id, title);
+            }
+        }).get(PopularMoreChannelViewModel.class);
         viewModel = popularMoreChannelViewModel;
-        adapter = new PopularMoreChannelAdapter();
     }
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_popular_channel_more, container, false);
-        return rootView;
+        return attachToSwipeBack(LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_popular_channel_more, container, false));
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupViews();
 
-        popularMoreChannelViewModel.getFirstPage(id, 0, pageMax);
+        helperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popularMoreChannelViewModel.toolbarBackClick();
+                    }
+                })
+                .setLogoShown(true)
+                .setDefaultTitle("")
+                .setLeftIcon(R.string.back_icon);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            pageMax = 20;
-            page = 1;
-            popularMoreChannelViewModel.getFirstPage(id, 0, pageMax);
-        });
+        ((LinearLayout) view.findViewById(R.id.ll_moreChannel_toolBar)).addView(helperToolbar.getView());
 
+        RecyclerView recyclerView = view.findViewById(R.id.rv_moreChannel);
+        swipeRefreshLayout = view.findViewById(R.id.sr_popularChannel_moreChannel);
+        emptyTextView = view.findViewById(R.id.tv_popularChannel_emptyText);
+        sliderCv = view.findViewById(R.id.cv_popularChannel_more);
+        slider = view.findViewById(R.id.bs_popularChannel_more);
 
-        popularMoreChannelViewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
-            isLoadMore = false;
-            if (childChannel != null) {
-
-                if (title.equals("")) {
-                    if (G.isAppRtl)
-                        title = childChannel.getInfo().getTitle();
-                    else
-                        title = childChannel.getInfo().getTitleEn();
-
-                    helperToolbar.setDefaultTitle(title);
-                }
-
-                if (childChannel.getInfo().getAdvertisement() != null && childChannel.getInfo().getHasAd() && page == 1) {
-                    sliderCv.setVisibility(View.VISIBLE);
-                    scale = childChannel.getInfo().getAdvertisement().getmScale();
-                    String[] scales = scale.split(":");
-                    float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-                    slider.getLayoutParams().height = Math.round(height);
-                    int playBackTime = childChannel.getInfo().getAdvertisement().getmPlaybackTime();
-                    sliderAdapter = new PopularChannelMoreSliderAdapter(childChannel.getInfo().getAdvertisement().getSlides(), scale);
-                    slider.postDelayed(() -> {
-                        slider.setAdapter(sliderAdapter);
-                        slider.setSelectedSlide(0);
-                        slider.setLoopSlides(true);
-                        slider.setInterval(playBackTime);
-                        slider.setOnSlideClickListener(position -> {
-                            popularMoreChannelViewModel.onSlideClick(PopularMoreChannelFragment.this, childChannel, position);
-                        });
-                    }, 200);
-                }
-
-                if (childChannel.getChannels().size() > 0) {
-                    if (page == 1) {
-                        adapter.setChannels(childChannel.getChannels());
-                    } else
-                        adapter.addChannel(childChannel.getChannels());
-
-                    itemSize = childChannel.getChannels().size();
-                }
-            }
-        });
-
-        adapter.setCallBack(new PopularMoreChannelAdapter.OnMoreChannelCallBack() {
+        recyclerView.setAdapter(new PopularMoreChannelAdapter(new PopularMoreChannelAdapter.OnMoreChannelCallBack() {
             @Override
             public void onChannelClick(Channel channel) {
-                popularMoreChannelViewModel.onChannelClick(channel, PopularMoreChannelFragment.this);
+                popularMoreChannelViewModel.onChannelClick(channel);
             }
 
             @Override
             public void onLoadMore() {
-                loadMoreData();
+                popularMoreChannelViewModel.loadMoreData();
+            }
+        }));
+
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((GridLayoutManager) recyclerView.getLayoutManager()) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.wtf(this.getClass().getName(), "onLoadMore,page: " + page);
+                Log.wtf(this.getClass().getName(), "onLoadMore,totalItemsCount: " + totalItemsCount);
+
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(() -> popularMoreChannelViewModel.onSwipeRefresh());
+
+        popularMoreChannelViewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
+            if (getActivity() != null && isGoBack != null && isGoBack) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        popularMoreChannelViewModel.getToolbarTitle().observe(getViewLifecycleOwner(), toolbarTitle -> {
+            if (toolbarTitle != null) {
+                helperToolbar.setDefaultTitle(toolbarTitle);
+            }
+        });
+
+        popularMoreChannelViewModel.getShowAdvertisement().observe(getViewLifecycleOwner(), adv -> {
+            if (adv != null) {
+                sliderCv.setVisibility(View.VISIBLE);
+                String scale = adv.getmScale();
+                slider.postDelayed(() -> {
+                    slider.setAdapter(new PopularChannelMoreSliderAdapter(adv.getSlides(), scale));
+                    slider.setSelectedSlide(0);
+                    slider.setLoopSlides(true);
+                    slider.setInterval(adv.getmPlaybackTime());
+                    slider.setOnSlideClickListener(position -> {
+                        popularMoreChannelViewModel.onSlideClick(adv.getSlides().get(position));
+                    });
+                }, 200);
+            } else {
+                sliderCv.setVisibility(View.GONE);
+            }
+        });
+
+        popularMoreChannelViewModel.getGoToChannel().observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                if (data.isPrivate()) {
+                    HelperUrl.checkAndJoinToRoom(getActivity(), data.getSlug());
+                } else {
+                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), data.getSlug(), HelperUrl.ChatEntry.chat);
+                }
+            }
+        });
+
+
+        popularMoreChannelViewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
+            Log.wtf(this.getClass().getName(), "getMoreChannelMutableLiveData");
+            if (childChannel != null && recyclerView.getAdapter() instanceof PopularMoreChannelAdapter) {
+                Log.wtf(this.getClass().getName(), "getMoreChannelMutableLiveData");
+                ((PopularMoreChannelAdapter) recyclerView.getAdapter()).setChannels(childChannel);
             }
         });
 
@@ -148,71 +176,13 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag implements Toolb
             else
                 emptyTextView.setVisibility(View.GONE);
         });
-
-
-        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
-            loadMoreData();
-        });
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (scale != null) {
-            String[] scales = scale.split(":");
-            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-            slider.getLayoutParams().height = Math.round(height);
-            sliderAdapter.setScale(scale);
+        if (popularMoreChannelViewModel.getScale()!= null) {
+            ((PopularChannelMoreSliderAdapter)slider.getAdapter()).setScale(popularMoreChannelViewModel.getScale());
         }
-    }
-
-    private void loadMoreData() {
-        if (itemSize >= pageMax && !isLoadMore) {
-            isLoadMore = true;
-            int nextPage = pageMax + pageMax;
-            popularMoreChannelViewModel.getFirstPage(id, pageMax, nextPage);
-            page = page + 1;
-        }
-    }
-
-    public void setupViews() {
-        helperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setListener(this)
-                .setLogoShown(true)
-                .setDefaultTitle(title)
-                .setLeftIcon(R.string.back_icon);
-
-        LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_moreChannel_toolBar);
-        RecyclerView recyclerView = rootView.findViewById(R.id.rv_moreChannel);
-        swipeRefreshLayout = rootView.findViewById(R.id.sr_popularChannel_moreChannel);
-        emptyTextView = rootView.findViewById(R.id.tv_popularChannel_emptyText);
-        sliderCv = rootView.findViewById(R.id.cv_popularChannel_more);
-        slider = rootView.findViewById(R.id.bs_popularChannel_more);
-        scrollView = rootView.findViewById(R.id.sv_popularChannel_more);
-
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setNestedScrollingEnabled(false);
-
-        toolBarContainer.addView(helperToolbar.getView());
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public void onLeftIconClickListener(View view) {
-        if (getActivity() != null)
-            getActivity().onBackPressed();
-    }
-
-    public int getPage() {
-        return page;
     }
 }

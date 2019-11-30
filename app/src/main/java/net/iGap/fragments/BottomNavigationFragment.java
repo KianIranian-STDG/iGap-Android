@@ -392,7 +392,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     if (uri != null)
                         if (uri.length > 1) {
                             PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
-                            popularMoreChannelFragment.setId(uri[1]);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("id",uri[1]);
+                            popularMoreChannelFragment.setArguments(bundle);
                             new HelperFragment(getFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
                         } else {
                             new HelperFragment(getFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();

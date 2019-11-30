@@ -550,7 +550,7 @@ public class FragmentChat extends BaseFragment
     private boolean isEmojiSHow = false;
     private boolean isPublicGroup = false;
     private ArrayList<Long> bothDeleteMessageId;
-    private RelativeLayout layoutMute;
+    private ViewGroup layoutMute;
     private String report = "";
     private View rootView;
     private boolean isAllSenderId = true;
@@ -2343,19 +2343,31 @@ public class FragmentChat extends BaseFragment
 
         G.onChatSendMessage = new OnChatSendMessage() {
             @Override
-            public void Error(int majorCode, int minorCode, final int waitTime) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (G.fragmentActivity.hasWindowFocus()) {
-                                showErrorDialog(waitTime);
+            public void Error(int majorCode, int minorCode, final int waitTime, long messageId) {
+                if (majorCode == 234) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (G.fragmentActivity.hasWindowFocus()) {
+                                    showErrorDialog(waitTime);
+                                }
+                            } catch (Exception e) {
                             }
-                        } catch (Exception e) {
-                        }
 
-                    }
-                });
+                        }
+                    });
+                } else if (majorCode == 233 && minorCode == 1) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (getContext() != null && mAdapter != null) {
+                                mAdapter.removeMessage(messageId);
+                            }
+                        }
+                    });
+                }
+
             }
         };
 
@@ -3996,12 +4008,9 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onMessageFailed(long roomId, long messageId) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (roomId == mRoomId && mAdapter != null) {
-                    mAdapter.updateMessageStatus(messageId, ProtoGlobal.RoomMessageStatus.FAILED);
-                }
+        G.handler.post(() -> {
+            if (roomId == mRoomId && mAdapter != null) {
+                mAdapter.updateMessageStatus(messageId, ProtoGlobal.RoomMessageStatus.FAILED);
             }
         });
     }
@@ -5992,8 +6001,8 @@ public class FragmentChat extends BaseFragment
     private void sendButtonVisibility(boolean visibility) {
 
         if (animGone == null || animVisible == null) {
-            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_hide);
-            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_show);
+            animGone = AnimationUtils.loadAnimation(imvSendButton.getContext(), R.anim.fade_scale_hide);
+            animVisible = AnimationUtils.loadAnimation(imvSendButton.getContext(), R.anim.fade_scale_show);
         }
 
         //animGone.setDuration(70);

@@ -203,7 +203,7 @@ public class FragmentChatSettings extends BaseFragment {
         return wrappedDrawable;
     }
 
-    public void setChatReceivedChatBubble(int color) {
+    private void setChatReceivedChatBubble(int color) {
         binding.receivedChatItem.setBackground(tintDrawable(binding.receivedChatItem.getBackground(), ColorStateList.valueOf(color)));
     }
 

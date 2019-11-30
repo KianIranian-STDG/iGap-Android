@@ -2,6 +2,7 @@ package net.iGap.viewmodel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -79,7 +80,9 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
             new HelperFragment(fragment.getActivity().getSupportFragmentManager(), FragmentWebView.newInstance(slide.getmActionLink(), false, null)).setReplace(false).load();
         } else if (slide.getActionType() == 12) {
             PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
-            popularMoreChannelFragment.setId(slide.getmActionLink());
+            Bundle bundle = new Bundle();
+            bundle.putString("id", slide.getmActionLink());
+            popularMoreChannelFragment.setArguments(bundle);
             new HelperFragment(fragment.getFragmentManager(), popularMoreChannelFragment).setResourceContainer(R.id.popularChannel_container).setReplace(false).load();
         }
     }
@@ -93,8 +96,10 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
 
     public void onMoreClick(String moreId, String title, PopularChannelHomeFragment fragment) {
         PopularMoreChannelFragment moreChannelFragment = new PopularMoreChannelFragment();
-        moreChannelFragment.setId(moreId);
-        moreChannelFragment.setTitle(title);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", moreId);
+        bundle.putString("title", title);
+        moreChannelFragment.setArguments(bundle);
         FragmentTransaction fragmentTransition = fragment.getFragmentManager().beginTransaction();
         fragmentTransition.replace(R.id.popularChannel_container, moreChannelFragment);
         fragmentTransition.addToBackStack(null);

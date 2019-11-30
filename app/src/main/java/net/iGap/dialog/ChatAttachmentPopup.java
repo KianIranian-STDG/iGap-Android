@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -38,6 +39,7 @@ import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnClickCamera;
 import net.iGap.interfaces.OnGetPermission;
@@ -55,7 +57,6 @@ import java.util.List;
 import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.selector.ResolutionSelectorsKt;
 
-import static io.fotoapparat.selector.LensPositionSelectorsKt.back;
 import static net.iGap.R.string.item;
 import static net.iGap.fragments.FragmentChat.listPathString;
 
@@ -554,7 +555,7 @@ public class ChatAttachmentPopup {
 
         if (isCameraStart || !isPermissionCamera) return;
         if (fotoapparatSwitcher == null) buildCameraSwitcher();
-        setCameraState(true);
+        if (fotoapparatSwitcher != null) setCameraState(true);
 
     }
 
@@ -562,7 +563,7 @@ public class ChatAttachmentPopup {
 
         if (!isCameraStart || !isPermissionCamera) return;
         if (fotoapparatSwitcher == null) buildCameraSwitcher();
-        setCameraState(false);
+        if (fotoapparatSwitcher != null) setCameraState(false);
 
     }
 
@@ -779,7 +780,7 @@ public class ChatAttachmentPopup {
 
     private void animateViewWithCircularReveal(View myView) {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && myView != null) {
 
             int cx = myView.getMeasuredWidth() / 2;
             int cy = myView.getMeasuredHeight() / 2;
@@ -845,7 +846,12 @@ public class ChatAttachmentPopup {
         fotoapparatSwitcher = Fotoapparat.with(mFrgActivity)
                 .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview
                 .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
-                .lensPosition(back())     // we want back camera
+//                .lensPosition(back())     // we want back camera
+                .cameraErrorCallback(e -> {
+                    fotoapparatSwitcher = null;
+                    Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
+                    new HelperLog().setErrorLog(e);
+                })
                 .build();
 
     }

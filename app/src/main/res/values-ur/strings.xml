@@ -2099,6 +2099,7 @@
     <string name="elecBill_success_title">سەرکەوتن</string>
     <string name="elecBill_success_pay">حساب کردن بە سەرکەوتوویی ئەنجام بوو.</string>
     <string name="delete_from_storage">سڕینەوە لە بیرەوەریی</string>
+    <string name="map_registration_enable">Enable Nearby Visibility</string>
     <string name="login_exist_account_error">This account is login on this device</string>
 
 </resources>
