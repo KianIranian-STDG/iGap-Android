@@ -27,13 +27,28 @@ import static net.iGap.helper.HelperConvertEnumToString.convertActionEnum;
 public class HelperGetAction {
 
     private static CopyOnWriteArrayList<StructAction> structActions = new CopyOnWriteArrayList<>();
+    // this array contains all of NOT canceled user and their rooms
+    private static CopyOnWriteArrayList<StructAction> activeActions = new CopyOnWriteArrayList<>();
+    // this var indicates that function for checking the user action is running.
+    private static Boolean handler = false;
 
-    public static String getAction(long roomId, ProtoGlobal.Room.Type type, ProtoGlobal.ClientAction clientAction) {
+    public static String getAction(long roomId, long userID, ProtoGlobal.Room.Type type, ProtoGlobal.ClientAction clientAction) {
+        if (!checkExistAction(roomId, userID, clientAction) && type != null && type != ProtoGlobal.Room.Type.CHANNEL) {
+            // in here we add user and its room id to the list and starts the observer.
+            final StructAction structAction = new StructAction();
+            structAction.roomId = roomId;
+            structAction.userId = userID;
+            structAction.currentTime = System.currentTimeMillis();
+            structAction.action = ProtoGlobal.ClientAction.TYPING;
+
+            activeActions.add(structAction);
+//            timeOutChecking(structAction);
+            checkTimeOut(false);
+        }
         if (type == ProtoGlobal.Room.Type.CHAT) {
             String action = convertActionEnum(clientAction);
             return action;
         } else if (type == ProtoGlobal.Room.Type.GROUP) {
-
             final String actionText = HelperGetAction.getMultipleAction(roomId);
             return actionText;
         }
@@ -187,6 +202,100 @@ public class HelperGetAction {
     private static class StructAction {
         public long roomId;
         public long userId;
+        public long currentTime;
         public ProtoGlobal.ClientAction action;
+    }
+
+    /**
+     * check that action with same roomId is exist or not.
+     * return true if exist and update time otherwise just return false. and if the status is cancel so we will delete it from out lists.
+     *
+     * @param roomId roomId that send action from that
+     * @param action action that send
+     */
+    private static boolean checkExistAction(long roomId, long userID, ProtoGlobal.ClientAction action) {
+        for (StructAction struct : activeActions) {
+            if (struct.roomId == roomId && struct.userId == userID) {
+                if (action == ProtoGlobal.ClientAction.CANCEL) {
+                    removeStructWithRoomID(roomId, userID);
+                    fillOrClearAction(roomId, userID, ProtoGlobal.ClientAction.CANCEL);
+                    if (G.onSetAction != null)
+                        G.onSetAction.onSetAction(roomId, struct.userId, ProtoGlobal.ClientAction.CANCEL);
+                    if (G.onSetActionInRoom != null) {
+                        G.onSetActionInRoom.onSetAction(struct.roomId, struct.userId, ProtoGlobal.ClientAction.CANCEL);
+                    }
+                } else {
+                    struct.currentTime = System.currentTimeMillis();
+                }
+                return true;
+            }
+        }
+        if (action == ProtoGlobal.ClientAction.CANCEL) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * this function will repeat itself until there is no item in the list.
+     *
+     * @param isCallInside is it send inside the observer or not
+     */
+
+    private static void checkTimeOut(boolean isCallInside) {
+        if (handler != isCallInside)
+            return;
+        else
+            handler = true;
+        LooperThreadHelper.getInstance().getHandler().postDelayed(
+                () -> {
+                    for (StructAction struct : activeActions) {
+                        if (autoCancel(struct.currentTime)) {
+                            if (G.onSetAction != null) {
+                                G.onSetAction.onSetAction(struct.roomId, struct.userId, ProtoGlobal.ClientAction.CANCEL);
+                            }
+                            if (G.onSetActionInRoom != null) {
+                                G.onSetActionInRoom.onSetAction(struct.roomId, struct.userId, ProtoGlobal.ClientAction.CANCEL);
+                            }
+                        }
+                    }
+                    if (activeActions.size() > 0)
+                        checkTimeOut(true);
+                    else
+                        handler = false;
+                }, Config.ACTION_EXPIRE_LOOP);
+    }
+
+    /**
+     * check difference time from latest set action .
+     * if time difference was more than Config.ACTION_TIME_OUT second
+     * return true for send cancel request for that action
+     *
+     * @param startActionTime currentTimeMillis for start action or update action(when repeat it)
+     */
+
+    private static boolean autoCancel(long startActionTime) {
+
+        long difference;
+
+        long currentTime = System.currentTimeMillis();
+        difference = (currentTime - startActionTime);
+
+        return difference >= Config.CLIENT_ACTION_TIME_OUT;
+    }
+
+
+    /**
+     * remove item from structActions array with roodID.
+     *
+     * @param roomID randomKey that should remove struct with that
+     */
+    private static void removeStructWithRoomID(long roomID, long userID) {
+        for (int i = 0; i < activeActions.size(); i++) {
+            if (activeActions.get(i).roomId == roomID && activeActions.get(i).userId == userID) {
+                activeActions.remove(i);
+                break;
+            }
+        }
     }
 }

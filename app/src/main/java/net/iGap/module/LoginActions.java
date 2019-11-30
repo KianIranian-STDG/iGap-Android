@@ -57,15 +57,6 @@ public class LoginActions {
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-                        G.clientConditionGlobal = RealmClientCondition.computeClientCondition(null);
-                        new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
-                        return null;
-                    }
-
-                }.execute();
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {

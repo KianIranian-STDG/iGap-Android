@@ -2,12 +2,12 @@ package net.iGap.viewmodel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiInitializer;
@@ -20,17 +20,12 @@ import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Channel;
 import net.iGap.model.popularChannel.ParentChannel;
 import net.iGap.model.popularChannel.Slide;
 import net.iGap.module.SHP_SETTING;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PopularChannelHomeViewModel extends BaseViewModel {
     private FavoriteChannelApi channelApi = ApiServiceProvider.getChannelApi();
@@ -85,7 +80,9 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
             new HelperFragment(fragment.getActivity().getSupportFragmentManager(), FragmentWebView.newInstance(slide.getmActionLink(), false, null)).setReplace(false).load();
         } else if (slide.getActionType() == 12) {
             PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
-            popularMoreChannelFragment.setId(slide.getmActionLink());
+            Bundle bundle = new Bundle();
+            bundle.putString("id", slide.getmActionLink());
+            popularMoreChannelFragment.setArguments(bundle);
             new HelperFragment(fragment.getFragmentManager(), popularMoreChannelFragment).setResourceContainer(R.id.popularChannel_container).setReplace(false).load();
         }
     }
@@ -99,8 +96,10 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
 
     public void onMoreClick(String moreId, String title, PopularChannelHomeFragment fragment) {
         PopularMoreChannelFragment moreChannelFragment = new PopularMoreChannelFragment();
-        moreChannelFragment.setId(moreId);
-        moreChannelFragment.setTitle(title);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", moreId);
+        bundle.putString("title", title);
+        moreChannelFragment.setArguments(bundle);
         FragmentTransaction fragmentTransition = fragment.getFragmentManager().beginTransaction();
         fragmentTransition.replace(R.id.popularChannel_container, moreChannelFragment);
         fragmentTransition.addToBackStack(null);

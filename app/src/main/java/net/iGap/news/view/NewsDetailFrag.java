@@ -101,17 +101,15 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
             startActivity(Intent.createChooser(sendIntent, "Share via"));
         });
 
-        binding.writeComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag().setData(arg.getString("NewsID"), new NewsAddCommentBottomSheetFrag.CompleteListener() {
-                            @Override
-                            public void onCompleted() {
-                                Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
-            }
+        binding.writeComment.setOnClickListener(v -> {
+            NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag()
+                    .setData(arg.getString("NewsID"), result -> {
+                        if (result)
+                            Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getContext(), R.string.news_add_comment_failToast, Toast.LENGTH_SHORT).show();
+                    });
+            bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
         });
 
         newsMainVM.getDataFromServer(arg.getString("NewsID"));
@@ -127,6 +125,8 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
                 Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
                 snackbar.show();
+                if (newsError.getTitle().equals("001"))
+                    binding.noDataError.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -187,15 +187,13 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
     private void initMainRecycler(NewsDetail data) {
 
         Picasso.get()
-//                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                 .load(data.getSourceImage())
                 .placeholder(R.mipmap.news_temp_banner)
                 .into(binding.image);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             binding.detailTV.setText(Html.fromHtml(data.getBody(), Html.FROM_HTML_MODE_COMPACT));
-        }
-        else {
+        } else {
             binding.detailTV.setText(Html.fromHtml(data.getBody()));
         }
 

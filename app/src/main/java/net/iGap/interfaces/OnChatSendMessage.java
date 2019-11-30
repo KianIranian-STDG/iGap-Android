@@ -11,5 +11,5 @@ package net.iGap.interfaces;
 
 public interface OnChatSendMessage {
 
-    void Error(int majorCode, int minorCode, int waitTime);
+    void Error(int majorCode, int minorCode, int waitTime, long messageId);
 }

@@ -2,7 +2,9 @@ package net.iGap.electricity_bill.viewmodel;
 
 import android.view.View;
 
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
@@ -17,24 +19,24 @@ import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 public class ElectricityBillAddVM extends BaseAPIViewModel {
 
     private ObservableField<String> billID;
-    private ObservableField<Integer> billIDError;
-    private ObservableField<Boolean> billIDErrorEnable;
+    private ObservableInt billIDError;
+    private ObservableBoolean billIDErrorEnable;
 
     private ObservableField<String> billName;
-    private ObservableField<Integer> billNameError;
-    private ObservableField<Boolean> billNameErrorEnable;
+    private ObservableInt billNameError;
+    private ObservableBoolean billNameErrorEnable;
 
     private ObservableField<String> billPhone;
-    private ObservableField<Integer> billPhoneError;
-    private ObservableField<Boolean> billPhoneErrorEnable;
+    private ObservableInt billPhoneError;
+    private ObservableBoolean billPhoneErrorEnable;
 
     private ObservableField<String> billUserID;
-    private ObservableField<Integer> billUserIDError;
-    private ObservableField<Boolean> billUserIDErrorEnable;
+    private ObservableInt billUserIDError;
+    private ObservableBoolean billUserIDErrorEnable;
 
     private ObservableField<String> billEmail;
-    private ObservableField<Integer> billEmailError;
-    private ObservableField<Boolean> billEmailErrorEnable;
+    private ObservableInt billEmailError;
+    private ObservableBoolean billEmailErrorEnable;
 
     private ObservableField<Integer> progressVisibility;
 
@@ -47,25 +49,25 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
     public ElectricityBillAddVM() {
 
         billID = new ObservableField<>();
-        billIDError = new ObservableField<>();
-        billIDErrorEnable = new ObservableField<>(false);
+        billIDError = new ObservableInt();
+        billIDErrorEnable = new ObservableBoolean(false);
 
         ElectricityBillRealmRepo repo = new ElectricityBillRealmRepo();
         billPhone = new ObservableField<>(repo.getUserNum());
-        billPhoneError = new ObservableField<>();
-        billPhoneErrorEnable = new ObservableField<>(false);
+        billPhoneError = new ObservableInt();
+        billPhoneErrorEnable = new ObservableBoolean(false);
 
         billName = new ObservableField<>();
-        billNameError = new ObservableField<>();
-        billNameErrorEnable = new ObservableField<>(false);
+        billNameError = new ObservableInt();
+        billNameErrorEnable = new ObservableBoolean(false);
 
         billUserID = new ObservableField<>("0");
-        billUserIDError = new ObservableField<>();
-        billUserIDErrorEnable = new ObservableField<>(false);
+        billUserIDError = new ObservableInt();
+        billUserIDErrorEnable = new ObservableBoolean(false);
 
         billEmail = new ObservableField<>(repo.getUserEmail());
-        billEmailError = new ObservableField<>();
-        billEmailErrorEnable = new ObservableField<>(false);
+        billEmailError = new ObservableInt();
+        billEmailErrorEnable = new ObservableBoolean(false);
 
         progressVisibility = new ObservableField<>(View.GONE);
         goBack = new MutableLiveData<>(false);
@@ -194,19 +196,19 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         this.billID = billID;
     }
 
-    public ObservableField<Integer> getBillIDError() {
+    public ObservableInt getBillIDError() {
         return billIDError;
     }
 
-    public void setBillIDError(ObservableField<Integer> billIDError) {
+    public void setBillIDError(ObservableInt billIDError) {
         this.billIDError = billIDError;
     }
 
-    public ObservableField<Boolean> getBillIDErrorEnable() {
+    public ObservableBoolean getBillIDErrorEnable() {
         return billIDErrorEnable;
     }
 
-    public void setBillIDErrorEnable(ObservableField<Boolean> billIDErrorEnable) {
+    public void setBillIDErrorEnable(ObservableBoolean billIDErrorEnable) {
         this.billIDErrorEnable = billIDErrorEnable;
     }
 
@@ -226,19 +228,19 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         this.billName = billName;
     }
 
-    public ObservableField<Integer> getBillNameError() {
+    public ObservableInt getBillNameError() {
         return billNameError;
     }
 
-    public void setBillNameError(ObservableField<Integer> billNameError) {
+    public void setBillNameError(ObservableInt billNameError) {
         this.billNameError = billNameError;
     }
 
-    public ObservableField<Boolean> getBillNameErrorEnable() {
+    public ObservableBoolean getBillNameErrorEnable() {
         return billNameErrorEnable;
     }
 
-    public void setBillNameErrorEnable(ObservableField<Boolean> billNameErrorEnable) {
+    public void setBillNameErrorEnable(ObservableBoolean billNameErrorEnable) {
         this.billNameErrorEnable = billNameErrorEnable;
     }
 
@@ -250,19 +252,19 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         this.billPhone = billPhone;
     }
 
-    public ObservableField<Integer> getBillPhoneError() {
+    public ObservableInt getBillPhoneError() {
         return billPhoneError;
     }
 
-    public void setBillPhoneError(ObservableField<Integer> billPhoneError) {
+    public void setBillPhoneError(ObservableInt billPhoneError) {
         this.billPhoneError = billPhoneError;
     }
 
-    public ObservableField<Boolean> getBillPhoneErrorEnable() {
+    public ObservableBoolean getBillPhoneErrorEnable() {
         return billPhoneErrorEnable;
     }
 
-    public void setBillPhoneErrorEnable(ObservableField<Boolean> billPhoneErrorEnable) {
+    public void setBillPhoneErrorEnable(ObservableBoolean billPhoneErrorEnable) {
         this.billPhoneErrorEnable = billPhoneErrorEnable;
     }
 
@@ -274,19 +276,19 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         this.billUserID = billUserID;
     }
 
-    public ObservableField<Integer> getBillUserIDError() {
+    public ObservableInt getBillUserIDError() {
         return billUserIDError;
     }
 
-    public void setBillUserIDError(ObservableField<Integer> billUserIDError) {
+    public void setBillUserIDError(ObservableInt billUserIDError) {
         this.billUserIDError = billUserIDError;
     }
 
-    public ObservableField<Boolean> getBillUserIDErrorEnable() {
+    public ObservableBoolean getBillUserIDErrorEnable() {
         return billUserIDErrorEnable;
     }
 
-    public void setBillUserIDErrorEnable(ObservableField<Boolean> billUserIDErrorEnable) {
+    public void setBillUserIDErrorEnable(ObservableBoolean billUserIDErrorEnable) {
         this.billUserIDErrorEnable = billUserIDErrorEnable;
     }
 
@@ -298,19 +300,19 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         this.billEmail = billEmail;
     }
 
-    public ObservableField<Integer> getBillEmailError() {
+    public ObservableInt getBillEmailError() {
         return billEmailError;
     }
 
-    public void setBillEmailError(ObservableField<Integer> billEmailError) {
+    public void setBillEmailError(ObservableInt billEmailError) {
         this.billEmailError = billEmailError;
     }
 
-    public ObservableField<Boolean> getBillEmailErrorEnable() {
+    public ObservableBoolean getBillEmailErrorEnable() {
         return billEmailErrorEnable;
     }
 
-    public void setBillEmailErrorEnable(ObservableField<Boolean> billEmailErrorEnable) {
+    public void setBillEmailErrorEnable(ObservableBoolean billEmailErrorEnable) {
         this.billEmailErrorEnable = billEmailErrorEnable;
     }
 

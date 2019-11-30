@@ -27,7 +27,7 @@ public class Config {
     public static final int GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final int LIMIT_GET_HISTORY_LOW = 10;
     public static final int LIMIT_GET_HISTORY_NORMAL = 50;
-    public static final int LIMIT_LOAD_ROOM = 50;
+    public static final int LIMIT_LOAD_ROOM = 100;
     public static final int STORE_MESSAGE_POSITION_LIMIT = 2; // count of message from end of list
     public static final int FAST_START_PAGE_TIME = 50;
     public static final int LOW_START_PAGE_TIME = 200;
@@ -35,8 +35,9 @@ public class Config {
     public static final long drIgapPeerId = 2297310;
 
     public static final int TIME_OUT_DELAY_MS = (int) (DateUtils.SECOND_IN_MILLIS);
+    public static final int ACTION_EXPIRE_LOOP = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int FAKE_PM_DELAY = (int) (10 * DateUtils.SECOND_IN_MILLIS);
-    public static final int TIME_OUT_MS = (int) (10 * DateUtils.SECOND_IN_MILLIS);
+    public static final int TIME_OUT_MS = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static final int ALLOW_RECONNECT_AGAIN_NORMAL = (int) (3 * DateUtils.SECOND_IN_MILLIS);
     public static final int REPEAT_CONNECTION_CHECKING = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int DEFAULT_TIME_OUT = (int) (10 * DateUtils.SECOND_IN_MILLIS);
@@ -45,6 +46,7 @@ public class Config {
     public static final int COUNTER_TIMER_DELAY = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int UPDATE_STATUS_TIME = (int) (3 * DateUtils.SECOND_IN_MILLIS);// after this time check that program is in background
     public static final int ACTION_TIME_OUT = (int) (2 * DateUtils.SECOND_IN_MILLIS);
+    public static final int CLIENT_ACTION_TIME_OUT = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_MESSAGE_STATE_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_MESSAGE_STATE_TIME_OUT_CHECKING = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);

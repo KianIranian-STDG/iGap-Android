@@ -32,6 +32,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.EmojiEditTextE;
 
 import java.util.Locale;
 
@@ -51,7 +52,7 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
     private View transferRootViewCard;
     private Button cancelBtnCard;
     private EditText amountEtCard;
-    private EditText descEtCard;
+    private EmojiEditTextE descEtCard;
     private MaskedEditText cardNumberEtCard;
     private CardToCardCallBack cardToCardCallBack;
 

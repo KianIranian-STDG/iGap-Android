@@ -55,8 +55,10 @@
     <string name="Re_dialog_verify_number_part1">You have entered this number :</string>
     <string name="Re_dialog_verify_number_part2">Tap OK if this entered phone number is correct or simply modify it if wrong.</string>
     <string name="Re_Enter_Verify_Code_Please">Please enter the verification code</string>
-    <string name="verify_socket_message">You have logged into your account on another device and iGap has sent a verification code via its Notification Service in your account, Please check another device and enter the verification code.</string>
-    <string name="verify_time_out_message">iGap recognizes the code automatically; if not, enter it manually. (Please ask the app to resend the verification code if you have not received it yet)</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap</string>
+    <string name="verify_sms_message">Please enter verification code sent by sms</string>
+    <string name="verify_call_message">Please enter verification code sent by call</string>
+    <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
     <string name="verify_invalid_code_message">Unfortunately; the verification code is invalid , Please enter the correct one manually.</string>
     <string name="resend_message">Resending the verification code</string>
     <string name="phone_number">Phone Number</string>
@@ -1121,6 +1123,7 @@ Want to get it?</string>
     <string name="nearby">Manually Update the Map</string>
     <string name="list_user_map">List of People Nearby</string>
     <string name="map_registration">Disable "Nearby" Visibility</string>
+    <string name="map_registration_enable">Enable "Nearby" Visibility</string>
     <string name="comment_waiting">Receiving notes...</string>
     <string name="comment_no">No Status</string>
     <string name="distance" formatted="false">about %d m</string>
@@ -1227,7 +1230,7 @@ Want to get it?</string>
     <string name="send">Send</string>
     <string name="do_not_send">Don\'t Send</string>
     <string name="save_data_in_sd_card">Save data in sd card</string>
-    <string name="are_you_sure">Are you sure</string>
+    <string name="are_you_sure">Are you sure?</string>
     <string name="are_you_sure_request">Are you sure you want to submit your request?</string>
     <string name="are_you_sure_edit_contact">Are you sure to edit contact?</string>
     <string name="change_storage_place">Change storage place</string>
@@ -2347,10 +2350,11 @@ Want to get it?</string>
     <string name="news_MHits" tools:ignore="ExtraTranslation">پربازدیدترین</string>
     <string name="news_comment" tools:ignore="ExtraTranslation">نظرات</string>
     <string name="news_emptyList" tools:ignore="ExtraTranslation">هیچ موردی برای نمایش موجود نیست. \n برای بارگزاری مجدد صفحه را به سمت پایین بکشید.</string>
+    <string name="news_noData" tools:ignore="ExtraTranslation">جزئیات خبر مورد نظر دریافت نشد. \nلطفا دوباره تلاش کنید.</string>
     <string name="news_ergent" tools:ignore="ExtraTranslation">پربحث ترین</string>
     <string name="news_groupTitle" tools:ignore="ExtraTranslation">گروه های خبری</string>
     <string name="news_latest" tools:ignore="ExtraTranslation">آخرین خبرها</string>
-    <string name="news_mainTitle" tools:ignore="ExtraTranslation">اخبار آیگپ</string>
+    <string name="news_mainTitle" tools:ignore="ExtraTranslation">اولین خبر</string>
     <string name="news_related_news" tools:ignore="ExtraTranslation">اخبار مرتبط</string>
     <string name="news_share" tools:ignore="ExtraTranslation">اشتراک گذاری خبر</string>
     <string name="news_write_comment" tools:ignore="ExtraTranslation">نظر شما چیست؟</string>
@@ -2365,9 +2369,25 @@ Want to get it?</string>
     <string name="news_add_comment_success" tools:ignore="ExtraTranslation">ثبت شد.</string>
     <string name="news_add_comment_fail" tools:ignore="ExtraTranslation">خطا!</string>
     <string name="news_add_comment_successToast" tools:ignore="ExtraTranslation">نظر شما با موفقیت ثبت شد.</string>
+    <string name="news_add_comment_failToast" tools:ignore="ExtraTranslation">ثبت نظر با خطا مواجه شد.</string>
     <string name="news_add_comment_errorAuthor" tools:ignore="ExtraTranslation">لطفا نام خود را وارد کنید.</string>
     <string name="news_add_comment_errorEmail" tools:ignore="ExtraTranslation">لطفا ایمیل خود را وارد کنید.</string>
     <string name="news_add_comment_errorEmail2" tools:ignore="ExtraTranslation">فرمت ایمیل وارد شده صحیح نیست.</string>
     <string name="news_add_comment_errorComment" tools:ignore="ExtraTranslation">لطفا نظر خود را وارد کنید.</string>
+    <string name="delete_from_storage">Delete from Storage</string>
+
+
+    <string name="your_profile">Your Profile</string>
+    <string name="dialog_done">Done</string>
+    <string name="new_text">new</string>
+    <string name="set_as_default_card">Set as Default Card</string>
+    <string name="driver_wallet_balance">Balance of Driver\'s Wallet</string>
+    <string name="wallet_store_balance">Balance of Shop\'s Wallet</string>
+    <string name="gift_is_used">This Gift Barcode Is Already Used</string>
+    <string name="please_fill_form_data_correctly">Please fill the form information correctly</string>
+    <string name="qr_code_scanner">Qr Code Scanner</string>
+    <string name="msg_security_two_step_verification">In Order to retrieve your accountPlease Answer the following security questions,after answering correctly your two step verification password will be disabled and need to be activated again</string>
+    <string name="show_and_login_using_qr_title">Scan this QR Code using your other device to log in to your iGap Account</string>
+    <string name="two_step_verficatiion_header">You have enabled Two-Step verification; so your account is protected with an additional password</string>
 
 </resources>

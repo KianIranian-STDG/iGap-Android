@@ -62,13 +62,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         int viewType = holder.getItemViewType();
         switch (viewType) {
             case newsType:
-                ((NewsViewHolder)holder).initVH(position);
+                ((NewsViewHolder) holder).initVH(position);
                 break;
             case advType:
-                ((AdvViewHolder)holder).initVH(position);
+                ((AdvViewHolder) holder).initVH(position);
                 break;
             case loadType:
-                ((LoadViewHolder)holder).initVH();
+                ((LoadViewHolder) holder).initVH();
                 break;
             default:
                 break;
@@ -120,6 +120,18 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
+    public onClickListener getCallback() {
+        return callBack;
+    }
+
+    public void setCallback(onClickListener callback) {
+        this.callBack = callback;
+    }
+
+    public interface onClickListener {
+        void onNewsGroupClick(NewsList.News slide);
+    }
+
     public class NewsViewHolder extends RecyclerView.ViewHolder {
 
         private TextView time, source, rootTitle, title, view, view_icon;
@@ -143,13 +155,21 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             source.setText(mData.getNews().get(position).getSource());
             title.setText(mData.getNews().get(position).getTitle());
 
-            String tempView = mData.getNews().get(position).getViewNum();
-            if (tempView == null || tempView.equals("0")) {
+            int viewTemp = Integer.valueOf(mData.getNews().get(position).getViewNum()) + Integer.valueOf(mData.getNews().get(position).getId());
+            if (viewTemp == 0) {
                 view.setVisibility(View.GONE);
                 view_icon.setVisibility(View.GONE);
+            } else {
+                if (viewTemp > 1000000) {
+                    viewTemp /= 1000000;
+                    view.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp)) + "M");
+                } else if (viewTemp > 1000) {
+                    viewTemp /= 1000;
+                    view.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp)) + "K");
+                } else {
+                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
+                }
             }
-            else
-                view.setText(tempView);
 
             String tempRoot = mData.getNews().get(position).getRootTitle();
             if (tempRoot == null || tempRoot.equals(""))
@@ -214,17 +234,5 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void initVH() {
 
         }
-    }
-
-    public interface onClickListener {
-        void onNewsGroupClick(NewsList.News slide);
-    }
-
-    public onClickListener getCallback() {
-        return callBack;
-    }
-
-    public void setCallback(onClickListener callback) {
-        this.callBack = callback;
     }
 }

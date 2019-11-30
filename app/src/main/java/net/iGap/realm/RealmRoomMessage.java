@@ -156,6 +156,7 @@ public class RealmRoomMessage extends RealmObject {
                     equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
                     equalTo(RealmRoomMessageFields.DELETED, false).
                     equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
+                    contains(RealmRoomMessageFields.LINK_INFO , HelperUrl.linkType.webLink.toString()).
                     findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
         } else {
             //TODO [Saeed Mozaffari] [2017-10-28 9:59 AM] - Can Write Better Code?

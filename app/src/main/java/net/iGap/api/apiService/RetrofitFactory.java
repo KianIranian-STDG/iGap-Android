@@ -46,8 +46,11 @@ public class RetrofitFactory {
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
                 .build();
-        // TODO: 10/22/2019 Must be added for release
-        httpClient = builder/*.connectionSpecs(Collections.singletonList(spec))*/.build();
+
+        if (BuildConfig.DEBUG)
+            httpClient = builder.build();
+        else
+            httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
 //        httpClient = enableTls12OnPreLollipop(builder).build();
     }
 

@@ -61,7 +61,6 @@ public class NewsListFrag extends BaseAPIViewFrag {
     }
 
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
@@ -137,7 +136,7 @@ public class NewsListFrag extends BaseAPIViewFrag {
 
     private void onProgress() {
         if (apiArg.getStart() == 1)
-        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
+            newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
@@ -152,8 +151,10 @@ public class NewsListFrag extends BaseAPIViewFrag {
         if (data.getNews() == null || data.getNews().size() == 0)
             return;
 
-        if (apiArg.getStart() == 1 && handler != null)
-            handler.onImageLoader(data.getNews().get(0).getImage());
+        if (apiArg.getStart() == 1 && handler != null) {
+            handler.onImageLoader(data.getNews().get(0));
+            data.getNews().remove(0);
+        }
 
         adapter.addItems(data);
 
@@ -170,15 +171,15 @@ public class NewsListFrag extends BaseAPIViewFrag {
         this.apiArg = apiArg;
     }
 
-    public interface onImageListener {
-        void onImageLoader(String newsPicAdd);
-    }
-
     public onImageListener getHandler() {
         return handler;
     }
 
     public void setHandler(onImageListener handler) {
         this.handler = handler;
+    }
+
+    public interface onImageListener {
+        void onImageLoader(NewsList.News news);
     }
 }

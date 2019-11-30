@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.ImageView;
@@ -325,7 +326,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
                 else {
                     PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
-                    popularMoreChannelFragment.setId(discoveryField.value);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id",discoveryField.value);
+                    popularMoreChannelFragment.setArguments(bundle);
                     new HelperFragment(activity.getSupportFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
                 }
 

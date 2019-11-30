@@ -59,6 +59,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
@@ -1647,7 +1648,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                                 MusicPlayer.downloadNewItem = true;
                                             }
                                         }
-                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
+                                        if (attachment.isValid())
+                                            onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
+                                        else
+                                            HelperLog.setErrorLog(new Exception("attachment is not valid any more."));
                                     }
                                 }
                             }

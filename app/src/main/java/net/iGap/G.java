@@ -198,8 +198,6 @@ public class G extends ApplicationContext {
     /*public static OnUserRegistration onUserRegistration;*/
     public static OnClientSearchRoomHistory onClientSearchRoomHistory;
     /*public static OnUserVerification onUserVerification;*/
-    public static OnReceivePageInfoTOS onReceivePageInfoTOS;
-    public static OnReceivePageInfoWalletAgreement onReceivePageInfoWalletAgreement;
     public static OnUserLogin onUserLogin;
     /*public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;*/
     /*public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;*/
@@ -424,12 +422,8 @@ public class G extends ApplicationContext {
 
     public static Context updateResources(Context baseContext) {
         if (G.selectedLanguage == null) {
-            G.selectedLanguage = Locale.getDefault().getLanguage();
+            G.selectedLanguage = "fa";
         }
-
-        //todo :// for release 2.0.5 to skip default lang when device locale was  kurdish
-        if ( selectedLanguage.equals("ur"))
-            G.selectedLanguage = "en";
 
         Locale locale = new Locale(G.selectedLanguage);
         Locale.setDefault(locale);

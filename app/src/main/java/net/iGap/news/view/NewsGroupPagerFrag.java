@@ -1,18 +1,19 @@
 package net.iGap.news.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -23,6 +24,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.TabAdapter;
@@ -82,7 +84,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
 
         if (!arg.getString("GroupPic").equals(""))
             Picasso.get()
-    //                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                    //                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(arg.getString("GroupPic"))
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(binding.groupImage);
@@ -93,10 +95,24 @@ public class NewsGroupPagerFrag extends BaseFragment {
 
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
-        frag.setHandler(newsPicAdd -> {
+        frag.setHandler(news -> {
             Picasso.get()
-                    .load(newsPicAdd)
+                    .load(news.getImage())
                     .into(binding.groupImage);
+            binding.groupTitle.setText(news.getTitle());
+            binding.headerNews.setOnClickListener(v -> {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
+                if (fragment == null) {
+                    fragment = NewsDetailFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                Bundle args = new Bundle();
+                args.putString("NewsID", news.getId());
+                fragment.setArguments(args);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            });
         });
         adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 

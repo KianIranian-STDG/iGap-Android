@@ -61,6 +61,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentChatSettings;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMediaPlayer;
@@ -82,6 +83,7 @@ import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
+import net.iGap.interfaces.DataTransformerListener;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -175,6 +177,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static String userPhoneNumber;
     private BroadcastReceiver audioManagerReciver;
     private MyPhonStateService myPhonStateService;
+    public DataTransformerListener<Intent> dataTransformer ;
 
     public static void setMediaLayout() {
         try {
@@ -520,7 +523,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 };
 
                 designLayout(chatLayoutMode.none);
-                new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
                 setDialogFragmentSize();
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
@@ -927,18 +929,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             case AttachFile.request_code_trim_video:
                 if (resultCode == RESULT_OK){
-                    Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(G.twoPaneMode ? R.id.detailFrame : R.id.mainFrame);
                     if (fragmentGallery instanceof FragmentGallery){
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().popBackStack();
+                        goneDetailFrameInTabletMode();
                         Fragment fragmentChat = getSupportFragmentManager().findFragmentByTag(FragmentChat.class.getName());
                         if (fragmentChat instanceof FragmentChat){
                             ((FragmentChat) fragmentChat).manageTrimVideoResult(data);
+                        }else{
+                            //todo:// fix fragment chat backstack
+                            if (dataTransformer != null){
+                                dataTransformer.transform(AttachFile.request_code_trim_video , data);
+                            }
                         }
                     }
                 }
                 break;
         }
+    }
+
+    public void goneDetailFrameInTabletMode(){
+        if (G.twoPaneMode) findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
     }
 
     /**
@@ -1148,27 +1160,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.rotationState = newConfig.orientation;
     }
 
-    private void setViewConfigurationChanged() {
-        if (G.twoPaneMode) {
-            if (G.isLandscape) {
-                Log.wtf(this.getClass().getName(), "isLandscape");
-                findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
-                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
-            } else {
-                Log.wtf(this.getClass().getName(), "not Landscape");
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-                if (fragment instanceof FragmentChat) {
-                    findViewById(R.id.roomListFrame).setVisibility(View.GONE);
-                } else {
-                    findViewById(R.id.mainFrame).setVisibility(View.GONE);
-                }
-            }
-        }
-    }
-
     //******************************************************************************************************************************
 
     private void initTabStrip(Intent intent) {
+        if (G.twoPaneMode) {
+            new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
+        }
         BottomNavigationFragment bottomNavigationFragment = new BottomNavigationFragment();
 
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
@@ -1885,14 +1882,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void goToUserProfile() {
+        getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(),0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).goToUserProfile();
+        }else{
+            Log.wtf(this.getClass().getName(),"test");
         }
     }
 
     public void goToChatPage(FragmentChat fragmentChat) {
-        Log.wtf(this.getClass().getName(), "goToChatPage");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
         if (fragment instanceof FragmentChat) {
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
@@ -1956,5 +1955,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public Fragment getFragment(String fragmentTag) {
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    }
+
+    public void chatBackgroundChanged(){
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
+        if (fragment instanceof FragmentChatSettings){
+            ((FragmentChatSettings) fragment).chatBackgroundChange();
+        }
+        if (G.twoPaneMode){
+            Fragment f = getSupportFragmentManager().findFragmentByTag(TabletEmptyChatFragment.class.getName());
+            if (f instanceof TabletEmptyChatFragment){
+                ((TabletEmptyChatFragment) f).getChatBackground();
+            }
+        }
     }
 }

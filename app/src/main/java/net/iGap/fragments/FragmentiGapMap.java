@@ -93,6 +93,7 @@ import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import net.iGap.request.RequestGeoUpdatePosition;
 
+import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
@@ -413,7 +414,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         realmMapUsers = Realm.getDefaultInstance();
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+        Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
 
         KeyboardUtils.addKeyboardToggleListener(getActivity(), new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
@@ -438,7 +439,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_NEARBY_PAGE);
         G.onLocationChanged = this;
@@ -853,14 +854,14 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                         e.printStackTrace();
                     }
                 } else {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (G.userLogin) {
                                 new RequestGeoRegister().register(true);
                             } else {
                                 toggleGps.setChecked(false);
-                                showSnackBar(G.fragmentActivity.getResources().getString(R.string.please_check_your_connenction));
+                                showSnackBar(getString(R.string.please_check_your_connenction));
                             }
                         }
                     }).negativeText(R.string.no).onNegative((dialog, which) -> toggleGps.setChecked(false)).show();
@@ -1375,11 +1376,11 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     public void statusCheck() {
-        final LocationManager manager = (LocationManager) G.fragmentActivity.getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            visibleViewAttention(G.fragmentActivity.getResources().getString(R.string.turn_on_gps_explain), true);
+            visibleViewAttention(getString(R.string.turn_on_gps_explain), true);
 
         } else {// GPS is on
             isGpsOn = true;
@@ -1391,7 +1392,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
             } else {
-                visibleViewAttention(G.fragmentActivity.getResources().getString(R.string.Visible_Status_text), false);
+                visibleViewAttention(getString(R.string.Visible_Status_text), false);
             }
 
         }
@@ -1472,7 +1473,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
     @Override
     public void onClose() {
-        if (G.fragmentActivity != null) {
+        if (getActivity() != null) {
             removeFromBaseFragment(this);
         }
     }
@@ -1601,15 +1602,19 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     @Override
     public void onRightIconClickListener(View view) {
         if (getActivity() != null) {
-            List<String> items = new ArrayList<>();
-            items.add(getString(R.string.list_user_map));
-            items.add(getString(R.string.nearby));
-            items.add(getString(R.string.map_registration));
+            List<Integer> items = new ArrayList<>();
+            items.add(R.string.list_user_map);
+            items.add(R.string.nearby);
+            if (getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.REGISTER_STATUS, false)) {
+                items.add(R.string.map_registration);
+            } else {
+                items.add(R.string.map_registration_enable);
+            }
 
-            dialog = new TopSheetDialog(getActivity()).setListData(items, -1, new BottomSheetItemClickCallback() {
+            dialog = new TopSheetDialog(getActivity()).setListDataWithResourceId(items, -1, new BottomSheetItemClickCallback() {
                 @Override
                 public void onClick(int position) {
-                    if (items.get(position).equals(getString(R.string.list_user_map))) {
+                    if (items.get(position) == R.string.list_user_map) {
                         fabGps.hide();
                         fabStateSwitcher.setVisibility(View.GONE);
                         rippleMoreMap.setVisibility(View.GONE);
@@ -1621,14 +1626,14 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
-                    } else if (items.get(position).equals(getString(R.string.nearby))) {
+                    } else if (items.get(position) == R.string.nearby) {
                         if (location != null && !isSendRequestGeoCoordinate) {
                             new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
                             showProgress(true);
                             isSendRequestGeoCoordinate = true;
                         }
-                    } else if (items.get(position).equals(getString(R.string.map_registration))) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    } else if (items.get(position) == R.string.map_registration) {
+                        new MaterialDialog.Builder(getActivity()).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1641,6 +1646,26 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
                             }
                         }).show();
+                    } else if (items.get(position) == R.string.map_registration_enable) {
+                        if (!isGpsOn) {
+                            try {
+                                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            } catch (ActivityNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    if (G.userLogin) {
+                                        new RequestGeoRegister().register(true);
+                                    } else {
+                                        toggleGps.setChecked(false);
+                                        showSnackBar(getString(R.string.please_check_your_connenction));
+                                    }
+                                }
+                            }).negativeText(R.string.no).onNegative((dialog, which) -> toggleGps.setChecked(false)).show();
+                        }
                     }
                 }
             });

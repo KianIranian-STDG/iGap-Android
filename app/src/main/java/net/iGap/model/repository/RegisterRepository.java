@@ -12,7 +12,6 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnReceiveInfoLocation;
-import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
@@ -54,13 +53,14 @@ public class RegisterRepository {
     private String authorHash;
     private long userId;
     private boolean newUser;
-    private String regex;
+    private String regex = "^\\d{10}$";
     private int callingCode;
     private String isoCode = "IR";
     private String countryName = "";
     private String pattern = "";
     private String regexFetchCodeVerification;
     private boolean forgetTwoStepVerification = false;
+    private ProtoUserRegister.UserRegisterResponse.Method method;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToWelcomePage = new SingleLiveEvent<>();
@@ -126,6 +126,10 @@ public class RegisterRepository {
         this.token = token;
     }
 
+    public ProtoUserRegister.UserRegisterResponse.Method getMethod() {
+        return method;
+    }
+
     public void setForgetTwoStepVerification(boolean forgetTwoStepVerification) {
         this.forgetTwoStepVerification = forgetTwoStepVerification;
     }
@@ -159,20 +163,17 @@ public class RegisterRepository {
     }
 
     public void getTermsOfServiceBody(RepositoryCallback<String> callback) {
-        G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
+        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
             @Override
-            public void onReceivePageInfo(String bodyR) {
-                callback.onSuccess(bodyR);
+            public void onInfo(String body) {
+                callback.onSuccess(body);
             }
 
             @Override
-            public void onError(int majorCode, int minorCode) {
-                //todo: fixed it and handle is Secure
-                /*G.handler.postDelayed(()->new RequestInfoPage().infoPage("TOS"),2000);*/
+            public void onError(int major, int minor) {
                 callback.onError();
             }
-        };
-        new RequestInfoPage().infoPage("TOS");
+        });
     }
 
     public void getInfoLocation(RepositoryCallback<LocationModel> callback) {
@@ -245,6 +246,7 @@ public class RegisterRepository {
                 userId = userIdR;
                 authorHash = authorHashR;
                 G.smsNumbers = smsNumbersR;
+                method = methodValue;
                 /*SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("callingCode", callingCode);
                 editor.putString("countryName", countryName);
@@ -352,16 +354,17 @@ public class RegisterRepository {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    realm.executeTransaction(realm1 -> {
-                        G.displayName = user.getDisplayName();
-                        G.userId = user.getId();
-                        RealmUserInfo.putOrUpdate(realm1, user);
-                        G.onUserInfoResponse = null;
-                        goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-                    });
+                if (user.getId() == userId) {
+                    G.onUserInfoResponse = null;
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(realm1 -> {
+                            G.displayName = user.getDisplayName();
+                            G.userId = user.getId();
+                            RealmUserInfo.putOrUpdate(realm1, user);
+                            goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                        });
+                    }
                 }
-
             }
 
             @Override

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
@@ -49,6 +50,7 @@ public class FragmentGallery extends BaseFragment {
     private HelperToolbar mHelperToolbar;
     private GalleryFragmentListener mGalleryListener;
     private GalleryMode mGalleryMode;
+    private boolean isReturnResultDirectly;
 
     public FragmentGallery() {
     }
@@ -62,13 +64,14 @@ public class FragmentGallery extends BaseFragment {
         return fragment;
     }
 
-    public static FragmentGallery newInstance(GalleryMode mode, String folder, String id, GalleryFragmentListener listener) {
+    public static FragmentGallery newInstance(GalleryMode mode,boolean isReturnResultDirectly , String folder, String id, GalleryFragmentListener listener) {
         FragmentGallery fragment = new FragmentGallery();
         fragment.mFolderName = folder;
         fragment.mFolderId = id;
         fragment.mGalleryMode = mode;
         fragment.mGalleryListener = listener;
         fragment.isSubFolder = true;
+        fragment.isReturnResultDirectly =isReturnResultDirectly;
         return fragment;
     }
 
@@ -97,7 +100,6 @@ public class FragmentGallery extends BaseFragment {
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(isSubFolder ? R.string.edit_icon : R.string.more_icon)
                 .setLogoShown(true)
                 .setIGapLogoCheck(false)
                 .setDefaultTitle(isSubFolder ? mFolderName : getString(R.string.gallery))
@@ -120,6 +122,10 @@ public class FragmentGallery extends BaseFragment {
                         }
                     }
                 });
+
+        if (!isReturnResultDirectly){
+            mHelperToolbar.setRightIcons(isSubFolder ? R.string.edit_icon : R.string.more_icon);
+        }
 
         lytToolbar.addView(mHelperToolbar.getView());
     }
@@ -193,6 +199,9 @@ public class FragmentGallery extends BaseFragment {
                 }
                 mGalleryListener.onVideoPickerResult(videos);
                 popBackStackFragment();
+                if (getActivity() instanceof ActivityMain){
+                    ((ActivityMain) getActivity()).goneDetailFrameInTabletMode();
+                }
             }
         } else {
             mHelperToolbar.getRightButton().setText(R.string.close_icon);
@@ -350,13 +359,11 @@ public class FragmentGallery extends BaseFragment {
     private void openVideoForEdit(String path) {
         if (getActivity() == null) return;
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
-                Intent intent = new Intent(getActivity(), ActivityTrimVideo.class);
-                intent.putExtra("PATH", path);
-                getActivity().startActivityForResult(intent, AttachFile.request_code_trim_video);
-                return;
-            }
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1)) {
+            Intent intent = new Intent(getActivity(), ActivityTrimVideo.class);
+            intent.putExtra("PATH", path);
+            getActivity().startActivityForResult(intent, AttachFile.request_code_trim_video);
+            return;
         }
         List<String> videos = new ArrayList<>();
         videos.add(path);
@@ -368,30 +375,37 @@ public class FragmentGallery extends BaseFragment {
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
 
-        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
-        fragmentEditImage.setIsReOpenChatAttachment(false);
+        if (!isReturnResultDirectly){
 
-        //rotate and send image for edit
-        ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
-            @Override
-            public void startProcess() {
-                //nothing
+            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
+            fragmentEditImage.setIsReOpenChatAttachment(false);
+
+            //rotate and send image for edit
+            ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
+                @Override
+                public void startProcess() {
+                    //nothing
+                }
+
+                @Override
+                public void success(String newPath) {
+                    FragmentEditImage.insertItemList(newPath, "", false);
+                    G.handler.post(() -> {
+                        if (getActivity() == null) return;
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                    });
+                }
+            });
+
+            fragmentEditImage.setGalleryListener(() -> {
+                popBackStackFragment();
+                popBackStackFragment();
+            });
+        }else {
+            if (mGalleryListener != null){
+                mGalleryListener.onGalleryResult(path);
             }
-
-            @Override
-            public void success(String newPath) {
-                FragmentEditImage.insertItemList(newPath, "", false);
-                G.handler.post(() -> {
-                    if (getActivity() == null) return;
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                });
-            }
-        });
-
-        fragmentEditImage.setGalleryListener(() -> {
-            popBackStackFragment();
-            popBackStackFragment();
-        });
+        }
     }
 
     private void sendSelectedPhotos(List<GalleryItemModel> selectedPhotos) {
@@ -418,7 +432,7 @@ public class FragmentGallery extends BaseFragment {
 
     private void openGallerySubDirectory(GalleryMode mode, String path, String id) {
         if (id == null || getActivity() == null) return;
-        Fragment fragment = FragmentGallery.newInstance(mode, path, id, new GalleryFragmentListener() {
+        Fragment fragment = FragmentGallery.newInstance(mode, false, path, id, new GalleryFragmentListener() {
             @Override
             public void openOsGallery() {
 
@@ -452,6 +466,8 @@ public class FragmentGallery extends BaseFragment {
 
     public interface GalleryFragmentListener {
         void openOsGallery();
+
+        default void onGalleryResult(String path){}
 
         default void onVideoPickerResult(List<String> videos) {
         }

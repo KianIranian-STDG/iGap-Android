@@ -28,7 +28,7 @@ public class NewsAPIRepository {
     }
 
     public void getNewsGroup(HandShakeCallback handShakeCallback, ResponseCallback<NewsGroup> apiResponse) {
-        new ApiInitializer<NewsGroup>().initAPI(apiService.getNewsGroups(0,0), handShakeCallback, apiResponse);
+        new ApiInitializer<NewsGroup>().initAPI(apiService.getNewsGroups(0, 0), handShakeCallback, apiResponse);
     }
 
     public void getNewsList(NewsApiArg arg, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {

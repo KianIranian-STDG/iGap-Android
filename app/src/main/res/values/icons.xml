@@ -219,6 +219,7 @@
     <string name="mic_on_icon">\ue960</string>
     <string name="mic_off_icon">\ue95f</string>
     <string name="speaker_on_icon">\ue998</string>
+    <string name="unmute_icon">\ue998</string>
     <string name="speaker_off_icon">\ue997</string>
     <string name="switch_camera_icon">\ue995</string>
     <string name="end_voice_call_icon">\ue937</string>

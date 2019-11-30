@@ -174,6 +174,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                         item.mMessage.messageText = updatedText;
                         item.mMessage.isEdited = true;
                         item.mMessage.linkInfo = HelperUrl.getLinkInfo(updatedText);
+                        item.mMessage.hasLinkInMessage = item.mMessage.linkInfo.length() > 0;
                         item.updateMessageText(updatedText);
                         set(i, item);
 

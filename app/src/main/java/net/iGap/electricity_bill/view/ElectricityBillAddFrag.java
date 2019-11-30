@@ -13,16 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.databinding.FragmentElecBillAddBinding;
-import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -213,8 +210,8 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
     @Override
     public boolean onBackPressed() {
         Fragment fragment = getFragmentManager().findFragmentByTag(ElectricityBillListFrag.class.getName());
-        if (fragment != null){
-            ((ElectricityBillListFrag)fragment).refreshData();
+        if (fragment != null) {
+            ((ElectricityBillListFrag) fragment).refreshData();
         }
         return false;
     }

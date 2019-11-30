@@ -13,15 +13,6 @@ public class NewsFirstPage {
     @SerializedName("type")
     private int mType;
 
-    public NewsFirstPage() {
-    }
-
-    public NewsFirstPage(List<NewsMainBTN> mBtns, List<NewsFPList> mNews, int mType) {
-        this.mBtns = mBtns;
-        this.mNews = mNews;
-        this.mType = mType;
-    }
-
     public int getmType() {
         return mType;
     }

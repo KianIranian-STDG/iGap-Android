@@ -4,47 +4,54 @@
     android:id="@+id/card_item_pop_grid"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp2"
-    android:clickable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardBackgroundColor="?attr/iGapCardViewColor"
     app:cardCornerRadius="@dimen/dp12"
     app:cardElevation="@dimen/dp2"
-    app:cardPreventCornerOverlap="false">
+    app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/ll_item_pop_card_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/iGapBottomSheetBackground"
-            android:gravity="center_horizontal">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/iGapDividerLine"
+            app:layout_constraintBottom_toTopOf="@id/tv_item_popular_rv_grid_linear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circle_item_popular_rv_grid_linear"
-                android:layout_width="@dimen/dp48"
-                android:layout_height="@dimen/dp48"
-                android:layout_margin="@dimen/dp10" />
-        </LinearLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circle_item_popular_rv_grid_linear"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/dp8"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".35" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_item_popular_rv_grid_linear"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="@dimen/dp6"
             android:layout_marginTop="@dimen/dp4"
-            android:layout_marginEnd="@dimen/dp6"
-            android:layout_marginBottom="@dimen/dp4"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="1"
             android:minLines="1"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/verySmallTextSize" />
-    </LinearLayout>
+            android:padding="@dimen/dp4"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="@dimen/verySmallTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/circle_item_popular_rv_grid_linear" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
