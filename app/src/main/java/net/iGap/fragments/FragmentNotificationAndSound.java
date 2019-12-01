@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -41,48 +42,42 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     private SharedPreferences sharedPreferences;
 
-    private FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding;
-    private FragmentNotificationAndSoundViewModel fragmentNotificationAndSoundViewModel;
+    private FragmentNotificationAndSoundBinding binding;
+    private FragmentNotificationAndSoundViewModel viewModel;
     private HelperToolbar mHelperToolbar;
-
-
-    public FragmentNotificationAndSound() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        fragmentNotificationAndSoundBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notification_and_sound, container, false);
-        return attachToSwipeBack(fragmentNotificationAndSoundBinding.getRoot());
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notification_and_sound, container, false);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initDataBinding();
-
+        viewModel = new FragmentNotificationAndSoundViewModel();
+        binding.setFragmentNotificationAndSoundViewModel(viewModel);
         setupToolbar();
 
-        fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(new Theme().getAccentColor(getContext()));
+        binding.asnToolbar.setBackgroundColor(new Theme().getAccentColor(getContext()));
 
-        fragmentNotificationAndSoundBinding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        binding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
                 popBackStackFragment();
             }
         });
 
-        GradientDrawable bgShapeAlert = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorMessage.getBackground();
-        bgShapeAlert.setColor(fragmentNotificationAndSoundViewModel.ledColorMessage);
+        GradientDrawable bgShapeAlert = (GradientDrawable) binding.stnsImgLedColorMessage.getBackground();
+        bgShapeAlert.setColor(viewModel.ledColorMessage);
 
-        GradientDrawable bgShapeGroup = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorGroup.getBackground();
-        bgShapeGroup.setColor(fragmentNotificationAndSoundViewModel.ledColorGroup);
+        GradientDrawable bgShapeGroup = (GradientDrawable) binding.stnsImgLedColorGroup.getBackground();
+        bgShapeGroup.setColor(viewModel.ledColorGroup);
 
 
-        fragmentNotificationAndSoundBinding.stLayoutResetAllNotification.setOnClickListener(new View.OnClickListener() {
+        binding.stLayoutResetAllNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null) {
@@ -127,6 +122,27 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 }
             }
         });
+
+        viewModel.callLedDirectBackground.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer != null) {
+                    GradientDrawable bgShape = (GradientDrawable) binding.stnsImgLedColorMessage.getBackground();
+                    bgShape.setColor(integer);
+                    binding.stnsImgLedColorMessage.setBackground(bgShape);
+                }
+
+            }
+        });
+        viewModel.callLedGroupBackground.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                GradientDrawable bgShape = (GradientDrawable) binding.stnsImgLedColorMessage.getBackground();
+                bgShape.setColor(integer);
+                binding.stnsImgLedColorGroup.setBackground(bgShape);
+            }
+        });
+
     }
 
     private void setupToolbar() {
@@ -143,14 +159,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                     }
                 });
 
-        fragmentNotificationAndSoundBinding.fnsLayoutToolbar.addView(mHelperToolbar.getView());
-    }
-
-    private void initDataBinding() {
-
-        fragmentNotificationAndSoundViewModel = new FragmentNotificationAndSoundViewModel(fragmentNotificationAndSoundBinding);
-        fragmentNotificationAndSoundBinding.setFragmentNotificationAndSoundViewModel(fragmentNotificationAndSoundViewModel);
-
+        binding.fnsLayoutToolbar.addView(mHelperToolbar.getView());
     }
 
 

@@ -19,7 +19,9 @@ import android.os.Vibrator;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -37,25 +39,27 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentNotificationAndSoundViewModel {
 
-    public FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding;
     public int ledColorMessage;
     public int ledColorGroup;
-    public ObservableField<Boolean> isAlertMassage = new ObservableField<>();
-    public ObservableField<Boolean> isMassagePreview = new ObservableField<>();
+    public ObservableBoolean isAlertMassage = new ObservableBoolean();
+    public ObservableBoolean isMassagePreview = new ObservableBoolean();
+    public ObservableBoolean isAppSound = new ObservableBoolean();
+    public ObservableBoolean isInAppVibration = new ObservableBoolean();
+    public ObservableBoolean isInAppPreView = new ObservableBoolean();
+    public ObservableBoolean isSoundInChat = new ObservableBoolean();
+    public ObservableBoolean isSeparateNotification = new ObservableBoolean();
+    public ObservableBoolean isKeepService = new ObservableBoolean();
+    public ObservableBoolean isAlertGroup = new ObservableBoolean();
+    public ObservableBoolean isMessagePreViewGroup = new ObservableBoolean();
     public ObservableField<String> callbackVibrateMessage = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.array_Default));
     public ObservableField<String> callbackPopUpNotificationMessage = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
     public ObservableField<String> callbackSoundMessage = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
-    public ObservableField<Boolean> isAlertGroup = new ObservableField<>();
-    public ObservableField<Boolean> isMessagePreViewGroup = new ObservableField<>();
     public ObservableField<String> callbackVibrateGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.array_Default));
     public ObservableField<String> callbackPopUpNotificationGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
     public ObservableField<String> callBackSoundGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
-    public ObservableField<Boolean> isAppSound = new ObservableField<>();
-    public ObservableField<Boolean> isInAppVibration = new ObservableField<>();
-    public ObservableField<Boolean> isInAppPreView = new ObservableField<>();
-    public ObservableField<Boolean> isSoundInChat = new ObservableField<>();
-    public ObservableField<Boolean> isSeparateNotification = new ObservableField<>();
-    public ObservableField<Boolean> isKeepService = new ObservableField<>();
+    public MutableLiveData<Integer> callLedDirectBackground = new MutableLiveData<>();
+    public MutableLiveData<Integer> callLedGroupBackground = new MutableLiveData<>();
+
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private int vibrateMessage;
@@ -72,8 +76,7 @@ public class FragmentNotificationAndSoundViewModel {
     private int soundMessageGroupWhich = 0;
 
 
-    public FragmentNotificationAndSoundViewModel(FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding) {
-        this.fragmentNotificationAndSoundBinding = fragmentNotificationAndSoundBinding;
+    public FragmentNotificationAndSoundViewModel() {
         getInfo();
         startLedColorMessage();
         startVibrateMessage();
@@ -328,7 +331,7 @@ public class FragmentNotificationAndSoundViewModel {
     //================================Event Listeners================================
     //===============================================================================
 
-    public void onClickAlertMessage(View view) {
+    public void onClickAlertMessage() {
 
         isAlertMassage.set(!isAlertMassage.get());
     }
@@ -338,7 +341,7 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
 
-    public void onClickMessagePreView(View view) {
+    public void onClickMessagePreView() {
 
         isMassagePreview.set(!isMassagePreview.get());
     }
@@ -347,8 +350,7 @@ public class FragmentNotificationAndSoundViewModel {
         setMessagePreview(isChecked);
     }
 
-    public void onClickLedColorMessage(View view) {
-
+    public void onClickLedColorMessage() {
         boolean wrapInScrollView = true;
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -376,8 +378,10 @@ public class FragmentNotificationAndSoundViewModel {
             public void onClick(View view) {
 
                 dialog.dismiss();
-                GradientDrawable bgShape = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorMessage.getBackground();
-                bgShape.setColor(picker.getColor());
+                callLedDirectBackground.getValue();
+                callLedDirectBackground.setValue(picker.getColor());
+      /*          GradientDrawable bgShape = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorMessage.getBackground();
+                bgShape.setColor(picker.getColor());*/
                 editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, picker.getColor());
                 editor.apply();
             }
@@ -388,7 +392,49 @@ public class FragmentNotificationAndSoundViewModel {
 
     }
 
-    public void onClickVibrationMessage(View view) {
+    public void onClickLedGroup() {
+
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                }).build();
+
+        View view1 = dialog.getCustomView();
+        assert view1 != null;
+        final ColorPicker picker = view1.findViewById(R.id.picker);
+        SVBar svBar = view1.findViewById(R.id.svbar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
+        picker.setOldCenterColor(ledColorGroup);
+        picker.addSVBar(svBar);
+        picker.addOpacityBar(opacityBar);
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog.dismiss();
+                callLedGroupBackground.getValue();
+                callLedGroupBackground.setValue(picker.getColor());
+               /* GradientDrawable bgShapeGroup = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorGroup.getBackground();
+                bgShapeGroup.setColor(picker.getColor());*/
+                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
+                editor.apply();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public void onClickVibrationMessage() {
 
 
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
@@ -435,7 +481,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     }
 
-    public void onClickPopUpNotificationMessage(View view) {
+    public void onClickPopUpNotificationMessage() {
 
         int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
@@ -449,7 +495,7 @@ public class FragmentNotificationAndSoundViewModel {
         }).show();
     }
 
-    public void onClickSoundMessage(View view) {
+    public void onClickSoundMessage() {
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessage, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -477,7 +523,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     }
 
-    public void onClickAlertGroup(View view) {
+    public void onClickAlertGroup() {
         isAlertGroup.set(!isAlertGroup.get());
     }
 
@@ -485,7 +531,7 @@ public class FragmentNotificationAndSoundViewModel {
         setAlertGroup(isChecked);
     }
 
-    public void onClickMessagePreViewGroup(View view) {
+    public void onClickMessagePreViewGroup() {
 
         isMessagePreViewGroup.set(!isMessagePreViewGroup.get());
 
@@ -495,47 +541,8 @@ public class FragmentNotificationAndSoundViewModel {
         setMessagePreviewGroup(isChecked);
     }
 
-    public void onClickLedGroup(View view) {
 
-        boolean wrapInScrollView = true;
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    }
-                }).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    }
-                }).build();
-
-        View view1 = dialog.getCustomView();
-        assert view1 != null;
-        final ColorPicker picker = view1.findViewById(R.id.picker);
-        SVBar svBar = view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
-        picker.setOldCenterColor(ledColorGroup);
-        picker.addSVBar(svBar);
-        picker.addOpacityBar(opacityBar);
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dialog.dismiss();
-                GradientDrawable bgShapeGroup = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorGroup.getBackground();
-                bgShapeGroup.setColor(picker.getColor());
-                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
-                editor.apply();
-            }
-        });
-
-        dialog.show();
-
-    }
-
-    public void onClickVibrationGroup(View view) {
+    public void onClickVibrationGroup() {
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -577,7 +584,7 @@ public class FragmentNotificationAndSoundViewModel {
         }).show();
     }
 
-    public void onClickPopUpNotificationGroup(View view) {
+    public void onClickPopUpNotificationGroup() {
 
         int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
@@ -592,7 +599,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     }
 
-    public void onClickSoundGroup(View view) {
+    public void onClickSoundGroup() {
 
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessageGroup, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
@@ -620,7 +627,7 @@ public class FragmentNotificationAndSoundViewModel {
         }).show();
     }
 
-    public void onClickInAppSound(View view) {
+    public void onClickInAppSound() {
         isAppSound.set(!isAppSound.get());
     }
 
@@ -628,7 +635,7 @@ public class FragmentNotificationAndSoundViewModel {
         setAppSound(isChecked);
     }
 
-    public void onClickInAppVibration(View view) {
+    public void onClickInAppVibration() {
         isInAppVibration.set(!isInAppVibration.get());
     }
 
@@ -636,7 +643,7 @@ public class FragmentNotificationAndSoundViewModel {
         setInAppVibrate(isChecked);
     }
 
-    public void onClickInAppPreView(View view) {
+    public void onClickInAppPreView() {
         isInAppPreView.set(!isInAppPreView.get());
     }
 
@@ -645,12 +652,12 @@ public class FragmentNotificationAndSoundViewModel {
         setInAppPreView(isChecked);
     }
 
-    public void onClickSoundInChat(View view) {
+    public void onClickSoundInChat() {
 
         isSoundInChat.set(!isSoundInChat.get());
     }
 
-    public void onClickSeparateNotification(View view) {
+    public void onClickSeparateNotification() {
         isSeparateNotification.set(!isSeparateNotification.get());
     }
 
@@ -658,7 +665,7 @@ public class FragmentNotificationAndSoundViewModel {
         setInSoundChat(isChecked);
     }
 
-    public void onClickKeepService(View view) {
+    public void onClickKeepService() {
 
         isKeepService.set(!isKeepService.get());
     }

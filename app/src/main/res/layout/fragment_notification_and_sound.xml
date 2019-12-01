@@ -122,7 +122,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickAlertMessage}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertMessage()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -150,17 +150,13 @@
                             android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"
                             android:textOff=""
                             android:textOn="" />
-                        <!--android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAlertMessage(checked)}"-->
-                        <!--android:onCheckedChanged="@{() -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"-->
-
-
                     </LinearLayout>
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickMessagePreView}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreView()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -198,6 +194,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedColorMessage()}"
                         android:orientation="horizontal">
 
                         <TextView
@@ -205,7 +202,6 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickLedColorMessage}"
                             android:paddingLeft="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
@@ -231,7 +227,7 @@
                         android:id="@+id/stns_layout_vibrate_message"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickVibrationMessage}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationMessage()}"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
@@ -262,7 +258,7 @@
                         android:id="@+id/stns_layout_popupNotification_message"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickPopUpNotificationMessage}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationMessage()}"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
@@ -294,7 +290,7 @@
                         android:id="@+id/stns_layout_sound_message"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSoundMessage}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
@@ -355,7 +351,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickAlertGroup}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertGroup()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -390,7 +386,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickMessagePreViewGroup}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreViewGroup()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -426,7 +422,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickLedGroup}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedGroup()}"
                         android:orientation="horizontal">
 
                         <TextView
@@ -458,7 +454,7 @@
                         android:id="@+id/stns_layout_vibrate_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickVibrationGroup}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationGroup()}"
                         android:orientation="vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
@@ -490,7 +486,7 @@
                         android:id="@+id/stns_layout_popupNotification_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickPopUpNotificationGroup}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationGroup()}"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
@@ -521,7 +517,7 @@
                         android:id="@+id/stns_layout_sound_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSoundGroup}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundGroup()}"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
@@ -582,7 +578,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickInAppSound}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppSound()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -619,7 +615,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickInAppVibration}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppVibration()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -659,7 +655,7 @@
 
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickInAppPreView}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppPreView()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -697,7 +693,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSoundInChat}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundInChat()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -863,7 +859,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSeparateNotification}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSeparateNotification()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
@@ -898,7 +894,7 @@
                         android:id="@+id/stns_txt_title_keep_alive_service"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickKeepService}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickKeepService()}"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingEnd="@dimen/dp16"
@@ -912,7 +908,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="@{FragmentNotificationAndSoundViewModel::onClickKeepService}"
+                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickKeepService()}"
                         android:orientation="horizontal"
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
