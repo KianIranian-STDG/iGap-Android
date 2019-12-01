@@ -71,6 +71,7 @@ public class FragmentLanguage extends BaseFragment {
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
+                .setShowConnectionState(false)
                 .setDefaultTitle(getString(R.string.language))
                 .setListener(new ToolbarListener() {
                     @Override
