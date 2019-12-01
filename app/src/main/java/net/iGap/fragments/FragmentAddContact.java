@@ -466,7 +466,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     public void onContactEditTimeOut() {
         G.handler.post(() -> {
             loader.setVisibility(View.GONE);
-            if (getContext() != null ) HelperError.showSnackMessage(getContext().getString(R.string.server_do_not_response), false);
+            Toast.makeText(loader.getContext(), R.string.server_do_not_response, Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -474,8 +474,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     public void onContactEditError(int majorCode, int minorCode) {
         G.handler.post(() -> {
             loader.setVisibility(View.GONE);
-            if (getContext() != null)
-                HelperError.showSnackMessage(getContext().getString(R.string.server_error), false);
+            Toast.makeText(loader.getContext(), R.string.server_error, Toast.LENGTH_SHORT).show();
         });
     }
 

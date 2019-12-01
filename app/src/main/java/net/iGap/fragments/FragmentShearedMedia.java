@@ -1570,7 +1570,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                     RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
 
-                    if (at.getSmallThumbnail() != null) {
+                    if (at != null && at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
                             HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
