@@ -12,7 +12,6 @@ package net.iGap.viewmodel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -32,15 +31,15 @@ import com.larswerkman.holocolorpicker.SVBar;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentNotificationAndSoundViewModel {
 
-    public int ledColorMessage;
-    public int ledColorGroup;
+    private int ledColorMessage;
+    private int ledColorGroup;
+
     public ObservableBoolean isAlertMassage = new ObservableBoolean();
     public ObservableBoolean isMassagePreview = new ObservableBoolean();
     public ObservableBoolean isAppSound = new ObservableBoolean();
@@ -57,8 +56,9 @@ public class FragmentNotificationAndSoundViewModel {
     public ObservableField<String> callbackVibrateGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.array_Default));
     public ObservableField<String> callbackPopUpNotificationGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
     public ObservableField<String> callBackSoundGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
-    public MutableLiveData<Integer> callLedDirectBackground = new MutableLiveData<>();
-    public MutableLiveData<Integer> callLedGroupBackground = new MutableLiveData<>();
+    public MutableLiveData<Integer> directLedColor = new MutableLiveData<>();
+    public MutableLiveData<Integer> groupLedColor = new MutableLiveData<>();
+
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -87,7 +87,6 @@ public class FragmentNotificationAndSoundViewModel {
         poRbDialogSoundGroup();
 
     }
-
     //===============================================================================
     //=====================================Starts====================================
     //===============================================================================
@@ -336,10 +335,6 @@ public class FragmentNotificationAndSoundViewModel {
         isAlertMassage.set(!isAlertMassage.get());
     }
 
-    public void onCheckedChangedAlertMessage(boolean isChecked) {
-        setAlertMassage(isChecked);
-    }
-
 
     public void onClickMessagePreView() {
 
@@ -358,11 +353,8 @@ public class FragmentNotificationAndSoundViewModel {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                     }
-                }).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                }).onPositive((dialog1, which) -> {
 
-                    }
                 }).build();
 
         View view1 = dialog.getCustomView();
@@ -370,6 +362,7 @@ public class FragmentNotificationAndSoundViewModel {
         final ColorPicker picker = view1.findViewById(R.id.picker);
         SVBar svBar = view1.findViewById(R.id.svbar);
         OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
+        picker.setOldCenterColor(ledColorMessage);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 
@@ -378,10 +371,8 @@ public class FragmentNotificationAndSoundViewModel {
             public void onClick(View view) {
 
                 dialog.dismiss();
-                callLedDirectBackground.getValue();
-                callLedDirectBackground.setValue(picker.getColor());
-      /*          GradientDrawable bgShape = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorMessage.getBackground();
-                bgShape.setColor(picker.getColor());*/
+                directLedColor.getValue();
+                directLedColor.setValue(picker.getColor());
                 editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, picker.getColor());
                 editor.apply();
             }
@@ -393,7 +384,6 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     public void onClickLedGroup() {
-
         boolean wrapInScrollView = true;
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -401,11 +391,8 @@ public class FragmentNotificationAndSoundViewModel {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                     }
-                }).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                }).onPositive((dialog1, which) -> {
 
-                    }
                 }).build();
 
         View view1 = dialog.getCustomView();
@@ -421,10 +408,8 @@ public class FragmentNotificationAndSoundViewModel {
             public void onClick(View view) {
 
                 dialog.dismiss();
-                callLedGroupBackground.getValue();
-                callLedGroupBackground.setValue(picker.getColor());
-               /* GradientDrawable bgShapeGroup = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorGroup.getBackground();
-                bgShapeGroup.setColor(picker.getColor());*/
+                groupLedColor.getValue();
+                groupLedColor.setValue(picker.getColor());
                 editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
                 editor.apply();
             }
@@ -767,12 +752,7 @@ public class FragmentNotificationAndSoundViewModel {
         MediaPlayer mediaPlayer = MediaPlayer.create(G.fragmentActivity, musicId);
         mediaPlayer.start();
 
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
-            }
-
-        });
+        mediaPlayer.setOnCompletionListener(mp -> mp.release());
 
     }
 

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -26,11 +25,9 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentNotificationAndSoundViewModel;
 
-import java.io.IOException;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -61,23 +58,18 @@ public class FragmentNotificationAndSound extends BaseFragment {
         binding.setFragmentNotificationAndSoundViewModel(viewModel);
         setupToolbar();
 
-        binding.asnToolbar.setBackgroundColor(new Theme().getAccentColor(getContext()));
+        binding.toolbar.setBackgroundColor(new Theme().getAccentColor(getContext()));
 
-        binding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+/**old toolbar remove**/
+      /*  binding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
                 popBackStackFragment();
             }
-        });
-
-        GradientDrawable bgShapeAlert = (GradientDrawable) binding.stnsImgLedColorMessage.getBackground();
-        bgShapeAlert.setColor(viewModel.ledColorMessage);
-
-        GradientDrawable bgShapeGroup = (GradientDrawable) binding.stnsImgLedColorGroup.getBackground();
-        bgShapeGroup.setColor(viewModel.ledColorGroup);
+        });*/
 
 
-        binding.stLayoutResetAllNotification.setOnClickListener(new View.OnClickListener() {
+        binding.llResetNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() != null) {
@@ -123,24 +115,18 @@ public class FragmentNotificationAndSound extends BaseFragment {
             }
         });
 
-        viewModel.callLedDirectBackground.observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                if (integer != null) {
-                    GradientDrawable bgShape = (GradientDrawable) binding.stnsImgLedColorMessage.getBackground();
-                    bgShape.setColor(integer);
-                    binding.stnsImgLedColorMessage.setBackground(bgShape);
-                }
+        viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
+            if (integer != null) {
+                GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
+                gradientDrawable.setColor(integer);
+                binding.ivLedDirect.setBackground(gradientDrawable);
+            }
 
-            }
         });
-        viewModel.callLedGroupBackground.observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                GradientDrawable bgShape = (GradientDrawable) binding.stnsImgLedColorMessage.getBackground();
-                bgShape.setColor(integer);
-                binding.stnsImgLedColorGroup.setBackground(bgShape);
-            }
+        viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
+            GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedGroup.getBackground();
+            gradientDrawable.setColor(integer);
+            binding.ivLedGroup.setBackground(gradientDrawable);
         });
 
     }
@@ -159,7 +145,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                     }
                 });
 
-        binding.fnsLayoutToolbar.addView(mHelperToolbar.getView());
+        binding.toolbar.addView(mHelperToolbar.getView());
     }
 
 

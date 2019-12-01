@@ -15,83 +15,28 @@
     </data>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/fns_layout_toolbar"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height"
-            android:orientation="horizontal" />
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/asn_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp60"
-                android:background="?attr/iGapToolbarBackground"
-                android:layoutDirection="ltr"
-                android:padding="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-
-                >
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <net.iGap.libs.rippleeffect.RippleView
-                        android:id="@+id/stns_ripple_back"
-                        rv_centered="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:rv_alpha="200"
-                        app:rv_centered="true"
-                        app:rv_rippleDuration="0"
-                        app:rv_ripplePadding="5dp">
-
-                        <net.iGap.module.MaterialDesignTextView
-                            android:id="@+id/stns_txt_back"
-                            android:layout_width="@dimen/dp52"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/md_back_arrow"
-                            android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
-                    </net.iGap.libs.rippleeffect.RippleView>
-
-                    <TextView
-                        android:fontFamily="@font/main_font_bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/stns_ripple_back"
-                        android:layout_toRightOf="@+id/stns_ripple_back"
-                        android:gravity="center"
-                        android:text="@string/st_titleToolbar_page_Notification_and_sounds"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/dp18"
-                        android:textStyle="normal"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,7 +75,7 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:id="@+id/stns_txt_alert"
+                            android:id="@+id/tv_alert"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -142,7 +87,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_alert"
+                            android:id="@+id/toggle_alert"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertMassage)}"
@@ -165,7 +110,7 @@
 
 
                         <TextView
-                            android:id="@+id/stns_txt_messagePreview"
+                            android:id="@+id/tv_messagePreview"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -177,7 +122,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_messagePreview"
+                            android:id="@+id/toggle_messagePreview"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMassagePreview)}"
@@ -190,7 +135,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/stns_layout_ledColorMessage"
+                        android:id="@+id/ll_led_direct"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical"
@@ -212,7 +157,7 @@
 
 
                         <ImageView
-                            android:id="@+id/stns_img_ledColorMessage"
+                            android:id="@+id/iv_led_direct"
                             android:layout_width="@dimen/dp16"
                             android:layout_height="@dimen/dp16"
                             android:layout_gravity="center_vertical"
@@ -224,7 +169,7 @@
                     </LinearLayout>
 
                     <RelativeLayout
-                        android:id="@+id/stns_layout_vibrate_message"
+                        android:id="@+id/rl_vibration_direct"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationMessage()}"
@@ -241,7 +186,7 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/stns_txt_vibrate_message_text"
+                            android:id="@+id/tv_vibration_direct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -255,7 +200,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/stns_layout_popupNotification_message"
+                        android:id="@+id/rl_pop_sound_direct"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationMessage()}"
@@ -273,7 +218,7 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/stns_txt_popupNotification_message_text"
+                            android:id="@+id/tv_pop_sound_direct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -287,7 +232,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/stns_layout_sound_message"
+                        android:id="@+id/rl_sound_direct"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
@@ -304,7 +249,7 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/stns_txt_sound_text"
+                            android:id="@+id/tv_sound_direct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -326,7 +271,6 @@
                     android:layout_marginRight="@dimen/dp10"
                     android:background="?iGapDividerLine" />
 
-                <!--group-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -360,7 +304,7 @@
 
 
                         <TextView
-                            android:id="@+id/stns_txt_alert_group"
+                            android:id="@+id/tv_alert_group"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -372,7 +316,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_alert_group"
+                            android:id="@+id/toggle_alert_group"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertGroup)}"
@@ -395,7 +339,7 @@
 
 
                         <TextView
-                            android:id="@+id/stns_txt_messagePreview_group"
+                            android:id="@+id/tv_messagePreview_group"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -407,7 +351,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_messagePreview_group"
+                            android:id="@+id/toggle_messagePreview_group"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMessagePreViewGroup)}"
@@ -418,7 +362,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/stns_layout_ledColor_group"
+                        android:id="@+id/ll_led_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical"
@@ -439,7 +383,7 @@
                             android:textStyle="normal" />
 
                         <ImageView
-                            android:id="@+id/stns_img_ledColor_group"
+                            android:id="@+id/iv_led_group"
                             android:layout_width="@dimen/dp16"
                             android:layout_height="@dimen/dp16"
                             android:layout_gravity="center_vertical"
@@ -451,7 +395,7 @@
                     </LinearLayout>
 
                     <RelativeLayout
-                        android:id="@+id/stns_layout_vibrate_group"
+                        android:id="@+id/rl_vibration_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationGroup()}"
@@ -469,7 +413,7 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/stns_txt_vibrate_group_text"
+                            android:id="@+id/tv_vibration_group"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -483,7 +427,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/stns_layout_popupNotification_group"
+                        android:id="@+id/rl_pop_sound_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationGroup()}"
@@ -500,7 +444,7 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/stns_txt_popupNotification_group_text"
+                            android:id="@+id/tv_pop_sound_group"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -514,7 +458,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/stns_layout_sound_group"
+                        android:id="@+id/rl_sound_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundGroup()}"
@@ -531,7 +475,7 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/stns_txt_sound_group_text"
+                            android:id="@+id/tv_sound_group"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -553,7 +497,6 @@
                     android:layout_marginRight="@dimen/dp10"
                     android:background="?iGapDividerLine" />
 
-                <!--in app notification-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -587,7 +530,7 @@
 
 
                         <TextView
-                            android:id="@+id/stns_txt_app_sound"
+                            android:id="@+id/tv_sound_app"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -599,7 +542,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_app_sound"
+                            android:id="@+id/toggle_sound_app"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAppSound)}"
@@ -620,13 +563,10 @@
                         android:paddingStart="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
-
-                        >
-
+                        android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:id="@+id/stns_txt_app_vibrate"
+                            android:id="@+id/tv_vibration_app"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -638,21 +578,17 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_app_vibrate"
+                            android:id="@+id/toggle_vibration_app"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppVibration)}"
                             android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppVibration(checked)}"
                             android:textOff=""
-                            android:textOn=""
-
-                            />
-
+                            android:textOn="" />
 
                     </LinearLayout>
 
                     <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppPreView()}"
@@ -662,9 +598,8 @@
                         android:paddingEnd="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
-
                         <TextView
-                            android:id="@+id/stns_txt_app_preview"
+                            android:id="@+id/tv_preview_app"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -677,16 +612,13 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_app_preview"
+                            android:id="@+id/toggle_preview_app"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppPreView)}"
                             android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppPreView(checked)}"
                             android:textOff=""
-                            android:textOn=""
-
-                            />
-
+                            android:textOn="" />
 
                     </LinearLayout>
 
@@ -700,9 +632,8 @@
                         android:paddingEnd="@dimen/dp16"
                         android:paddingRight="@dimen/dp16">
 
-
                         <TextView
-                            android:id="@+id/stns_txt_chat_sound"
+                            android:id="@+id/tv_chatSound"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -714,17 +645,13 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_chat_sound"
+                            android:id="@+id/toggle_chatSound"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSoundInChat)}"
                             android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedSoundInChat(checked)}"
                             android:textOff=""
-                            android:textOn=""
-
-                            />
-
-
+                            android:textOn="" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -767,7 +694,7 @@
 
 
                         <TextView
-                            android:id="@+id/stns_txt_Contact_joined"
+                            android:id="@+id/tv_joinContact"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -780,7 +707,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_Contact_joined"
+                            android:id="@+id/toggle_joinContact"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:textOff=""
@@ -806,7 +733,7 @@
                             android:layout_centerInParent="true">
 
                             <net.iGap.module.CustomToggleButton
-                                android:id="@+id/stns_toggle_pinned_message"
+                                android:id="@+id/toggle_pinMessage"
                                 android:layout_width="@dimen/toggles_width"
                                 android:layout_height="@dimen/toggles_height"
                                 android:textOff=""
@@ -814,7 +741,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/stns_txt_pinned_message"
+                            android:id="@+id/tv_pinMessage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
@@ -868,7 +795,7 @@
                         android:paddingBottom="@dimen/dp16">
 
                         <TextView
-                            android:id="@+id/stns_txt_separate_notifications"
+                            android:id="@+id/tv_separate_notifications"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -880,7 +807,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_separate_notifications"
+                            android:id="@+id/toggle_separate_notifications"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSeparateNotification)}"
@@ -891,7 +818,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/stns_txt_title_keep_alive_service"
+                        android:id="@+id/tv_title_keepService"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickKeepService()}"
@@ -918,7 +845,7 @@
 
 
                         <com.uncopt.android.widget.text.justify.JustifiedTextView
-                            android:id="@+id/stns_txt_keep_alive_service"
+                            android:id="@+id/tv_description_keepService"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -932,7 +859,7 @@
                             android:textStyle="normal" />
 
                         <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stns_toggle_keep_alive_service"
+                            android:id="@+id/toggle_keepService"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isKeepService)}"
@@ -963,7 +890,7 @@
                             android:layout_centerInParent="true">
 
                             <net.iGap.module.CustomToggleButton
-                                android:id="@+id/stns_toggle_background_connection"
+                                android:id="@+id/toggle_background_connection"
                                 android:layout_width="@dimen/toggles_width"
                                 android:layout_height="@dimen/toggles_height"
                                 android:textOff=""
@@ -972,7 +899,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/stns_txt_title_background_connection"
+                            android:id="@+id/tv_title_background_connection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/st_background_connection"
@@ -981,10 +908,10 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/stns_txt_background_connection"
+                            android:id="@+id/tv_description_background_connection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/stns_txt_title_background_connection"
+                            android:layout_below="@+id/tv_title_background_connection"
                             android:paddingTop="@dimen/dp4"
                             android:paddingEnd="@dimen/dp52"
                             android:paddingRight="@dimen/dp52"
@@ -1015,7 +942,7 @@
                             android:layout_centerInParent="true">
 
                             <net.iGap.module.CustomToggleButton
-                                android:id="@+id/stns_badge_counter"
+                                android:id="@+id/toggle_badge_pin"
                                 android:layout_width="@dimen/toggles_width"
                                 android:layout_height="@dimen/toggles_height"
                                 android:textOff=""
@@ -1023,7 +950,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/stns_txt_badge_countent"
+                            android:id="@+id/tv_badge_pin"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
@@ -1039,7 +966,7 @@
 
                     <!--this part is Gone-->
                     <RelativeLayout
-                        android:id="@+id/st_layout_Repeat_Notifications"
+                        android:id="@+id/rl_sound_pinnedMessage"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:orientation="vertical"
@@ -1057,7 +984,7 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            android:id="@+id/st_txt_Repeat_Notifications"
+                            android:id="@+id/tv_sound_pinnedMessage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -1099,7 +1026,7 @@
                         android:textStyle="normal" />
 
                     <LinearLayout
-                        android:id="@+id/st_layout_reset_all_notification"
+                        android:id="@+id/ll_reset_notifications"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -1128,5 +1055,5 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
