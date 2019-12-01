@@ -94,7 +94,7 @@ public class MakeButtons {
         void onClick(View view, ButtonEntity buttonEntity);
     }
 
-    public static LinearLayout addButtons(ButtonEntity entity, OnClickListener onClickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
+    public static LinearLayout addButtons(Theme theme , ButtonEntity entity, OnClickListener onClickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
@@ -206,7 +206,7 @@ public class MakeButtons {
                 btn1.setText(entity.getLable());
             }
             btn1.setTextSize(16);
-            card.setBackgroundResource(new Theme().getCardToCardButtonBackground(mainLayout.getContext()));
+            card.setBackgroundResource(theme.getCardToCardButtonBackground(mainLayout.getContext()));
             btn1.setTextColor(ContextCompat.getColor(btn1.getContext(), R.color.white));
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);

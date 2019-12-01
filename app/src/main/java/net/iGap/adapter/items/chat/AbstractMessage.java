@@ -43,7 +43,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.AccountManager;
@@ -63,7 +62,6 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -91,10 +89,7 @@ import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
-import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentResult;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
@@ -139,6 +134,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private MessagesAdapter<AbstractMessage> mAdapter;
     private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
+    protected Theme theme;
     private VH holder;
     /**
      * add this prt for video player
@@ -149,7 +145,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.type = type;
         this.mAdapter = mAdapter;
         this.messageClickListener = messageClickListener;
-
+        this.theme = Theme.getInstance();
     }
 
 
@@ -514,7 +510,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 //                                    btnEntery.setLongValue(json.getLong("value"));
                                 }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(btnEntery, (view, buttonEntity) -> {
+                                childLayout = MakeButtons.addButtons(theme,btnEntery, (view, buttonEntity) -> {
                                     if (FragmentChat.isInSelectionMode) {
                                         holder.itemView.performLongClick();
                                         return;
@@ -899,10 +895,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(new Theme().getReceivedMessageColor(viewHolder.getContext()));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(theme.getReceivedMessageColor(viewHolder.getContext()));
         }
 
-        viewHolder.getChatBloke().setBackground(new Theme().tintDrawable(RECEIVED_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.colorPrimaryLight));
+        viewHolder.getChatBloke().setBackground(theme.tintDrawable(RECEIVED_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.colorPrimaryLight));
 
         /**
          * add main layout margin to prevent getting match parent completely
@@ -912,8 +908,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
 
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
-        viewHolder.getMessageTimeTv().setTextColor(new Theme().getReceivedMessageOtherTextColor(viewHolder.getContext()));
-        viewHolder.getSignatureTv().setTextColor(new Theme().getReceivedMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getMessageTimeTv().setTextColor(theme.getReceivedMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getSignatureTv().setTextColor(theme.getReceivedMessageOtherTextColor(viewHolder.getContext()));
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp15);
@@ -934,7 +930,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(new Theme().getSendMessageTextColor(((ChatItemWithTextHolder) holder).getContext()));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(theme.getSendMessageTextColor(((ChatItemWithTextHolder) holder).getContext()));
         }
 
 
@@ -948,11 +944,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (status != ProtoGlobal.RoomMessageStatus.SEEN) {
-            viewHolder.getMessageStatusTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));
+            viewHolder.getMessageStatusTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
         }
-        viewHolder.getChatBloke().setBackground(new Theme().tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.iGapSendMessageBubbleColor));
-        viewHolder.getMessageTimeTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));
-        viewHolder.getSignatureTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getChatBloke().setBackground(theme.tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.iGapSendMessageBubbleColor));
+        viewHolder.getMessageTimeTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getSignatureTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
     }
@@ -1021,12 +1017,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 replayMessage.setText(replayText);
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-                    replayView.setBackgroundResource(new Theme().getSendReplay(replayView.getContext()));
+                    replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
                 } else {
-                    replayView.setBackgroundResource(new Theme().getReceivedReplay(replayView.getContext()));
+                    replayView.setBackgroundResource(theme.getReceivedReplay(replayView.getContext()));
                 }
-                replyFrom.setTextColor(new Theme().getSendReplayUserColor(replyFrom.getContext()));
-                replayMessage.setTextColor(new Theme().getSendMessageTextColor(replayMessage.getContext()));
+                replyFrom.setTextColor(theme.getSendReplayUserColor(replyFrom.getContext()));
+                replayMessage.setTextColor(theme.getSendMessageTextColor(replayMessage.getContext()));
 
                 replyFrom.measure(0, 0);       //must call measure!
                 replayMessage.measure(0, 0);
@@ -1107,7 +1103,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 txtForwardFrom.setText(info.getDisplayName());
                 structMessage.username = info.getUsername();
-                txtForwardFrom.setTextColor(new Theme().getForwardFromTextColor(txtForwardFrom.getContext()));
+                txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
             } else if (mMessage.getForwardMessage().getUserId() != 0) {
 
                 if (RealmRegisteredInfo.needUpdateUser(mMessage.getForwardMessage().getUserId(), null)) {
@@ -1121,7 +1117,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
                 if (realmRoom != null) {
                     txtForwardFrom.setText(realmRoom.getTitle());
-                    txtForwardFrom.setTextColor(new Theme().getForwardFromTextColor(txtForwardFrom.getContext()));
+                    txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
 
                     switch (realmRoom.getType()) {
                         case CHANNEL:
@@ -1155,7 +1151,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
 
                         txtForwardFrom.setText(realmRoomForwardedFrom.getTitle());
-                        txtForwardFrom.setTextColor(new Theme().getForwardFromTextColor(txtForwardFrom.getContext()));
+                        txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
                     } else {
                         if (RealmRoom.needUpdateRoomInfo(mMessage.getForwardMessage().getAuthorRoomId())) {
                             if (!updateForwardInfo.containsKey(mMessage.getForwardMessage().getAuthorRoomId())) {

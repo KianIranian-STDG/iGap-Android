@@ -405,7 +405,7 @@ public class HelperLogMessage {
                 @Override
                 public void updateDrawState(TextPaint ds) {
                     //ToDo: fixed it and pass color to this function
-                    ds.linkColor = new Theme().getLinkColor(context);
+                    ds.linkColor = Theme.getInstance().getLinkColor(context);
                     super.updateDrawState(ds);
                 }
             };

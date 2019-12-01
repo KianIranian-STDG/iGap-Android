@@ -27,7 +27,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
@@ -302,8 +301,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.txt_Timer.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
-        holder.author.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.txt_Timer.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
         if (mMessage.getStatus() != null) {
@@ -325,8 +324,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        holder.txt_Timer.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.author.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.txt_Timer.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
         holder.listenView.setVisibility(View.GONE);
     }
 

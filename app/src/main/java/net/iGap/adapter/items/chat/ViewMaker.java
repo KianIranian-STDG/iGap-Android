@@ -78,8 +78,8 @@ public class ViewMaker {
         text.setPadding(i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4));
         text.setGravity(CENTER);
         text.setText("Log");
-        text.setTextColor(new Theme().getTitleTextColor(text.getContext()));
-        text.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(text.getContext(), R.drawable.recangle_gray_tranceparent), text.getContext(), R.attr.iGapDividerLine));
+        text.setTextColor(Theme.getInstance().getTitleTextColor(text.getContext()));
+        text.setBackground(Theme.getInstance().tintDrawable(ContextCompat.getDrawable(text.getContext(), R.drawable.recangle_gray_tranceparent), text.getContext(), R.attr.iGapDividerLine));
 
         setTextSize(text, R.dimen.dp12);
         setTypeFace(text);
@@ -108,7 +108,7 @@ public class ViewMaker {
 
         View verticalLine = new View(context);
         verticalLine.setId(R.id.verticalLine);
-        verticalLine.setBackgroundColor(new Theme().getMessageVerticalLineColor(verticalLine.getContext()));
+        verticalLine.setBackgroundColor(Theme.getInstance().getMessageVerticalLineColor(verticalLine.getContext()));
         LinearLayout.LayoutParams layout_81 = new LinearLayout.LayoutParams(dpToPixel(3), ViewGroup.LayoutParams.MATCH_PARENT);
 
         if (HelperCalander.isPersianUnicode) {
@@ -167,7 +167,7 @@ public class ViewMaker {
         chslr_txt_replay_message.setPadding(0, 0, 0, 0);
         chslr_txt_replay_message.setText("");
 
-        chslr_txt_replay_message.setTextColor(new Theme().getPrimaryTextColor(chslr_txt_replay_message.getContext()));
+        chslr_txt_replay_message.setTextColor(Theme.getInstance().getPrimaryTextColor(chslr_txt_replay_message.getContext()));
         chslr_txt_replay_message.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
 
         chslr_txt_replay_message.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
@@ -196,7 +196,7 @@ public class ViewMaker {
         cslr_ll_forward.setLayoutParams(layout_687);
 
         View View_997 = new View(context);
-        View_997.setBackgroundColor(new Theme().getMessageVerticalLineColor(View_997.getContext()));
+        View_997.setBackgroundColor(Theme.getInstance().getMessageVerticalLineColor(View_997.getContext()));
         LinearLayout.LayoutParams layout_547 = new LinearLayout.LayoutParams(dpToPixel(2), ViewGroup.LayoutParams.MATCH_PARENT);
         layout_547.rightMargin = dpToPixel(3);
         View_997.setLayoutParams(layout_547);
@@ -206,7 +206,7 @@ public class ViewMaker {
         TextView cslr_txt_prefix_forward = new AppCompatTextView(context);
         cslr_txt_prefix_forward.setId(R.id.cslr_txt_prefix_forward);
         cslr_txt_prefix_forward.setText(context.getResources().getString(R.string.forwarded_from));
-        cslr_txt_prefix_forward.setTextColor(new Theme().getReceivedMessageOtherTextColor(cslr_txt_prefix_forward.getContext()));
+        cslr_txt_prefix_forward.setTextColor(Theme.getInstance().getReceivedMessageOtherTextColor(cslr_txt_prefix_forward.getContext()));
         setTextSize(cslr_txt_prefix_forward, R.dimen.dp12);
         cslr_txt_prefix_forward.setSingleLine(true);
         cslr_txt_prefix_forward.setTypeface(ResourcesCompat.getFont(cslr_txt_prefix_forward.getContext(), R.font.main_font_bold));
@@ -220,7 +220,7 @@ public class ViewMaker {
         cslr_txt_forward_from.setId(R.id.cslr_txt_forward_from);
         cslr_txt_forward_from.setMinimumWidth(i_Dp(R.dimen.dp100));
         cslr_txt_forward_from.setMaxWidth(i_Dp(R.dimen.dp140));
-        cslr_txt_forward_from.setTextColor(new Theme().getForwardFromTextColor(cslr_txt_forward_from.getContext()));
+        cslr_txt_forward_from.setTextColor(Theme.getInstance().getForwardFromTextColor(cslr_txt_forward_from.getContext()));
         setTextSize(cslr_txt_forward_from, R.dimen.dp12);
         cslr_txt_forward_from.setSingleLine(true);
         cslr_txt_forward_from.setTypeface(ResourcesCompat.getFont(cslr_txt_forward_from.getContext(), R.font.main_font_bold));
@@ -416,7 +416,7 @@ public class ViewMaker {
         fcsl_txt_name.setPadding(0, 0, 0, dpToPixel(1));
         fcsl_txt_name.setText("Name");
         fcsl_txt_name.setSingleLine(true);
-        fcsl_txt_name.setTextColor(new Theme().getTitleTextColor(context));
+        fcsl_txt_name.setTextColor(Theme.getInstance().getTitleTextColor(context));
 
         setTextSize(fcsl_txt_name, R.dimen.standardTextSize);
         fcsl_txt_name.setTypeface(ResourcesCompat.getFont(fcsl_txt_name.getContext(), R.font.main_font));
@@ -435,7 +435,7 @@ public class ViewMaker {
         fcsl_txt_time_info.setGravity(Gravity.START);
         fcsl_txt_time_info.setSingleLine(true);
         fcsl_txt_time_info.setText("(4) 9:24 am");
-        fcsl_txt_time_info.setTextColor(new Theme().getSubTitleColor(context));
+        fcsl_txt_time_info.setTextColor(Theme.getInstance().getSubTitleColor(context));
         setTextSize(fcsl_txt_time_info, R.dimen.smallTextSize);
         fcsl_txt_time_info.setTypeface(ResourcesCompat.getFont(fcsl_txt_time_info.getContext(), R.font.main_font));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

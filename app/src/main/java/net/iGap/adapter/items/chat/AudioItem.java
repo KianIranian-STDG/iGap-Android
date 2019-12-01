@@ -27,7 +27,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
@@ -275,10 +274,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
 
-        holder.songFileName.setTextColor(new Theme().getSendMessageTextColor(holder.getContext()));
-        holder.songSize.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
-        holder.songArtist.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
-        holder.songTimeTv.setTextColor(new Theme().getSendMessageOtherTextColor(holder.songTimeTv.getContext()));
+        holder.songFileName.setTextColor(theme.getSendMessageTextColor(holder.getContext()));
+        holder.songSize.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.songArtist.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.songTimeTv.setTextColor(theme.getSendMessageOtherTextColor(holder.songTimeTv.getContext()));
 
         if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
             holder.seekBar.getThumb().mutate().setColorFilter(holder.getColor(R.color.black),
@@ -293,10 +292,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        holder.songFileName.setTextColor(new Theme().getReceivedMessageColor(holder.getContext()));
-        holder.songSize.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.songArtist.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.songTimeTv.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.songTimeTv.getContext()));
+        holder.songFileName.setTextColor(theme.getReceivedMessageColor(holder.getContext()));
+        holder.songSize.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.songArtist.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.songTimeTv.setTextColor(theme.getReceivedMessageOtherTextColor(holder.songTimeTv.getContext()));
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {

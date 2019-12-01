@@ -26,7 +26,6 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
@@ -112,10 +111,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.cslf_txt_file_name.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
-        holder.cslf_txt_file_size.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
-        holder.spaceView.setBackgroundColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
-        holder.fileType.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.cslf_txt_file_name.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.cslf_txt_file_size.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.spaceView.setBackgroundColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.fileType.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
 
 
     }
@@ -123,10 +122,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-        holder.cslf_txt_file_name.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.cslf_txt_file_size.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.spaceView.setBackgroundColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.fileType.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.cslf_txt_file_name.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.cslf_txt_file_size.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.spaceView.setBackgroundColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.fileType.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
 
     }
 

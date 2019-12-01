@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperUrl;
@@ -419,7 +420,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                     btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                     }.getType());
                     btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                    childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, type);
+                    childLayout = MakeButtons.addButtons(Theme.getInstance(), btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, type);
                     //   childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -477,7 +478,7 @@ public class BotInit implements MakeButtons.OnClickListener {
         btn.setText(name);
         btn.setAllCaps(false);
         btn.setGravity(Gravity.CENTER);
-        btn.setTypeface(ResourcesCompat.getFont(btn.getContext() , R.font.main_font));
+        btn.setTypeface(ResourcesCompat.getFont(btn.getContext(), R.font.main_font));
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -518,7 +519,7 @@ public class BotInit implements MakeButtons.OnClickListener {
         txt.setLayoutParams(param);
         txt.setPadding(15, 6, 15, 6);
         txt.setText(action);
-        txt.setTypeface(ResourcesCompat.getFont(txt.getContext() , R.font.main_font));
+        txt.setTypeface(ResourcesCompat.getFont(txt.getContext(), R.font.main_font));
         txt.setTextColor(Color.BLACK);
         txt.setOnClickListener(new View.OnClickListener() {
             @Override

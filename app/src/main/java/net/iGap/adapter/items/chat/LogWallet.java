@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
@@ -107,8 +106,8 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.cardNumber.setText(cardNumber);
             holder.rrnNumber.setText(rrn);
             holder.titleTxt.setText(R.string.PAYMENT_TRANSFER_MONEY);
-            holder.payTime.setBackgroundColor(new Theme().getPrimaryColor(holder.payTime.getContext()));
-            holder.titleTxt.setBackgroundColor(new Theme().getPrimaryColor(holder.titleTxt.getContext()));
+            holder.payTime.setBackgroundColor(theme.getPrimaryColor(holder.payTime.getContext()));
+            holder.titleTxt.setBackgroundColor(theme.getPrimaryColor(holder.titleTxt.getContext()));
         }
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmMoneyTransfer.getFromUserId());
