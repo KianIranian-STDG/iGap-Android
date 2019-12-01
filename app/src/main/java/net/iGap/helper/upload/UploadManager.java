@@ -124,6 +124,10 @@ public class UploadManager {
             return;
 
         Log.d("bagi", "after Compress");
+        if (message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
+            new ChatSendMessageUtil().build(roomType, message.getRoomId(), message);
+            return;
+        }
 
         OnUploadListener onUploadListener = new OnUploadListener() {
             @Override

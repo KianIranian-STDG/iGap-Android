@@ -5784,13 +5784,9 @@ public class FragmentChat extends BaseFragment
                             });
                         }).start();
 
-
-
                         StructMessageInfo sm = new StructMessageInfo(roomMessage);
                         mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
-
-                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
 
                         if (isReply()) {
                             mReplayLayout.setTag(null);
