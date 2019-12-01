@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,11 +97,16 @@ public class PaymentFragment extends BaseAPIViewFrag {
 
         paymentViewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
             if (getActivity() != null && webLink != null) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
-                Bundle bundle = new Bundle();
-                bundle.putString("Authorization", G.getApiToken());
-                browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
-                startActivity(browserIntent);
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Authorization", G.getApiToken());
+                    browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
+                    startActivity(browserIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), R.string.add_new_account, Toast.LENGTH_LONG).show();
+                }
             }
         });
 

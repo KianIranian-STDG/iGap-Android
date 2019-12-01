@@ -2390,5 +2390,6 @@ Want to get it?</string>
     <string name="show_and_login_using_qr_title">Scan this QR Code using your other device to log in to your iGap Account</string>
     <string name="two_step_verficatiion_header">You have enabled Two-Step verification; so your account is protected with an additional password</string>
     <string name="login_exist_account_error">This account is login on this device</string>
+    <string name="need_browser">Requires browser to use.</string>
 
 </resources>

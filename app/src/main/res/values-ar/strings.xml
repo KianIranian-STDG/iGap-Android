@@ -3062,4 +3062,5 @@
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="delete_from_storage">حذف من التخزين</string>
     <string name="map_registration_enable">تمكين الرؤية القريبة</string>
+    <string name="need_browser">يتطلب متصفح للاستخدام.</string>
 </resources>

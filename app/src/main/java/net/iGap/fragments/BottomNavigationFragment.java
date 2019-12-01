@@ -135,7 +135,6 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
-        Fragment current = fragmentManager.findFragmentById(R.id.viewpager);
         switch (position) {
             case 0:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
@@ -143,10 +142,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(current instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 1:
                 fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
@@ -154,23 +150,15 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     fragment = FragmentCall.newInstance(true);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 2:
                 fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
                 if (fragment == null) {
                     fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
-                } else {
-                    if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                        fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                    }
-                    fragmentTransaction.show(fragment).commit();
                 }
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 3:
                 fragment = fragmentManager.findFragmentByTag(DiscoveryFragment.class.getName());
@@ -182,11 +170,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 if (crawlerStruct != null && !crawlerStruct.isWorkDone()) {
                     ((DiscoveryFragment) fragment).setNeedToCrawl(true);
                 }
-
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 4:
                 fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
@@ -194,10 +178,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     fragment = new FragmentUserProfile();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
         }
     }
