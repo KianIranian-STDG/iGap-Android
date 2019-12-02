@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -29,238 +30,248 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_title_messageNotification"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/dp8"
-                    android:paddingBottom="@dimen/dp4"
-                    android:visibility="visible">
+                    android:padding="@dimen/dp12"
+                    android:text="@string/st_title_messageNotification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/dp12"
-                        android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
-                        android:paddingBottom="@dimen/dp12"
-                        android:text="@string/st_title_messageNotification"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/largeTextSize"
-                        android:textStyle="normal" />
+                <view
+                    android:id="@+id/view_alert"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_messageNotification" />
 
+                <TextView
+                    android:id="@+id/tv_alert"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/st_alert"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_alert"
+                    app:layout_constraintEnd_toEndOf="@+id/toggle_alert"
+                    app:layout_constraintStart_toStartOf="@id/view_alert"
+                    app:layout_constraintTop_toTopOf="@+id/view_alert" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertMessage()}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:id="@+id/tv_alert"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|start"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_alert"
-                            android:textColor="?iGapTitleTextColor"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/toggle_alert"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertMassage)}"
-                            android:gravity="start"
-                            android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreView()}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
-
-
-                        <TextView
-                            android:id="@+id/tv_messagePreview"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_messagePreview"
-                            android:textColor="?iGapTitleTextColor"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/toggle_messagePreview"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMassagePreview)}"
-                            android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMassagePreview(checked)}"
-                            android:textOff=""
-                            android:textOn=""
-
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_led_direct"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:gravity="center_vertical"
-                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedColorMessage()}"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingTop="@dimen/dp4"
-                            android:paddingRight="@dimen/dp16"
-                            android:text="@string/st_led_color"
-                            android:textColor="?iGapTitleTextColor"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-
-                        <ImageView
-                            android:id="@+id/iv_led_direct"
-                            android:layout_width="@dimen/dp16"
-                            android:layout_height="@dimen/dp16"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/dp16"
-                            android:layout_marginRight="@dimen/dp16"
-                            android:background="@drawable/circle_color_notificatin_setting"
-                            android:gravity="center" />
-
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rl_vibration_direct"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationMessage()}"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="@string/st_vibrate"
-                            android:textColor="?iGapTitleTextColor"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <TextView
-                            android:id="@+id/tv_vibration_direct"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateMessage , default=@string/array_Default}"
-                            android:textColor="?attr/colorPrimary"
-                            android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rl_pop_sound_direct"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationMessage()}"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:gravity="center_vertical"
-                            android:text="@string/st_popupNotification"
-                            android:textColor="?iGapTitleTextColor"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <TextView
-                            android:id="@+id/tv_pop_sound_direct"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationMessage , default=@string/st_sound}"
-                            android:textColor="?attr/colorPrimary"
-                            android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rl_sound_direct"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="@string/st_sound"
-                            android:textColor="?iGapTitleTextColor"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <TextView
-                            android:id="@+id/tv_sound_direct"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:text="@{FragmentNotificationAndSoundViewModel.callbackSoundMessage , default = @string/st_sound}"
-                            android:textColor="?attr/colorPrimary"
-                            android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_alert"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertMassage)}"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_alert"
+                    app:layout_constraintEnd_toEndOf="@id/view_alert"
+                    app:layout_constraintTop_toTopOf="@id/view_alert" />
 
                 <View
-                    android:layout_width="match_parent"
+                    android:id="@+id/view_messagePreview"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreView()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_alert" />
+
+                <TextView
+                    android:id="@+id/tv_messagePreview"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/st_messagePreview"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_messagePreview"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_messagePreview"
+                    app:layout_constraintStart_toStartOf="@id/view_messagePreview"
+                    app:layout_constraintTop_toTopOf="@+id/view_messagePreview" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_messagePreview"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMassagePreview)}"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMassagePreview(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_messagePreview"
+                    app:layout_constraintEnd_toEndOf="@id/view_messagePreview"
+                    app:layout_constraintTop_toTopOf="@id/view_messagePreview" />
+
+
+                <View
+                    android:id="@+id/ll_led_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedColorMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_messagePreview" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:paddingRight="@dimen/dp16"
+                    android:text="@string/st_led_color"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_led_direct"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_led_direct"
+                    app:layout_constraintStart_toStartOf="@+id/ll_led_direct"
+                    app:layout_constraintTop_toTopOf="@id/ll_led_direct" />
+
+                <ImageView
+                    android:id="@+id/iv_led_direct"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:background="@drawable/circle_color_notificatin_setting"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_led_direct"
+                    app:layout_constraintEnd_toEndOf="@+id/ll_led_direct"
+                    app:layout_constraintTop_toTopOf="@id/ll_led_direct" />
+
+                <View
+                    android:id="@+id/rl_vibration_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_led_direct" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:text="@string/st_vibrate"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_vibration_direct"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_vibration_direct"
+                    app:layout_constraintStart_toStartOf="@id/rl_vibration_direct"
+                    app:layout_constraintTop_toTopOf="@id/rl_vibration_direct" />
+
+                <TextView
+                    android:id="@+id/tv_vibration_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateMessage , default=@string/array_Default}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_vibration_direct"
+                    app:layout_constraintEnd_toEndOf="@id/rl_vibration_direct"
+                    app:layout_constraintTop_toTopOf="@id/rl_vibration_direct" />
+
+                <View
+                    android:id="@+id/rl_pop_sound_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_vibration_direct" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:text="@string/st_popupNotification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_pop_sound_direct"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_pop_sound_direct"
+                    app:layout_constraintStart_toStartOf="@+id/rl_pop_sound_direct"
+                    app:layout_constraintTop_toTopOf="@id/rl_pop_sound_direct" />
+
+                <TextView
+                    android:id="@+id/tv_pop_sound_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationMessage , default=@string/st_sound}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_pop_sound_direct"
+                    app:layout_constraintEnd_toEndOf="@id/rl_pop_sound_direct"
+                    app:layout_constraintTop_toTopOf="@id/rl_pop_sound_direct" />
+
+                <View
+                    android:id="@+id/rl_sound_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_direct" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:text="@string/st_sound"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_sound_direct"
+                    app:layout_constraintEnd_toStartOf="@id/tv_sound_direct"
+                    app:layout_constraintStart_toStartOf="@id/rl_pop_sound_direct"
+                    app:layout_constraintTop_toTopOf="@id/rl_sound_direct" />
+
+                <TextView
+                    android:id="@+id/tv_sound_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackSoundMessage , default = @string/st_sound}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_sound_direct"
+                    app:layout_constraintEnd_toEndOf="@id/rl_sound_direct"
+                    app:layout_constraintTop_toTopOf="@id/rl_sound_direct" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10"
-                    android:background="?iGapDividerLine" />
+                    android:layout_marginEnd="@dimen/dp10"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_sound_direct"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -268,7 +279,8 @@
                     android:orientation="vertical"
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="@dimen/dp4"
-                    android:visibility="visible">
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/view1">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -653,7 +665,6 @@
                     android:layout_marginRight="@dimen/dp10"
                     android:background="?iGapDividerLine" />
 
-                <!--this part is Gone-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1044,7 +1055,7 @@
 
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </LinearLayout>
 </layout>
