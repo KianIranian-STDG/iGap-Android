@@ -16,11 +16,13 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -28,6 +30,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
+import com.nostra13.universalimageloader.utils.L;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -35,7 +38,7 @@ import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FragmentNotificationAndSoundViewModel {
+public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     private int ledColorMessage;
     private int ledColorGroup;
@@ -78,7 +81,6 @@ public class FragmentNotificationAndSoundViewModel {
 
     public FragmentNotificationAndSoundViewModel() {
         getInfo();
-        startLedColorMessage();
         startVibrateMessage();
         startPopupNotification();
         poRbDialogSoundMessage();
@@ -90,11 +92,6 @@ public class FragmentNotificationAndSoundViewModel {
     //===============================================================================
     //=====================================Starts====================================
     //===============================================================================
-
-    private void startLedColorMessage() {
-
-
-    }
 
     public void startVibrateMessage() {
 
@@ -143,7 +140,6 @@ public class FragmentNotificationAndSoundViewModel {
             callbackSoundMessage.set(soundMessage);
         }
     }
-
 
     private void startVibrateGroup() {
 
@@ -196,6 +192,7 @@ public class FragmentNotificationAndSoundViewModel {
     //===============================================================================
     //================================Getters/Setters================================
     //===============================================================================
+
 
     public void setAlertMassage(Boolean isChecked) {
 
@@ -326,7 +323,10 @@ public class FragmentNotificationAndSoundViewModel {
 
     }
 
-    //===============================================================================
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
+//===============================================================================
     //================================Event Listeners================================
     //===============================================================================
 
@@ -346,12 +346,11 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     public void onClickLedColorMessage() {
-        boolean wrapInScrollView = true;
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, true).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+                        Toast.makeText(dialog.getContext(), "nnnnnnnnnnnnn", Toast.LENGTH_SHORT).show();
                     }
                 }).onPositive((dialog1, which) -> {
 
@@ -366,21 +365,16 @@ public class FragmentNotificationAndSoundViewModel {
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dialog.dismiss();
-                directLedColor.getValue();
-                directLedColor.setValue(picker.getColor());
-                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, picker.getColor());
-                editor.apply();
-            }
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+            Toast.makeText(dialog.getContext(), "PPPPPPPPP", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+            directLedColor.setValue(picker.getColor());
+            editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, picker.getColor());
+            editor.apply();
+            sharedPreferences.edit();
         });
 
         dialog.show();
-
-
     }
 
     public void onClickLedGroup() {
@@ -659,6 +653,36 @@ public class FragmentNotificationAndSoundViewModel {
         setKeepService(isChecked);
     }
 
+    public void onResetDataInSharedPreference() {
+        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0);
+        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
+        editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
+        editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+        editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0);
+        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
+        editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
+        editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+        editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND_NEW, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE_NEW, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW_NEW, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND_NEW, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
+        editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
+        editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.fragmentActivity.getResources().getString(R.string.array_1_hour));
+        editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+        editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+        editor.apply();
+    }
     //===============================================================================
     //====================================Methods====================================
     //===============================================================================
@@ -747,8 +771,6 @@ public class FragmentNotificationAndSoundViewModel {
                 musicId = R.raw.woow;
                 break;
         }
-
-
         MediaPlayer mediaPlayer = MediaPlayer.create(G.fragmentActivity, musicId);
         mediaPlayer.start();
 
