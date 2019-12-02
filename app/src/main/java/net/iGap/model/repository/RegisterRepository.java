@@ -72,6 +72,7 @@ public class RegisterRepository {
     private ProtoUserRegister.UserRegisterResponse.Method method;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Long> goToSyncContactPageForNewUser = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> loginExistUser = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToWelcomePage = new SingleLiveEvent<>();
 
@@ -102,6 +103,10 @@ public class RegisterRepository {
 
     public SingleLiveEvent<Long> getGoToWelcomePage() {
         return goToWelcomePage;
+    }
+
+    public SingleLiveEvent<Long> getGoToSyncContactPageForNewUser() {
+        return goToSyncContactPageForNewUser;
     }
 
     public int getCallingCode() {
@@ -335,15 +340,15 @@ public class RegisterRepository {
         requestLogin();
     }
 
-    public void setNickName(String name, String lastName, String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+    public void setNickName(String name, String lastName,String countryCode, String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         new RequestUserProfileSetNickname().userProfileNickName(name + " " + lastName, new OnUserProfileSetNickNameResponse() {
             @Override
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                if (reagentPhoneNumber == null || reagentPhoneNumber.isEmpty()) {
+                if ((reagentPhoneNumber == null || reagentPhoneNumber.isEmpty())) {
                     getUserInfo();
                     requestUserInfo();
                 } else {
-                    setReagent(reagentPhoneNumber, callback);
+                    setReagent(countryCode + reagentPhoneNumber, callback);
                 }
             }
 
@@ -413,7 +418,11 @@ public class RegisterRepository {
                     DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
                     });
-                    goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                    if (newUser) {
+                        goToSyncContactPageForNewUser.postValue(userId);
+                    } else {
+                        goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                    }
                 }
 
             }
@@ -491,7 +500,7 @@ public class RegisterRepository {
 
             @Override
             public void errorVerifyPassword(int major, int minor, int wait) {
-                G.handler.post(() -> callback.onError(new ErrorWithWaitTime(major, minor, wait)));
+                callback.onError(new ErrorWithWaitTime(major, minor, wait));
             }
         });
     }

@@ -36,6 +36,10 @@ public class RegistrationViewModel extends ViewModel {
         return repository.getGoToMainPage();
     }
 
+    public SingleLiveEvent<Long> goToContactPage(){
+        return repository.getGoToSyncContactPageForNewUser();
+    }
+
     public SingleLiveEvent<Boolean> getExistUser(){
         return repository.getLoginExistUser();
     }

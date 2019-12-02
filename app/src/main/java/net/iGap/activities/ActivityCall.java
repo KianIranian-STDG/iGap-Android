@@ -172,7 +172,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new ActivityCallViewModel(getIntent().getExtras().getLong(USER_ID_STR), getIntent().getExtras().getBoolean(INCOMING_CALL_STR), (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE));
+                long userId = -1;
+                boolean isIncomingCall = false;
+                ProtoSignalingOffer.SignalingOffer.Type type = ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING;
+                if (getIntent() != null) {
+                    userId = getIntent().getLongExtra(USER_ID_STR, -1);
+                    isIncomingCall = getIntent().getExtras().getBoolean(INCOMING_CALL_STR);
+                    type = (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE);
+                }
+                return (T) new ActivityCallViewModel(userId, isIncomingCall, type);
             }
         }).get(ActivityCallViewModel.class);
         binding.setActivityCallViewModel(viewModel);

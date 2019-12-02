@@ -15,25 +15,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.AccountHelper;
 import net.iGap.AccountManager;
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.WebSocketClient;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentActivation;
 import net.iGap.fragments.FragmentIntroduce;
-import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
+import net.iGap.fragments.FragmentSyncRegisteredContacts;
 import net.iGap.fragments.WelcomeFragment;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.request.RequestClientGetRoomList;
-import net.iGap.response.ClientGetRoomListResponse;
 import net.iGap.viewmodel.RegistrationViewModel;
-
-import org.paygear.RaadApp;
-
-import static org.paygear.utils.Utils.signOutWallet;
 
 public class ActivityRegistration extends ActivityEnhanced {
 
@@ -72,6 +65,18 @@ public class ActivityRegistration extends ActivityEnhanced {
                 } else {
                     goToMainPage(data.getUserId());
                 }
+            }
+        });
+
+        viewModel.goToContactPage().observe(this, userId -> {
+            if (!isFinishing() && userId != null) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
+                removeAllFragment();
+                FragmentSyncRegisteredContacts fragment = new FragmentSyncRegisteredContacts();
+                Bundle bundle = new Bundle();
+                bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
+                fragment.setArguments(bundle);
+                loadFragment(fragment, true);
             }
         });
 
@@ -177,5 +182,12 @@ public class ActivityRegistration extends ActivityEnhanced {
         fragmentTransaction.replace(R.id.registrationFrame, fragment, fragment.getClass().getName())
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                 .commit();
+    }
+
+    private void removeAllFragment() {
+        int t = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = t; i > 0; i--) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 }

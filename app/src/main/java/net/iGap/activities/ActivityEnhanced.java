@@ -117,11 +117,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
             /*Log.wtf("ActivityEnhanced","status bar start");*/
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                TypedValue tV = new TypedValue();
-                TypedArray aa = obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
-                int clr = aa.getColor(0, 0);
-                aa.recycle();
-                StatusBarUtil.setColor(this, clr, 50);
+                StatusBarUtil.setColor(this, Theme.getInstance().getPrimaryDarkColor(this), 50);
             }
             /*Log.wtf("ActivityEnhanced","status bar start");*/
 
