@@ -185,7 +185,6 @@ public class FragmentRegisterViewModel extends ViewModel {
         if (G.isSecure) {
             isShowLoading.set(View.VISIBLE);
             showRetryView.set(View.GONE);
-            viewVisibility.set(View.INVISIBLE);
             repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
@@ -194,6 +193,7 @@ public class FragmentRegisterViewModel extends ViewModel {
                     }
                     isShowLoading.set(View.INVISIBLE);
                     showTermsAndConditionDialog.postValue(agreementDescription);
+                    viewVisibility.set(View.VISIBLE);
                 /*repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
                     @Override
                     public void onSuccess(LocationModel data) {
