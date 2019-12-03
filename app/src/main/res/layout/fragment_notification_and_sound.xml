@@ -358,7 +358,6 @@
                     android:id="@+id/ll_led_group"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedGroup()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view_messagePreview_group" />

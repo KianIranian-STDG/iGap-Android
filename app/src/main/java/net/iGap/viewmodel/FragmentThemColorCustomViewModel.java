@@ -113,8 +113,8 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
         View view1 = dialog.getCustomView();
         assert view1 != null;
         final ColorPicker picker = view1.findViewById(R.id.picker);
-        SVBar svBar = view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
+        SVBar svBar = view1.findViewById(R.id.svBar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacityBar);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 

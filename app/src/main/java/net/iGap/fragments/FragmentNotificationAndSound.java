@@ -15,13 +15,19 @@ import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SVBar;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.ColorPiker;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentNotificationAndSoundViewModel;
 
 
@@ -46,35 +52,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
         viewModel = new FragmentNotificationAndSoundViewModel();
         binding.setFragmentNotificationAndSoundViewModel(viewModel);
         setupToolbar();
-
-        viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
-            if (integer != null) {
-                GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
-                gradientDrawable.setColor(integer);
-                binding.ivLedDirect.setBackground(gradientDrawable);
-            }
-
-        });
-        viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
-            GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedGroup.getBackground();
-            gradientDrawable.setColor(integer);
-            binding.ivLedGroup.setBackground(gradientDrawable);
-        });
-
-        binding.llResetNotifications.setOnClickListener(v -> {
-            if (getActivity() != null) {
-                new MaterialDialog.Builder(getActivity()).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        viewModel.onResetDataInSharedPreference();
-                        Toast.makeText(getActivity(), R.string.st_reset_all_notification, Toast.LENGTH_SHORT).show();
-                        removeFromBaseFragment(FragmentNotificationAndSound.this);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentNotificationAndSound()).setReplace(false).load();
-                    }
-                }).show();
-            }
-        });
+        setupLedColor();
+        setupResetNotification();
     }
 
     private void setupToolbar() {
@@ -92,6 +71,67 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 });
 
         binding.toolbar.addView(mHelperToolbar.getView());
+    }
+
+    private void setupLedColor() {
+        viewModel.setDirectLedColor(new FragmentNotificationAndSoundViewModel.onChangeLEDColor() {
+            @Override
+            public void onChenge(int color) {
+                    GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
+                    gradientDrawable.setColor(color);
+                    binding.ivLedDirect.setBackground(gradientDrawable);
+            }
+        });
+        /*viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
+
+
+        });*/
+        viewModel.showMaterialDialog.observe(getViewLifecycleOwner(), isShow -> {
+            if (isShow) {
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.stns_popup_colorpicer, true).positiveText(R.string.set)
+                        .negativeText(R.string.DISCARD).title(R.string.st_led_color)
+                        .onNegative((dialog12, which) -> {
+                            dialog12.dismiss();
+                        })
+                        .onPositive((dialog1, which) -> {
+
+                        }).build();
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
+                    View view = dialog.getCustomView();
+                    if (view != null) {
+                        ColorPicker picker = view.findViewById(R.id.picker);
+                        SVBar svBar = view.findViewById(R.id.svBar);
+                        OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
+                        picker.setOldCenterColor(viewModel.getLedColorMessage());
+                        picker.addSVBar(svBar);
+                        picker.addOpacityBar(opacityBar);
+                        viewModel.setNewColor(picker.getColor());
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+
+    }
+
+
+    private void setupResetNotification() {
+
+        binding.llResetNotifications.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                new MaterialDialog.Builder(getActivity()).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        viewModel.onResetDataInSharedPreference();
+                        Toast.makeText(getActivity(), R.string.st_reset_all_notification, Toast.LENGTH_SHORT).show();
+                        removeFromBaseFragment(FragmentNotificationAndSound.this);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentNotificationAndSound()).setReplace(false).load();
+                    }
+                }).show();
+            }
+        });
     }
 
     @Override

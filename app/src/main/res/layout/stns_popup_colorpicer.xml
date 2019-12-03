@@ -12,12 +12,12 @@
         android:layout_height="wrap_content" />
 
     <com.larswerkman.holocolorpicker.SVBar
-        android:id="@+id/svbar"
+        android:id="@+id/svBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <com.larswerkman.holocolorpicker.OpacityBar
-        android:id="@+id/opacitybar"
+        android:id="@+id/opacityBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
