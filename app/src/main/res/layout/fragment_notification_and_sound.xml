@@ -47,7 +47,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <view
+                <View
                     android:id="@+id/view_alert"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
@@ -82,7 +82,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="0dp"
-                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertMassage)}"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isAlertMassage}"
                     android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"
                     android:textOff=""
                     android:textOn=""
@@ -122,7 +122,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="0dp"
-                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMassagePreview)}"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isMassagePreview}"
                     android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMassagePreview(checked)}"
                     android:textOff=""
                     android:textOn=""
@@ -350,7 +350,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="0dp"
-                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertGroup)}"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isAlertGroup}"
                     android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAlertGroup(checked)}"
                     android:textOff=""
                     android:textOn=""
@@ -394,7 +394,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="0dp"
-                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMessagePreViewGroup)}"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isMessagePreViewGroup}"
                     android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMessagePreViewGroup(checked)}"
                     android:textOff=""
                     android:textOn=""
@@ -473,7 +473,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="0dp"
-                    android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateGroup , default=@string/array_Default}"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateGroup}"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:textStyle="normal"
@@ -514,7 +514,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="0dp"
-                    android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationGroup,default = @string/st_sound}"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationGroup}"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:textStyle="normal"
@@ -917,6 +917,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view5" />
 
+                <View
+                    android:id="@+id/ll_reset_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_reset" />
+
                 <TextView
                     android:id="@+id/tv_reset"
                     android:layout_width="0dp"
@@ -929,24 +939,28 @@
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_title_reset" />
+                    app:layout_constraintBottom_toTopOf="@+id/description_reset"
+                    app:layout_constraintEnd_toEndOf="@+id/ll_reset_notifications"
+                    app:layout_constraintStart_toStartOf="@id/ll_reset_notifications"
+                    app:layout_constraintTop_toTopOf="@id/ll_reset_notifications" />
+
                 <TextView
+                    android:id="@+id/description_reset"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:layout_marginEnd="@dimen/dp4"
+                    android:layout_marginRight="@dimen/dp16"
                     android:gravity="center_vertical|top"
                     android:text="@string/st_text_reset_all_notification"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     android:textStyle="normal"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginEnd="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp16"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_reset"/>
+                 app:layout_constraintBottom_toBottomOf="@id/ll_reset_notifications"
+                    app:layout_constraintEnd_toEndOf="@id/ll_reset_notifications"
+                    app:layout_constraintStart_toStartOf="@id/ll_reset_notifications"
+                    app:layout_constraintTop_toBottomOf="@id/tv_reset"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </LinearLayout>
