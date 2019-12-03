@@ -1,17 +1,10 @@
 package net.iGap.api.apiService;
 
-import android.os.Build;
-import android.util.Log;
-
 import net.iGap.BuildConfig;
 import net.iGap.api.CPayApi;
 import net.iGap.api.CharityApi;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
-import javax.net.ssl.SSLContext;
 
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
@@ -21,9 +14,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitFactory {
-    public OkHttpClient httpClient;
 
-    public RetrofitFactory() {
+    private OkHttpClient getHttpClient() {
+        OkHttpClient httpClient;
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         if (BuildConfig.DEBUG) {
@@ -32,30 +25,22 @@ public class RetrofitFactory {
             builder.addInterceptor(httpLoggingInterceptor);
         }
         builder.addInterceptor(new IgapRetrofitInterceptor());
-        /*builder.addInterceptor(chain -> {
-            Request original = chain.request();
-            Request request = original.newBuilder()
-                    .header("Authorization", G.getApiToken())
-                    .header("Content-Type", "application/json")
-                    .method(original.method(), original.body())
-                    .build();
-            return chain.proceed(request);
-        });*/
-        ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                .tlsVersions(TlsVersion.TLS_1_2)
-                .build();
 
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             httpClient = builder.build();
-        else
+        } else {
+            ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                    .tlsVersions(TlsVersion.TLS_1_2)
+                    .build();
             httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
-//        httpClient = enableTls12OnPreLollipop(builder).build();
+        }
+        return httpClient;
     }
 
     Retrofit getBeepTunesRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.BEEP_TUNES_URL)
-                .client(httpClient)
+                .client(getHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -65,7 +50,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.CHANNEL_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build();
     }
 
@@ -73,7 +58,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.KUKNOS_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build();
     }
 
@@ -81,7 +66,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.PAYMENT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build();
     }
 
@@ -89,7 +74,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.ATI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build();
     }
 
@@ -97,7 +82,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.CPAY_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build()
                 .create(CPayApi.class);
     }
@@ -106,7 +91,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.MCI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build();
     }
 
@@ -114,7 +99,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.CHARITY_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build().create(CharityApi.class);
     }
 
@@ -122,7 +107,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.NEWS_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build();
     }
 
@@ -130,64 +115,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.ELECTRICITY_BILL_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
+                .client(getHttpClient())
                 .build();
     }
-
-    private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {
-        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
-            Log.wtf(this.getClass().getName(), "enableTls12OnPreLollipop");
-            try {
-                SSLContext sc = SSLContext.getInstance("TLSv1.2");
-                sc.init(null, null, null);
-                client.sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()));
-
-                ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                        .tlsVersions(TlsVersion.TLS_1_2)
-                        .build();
-
-                List<ConnectionSpec> specs = new ArrayList<>();
-                specs.add(cs);
-                specs.add(ConnectionSpec.COMPATIBLE_TLS);
-                specs.add(ConnectionSpec.CLEARTEXT);
-
-                client.connectionSpecs(specs);
-                Log.wtf(this.getClass().getName(), "enableTls12OnPreLollipop");
-            } catch (Exception exc) {
-                exc.printStackTrace();
-                Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
-            }
-        }
-
-        return client;
-    }
-
-
-    // TODO clean this comment
-/*
-    Retrofit getKuknosHorizanRetrofit() {
-
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(interceptor);
-
-        builder.addInterceptor(chain -> {
-            Request original = chain.request();
-            Request request = original.newBuilder()
-                    .header("Content-Type", "application/json")
-                    .method(original.method(), original.body())
-                    .build();
-            return chain.proceed(request);
-        });
-        OkHttpClient httpClient = builder.build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiStatic.KUKNOS_Horizan_Server)
-                .addConverterFactory(GsonConverterFactory.create(*//*GsonSingleton.getInstance()*//*))
-                .client(httpClient)
-                .build();
-        return retrofit;
-    }*/
 }
