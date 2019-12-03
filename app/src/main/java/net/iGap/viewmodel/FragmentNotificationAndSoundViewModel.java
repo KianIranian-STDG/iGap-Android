@@ -350,7 +350,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
                 new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, true).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Toast.makeText(dialog.getContext(), "nnnnnnnnnnnnn", Toast.LENGTH_SHORT).show();
                     }
                 }).onPositive((dialog1, which) -> {
 
@@ -366,8 +365,8 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         picker.addOpacityBar(opacityBar);
 
         dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-            Toast.makeText(dialog.getContext(), "PPPPPPPPP", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
+            directLedColor.getValue();
             directLedColor.setValue(picker.getColor());
             editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, picker.getColor());
             editor.apply();
