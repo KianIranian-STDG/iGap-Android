@@ -11,6 +11,8 @@ import net.iGap.news.repository.model.NewsList;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
 
+import java.util.List;
+
 import io.realm.Realm;
 
 public class DetailRepo {
@@ -26,7 +28,7 @@ public class DetailRepo {
         repository.getNewsDetail(newsID, handShakeCallback, apiResponse);
     }
 
-    public void getNewsComment(int newsID, int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsComment> apiResponse) {
+    public void getNewsComment(int newsID, int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<List<NewsComment>> apiResponse) {
         repository.getNewsComment(newsID, start, display, handShakeCallback, apiResponse);
     }
 

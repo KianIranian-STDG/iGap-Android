@@ -103,8 +103,8 @@ public class NewsAPIRepository {
         new ApiInitializer<NewsDetail>().initAPI(apiService.getNewsDetail(newsID), handShakeCallback, apiResponse);
     }
 
-    public void getNewsComment(int newsID, int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsComment> apiResponse) {
-        new ApiInitializer<NewsComment>().initAPI(apiService.getNewsComment(newsID, start, display), handShakeCallback, apiResponse);
+    public void getNewsComment(int newsID, int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<List<NewsComment>> apiResponse) {
+        new ApiInitializer<List<NewsComment>>().initAPI(apiService.getNewsComment(newsID, start, display), handShakeCallback, apiResponse);
     }
 
     public void postNewsComment(String newsID, String comment, String author, String email, HandShakeCallback handShakeCallback, ResponseCallback<NewsDetail> apiResponse) {

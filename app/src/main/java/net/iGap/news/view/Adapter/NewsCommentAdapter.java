@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.news.repository.model.NewsComment;
 
+import java.util.List;
+
 public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private NewsComment mData;
+    private List<NewsComment> mData;
 
-    public NewsCommentAdapter(NewsComment mData) {
+    public NewsCommentAdapter(List<NewsComment> mData) {
         this.mData = mData;
     }
 
@@ -35,9 +37,9 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        if (mData.getComments().size() > 5)
+        if (mData.size() > 5)
             return 5;
-        return mData.getComments().size();
+        return mData.size();
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -51,8 +53,8 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void initView(int position) {
-            author.setText(mData.getComments().get(position).getAuthor());
-            comment.setText(mData.getComments().get(position).getBody());
+            author.setText(mData.get(position).getUsername());
+            comment.setText(mData.get(position).getComment());
         }
     }
 

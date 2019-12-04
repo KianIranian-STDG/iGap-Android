@@ -54,7 +54,7 @@ public interface NewsApi {
     Call<NewsDetail> getNewsDetail(@Query("articleId") int newsID);
 
     @GET("getNewsComments/igap/")
-    Call<NewsComment> getNewsComment(@Query("articleId") int newsID, @Query("page") int page, @Query("perpage") int display);
+    Call<List<NewsComment>> getNewsComment(@Query("articleId") int newsID, @Query("page") int page, @Query("perpage") int display);
 
     @POST("setComment/igap/")
 //    Call<NewsDetail> postNewsComment(@Field("articleid") String newsID, @Field("comment") String comment, @Field("author") String author, @Field("email") String email);
