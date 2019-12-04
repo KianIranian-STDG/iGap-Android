@@ -1431,6 +1431,15 @@ public class FragmentChat extends BaseFragment
         setDraftMessage(request_code_VIDEO_CAPTURED);
     }
 
+    private void manageSelectedVideoResult(String path) {
+        latestRequestCode = request_code_VIDEO_CAPTURED;
+        listPathString = new ArrayList<>();
+        mainVideoPath = path ;
+        listPathString.add(mainVideoPath);
+        showDraftLayout();
+        setDraftMessage(request_code_VIDEO_CAPTURED);
+    }
+
     private RealmRoom getRoom() {
         return DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -8974,6 +8983,12 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onAttachPopupVideoPickerResult(List<String> results) {
+
+        if (results.size() == 1){
+            manageSelectedVideoResult(results.get(0));
+            return;
+        }
+
         for (String path : results){
             sendMessage(request_code_VIDEO_CAPTURED, path);
         }
