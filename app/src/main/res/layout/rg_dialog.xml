@@ -11,8 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:layout_marginTop="@dimen/dp12"
-        android:layoutDirection="ltr">
+        android:layout_marginTop="@dimen/dp12">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/rg_edtSearch_toolbar"
@@ -45,8 +44,8 @@
 
     <ListView
         android:id="@+id/lstContent"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:choiceMode="singleChoice"
         android:divider="?attr/iGapDividerLine"
@@ -62,9 +61,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp52"
+        android:layout_height="wrap_content"
         android:gravity="right"
-        android:layoutDirection="ltr"
         android:orientation="horizontal"
         android:padding="@dimen/dp8">
 

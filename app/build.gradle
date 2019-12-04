@@ -30,8 +30,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 151
-        versionName "2.1.0.beta20"
+        versionCode 153
+        versionName "2.1.0.beta22"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -220,7 +220,7 @@ dependencies {
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'com.mindorks.android:prdownloader:0.6.0'
     implementation 'com.google.firebase:firebase-core:17.2.1'
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.1'
     implementation('com.github.KianIranian-STDG:Compress:2.1.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }

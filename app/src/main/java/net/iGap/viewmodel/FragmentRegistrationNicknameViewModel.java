@@ -62,7 +62,6 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     public SingleLiveEvent<Boolean> showDialog = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
     public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
-    public MutableLiveData<Long> goToMain = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
     public ObservableInt showCameraImage = new ObservableInt(View.VISIBLE);
     public ObservableField<String> reagentCountryCode = new ObservableField<>("+98");
@@ -161,7 +160,8 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                     repository.setNickName(
                             name,
                             lastName,
-                            reagentCountryCode.get().replace("+", "") + reagentPhoneNumber.get().replace("-", ""),
+                            reagentCountryCode.get().replace("+", ""),
+                            reagentPhoneNumber.get().replace("-", ""),
                             new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
                                 @Override
                                 public void onSuccess() {

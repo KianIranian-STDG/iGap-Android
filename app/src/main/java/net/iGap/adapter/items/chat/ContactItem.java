@@ -29,7 +29,6 @@ import androidx.fragment.app.FragmentActivity;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentCallAction;
 import net.iGap.fragments.FragmentContactsProfile;
@@ -53,16 +52,16 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.contactName.setTextColor(new Theme().getSendMessageTextColor(holder.getContext()));
-        holder.contactNumberTv.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.contactName.setTextColor(theme.getSendMessageTextColor(holder.getContext()));
+        holder.contactNumberTv.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        holder.contactName.setTextColor(new Theme().getReceivedMessageColor(holder.getContext()));
-        holder.contactNumberTv.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.contactName.setTextColor(theme.getReceivedMessageColor(holder.getContext()));
+        holder.contactNumberTv.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
@@ -97,7 +96,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         return new ViewHolder(activity, v);
     }
 
-    protected static class ViewHolder extends NewChatItemHolder {
+    protected class ViewHolder extends NewChatItemHolder {
 
         private static final int IN_CONTACT_AND_HAVE_IGAP = 0;
         private static final int NOT_CONTACT_AND_HAVE_NOT_IGAP = 1;
@@ -119,7 +118,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactImage = new AppCompatImageView(getContext());
             contactImage.setId(R.id.iv_contactItem_contact);
             contactImage.setContentDescription(null);
-            contactImage.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_contact), getContext(), R.attr.colorPrimaryDark));
+            contactImage.setBackground(theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_contact), getContext(), R.attr.colorPrimaryDark));
 
             contactName = new AppCompatTextView(getContext());
             contactName.setId(R.id.tv_contactItem_contactName);

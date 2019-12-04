@@ -84,9 +84,9 @@ public class TwoStepVerificationViewModel extends ViewModel {
                 public void onError(ErrorWithWaitTime error) {
                     if (error.getMajorCode() == 191) {
                         isShowLoading.set(View.GONE);
-                        showDialogWaitTime.setValue((long) error.getWaitTime());
+                        showDialogWaitTime.postValue((long) error.getWaitTime());
                     } else if (error.getMajorCode() == 194 && error.getMinorCode() == 1) {
-                        isHideKeyword.setValue(true);
+                        isHideKeyword.postValue(true);
                         isShowLoading.set(View.GONE);
                     }
                 }

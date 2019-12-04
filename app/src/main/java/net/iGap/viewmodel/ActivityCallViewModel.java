@@ -114,6 +114,10 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         this.isIncomingCall = isIncomingCall;
         this.callTYpe = callTYpe;
 
+        if (userId == -1){
+            finishActivity.setValue(true);
+        }
+
         changeViewState.setValue(isIncomingCall);
 
         if (MusicPlayer.mp != null) {

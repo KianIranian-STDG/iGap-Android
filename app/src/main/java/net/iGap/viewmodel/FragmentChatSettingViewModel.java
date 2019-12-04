@@ -1,7 +1,6 @@
 package net.iGap.viewmodel;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -278,7 +277,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
     public void setTheme(int oldTheme, int newTheme) {
         if (themeList.getValue() != null) {
             sharedPreferences.edit()
-                    .putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeList.getValue().get(oldTheme).getThemeId())
+                    .putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeList.getValue().get(oldTheme != -1 ? oldTheme : 0).getThemeId())
                     .putInt(SHP_SETTING.KEY_THEME_COLOR, themeList.getValue().get(newTheme).getThemeId())
                     .putBoolean(SHP_SETTING.KEY_THEME_DARK, themeList.getValue().get(newTheme).getThemeId() == Theme.DARK)
                     .apply();

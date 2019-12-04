@@ -740,7 +740,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     @Override
     protected void onCleared() {
-        userInfo.removeAllChangeListeners();
+        if (userInfo != null) {
+            userInfo.removeAllChangeListeners();
+        }
         super.onCleared();
     }
 

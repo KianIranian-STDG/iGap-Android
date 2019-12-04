@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
+import net.iGap.AccountHelper;
 import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -134,7 +135,7 @@ public class LoginActions {
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.wtf(LoginActions.class.getName(),"catch");
-                G.logoutAccount.postValue(new HelperLogout().logoutUser());
+                G.logoutAccount.postValue(true);
                 return null;
             }
         });

@@ -47,7 +47,7 @@
             app:layout_constraintBottom_toTopOf="@id/changeLanguage"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintWidth_percent=".5" />
+            app:layout_constraintWidth_percent=".6" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/changeLanguage"

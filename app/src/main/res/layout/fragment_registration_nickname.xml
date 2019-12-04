@@ -158,6 +158,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pu_profile_circle_image"
             app:layout_constraintWidth_percent=".6"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:mask="@{viewModel.reagentPhoneNumberMask}" />
 
         <androidx.appcompat.widget.AppCompatTextView

@@ -17,7 +17,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
@@ -49,7 +48,7 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
             }
         });
 
-        holder.txtUnreadMessage.setBackgroundResource(new Theme().getCardToCardButtonBackground(holder.txtUnreadMessage.getContext()));
+        holder.txtUnreadMessage.setBackgroundResource(theme.getCardToCardButtonBackground(holder.txtUnreadMessage.getContext()));
 
         holder.txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

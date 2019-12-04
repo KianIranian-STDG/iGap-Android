@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import net.iGap.AccountHelper;
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -47,11 +48,6 @@ public final class HelperLogout {
      * truncate realm and go to ActivityIntroduce for register again
      */
     private void logout() {
-
-        ClientGetRoomListResponse.roomListFetched = false;
-        RequestClientGetRoomList.isPendingGetRoomList = false;
-        FragmentMain.mOffset = 0;
-        signOutWallet();
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -73,7 +69,7 @@ public final class HelperLogout {
         }
     }
 
-    private boolean logoutUser(AccountUser accountUser) {
+    public boolean logoutUser(AccountUser accountUser) {
         if (accountUser.isAssigned()) {
             logout();
             boolean tmp = AccountManager.getInstance().removeUser(accountUser);
@@ -96,12 +92,8 @@ public final class HelperLogout {
         new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
             public void onUserSessionLogout() {
-                G.userLogin = false;
-                WebSocketClient.getInstance().disconnectSocket(false);
-                G.handler.removeCallbacksAndMessages(null);
-                G.pullRequestQueueRunned = new AtomicBoolean(false);
-                logOutUserCallBack.onLogOut(logoutUser(AccountManager.getInstance().getCurrentUser()));
-                /*new LoginActions();*/
+                logOutUserCallBack.onLogOut();
+                new LoginActions();
             }
 
             @Override
@@ -117,7 +109,7 @@ public final class HelperLogout {
     }
 
     public interface LogOutUserCallBack {
-        void onLogOut(boolean haveAnotherAccount);
+        void onLogOut();
 
         void onError();
     }

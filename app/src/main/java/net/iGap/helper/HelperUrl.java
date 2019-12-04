@@ -244,7 +244,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(context);
+                ds.linkColor = Theme.getInstance().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -316,7 +316,7 @@ public class HelperUrl {
         //todo: fixed it and do not user G.currentActivity
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = new Theme().getPrimaryColor(G.currentActivity);
+        int mColorPrimary = Theme.getInstance().getPrimaryColor(G.currentActivity);
         final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
@@ -378,7 +378,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -401,7 +401,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(context);
+                ds.linkColor = Theme.getInstance().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -440,7 +440,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -460,7 +460,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -503,7 +503,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -571,7 +571,7 @@ public class HelperUrl {
             @Override
             public void updateDrawState(TextPaint ds) {
                 //ToDo: fixed it and pass color to this function
-                ds.linkColor = new Theme().getLinkColor(context);
+                ds.linkColor = Theme.getInstance().getLinkColor(context);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -644,7 +644,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);

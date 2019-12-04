@@ -253,7 +253,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                     for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
                         StructWallpaper _swp = new StructWallpaper();
                         _swp.setWallpaperType(FragmentChatBackground.WallpaperType.proto);
-                        _swp.setProtoWallpaper(wallpaper);
+                        _swp.setProtoWallpaper(realm.copyFromRealm(wallpaper));
                         wList.add(_swp);
                         loadChatBackgroundImage.postValue(wList);
                     }

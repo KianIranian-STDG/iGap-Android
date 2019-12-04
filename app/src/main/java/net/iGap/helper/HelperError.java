@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import net.iGap.AccountHelper;
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
@@ -52,7 +53,7 @@ public class HelperError {
                 break;
             case 8://session is terminate
                 Log.wtf(HelperError.class.getName(),"case 8:");
-                G.logoutAccount.postValue(new HelperLogout().logoutUser());
+                G.logoutAccount.postValue(true);
                 break;
             case 9:
                 /*if (G.currentActivity != null) {
@@ -65,7 +66,7 @@ public class HelperError {
             case 109:
                 error = G.fragmentActivity.getResources().getString(R.string.E_109);
                 Log.wtf(HelperError.class.getName(),"case 109:");
-                G.logoutAccount.postValue(new HelperLogout().logoutUser());
+                G.logoutAccount.postValue(true);
                 break;
             case 110:
                 if (BuildConfig.DEBUG)
@@ -74,7 +75,7 @@ public class HelperError {
             case 111:
                 if (minorCode != 4) {
                     Log.wtf(HelperError.class.getName(),"case 111:");
-                    G.logoutAccount.postValue(new HelperLogout().logoutUser());
+                    G.logoutAccount.postValue(true);
                 } else {
                     error = G.fragmentActivity.getResources().getString(R.string.E_111);
                 }

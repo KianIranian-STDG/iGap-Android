@@ -140,29 +140,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
                 Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
             }
         });
-
-        viewModel.goToMain.observe(getViewLifecycleOwner(), userId -> {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
-
-            /*if (getActivity() != null && userId != null) {
-                Intent intent = new Intent(getActivity(), ActivityMain.class);
-                intent.putExtra(ARG_USER_ID, userId);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getActivity().startActivity(intent);
-                getActivity().finish();
-            }*/
-
-            if (getActivity() instanceof ActivityRegistration) {
-                FragmentSyncRegisteredContacts fragment = new FragmentSyncRegisteredContacts();
-                Bundle bundle = new Bundle();
-                bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().popBackStack();
-                ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
-            }
-        });
     }
 
     @Override

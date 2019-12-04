@@ -231,6 +231,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (getContext() == null) {
+                            return;
+                        }
+
                         loadingProgressBar.setVisibility(View.GONE);
                         fillAfterResponse();
                         HelperError.showSnackMessage(getString(R.string.connection_error), false);

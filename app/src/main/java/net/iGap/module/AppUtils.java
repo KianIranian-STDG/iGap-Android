@@ -322,7 +322,7 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.error_icon);
@@ -330,15 +330,15 @@ public final class AppUtils {
                 break;
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getInstance().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
-                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
                 iconTextView.setText(R.string.check_icon);
-                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);

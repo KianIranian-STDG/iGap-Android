@@ -22,7 +22,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
@@ -31,6 +30,8 @@ import net.iGap.model.CardToCardValue;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -61,12 +62,13 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 
     }
 
+    @NotNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NotNull View v) {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends NewChatItemHolder {
+    protected class ViewHolder extends NewChatItemHolder {
         private TextView cardToCardAmountTv;
         private EmojiTextViewE messageTv;
         private Button payButton;
@@ -88,7 +90,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             cardToCardAmountTv = new TextView(view.getContext());
             cardIcon = new FontIconTextView(view.getContext());
 
-            messageTv.setTextColor(new Theme().getReceivedMessageColor(messageTv.getContext()));
+            messageTv.setTextColor(theme.getReceivedMessageColor(messageTv.getContext()));
             setTextSize(messageTv, R.dimen.smallTextSize);
             setTypeFace(messageTv);
 
@@ -99,7 +101,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             payButton.setTextColor(getColor(R.color.white));
 
 
-            cardToCardAmountTv.setTextColor(new Theme().getReceivedMessageColor(cardToCardAmountTv.getContext()));
+            cardToCardAmountTv.setTextColor(theme.getReceivedMessageColor(cardToCardAmountTv.getContext()));
             cardToCardAmountTv.setGravity(Gravity.CENTER);
             setTextSize(cardToCardAmountTv, R.dimen.standardTextSize);
             setTypeFace(cardToCardAmountTv, Typeface.BOLD);
@@ -121,9 +123,9 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 //                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
 //            }
 
-            innerLayout.setBackgroundResource(new Theme().getCardToCardBackground(innerLayout.getContext()));
-            payButton.setBackgroundResource(new Theme().getCardToCardButtonBackground(payButton.getContext()));
-            cardIcon.setBackgroundResource(new Theme().getCardToCardIconBackground(cardIcon.getContext()));
+            innerLayout.setBackgroundResource(theme.getCardToCardBackground(innerLayout.getContext()));
+            payButton.setBackgroundResource(theme.getCardToCardButtonBackground(payButton.getContext()));
+            cardIcon.setBackgroundResource(theme.getCardToCardIconBackground(cardIcon.getContext()));
 
             set.constrainHeight(payButton.getId(), ConstraintSet.WRAP_CONTENT);
             set.constrainWidth(payButton.getId(), ConstraintSet.MATCH_CONSTRAINT);
@@ -192,9 +194,10 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             this.onCardToCard = onCardToCard;
         }
 
-        @FunctionalInterface
-        public interface OnCardToCard {
-            void onClick(CardToCardValue cardToCard);
-        }
+    }
+
+    @FunctionalInterface
+    public interface OnCardToCard {
+        void onClick(CardToCardValue cardToCard);
     }
 }
