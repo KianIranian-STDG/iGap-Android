@@ -19,12 +19,12 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillListBinding;
-import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillListAdapter;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillListVM;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -33,12 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ElectricityBillListFrag extends BaseAPIViewFrag {
+public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillListVM> {
 
     public enum btnActions {ADD_NEW_BILL, DELETE_ACCOUNT}
 
     private FragmentElecBillListBinding binding;
-    private ElectricityBillListVM elecBillVM;
     private ElectricityBillListAdapter adapter;
     private static final String TAG = "ElectricityBillListFrag";
 
@@ -49,7 +48,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        elecBillVM = ViewModelProviders.of(this).get(ElectricityBillListVM.class);
+        viewModel = ViewModelProviders.of(this).get(ElectricityBillListVM.class);
     }
 
     @Nullable
@@ -57,10 +56,9 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_elec_bill_list, container, false);
-        binding.setViewmodel(elecBillVM);
+        binding.setViewmodel(viewModel);
         binding.setFragment(this);
         binding.setLifecycleOwner(this);
-        this.viewModel = elecBillVM;
 
         return attachToSwipeBack(binding.getRoot());
 
@@ -94,7 +92,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                                         .negativeText(R.string.elecBill_deleteAccount_neg)
                                         .positiveColor(getContext().getResources().getColor(R.color.red))
                                         .widgetColor(new Theme().getAccentColor(getContext()))
-                                        .onPositive((dialog1, which) -> elecBillVM.deleteAccount())
+                                        .onPositive((dialog1, which) -> viewModel.deleteAccount())
                                         .build();
                                 dialog.show();
                             }
@@ -108,18 +106,18 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
 
         binding.billRecycler.setHasFixedSize(true);
         onDataChangedListener();
-        elecBillVM.getBranchData();
+        viewModel.getBranchData();
     }
 
     private void onDataChangedListener() {
-        elecBillVM.getmMapData().observe(getViewLifecycleOwner(), billDataModelBranchDebitMap -> initRecycler(billDataModelBranchDebitMap));
-        elecBillVM.getGoBack().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getmMapData().observe(getViewLifecycleOwner(), billDataModelBranchDebitMap -> initRecycler(billDataModelBranchDebitMap));
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 popBackStackFragment();
             }
         });
 
-        elecBillVM.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
+        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
             switch (errorModel.getMessage()) {
                 case "001":
                     showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_MPLError), getResources().getString(R.string.ok));
@@ -140,6 +138,12 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                     break;
             }
         });
+
+        viewModel.getShowRequestFailedError().observe(getViewLifecycleOwner(), errorMessageRes -> {
+            if (errorMessageRes != null) {
+                HelperError.showSnackMessage(getString(errorMessageRes), false);
+            }
+        });
     }
 
 
@@ -150,19 +154,19 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
 
     private void initRecycler(Map<BillData.BillDataModel, BranchDebit> bills) {
         adapter = new ElectricityBillListAdapter(getContext(), bills, (item, btnAction) -> {
-            BranchDebit temp = elecBillVM.getmMapData().getValue().get(item);
+            BranchDebit temp = viewModel.getmMapData().getValue().get(item);
             switch (btnAction) {
                 case PAY:
-                    elecBillVM.payBill(item);
+                    viewModel.payBill(item);
                     break;
                 case EDIT:
                     if (temp.getBillID() == null) {
-                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible),getResources().getString(R.string.ok));
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
                         return;
                     }
                     new HelperFragment(getFragmentManager(),
                             ElectricityBillAddFrag.newInstance(temp.getBillID(), item.getBillTitle(),
-                                    String.valueOf(elecBillVM.getNationalID()), true)).setReplace(false).load();
+                                    String.valueOf(viewModel.getNationalID()), true)).setReplace(false).load();
                     break;
                 case DELETE:
                     final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
@@ -173,7 +177,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                             .positiveColor(getContext().getResources().getColor(R.color.red))
                             .widgetColor(new Theme().getAccentColor(getContext()))
                             .onPositive((dialog1, which) -> {
-                                elecBillVM.deleteItem(item);
+                                viewModel.deleteItem(item);
                                 Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
                             })
                             .build();
@@ -181,7 +185,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                     break;
                 case SHOW_DETAIL:
                     if (temp.getBillID() == null) {
-                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible),getResources().getString(R.string.ok));
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
                         return;
                     }
                     new HelperFragment(getFragmentManager(),
@@ -208,6 +212,6 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
     }
 
     public void refreshData() {
-        elecBillVM.getBranchData();
+        viewModel.getBranchData();
     }
 }

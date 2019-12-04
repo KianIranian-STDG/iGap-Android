@@ -1,8 +1,16 @@
 package net.iGap.api.apiService;
 
 import net.iGap.BuildConfig;
+import net.iGap.api.BeepTunesApi;
 import net.iGap.api.CPayApi;
 import net.iGap.api.CharityApi;
+import net.iGap.api.ElecBillApi;
+import net.iGap.api.FavoriteChannelApi;
+import net.iGap.api.IgashtApi;
+import net.iGap.api.KuknosApi;
+import net.iGap.api.MciApi;
+import net.iGap.api.NewsApi;
+import net.iGap.api.PaymentApi;
 
 import java.util.Collections;
 
@@ -37,45 +45,49 @@ public class RetrofitFactory {
         return httpClient;
     }
 
-    public Retrofit getBeepTunesRetrofit() {
+    public BeepTunesApi getBeepTunesRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.BEEP_TUNES_URL)
                 .client(getHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+                .build()
+                .create(BeepTunesApi.class);
     }
 
-    public Retrofit getChannelRetrofit() {
+    public FavoriteChannelApi getChannelRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.CHANNEL_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build();
+                .build()
+                .create(FavoriteChannelApi.class);
     }
 
-    Retrofit getKuknosRetrofit() {
+    public KuknosApi getKuknosRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.KUKNOS_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build();
+                .build()
+                .create(KuknosApi.class);
     }
 
-    public Retrofit getPaymentRetrofit() {
+    public PaymentApi getPaymentRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.PAYMENT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build();
+                .build()
+                .create(PaymentApi.class);
     }
 
-    public Retrofit getIgashtRetrofit() {
+    public IgashtApi getIgashtRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.ATI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build();
+                .build()
+                .create(IgashtApi.class);
     }
 
     public CPayApi getCPayApi() {
@@ -87,12 +99,13 @@ public class RetrofitFactory {
                 .create(CPayApi.class);
     }
 
-    public Retrofit getMciRetrofit() {
+    public MciApi getMciRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.MCI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build();
+                .build()
+                .create(MciApi.class);
     }
 
     public CharityApi getCharityRetrofit() {
@@ -100,22 +113,25 @@ public class RetrofitFactory {
                 .baseUrl(ApiStatic.CHARITY_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build().create(CharityApi.class);
+                .build()
+                .create(CharityApi.class);
     }
 
-    public Retrofit getNewsRetrofit() {
+    public NewsApi getNewsRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.NEWS_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build();
+                .build()
+                .create(NewsApi.class);
     }
 
-    public Retrofit getElecBillRetrofit() {
+    public ElecBillApi getElecBillRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.ELECTRICITY_BILL_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
-                .build();
+                .build()
+                .create(ElecBillApi.class);
     }
 }

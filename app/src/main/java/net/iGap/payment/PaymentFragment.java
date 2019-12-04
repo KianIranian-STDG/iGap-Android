@@ -113,17 +113,4 @@ public class PaymentFragment extends BaseAPIViewFrag<PaymentViewModel> {
         Log.wtf(this.getClass().getName(), "setPaymentResult");
         viewModel.setPaymentResult(paymentModel);
     }
-
-    //ToDo: create base view for fragment with request
-    private void showDialogNeedGooglePlay() {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
-                    .titleGravity(GravityEnum.CENTER)
-                    .buttonsGravity(GravityEnum.CENTER)
-                    .content("برای استفاده از این بخش نیاز به گوگل سرویس است.").contentGravity(GravityEnum.CENTER)
-                    .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
-                    .show();
-        }
-    }
 }

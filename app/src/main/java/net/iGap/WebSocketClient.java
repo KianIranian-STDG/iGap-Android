@@ -70,7 +70,6 @@ public class WebSocketClient {
                 public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
                     new HandleResponse(binary).start();
                     super.onBinaryMessage(websocket, binary);
-                    Log.wtf(this.getClass().getName(), "onBinaryMessage");
                 }
 
                 @Override
@@ -84,7 +83,6 @@ public class WebSocketClient {
                 @Override
                 public void onFrameSent(WebSocket websocket, WebSocketFrame frame) throws Exception {
                     super.onFrameSent(websocket, frame);
-                    Log.wtf(this.getClass().getName(), "onFrameSent");
 
                     /**
                      * set time after that actually frame was sent

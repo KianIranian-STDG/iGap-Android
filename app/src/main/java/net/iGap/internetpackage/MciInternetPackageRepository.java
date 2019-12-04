@@ -23,26 +23,22 @@ public class MciInternetPackageRepository {
     }
 
     private MciInternetPackageRepository() {
-        api = new RetrofitFactory().getMciRetrofit().create(MciApi.class);
+        api = new RetrofitFactory().getMciRetrofit();
     }
 
-    public void onClear() {
+    void onClear() {
         instance = null;
     }
 
-    public void getFilterListData(HandShakeCallback handShakeCallback, ResponseCallback<List<MciInternetPackageFilter>> callback) {
-
+    void getFilterListData(HandShakeCallback handShakeCallback, ResponseCallback<List<MciInternetPackageFilter>> callback) {
         new ApiInitializer<List<MciInternetPackageFilter>>().initAPI(api.getInternetPackageFilterList(), handShakeCallback, callback);
-
     }
 
-    public void getInternetPackageList(HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<InternetPackage>> callback) {
-
+    void getInternetPackageList(HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<InternetPackage>> callback) {
         new ApiInitializer<BaseIGashtResponse<InternetPackage>>().initAPI(api.getInternetPackageList(), handShakeCallback, callback);
-
     }
 
-    public void purchaseInternetPackage(String phoneNumber, String internetPackageType, HandShakeCallback handShakeCallback, ResponseCallback<MciPurchaseResponse> callback) {
+    void purchaseInternetPackage(String phoneNumber, String internetPackageType, HandShakeCallback handShakeCallback, ResponseCallback<MciPurchaseResponse> callback) {
         new ApiInitializer<MciPurchaseResponse>().initAPI(api.internetPackagePurchase(phoneNumber, internetPackageType), handShakeCallback, callback);
     }
 }

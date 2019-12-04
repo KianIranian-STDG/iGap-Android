@@ -19,23 +19,21 @@ import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 
 import java.util.ArrayList;
 
-public class IGashtBuyTicketFragment extends IGashtBaseView {
+public class IGashtBuyTicketFragment extends IGashtBaseView<IGashtBuyTicketViewModel> {
 
     private FragmentIgashtBuyTicketBinding binding;
-    private IGashtBuyTicketViewModel iGashtBuyTicketViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iGashtBuyTicketViewModel = ViewModelProviders.of(this).get(IGashtBuyTicketViewModel.class);
-        viewModel = iGashtBuyTicketViewModel;
+        viewModel = ViewModelProviders.of(this).get(IGashtBuyTicketViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_buy_ticket, container, false);
-        binding.setViewModel(iGashtBuyTicketViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -47,15 +45,15 @@ public class IGashtBuyTicketFragment extends IGashtBaseView {
         binding.addedPlaceList.addItemDecoration(new DividerItemDecoration(binding.addedPlaceList.getContext(), DividerItemDecoration.VERTICAL));
         binding.addedPlaceList.setNestedScrollingEnabled(false);
         binding.addedPlaceList.setHasFixedSize(true);
-        binding.addedPlaceList.setAdapter(new OrderedTicketListAdapter(new ArrayList<>(), totalPrice -> iGashtBuyTicketViewModel.setTotalPrice(totalPrice)));
+        binding.addedPlaceList.setAdapter(new OrderedTicketListAdapter(new ArrayList<>(), totalPrice -> viewModel.setTotalPrice(totalPrice)));
 
-        iGashtBuyTicketViewModel.getServiceList().observe(getViewLifecycleOwner(), ticketList -> {
+        viewModel.getServiceList().observe(getViewLifecycleOwner(), ticketList -> {
             if (binding.addedPlaceList.getAdapter() instanceof OrderedTicketListAdapter && ticketList != null) {
                 ((OrderedTicketListAdapter) binding.addedPlaceList.getAdapter()).addNewItem(ticketList);
             }
         });
 
-        iGashtBuyTicketViewModel.getRegisterVoucher().observe(getViewLifecycleOwner(), registerVoucher -> {
+        viewModel.getRegisterVoucher().observe(getViewLifecycleOwner(), registerVoucher -> {
             if (registerVoucher != null) {
                 if (registerVoucher) {
                     if (getParentFragment() instanceof IGashtLocationDetailFragment) {

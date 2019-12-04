@@ -2,10 +2,11 @@ package net.iGap.electricity_bill.viewmodel;
 
 import android.view.View;
 
-import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -27,24 +28,27 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
     private MutableLiveData<Map<BillData.BillDataModel, BranchDebit>> mMapData;
     private SingleLiveEvent<Boolean> goBack;
     private MutableLiveData<ErrorModel> errorM;
+    private MutableLiveData<Integer> showRequestFailedError;
 
-    private ObservableField<Integer> progressVisibility;
-    private ObservableField<Integer> errorVisibility;
+    private ObservableInt progressVisibility;
+    private ObservableInt errorVisibility;
+    private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private int nationalID = -1;
 
     public ElectricityBillListVM() {
 
         mMapData = new MutableLiveData<>(new HashMap<>());
-        progressVisibility = new ObservableField<>(View.GONE);
-        errorVisibility = new ObservableField<>(View.GONE);
+        progressVisibility = new ObservableInt(View.GONE);
+        errorVisibility = new ObservableInt(View.GONE);
         goBack = new SingleLiveEvent<>();
         errorM = new MutableLiveData<>();
-
+        showRequestFailedError = new MutableLiveData<>();
     }
 
     public void getBranchData() {
         progressVisibility.set(View.VISIBLE);
         errorVisibility.set(View.GONE);
+        showRetryView.set(View.GONE);
         new ElectricityBillAPIRepository().getBillList(this, new ResponseCallback<ElectricityResponseModel<BillData>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<BillData> data) {
@@ -65,6 +69,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String error) {
+                showRetryView.set(View.VISIBLE);
                 progressVisibility.set(View.GONE);
                 errorM.setValue(new ErrorModel("", error));
                 errorVisibility.set(View.VISIBLE);
@@ -72,7 +77,9 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                //ToDo: handle this event
+                showRetryView.set(View.VISIBLE);
+                progressVisibility.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
             }
         });
     }
@@ -199,11 +206,11 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         });
     }
 
-    public ObservableField<Integer> getProgressVisibility() {
+    public ObservableInt getProgressVisibility() {
         return progressVisibility;
     }
 
-    public void setProgressVisibility(ObservableField<Integer> progressVisibility) {
+    public void setProgressVisibility(ObservableInt progressVisibility) {
         this.progressVisibility = progressVisibility;
     }
 
@@ -239,12 +246,15 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         this.errorM = errorM;
     }
 
-    public ObservableField<Integer> getErrorVisibility() {
+    public ObservableInt getErrorVisibility() {
         return errorVisibility;
     }
 
-    public void setErrorVisibility(ObservableField<Integer> errorVisibility) {
+    public void setErrorVisibility(ObservableInt errorVisibility) {
         this.errorVisibility = errorVisibility;
     }
 
+    public MutableLiveData<Integer> getShowRequestFailedError() {
+        return showRequestFailedError;
+    }
 }

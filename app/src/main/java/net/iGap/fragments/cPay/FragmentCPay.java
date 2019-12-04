@@ -26,9 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
+public class FragmentCPay extends BaseAPIViewFrag<FragmentCPayViewModel> implements ToolbarListener {
 
-    private FragmentCPayViewModel cPayViewModel;
     private FragmentCpayBinding binding;
     private AdapterPlaqueList adapter;
     private List<String> plaqueList = new ArrayList<>();
@@ -40,14 +39,13 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cPayViewModel = ViewModelProviders.of(this).get(FragmentCPayViewModel.class);
-        viewModel = cPayViewModel;
+        viewModel = ViewModelProviders.of(this).get(FragmentCPayViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay, container, false);
-        binding.setViewModel(cPayViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -63,11 +61,11 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
 
     private void initCallBacks() {
 
-        cPayViewModel.getOnAddClickListener().observe(getViewLifecycleOwner(), isOpen -> {
+        viewModel.getOnAddClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             openEditOrAddFragment(null);
         });
 
-        cPayViewModel.getOnInquiryClickListener().observe(getViewLifecycleOwner(), isOpen -> {
+        viewModel.getOnInquiryClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             if (getActivity() == null) return;
 
             if (adapter.getSelectedPlaqueList().size() == 0) {
@@ -80,7 +78,7 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
                     .load();
         });
 
-        cPayViewModel.getOnChargeClickListener().observe(getViewLifecycleOwner(), isOpen -> {
+        viewModel.getOnChargeClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             if (getActivity() == null) return;
 
             if (adapter.getSelectedPlaqueList().size() == 0) {
@@ -93,16 +91,16 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
                     .load();
         });
 
-        cPayViewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner(), isUpdate -> {
-            if (isUpdate != null && isUpdate) cPayViewModel.getPlaqueListByApi();
+        viewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (isUpdate != null && isUpdate) viewModel.getPlaqueListByApi();
         });
 
-        cPayViewModel.getLoaderListener().observe(getViewLifecycleOwner(), isLoading -> {
+        viewModel.getLoaderListener().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading == null) return;
             handleView(isLoading ? PageState.LOADING : PageState.ERROR);
         });
 
-        cPayViewModel.getPlaquesReceiverListener().observe(getViewLifecycleOwner(), userPlaques -> {
+        viewModel.getPlaquesReceiverListener().observe(getViewLifecycleOwner(), userPlaques -> {
             if (userPlaques == null) {
                 handleView(PageState.NO_CAR);
             } else {
@@ -112,12 +110,12 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
             }
         });
 
-        cPayViewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
+        viewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
             if (resID == null) return;
             Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
         });
 
-        cPayViewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
+        viewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         });

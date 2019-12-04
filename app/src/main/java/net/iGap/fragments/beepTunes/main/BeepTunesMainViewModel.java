@@ -3,10 +3,7 @@ package net.iGap.fragments.beepTunes.main;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.BeepTunesApi;
-import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiServiceProvider;
-import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.module.api.beepTunes.FirstPage;
 import net.iGap.viewmodel.BaseViewModel;
@@ -14,7 +11,7 @@ import net.iGap.viewmodel.BaseViewModel;
 public class BeepTunesMainViewModel extends BaseViewModel {
     private static final String TAG = "aabolfazlBeepTunes";
 
-    private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
+    private BeepTunesApi apiService = new RetrofitFactory().getBeepTunesRetrofit();
 
     private MutableLiveData<FirstPage> firstPageMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> progressMutableLiveData = new MutableLiveData<>();

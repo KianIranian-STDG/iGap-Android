@@ -29,7 +29,7 @@ public class PopularChannelRepository {
     }
 
     private PopularChannelRepository() {
-        channelApi = new RetrofitFactory().getChannelRetrofit().create(FavoriteChannelApi.class);
+        channelApi = new RetrofitFactory().getChannelRetrofit();
     }
 
     public void getFirstPage(HandShakeCallback handShakeCallback, ResponseCallback<ParentChannel> callback) {

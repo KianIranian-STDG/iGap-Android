@@ -21,9 +21,8 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayEditViewModel;
 
-public class FragmentCPayEdit extends BaseAPIViewFrag implements ToolbarListener {
+public class FragmentCPayEdit extends BaseAPIViewFrag<FragmentCPayEditViewModel> implements ToolbarListener {
 
-    private FragmentCPayEditViewModel cPayEditViewModel;
     private FragmentCpayEditBinding binding;
     private String plaqueText;
 
@@ -42,14 +41,13 @@ public class FragmentCPayEdit extends BaseAPIViewFrag implements ToolbarListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cPayEditViewModel = ViewModelProviders.of(this).get(FragmentCPayEditViewModel.class);
-        viewModel = cPayEditViewModel;
+        viewModel = ViewModelProviders.of(this).get(FragmentCPayEditViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay_edit, container, false);
-        binding.setViewModel(cPayEditViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -67,17 +65,17 @@ public class FragmentCPayEdit extends BaseAPIViewFrag implements ToolbarListener
 
     private void setupCallBacks() {
 
-        cPayEditViewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
+        viewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
             if (resID == null) return;
             Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
         });
 
-        cPayEditViewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
+        viewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         });
 
-        cPayEditViewModel.getLoaderListener().observe(getViewLifecycleOwner(), isVisible -> {
+        viewModel.getLoaderListener().observe(getViewLifecycleOwner(), isVisible -> {
             if (isVisible == null) return;
 
             closeKeyboard(binding.btnAddCar);
@@ -91,7 +89,7 @@ public class FragmentCPayEdit extends BaseAPIViewFrag implements ToolbarListener
             }
         });
 
-        cPayEditViewModel.getAddCarListener().observe(getViewLifecycleOwner(), isOk -> {
+        viewModel.getAddCarListener().observe(getViewLifecycleOwner(), isOk -> {
             if (isOk == null) return;
             //update list in main
             CPayRepository.getInstance().getPlaquesChangeListener().setValue(true);

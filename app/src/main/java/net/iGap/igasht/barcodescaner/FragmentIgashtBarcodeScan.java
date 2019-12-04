@@ -18,29 +18,27 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
 import net.iGap.interfaces.ToolbarListener;
 
-public class FragmentIgashtBarcodeScan extends IGashtBaseView {
+public class FragmentIgashtBarcodeScan extends IGashtBaseView<IGashtBarcodeScannerViewModel> {
 
     private FragmentIgashtBarcodeScanerBinding binding;
-    private IGashtBarcodeScannerViewModel iGashtBarcodeScannerViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iGashtBarcodeScannerViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 return (T) new IGashtBarcodeScannerViewModel(getArguments() != null ? getArguments().getString("voucher_number") : "");
             }
         }).get(IGashtBarcodeScannerViewModel.class);
-        viewModel = iGashtBarcodeScannerViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_barcode_scaner, container, false);
-        binding.setViewModel(iGashtBarcodeScannerViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
@@ -62,7 +60,7 @@ public class FragmentIgashtBarcodeScan extends IGashtBaseView {
                     }
                 }).getView());
 
-        iGashtBarcodeScannerViewModel.getShowQRCodeImage().observe(getViewLifecycleOwner(), imageBitmap -> {
+        viewModel.getShowQRCodeImage().observe(getViewLifecycleOwner(), imageBitmap -> {
             if (imageBitmap != null) {
                 binding.barCodeImage.setImageBitmap(imageBitmap);
             }

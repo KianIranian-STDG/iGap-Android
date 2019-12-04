@@ -1,26 +1,10 @@
 package net.iGap.kuknos.service.Repository;
 
 import net.iGap.api.KuknosApi;
-import net.iGap.api.apiService.ApiServiceProvider;
-import net.iGap.kuknos.service.model.KuknosInfoM;
-import net.iGap.kuknos.service.model.KuknosLoginM;
-import net.iGap.kuknos.service.model.KuknosSendM;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
-import net.iGap.kuknos.service.model.KuknoscheckUserM;
-
-import org.stellar.sdk.responses.AccountResponse;
-import org.stellar.sdk.responses.AssetResponse;
-import org.stellar.sdk.responses.OfferResponse;
-import org.stellar.sdk.responses.Page;
-import org.stellar.sdk.responses.SubmitTransactionResponse;
-import org.stellar.sdk.responses.operations.OperationResponse;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import net.iGap.api.apiService.RetrofitFactory;
 
 public class KuknosAPIRepository {
-    private KuknosApi apiService = ApiServiceProvider.getKuknosClient();
+    private KuknosApi apiService = new RetrofitFactory().getKuknosRetrofit();
     //private KuknosHorizenApi apiHorizenService = ApiServiceProvider.getKuknosHorizonClient();
 
     /*public void getUserAuthentication(String phoneNum, String nID, ApiResponse<KuknosLoginM> apiResponse) {

@@ -300,7 +300,7 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
 
     private void sendRequestChargeMci(String phoneNumber, int price) {
         new ApiInitializer<MciPurchaseResponse>().initAPI(
-                new RetrofitFactory().getMciRetrofit().create(MciApi.class).topUpPurchase(phoneNumber, price),
+                new RetrofitFactory().getMciRetrofit().topUpPurchase(phoneNumber, price),
                 this, new ResponseCallback<MciPurchaseResponse>() {
                     @Override
                     public void onSuccess(MciPurchaseResponse data) {

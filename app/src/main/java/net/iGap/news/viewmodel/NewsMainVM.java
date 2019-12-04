@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.news.repository.MainRepo;
+import net.iGap.news.repository.api.NewsAPIRepository;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsFirstPage;
 
@@ -17,18 +16,18 @@ public class NewsMainVM extends BaseAPIViewModel {
     private MutableLiveData<List<NewsFirstPage>> mainList;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
-    private MainRepo repo;
+    private NewsAPIRepository repo;
 
     public NewsMainVM() {
         mainList = new MutableLiveData<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
-        repo = new MainRepo();
+        repo = new NewsAPIRepository();
     }
 
     public void getNews() {
         progressState.setValue(true);
-        repo.getMainPage(this, new ResponseCallback<List<NewsFirstPage>>() {
+        repo.getMainPageNews(this, new ResponseCallback<List<NewsFirstPage>>() {
             @Override
             public void onSuccess(List<NewsFirstPage> data) {
                 mainList.setValue(data);

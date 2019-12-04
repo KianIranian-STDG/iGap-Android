@@ -24,9 +24,8 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayChargeViewModel;
 
 
-public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListener {
+public class FragmentCPayCharge extends BaseAPIViewFrag<FragmentCPayChargeViewModel> implements ToolbarListener {
 
-    private FragmentCPayChargeViewModel cPayChargeViewModel;
     private FragmentCpayChargeBinding binding;
     private String plaqueText;
 
@@ -44,14 +43,13 @@ public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cPayChargeViewModel = ViewModelProviders.of(this).get(FragmentCPayChargeViewModel.class);
-        viewModel = cPayChargeViewModel;
+        viewModel = ViewModelProviders.of(this).get(FragmentCPayChargeViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay_charge, container, false);
-        binding.setViewModel(cPayChargeViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -69,8 +67,8 @@ public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListen
             popBackStackFragment();
         }
 
-        cPayChargeViewModel.setPlaque(plaqueText);
-        cPayChargeViewModel.getRequestAmountFromServer();
+        viewModel.setPlaque(plaqueText);
+        viewModel.getRequestAmountFromServer();
 
         binding.plaqueBg.setBackground(new Theme().tintDrawable(binding.plaqueBg.getBackground(), getContext(), R.attr.iGapCardViewColor));
         initPlaque();
@@ -81,28 +79,28 @@ public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListen
 
     private void initCallback() {
 
-        cPayChargeViewModel.getEditTextVisibilityListener().observe(getViewLifecycleOwner(), isVisible -> {
+        viewModel.getEditTextVisibilityListener().observe(getViewLifecycleOwner(), isVisible -> {
             if (isVisible == null) return;
             binding.edtAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         });
 
-        cPayChargeViewModel.getLoaderListener().observe(getViewLifecycleOwner(), isVisible -> {
+        viewModel.getLoaderListener().observe(getViewLifecycleOwner(), isVisible -> {
             if (isVisible == null) return;
             binding.loaderAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
             binding.txtCredit.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
         });
 
-        cPayChargeViewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
+        viewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
             if (resID == null) return;
             Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
         });
 
-        cPayChargeViewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
+        viewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         });
 
-        cPayChargeViewModel.getChargePaymentStateListener().observe(getViewLifecycleOwner(), token -> {
+        viewModel.getChargePaymentStateListener().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() == null) return;
             if (token == null) {
                 Toast.makeText(getContext(), getString(R.string.wallet_error_server), Toast.LENGTH_LONG).show();
