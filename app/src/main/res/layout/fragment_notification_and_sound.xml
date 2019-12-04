@@ -48,15 +48,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:id="@+id/view_alert"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertMessage()}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_title_messageNotification" />
-
                 <TextView
                     android:id="@+id/tv_alert"
                     android:layout_width="0dp"
@@ -85,13 +76,14 @@
                     app:layout_constraintTop_toTopOf="@id/view_alert" />
 
                 <View
-                    android:id="@+id/view_messagePreview"
+                    android:id="@+id/view_alert"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreView()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertMessage()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view_alert" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_messageNotification" />
+
 
                 <TextView
                     android:id="@+id/tv_messagePreview"
@@ -120,15 +112,14 @@
                     app:layout_constraintEnd_toEndOf="@id/view_messagePreview"
                     app:layout_constraintTop_toTopOf="@id/view_messagePreview" />
 
-
                 <View
-                    android:id="@+id/ll_led_direct"
+                    android:id="@+id/view_messagePreview"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedColorMessage()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreView()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view_messagePreview" />
+                    app:layout_constraintTop_toBottomOf="@id/view_alert" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -154,13 +145,15 @@
                     app:layout_constraintTop_toTopOf="@id/ll_led_direct" />
 
                 <View
-                    android:id="@+id/rl_vibration_direct"
+                    android:id="@+id/ll_led_direct"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationMessage()}"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedColorMessage()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_led_direct" />
+                    app:layout_constraintTop_toBottomOf="@id/view_messagePreview" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -189,13 +182,14 @@
                     app:layout_constraintTop_toTopOf="@id/rl_vibration_direct" />
 
                 <View
-                    android:id="@+id/rl_pop_sound_direct"
+                    android:id="@+id/rl_vibration_direct"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationMessage()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationMessage()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rl_vibration_direct" />
+                    app:layout_constraintTop_toBottomOf="@+id/ll_led_direct" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -224,13 +218,14 @@
                     app:layout_constraintTop_toTopOf="@id/rl_pop_sound_direct" />
 
                 <View
-                    android:id="@+id/rl_sound_direct"
+                    android:id="@+id/rl_pop_sound_direct"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationMessage()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_direct" />
+                    app:layout_constraintTop_toBottomOf="@+id/rl_vibration_direct" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -259,6 +254,15 @@
                     app:layout_constraintTop_toTopOf="@id/rl_sound_direct" />
 
                 <View
+                    android:id="@+id/rl_sound_direct"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_direct" />
+
+                <View
                     android:id="@+id/view1"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
@@ -282,14 +286,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view1" />
 
-                <View
-                    android:id="@+id/view_alert_group"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertGroup()}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_groupNotification" />
 
                 <TextView
                     android:id="@+id/tv_alert_group"
@@ -319,13 +315,14 @@
                     app:layout_constraintTop_toTopOf="@+id/view_alert_group" />
 
                 <View
-                    android:id="@+id/view_messagePreview_group"
+                    android:id="@+id/view_alert_group"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreViewGroup()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertGroup()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_alert_group" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_groupNotification" />
+
 
                 <TextView
                     android:id="@+id/tv_messagePreview_group"
@@ -355,12 +352,14 @@
                     app:layout_constraintTop_toTopOf="@id/view_messagePreview_group" />
 
                 <View
-                    android:id="@+id/ll_led_group"
+                    android:id="@+id/view_messagePreview_group"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreViewGroup()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_messagePreview_group" />
+                    app:layout_constraintTop_toBottomOf="@+id/view_alert_group" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -386,13 +385,14 @@
                     app:layout_constraintTop_toTopOf="@id/ll_led_group" />
 
                 <View
-                    android:id="@+id/rl_vibration_group"
+                    android:id="@+id/ll_led_group"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationGroup()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedGroup()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_led_group" />
+                    app:layout_constraintTop_toBottomOf="@+id/view_messagePreview_group" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -421,13 +421,14 @@
                     app:layout_constraintTop_toTopOf="@id/rl_vibration_group" />
 
                 <View
-                    android:id="@+id/rl_pop_sound_group"
+                    android:id="@+id/rl_vibration_group"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationGroup()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationGroup()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rl_vibration_group" />
+                    app:layout_constraintTop_toBottomOf="@+id/ll_led_group" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -456,13 +457,14 @@
                     app:layout_constraintTop_toTopOf="@+id/rl_pop_sound_group" />
 
                 <View
-                    android:id="@+id/rl_sound_group"
+                    android:id="@+id/rl_pop_sound_group"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundGroup()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationGroup()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_group" />
+                    app:layout_constraintTop_toBottomOf="@id/rl_vibration_group" />
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -491,6 +493,15 @@
                     app:layout_constraintTop_toTopOf="@id/rl_sound_group" />
 
                 <View
+                    android:id="@+id/rl_sound_group"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundGroup()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_group" />
+
+                <View
                     android:id="@+id/view2"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
@@ -513,15 +524,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-
-                <View
-                    android:id="@+id/view_sound_app"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppSound()}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/title_sound_app" />
 
                 <TextView
                     android:id="@+id/tv_sound_app"
@@ -550,14 +552,15 @@
                     app:layout_constraintEnd_toEndOf="@id/view_sound_app"
                     app:layout_constraintTop_toTopOf="@id/view_sound_app" />
 
+
                 <View
-                    android:id="@+id/view_vibration_app"
-                    android:layout_width="match_parent"
+                    android:id="@+id/view_sound_app"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppVibration()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppSound()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_sound_app" />
+                    app:layout_constraintTop_toBottomOf="@id/title_sound_app" />
 
                 <TextView
                     android:id="@+id/tv_vibration_app"
@@ -587,13 +590,14 @@
                     app:layout_constraintTop_toTopOf="@id/view_vibration_app" />
 
                 <View
-                    android:id="@+id/view_preview_app"
-                    android:layout_width="0dp"
+                    android:id="@+id/view_vibration_app"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppPreView()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppVibration()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_vibration_app" />
+                    app:layout_constraintTop_toBottomOf="@+id/view_sound_app" />
+
 
                 <TextView
                     android:id="@+id/tv_preview_app"
@@ -623,13 +627,14 @@
                     app:layout_constraintTop_toTopOf="@+id/view_preview_app" />
 
                 <View
-                    android:id="@+id/view_chatSound"
+                    android:id="@+id/view_preview_app"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundInChat()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppPreView()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_preview_app" />
+                    app:layout_constraintTop_toBottomOf="@+id/view_vibration_app" />
+
 
                 <TextView
                     android:id="@+id/tv_chatSound"
@@ -658,6 +663,14 @@
                     app:layout_constraintEnd_toEndOf="@+id/view_chatSound"
                     app:layout_constraintTop_toTopOf="@+id/view_chatSound" />
 
+                <View
+                    android:id="@+id/view_chatSound"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundInChat()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_preview_app" />
 
                 <View
                     android:id="@+id/view3"
@@ -683,15 +696,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view3" />
 
-
-                <View
-                    android:id="@+id/view_separate_notifications"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSeparateNotification()}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_separate_notification" />
 
                 <TextView
                     android:id="@+id/tv_separate_notifications"
@@ -721,6 +725,15 @@
                     app:layout_constraintTop_toTopOf="@id/view_separate_notifications" />
 
 
+                <View
+                    android:id="@+id/view_separate_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSeparateNotification()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_separate_notification" />
+
                 <TextView
                     android:id="@+id/tv_title_keepService"
                     android:layout_width="0dp"
@@ -738,15 +751,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view_separate_notifications" />
-
-                <View
-                    android:id="@+id/view_description_keepService"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickKeepService()}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_title_keepService" />
 
                 <com.uncopt.android.widget.text.justify.JustifiedTextView
                     android:id="@+id/tv_description_keepService"
@@ -776,6 +780,15 @@
                     app:layout_constraintTop_toTopOf="@+id/view_description_keepService" />
 
                 <View
+                    android:id="@+id/view_description_keepService"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickKeepService()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_keepService" />
+
+                <View
                     android:id="@+id/view5"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
@@ -799,13 +812,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view5" />
 
-                <View
-                    android:id="@+id/ll_reset_notifications"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp80"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_title_reset" />
 
                 <TextView
                     android:id="@+id/tv_reset"
@@ -833,6 +839,14 @@
                     app:layout_constraintEnd_toEndOf="@id/ll_reset_notifications"
                     app:layout_constraintStart_toStartOf="@id/ll_reset_notifications"
                     app:layout_constraintTop_toBottomOf="@id/tv_reset" />
+
+                <View
+                    android:id="@+id/ll_reset_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp80"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_reset" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </LinearLayout>
