@@ -12,6 +12,7 @@ package net.iGap.viewmodel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -33,6 +34,8 @@ import com.mikepenz.materialize.color.Material;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.databinding.FragmentNotificationAndSoundBinding;
+import net.iGap.fragments.FragmentNotificationAndSound;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 
@@ -354,9 +357,12 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     public void onClickLedColorMessage() {
         showMaterialDialog.setValue(true);
+
+
     }
 
     public void setNewColor(int color) {
+        directLedColor.getValue();
         directLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, color);
         editor.apply();
@@ -364,37 +370,31 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     public void onClickLedGroup() {
-        boolean wrapInScrollView = true;
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, true).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color))
+                .onNegative((dialog12, which) -> {
 
-                    }
                 }).onPositive((dialog1, which) -> {
 
+                    View view1 = dialog1.getCustomView();
+                    if (view1 != null) {
+                        ColorPicker picker = view1.findViewById(R.id.picker);
+                        SVBar svBar = view1.findViewById(R.id.svBar);
+                        OpacityBar opacityBar = view1.findViewById(R.id.opacityBar);
+                        picker.setOldCenterColor(ledColorGroup);
+                        picker.addSVBar(svBar);
+                        picker.addOpacityBar(opacityBar);
+
+                        groupLedColor.getValue();
+                        groupLedColor.setValue(picker.getColor());
+                        editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
+                        editor.apply();
+                    }
                 }).build();
 
-        View view1 = dialog.getCustomView();
-        assert view1 != null;
-        final ColorPicker picker = view1.findViewById(R.id.picker);
-        SVBar svBar = view1.findViewById(R.id.svBar);
-        OpacityBar opacityBar = view1.findViewById(R.id.opacityBar);
-        picker.setOldCenterColor(ledColorGroup);
-        picker.addSVBar(svBar);
-        picker.addOpacityBar(opacityBar);
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-
-            dialog.dismiss();
-            groupLedColor.getValue();
-            groupLedColor.setValue(picker.getColor());
-            editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
-            editor.apply();
-        });
 
         dialog.show();
-
     }
+
 
     public void onClickVibrationMessage() {
 
