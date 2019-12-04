@@ -25,7 +25,7 @@ public class BeepTunesMainViewModel extends BaseViewModel {
     }
 
     private void getFirsPage() {
-        new ApiInitializer<FirstPage>().initAPI(apiService.getFirstPage(), this, new ResponseCallback<FirstPage>() {
+        /*new ApiInitializer<FirstPage>().initAPI(apiService.getFirstPage(), this, new ResponseCallback<FirstPage>() {
             @Override
             public void onSuccess(FirstPage data) {
                 firstPageMutableLiveData.postValue(data);
@@ -40,7 +40,7 @@ public class BeepTunesMainViewModel extends BaseViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressMutableLiveData.postValue(visibility ? 0 : 1);
             }
-        });
+        });*/
     }
 
     public MutableLiveData<Integer> getProgressMutableLiveData() {

@@ -40,10 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class NewsMainFrag extends BaseAPIViewFrag {
+public class NewsMainFrag extends BaseAPIViewFrag<NewsMainVM> {
 
     private NewsMainPageBinding binding;
-    private NewsMainVM newsMainVM;
 
     private String specificNewsID = null;
     private String specificGroupID = null;
@@ -55,7 +54,7 @@ public class NewsMainFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newsMainVM = ViewModelProviders.of(this).get(NewsMainVM.class);
+        viewModel = ViewModelProviders.of(this).get(NewsMainVM.class);
     }
 
     @Nullable
@@ -65,7 +64,6 @@ public class NewsMainFrag extends BaseAPIViewFrag {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_main_page, container, false);
 //        binding.setViewmodel(newsMainVM);
         binding.setLifecycleOwner(this);
-        this.viewModel = newsMainVM;
 
         return binding.getRoot();
     }
@@ -102,18 +100,18 @@ public class NewsMainFrag extends BaseAPIViewFrag {
         binding.rcMain.setLayoutManager(layoutManager);
 
         binding.pullToRefresh.setOnRefreshListener(() -> {
-            newsMainVM.getNews();
+            viewModel.getNews();
             binding.noItemInListError.setVisibility(View.GONE);
         });
 
-        newsMainVM.getNews();
+        viewModel.getNews();
         onErrorObserver();
         onDataChanged();
         onProgress();
     }
 
     private void onErrorObserver() {
-        newsMainVM.getError().observe(getViewLifecycleOwner(), newsError -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), newsError -> {
             if (newsError.getState()) {
                 //show the related text
                 binding.noItemInListError.setVisibility(View.VISIBLE);
@@ -126,11 +124,11 @@ public class NewsMainFrag extends BaseAPIViewFrag {
     }
 
     private void onProgress() {
-        newsMainVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
-        newsMainVM.getMainList().observe(getViewLifecycleOwner(), this::initMainRecycler);
+        viewModel.getMainList().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
     private void initMainRecycler(List<NewsFirstPage> data) {

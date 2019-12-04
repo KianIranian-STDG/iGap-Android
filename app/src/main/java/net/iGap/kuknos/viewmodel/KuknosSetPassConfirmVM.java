@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -74,7 +73,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
             e.printStackTrace();
         }
 
-        userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
+        /*userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
             @Override
             public void onResponse(KuknosSubmitM kuknosSubmitM) {
                 if (kuknosSubmitM.getOk() == 1) {
@@ -92,7 +91,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     // setter and getter

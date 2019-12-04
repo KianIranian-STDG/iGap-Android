@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
 
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -49,7 +48,7 @@ public class KuknosPanelVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+        /*panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
             @Override
             public void onResponse(AccountResponse accountResponse) {
                 kuknosWalletsM.setValue(accountResponse);
@@ -67,7 +66,7 @@ public class KuknosPanelVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public String convertToJSON(int position) {

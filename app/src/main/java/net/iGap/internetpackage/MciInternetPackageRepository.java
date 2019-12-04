@@ -43,8 +43,6 @@ public class MciInternetPackageRepository {
     }
 
     public void purchaseInternetPackage(String phoneNumber, String internetPackageType, HandShakeCallback handShakeCallback, ResponseCallback<MciPurchaseResponse> callback) {
-
         new ApiInitializer<MciPurchaseResponse>().initAPI(api.internetPackagePurchase(phoneNumber, internetPackageType), handShakeCallback, callback);
-
     }
 }

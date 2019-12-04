@@ -302,17 +302,24 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
         new ApiInitializer<MciPurchaseResponse>().initAPI(
                 new RetrofitFactory().getMciRetrofit().create(MciApi.class).topUpPurchase(phoneNumber, price),
                 this, new ResponseCallback<MciPurchaseResponse>() {
-            @Override
-            public void onSuccess(MciPurchaseResponse data) {
-                observeEnabledPayment.set(true);
-                goToPaymentPage.setValue(data.getToken());
-            }
+                    @Override
+                    public void onSuccess(MciPurchaseResponse data) {
+                        observeEnabledPayment.set(true);
+                        goToPaymentPage.setValue(data.getToken());
+                    }
 
-            @Override
-            public void onError(ErrorModel error) {
-                observeEnabledPayment.set(true);
-                showMciPaymentError.setValue(error);
-            }
-        });
+                    @Override
+                    public void onError(String error) {
+                        observeEnabledPayment.set(true);
+                        showMciPaymentError.setValue(new ErrorModel("", error));
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        //ToDO: handle this event
+                        /*observeEnabledPayment.set(true);
+                        showMciPaymentError.setValue(error);*/
+                    }
+                });
     }
 }

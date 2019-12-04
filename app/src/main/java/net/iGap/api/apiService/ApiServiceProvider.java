@@ -7,6 +7,7 @@ import net.iGap.api.KuknosApi;
 import net.iGap.api.KuknosHorizenApi;
 import net.iGap.api.NewsApi;
 
+@Deprecated
 public class ApiServiceProvider {
     private static RetrofitFactory factory = new RetrofitFactory();
 
@@ -22,13 +23,6 @@ public class ApiServiceProvider {
             beepTunesApi = factory.getBeepTunesRetrofit().create(BeepTunesApi.class);
         }
         return beepTunesApi;
-    }
-
-    public static FavoriteChannelApi getChannelApi() {
-        if (channelApi == null) {
-            channelApi = factory.getChannelRetrofit().create(FavoriteChannelApi.class);
-        }
-        return channelApi;
     }
 
     public static KuknosApi getKuknosClient() {
@@ -51,14 +45,4 @@ public class ApiServiceProvider {
         }
         return elecApi;
     }
-
-    //todo clean this comment
-
-    /*public static KuknosHorizenApi getKuknosHorizonClient() {
-        if (kuknosHorizenApi == null) {
-            kuknosHorizenApi = factory.getKuknosHorizanRetrofit().create(KuknosHorizenApi.class);
-        }
-        return kuknosHorizenApi;
-    }*/
-
 }

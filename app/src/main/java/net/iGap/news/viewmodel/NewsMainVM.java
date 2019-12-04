@@ -27,20 +27,23 @@ public class NewsMainVM extends BaseAPIViewModel {
     }
 
     public void getNews() {
+        progressState.setValue(true);
         repo.getMainPage(this, new ResponseCallback<List<NewsFirstPage>>() {
             @Override
             public void onSuccess(List<NewsFirstPage> data) {
                 mainList.setValue(data);
+                progressState.setValue(false);
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
-                error.setValue(new NewsError(true, errorM.getName(), errorM.getMessage(), R.string.news_serverError));
+            public void onError(String e) {
+                error.setValue(new NewsError(true, "KB", e, R.string.news_serverError));
+                progressState.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                progressState.setValue(false);
             }
         });
     }

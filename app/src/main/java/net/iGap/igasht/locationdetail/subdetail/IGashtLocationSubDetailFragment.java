@@ -14,23 +14,21 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentIgashtLocationSubDetailBinding;
 
-public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag {
+public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag<IGashtLocationSubDetailViewModel> {
 
     private FragmentIgashtLocationSubDetailBinding binding;
-    private IGashtLocationSubDetailViewModel iGashtLocationSubDetailViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iGashtLocationSubDetailViewModel = ViewModelProviders.of(this).get(IGashtLocationSubDetailViewModel.class);
-        viewModel = iGashtLocationSubDetailViewModel;
+        viewModel = ViewModelProviders.of(this).get(IGashtLocationSubDetailViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_location_sub_detail, container, false);
-        binding.setViewModel(iGashtLocationSubDetailViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }

@@ -37,10 +37,9 @@ import net.iGap.news.view.Adapter.NewsDetailRelatedCardsAdapter;
 import net.iGap.news.view.Adapter.NewsDetailSliderAdapter;
 import net.iGap.news.viewmodel.NewsDetailVM;
 
-public class NewsDetailFrag extends BaseAPIViewFrag {
+public class NewsDetailFrag extends BaseAPIViewFrag<NewsDetailVM> {
 
     private NewsDetailPageBinding binding;
-    private NewsDetailVM newsMainVM;
 
     public static NewsDetailFrag newInstance() {
         return new NewsDetailFrag();
@@ -49,7 +48,7 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newsMainVM = ViewModelProviders.of(this).get(NewsDetailVM.class);
+        viewModel = ViewModelProviders.of(this).get(NewsDetailVM.class);
     }
 
     @Nullable
@@ -57,9 +56,8 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.news_detail_page, container, false);
-        binding.setViewmodel(newsMainVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
-        this.viewModel = newsMainVM;
 
         return attachToSwipeBack(binding.getRoot());
     }
@@ -96,7 +94,7 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
 
         binding.shareNewsBTN.setOnClickListener(v -> {
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, newsMainVM.getData().getValue().getTitle() + "\n" + newsMainVM.getData().getValue().getLead() + "\n" + "تاریخ انتشار: " + newsMainVM.getData().getValue().getDate() + "\n" + "قدرت گرفته از آیگپ" + "\n" + "این خبر را در آیگپ بخوانید: " + "igap://news/showDetail/" + arg.getString("NewsID") + "\n" + "لینک خبر: " + newsMainVM.getData().getValue().getLink());
+            sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getData().getValue().getTitle() + "\n" + viewModel.getData().getValue().getLead() + "\n" + "تاریخ انتشار: " + viewModel.getData().getValue().getDate() + "\n" + "قدرت گرفته از آیگپ" + "\n" + "این خبر را در آیگپ بخوانید: " + "igap://news/showDetail/" + arg.getString("NewsID") + "\n" + "لینک خبر: " + viewModel.getData().getValue().getLink());
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Share via"));
         });
@@ -112,14 +110,14 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
             bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
         });
 
-        newsMainVM.getDataFromServer(arg.getString("NewsID"));
+        viewModel.getDataFromServer(arg.getString("NewsID"));
         onErrorObserver();
         onDataChanged();
         onProgress();
     }
 
     private void onErrorObserver() {
-        newsMainVM.getError().observe(getViewLifecycleOwner(), newsError -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), newsError -> {
             if (newsError.getState()) {
                 // show error
                 Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
@@ -132,19 +130,19 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
     }
 
     private void onProgress() {
-        newsMainVM.getProgressStateContext().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressStateContext().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
                 binding.ProgressTitleV.setVisibility(View.VISIBLE);
             else
                 binding.ProgressTitleV.setVisibility(View.GONE);
         });
-        newsMainVM.getProgressStateComment().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressStateComment().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
                 binding.ProgressCommentV.setVisibility(View.VISIBLE);
             else
                 binding.ProgressCommentV.setVisibility(View.GONE);
         });
-        newsMainVM.getProgressStateRelated().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressStateRelated().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
                 binding.ProgressNewsV.setVisibility(View.VISIBLE);
             else
@@ -153,9 +151,9 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
     }
 
     private void onDataChanged() {
-        newsMainVM.getData().observe(getViewLifecycleOwner(), this::initMainRecycler);
-        newsMainVM.getComments().observe(getViewLifecycleOwner(), this::initCommentRecycler);
-        newsMainVM.getRelatedNews().observe(getViewLifecycleOwner(), this::initRelatedNews);
+        viewModel.getData().observe(getViewLifecycleOwner(), this::initMainRecycler);
+        viewModel.getComments().observe(getViewLifecycleOwner(), this::initCommentRecycler);
+        viewModel.getRelatedNews().observe(getViewLifecycleOwner(), this::initRelatedNews);
     }
 
     private void initCommentRecycler(NewsComment data) {

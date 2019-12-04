@@ -38,9 +38,14 @@ public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 progressVisibility.set(View.GONE);
                 errorVisibility.set(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailed() {
+                //ToDo: handle this event
             }
         });
     }

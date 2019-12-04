@@ -25,20 +25,23 @@ public class NewsGroupListVM extends BaseAPIViewModel {
     }
 
     public void getData() {
+        progressState.setValue(true);
         repo.getNewsGroups(this, new ResponseCallback<NewsGroup>() {
             @Override
             public void onSuccess(NewsGroup data) {
+                progressState.setValue(false);
                 mGroups.setValue(data);
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String e) {
+                progressState.setValue(false);
                 error.setValue(new NewsError(true, "", "", R.string.news_serverError));
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                progressState.setValue(false);
             }
         });
     }

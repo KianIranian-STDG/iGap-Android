@@ -48,7 +48,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     }
 
     void getAlbumSong(long id) {
-        new ApiInitializer<AlbumTrack>().initAPI(apiService.getAlbumTrack(id), this, new ResponseCallback<AlbumTrack>() {
+        /*new ApiInitializer<AlbumTrack>().initAPI(apiService.getAlbumTrack(id), this, new ResponseCallback<AlbumTrack>() {
             @Override
             public void onSuccess(AlbumTrack data) {
                 trackMutableLiveData.postValue(data.getData());
@@ -63,12 +63,12 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
             public void setProgressIndicator(boolean visibility) {
                 LoadingProgressMutableLiveData.postValue(visibility);
             }
-        });
+        });*/
     }
 
     void getArtistOtherAlbum(long id) {
 
-        new ApiInitializer<Albums>().initAPI(apiService.getArtistAlbums(id), this, new ResponseCallback<Albums>() {
+        /*new ApiInitializer<Albums>().initAPI(apiService.getArtistAlbums(id), this, new ResponseCallback<Albums>() {
             @Override
             public void onSuccess(Albums data) {
                 albumMutableLiveData.postValue(data);
@@ -83,7 +83,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
             public void setProgressIndicator(boolean visibility) {
                 LoadingProgressMutableLiveData.postValue(visibility);
             }
-        });
+        });*/
 
     }
 

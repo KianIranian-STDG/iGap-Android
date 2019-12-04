@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
@@ -30,10 +29,9 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableBoolean enabledPaymentButton = new ObservableBoolean(true);
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
-    private MutableLiveData<ErrorModel> showRequestErrorMessage = new MutableLiveData<>();
+    private MutableLiveData<String> showRequestErrorMessage = new MutableLiveData<>();
     private MutableLiveData<List<MciInternetPackageFilter>> typeList = new MutableLiveData<>();
     private MutableLiveData<List<InternetPackage>> internetPackageFiltered = new MutableLiveData<>();
-    private MutableLiveData<Boolean> needUpdateGooglePlay = new MutableLiveData<>();
     private MutableLiveData<String> goToPaymentPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearTypeChecked = new MutableLiveData<>();
     private MciInternetPackageRepository repository;
@@ -89,12 +87,8 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         return typeList;
     }
 
-    public MutableLiveData<ErrorModel> getShowRequestErrorMessage() {
+    public MutableLiveData<String> getShowRequestErrorMessage() {
         return showRequestErrorMessage;
-    }
-
-    public MutableLiveData<Boolean> getNeedUpdateGooglePlay() {
-        return needUpdateGooglePlay;
     }
 
     public MutableLiveData<String> getGoToPaymentPage() {
@@ -171,16 +165,15 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                 }
 
                 @Override
-                public void onError(ErrorModel error) {
+                public void onError(String error) {
                     showLoadingView.set(View.INVISIBLE);
                     showRequestErrorMessage.setValue(error);
                     enabledPaymentButton.set(true);
                 }
 
                 @Override
-                public void onFailed(boolean handShakeError) {
+                public void onFailed() {
                     showLoadingView.set(View.INVISIBLE);
-                    needUpdateGooglePlay.setValue(handShakeError);
                     enabledPaymentButton.set(true);
                 }
             });
@@ -207,13 +200,13 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                 }
 
                 @Override
-                public void onError(ErrorModel error) {
+                public void onError(String error) {
                     requestError(error);
                 }
 
                 @Override
-                public void onFailed(boolean handShakeError) {
-                    onFailedHandler(handShakeError);
+                public void onFailed() {
+                    onFailedHandler();
                 }
             });
         } else if (packageList == null) {
@@ -225,13 +218,13 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                 }
 
                 @Override
-                public void onError(ErrorModel error) {
+                public void onError(String error) {
                     requestError(error);
                 }
 
                 @Override
-                public void onFailed(boolean handShakeError) {
-                    onFailedHandler(handShakeError);
+                public void onFailed() {
+                    onFailedHandler();
                 }
             });
         } else {
@@ -245,16 +238,15 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         showRetryView.set(View.GONE);
     }
 
-    private void requestError(ErrorModel error) {
+    private void requestError(String error) {
         showRetryView.set(View.VISIBLE);
         showLoadingView.set(View.INVISIBLE);
         showRequestErrorMessage.setValue(error);
     }
 
-    private void onFailedHandler(boolean isNeedUpdateGooglePlay) {
+    private void onFailedHandler() {
         showLoadingView.set(View.INVISIBLE);
         showRetryView.set(View.VISIBLE);
-        needUpdateGooglePlay.setValue(isNeedUpdateGooglePlay);
     }
 
     private void getPackageListWithFilter(int position) {

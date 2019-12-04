@@ -1,7 +1,5 @@
 package net.iGap.adapter.items.popularChannel;
 
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,13 +38,13 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
     private String bannerScale;
     private SliderViewHolder sliderViewHolder;
 
+    public PopularChannelHomeAdapter(OnFavoriteChannelCallBack callBack){
+        this.callBack = callBack;
+    }
+
     public void setData(List<Datum> data) {
         this.data = data;
         notifyDataSetChanged();
-    }
-
-    public void setCallBack(OnFavoriteChannelCallBack callBack) {
-        this.callBack = callBack;
     }
 
     @NonNull

@@ -26,13 +26,13 @@ public abstract class BaseCPayViewModel<T> extends BaseAPIViewModel implements R
     }
 
     @Override
-    public void onError(ErrorModel error) {
-        msgToUserString.setValue(error.getMessage());
+    public void onError(String error) {
+        msgToUserString.setValue(error);
         loaderListener.setValue(false);
     }
 
     @Override
-    public void onFailed(boolean handShakeError) {
+    public void onFailed() {
         msgToUser.setValue(R.string.server_do_not_response);
         loaderListener.setValue(false);
     }

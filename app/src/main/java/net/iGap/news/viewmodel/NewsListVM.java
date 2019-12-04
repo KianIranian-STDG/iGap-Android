@@ -27,20 +27,23 @@ public class NewsListVM extends BaseAPIViewModel {
     }
 
     public void getData(NewsApiArg arg) {
+        progressState.setValue(true);
         repo.getNewsList(arg, this, new ResponseCallback<NewsList>() {
             @Override
             public void onSuccess(NewsList data) {
                 mData.setValue(data);
+                progressState.setValue(false);
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String e) {
                 error.setValue(new NewsError(true, "", "", R.string.news_serverError));
+                progressState.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                progressState.setValue(false);
             }
         });
     }

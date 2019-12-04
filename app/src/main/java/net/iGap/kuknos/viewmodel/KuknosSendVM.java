@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSendM;
@@ -116,9 +115,7 @@ public class KuknosSendVM extends ViewModel {
         kuknosSendM.setDest(walletID.get());
         kuknosSendM.setMemo((text.get() == null ? "" : text.get()));
 
-        Gson gson = new Gson();
-
-        panelRepo.paymentUser(kuknosSendM, new ApiResponse<SubmitTransactionResponse>() {
+        /*panelRepo.paymentUser(kuknosSendM, new ApiResponse<SubmitTransactionResponse>() {
             @Override
             public void onResponse(SubmitTransactionResponse accountResponse) {
                 if (accountResponse.isSuccess())
@@ -141,7 +138,7 @@ public class KuknosSendVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     // Setter and Getter

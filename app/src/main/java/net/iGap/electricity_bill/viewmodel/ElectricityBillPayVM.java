@@ -15,7 +15,6 @@ import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 import net.iGap.electricity_bill.repository.model.LastBillData;
-import net.iGap.helper.HelperNumerical;
 import net.iGap.request.RequestMplGetBillToken;
 
 public class ElectricityBillPayVM extends BaseAPIViewModel {
@@ -52,8 +51,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void getData() {
         progressVisibilityData.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().getBranchDebit(debit.getID(), this,
-                new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
+        new ElectricityBillAPIRepository().getBranchDebit(debit.getID(), this, new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<BranchDebit> data) {
                 progressVisibilityData.set(View.GONE);
@@ -66,23 +64,28 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
-                errorM.setValue(error);
+            public void onError(String error) {
+                errorM.setValue(new ErrorModel("", error));
                 progressVisibilityData.set(View.GONE);
+            }
+
+            @Override
+            public void onFailed() {
+                //ToDO: handle this event
             }
         });
     }
 
-    public void payBill (){
+    public void payBill() {
 
         if (debit.getPayID() == null || debit.getPayID().equals("") || debit.getPayID().equals("null")) {
-            errorM.setValue(new ErrorModel("" , "001"));
+            errorM.setValue(new ErrorModel("", "001"));
             getData();
             return;
         }
 
-        if (Long.parseLong(debit.getPrice().replace(",","").replace(" ریال", "")) < 10000) {
-            errorM.setValue(new ErrorModel("" , "002"));
+        if (Long.parseLong(debit.getPrice().replace(",", "").replace(" ریال", "")) < 10000) {
+            errorM.setValue(new ErrorModel("", "002"));
             return;
         }
 
@@ -98,11 +101,10 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        if (debit.getPayID().startsWith(debit.getPrice().replace("000", "").replace(",","").replace(" ریال", ""))) {
+        if (debit.getPayID().startsWith(debit.getPrice().replace("000", "").replace(",", "").replace(" ریال", ""))) {
             requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPayID()));
-        }
-        else {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPrice().replace("000", "").replace(",","").replace(" ریال", "") + debit.getPayID()));
+        } else {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPrice().replace("000", "").replace(",", "").replace(" ریال", "") + debit.getPayID()));
         }
     }
 
@@ -117,9 +119,14 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 progressVisibilityDownload.set(View.GONE);
-                errorM.setValue(error);
+                errorM.setValue(new ErrorModel("", error));
+            }
+
+            @Override
+            public void onFailed() {
+                //ToDo: handle this event
             }
         });
     }

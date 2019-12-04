@@ -3,7 +3,6 @@ package net.iGap.electricity_bill.view;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +20,13 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillAddBinding;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
-public class ElectricityBillAddFrag extends BaseAPIViewFrag {
+public class ElectricityBillAddFrag extends BaseAPIViewFrag<ElectricityBillAddVM> {
 
     private FragmentElecBillAddBinding binding;
-    private ElectricityBillAddVM elecBillVM;
     private String billID, billTitle, nationalID;
     private boolean editMode = false;
     private static final String TAG = "ElectricityBillAddFrag";
@@ -62,24 +61,21 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        elecBillVM = ViewModelProviders.of(this).get(ElectricityBillAddVM.class);
-        elecBillVM.getBillID().set(billID);
+        viewModel = ViewModelProviders.of(this).get(ElectricityBillAddVM.class);
+        viewModel.getBillID().set(billID);
         if (editMode) {
-            elecBillVM.getBillName().set(billTitle);
-            elecBillVM.getBillUserID().set(nationalID);
-            elecBillVM.setEditMode(editMode);
+            viewModel.getBillName().set(billTitle);
+            viewModel.getBillUserID().set(nationalID);
+            viewModel.setEditMode(editMode);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_elec_bill_add, container, false);
-        binding.setViewmodel(elecBillVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
-        this.viewModel = elecBillVM;
-
         return attachToSwipeBack(binding.getRoot());
 
     }
@@ -103,14 +99,25 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         LinearLayout toolbarLayout = binding.Toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        elecBillVM.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
-            if (errorModel.getName().equals("200"))
-                showDialog(getResources().getString(R.string.elecBill_success_title), errorModel.getMessage());
-            else
-                showDialog(getResources().getString(R.string.elecBill_error_title), errorModel.getMessage());
+        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
+            if (errorModel != null) {
+                showDialog(getResources().getString(R.string.elecBill_error_title), errorModel);
+            }
         });
 
-        elecBillVM.getGoBack().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getSuccessM().observe(getViewLifecycleOwner(), message -> {
+            if (message != null) {
+                showDialog(getResources().getString(R.string.elecBill_success_title), message);
+            }
+        });
+
+        viewModel.getErrorRequestFailed().observe(getViewLifecycleOwner(), message -> {
+            if (message != null) {
+                HelperError.showSnackMessage(getString(message), false);
+            }
+        });
+
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
                 popBackStackFragment();
         });
@@ -129,7 +136,7 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                elecBillVM.getBillNameErrorEnable().set(false);
+                viewModel.getBillNameErrorEnable().set(false);
             }
 
             @Override
@@ -145,7 +152,7 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                elecBillVM.getBillIDErrorEnable().set(false);
+                viewModel.getBillIDErrorEnable().set(false);
             }
 
             @Override
@@ -161,7 +168,7 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                elecBillVM.getBillPhoneErrorEnable().set(false);
+                viewModel.getBillPhoneErrorEnable().set(false);
             }
 
             @Override
@@ -177,7 +184,7 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                elecBillVM.getBillUserIDErrorEnable().set(false);
+                viewModel.getBillUserIDErrorEnable().set(false);
             }
 
             @Override
@@ -193,7 +200,7 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                elecBillVM.getBillEmailErrorEnable().set(false);
+                viewModel.getBillEmailErrorEnable().set(false);
             }
 
             @Override

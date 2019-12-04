@@ -1,6 +1,5 @@
 package net.iGap.kuknos.service.Repository;
 
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.model.KuknosSendM;
 
 import org.stellar.sdk.responses.AccountResponse;
@@ -23,17 +22,17 @@ public class PanelRepo {
                 + "\nmnemonic is: " + userRepo.getMnemonic();
     }
 
-    public void getAccountInfo(ApiResponse<AccountResponse> apiResponse) {
+    /*public void getAccountInfo(ApiResponse<AccountResponse> apiResponse) {
         kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), apiResponse);
-    }
+    }*/
 
-    public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
+    /*public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
         kuknosAPIRepository.paymentUser(model, apiResponse);
-    }
+    }*/
 
-    public void getUserHistory(ApiResponse<Page<OperationResponse>> apiResponse) {
+    /*public void getUserHistory(ApiResponse<Page<OperationResponse>> apiResponse) {
         kuknosAPIRepository.getUserHistory(userRepo.getAccountID(), apiResponse);
-    }
+    }*/
 
     public UserRepo getUserRepo() {
         return userRepo;

@@ -82,9 +82,14 @@ public class NewsAddCommentVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 progress.set(R.string.news_add_comment_fail);
                 complete.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
+                //Todo: handle this event
             }
         });
     }

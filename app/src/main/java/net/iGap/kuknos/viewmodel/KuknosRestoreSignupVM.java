@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
@@ -104,7 +103,7 @@ public class KuknosRestoreSignupVM extends ViewModel {
     }
 
     private void submitUser() {
-        userRepo.registerUser(token, userRepo.getAccountID(), username.get(), new ApiResponse<KuknosSubmitM>() {
+        /*userRepo.registerUser(token, userRepo.getAccountID(), username.get(), new ApiResponse<KuknosSubmitM>() {
             @Override
             public void onResponse(KuknosSubmitM kuknosSubmitM) {
                 if (kuknosSubmitM.getOk() == 1) {
@@ -122,7 +121,7 @@ public class KuknosRestoreSignupVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressSendDServerState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public void cancelUsernameServer() {

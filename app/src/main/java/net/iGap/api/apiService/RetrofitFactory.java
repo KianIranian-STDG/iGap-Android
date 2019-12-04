@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitFactory {
 
-    private OkHttpClient getHttpClient() {
+    public OkHttpClient getHttpClient() {
         OkHttpClient httpClient;
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
@@ -37,7 +37,7 @@ public class RetrofitFactory {
         return httpClient;
     }
 
-    Retrofit getBeepTunesRetrofit() {
+    public Retrofit getBeepTunesRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.BEEP_TUNES_URL)
                 .client(getHttpClient())
@@ -46,7 +46,7 @@ public class RetrofitFactory {
 
     }
 
-    Retrofit getChannelRetrofit() {
+    public Retrofit getChannelRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.CHANNEL_URL)
                 .addConverterFactory(GsonConverterFactory.create())

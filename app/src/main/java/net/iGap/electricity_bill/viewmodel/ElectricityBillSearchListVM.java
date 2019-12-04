@@ -51,13 +51,18 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 if (tryOut > 0)
                     getCompanyData();
                 else {
-                    errorM.setValue(error);
+                    errorM.setValue(new ErrorModel("", error));
                 }
                 tryOut--;
+            }
+
+            @Override
+            public void onFailed() {
+
             }
         });
     }
@@ -103,10 +108,15 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 progressVisibility.set(View.GONE);
-                errorM.setValue(error);
+                errorM.setValue(new ErrorModel("", error));
                 errorVisibility.set(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailed() {
+                //ToDo: handle this event
             }
         });
     }

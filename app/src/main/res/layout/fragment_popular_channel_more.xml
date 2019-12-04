@@ -84,12 +84,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/retryView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            style="@style/baseFontIcon"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:text="@string/retry"
-            android:textColor="?attr/iGapSubtitleTextColor"
+            android:text="@string/retry_icon"
+            android:textColor="?attr/iGapTitleTextColor"
             android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>

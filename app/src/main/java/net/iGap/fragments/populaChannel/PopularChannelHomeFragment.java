@@ -1,16 +1,16 @@
 package net.iGap.fragments.populaChannel;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -18,70 +18,61 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popularChannel.PopularChannelHomeAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.fragments.FragmentWebView;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.model.popularChannel.Category;
-import net.iGap.model.popularChannel.Channel;
-import net.iGap.model.popularChannel.Slide;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.PopularChannelHomeViewModel;
 
-public class PopularChannelHomeFragment extends BaseAPIViewFrag implements ToolbarListener {
-    private PopularChannelHomeViewModel popularChannelHomeViewModel;
-    private PopularChannelHomeAdapter adapter;
+public class PopularChannelHomeFragment extends BaseAPIViewFrag<PopularChannelHomeViewModel> {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private View rootView;
     private TextView epmtyView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        popularChannelHomeViewModel = ViewModelProviders.of(this).get(PopularChannelHomeViewModel.class);
-        viewModel = popularChannelHomeViewModel;
+        viewModel = ViewModelProviders.of(this).get(PopularChannelHomeViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_popular_channel, container, false);
-        adapter = new PopularChannelHomeAdapter();
-        return rootView;
+        return inflater.inflate(R.layout.fragment_popular_channel, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupViews();
-        popularChannelHomeViewModel.onStartFragment(this);
 
-        popularChannelHomeViewModel.getFirstPageMutableLiveData().observe(getViewLifecycleOwner(), parentChannel -> {
-            if (parentChannel != null)
-                adapter.setData(parentChannel.getData());
-        });
+        RecyclerView recyclerView = view.findViewById(R.id.rv_popularChannel_home);
+        swipeRefreshLayout = view.findViewById(R.id.sr_popularChannel_home);
+        epmtyView = view.findViewById(R.id.emptyRecycle);
 
-        adapter.setCallBack(new PopularChannelHomeAdapter.OnFavoriteChannelCallBack() {
-            @Override
-            public void onCategoryClick(Category category) {
-                popularChannelHomeViewModel.onMoreClick(category.getId(), G.isAppRtl ? category.getTitle() : category.getTitleEn(), PopularChannelHomeFragment.this);
-            }
+        recyclerView.setAdapter(new PopularChannelHomeAdapter(viewModel.getRecyclerItemClick()));
+        ((ViewGroup) view.findViewById(R.id.ll_popularChannel_toolBar)).addView(HelperToolbar.create()
+                .setContext(getContext())
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                })
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.popular_channel))
+                .setLeftIcon(R.string.back_icon)
+                .getView());
 
-            @Override
-            public void onChannelClick(Channel channel) {
-                popularChannelHomeViewModel.onChannelClick(channel, PopularChannelHomeFragment.this);
-            }
-
-            @Override
-            public void onSlideClick(Slide slide) {
-                popularChannelHomeViewModel.onSlideClick(PopularChannelHomeFragment.this, slide);
-            }
-
-            @Override
-            public void onMoreClick(String moreId, String title) {
-                popularChannelHomeViewModel.onMoreClick(moreId, title, PopularChannelHomeFragment.this);
+        viewModel.getFirstPageMutableLiveData().observe(getViewLifecycleOwner(), parentChannel -> {
+            if (recyclerView.getAdapter() instanceof PopularChannelHomeAdapter && parentChannel != null) {
+                ((PopularChannelHomeAdapter) recyclerView.getAdapter()).setData(parentChannel.getData());
             }
         });
 
-        popularChannelHomeViewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
+        viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
             if (progress != null && progress)
                 swipeRefreshLayout.setRefreshing(true);
             else
@@ -89,41 +80,59 @@ public class PopularChannelHomeFragment extends BaseAPIViewFrag implements Toolb
         });
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            popularChannelHomeViewModel.getFirstPage();
+            viewModel.getFirstPage();
         });
 
-        popularChannelHomeViewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), visibility -> {
+        viewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), visibility -> {
             if (visibility != null)
                 epmtyView.setVisibility(visibility);
         });
 
-        epmtyView.setOnClickListener(v -> {
-            popularChannelHomeViewModel.getFirstPage();
+        viewModel.getGoToMorePage().observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                PopularMoreChannelFragment moreChannelFragment = new PopularMoreChannelFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id", data.getId());
+                bundle.putString("title", G.isAppRtl ? data.getTitle() : data.getTitleEn());
+                moreChannelFragment.setArguments(bundle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), moreChannelFragment).setReplace(false).load(true);
+            }
         });
-    }
 
+        viewModel.getGoToRoom().observe(getViewLifecycleOwner(), link -> {
+            if (getActivity() != null && link != null) {
+                HelperUrl.checkUsernameAndGoToRoom(getActivity(), link, HelperUrl.ChatEntry.chat);
+            }
+        });
 
-    private void setupViews() {
-        HelperToolbar toolbar = HelperToolbar.create()
-                .setContext(G.fragmentActivity)
-                .setListener(this)
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.popular_channel))
-                .setLeftIcon(R.string.back_icon);
+        viewModel.getGoToChannel().observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                if (data.isPrivate()) {
+                    HelperUrl.checkAndJoinToRoom(getActivity(), data.getSlug());
+                } else {
+                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), data.getSlug(), HelperUrl.ChatEntry.chat);
+                }
+            }
+        });
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.rv_popularChannel_home);
-        LinearLayout toolBall = rootView.findViewById(R.id.ll_popularChannel_toolBar);
-        swipeRefreshLayout = rootView.findViewById(R.id.sr_popularChannel_home);
-        epmtyView = rootView.findViewById(R.id.emptyRecycle);
+        viewModel.getGoToWebViewPage().observe(getViewLifecycleOwner(), link -> {
+            if (getActivity() != null && link != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWebView.newInstance(link, false, null)).setReplace(false).load();
+            }
+        });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
-        toolBall.addView(toolbar.getView());
-    }
+        viewModel.getOpenBrowser().observe(getViewLifecycleOwner(), link -> {
+            if (getActivity() != null && link != null) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+                if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(link)) {
+                    HelperUrl.openBrowser(link);
+                } else {
+                    HelperUrl.openWithoutBrowser(link);
+                }
+            }
+        });
 
-    @Override
-    public void onLeftIconClickListener(View view) {
-        if (getActivity() != null)
-            getActivity().onBackPressed();
+        epmtyView.setOnClickListener(v -> viewModel.getFirstPage());
     }
 }

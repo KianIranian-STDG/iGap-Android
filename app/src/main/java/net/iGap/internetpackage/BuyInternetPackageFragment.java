@@ -20,23 +20,21 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
-public class BuyInternetPackageFragment extends BaseAPIViewFrag {
+public class BuyInternetPackageFragment extends BaseAPIViewFrag<BuyInternetPackageViewModel> {
 
-    private BuyInternetPackageViewModel buyInternetPackageViewModel;
     private FragmentBuyInternetPackageBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        buyInternetPackageViewModel = ViewModelProviders.of(this).get(BuyInternetPackageViewModel.class);
-        viewModel = buyInternetPackageViewModel;
+        viewModel = ViewModelProviders.of(this).get(BuyInternetPackageViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_buy_internet_package, container, false);
-        binding.setViewModel(buyInternetPackageViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
     }
@@ -59,19 +57,19 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag {
                     }
                 }).getView());
 
-        buyInternetPackageViewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessageResId -> {
+        viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessageResId -> {
             if (errorMessageResId != null) {
                 HelperError.showSnackMessage(getString(errorMessageResId), false);
             }
         });
 
-        buyInternetPackageViewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+        viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null) {
-                HelperError.showSnackMessage(errorMessage.getMessage(), false);
+                HelperError.showSnackMessage(errorMessage, false);
             }
         });
 
-        buyInternetPackageViewModel.getTypeList().observe(getViewLifecycleOwner(), typeList -> {
+        viewModel.getTypeList().observe(getViewLifecycleOwner(), typeList -> {
             hideKeyboard();
             if (typeList != null) {
                 binding.filterType.setAdapter(new MySpinnerAdapter(typeList));
@@ -80,7 +78,7 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag {
             }
         });
 
-        buyInternetPackageViewModel.getInternetPackageFiltered().observe(getViewLifecycleOwner(), packageList -> {
+        viewModel.getInternetPackageFiltered().observe(getViewLifecycleOwner(), packageList -> {
             if (packageList != null) {
                 binding.packageList.setAdapter(new InternetPackageListAdapter(packageList));
             } else {
@@ -88,13 +86,7 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag {
             }
         });
 
-        buyInternetPackageViewModel.getNeedUpdateGooglePlay().observe(getViewLifecycleOwner(), isNeed -> {
-            if (getActivity() instanceof ActivityMain && isNeed != null && isNeed) {
-                ((ActivityMain) getActivity()).checkGoogleUpdate();
-            }
-        });
-
-        buyInternetPackageViewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
+        viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), token, result -> {
                     if (getActivity() != null && result.isSuccess()) {
@@ -104,7 +96,7 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag {
             }
         });
 
-        buyInternetPackageViewModel.getClearTypeChecked().observe(getViewLifecycleOwner(), isCleared -> {
+        viewModel.getClearTypeChecked().observe(getViewLifecycleOwner(), isCleared -> {
             if (isCleared != null && isCleared) {
                 binding.typeGroup.clearCheck();
             }

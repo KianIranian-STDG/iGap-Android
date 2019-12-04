@@ -3,7 +3,6 @@ package net.iGap.kuknos.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 
@@ -37,7 +36,7 @@ public class KuknosTradeHistoryVM extends ViewModel {
 
     public void getDataFromServer() {
         if (mode == API.OFFERS_LIST) {
-            tradeRepo.getOffersList(new ApiResponse<Page<OfferResponse>>() {
+            /*tradeRepo.getOffersList(new ApiResponse<Page<OfferResponse>>() {
                 @Override
                 public void onResponse(Page<OfferResponse> offerResponsePage) {
                     listMutableLiveData.setValue(offerResponsePage);
@@ -52,9 +51,9 @@ public class KuknosTradeHistoryVM extends ViewModel {
                 public void setProgressIndicator(boolean visibility) {
                     progressState.setValue(visibility);
                 }
-            });
+            });*/
         } else {
-            tradeRepo.getTradesList(new ApiResponse<Page<OfferResponse>>() {
+            /*tradeRepo.getTradesList(new ApiResponse<Page<OfferResponse>>() {
                 @Override
                 public void onResponse(Page<OfferResponse> offerResponsePage) {
                     listMutableLiveData.setValue(offerResponsePage);
@@ -69,7 +68,7 @@ public class KuknosTradeHistoryVM extends ViewModel {
                 public void setProgressIndicator(boolean visibility) {
                     progressState.setValue(visibility);
                 }
-            });
+            });*/
         }
     }
 

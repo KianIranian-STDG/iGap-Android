@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknoscheckUserM;
@@ -45,7 +44,7 @@ public class KuknosLoginVM extends ViewModel {
     }
 
     private void checkUser() {
-        userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
+        /*userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
             @Override
             public void onResponse(KuknoscheckUserM kuknoscheckUserM) {
                 if (kuknoscheckUserM.getToken() != null) {
@@ -69,7 +68,7 @@ public class KuknosLoginVM extends ViewModel {
                 else
                     progressState.setValue(0);
             }
-        });
+        });*/
     }
 
     public boolean loginStatus() {

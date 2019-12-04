@@ -30,14 +30,13 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
 
-public class PaymentFragment extends BaseAPIViewFrag {
+public class PaymentFragment extends BaseAPIViewFrag<PaymentViewModel> {
 
     private static String TOKEN = "Payment_Token";
     private static String TYPE = "Payment_Type";
 
     private FragmentUniversalPaymentBinding binding;
     private PaymentCallBack callBack;
-    private PaymentViewModel paymentViewModel;
 
     public static PaymentFragment getInstance(String type, String token, PaymentCallBack paymentCallBack) {
         PaymentFragment fragment = new PaymentFragment();
@@ -56,7 +55,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        paymentViewModel = ViewModelProviders.of(
+        viewModel = ViewModelProviders.of(
                 this,
                 new ViewModelProvider.Factory() {
                     @NonNull
@@ -70,14 +69,13 @@ public class PaymentFragment extends BaseAPIViewFrag {
                     }
                 }
         ).get(PaymentViewModel.class);
-        viewModel = paymentViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_universal_payment, container, false);
-        binding.setViewModel(paymentViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -86,7 +84,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        paymentViewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
             if (getActivity() != null && paymentResult != null) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
                 if (callBack != null) {
@@ -95,7 +93,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
             }
         });
 
-        paymentViewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
+        viewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
             if (getActivity() != null && webLink != null) {
                 try {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
@@ -109,28 +107,11 @@ public class PaymentFragment extends BaseAPIViewFrag {
                 }
             }
         });
-
-        paymentViewModel.getNeedUpdateGooglePlay().observe(getViewLifecycleOwner(), isNeed -> {
-            if (getActivity() != null && isNeed != null && isNeed) {
-                try {
-                    if (getActivity() != null) {
-                        ProviderInstaller.installIfNeeded(getActivity().getApplicationContext());
-                    }
-                } catch (GooglePlayServicesRepairableException e) {
-                    // Prompt the user to install/update/enable Google Play services.
-                    GoogleApiAvailability.getInstance().showErrorNotification(getActivity(), e.getConnectionStatusCode());
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    // Indicates a non-recoverable error: let the user know.
-                    showDialogNeedGooglePlay();
-
-                }
-            }
-        });
     }
 
     public void setPaymentResult(Payment paymentModel) {
         Log.wtf(this.getClass().getName(), "setPaymentResult");
-        paymentViewModel.setPaymentResult(paymentModel);
+        viewModel.setPaymentResult(paymentModel);
     }
 
     //ToDo: create base view for fragment with request
