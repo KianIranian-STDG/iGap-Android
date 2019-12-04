@@ -74,44 +74,33 @@ public class FragmentNotificationAndSound extends BaseFragment {
     }
 
     private void setupLedColor() {
-        viewModel.setDirectLedColor(new FragmentNotificationAndSoundViewModel.onChangeLEDColor() {
-            @Override
-            public void onChenge(int color) {
-                    GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
-                    gradientDrawable.setColor(color);
-                    binding.ivLedDirect.setBackground(gradientDrawable);
-            }
-        });
-        /*viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
-
-
-        });*/
         viewModel.showMaterialDialog.observe(getViewLifecycleOwner(), isShow -> {
-            if (isShow) {
+            if (isShow != null && isShow) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.stns_popup_colorpicer, true).positiveText(R.string.set)
                         .negativeText(R.string.DISCARD).title(R.string.st_led_color)
-                        .onNegative((dialog12, which) -> {
-                            dialog12.dismiss();
+                        .onNegative((dialog2, which) -> {
+                            dialog2.dismiss();
                         })
                         .onPositive((dialog1, which) -> {
-
+                            View view = dialog1.getCustomView();
+                            if (view != null) {
+                                ColorPicker picker = view.findViewById(R.id.picker);
+                                SVBar svBar = view.findViewById(R.id.svBar);
+                                OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
+                                picker.setOldCenterColor(viewModel.getLedColorMessage());
+                                picker.addSVBar(svBar);
+                                picker.addOpacityBar(opacityBar);
+                                viewModel.setNewColor(picker.getColor());
+                                viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
+                                    GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
+                                    gradientDrawable.setColor(integer);
+                                    binding.ivLedDirect.setBackground(gradientDrawable);
+                                });
+                            }
                         }).build();
-                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
-                    View view = dialog.getCustomView();
-                    if (view != null) {
-                        ColorPicker picker = view.findViewById(R.id.picker);
-                        SVBar svBar = view.findViewById(R.id.svBar);
-                        OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
-                        picker.setOldCenterColor(viewModel.getLedColorMessage());
-                        picker.addSVBar(svBar);
-                        picker.addOpacityBar(opacityBar);
-                        viewModel.setNewColor(picker.getColor());
-                    }
-                });
                 dialog.show();
             }
         });
-
 
     }
 
