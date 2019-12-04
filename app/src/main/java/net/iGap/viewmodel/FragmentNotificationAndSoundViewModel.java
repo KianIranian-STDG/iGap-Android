@@ -383,16 +383,13 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         picker.setOldCenterColor(ledColorGroup);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
 
-                dialog.dismiss();
-                groupLedColor.getValue();
-                groupLedColor.setValue(picker.getColor());
-                editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
-                editor.apply();
-            }
+            dialog.dismiss();
+            groupLedColor.getValue();
+            groupLedColor.setValue(picker.getColor());
+            editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
+            editor.apply();
         });
 
         dialog.show();
