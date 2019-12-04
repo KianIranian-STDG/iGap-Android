@@ -12,7 +12,6 @@ package net.iGap.viewmodel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -30,12 +29,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-import com.mikepenz.materialize.color.Material;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentNotificationAndSoundBinding;
-import net.iGap.fragments.FragmentNotificationAndSound;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 
@@ -63,8 +59,9 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     public ObservableField<String> callbackPopUpNotificationGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
     public ObservableField<String> callBackSoundGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
     public MutableLiveData<Integer> directLedColor = new MutableLiveData<>();
-    public SingleLiveEvent<Boolean> showMaterialDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDirectMaterialDialog = new SingleLiveEvent<>();
     public MutableLiveData<Integer> groupLedColor = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showGroupMaterialDialog = new SingleLiveEvent<>();
 
 
     private SharedPreferences sharedPreferences;
@@ -356,9 +353,11 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     public void onClickLedColorMessage() {
-        showMaterialDialog.setValue(true);
+        showDirectMaterialDialog.setValue(true);
+    }
 
-
+    public void onClickLedGroup() {
+        showGroupMaterialDialog.setValue(true);
     }
 
     public void setNewColor(int color) {
@@ -366,35 +365,14 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         directLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, color);
         editor.apply();
-        sharedPreferences.edit();
     }
 
-    public void onClickLedGroup() {
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, true).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color))
-                .onNegative((dialog12, which) -> {
-
-                }).onPositive((dialog1, which) -> {
-
-                    View view1 = dialog1.getCustomView();
-                    if (view1 != null) {
-                        ColorPicker picker = view1.findViewById(R.id.picker);
-                        SVBar svBar = view1.findViewById(R.id.svBar);
-                        OpacityBar opacityBar = view1.findViewById(R.id.opacityBar);
-                        picker.setOldCenterColor(ledColorGroup);
-                        picker.addSVBar(svBar);
-                        picker.addOpacityBar(opacityBar);
-
-                        groupLedColor.getValue();
-                        groupLedColor.setValue(picker.getColor());
-                        editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, picker.getColor());
-                        editor.apply();
-                    }
-                }).build();
-
-
-        dialog.show();
+    public void setPickerColor(int color) {
+        groupLedColor.getValue();
+        groupLedColor.setValue(color);
+        editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, color);
+        editor.apply();
     }
-
 
     public void onClickVibrationMessage() {
 
