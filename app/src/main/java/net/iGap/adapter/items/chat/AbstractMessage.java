@@ -43,7 +43,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.AccountManager;
@@ -63,7 +62,6 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -91,10 +89,7 @@ import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
-import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentResult;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
@@ -661,7 +656,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         mHolder.getVoteContainer().setVisibility(View.GONE);
         mHolder.getViewContainer().setVisibility(View.GONE);
-        if (!(holder instanceof StickerItem.ViewHolder)) {
+        if (!(holder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
                 showVote(holder);
             } else {
@@ -1401,7 +1396,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
-                        if (mHolder instanceof StickerItem.ViewHolder) {
+                        if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder) {
                             downLoadFile(holder, 0);
                         } else {
                             downLoadThumbnail(holder);
@@ -1415,7 +1410,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.setTag(mMessage.getMessageId());
                 _Progress.setVisibility(View.GONE);
 
-                if (mHolder instanceof StickerItem.ViewHolder)
+                if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder)
                     return;
 
                 AppUtils.setProgresColor(_Progress.progressBar);
@@ -1520,6 +1515,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
                 break;
         }
+
+        Log.i("abbasiAnim", "onProgressFinish: ");
 
     }
 
@@ -1669,7 +1666,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         final String token = structMessage.getAttachment().getToken();
         final String url = structMessage.getAttachment().getUrl();
         String name = structMessage.getAttachment().getName();
-        Long size = structMessage.getAttachment().getSize();
+        long size = structMessage.getAttachment().getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
         final ProtoGlobal.RoomMessageType messageType = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
@@ -1685,6 +1682,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             HelperDownloadFile.getInstance().startDownload(messageType, mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
+
+                    Log.i("abbasiAnimation", "OnProgress: " + progress);
 
                     if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
