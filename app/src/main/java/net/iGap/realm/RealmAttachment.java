@@ -206,8 +206,8 @@ public class RealmAttachment extends RealmObject {
                                 _File1.renameTo(new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
                             } else {
-                                    AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
-                                    realmAttachment.setLocalFilePath(_defaultFilePAth);
+                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
+                                realmAttachment.setLocalFilePath(_defaultFilePAth);
 
                             }
                         }
@@ -411,9 +411,14 @@ public class RealmAttachment extends RealmObject {
         return localFilePath != null && new File(localFilePath).exists() && new File(localFilePath).canRead();
     }
 
-    public boolean isFileExistsOnLocalAndIsThumbnail() {
+    public boolean isFileExistsOnLocalAndIsImage() {
         assert localFilePath != null;
         return isFileExistsOnLocal() && HelperMimeType.isFileImage(localFilePath.toLowerCase());
+    }
+
+    public boolean isFileExistsOnLocalAndIsAnimatedSticker() {
+        assert localFilePath != null;
+        return isFileExistsOnLocal() && HelperMimeType.isFileJson(localFilePath.toLowerCase());
     }
 
     /**

@@ -10,9 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import net.iGap.R;
@@ -22,7 +20,6 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
@@ -46,16 +43,17 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
+        holder.stickerCell.setTag(structMessage.getAttachment().getCacheId());
         super.bindView(holder, payloads);
 
-        holder.image.setOnLongClickListener(getLongClickPerform(holder));
+        holder.stickerCell.setOnLongClickListener(getLongClickPerform(holder));
         holder.progress.setVisibility(View.GONE);
 
-        holder.stickerCell.setMessage(structMessage);
+//        holder.stickerCell.setMessage(structMessage);
 
         holder.getChatBloke().setBackgroundResource(0);
 
-        holder.image.setOnClickListener(v -> {
+        holder.stickerCell.setOnClickListener(v -> {
 
             if (FragmentChat.isInSelectionMode) {
                 holder.itemView.performLongClick();
@@ -78,7 +76,8 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
     @Override
     public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-        Log.i("abbasiAnimation", "onLoadThumbnailFromLocal: " + localPath);
+        if (holder.stickerCell != null && holder.stickerCell.getTag() == tag)
+            holder.stickerCell.playAnimation(localPath);
     }
 
     @Override
@@ -87,32 +86,17 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
     }
 
     public static class ViewHolder extends NewChatItemHolder implements IProgress, IThumbNailItem {
-        protected ReserveSpaceRoundedImageView image;
         protected MessageProgress progress;
-
         private AnimatedStickerCell stickerCell;
 
         public ViewHolder(View view) {
             super(view);
 
-            FrameLayout frameLayout = new FrameLayout(getContext());
-
             stickerCell = new AnimatedStickerCell(getContext());
-
-//            frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
-            image = new ReserveSpaceRoundedImageView(getContext());
 
             progress = getProgressBar(view.getContext(), 0);
 
-            stickerCell.setOnClickListener(v -> {
-                if (stickerCell.animatedLoaded)
-                    stickerCell.playAnimation();
-            });
-
-            frameLayout.addView(stickerCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
-
-            getContentBloke().addView(frameLayout, LayoutCreator.createFrame(200, 200));
-
+            getContentBloke().addView(stickerCell, LayoutCreator.createFrame(200, 200));
         }
 
         @Override
@@ -122,7 +106,7 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
 
         @Override
         public ImageView getThumbNailImageView() {
-            return image;
+            return stickerCell;
         }
     }
 }
