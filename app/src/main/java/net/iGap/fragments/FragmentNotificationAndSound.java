@@ -4,6 +4,7 @@ package net.iGap.fragments;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,26 +82,28 @@ public class FragmentNotificationAndSound extends BaseFragment {
                             dialog1.dismiss();
                         })
                         .onPositive((dialog2, which) -> {
-                            View view = dialog2.getCustomView();
-                            if (view != null) {
-                                ColorPicker picker = view.findViewById(R.id.picker);
-                                SVBar svBar = view.findViewById(R.id.svBar);
-                                OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
-
-                                viewModel.setPickerColor(picker.getColor());
-                                picker.addSVBar(svBar);
-                                picker.addOpacityBar(opacityBar);
-                                viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
-                                    GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedGroup.getBackground();
-                                    gradientDrawable.setColor(integer);
-                                    binding.ivLedGroup.setBackground(gradientDrawable);
-                                });
-
-                            }
+                            viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
+                                GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedGroup.getBackground();
+                                gradientDrawable.setColor(integer);
+                                binding.ivLedGroup.setBackground(gradientDrawable);
+                                dialog2.dismiss();
+                            });
                         }).build();
+
+                View view = dialog.getCustomView();
+                if (view != null) {
+                    ColorPicker picker = view.findViewById(R.id.picker);
+                    SVBar svBar = view.findViewById(R.id.svBar);
+                    OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
+                    picker.addSVBar(svBar);
+                    picker.addOpacityBar(opacityBar);
+                    picker.setOldCenterColor(picker.getColor());
+                    viewModel.setPickerColor(picker.getColor());
+                }
                 dialog.show();
             }
         });
+
     }
 
     private void setupDirectLEDColor() {
@@ -108,26 +111,25 @@ public class FragmentNotificationAndSound extends BaseFragment {
             if (isShow != null && isShow) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicer, true).positiveText(R.string.set)
                         .negativeText(R.string.DISCARD).title(R.string.st_led_color)
-                        .onNegative((dialog2, which) -> {
-                            dialog2.dismiss();
-                        })
-                        .onPositive((dialog1, which) -> {
-                            View view = dialog1.getCustomView();
-                            if (view != null) {
-                                ColorPicker picker = view.findViewById(R.id.picker);
-                                SVBar svBar = view.findViewById(R.id.svBar);
-                                OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
-                                picker.addSVBar(svBar);
-                                picker.addOpacityBar(opacityBar);
-                                viewModel.setNewColor(picker.getColor());
-                                viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
-                                    GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
-                                    gradientDrawable.setColor(integer);
-                                    binding.ivLedDirect.setBackground(gradientDrawable);
-                                });
-                            }
-                        }).build();
+                        .onNegative((dialog1, which) -> dialog1.dismiss())
+                        .onPositive((dialog1, which) -> viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
+                            GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
+                            gradientDrawable.setColor(integer);
+                            binding.ivLedDirect.setBackground(gradientDrawable);
+                        }))
+                        .build();
+                View view = dialog.getCustomView();
+                if (view != null) {
+                    ColorPicker picker = view.findViewById(R.id.picker);
+                    SVBar svBar = view.findViewById(R.id.svBar);
+                    OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
+                    picker.addSVBar(svBar);
+                    picker.addOpacityBar(opacityBar);
+                    viewModel.setNewColor(picker.getColor());
+                }
+
                 dialog.show();
+
             }
         });
 

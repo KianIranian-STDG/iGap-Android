@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -353,6 +354,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     public void onClickLedColorMessage() {
+        Log.wtf(this.getClass().getName(), "onClickLedColorMessage");
         showDirectMaterialDialog.setValue(true);
     }
 
@@ -365,6 +367,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         directLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, color);
         editor.apply();
+        sharedPreferences.edit();
     }
 
     public void setPickerColor(int color) {
@@ -372,6 +375,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         groupLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, color);
         editor.apply();
+        sharedPreferences.edit();
     }
 
     public void onClickVibrationMessage() {
