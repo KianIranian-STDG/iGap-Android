@@ -74,6 +74,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
     }
 
     private void setupGroupLEDColor() {
+        GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
+        gradientDrawable.setColor(viewModel.ledColorMessage);
         viewModel.showGroupMaterialDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicer, true).positiveText(R.string.set)
@@ -83,13 +85,12 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         })
                         .onPositive((dialog2, which) -> {
                             viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
-                                GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedGroup.getBackground();
-                                gradientDrawable.setColor(integer);
-                                binding.ivLedGroup.setBackground(gradientDrawable);
+                                GradientDrawable gradientDrawable1 = (GradientDrawable) binding.ivLedGroup.getBackground();
+                                gradientDrawable1.setColor(integer);
+                                binding.ivLedGroup.setBackground(gradientDrawable1);
                                 dialog2.dismiss();
                             });
                         }).build();
-
                 View view = dialog.getCustomView();
                 if (view != null) {
                     ColorPicker picker = view.findViewById(R.id.picker);
@@ -106,16 +107,20 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     }
 
+
     private void setupDirectLEDColor() {
+        GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
+        gradientDrawable.setColor(viewModel.ledColorMessage);
         viewModel.showDirectMaterialDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicer, true).positiveText(R.string.set)
                         .negativeText(R.string.DISCARD).title(R.string.st_led_color)
                         .onNegative((dialog1, which) -> dialog1.dismiss())
                         .onPositive((dialog1, which) -> viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
-                            GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
-                            gradientDrawable.setColor(integer);
-                            binding.ivLedDirect.setBackground(gradientDrawable);
+                            dialog1.dismiss();
+                            GradientDrawable gradientDrawable1 = (GradientDrawable) binding.ivLedDirect.getBackground();
+                            gradientDrawable1.setColor(integer);
+                            binding.ivLedDirect.setBackground(gradientDrawable1);
                         }))
                         .build();
                 View view = dialog.getCustomView();

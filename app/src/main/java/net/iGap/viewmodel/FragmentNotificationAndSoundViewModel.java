@@ -40,8 +40,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
-    private int ledColorMessage;
-    private int ledColorGroup;
+    public int ledColorMessage;
+    public int ledColorGroup;
 
     public ObservableBoolean isAlertMassage = new ObservableBoolean();
     public ObservableBoolean isMassagePreview = new ObservableBoolean();
@@ -363,7 +363,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     public void setNewColor(int color) {
-        directLedColor.getValue();
         directLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, color);
         editor.apply();
@@ -371,7 +370,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     public void setPickerColor(int color) {
-        groupLedColor.getValue();
         groupLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, color);
         editor.apply();
