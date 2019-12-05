@@ -1,5 +1,6 @@
 package net.iGap.fragments.emoji.add;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,29 +28,30 @@ public class StickerAdapter extends RecyclerView.Adapter {
 
     private List<StructIGSticker> igStickers = new ArrayList<>();
     private AddStickerDialogListener listener;
+    private String TAG = "abbasiSticker";
 
     public void setListener(AddStickerDialogListener listener) {
         this.listener = listener;
     }
 
-    public StickerAdapter(AddStickerDialogListener stickerDialogListener) {
-        this.listener = stickerDialogListener;
-
-//        paths.add("/storage/emulated/0/iGap/iGap Images/791d9a011707a22caf2564be154d1803586ca9fa.json");
-//        paths.add("/storage/emulated/0/iGap/iGap Images/59150779dd5d73bfd16f802f9d90be16e06b5028.json");
-//        paths.add("/storage/emulated/0/iGap/iGap Images/a711d859f130dc337ea18662d15b2d183d972637.json");
-//        paths.add("/storage/emulated/0/iGap/iGap Images/9c8b2a95e824e1d99ac99861c0e1e609ca7f949f.json");
-//        paths.add("/storage/emulated/0/iGap/iGap Images/75201abbe3d90f4e59da4a3cbef0b5590e745750.json");
-//        paths.add("/storage/emulated/0/iGap/iGap Images/5348019ae8dd57851ee3dd71739172ae5d89f062.json");
-//        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/9D1OKFOfwzb1vDiwUukkMsEtal7ObXR914RsaCdh.json");
-//        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/FsQljROpARpWEbRtQ4ZdOhdGNwF0jLet8PZYSPoO.json");
-//        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/ChaqHK1zqfWwV7QFIdTnOXIchFAL4zYoUdH55y1N.json");
-//        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/94sbyb9eRBtmUUXGwTX60shtnngAQuNm7EkDxS67.json");
-//        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/GVWf4pfTXbcM1xSzJelCuj556EY67L1igQpQ3yoQ.json");
-//        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/z5hWy2YVLDT32WcC5sr9q7vslXghQY4oBble5i0x.json");
-
-
-    }
+//    public StickerAdapter(AddStickerDialogListener stickerDialogListener) {
+//        this.listener = stickerDialogListener;
+//
+////        paths.add("/storage/emulated/0/iGap/iGap Images/791d9a011707a22caf2564be154d1803586ca9fa.json");
+////        paths.add("/storage/emulated/0/iGap/iGap Images/59150779dd5d73bfd16f802f9d90be16e06b5028.json");
+////        paths.add("/storage/emulated/0/iGap/iGap Images/a711d859f130dc337ea18662d15b2d183d972637.json");
+////        paths.add("/storage/emulated/0/iGap/iGap Images/9c8b2a95e824e1d99ac99861c0e1e609ca7f949f.json");
+////        paths.add("/storage/emulated/0/iGap/iGap Images/75201abbe3d90f4e59da4a3cbef0b5590e745750.json");
+////        paths.add("/storage/emulated/0/iGap/iGap Images/5348019ae8dd57851ee3dd71739172ae5d89f062.json");
+////        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/9D1OKFOfwzb1vDiwUukkMsEtal7ObXR914RsaCdh.json");
+////        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/FsQljROpARpWEbRtQ4ZdOhdGNwF0jLet8PZYSPoO.json");
+////        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/ChaqHK1zqfWwV7QFIdTnOXIchFAL4zYoUdH55y1N.json");
+////        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/94sbyb9eRBtmUUXGwTX60shtnngAQuNm7EkDxS67.json");
+////        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/GVWf4pfTXbcM1xSzJelCuj556EY67L1igQpQ3yoQ.json");
+////        paths.add("/storage/emulated/0/Android/data/net.iGap/cache/.sticker/z5hWy2YVLDT32WcC5sr9q7vslXghQY4oBble5i0x.json");
+//
+//
+//    }
 
 
     @NotNull
@@ -142,6 +144,9 @@ public class StickerAdapter extends RecyclerView.Adapter {
 
     public void setIgStickers(List<StructIGSticker> igStickers) {
         this.igStickers = igStickers;
+        for (int i = 0; i < igStickers.size(); i++) {
+            Log.i(TAG, "set Ig Stickers in adapter " + igStickers.get(i).getPath());
+        }
         notifyDataSetChanged();
     }
 

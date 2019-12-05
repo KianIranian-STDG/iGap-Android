@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
 import net.iGap.R;
-import net.iGap.fragments.emoji.api.APIEmojiService;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -26,7 +24,6 @@ import java.util.List;
 public class StickerDialogFragment extends DialogFragment {
     private ProgressBar progressBar;
     private StickerAdapter adapter;
-    private APIEmojiService mAPIService;
     private String groupId = "";
     private String token = "";
     private List<StructGroupSticker> data = new ArrayList<>();
@@ -42,13 +39,11 @@ public class StickerDialogFragment extends DialogFragment {
         return dialogAddSticker;
     }
 
-    private void getSticker(String groupID) {
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModel = new StickerDialogViewModel();
+        adapter = new StickerAdapter();
         return inflater.inflate(R.layout.dialog_add_sticker, container);
     }
 
@@ -66,6 +61,8 @@ public class StickerDialogFragment extends DialogFragment {
             if (close)
                 dismiss();
         });
+
+        viewModel.getSticker(groupId);
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -88,30 +85,15 @@ public class StickerDialogFragment extends DialogFragment {
         ViewGroup layoutToolbar = view.findViewById(R.id.add_sticker_toolbar);
         layoutToolbar.addView(toolbar.getView());
 
-        mAPIService = ApiEmojiUtils.getAPIService();
         progressBar = view.findViewById(R.id.progress_stricker);
         RecyclerView stickerRecyclerView = view.findViewById(R.id.rcvAddStickerDialog);
-        adapter = new StickerAdapter(new StickerAdapter.AddStickerDialogListener() {
-            @Override
-            public void onStickerClick() {
 
-            }
-
-            @Override
-            public void onStickerLongClick() {
-
-            }
-
-            @Override
-            public void onStickerDownLoaded() {
-
-            }
-        });
         stickerRecyclerView.setAdapter(adapter);
-        stickerRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        stickerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         stickerRecyclerView.setHasFixedSize(true);
-        getSticker(groupId);
 
-        viewModel.getSticker(groupId, structIGStickers -> adapter.setIgStickers(structIGStickers));
+        viewModel.getStickersMutableLiveData().observe(getViewLifecycleOwner(), structIGStickers -> {
+            adapter.setIgStickers(structIGStickers);
+        });
     }
 }

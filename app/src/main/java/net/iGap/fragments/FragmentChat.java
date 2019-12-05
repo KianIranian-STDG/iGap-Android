@@ -7796,7 +7796,7 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER:
-                        if (messageInfo.realmRoomMessage.getAttachment().getMimType().equalsIgnoreCase("text/plain")) {
+                        if (messageInfo.realmRoomMessage.getAttachment().getMimType() != null && messageInfo.realmRoomMessage.getAttachment().getMimType().equalsIgnoreCase("text/plain")) {
                             if (!addTop) {
                                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {

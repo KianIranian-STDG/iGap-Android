@@ -3,10 +3,13 @@ package net.iGap.fragments.emoji.add;
 import android.util.Log;
 
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.DbManager;
+import net.iGap.G;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
@@ -15,6 +18,7 @@ import net.iGap.realm.RealmStickers;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -39,6 +43,7 @@ public class StickerRepository {
                 Log.i(TAG, "load sticker from DB with group id --> " + groupId);
             } else {
                 Log.i(TAG, "get sticker from API SERVICE with group id --> " + groupId);
+
                 getStickerFromServer(groupId, callback);
             }
         });
@@ -51,12 +56,31 @@ public class StickerRepository {
                 public void onResponse(@NotNull Call<StructEachSticker> call, @NotNull Response<StructEachSticker> response) {
                     if (response.body() != null) {
                         if (response.body().getOk() && response.body().getData() != null) {
+
                             StructGroupSticker item = response.body().getData();
+
                             DbManager.getInstance().doRealmTask(realm -> {
                                 realm.executeTransaction(realm1 -> RealmStickers.put(realm1, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false));
                             });
 
-                            Log.i(TAG, "get sticker from API SERVICE with group id" + groupId + " successfully ");
+                            List<StructIGSticker> structIGStickers = new ArrayList<>();
+
+                            for (int i = 0; i < item.getStickers().size(); i++) {
+                                StructItemSticker structItemSticker = item.getStickers().get(i);
+
+                                StructIGSticker structIGSticker = new StructIGSticker();
+                                structIGSticker.setPath(HelperDownloadSticker.createPathFile(structItemSticker.getToken(), structItemSticker.getAvatarName()));
+                                structIGSticker.setName(structItemSticker.getName());
+                                structIGSticker.setId(structItemSticker.getId());
+                                structIGStickers.add(structIGSticker);
+                                Log.i(TAG, "onResponse: with path -> " + structIGSticker.getPath());
+                            }
+
+                            G.handler.postDelayed(() -> {
+                                callback.onSuccess(structIGStickers);
+                            }, 500);
+
+                            Log.i(TAG, "get sticker from API SERVICE with group id" + groupId + " size " + structIGStickers.size() + " successfully ");
                         }
                     }
                 }
