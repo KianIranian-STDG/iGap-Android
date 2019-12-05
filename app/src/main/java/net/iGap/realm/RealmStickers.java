@@ -6,6 +6,7 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.DbManager;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.add.StructIGSticker;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 
@@ -166,6 +167,26 @@ public class RealmStickers extends RealmObject {
             itemSticker.setStickers(stickerDetails);
 
             return itemSticker;
+        });
+    }
+
+    public static List<StructIGSticker> getGroupStickers(String groupId) {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
+
+            if (realmStickers == null)
+                return new ArrayList<>();
+
+            List<StructIGSticker> stickerDetails = new ArrayList<>();
+            for (RealmStickersDetails stickersDetails : realmStickers.getRealmStickersDetails()) {
+                StructIGSticker structIGSticker = new StructIGSticker();
+                structIGSticker.setId(stickersDetails.getSt_id());
+                structIGSticker.setName(stickersDetails.getName());
+                structIGSticker.setPath(stickersDetails.getUri());
+                stickerDetails.add(structIGSticker);
+            }
+
+            return stickerDetails;
         });
     }
 

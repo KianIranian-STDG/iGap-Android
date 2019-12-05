@@ -11,7 +11,6 @@ import net.iGap.module.structs.StructMessageInfo;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 
 public class AnimatedStickerCell extends LottieAnimationView {
@@ -59,7 +58,7 @@ public class AnimatedStickerCell extends LottieAnimationView {
             inputStream = new BufferedInputStream(new FileInputStream(path));
             setAnimation(inputStream, null);
             animatedLoaded = true;
-
+            Log.i(TAG, "loadAnimation: " + path);
             playAnimation();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -78,16 +77,16 @@ public class AnimatedStickerCell extends LottieAnimationView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         detached = true;
-        try {
-            if (inputStream != null)
-                inputStream.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            animatedLoaded = false;
-            playing = false;
-        }
+//        try {
+//            if (inputStream != null)
+//                inputStream.close();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            animatedLoaded = false;
+//            playing = false;
+//        }
     }
 
     @Override

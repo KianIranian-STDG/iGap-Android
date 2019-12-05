@@ -151,8 +151,8 @@ import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
-import net.iGap.fragments.emoji.add.DialogAddSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.helper.HelperCalander;
@@ -4119,7 +4119,7 @@ public class FragmentChat extends BaseFragment
     private void openFragmentAddStickerToFavorite(String groupId, String token) {
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        DialogAddSticker dialogFragment = new DialogAddSticker().newInstance(groupId, token);
+        StickerDialogFragment dialogFragment = new StickerDialogFragment().newInstance(groupId, token);
         if (fm != null) {
             dialogFragment.show(fm, "dialogFragment");
         }
