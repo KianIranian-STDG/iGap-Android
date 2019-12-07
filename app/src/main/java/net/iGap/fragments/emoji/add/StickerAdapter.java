@@ -1,6 +1,7 @@
 package net.iGap.fragments.emoji.add;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,7 +29,7 @@ public class StickerAdapter extends RecyclerView.Adapter {
 
     private List<StructIGSticker> igStickers = new ArrayList<>();
     private AddStickerDialogListener listener;
-    private String TAG = "abbasiSticker";
+    private String TAG = "abbasiStickerAdapter";
 
     public void setListener(AddStickerDialogListener listener) {
         this.listener = listener;
@@ -60,11 +61,11 @@ public class StickerAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder;
         if (viewType == StructIGSticker.ANIMATED_STICKER) {
             AnimatedStickerCell stickerCell = new AnimatedStickerCell(parent.getContext());
-            stickerCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 100));
+            stickerCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 75, Gravity.CENTER, 1, 0, 1, 2));
             viewHolder = new AnimatedViewHolder(stickerCell);
         } else if (viewType == StructIGSticker.NORMAL_STICKER) {
             View normalSticker = new ImageView(parent.getContext());
-            normalSticker.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
+            normalSticker.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 75, Gravity.CENTER, 1, 0, 1, 2));
             viewHolder = new NormalViewHolder(normalSticker);
         } else {
             ProgressBar progressBar = new ProgressBar(parent.getContext());
@@ -171,8 +172,10 @@ public class StickerAdapter extends RecyclerView.Adapter {
 
 
         public void bindView(StructIGSticker structIGSticker) {
-            if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals(""))
+            if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals("")) {
                 Glide.with(itemView.getContext()).load(structIGSticker.getPath()).into(imgSticker);
+                Log.i(TAG, "load sticker with glide -> " + structIGSticker.getPath());
+            }
         }
     }
 
@@ -198,8 +201,10 @@ public class StickerAdapter extends RecyclerView.Adapter {
         }
 
         public void bindView(StructIGSticker structIGSticker) {
-            if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals(""))
+            if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals("")) {
                 stickerCell.playAnimation(structIGSticker.getPath());
+                Log.i(TAG, "load lottie sticker -> " + structIGSticker.getPath());
+            }
         }
     }
 

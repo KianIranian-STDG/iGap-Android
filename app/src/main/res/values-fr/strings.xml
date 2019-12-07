@@ -1265,7 +1265,9 @@
     <string name="Please_select_an_option">veuillez choisir un élément</string>
     <string name="sticker">sticker </string>
     <string name="add_sticker">ajouter un sticker</string>
+    <string name="add_sticker_with_size">ajouter un %s sticker</string>
     <string name="remove_sticker">Enlever un sticker</string>
+    <string name="remove_sticker_with_size">Enlever un %s sticker</string>
     <string name="remove_sticker_text">Etes-vous sûr de supprimer ces stickers?</string>
     <string name="add_sticker_text">Etes-vous sûr d\'installer ces stickers?</string>
     <string name="Add">ajouter</string>

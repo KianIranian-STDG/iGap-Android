@@ -1,5 +1,7 @@
 package net.iGap.fragments.emoji.add;
 
+import net.iGap.realm.RealmStickers;
+
 import java.util.List;
 
 public class StructIGStickerGroup {
@@ -18,6 +20,29 @@ public class StructIGStickerGroup {
     private long createdBy;
     private boolean isFavorite;
     private List<StructIGSticker> stickers;
+
+    public StructIGStickerGroup(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setValueWithRealmStickers(RealmStickers realmStickers) {
+        if (realmStickers != null && realmStickers.isValid()) {
+            setStickers(realmStickers.getIGGroupStickers());
+            setSort(realmStickers.getSort());
+            setRefId(realmStickers.getRefId());
+            setPrice(realmStickers.getPrice());
+            setName(realmStickers.getName());
+            setFavorite(realmStickers.isFavorite());
+            setCreatedBy(realmStickers.getCreatedBy());
+            setCreatedAt(realmStickers.getCreatedAt());
+            setAvatarToken(realmStickers.getAvatarToken());
+            setAvatarSize(realmStickers.getAvatarSize());
+            setAvatarName(realmStickers.getAvatarName());
+            setApproved(realmStickers.isApproved());
+            setUri(realmStickers.getUri());
+            setVip(realmStickers.isVip());
+        }
+    }
 
     public String getGroupId() {
         return groupId;
@@ -137,5 +162,13 @@ public class StructIGStickerGroup {
 
     public void setStickers(List<StructIGSticker> stickers) {
         this.stickers = stickers;
+    }
+
+    public boolean hasData() {
+        return getStickers() != null && getStickers().size() > 0;
+    }
+
+    public int getStickersSize() {
+        return getStickers() != null ? getStickers().size() : 0;
     }
 }

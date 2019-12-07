@@ -152,6 +152,7 @@ import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
+import net.iGap.fragments.emoji.add.StructIGStickerGroup;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.helper.HelperCalander;
@@ -4102,10 +4103,9 @@ public class FragmentChat extends BaseFragment
         try {
             JSONObject jObject = new JSONObject(message.getAdditional().getAdditionalData());
             String groupId = jObject.getString("groupId");
-            String token = jObject.getString("token");
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                openFragmentAddStickerToFavorite(groupId, token, realmStickers != null && realmStickers.isFavorite());
+                openFragmentAddStickerToFavorite(groupId, realmStickers);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -4113,8 +4113,14 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    private void openFragmentAddStickerToFavorite(String groupId, String token, boolean b) {
-        StickerDialogFragment dialogFragment = StickerDialogFragment.newInstance(groupId, token, b);
+    private void openFragmentAddStickerToFavorite(String groupId, RealmStickers realmStickers) {
+        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
+
+        if (realmStickers != null && realmStickers.isValid())
+            stickerGroup.setValueWithRealmStickers(realmStickers);
+
+        StickerDialogFragment dialogFragment = StickerDialogFragment.newInstance(stickerGroup);
+
         if (getFragmentManager() != null)
             dialogFragment.show(getFragmentManager(), "dialogFragment");
 

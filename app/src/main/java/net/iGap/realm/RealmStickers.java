@@ -190,6 +190,26 @@ public class RealmStickers extends RealmObject {
         });
     }
 
+    public List<StructIGSticker> getIGGroupStickers() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+
+            if (getRealmStickersDetails() == null || getRealmStickersDetails().size() <= 0 || !getRealmStickersDetails().isValid())
+                return new ArrayList<>();
+
+            List<StructIGSticker> stickerDetails = new ArrayList<>();
+
+            for (RealmStickersDetails stickersDetails : getRealmStickersDetails()) {
+                StructIGSticker structIGSticker = new StructIGSticker();
+                structIGSticker.setId(stickersDetails.getSt_id());
+                structIGSticker.setName(stickersDetails.getName());
+                structIGSticker.setPath(stickersDetails.getUri());
+                stickerDetails.add(structIGSticker);
+            }
+
+            return stickerDetails;
+        });
+    }
+
 
     public static RealmStickers checkStickerExist(String groupId, Realm realm) {
         return realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
