@@ -60,11 +60,11 @@ public class StickerAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder;
         if (viewType == StructIGSticker.ANIMATED_STICKER) {
             AnimatedStickerCell stickerCell = new AnimatedStickerCell(parent.getContext());
-            stickerCell.setLayoutParams(LayoutCreator.createFrame(100, 100));
+            stickerCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 100));
             viewHolder = new AnimatedViewHolder(stickerCell);
         } else if (viewType == StructIGSticker.NORMAL_STICKER) {
             View normalSticker = new ImageView(parent.getContext());
-            normalSticker.setLayoutParams(LayoutCreator.createFrame(100, 100));
+            normalSticker.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
             viewHolder = new NormalViewHolder(normalSticker);
         } else {
             ProgressBar progressBar = new ProgressBar(parent.getContext());

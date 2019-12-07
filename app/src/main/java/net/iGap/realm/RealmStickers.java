@@ -190,6 +190,7 @@ public class RealmStickers extends RealmObject {
         });
     }
 
+
     public static RealmStickers checkStickerExist(String groupId, Realm realm) {
         return realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
     }

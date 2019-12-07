@@ -121,4 +121,30 @@ public class StickerRepository {
             });
     }
 
+    public void removeSticker(String groupId, ResponseCallback<Boolean> callback) {
+        if (apiService != null) {
+            apiService.removeSticker(groupId).enqueue(new Callback<StructStickerResult>() {
+                @Override
+                public void onResponse(@NotNull Call<StructStickerResult> call, @NotNull Response<StructStickerResult> response) {
+                    if (response.body() != null && response.body().isSuccess()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
+                            realm.executeTransactionAsync(realm1 -> {
+                                RealmStickers.updateFavorite(realm1, groupId, false);
+                            }, () -> {
+                                FragmentChat.onUpdateSticker.update();
+                            });
+                        });
+                        callback.onSuccess(true);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<StructStickerResult> call, Throwable t) {
+                    callback.onError(t.getMessage());
+                    Log.i(TAG, "add sticker to category API SERVICE  with group id" + groupId + " with error " + t.getMessage());
+                }
+            });
+        }
+    }
+
 }

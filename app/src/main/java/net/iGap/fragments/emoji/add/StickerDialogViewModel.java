@@ -16,12 +16,23 @@ public class StickerDialogViewModel extends BaseViewModel {
     private MutableLiveData<Integer> progressMutableLiveData;
     private MutableLiveData<Boolean> closeDialogMutableLiveData;
     private MutableLiveData<List<StructIGSticker>> stickersMutableLiveData;
+    private MutableLiveData<String> addOrRemoveStickerLiveData;
 
     StickerDialogViewModel() {
         repository = new StickerRepository();
         progressMutableLiveData = new MutableLiveData<>();
         closeDialogMutableLiveData = new MutableLiveData<>();
         stickersMutableLiveData = new MutableLiveData<>();
+        addOrRemoveStickerLiveData = new MutableLiveData<>();
+    }
+
+
+    public void onAddOrRemoveStickerClicked(String groupId, boolean hasStickerOnFavorite) {
+        if (hasStickerOnFavorite) {
+            removeSticker(groupId);
+        } else {
+            addSticker(groupId);
+        }
     }
 
     public void getSticker(String groupId) {
@@ -57,6 +68,23 @@ public class StickerDialogViewModel extends BaseViewModel {
         });
     }
 
+    public void removeSticker(String groupId) {
+        progressMutableLiveData.postValue(View.VISIBLE);
+        repository.removeSticker(groupId, new BaseCPayViewModel<Boolean>() {
+            @Override
+            public void onSuccess(Boolean data) {
+                addOrRemoveStickerLiveData.postValue("Remove Sticker");
+                progressMutableLiveData.postValue(View.GONE);
+                closeDialogMutableLiveData.postValue(data);
+            }
+
+            @Override
+            public void onError(String error) {
+                progressMutableLiveData.postValue(View.GONE);
+            }
+        });
+    }
+
     public MutableLiveData<Integer> getProgressMutableLiveData() {
         return progressMutableLiveData;
     }
@@ -69,7 +97,7 @@ public class StickerDialogViewModel extends BaseViewModel {
         return stickersMutableLiveData;
     }
 
-    public interface OnLoadSticker {
-        void onStickerLoaded(List<StructIGSticker> structIGStickers);
+    public MutableLiveData<String> getAddOrRemoveStickerLiveData() {
+        return addOrRemoveStickerLiveData;
     }
 }

@@ -5,36 +5,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class StickerDialogFragment extends DialogFragment {
+public class StickerDialogFragment extends BottomSheetDialogFragment {
     private ProgressBar progressBar;
     private StickerAdapter adapter;
     private String groupId = "";
     private String token = "";
-    private List<StructGroupSticker> data = new ArrayList<>();
     private StickerDialogViewModel viewModel;
+    private TextView addOrRemoveTv;
+    private boolean hasGroupInUserFavorite;
     private String TAG = "abbasiSticker";
 
-    public StickerDialogFragment newInstance(String groupId, String token) {
+    public static StickerDialogFragment newInstance(String groupId, String token, boolean hasGroupInUserFavorite) {
         StickerDialogFragment dialogAddSticker = new StickerDialogFragment();
         Bundle args = new Bundle();
         args.putString("GROUP_ID", groupId);
         args.putString("TOKEN", token);
+        args.putBoolean("hasGroupOnFavorite", hasGroupInUserFavorite);
         dialogAddSticker.setArguments(args);
         return dialogAddSticker;
     }
@@ -54,7 +50,19 @@ public class StickerDialogFragment extends DialogFragment {
         if (getArguments() != null) {
             groupId = getArguments().getString("GROUP_ID");
             token = getArguments().getString("TOKEN");
+            hasGroupInUserFavorite = getArguments().getBoolean("hasGroupOnFavorite");
         }
+
+        RecyclerView stickerRecyclerView = view.findViewById(R.id.rv_stickerDialog);
+        progressBar = view.findViewById(R.id.progress_stricker);
+        addOrRemoveTv = view.findViewById(R.id.tv_stickerDialog_add);
+        stickerRecyclerView.setAdapter(adapter);
+//        stickerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        stickerRecyclerView.setHasFixedSize(true);
+
+        addOrRemoveTv.setText(hasGroupInUserFavorite ? "REMOVE" : "ADD STICKERS");
+
+        addOrRemoveTv.setTextColor(hasGroupInUserFavorite ? getResources().getColor(R.color.red) : getResources().getColor(R.color.green));
 
         viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), visibility -> progressBar.setVisibility(visibility));
         viewModel.getCloseDialogMutableLiveData().observe(getViewLifecycleOwner(), close -> {
@@ -64,36 +72,14 @@ public class StickerDialogFragment extends DialogFragment {
 
         viewModel.getSticker(groupId);
 
-        HelperToolbar toolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.add_icon_without_circle_font)
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.add_sticker))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        getDialog().dismiss();
-                    }
+        viewModel.getStickersMutableLiveData().observe(getViewLifecycleOwner(), structIGStickers -> adapter.setIgStickers(structIGStickers));
+        viewModel.getAddOrRemoveStickerLiveData().observe(getViewLifecycleOwner(), s -> addOrRemoveTv.setText(s));
 
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        viewModel.addSticker(groupId);
-                    }
-                });
+        addOrRemoveTv.setOnClickListener(v -> viewModel.onAddOrRemoveStickerClicked(groupId, hasGroupInUserFavorite));
+    }
 
-        ViewGroup layoutToolbar = view.findViewById(R.id.add_sticker_toolbar);
-        layoutToolbar.addView(toolbar.getView());
-
-        progressBar = view.findViewById(R.id.progress_stricker);
-        RecyclerView stickerRecyclerView = view.findViewById(R.id.rcvAddStickerDialog);
-
-        stickerRecyclerView.setAdapter(adapter);
-        stickerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        stickerRecyclerView.setHasFixedSize(true);
-
-        viewModel.getStickersMutableLiveData().observe(getViewLifecycleOwner(), structIGStickers -> {
-            adapter.setIgStickers(structIGStickers);
-        });
+    @Override
+    public int getTheme() {
+        return R.style.BaseBottomSheetDialog;
     }
 }

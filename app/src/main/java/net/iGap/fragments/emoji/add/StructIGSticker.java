@@ -14,12 +14,12 @@ public class StructIGSticker {
     }
 
     public void setPath(String path) {
-//        this.path = "/storage/emulated/0/iGap/iGap Images/791d9a011707a22caf2564be154d1803586ca9fa.json";
         this.path = path;
         if (path == null || path.equals(""))
             type = 100;
         else if (path.endsWith(".json")) {
             type = ANIMATED_STICKER;
+            this.path = "/storage/emulated/0/iGap/iGap Images/791d9a011707a22caf2564be154d1803586ca9fa.json";
         } else {
             type = NORMAL_STICKER;
         }

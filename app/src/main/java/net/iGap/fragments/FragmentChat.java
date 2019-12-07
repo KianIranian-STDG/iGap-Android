@@ -76,7 +76,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -4106,9 +4105,7 @@ public class FragmentChat extends BaseFragment
             String token = jObject.getString("token");
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                if (realmStickers == null || !realmStickers.isFavorite()) {
-                    openFragmentAddStickerToFavorite(groupId, token);
-                }
+                openFragmentAddStickerToFavorite(groupId, token, realmStickers != null && realmStickers.isFavorite());
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -4116,13 +4113,11 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    private void openFragmentAddStickerToFavorite(String groupId, String token) {
+    private void openFragmentAddStickerToFavorite(String groupId, String token, boolean b) {
+        StickerDialogFragment dialogFragment = StickerDialogFragment.newInstance(groupId, token, b);
+        if (getFragmentManager() != null)
+            dialogFragment.show(getFragmentManager(), "dialogFragment");
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        StickerDialogFragment dialogFragment = new StickerDialogFragment().newInstance(groupId, token);
-        if (fm != null) {
-            dialogFragment.show(fm, "dialogFragment");
-        }
     }
 
     private void openMessage(StructMessageInfo message) {
