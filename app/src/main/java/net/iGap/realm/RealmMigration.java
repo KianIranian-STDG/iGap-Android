@@ -645,12 +645,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmUserInfo != null) {
                 DynamicRealmObject userInfo = realmUserInfo.getObject("userInfo");
                 if (userInfo != null) {
-                    String userImageAvatarPath = null;
                     long userId = userInfo.getLong("id");
-                    Number id = realm.where("RealmAvatar").equalTo("ownerId", userId).max("id");
-                    if (id != null) {
-                        userImageAvatarPath = realm.where("RealmAvatar").equalTo("id", id.longValue()).findFirst().getObject("file").getString("url");
-                    }
                     AccountManager.getInstance().addAccount(new AccountUser(
                             userId,
                             null,
@@ -702,8 +697,20 @@ public class RealmMigration implements io.realm.RealmMigration {
                     realmUserInfoShem.removeField("kindPassCode");
                 }
             }
+
+            oldVersion++;
         }
 
+        if (oldVersion == 41) {
+            RealmObjectSchema realmUser = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUser != null) {
+                realmUser.addField("isWalletRegister", boolean.class, FieldAttribute.REQUIRED);
+                realmUser.addField("isWalletActive", boolean.class, FieldAttribute.REQUIRED);
+                realmUser.addField("isMplActive", boolean.class, FieldAttribute.REQUIRED);
+            }
+
+            oldVersion++;
+        }
     }
 
     @Override

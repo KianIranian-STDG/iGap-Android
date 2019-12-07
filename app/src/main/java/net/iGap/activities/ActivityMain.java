@@ -1456,8 +1456,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             iconLock.setVisibility(View.GONE);
         }*/
 
-        onFinance(G.isMplActive, G.isWalletActive);
-
     }
 
     private void enterPassword() {
@@ -1669,11 +1667,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             HelperError.showSnackMessage(message, false);
         }
-    }
-
-    @Override
-    public void onFinance(final boolean mplActive, final boolean walletActive) {
-
     }
 
     @Override

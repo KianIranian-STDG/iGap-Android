@@ -1018,32 +1018,31 @@ public class HelperToolbar {
     }
 
     private void onScannerClickListener() {
-        String phoneNumber = "0";
-
-        try {
-            phoneNumber = DbManager.getInstance().doRealmTask(realm -> {
-                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            try {
                 if (userInfo != null) {
-                    return userInfo.getUserInfo().getPhoneNumber().substring(2);
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
                 } else {
-                    return AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2) ;
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
                 }
-            });
-
-        }catch (Exception e){
-            //maybe exception was for realm substring
-            try{
-                phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-            }catch (Exception ex){
-                //nothing
+            } catch (Exception e){
+                //maybe exception was for realm substring
+                try{
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }catch (Exception ex){
+                    //nothing
+                }
             }
-        }
 
-        if (!G.isWalletRegister) {
-            new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-        } else {
-            mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber, true),WALLET_REQUEST_CODE);
-        }
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber, true),WALLET_REQUEST_CODE);
+            }
+
+        });
     }
 
     private void initViews(ViewMaker view) {

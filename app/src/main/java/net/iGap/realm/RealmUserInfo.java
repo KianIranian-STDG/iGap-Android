@@ -33,6 +33,9 @@ public class RealmUserInfo extends RealmObject {
     private String representPhoneNumber;
     private RealmKuknos kuknosM;
     private String accessToken;
+    private boolean isWalletRegister;
+    private boolean isWalletActive;
+    private boolean isMplActive;
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
@@ -363,4 +366,27 @@ public class RealmUserInfo extends RealmObject {
         }
     }
 
+    public boolean isWalletRegister() {
+        return isWalletRegister;
+    }
+
+    public void setWalletRegister(boolean walletRegister) {
+        isWalletRegister = walletRegister;
+    }
+
+    public boolean isWalletActive() {
+        return isWalletActive;
+    }
+
+    public void setWalletActive(boolean walletActive) {
+        isWalletActive = walletActive;
+    }
+
+    public boolean isMplActive() {
+        return isMplActive;
+    }
+
+    public void setMplActive(boolean mplActive) {
+        isMplActive = mplActive;
+    }
 }

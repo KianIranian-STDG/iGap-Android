@@ -480,7 +480,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCreditClick() {
-        if (!G.isWalletRegister) {
+        if (!userInfo.isWalletRegister()) {
             goToWalletAgreementPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
         } else {
             goToWalletPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));

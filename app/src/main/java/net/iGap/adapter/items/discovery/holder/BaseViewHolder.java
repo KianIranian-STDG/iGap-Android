@@ -189,8 +189,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     DbManager.getInstance().doRealmTask(realm -> {
                         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                         String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                        if (!G.isWalletRegister) {
-
+                        if (!userInfo.isWalletRegister()) {
                             new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
                         } else {
                             boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");

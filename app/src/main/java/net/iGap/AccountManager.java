@@ -198,9 +198,6 @@ public class AccountManager {
         RequestClientGetRoomList.isPendingGetRoomList = false;
         FragmentMain.mOffset = 0;
         G.serverHashContact = null;
-        G.isMplActive = false;
-        G.isWalletActive = false;
-        G.isWalletRegister = false;
         G.jwt = null;
         G.selectedCard = null;
         G.cardamount = 0;
