@@ -40,13 +40,12 @@
         android:layout_marginTop="8dp"
         android:clipToPadding="false"
         android:minHeight="300dp"
-        android:paddingBottom="100dp"
+        android:paddingBottom="60dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_stickerDialog_groupName"
         app:spanCount="5" />
-
 
     <ProgressBar
         android:id="@+id/progress_sticker"
@@ -61,7 +60,7 @@
     <TextView
         android:id="@+id/tv_stickerDialog_add"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:background="?attr/iGapButtonColor"
         android:gravity="center"
         android:textColor="@color/white"
