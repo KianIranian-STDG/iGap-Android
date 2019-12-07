@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -27,9 +26,6 @@ import androidx.lifecycle.ViewModel;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.larswerkman.holocolorpicker.ColorPicker;
-import com.larswerkman.holocolorpicker.OpacityBar;
-import com.larswerkman.holocolorpicker.SVBar;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -331,9 +327,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         return sharedPreferences;
     }
 
-    public int getLedColorMessage() {
-        return ledColorMessage;
-    }
     //===============================================================================
     //================================Event Listeners================================
     //===============================================================================
@@ -354,7 +347,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     public void onClickLedColorMessage() {
-        Log.wtf(this.getClass().getName(), "onClickLedColorMessage");
         showDirectMaterialDialog.setValue(true);
     }
 
@@ -366,14 +358,12 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         directLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, color);
         editor.apply();
-        sharedPreferences.edit();
     }
 
     public void setPickerColor(int color) {
         groupLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, color);
         editor.apply();
-        sharedPreferences.edit();
     }
 
     public void onClickVibrationMessage() {

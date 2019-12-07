@@ -1,10 +1,8 @@
 package net.iGap.fragments;
 
 
-import android.annotation.SuppressLint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,75 +71,63 @@ public class FragmentNotificationAndSound extends BaseFragment {
         binding.toolbar.addView(mHelperToolbar.getView());
     }
 
-    private void setupGroupLEDColor() {
-        GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
-        gradientDrawable.setColor(viewModel.ledColorMessage);
-        viewModel.showGroupMaterialDialog.observe(getViewLifecycleOwner(), isShow -> {
-            if (isShow != null && isShow) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicer, true).positiveText(R.string.set)
-                        .negativeText(R.string.DISCARD).title(R.string.st_led_color)
-                        .onNegative((dialog1, which) -> {
-                            dialog1.dismiss();
-                        })
-                        .onPositive((dialog2, which) -> {
-                            viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
-                                GradientDrawable gradientDrawable1 = (GradientDrawable) binding.ivLedGroup.getBackground();
-                                gradientDrawable1.setColor(integer);
-                                binding.ivLedGroup.setBackground(gradientDrawable1);
-                                dialog2.dismiss();
-                            });
-                        }).build();
-                View view = dialog.getCustomView();
-                if (view != null) {
-                    ColorPicker picker = view.findViewById(R.id.picker);
-                    SVBar svBar = view.findViewById(R.id.svBar);
-                    OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
-                    picker.addSVBar(svBar);
-                    picker.addOpacityBar(opacityBar);
-                    picker.setOldCenterColor(picker.getColor());
-                    viewModel.setPickerColor(picker.getColor());
-                }
-                dialog.show();
-            }
-        });
-
-    }
-
-
     private void setupDirectLEDColor() {
         GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedDirect.getBackground();
         gradientDrawable.setColor(viewModel.ledColorMessage);
         viewModel.showDirectMaterialDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicer, true).positiveText(R.string.set)
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true).positiveText(R.string.set)
                         .negativeText(R.string.DISCARD).title(R.string.st_led_color)
-                        .onNegative((dialog1, which) -> dialog1.dismiss())
-                        .onPositive((dialog1, which) -> viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
-                            dialog1.dismiss();
-                            GradientDrawable gradientDrawable1 = (GradientDrawable) binding.ivLedDirect.getBackground();
-                            gradientDrawable1.setColor(integer);
-                            binding.ivLedDirect.setBackground(gradientDrawable1);
-                        }))
-                        .build();
+                        .onNegative((dialog1, which) -> dialog1.dismiss()).build();
                 View view = dialog.getCustomView();
-                if (view != null) {
-                    ColorPicker picker = view.findViewById(R.id.picker);
-                    SVBar svBar = view.findViewById(R.id.svBar);
-                    OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
-                    picker.addSVBar(svBar);
-                    picker.addOpacityBar(opacityBar);
+                ColorPicker picker = view.findViewById(R.id.picker);
+                SVBar svBar = view.findViewById(R.id.svBar);
+                OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
+                picker.addSVBar(svBar);
+                picker.addOpacityBar(opacityBar);
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
                     viewModel.setNewColor(picker.getColor());
-                }
-
+                    dialog.dismiss();
+                });
                 dialog.show();
-
             }
         });
+        viewModel.directLedColor.observe(getViewLifecycleOwner(), integer -> {
+            gradientDrawable.setColor(integer);
+            binding.ivLedDirect.setBackground(gradientDrawable);
 
+        });
+    }
+
+    private void setupGroupLEDColor() {
+        GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedGroup.getBackground();
+        gradientDrawable.setColor(viewModel.ledColorGroup);
+        viewModel.showGroupMaterialDialog.observe(getViewLifecycleOwner(), isShow -> {
+            if (isShow != null && isShow) {
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true).positiveText(R.string.set)
+                        .negativeText(R.string.DISCARD).title(R.string.st_led_color)
+                        .onNegative((dialog1, which) -> dialog1.dismiss()).build();
+                View view = dialog.getCustomView();
+                ColorPicker picker = view.findViewById(R.id.picker);
+                SVBar svBar = view.findViewById(R.id.svBar);
+                OpacityBar opacityBar = view.findViewById(R.id.opacityBar);
+                picker.addSVBar(svBar);
+                picker.addOpacityBar(opacityBar);
+                picker.setOldCenterColor(picker.getColor());
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
+                    viewModel.setPickerColor(picker.getColor());
+                    dialog.dismiss();
+                });
+                dialog.show();
+            }
+        });
+        viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
+            gradientDrawable.setColor(integer);
+            binding.ivLedGroup.setBackground(gradientDrawable);
+        });
     }
 
     private void setupResetNotification() {
-
         binding.llResetNotifications.setOnClickListener(v -> {
             if (getActivity() != null) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
