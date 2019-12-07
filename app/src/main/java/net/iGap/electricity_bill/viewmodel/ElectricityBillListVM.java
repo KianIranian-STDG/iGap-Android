@@ -176,7 +176,8 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                //ToDo: handle this event
+                progressVisibility.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
             }
         });
     }
@@ -201,7 +202,8 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                //ToDo: handle this event
+                progressVisibility.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
             }
         });
     }
@@ -256,5 +258,9 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
     public MutableLiveData<Integer> getShowRequestFailedError() {
         return showRequestFailedError;
+    }
+
+    public ObservableInt getShowRetryView() {
+        return showRetryView;
     }
 }

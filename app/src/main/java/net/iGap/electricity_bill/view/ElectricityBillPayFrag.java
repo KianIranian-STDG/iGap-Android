@@ -26,6 +26,7 @@ import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.repository.model.LastBillData;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillPayVM;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
@@ -123,6 +124,11 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
                     break;
             }
         });
+        viewModel.getShowRequestFailedError().observe(getViewLifecycleOwner(), errorMessageResId -> {
+            if (errorMessageResId != null) {
+                HelperError.showSnackMessage(getString(errorMessageResId), false);
+            }
+        });
         if (editMode)
             binding.addToList.setText(getResources().getString(R.string.elecBill_edit_Btn));
 
@@ -133,21 +139,18 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
     private void getIntent() {
         if (HelperCalander.isPersianUnicode) {
             viewModel.getBillID().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getID()));
-        }
-        else
+        } else
             viewModel.getBillID().set(bill.getID());
         if (bill.getPayID() != null) {
             if (HelperCalander.isPersianUnicode) {
                 viewModel.getBillPayID().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getPayID()));
-            }
-            else
+            } else
                 viewModel.getBillPayID().set(bill.getPayID());
         }
         if (bill.getPrice() != null) {
             if (HelperCalander.isPersianUnicode) {
                 viewModel.getBillPrice().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getPrice()));
-            }
-            else
+            } else
                 viewModel.getBillPrice().set(bill.getPrice());
             viewModel.getProgressVisibilityData().set(View.GONE);
         }

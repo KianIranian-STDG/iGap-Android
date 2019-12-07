@@ -5,9 +5,9 @@ import android.view.View;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.electricity_bill.repository.api.ElectricityBillAPIRepository;
 import net.iGap.electricity_bill.repository.model.BranchData;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
@@ -15,6 +15,7 @@ import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
 
     private MutableLiveData<ElectricityResponseModel<BranchData>> mData;
+    private MutableLiveData<Integer> showRequestFailedError;
     private ObservableField<Integer> progressVisibility;
     private ObservableField<Integer> errorVisibility;
     private String billID = null;
@@ -22,6 +23,7 @@ public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
     public ElectricityBranchInfoListVM() {
 
         mData = new MutableLiveData<>();
+        showRequestFailedError = new MutableLiveData<>();
         progressVisibility = new ObservableField<>(View.GONE);
         errorVisibility = new ObservableField<>(View.GONE);
 
@@ -45,7 +47,8 @@ public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                //ToDo: handle this event
+                progressVisibility.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
             }
         });
     }
@@ -80,5 +83,9 @@ public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
 
     public void setErrorVisibility(ObservableField<Integer> errorVisibility) {
         this.errorVisibility = errorVisibility;
+    }
+
+    public MutableLiveData<Integer> getShowRequestFailedError() {
+        return showRequestFailedError;
     }
 }

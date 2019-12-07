@@ -21,6 +21,7 @@ public class ElectricityBillAPIRepository {
     private ElecBillApi apiService =  new RetrofitFactory().getElecBillRetrofit();
     private ElectricityBillRealmRepo realmRepo = new ElectricityBillRealmRepo();
     private String phone = null;
+
     public ElectricityBillAPIRepository() {
         if (realmRepo.getUserNum().startsWith("98")) {
             phone = realmRepo.getUserNum().replaceFirst("98", "0");

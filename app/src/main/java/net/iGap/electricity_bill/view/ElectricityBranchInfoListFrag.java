@@ -18,6 +18,7 @@ import net.iGap.electricity_bill.repository.model.BranchData;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 import net.iGap.electricity_bill.view.adapter.ElectricityBranchInfoListAdapter;
 import net.iGap.electricity_bill.viewmodel.ElectricityBranchInfoListVM;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -81,6 +82,11 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBr
 
     private void onDataChangedListener() {
         viewModel.getmData().observe(getViewLifecycleOwner(), this::initRecycler);
+        viewModel.getShowRequestFailedError().observe(getViewLifecycleOwner(), errorMessageResId -> {
+            if (errorMessageResId != null) {
+                HelperError.showSnackMessage(getString(errorMessageResId), false);
+            }
+        });
     }
 
     private void initRecycler(ElectricityResponseModel<BranchData> data) {

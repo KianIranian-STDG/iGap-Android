@@ -24,6 +24,7 @@ import net.iGap.electricity_bill.repository.model.CompanyList;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillSearchCompanySpinnerAdapter;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillSearchListAdapter;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillSearchListVM;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -80,7 +81,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag<ElectricityBi
         binding.billCompanySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                viewModel.setCompanyPosition(position-1);
+                viewModel.setCompanyPosition(position - 1);
             }
 
             @Override
@@ -120,11 +121,15 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag<ElectricityBi
             if (errorModel.getMessage().equals("001")) {
                 Snackbar.make(binding.Container, getResources().getString(R.string.elecBill_error_company), Snackbar.LENGTH_LONG)
                         .setAction(R.string.elecBill_error_openCompanySpinner, v -> binding.billCompanySpinner.performClick()).show();
-            }
-            else {
+            } else {
                 Snackbar.make(binding.Container, errorModel.getMessage(), Snackbar.LENGTH_LONG)
                         .setAction(R.string.ok, v -> {
                         }).show();
+            }
+        });
+        viewModel.getShowRequestFailedError().observe(getViewLifecycleOwner(), errorMessageResId -> {
+            if (errorMessageResId != null) {
+                HelperError.showSnackMessage(getString(errorMessageResId), false);
             }
         });
     }

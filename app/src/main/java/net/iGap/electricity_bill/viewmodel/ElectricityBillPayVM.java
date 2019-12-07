@@ -4,9 +4,11 @@ import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -23,12 +25,13 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     private ObservableField<String> billPayID;
     private ObservableField<String> billPrice;
     private ObservableField<String> billTime;
-    private ObservableField<Integer> progressVisibilityData;
-    private ObservableField<Integer> progressVisibilityPay;
-    private ObservableField<Integer> progressVisibilityDownload;
+    private ObservableInt progressVisibilityData;
+    private ObservableInt progressVisibilityPay;
+    private ObservableInt progressVisibilityDownload;
     private ObservableBoolean payBtnEnable;
 
     private MutableLiveData<LastBillData> billImage;
+    private MutableLiveData<Integer> showRequestFailedError;
     private Bill debit;
     private MutableLiveData<ErrorModel> errorM;
 
@@ -42,10 +45,11 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         errorM = new MutableLiveData<>();
         debit = new Bill();
 
-        progressVisibilityData = new ObservableField<>(View.VISIBLE);
-        progressVisibilityPay = new ObservableField<>(View.GONE);
-        progressVisibilityDownload = new ObservableField<>(View.GONE);
+        progressVisibilityData = new ObservableInt(View.VISIBLE);
+        progressVisibilityPay = new ObservableInt(View.GONE);
+        progressVisibilityDownload = new ObservableInt(View.GONE);
         payBtnEnable = new ObservableBoolean(true);
+        showRequestFailedError = new MutableLiveData<>();
 
     }
 
@@ -71,7 +75,8 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                //ToDO: handle this event
+                progressVisibilityData.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
             }
         });
     }
@@ -126,7 +131,8 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                //ToDo: handle this event
+                progressVisibilityData.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
             }
         });
     }
@@ -163,19 +169,19 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         this.billTime = billTime;
     }
 
-    public ObservableField<Integer> getProgressVisibilityData() {
+    public ObservableInt getProgressVisibilityData() {
         return progressVisibilityData;
     }
 
-    public void setProgressVisibilityData(ObservableField<Integer> progressVisibilityData) {
+    public void setProgressVisibilityData(ObservableInt progressVisibilityData) {
         this.progressVisibilityData = progressVisibilityData;
     }
 
-    public ObservableField<Integer> getProgressVisibilityPay() {
+    public ObservableInt getProgressVisibilityPay() {
         return progressVisibilityPay;
     }
 
-    public void setProgressVisibilityPay(ObservableField<Integer> progressVisibilityPay) {
+    public void setProgressVisibilityPay(ObservableInt progressVisibilityPay) {
         this.progressVisibilityPay = progressVisibilityPay;
     }
 
@@ -195,11 +201,11 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         this.billImage = billImage;
     }
 
-    public ObservableField<Integer> getProgressVisibilityDownload() {
+    public ObservableInt getProgressVisibilityDownload() {
         return progressVisibilityDownload;
     }
 
-    public void setProgressVisibilityDownload(ObservableField<Integer> progressVisibilityDownload) {
+    public void setProgressVisibilityDownload(ObservableInt progressVisibilityDownload) {
         this.progressVisibilityDownload = progressVisibilityDownload;
     }
 
@@ -217,5 +223,9 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void setDebit(Bill debit) {
         this.debit = debit;
+    }
+
+    public MutableLiveData<Integer> getShowRequestFailedError() {
+        return showRequestFailedError;
     }
 }

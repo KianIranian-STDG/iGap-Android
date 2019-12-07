@@ -3,6 +3,7 @@ package net.iGap.electricity_bill.viewmodel;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
@@ -21,12 +22,13 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
     private MutableLiveData<CompanyList> mCompanyData;
     private MutableLiveData<List<BranchData>> mBranchData;
     private MutableLiveData<ErrorModel> errorM;
+    private MutableLiveData<Integer> showRequestFailedError;
 
     private ObservableField<String> billSerial;
-    private ObservableField<Integer> billSerialError;
+    private ObservableInt billSerialError;
     private ObservableField<Boolean> billSerialErrorEnable;
-    private ObservableField<Integer> progressVisibility;
-    private ObservableField<Integer> errorVisibility;
+    private ObservableInt progressVisibility;
+    private ObservableInt errorVisibility;
 
     private int companyPosition = -1;
     private int tryOut = 3;
@@ -35,12 +37,13 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
         mCompanyData = new MutableLiveData<>();
         mBranchData = new MutableLiveData<>();
         errorM = new MutableLiveData<>();
+        showRequestFailedError = new MutableLiveData<>();
 
         billSerial = new ObservableField<>();
-        billSerialError = new ObservableField<>();
+        billSerialError = new ObservableInt();
         billSerialErrorEnable = new ObservableField<>();
-        progressVisibility = new ObservableField<>(View.GONE);
-        errorVisibility = new ObservableField<>(View.GONE);
+        progressVisibility = new ObservableInt(View.GONE);
+        errorVisibility = new ObservableInt(View.GONE);
     }
 
     public void getCompanyData() {
@@ -62,7 +65,12 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-
+                if (tryOut > 0)
+                    getCompanyData();
+                else {
+                    showRequestFailedError.setValue(R.string.connection_error);
+                }
+                tryOut--;
             }
         });
     }
@@ -116,7 +124,9 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                //ToDo: handle this event
+                progressVisibility.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
+                errorVisibility.set(View.VISIBLE);
             }
         });
     }
@@ -145,11 +155,11 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
         this.billSerial = billSerial;
     }
 
-    public ObservableField<Integer> getBillSerialError() {
+    public ObservableInt getBillSerialError() {
         return billSerialError;
     }
 
-    public void setBillSerialError(ObservableField<Integer> billSerialError) {
+    public void setBillSerialError(ObservableInt billSerialError) {
         this.billSerialError = billSerialError;
     }
 
@@ -161,11 +171,11 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
         this.billSerialErrorEnable = billSerialErrorEnable;
     }
 
-    public ObservableField<Integer> getProgressVisibility() {
+    public ObservableInt getProgressVisibility() {
         return progressVisibility;
     }
 
-    public void setProgressVisibility(ObservableField<Integer> progressVisibility) {
+    public void setProgressVisibility(ObservableInt progressVisibility) {
         this.progressVisibility = progressVisibility;
     }
 
@@ -185,11 +195,15 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
         this.errorM = errorM;
     }
 
-    public ObservableField<Integer> getErrorVisibility() {
+    public ObservableInt getErrorVisibility() {
         return errorVisibility;
     }
 
-    public void setErrorVisibility(ObservableField<Integer> errorVisibility) {
+    public void setErrorVisibility(ObservableInt errorVisibility) {
         this.errorVisibility = errorVisibility;
+    }
+
+    public MutableLiveData<Integer> getShowRequestFailedError() {
+        return showRequestFailedError;
     }
 }
