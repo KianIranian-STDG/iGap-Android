@@ -1,6 +1,7 @@
 package net.iGap.adapter.items.cells;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.util.Log;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -16,7 +17,6 @@ import java.io.InputStream;
 public class AnimatedStickerCell extends LottieAnimationView {
     private String TAG = "abbasiAnimation";
 
-    private InputStream inputStream;
     public boolean animatedLoaded;
     private String path;
     private boolean detached = false;
@@ -28,6 +28,15 @@ public class AnimatedStickerCell extends LottieAnimationView {
 
     public AnimatedStickerCell(Context context) {
         super(context);
+        init(context);
+    }
+
+    public AnimatedStickerCell(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    private void init(Context context) {
         setRepeatCount(LottieDrawable.INFINITE);
         setRepeatMode(LottieDrawable.REVERSE);
     }
@@ -55,7 +64,7 @@ public class AnimatedStickerCell extends LottieAnimationView {
             return;
 
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(path));
+            InputStream inputStream = new BufferedInputStream(new FileInputStream(path));
             setAnimation(inputStream, null);
             animatedLoaded = true;
             Log.i(TAG, "loadAnimation: " + path);

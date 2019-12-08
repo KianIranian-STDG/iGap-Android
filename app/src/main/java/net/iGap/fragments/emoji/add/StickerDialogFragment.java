@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
+import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.helper.HelperCalander;
 
 public class StickerDialogFragment extends BottomSheetDialogFragment {
@@ -28,6 +29,7 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
     private TextView addOrRemoveTv;
     private TextView groupNameTv;
     private ImageView previewIv;
+    private AnimatedStickerCell stickerCell;
 
     private OnStickerDialogListener listener;
 
@@ -59,6 +61,7 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         groupNameTv = view.findViewById(R.id.tv_stickerDialog_groupName);
         addOrRemoveTv = view.findViewById(R.id.tv_stickerDialog_add);
         previewIv = view.findViewById(R.id.iv_stickerDialog_preview);
+        stickerCell = view.findViewById(R.id.iv_stickerDialog_lottiePreview);
 
         stickerRecyclerView.setAdapter(adapter);
 
@@ -80,18 +83,31 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         adapter.setListener(structIGSticker -> viewModel.onStickerInListModeClick(structIGSticker));
 
         viewModel.getOpenPreviewViewLiveData().observe(getViewLifecycleOwner(), structIGSticker -> {
+            // TODO: 12/8/19  must create custom dialog for add just once view for handle stickers view type
             if (structIGSticker != null && previewIv.getVisibility() == View.GONE) {
+                if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER) {
+                    stickerCell.playAnimation(structIGSticker.getPath());
 
-                if (getContext() != null)
-                    Glide.with(getContext()).load(structIGSticker.getPath()).into(previewIv);
+                    stickerCell.animate().alpha(1.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            stickerCell.setVisibility(View.VISIBLE);
+                        }
+                    });
 
-                previewIv.animate().alpha(1.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        previewIv.setVisibility(View.VISIBLE);
-                    }
-                });
+                } else if (structIGSticker.getType() == StructIGSticker.NORMAL_STICKER) {
+                    if (getContext() != null)
+                        Glide.with(getContext()).load(structIGSticker.getPath()).into(previewIv);
+
+                    previewIv.animate().alpha(1.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            previewIv.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
 
                 addOrRemoveTv.setText(getResources().getString(R.string.send));
             } else if (previewIv.getVisibility() == View.VISIBLE) {
@@ -101,6 +117,15 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         previewIv.setVisibility(View.GONE);
+                    }
+                });
+            } else if (stickerCell.getVisibility() == View.VISIBLE) {
+
+                stickerCell.animate().alpha(0.0f).setDuration(150).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        stickerCell.setVisibility(View.GONE);
                     }
                 });
             }
@@ -114,6 +139,7 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         });
 
         previewIv.setOnClickListener(v -> viewModel.onPreviewImageClicked());
+        stickerCell.setOnClickListener(v -> viewModel.onPreviewImageClicked());
 
         viewModel.getCloseDialogMutableLiveData().observe(getViewLifecycleOwner(), close -> dismiss());
 

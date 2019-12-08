@@ -60,6 +60,19 @@
         app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <net.iGap.adapter.items.cells.AnimatedStickerCell
+        android:id="@+id/iv_stickerDialog_lottiePreview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:animateLayoutChanges="true"
+        android:background="#8B000000"
+        android:padding="64dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tv_stickerDialog_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/fl_stickerDialog_progressContainer"
         android:layout_width="match_parent"
