@@ -27,7 +27,7 @@ public class PermissionHelper {
     }
 
     public boolean grantCameraAndVoicePermission() {
-        String[] Permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+        String[] Permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (hasPermissions(Permissions)) {
             return true;
         } else {
@@ -37,7 +37,17 @@ public class PermissionHelper {
     }
 
     public boolean grantVoicePermission() {
-        String[] Permissions = {Manifest.permission.RECORD_AUDIO};
+        String[] Permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO};
+        if (hasPermissions(Permissions)) {
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(activity, Permissions, VoicePermissionRequestCode);
+            return false;
+        }
+    }
+
+    public boolean grantReadPhoneStatePermission() {
+        String[] Permissions = {Manifest.permission.READ_PHONE_STATE};
         if (hasPermissions(Permissions)) {
             return true;
         } else {

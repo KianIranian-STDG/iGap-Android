@@ -87,6 +87,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.DataTransformerListener;
 import net.iGap.interfaces.FinishActivity;
@@ -540,21 +541,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             /**
              * just do this action once
              */
-            try {
-                HelperPermission.getPhonePermision(ActivityMain.this, new OnGetPermission() {
-                    @Override
-                    public void Allow() throws IOException {
+            new PermissionHelper(this).grantReadPhoneStatePermission();
 
-                    }
-
-                    @Override
-                    public void deny() {
-
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             if (!isGetContactList) {
                 try {
                     HelperPermission.getContactPermision(ActivityMain.this, new OnGetPermission() {
