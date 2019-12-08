@@ -13,6 +13,7 @@ public class PermissionHelper {
     private Activity activity;
     private Fragment fragment;
     public final static int CameraAndVoicePermissionRequestCode = 100;
+    public final static int CameraAndStoragePermissionRequestCode = 140;
     public final static int VoicePermissionRequestCode = 110;
     public final static int CameraPermissionRequestCode = 120;
     public final static int StoragePermissionRequestCode = 130;
@@ -31,7 +32,23 @@ public class PermissionHelper {
         if (hasPermissions(Permissions)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(activity, Permissions, CameraAndVoicePermissionRequestCode);
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, CameraAndVoicePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, CameraAndVoicePermissionRequestCode);
+            return false;
+        }
+    }
+
+    public boolean grantCameraAndStoreagePermission() {
+        String[] Permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (hasPermissions(Permissions)) {
+            return true;
+        } else {
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, CameraAndStoragePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, CameraAndStoragePermissionRequestCode);
             return false;
         }
     }
@@ -41,7 +58,10 @@ public class PermissionHelper {
         if (hasPermissions(Permissions)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(activity, Permissions, VoicePermissionRequestCode);
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, VoicePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, VoicePermissionRequestCode);
             return false;
         }
     }
@@ -64,7 +84,10 @@ public class PermissionHelper {
         if (hasPermissions(Permissions)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(activity, Permissions, StoragePermissionRequestCode);
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, StoragePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, StoragePermissionRequestCode);
             return false;
         }
     }

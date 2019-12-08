@@ -60,7 +60,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     public ObservableField<BindingAdapter.AvatarImage> avatarImagePath = new ObservableField<>();
     public MutableLiveData<Boolean> showReagentPhoneNumberError = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> showDialog = new SingleLiveEvent<>();
-    public MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showDialogSelectCountry = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
     public ObservableInt showCameraImage = new ObservableInt(View.VISIBLE);
@@ -71,7 +71,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     public ObservableInt showErrorName = new ObservableInt();
     public ObservableInt showErrorLastName = new ObservableInt();
 
-    public FragmentRegistrationNicknameViewModel(AvatarHandler avatarHandler, StringBuilder stringBuilder) {
+    public FragmentRegistrationNicknameViewModel(AvatarHandler avatarHandler, @NotNull StringBuilder stringBuilder) {
         repository = RegisterRepository.getInstance();
         this.avatarHandler = avatarHandler;
 

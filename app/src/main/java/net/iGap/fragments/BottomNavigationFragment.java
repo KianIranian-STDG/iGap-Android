@@ -374,7 +374,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                         if (uri.length > 1) {
                             PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
                             Bundle bundle = new Bundle();
-                            bundle.putString("id",uri[1]);
+                            bundle.putString("id", uri[1]);
                             popularMoreChannelFragment.setArguments(bundle);
                             new HelperFragment(getFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
                         } else {
@@ -403,6 +403,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
             }
         }
     }
+
     protected void hideKeyboard() {
         if (getActivity() != null) {
             View view = getActivity().getCurrentFocus();
@@ -412,6 +413,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
             }
         }
     }
+
     public DiscoveryFragment.CrawlerStruct getCrawlerStruct() {
         return crawlerStruct;
     }

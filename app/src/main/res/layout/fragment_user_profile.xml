@@ -136,7 +136,7 @@
                 android:id="@+id/multiAccount_arrow"
                 android:layout_width="@dimen/dp32"
                 android:layout_height="@dimen/dp32"
-                android:layout_margin="@dimen/dp16"
+                android:layout_margin="@dimen/dp8"
                 android:onClick="@{()-> viewModel.onAccountsClicked()}"
                 android:tint="@color/white"
                 app:backgroundTint="?attr/colorPrimary"
@@ -144,7 +144,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-
                 app:srcCompat="@drawable/ic_arrow_down" />
 
             <androidx.appcompat.widget.AppCompatTextView

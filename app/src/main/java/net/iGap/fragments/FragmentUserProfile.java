@@ -30,14 +30,13 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
 import net.iGap.dialog.account.AccountDialogListener;
 import net.iGap.dialog.account.AccountsDialog;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnGetPermission;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
@@ -48,10 +47,8 @@ import net.iGap.viewmodel.UserProfileViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
@@ -59,13 +56,14 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     private UserProfileViewModel viewModel;
 
     public static FragmentUserProfile newInstance() {
-        
+
         Bundle args = new Bundle();
-        
+
         FragmentUserProfile fragment = new FragmentUserProfile();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -241,52 +239,15 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(getString(R.string.array_From_Camera))) { // camera
-                    try {
-                        HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                dialog.dismiss();
-                                useCamera();
-                            }
-
-                            @Override
-                            public void deny() {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (new PermissionHelper(getActivity(), FragmentUserProfile.this).grantCameraAndStoreagePermission()) {
+                        useCamera();
                     }
                 } else {
-                    try {
-                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                if (getActivity() == null) return;
-                                Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO , true,getString(R.string.gallery) ,"-1" , new FragmentGallery.GalleryFragmentListener() {
-                                    @Override
-                                    public void openOsGallery() {
-                                    }
-
-                                    @Override
-                                    public void onGalleryResult(String path) {
-                                        popBackStackFragment();
-                                        handleGalleryImageResult(path);
-                                    }
-                                });
-                                new HelperFragment(getActivity().getSupportFragmentManager() , fragment).load();
-                            }
-
-                            @Override
-                            public void deny() {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (new PermissionHelper(getActivity(), FragmentUserProfile.this).grantReadAndRightStoragePermission()) {
+                        goToFragmentGallery();
                     }
-                    dialog.dismiss();
                 }
+                dialog.dismiss();
             }
         }).show();
     }
@@ -302,20 +263,55 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     }
 
     private void useCamera() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentUserProfile.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            if (getActivity() != null && getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(viewModel.getImageFile()));
-                startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
-
+        if (getActivity() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentUserProfile.this);
             } else {
-                Toast.makeText(getContext(), R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                if (getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(viewModel.getImageFile()));
+                    startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+                } else {
+                    Toast.makeText(getContext(), R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void goToFragmentGallery() {
+        if (getActivity() != null) {
+            Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
+                @Override
+                public void openOsGallery() {
+                }
+
+                @Override
+                public void onGalleryResult(String path) {
+                    popBackStackFragment();
+                    handleGalleryImageResult(path);
+                }
+            });
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean tmp = true;
+        for (int grantResult : grantResults) {
+            tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
+        }
+        if (requestCode == PermissionHelper.StoragePermissionRequestCode) {
+            if (tmp) {
+                goToFragmentGallery();
+            } else {
+                HelperError.showSnackMessage(getString(R.string.permission_storage), false);
+            }
+        } else if (requestCode == PermissionHelper.CameraAndStoragePermissionRequestCode) {
+            if (tmp) {
+                useCamera();
+            } else {
+                HelperError.showSnackMessage(getString(R.string.permission_camera), false);
             }
         }
     }
