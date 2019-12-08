@@ -16,16 +16,10 @@ public class MyPhoneStateListener extends PhoneStateListener {
 
     public void onCallStateChanged(int state, String incomingNumber) {
         if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-          /*  if (G.onRejectCallStatus != null)
-                G.onRejectCallStatus.setReject(true);*/
-    /*        try {
-                WebRTC.getInstance().leaveCall();
-            }catch (Exception e){}*/
 
             new RequestSignalingSessionHold().signalingSessionHold(true);
             WebRTC.getInstance().muteSound();
             WebRTC.getInstance().pauseVideoCapture();
-
 
             G.isCalling = true;
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
@@ -36,8 +30,6 @@ public class MyPhoneStateListener extends PhoneStateListener {
                 } catch (Exception e) {
                 }
 
-              /*  if (G.onRejectCallStatus != null)
-                    G.onRejectCallStatus.setReject(true);*/
             }
             G.isCalling = true;
             G.isVideoCallRinging = false;
@@ -54,7 +46,6 @@ public class MyPhoneStateListener extends PhoneStateListener {
 
 
         if (lastPhoneState == state || !MusicPlayer.isMusicPlyerEnable) {
-
             return;
         } else {
 
@@ -68,13 +59,6 @@ public class MyPhoneStateListener extends PhoneStateListener {
                 if (MusicPlayer.pauseSoundFromCall) {
                     MusicPlayer.pauseSoundFromCall = false;
                     MusicPlayer.playSound();
-
-                    //if (isBlutoothOn) {
-                    //    isBlutoothOn = false;
-                    //
-                    //    AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-                    //    am.setBluetoothScoOn(true);
-                    //}
                 }
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 pauseSoundIfPlay();
@@ -89,18 +73,6 @@ public class MyPhoneStateListener extends PhoneStateListener {
             MusicPlayer.pauseSound();
             MusicPlayer.pauseSoundFromCall = true;
 
-            //AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-
-            //if (am.isBluetoothScoOn()) {
-            //    isBlutoothOn = true;
-            //    am.setBluetoothScoOn(false);
-            //
-            //    try {
-            //        am.stopBluetoothSco();
-            //    } catch (Exception e) {
-            //        HelperLog.setErrorLog("myPhoneStateListener    " + e.toString());
-            //    }
-            //}
         }
     }
 }

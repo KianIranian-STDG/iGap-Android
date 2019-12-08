@@ -266,13 +266,13 @@ public class HelperPermission {
 
         ArrayList<String> needPermission = null;
 
-        int permissionCallPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+//        int permissionCallPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
         int permissionReadPhoneState = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
 
-        if (permissionCallPhone != PackageManager.PERMISSION_GRANTED) {
+        /*if (permissionCallPhone != PackageManager.PERMISSION_GRANTED) {
             needPermission = new ArrayList<>();
             needPermission.add(Manifest.permission.CALL_PHONE);
-        }
+        }*/
 
         if (permissionReadPhoneState != PackageManager.PERMISSION_GRANTED) {
             if (needPermission == null) {

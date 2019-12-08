@@ -540,6 +540,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             /**
              * just do this action once
              */
+            try {
+                HelperPermission.getPhonePermision(ActivityMain.this, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+
+                    }
+
+                    @Override
+                    public void deny() {
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if (!isGetContactList) {
                 try {
                     HelperPermission.getContactPermision(ActivityMain.this, new OnGetPermission() {

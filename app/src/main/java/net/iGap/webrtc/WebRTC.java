@@ -93,7 +93,6 @@ public class WebRTC {
         }
     }
 
-
     public void switchCamera() {
         if (Camera.getNumberOfCameras() > 1) {
             if (videoCapturer instanceof CameraVideoCapturer) {
