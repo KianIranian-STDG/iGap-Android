@@ -149,7 +149,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
                     android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedColorMessage()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickDirectLed()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view_messagePreview" />
@@ -185,7 +185,7 @@
                     android:id="@+id/rl_vibration_direct"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickVibrationMessage()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickDirectVibration()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ll_led_direct" />
@@ -221,7 +221,7 @@
                     android:id="@+id/rl_pop_sound_direct"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickPopUpNotificationMessage()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickDirectPopUpNotification()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rl_vibration_direct" />
@@ -257,7 +257,7 @@
                     android:id="@+id/rl_sound_direct"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundDirect()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_direct" />
@@ -388,7 +388,7 @@
                     android:id="@+id/ll_led_group"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickLedGroup()}"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickGroupLed()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view_messagePreview_group" />

@@ -56,9 +56,12 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     public ObservableField<String> callbackPopUpNotificationGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
     public ObservableField<String> callBackSoundGroup = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_sound));
     public MutableLiveData<Integer> directLedColor = new MutableLiveData<>();
-    public SingleLiveEvent<Boolean> showDirectMaterialDialog = new SingleLiveEvent<>();
     public MutableLiveData<Integer> groupLedColor = new MutableLiveData<>();
-    public SingleLiveEvent<Boolean> showGroupMaterialDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDirectLedDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showGroupLedDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDirectVibrationDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDirectPopupNotification = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDirectSound = new SingleLiveEvent<>();
 
 
     private SharedPreferences sharedPreferences;
@@ -66,15 +69,13 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     private SharedPreferences.Editor editor;
     private int vibrateMessage;
     private int mode;
-    private int poRbDialogSoundMessage;
+    public int poRbDialogSoundMessage;
     private String soundMessage;
     private int vibrateGroup;
     private int modeGroup;
     private int poRbDialogSoundMessageGroup;
     private String soundMessageGroup;
-    private String soundMessageSelected = "";
     private String soundMessageGroupSelected = "";
-    private int soundMessageWhich = 0;
     private int soundMessageGroupWhich = 0;
 
 
@@ -332,13 +333,10 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     //===============================================================================
 
     public void onClickAlertMessage() {
-
         isAlertMassage.set(!isAlertMassage.get());
     }
 
-
     public void onClickMessagePreView() {
-
         isMassagePreview.set(!isMassagePreview.get());
     }
 
@@ -346,113 +344,72 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         setMessagePreview(isChecked);
     }
 
-    public void onClickLedColorMessage() {
-        showDirectMaterialDialog.setValue(true);
+    public void onClickDirectLed() {
+        showDirectLedDialog.setValue(true);
     }
 
-    public void onClickLedGroup() {
-        showGroupMaterialDialog.setValue(true);
-    }
-
-    public void setNewColor(int color) {
+    public void setDirectPickerColor(int color) {
         directLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, color);
         editor.apply();
     }
 
-    public void setPickerColor(int color) {
+    public void onClickGroupLed() {
+        showGroupLedDialog.setValue(true);
+    }
+
+    public void setGroupPickerColor(int color) {
         groupLedColor.setValue(color);
         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, color);
         editor.apply();
     }
 
-    public void onClickVibrationMessage() {
-
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
-                editor.apply();
-
-                switch (which) {
-                    case 0:
-                        callbackVibrateMessage.set(G.fragmentActivity.getResources().getString(R.string.array_Default));
-                        Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                        vDefault.vibrate(350);
-                        break;
-                    case 1:
-                        callbackVibrateMessage.set(G.fragmentActivity.getResources().getString(R.string.array_Short));
-                        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                        vShort.vibrate(200);
-
-                        break;
-                    case 2:
-                        callbackVibrateMessage.set(G.fragmentActivity.getResources().getString(R.string.array_Long));
-                        Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                        vLong.vibrate(500);
-                        break;
-                    case 3:
-                        callbackVibrateMessage.set(G.fragmentActivity.getResources().getString(R.string.array_Only_if_silent));
-                        AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
-
-                        switch (am2.getRingerMode()) {
-                            case AudioManager.RINGER_MODE_SILENT:
-                                Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                                break;
-                        }
-                        break;
-                    case 4:
-                        callbackVibrateMessage.set(G.fragmentActivity.getResources().getString(R.string.array_Disable));
-                        break;
-                }
-            }
-        }).show();
-
+    public void onClickDirectVibration() {
+        showDirectVibrationDialog.setValue(true);
     }
 
-    public void onClickPopUpNotificationMessage() {
-
-        int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                callbackPopUpNotificationMessage.set(text.toString());
-                editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, which);
-                editor.apply();
-                return false;
-            }
-        }).show();
+    public void setGroupVibrationWhich(int which) {
+        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
+        editor.apply();
     }
 
-    public void onClickSoundMessage() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessage, new MaterialDialog.ListCallbackSingleChoice() {
+    public void onClickDirectPopUpNotification() {
+        showDirectPopupNotification.setValue(true);
+    }
+
+    public void setDirectPopWhich(int which) {
+        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, which);
+        editor.apply();
+    }
+
+    public void onClickSoundDirect() {
+        showDirectSound.setValue(true);
+    }
+
+    public void setDirectSoundWhichAndSelected(int soundMessageWhich, String soundMessageSelected) {
+        editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, soundMessageWhich);
+        editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, soundMessageSelected);
+        editor.apply();
+    }
+
+    public void onClickSoundGroup() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessageGroup, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
                 playSound(which);
-
-                soundMessageSelected = text.toString();
-                soundMessageWhich = which;
-
+                soundMessageGroupSelected = text.toString();
+                soundMessageGroupWhich = which;
                 return true;
             }
         }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                callbackSoundMessage.set(soundMessageSelected);
-                poRbDialogSoundMessage = soundMessageWhich;
-                editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, soundMessageWhich);
-                editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, soundMessageSelected);
-                editor.apply();
-
-            }
+                callBackSoundGroup.set(soundMessageGroupSelected);
+                poRbDialogSoundMessageGroup = soundMessageGroupWhich;
+                editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, soundMessageGroupSelected);
+                editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, soundMessageGroupWhich);
+                editor.apply(); }
         }).show();
-
-
     }
 
     public void onClickAlertGroup() {
@@ -531,33 +488,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     }
 
-    public void onClickSoundGroup() {
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessageGroup, new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                playSound(which);
-
-                soundMessageGroupSelected = text.toString();
-                soundMessageGroupWhich = which;
-
-                return true;
-            }
-        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                callBackSoundGroup.set(soundMessageGroupSelected);
-                poRbDialogSoundMessageGroup = soundMessageGroupWhich;
-
-                editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, soundMessageGroupSelected);
-                editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, soundMessageGroupWhich);
-                editor.apply();
-
-            }
-        }).show();
-    }
 
     public void onClickInAppSound() {
         isAppSound.set(!isAppSound.get());
@@ -676,7 +606,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     }
 
-    private void playSound(int which) {
+    public void playSound(int which) {
 
         int musicId = R.raw.igap;
 
@@ -730,5 +660,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         mediaPlayer.setOnCompletionListener(mp -> mp.release());
 
     }
+
 
 }
