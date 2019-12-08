@@ -68,8 +68,6 @@ public class WebRTC {
     private MediaConstraints mediaConstraints;
     private MediaConstraints audioConstraints;
     private VideoCapturer videoCapturer;
-    private VideoTrack videoTrackFromCamera;
-    VideoSource videoSource;
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
     private static WebRTC webRTCInstance;
@@ -80,6 +78,10 @@ public class WebRTC {
             webRTCInstance = new WebRTC();
         }
         return webRTCInstance;
+    }
+
+    public static boolean isAlive() {
+        return webRTCInstance != null;
     }
 
     public void muteSound() {
@@ -133,11 +135,11 @@ public class WebRTC {
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
-            videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
+            VideoSource videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
             SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", getEglBaseContext());
             videoCapturer.initialize(surfaceTextureHelper, G.context, videoSource.getCapturerObserver());
             videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
-            videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
+            VideoTrack videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
             videoTrackFromCamera.setEnabled(true);
 
             videoTrackFromCamera.addSink(videoFrame -> {
