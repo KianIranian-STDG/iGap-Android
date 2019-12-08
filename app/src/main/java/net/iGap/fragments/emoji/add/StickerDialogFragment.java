@@ -87,26 +87,15 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
             if (structIGSticker != null && previewIv.getVisibility() == View.GONE) {
                 if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER) {
                     stickerCell.playAnimation(structIGSticker.getPath());
+                    stickerCell.setVisibility(View.VISIBLE);
 
-                    stickerCell.animate().alpha(1.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            stickerCell.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    stickerCell.animate().alpha(1.0f).setDuration(150);
 
                 } else if (structIGSticker.getType() == StructIGSticker.NORMAL_STICKER) {
                     if (getContext() != null)
                         Glide.with(getContext()).load(structIGSticker.getPath()).into(previewIv);
-
-                    previewIv.animate().alpha(1.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            previewIv.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    previewIv.setVisibility(View.VISIBLE);
+                    previewIv.animate().alpha(1.0f).setDuration(150);
                 }
 
                 addOrRemoveTv.setText(getResources().getString(R.string.send));
