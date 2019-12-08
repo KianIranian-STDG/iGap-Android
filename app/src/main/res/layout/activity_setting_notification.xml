@@ -176,7 +176,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/ll_led_direct"
+                    android:id="@+id/ll_led_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
@@ -197,7 +197,7 @@
 
 
                     <ImageView
-                        android:id="@+id/iv_led_direct"
+                        android:id="@+id/iv_led_message"
                         android:layout_width="@dimen/dp24"
                         android:layout_height="@dimen/dp24"
                         android:layout_gravity="center_vertical"
@@ -214,7 +214,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/rl_vibration_direct"
+                    android:id="@+id/rl_vibration_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -232,7 +232,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/tv_vibration_direct"
+                        android:id="@+id/tv_vibration_message"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -250,7 +250,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/rl_pop_sound_direct"
+                    android:id="@+id/rl_pop_sound_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -268,7 +268,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/tv_pop_sound_direct"
+                        android:id="@+id/tv_pop_sound_message"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -286,7 +286,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/rl_sound_direct"
+                    android:id="@+id/rl_sound_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -304,7 +304,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/tv_sound_direct"
+                        android:id="@+id/tv_sound_message"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
