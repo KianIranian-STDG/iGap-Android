@@ -8,6 +8,8 @@ public class StructIGSticker {
     private String name;
     private int type;
     private String id;
+    private String token;
+    private String groupId;
 
     public String getPath() {
         return path;
@@ -43,5 +45,25 @@ public class StructIGSticker {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 }

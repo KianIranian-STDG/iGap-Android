@@ -25,7 +25,7 @@
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="8dp"
+        android:paddingBottom="4dp"
         android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
@@ -37,7 +37,7 @@
         android:id="@+id/rv_stickerDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:clipToPadding="false"
         android:minHeight="300dp"
         android:paddingBottom="60dp"
@@ -47,15 +47,37 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_stickerDialog_groupName"
         app:spanCount="5" />
 
-    <ProgressBar
-        android:id="@+id/progress_sticker"
-        android:layout_width="@dimen/dp40"
-        android:layout_height="@dimen/dp40"
-        android:layout_centerInParent="true"
+    <ImageView
+        android:id="@+id/iv_stickerDialog_preview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:animateLayoutChanges="true"
+        android:background="#8B000000"
+        android:padding="64dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tv_stickerDialog_add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
-        app:layout_constraintTop_toTopOf="@+id/rv_stickerDialog" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/fl_stickerDialog_progressContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:background="#8B000000"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_stickerDialog_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_stickerDialog_add"

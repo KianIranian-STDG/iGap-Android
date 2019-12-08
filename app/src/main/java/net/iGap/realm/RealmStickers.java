@@ -203,6 +203,8 @@ public class RealmStickers extends RealmObject {
                 structIGSticker.setId(stickersDetails.getSt_id());
                 structIGSticker.setName(stickersDetails.getName());
                 structIGSticker.setPath(stickersDetails.getUri());
+                structIGSticker.setGroupId(stickersDetails.getGroupId());
+                structIGSticker.setToken(stickersDetails.getToken());
                 stickerDetails.add(structIGSticker);
             }
 

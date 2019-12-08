@@ -151,31 +151,25 @@ public class StickerAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public void updateIgStickers(List<StructIGSticker> igStickers) {
-        this.igStickers = igStickers;
-        notifyDataSetChanged();
-    }
-
-
-    //    public void updateAdapter(List<StructItemSticker> data) {
-////        this.mData = data;
-//        notifyDataSetChanged();
-//    }
-
     public class NormalViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgSticker;
+        ImageView normalStickerCell;
 
         NormalViewHolder(View itemView) {
             super(itemView);
-            imgSticker = (ImageView) itemView;
+            normalStickerCell = (ImageView) itemView;
         }
 
 
         public void bindView(StructIGSticker structIGSticker) {
             if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals("")) {
-                Glide.with(itemView.getContext()).load(structIGSticker.getPath()).into(imgSticker);
+                Glide.with(itemView.getContext()).load(structIGSticker.getPath()).into(normalStickerCell);
                 Log.i(TAG, "load sticker with glide -> " + structIGSticker.getPath());
             }
+
+            normalStickerCell.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onStickerClick(structIGSticker);
+            });
         }
     }
 
@@ -205,15 +199,16 @@ public class StickerAdapter extends RecyclerView.Adapter {
                 stickerCell.playAnimation(structIGSticker.getPath());
                 Log.i(TAG, "load lottie sticker -> " + structIGSticker.getPath());
             }
+
+            stickerCell.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onStickerClick(structIGSticker);
+            });
         }
     }
 
     public interface AddStickerDialogListener {
-        void onStickerClick();
-
-        void onStickerLongClick();
-
-        void onStickerDownLoaded();
+        void onStickerClick(StructIGSticker structIGSticker);
     }
 }
 

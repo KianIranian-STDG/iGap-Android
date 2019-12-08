@@ -152,6 +152,7 @@ import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
+import net.iGap.fragments.emoji.add.StructIGSticker;
 import net.iGap.fragments.emoji.add.StructIGStickerGroup;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
@@ -4120,6 +4121,7 @@ public class FragmentChat extends BaseFragment
             stickerGroup.setValueWithRealmStickers(realmStickers);
 
         StickerDialogFragment dialogFragment = StickerDialogFragment.newInstance(stickerGroup);
+        dialogFragment.setListener(this::sendStickerAsMessage);
 
         if (getFragmentManager() != null)
             dialogFragment.show(getFragmentManager(), "dialogFragment");
@@ -5868,6 +5870,73 @@ public class FragmentChat extends BaseFragment
                 .setDividerColor(dividerColor)
                 .build(edtChat);
 
+    }
+
+    private void sendStickerAsMessage(StructIGSticker structIGSticker) {
+
+        String additional = new Gson().toJson(new StructSendSticker(structIGSticker.getId(), structIGSticker.getName(), structIGSticker.getGroupId(), structIGSticker.getToken()));
+        long identity = AppUtils.makeRandomId();
+        int[] imageSize = AndroidUtils.getImageDimens(structIGSticker.getPath());
+        RealmRoomMessage roomMessage = new RealmRoomMessage();
+        roomMessage.setMessageId(identity);
+        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+        roomMessage.setRoomId(mRoomId);
+        roomMessage.setMessage(structIGSticker.getName());
+        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+        RealmAdditional realmAdditional = new RealmAdditional();
+        realmAdditional.setId(AppUtils.makeRandomId());
+        realmAdditional.setAdditionalType(AdditionalType.STICKER);
+        realmAdditional.setAdditionalData(additional);
+
+        roomMessage.setRealmAdditional(realmAdditional);
+
+        RealmAttachment realmAttachment = new RealmAttachment();
+        realmAttachment.setId(identity);
+        realmAttachment.setLocalFilePath(structIGSticker.getPath());
+
+        realmAttachment.setWidth(imageSize[0]);
+        realmAttachment.setHeight(imageSize[1]);
+        realmAttachment.setSize(new File(structIGSticker.getPath()).length());
+        realmAttachment.setName(new File(structIGSticker.getPath()).getName());
+        realmAttachment.setDuration(0);
+
+        roomMessage.setAttachment(realmAttachment);
+
+        roomMessage.getAttachment().setToken(structIGSticker.getToken());
+        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
+        roomMessage.setShowMessage(true);
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+        if (isReply()) {
+            RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                if (copyReplyMessage1 != null) {
+                    return realm.copyFromRealm(copyReplyMessage1);
+                }
+                return null;
+            });
+
+            if (copyReplyMessage != null) {
+                roomMessage.setReplyTo(copyReplyMessage);
+            }
+        }
+
+        new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
+        })).start();
+
+
+        StructMessageInfo sm = new StructMessageInfo(roomMessage);
+        mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+        scrollToEnd();
+
+        if (isReply()) {
+            mReplayLayout.setTag(null);
+            mReplayLayout.setVisibility(View.GONE);
+        }
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {

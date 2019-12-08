@@ -12,6 +12,9 @@ import net.iGap.viewmodel.BaseViewModel;
 public class StickerDialogViewModel extends BaseViewModel {
     private static final String TAG = "abbasiSticker ViewModel";
 
+    private static final int LIST = 0;
+    private static final int PREVIEW = 1;
+
     private StickerRepository repository;
     private StructIGStickerGroup stickerGroup;
 
@@ -19,6 +22,10 @@ public class StickerDialogViewModel extends BaseViewModel {
     private MutableLiveData<StructIGStickerGroup> stickersMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> addOrRemoveStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> closeDialogMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<StructIGSticker> openPreviewViewLiveData = new MutableLiveData<>();
+    private MutableLiveData<StructIGSticker> sendMessageLiveData = new MutableLiveData<>();
+
+    private int fragmentMode = LIST;
 
     StickerDialogViewModel(StructIGStickerGroup stickerGroup) {
         repository = new StickerRepository(stickerGroup);
@@ -28,10 +35,15 @@ public class StickerDialogViewModel extends BaseViewModel {
     }
 
     public void onAddOrRemoveStickerClicked() {
-        if (stickerGroup.isFavorite()) {
-            removeStickerFromFavorite(stickerGroup.getGroupId());
-        } else {
-            addStickerToFavorite(stickerGroup.getGroupId());
+        if (fragmentMode == LIST) {
+            if (stickerGroup.isFavorite()) {
+                removeStickerFromFavorite(stickerGroup.getGroupId());
+            } else {
+                addStickerToFavorite(stickerGroup.getGroupId());
+            }
+        } else if (fragmentMode == PREVIEW) {
+            if (openPreviewViewLiveData.getValue() != null)
+                sendMessageLiveData.postValue(openPreviewViewLiveData.getValue());
         }
     }
 
@@ -100,6 +112,17 @@ public class StickerDialogViewModel extends BaseViewModel {
         });
     }
 
+    public void onStickerInListModeClick(StructIGSticker structIGSticker) {
+        fragmentMode = PREVIEW;
+        openPreviewViewLiveData.postValue(structIGSticker);
+    }
+
+    public void onPreviewImageClicked() {
+        fragmentMode = LIST;
+        openPreviewViewLiveData.postValue(null);
+        onStickerFavoriteChange(stickerGroup.isFavorite());
+    }
+
     private void onStickerFavoriteChange(boolean favorite) {
         addOrRemoveStickerLiveData.postValue(favorite ? R.string.remove_sticker_with_size : R.string.add_sticker_with_size);
     }
@@ -118,5 +141,13 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> getCloseDialogMutableLiveData() {
         return closeDialogMutableLiveData;
+    }
+
+    public MutableLiveData<StructIGSticker> getOpenPreviewViewLiveData() {
+        return openPreviewViewLiveData;
+    }
+
+    public MutableLiveData<StructIGSticker> getSendMessageLiveData() {
+        return sendMessageLiveData;
     }
 }
