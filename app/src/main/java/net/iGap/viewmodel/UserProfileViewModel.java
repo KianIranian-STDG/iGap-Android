@@ -175,7 +175,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private int phoneMax = 10;
     private boolean sendReferral = false;
-    private Realm mRealm;
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
@@ -216,14 +215,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         setCurrentFragment.setValue(isEditProfile);
         appVersion.set(BuildConfig.VERSION_NAME);
 
-    }
-
-    public SingleLiveEvent<Boolean> getUpdateNewTheme() {
-        return updateNewTheme;
-    }
-
-    public SingleLiveEvent<Boolean> getUpdateTwoPaneView() {
-        return updateTwoPaneView;
     }
 
     public void init() {
@@ -407,6 +398,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return goToWalletPage;
     }
 
+    public SingleLiveEvent<Boolean> getUpdateNewTheme() {
+        return updateNewTheme;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateTwoPaneView() {
+        return updateTwoPaneView;
+    }
+
     public void onEditProfileClick() {
         if (isEditProfile) {
             editProfileIcon.set(R.string.edit_icon);
@@ -417,7 +416,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             isEditProfile = true;
             if (editProfileIcon.get() == R.string.close_icon) {
                 isEditProfile = true;
-                getReferral();
+                String tmp = referralNumberObservableField.get();
+                if (tmp == null || tmp.isEmpty()) {
+                    getReferral();
+                }
             } else {
                 isEditProfile = false;
             }
@@ -581,7 +583,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void usernameTextChangeListener(String newUsername) {
-        if (isEditProfile) {
+        if (!newUsername.equals(currentUserName)) {
             if (HelperString.regexCheckUsername(newUsername)) {
                 new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
                     @Override

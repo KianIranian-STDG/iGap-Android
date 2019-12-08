@@ -42,7 +42,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEditChannelBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
@@ -336,11 +335,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(EditChannelFragment.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(EditChannelFragment.this);
         } else {
             try {
                 new AttachFile(G.fragmentActivity).requestTakePicture(EditChannelFragment.this);
@@ -396,7 +391,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
-        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext() , R.font.main_font));
+        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext(), R.font.main_font));
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         /*if (isPopup) {*/

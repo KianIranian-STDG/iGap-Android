@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.Gravity;
@@ -116,7 +115,6 @@ import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
-import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShearedMedia extends BaseFragment implements ToolbarListener {
@@ -561,7 +559,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         TextView textView = new TextView(getContext());
         textView.setText(mSharedTypesList.get(pos));
         Utils.setTextSize(textView, R.dimen.smallTextSize);
-        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
         textView.setSingleLine(true);
 
         textView.setBackgroundResource(new Theme().getButtonSelectorBackground(textView.getContext()));
@@ -1410,7 +1408,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             boolean result = isSelectedMode;
 
-            if (isSelectedMode == true) {
+            if (isSelectedMode) {
                 isSelectedMode = false;
 
                 SelectedList.clear();
@@ -1500,8 +1498,11 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 messageProgress.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        downloadFile(getPosition(), messageProgress);
+                        if (isSelectedMode) {
+                            setSelectedItem(getPosition());
+                        } else {
+                            downloadFile(getPosition(), messageProgress);
+                        }
                     }
                 });
             }
@@ -1529,8 +1530,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             super(context, list);
         }
 
+        @NotNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (position == 0) {
@@ -2393,7 +2395,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         public class ViewHolder extends mHolder {
             private EmojiTextViewE tvMessage;
-            private LinearLayout lytLinks ;
+            private LinearLayout lytLinks;
             String rawLink = "";
 
             public ViewHolder(View view) {
@@ -2403,13 +2405,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 lytLinks = itemView.findViewById(R.id.lytLinks);
             }
 
-            public void bind(String message){
+            public void bind(String message) {
 
                 tvMessage.setText(message);
                 Linkify.addLinks(tvMessage, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
                 String[] links = getUrlsFromText(tvMessage);
-                if (links.length != 0){
+                if (links.length != 0) {
 
                     int txtColor = new Theme().getLinkColor(tvMessage.getContext());
                     lytLinks.removeAllViews();
@@ -2419,15 +2421,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             tvMessage.setText(message.replace(link, "").trim());
                         } else if (message.contains(link.replace("http://", ""))) {
                             tvMessage.setText(message.replace(link.replace("http://", ""), "").trim());
-                        }else if (message.contains(link.replace("mailto:", ""))) {
+                        } else if (message.contains(link.replace("mailto:", ""))) {
                             tvMessage.setText(message.replace(link.replace("mailto:", ""), "").trim());
                         }
 
-                        if (link.startsWith("mailto:")){
-                            link = link.replace("mailto:" , "");
+                        if (link.startsWith("mailto:")) {
+                            link = link.replace("mailto:", "");
                         }
 
-                        rawLink = link ;
+                        rawLink = link;
 
                         TextView tvLink = new TextView(tvMessage.getContext());
                         tvLink.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -2447,31 +2449,31 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             private void enableLinkOperation(TextView txt) {
 
-                if (getActivity() != null){
+                if (getActivity() != null) {
                     BetterLinkMovementMethod
                             .linkify(Linkify.ALL, txt)
                             .setOnLinkClickListener((tv, url) -> {
-                                if (HelperUrl.isTextEmail(url.replace("mailto:" , ""))){
-                                    HelperUrl.openEmail(getActivity() , url.replace("mailto:" , ""));
-                                }else {
-                                    HelperUrl.openWebBrowser(getActivity() , url);
+                                if (HelperUrl.isTextEmail(url.replace("mailto:", ""))) {
+                                    HelperUrl.openEmail(getActivity(), url.replace("mailto:", ""));
+                                } else {
+                                    HelperUrl.openWebBrowser(getActivity(), url);
                                 }
                                 return true;
                             })
                             .setOnLinkLongClickListener((tv, url) -> {
-                                if (HelperUrl.isTextLink(url)){
-                                    G.isLinkClicked = true ;
-                                    HelperUrl.openLinkDialog(getActivity() , url.replace("mailto:" , ""));
+                                if (HelperUrl.isTextLink(url)) {
+                                    G.isLinkClicked = true;
+                                    HelperUrl.openLinkDialog(getActivity(), url.replace("mailto:", ""));
                                 }
                                 return true;
                             });
                 }
             }
 
-            private String[] getUrlsFromText(TextView textView){
+            private String[] getUrlsFromText(TextView textView) {
                 URLSpan[] spans = textView.getUrls();
                 String[] results = new String[spans.length];
-                for(int i=0 ; i<spans.length ; i++) {
+                for (int i = 0; i < spans.length; i++) {
                     results[i] = spans[i].getURL();
                 }
                 return results;

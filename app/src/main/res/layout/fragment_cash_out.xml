@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fragment_back"
+    android:orientation="vertical"
     tools:context="org.paygear.fragment.CashOutFragment">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/app_bar_with_tab_back_shape">
+        android:background="@drawable/app_bar_with_tab_back_shape"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/toolbarLayout"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height" />
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabTextColor="?attr/iGapTitleTextColor"
-            app:tabSelectedTextColor="?attr/colorAccent"
+            android:background="?attr/iGapCardViewColor"
+            android:layoutDirection="ltr"
+            app:tabGravity="fill"
             app:tabIndicatorColor="?attr/colorAccent"
             app:tabMode="scrollable"
-            app:tabGravity="fill"
-            android:layoutDirection="ltr" />
+            app:tabSelectedTextColor="?attr/colorAccent"
+            app:tabTextColor="?attr/iGapTitleTextColor" />
 
     </LinearLayout>
 
