@@ -59,11 +59,11 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -122,6 +122,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private boolean inSearchMode = false;
     private String searchText = "";
     private boolean isSearchEnabled;
+    private int tryRequest;
 
     public static RegisteredContactsFragment newInstance(boolean isSwipe, boolean isCallAction, int pageMode) {
         RegisteredContactsFragment contactsFragment = new RegisteredContactsFragment();
@@ -149,6 +150,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         G.onContactImport = this;
         G.onUserContactdelete = this;
         G.onContactsGetList = this;
+
+        tryRequest = 0;
 
         realmRecyclerView = view.findViewById(R.id.recycler_view);
 
@@ -564,7 +567,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
     }
 
-    private void showDialogContactLongClicked(int itemPosition ,long id, long phone, String name, String family) {
+    private void showDialogContactLongClicked(int itemPosition, long id, long phone, String name, String family) {
         if (getFragmentManager() != null) {
             List<String> items = new ArrayList<>();
             items.add(getString(R.string.edit));
@@ -578,9 +581,9 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     );
                     if (getActivity() != null)
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-                } else if (position == 1){
+                } else if (position == 1) {
                     new RequestUserContactsDelete().contactsDelete("" + phone);
-                }else if (position == 2){
+                } else if (position == 2) {
                     setMultiSelectState(isMultiSelect);
                     multi_select(itemPosition);
                 }
@@ -652,6 +655,19 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     public void onContactsGetList() {
         loadContacts();
         prgMainLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onContactsGetListTimeOut() {
+        if (tryRequest < 3) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tryRequest++;
+                    new RequestUserContactsGetList().userContactGetList();
+                }
+            }, 1000);
+        }
     }
 
     @Override
@@ -879,7 +895,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 root.setOnLongClickListener(v -> {
                     if (!isMultiSelect) {
-                        showDialogContactLongClicked(getAdapterPosition() , realmContacts.getId(), realmContacts.getPhone(), realmContacts.getFirst_name(), realmContacts.getLast_name());
+                        showDialogContactLongClicked(getAdapterPosition(), realmContacts.getId(), realmContacts.getPhone(), realmContacts.getFirst_name(), realmContacts.getLast_name());
                     }
                     return true;
                 });
