@@ -49,14 +49,14 @@ public class StickerRepository {
                     if (response.body() != null) {
                         if (response.body().getOk() && response.body().getData() != null) {
 
-                            StructGroupSticker item = response.body().getData();
+                            StructGroupSticker structGroupSticker = response.body().getData();
 
                             DbManager.getInstance().doRealmTransaction(realm -> {
-                                RealmStickers realmStickers = RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false);
+                                RealmStickers realmStickers = RealmStickers.put(realm, structGroupSticker.getCreatedAt(), structGroupSticker.getId(), structGroupSticker.getRefId(), structGroupSticker.getName(), structGroupSticker.getAvatarToken(), structGroupSticker.getAvatarSize(), structGroupSticker.getAvatarName(), structGroupSticker.getPrice(), structGroupSticker.getIsVip(), structGroupSticker.getSort(), structGroupSticker.getIsVip(), structGroupSticker.getCreatedBy(), structGroupSticker.getStickers(), false);
                                 stickerGroup.setValueWithRealmStickers(realmStickers);
                             });
 
-                            G.handler.postDelayed(() -> callback.onSuccess(stickerGroup), 500);
+                            G.handler.postDelayed(() -> callback.onSuccess(stickerGroup), 300);
 
                             Log.i(TAG, "get sticker from API SERVICE with group id" + stickerGroup.getGroupId() + " * and size " + stickerGroup.getGroupId() + " * successfully * ");
                         }
