@@ -127,6 +127,8 @@ public class StickerAdapter extends RecyclerView.Adapter {
             stickerCell = itemView.findViewById(R.id.lottie);
 //            stickerCell.setRepeatCount(LottieDrawable.INFINITE);
 //            stickerCell.setRepeatMode(LottieDrawable.REVERSE);
+
+            stickerCell.setFailureListener(result -> Log.e(getClass().getName(), "AnimatedViewHolder: ", result));
         }
 
 
