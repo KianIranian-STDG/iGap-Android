@@ -8559,7 +8559,7 @@ public class FragmentChat extends BaseFragment
     private void deleteFileFromStorageIfExist(StructMessageInfo message){
         String path = getFilePathIfExistInStorage(message);
         if (path == null) return;
-        if (!path.contains(G.IGAP + "/")) return; //dont remove images was not in igap folder
+        if (!path.contains(G.IGAP + "/") && !path.contains("/net.iGap/")) return; //dont remove images was not in igap folder
         File file = new File(path);
         if (file.exists()) file.delete();
     }
