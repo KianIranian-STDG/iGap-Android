@@ -10,7 +10,6 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperLogout;
-import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnInfoCountryResponse;
@@ -167,7 +166,6 @@ public class RegisterRepository {
                 Log.wtf(this.getClass().getName(), "not Exist");
                 token = tokenQrCode;
                 userName = userNameR;
-                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
                 authorHash = authorHashR;
                 hideDialogQRCode.postValue(true);
@@ -182,7 +180,6 @@ public class RegisterRepository {
             } else {
                 Log.wtf(this.getClass().getName(), "not Exist");
                 userName = userNameR;
-                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
                 authorHash = authorHashR;
                 goToTwoStepVerificationPage.postValue(userIdR);
@@ -248,14 +245,11 @@ public class RegisterRepository {
     //basically it is send request resend activation code and send this request for getting new activation code
     public void registration(RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         // check for re-use
-        if (phoneNumber == null || phoneNumber.isEmpty())
-            phoneNumber = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER);
         requestRegister(phoneNumber, callback);
     }
 
     private void requestRegister(@NotNull String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         this.phoneNumber = phoneNumber.replace("-", "");
-        new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER, this.phoneNumber);
         ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
         builder.setCountryCode(isoCode);
         builder.setPhoneNumber(Long.parseLong(this.phoneNumber));
@@ -269,7 +263,6 @@ public class RegisterRepository {
                 /*digitCount = verifyCodeDigitCount;*/
                 regexFetchCodeVerification = regex;
                 userName = userNameR;
-                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
                 authorHash = authorHashR;
                 G.smsNumbers = smsNumbersR;
@@ -293,9 +286,8 @@ public class RegisterRepository {
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
+                G.onUserLogin = null;
                 DbManager.getInstance().doRealmTask(realm -> {
-                    if (userName == null || userName.isEmpty())
-                        userName = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME);
 
                     AccountManager.getInstance().addAccount(new AccountUser(
                             userId,
@@ -386,8 +378,6 @@ public class RegisterRepository {
             userVerify.setCode(Integer.parseInt(verificationCode
                     .replaceAll("[^0-9]", "")
                     .replaceAll("[\u0000-\u001f]", "")));
-            if (userName == null || userName.isEmpty())
-                userName = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME);
             userVerify.setUsername(userName);
             RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
                 @Override

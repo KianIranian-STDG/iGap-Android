@@ -164,6 +164,7 @@
             style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:enabled="@{viewModel.isActive}"
             android:onClick="@{()->viewModel.loginButtonOnClick(activationCodeEditText1.getEditableText().toString() + activationCodeEditText2.getEditableText().toString() + activationCodeEditText3.getEditableText().toString() + activationCodeEditText4.getEditableText().toString()+activationCodeEditText5.getEditableText().toString())}"
             android:text="@string/login"
             app:layout_constraintBottom_toBottomOf="parent"
