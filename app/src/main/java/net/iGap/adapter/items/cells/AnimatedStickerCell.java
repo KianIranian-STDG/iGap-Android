@@ -64,7 +64,8 @@ public class AnimatedStickerCell extends LottieAnimationView {
 
         try {
             InputStream inputStream = new FileInputStream(path);
-            setAnimation(inputStream, "sasdfsdfsdfs");
+            String loadingCashId = (String) getTag();
+            setAnimation(inputStream, loadingCashId);
             animatedLoaded = true;
             Log.i(TAG, "loadAnimation: " + path);
             playAnimation();

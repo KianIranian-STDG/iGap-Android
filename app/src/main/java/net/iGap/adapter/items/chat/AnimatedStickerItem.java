@@ -10,8 +10,11 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.airbnb.lottie.LottieListener;
 
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -26,6 +29,8 @@ import net.iGap.proto.ProtoGlobal;
 import java.util.List;
 
 public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, AnimatedStickerItem.ViewHolder> {
+
+    private String TAG = "abbasiStickerItem";
 
     public AnimatedStickerItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -76,8 +81,10 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
     @Override
     public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-        if (holder.stickerCell != null && holder.stickerCell.getTag() == tag)
+        if (holder.stickerCell != null && holder.stickerCell.getTag() == tag) {
+            Log.i(TAG, "onLoadThumbnailFromLocal: " + localPath);
             holder.stickerCell.playAnimation(localPath);
+        }
     }
 
     @Override
@@ -93,6 +100,13 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
             super(view);
 
             stickerCell = new AnimatedStickerCell(getContext());
+
+            stickerCell.setFailureListener(new LottieListener<Throwable>() {
+                @Override
+                public void onResult(Throwable result) {
+                    Log.e(getClass().getName(), "onResult: ", result);
+                }
+            });
 
             progress = getProgressBar(view.getContext(), 0);
 
