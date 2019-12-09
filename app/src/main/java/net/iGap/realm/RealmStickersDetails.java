@@ -31,12 +31,13 @@ public class RealmStickersDetails extends RealmObject {
             realmStickersDetails.setRefId(refId);
             realmStickersDetails.setName(name);
             realmStickersDetails.setToken(avatarToken);
-            realmStickersDetails.setUri(HelperDownloadSticker.createPathFile(avatarToken, avatarName));
+            realmStickersDetails.setUri(HelperDownloadSticker.downloadStickerPath(avatarToken, avatarName));
             realmStickersDetails.setFileName(avatarName);
             realmStickersDetails.setFileSize(avatarSize);
             realmStickersDetails.setSort(sort);
             realmStickersDetails.setGroupId(groupId);
 
+            // TODO: 12/9/19 clear this method! must use in bind view check this
             HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER_DETAIL, new HelperDownloadSticker.UpdateStickerListener() {
                 @Override
                 public void OnProgress(String path, String token, int progress) {

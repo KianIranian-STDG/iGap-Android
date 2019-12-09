@@ -1,5 +1,7 @@
 package net.iGap.fragments.emoji.add;
 
+import java.io.File;
+
 public class StructIGSticker {
     public static final int NORMAL_STICKER = 0;
     public static final int ANIMATED_STICKER = 1;
@@ -10,6 +12,8 @@ public class StructIGSticker {
     private String id;
     private String token;
     private String groupId;
+    private String fileName;
+    private int fileSize;
 
     public String getPath() {
         return path;
@@ -21,7 +25,6 @@ public class StructIGSticker {
             type = 100;
         else if (path.endsWith(".json")) {
             type = ANIMATED_STICKER;
-            this.path = "/storage/emulated/0/iGap/iGap Images/791d9a011707a22caf2564be154d1803586ca9fa.json";
         } else {
             type = NORMAL_STICKER;
         }
@@ -65,5 +68,25 @@ public class StructIGSticker {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public int getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(int fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public boolean hasFileOnLocal() {
+        return new File(path).exists() && new File(path).canRead();
     }
 }

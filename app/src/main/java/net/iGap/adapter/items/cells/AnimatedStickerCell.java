@@ -9,7 +9,6 @@ import com.airbnb.lottie.LottieDrawable;
 
 import net.iGap.module.structs.StructMessageInfo;
 
-import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -64,8 +63,8 @@ public class AnimatedStickerCell extends LottieAnimationView {
             return;
 
         try {
-            InputStream inputStream = new BufferedInputStream(new FileInputStream(path));
-            setAnimation(inputStream, null);
+            InputStream inputStream = new FileInputStream(path);
+            setAnimation(inputStream, "sasdfsdfsdfs");
             animatedLoaded = true;
             Log.i(TAG, "loadAnimation: " + path);
             playAnimation();

@@ -52,7 +52,7 @@ public class RealmStickers extends RealmObject {
         realmStickers.setRefId(refId);
         realmStickers.setName(name);
         realmStickers.setAvatarToken(avatarToken);
-        realmStickers.setUri(HelperDownloadSticker.createPathFile(avatarToken, avatarName));
+        realmStickers.setUri(HelperDownloadSticker.downloadStickerPath(avatarToken, avatarName));
         realmStickers.setAvatarSize(avatarSize);
         realmStickers.setAvatarName(avatarName);
         realmStickers.setPrice(price);
@@ -205,6 +205,8 @@ public class RealmStickers extends RealmObject {
                 structIGSticker.setPath(stickersDetails.getUri());
                 structIGSticker.setGroupId(stickersDetails.getGroupId());
                 structIGSticker.setToken(stickersDetails.getToken());
+                structIGSticker.setFileName(stickersDetails.getFileName());
+                structIGSticker.setFileSize((int) stickersDetails.getFileSize());
                 stickerDetails.add(structIGSticker);
             }
 
