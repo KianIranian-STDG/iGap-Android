@@ -62,6 +62,7 @@ public class RealmStickers extends RealmObject {
         realmStickers.setCreatedBy(createdBy);
         realmStickers.setFavorite(isFavorite);
 
+        // TODO: 12/9/19 clear this method! must use in bind view check this
         HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
             @Override
             public void OnProgress(String path, String token, int progress) {

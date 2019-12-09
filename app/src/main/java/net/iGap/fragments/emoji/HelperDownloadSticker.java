@@ -4,7 +4,6 @@ import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.eventbus.EventManager;
-import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.add.StructIGSticker;
 import net.iGap.interfaces.OnStickerDownloaded;
 import net.iGap.proto.ProtoFileDownload;
@@ -117,9 +116,9 @@ public class HelperDownloadSticker {
             mimeType = extension.substring(index);
         }
 
-        Log.i(TAG, "createPathFile: " + StickerDialogFragment.downloadDirectoryPath + "/" + token + mimeType);
+        Log.i(TAG, "createPathFile: " + G.downloadDirectoryPath + "/" + token + mimeType);
 
-        return StickerDialogFragment.downloadDirectoryPath + "/" + token + mimeType;
+        return G.downloadDirectoryPath + "/" + token + mimeType;
     }
 
 

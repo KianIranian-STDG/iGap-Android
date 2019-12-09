@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,10 +19,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import net.iGap.R;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.helper.HelperCalander;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class StickerDialogFragment extends BottomSheetDialogFragment {
     private View progressBar;
@@ -37,8 +32,6 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
     private AnimatedStickerCell stickerCell;
 
     private OnStickerDialogListener listener;
-
-    public static String downloadDirectoryPath;
 
     private String TAG = "abbasiStickerDialog";
 
@@ -54,7 +47,6 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        downloadDirectoryPath = getContext().getFilesDir().getAbsolutePath() + "/stickers";
         viewModel = new StickerDialogViewModel(stickerGroup);
         adapter = new StickerAdapter();
         return inflater.inflate(R.layout.dialog_add_sticker, container);
@@ -63,22 +55,6 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        try {
-            String path = downloadDirectoryPath + "/" + "Notes";
-            File root = new File(path);
-            if (!root.exists()) {
-                root.mkdirs();
-            }
-            File gpxfile = new File(root, "abolfazl");
-            FileWriter writer = new FileWriter(gpxfile);
-            writer.append("abolfazl");
-            writer.flush();
-            writer.close();
-            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         RecyclerView stickerRecyclerView = view.findViewById(R.id.rv_stickerDialog);
         progressBar = view.findViewById(R.id.fl_stickerDialog_progressContainer);
