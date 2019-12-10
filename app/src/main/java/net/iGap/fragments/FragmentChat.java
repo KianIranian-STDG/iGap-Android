@@ -6199,6 +6199,7 @@ public class FragmentChat extends BaseFragment
             if (draft != null && draft.getMessage().length() > 0) {
                 hasDraft = true;
                 edtChat.setText(draft.getMessage());
+                edtChat.setSelection(edtChat.getText().toString().length());
             }
         }
 //        clearLocalDraft();
