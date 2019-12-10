@@ -1,5 +1,10 @@
 package net.iGap;
 
+import android.content.Context;
+import android.os.Build;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
+
 import net.iGap.helper.HelperLogout;
 
 import static org.paygear.utils.Utils.signOutWallet;
@@ -32,6 +37,7 @@ public class AccountHelper {
     }
 
     private void baseBefore(){
+        clearCookies(G.context);
         WebSocketClient.getInstance().disconnectSocket(false);
         G.handler.removeCallbacksAndMessages(null);
         signOutWallet();
@@ -43,5 +49,22 @@ public class AccountHelper {
     private void baseAfter(){
         DbManager.getInstance().changeRealmConfiguration();
         WebSocketClient.getInstance().connect(true);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void clearCookies(Context context)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+            cookieSyncMngr.startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+            cookieManager.removeSessionCookie();
+            cookieSyncMngr.stopSync();
+            cookieSyncMngr.sync();
+        }
     }
 }
