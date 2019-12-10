@@ -888,33 +888,29 @@ public class HelperToolbar {
             }
         }
 
-        G.connectionStateMutableLiveData.observe(owner, new androidx.lifecycle.Observer<ConnectionState>() {
-            @Override
-            public void onChanged(@Nullable ConnectionState connectionState) {
+        G.connectionStateMutableLiveData.observe(owner, connectionState -> {
 
-                if (mTxtLogo != null && connectionState != null) {
+            if (mTxtLogo != null) {
 
+                if (connectionState != null) {
                     if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                         mTxtLogo.setText(R.string.waiting_for_network);
-
                     } else if (connectionState == ConnectionState.CONNECTING) {
                         mTxtLogo.setText(R.string.connecting);
-
                     } else if (connectionState == ConnectionState.UPDATING) {
                         mTxtLogo.setText(R.string.updating);
-
                     } else if (connectionState == ConnectionState.IGAP) {
                         mTxtLogo.setText(defaultTitleText);
-
                     } else {
                         mTxtLogo.setText(defaultTitleText);
                     }
-
-                    checkIGapFont();
-
+                }else {
+                    mTxtLogo.setText(defaultTitleText);
                 }
 
+                checkIGapFont();
             }
+
         });
     }
 
