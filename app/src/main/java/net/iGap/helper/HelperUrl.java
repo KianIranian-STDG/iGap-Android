@@ -17,6 +17,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -304,12 +306,17 @@ public class HelperUrl {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (intent.resolveActivity(G.fragmentActivity.getPackageManager()) != null) {
+        if (intent.resolveActivity(G.fragmentActivity.getPackageManager()) != null && isAvailable(G.fragmentActivity, intent)) {
             G.fragmentActivity.startActivity(intent);
         } else {
-//            Toast.makeText(G.fragmentActivity, "", Toast.LENGTH_SHORT).show();
             HelperError.showSnackMessage(G.context.getResources().getString(R.string.error), false);
         }
+    }
+
+    private static boolean isAvailable(Context ctx, Intent intent) {
+        final PackageManager mgr = ctx.getPackageManager();
+        List<ResolveInfo> list = mgr.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
     public static void openBrowser(String url) {
