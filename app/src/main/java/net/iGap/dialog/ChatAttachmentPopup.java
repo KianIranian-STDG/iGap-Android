@@ -850,15 +850,13 @@ public class ChatAttachmentPopup {
 //                .lensPosition(back())     // we want back camera
                     .cameraErrorCallback(e -> {
                         fotoapparatSwitcher = null;
-                        Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
-                        new HelperLog().setErrorLog(e);
+                        HelperLog.setErrorLog(e);
                     })
                     .build();
         }
         catch (Exception e) {
             fotoapparatSwitcher = null;
-            Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
-            new HelperLog().setErrorLog(e);
+            HelperLog.setErrorLog(e);
         }
 
     }
