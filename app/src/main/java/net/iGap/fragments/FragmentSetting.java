@@ -100,6 +100,8 @@ public class FragmentSetting extends BaseFragment {
                 });
         binding.toolbar.addView(t.getView());
 
+        viewModel.setCurrentLanguage();
+
         viewModel.showDialogDeleteAccount.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDeleteAccountDialog();
@@ -114,7 +116,7 @@ public class FragmentSetting extends BaseFragment {
 
         viewModel.goToLanguagePage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(true).load();
             }
         });
 
