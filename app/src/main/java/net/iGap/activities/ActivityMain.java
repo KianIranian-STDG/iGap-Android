@@ -359,6 +359,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragmentBottomNav = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragmentBottomNav instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragmentBottomNav).checkHasSharedData(true);//set true just for checking state
+            ((BottomNavigationFragment) fragmentBottomNav).isFirstTabItem();
         }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
@@ -1924,6 +1925,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setForwardMessage(enable);
+            ((BottomNavigationFragment) fragment).isFirstTabItem();
         }
     }
 
