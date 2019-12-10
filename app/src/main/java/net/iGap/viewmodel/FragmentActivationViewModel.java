@@ -34,7 +34,7 @@ public class FragmentActivationViewModel extends ViewModel {
     public MutableLiveData<WaitTimeModel> showWaitDialog = new MutableLiveData<>();
     public SingleLiveEvent<Integer> showEnteredCodeErrorServer = new SingleLiveEvent<>();
     public ObservableInt showLoading = new ObservableInt(View.GONE);
-    public ObservableInt sendActivationStatus = new ObservableInt();
+    public ObservableInt sendActivationStatus = new ObservableInt(R.string.empty_error_message);
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
