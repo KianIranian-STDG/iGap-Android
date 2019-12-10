@@ -2324,7 +2324,7 @@
     <string name="elecBill_success_title">موفقیت</string>
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
     <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
-    <string name="delete_from_storage">حذف از حافظه</string>
+    <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
     <string name="need_browser">برای استفاده نیاز به مرورگر است.</string>
 </resources>
