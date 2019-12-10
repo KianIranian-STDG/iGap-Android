@@ -10,6 +10,7 @@
 
 package net.iGap.request;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -219,7 +220,12 @@ public class RequestQueue {
         for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
             String key = entry.getKey();
             RequestWrapper requestWrapper = entry.getValue();
-            boolean delete = timeDifference(requestWrapper.getTime());
+            boolean delete;
+            if (requestWrapper.actionId == 102) {
+                delete = timeDifference(requestWrapper.getTime(), (10 * DateUtils.SECOND_IN_MILLIS));
+            } else {
+                delete = timeDifference(requestWrapper.getTime(), Config.TIME_OUT_MS);
+            }
             if (delete) {
                 deleteRequest(key);
             }
@@ -331,7 +337,7 @@ public class RequestQueue {
     /**
      * if time not set yet don't set timeout
      */
-    private static boolean timeDifference(long beforeTime) {
+    private static boolean timeDifference(long beforeTime, long config) {
         if (beforeTime == 0) {
             return false;
         }
@@ -341,7 +347,7 @@ public class RequestQueue {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        return difference >= Config.TIME_OUT_MS;
+        return difference >= config;
     }
 
 
