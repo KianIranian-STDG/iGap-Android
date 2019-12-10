@@ -1505,6 +1505,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         }
                     }
                 });
+
+                messageProgress.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        isSelectedMode = true;
+                        setSelectedItem(getPosition());
+                        return true;
+                    }
+                });
             }
         }
 
