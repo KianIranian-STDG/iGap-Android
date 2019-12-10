@@ -71,7 +71,6 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
-import androidx.collection.ArrayMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -239,7 +238,6 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
-import net.iGap.module.FileUtils;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.IntentRequests;
 import net.iGap.module.LastSeenTimeUtil;
@@ -318,22 +316,18 @@ import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -376,6 +370,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
@@ -813,9 +808,9 @@ public class FragmentChat extends BaseFragment
 
     private void setupIntentReceiverForGetDataInTwoPanMode() {
         //todo://fix chat fragment back stack and remove this code
-        if (getActivity() instanceof ActivityMain){
+        if (getActivity() instanceof ActivityMain) {
             ((ActivityMain) getActivity()).dataTransformer = (id, data) -> {
-                if (id == AttachFile.request_code_trim_video){
+                if (id == AttachFile.request_code_trim_video) {
                     manageTrimVideoResult(data);
                 }
             };
@@ -1443,7 +1438,7 @@ public class FragmentChat extends BaseFragment
     private void manageSelectedVideoResult(String path) {
         latestRequestCode = request_code_VIDEO_CAPTURED;
         listPathString = new ArrayList<>();
-        mainVideoPath = path ;
+        mainVideoPath = path;
         listPathString.add(mainVideoPath);
         showDraftLayout();
         setDraftMessage(request_code_VIDEO_CAPTURED);
@@ -3424,8 +3419,7 @@ public class FragmentChat extends BaseFragment
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
                 rootWebView.addView(webViewChatPage, params);
 //                webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 return;
             }
         }
@@ -4291,6 +4285,7 @@ public class FragmentChat extends BaseFragment
 
         boolean shareLinkIsOn = false;
 
+
         RealmRoom room = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.realmRoomMessage.getRoomId()).findFirst();
         });
@@ -4306,6 +4301,7 @@ public class FragmentChat extends BaseFragment
             items.add(getString(R.string.share_link_item_dialog));
         items.add(getString(R.string.forward_item_dialog));
         items.add(getString(R.string.delete_item_dialog));
+        if (isFileExistInLocalStorage(message)) items.add(getString(R.string.delete_from_storage));
 
         //check and remove share base on type and download state
         if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")) {
@@ -4492,7 +4488,9 @@ public class FragmentChat extends BaseFragment
                 }
                 finishChat();
             } else if (items.get(position).equals(getString(R.string.delete_item_dialog))) {
-                confirmAndDeleteMessage(message , false);
+                confirmAndDeleteMessage(message, false);
+            } else if (items.get(position).equals(getString(R.string.delete_from_storage))) {
+                confirmAndDeleteFromStorage(message, pos);
             } else if (items.get(position).equals(getString(R.string.edit_item_dialog))) {
                 // edit message
                 // put message text to EditText
@@ -4543,7 +4541,7 @@ public class FragmentChat extends BaseFragment
 
                     final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
                     if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                        HelperDownloadFile.getInstance().startDownload(message.realmRoomMessage.getMessageType(), message.realmRoomMessage.getMessageId()+ "", fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(message.realmRoomMessage.getMessageType(), message.realmRoomMessage.getMessageId() + "", fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 
@@ -4686,7 +4684,34 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void confirmAndDeleteMessage(StructMessageInfo message , boolean isFromMultiSelect) {
+    private void confirmAndDeleteFromStorage(StructMessageInfo message, int pos) {
+        if (getContext() == null) return;
+        new MaterialDialog.Builder(getContext())
+                .content(R.string.are_you_sure)
+                .positiveText(R.string.yes)
+                .negativeText(R.string.cancel)
+                .onPositive((dialog, which) -> DbManager.getInstance().doRealmTask(realm -> {
+
+                    realm.executeTransactionAsync(realm1 -> {
+
+                        deleteFileFromStorageIfExist(message);
+                        RealmAttachment attachment = realm1.where(RealmAttachment.class)
+                                .equalTo(RealmAttachmentFields.TOKEN, message.getAttachment().getToken())
+                                .findFirst();
+
+                        if (attachment != null) {
+                            attachment.setLocalFilePath("");
+                        }
+                    }, () -> {
+                        // do ui task
+                        mAdapter.notifyAdapterItemChanged(pos);
+                    });
+
+                }))
+                .show();
+    }
+
+    private void confirmAndDeleteMessage(StructMessageInfo message, boolean isFromMultiSelect) {
         if (getContext() == null || message == null) return;
 
         boolean bothDelete = RealmRoomMessage.isBothDelete(message.realmRoomMessage.getUpdateOrCreateTime());
@@ -4703,12 +4728,12 @@ public class FragmentChat extends BaseFragment
         String count = "1";
         boolean isCanDeleteAttachFromDevice = isFileExistInLocalStorage(message);
 
-        if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 &&  message.realmRoomMessage.getUserId()== AccountManager.getInstance().getCurrentUser().getId()) {
+        if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && message.realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
             // show both Delete check box
             textDeleteForBoth = getString(R.string.st_checkbox_delete) + " " + title;
 
             if (HelperCalander.isPersianUnicode) {
-                dialogContent = HelperCalander.convertToUnicodeFarsiNumber(getString(R.string.st_desc_delete, count ));
+                dialogContent = HelperCalander.convertToUnicodeFarsiNumber(getString(R.string.st_desc_delete, count));
             } else {
                 dialogContent = HelperCalander.convertToUnicodeFarsiNumber(getString(R.string.st_desc_delete, "the"));
             }
@@ -4722,7 +4747,7 @@ public class FragmentChat extends BaseFragment
 
         MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .limitIconToDefaultSize()
-                .customView(R.layout.st_dialog_delete_message ,false)
+                .customView(R.layout.st_dialog_delete_message, false)
                 .title(R.string.message)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
@@ -4736,23 +4761,23 @@ public class FragmentChat extends BaseFragment
 
         txtContent.setText(dialogContent);
 
-        if (!isCanDeleteAttachFromDevice){
+        if (!isCanDeleteAttachFromDevice) {
             checkBoxDelDevice.setVisibility(View.GONE);
         }
 
-        if (textDeleteForBoth == null){
+        if (textDeleteForBoth == null) {
             checkBoxDelBoth.setVisibility(View.GONE);
             bothDeleteMessageId = null;
-        }else {
+        } else {
             checkBoxDelBoth.setText(textDeleteForBoth);
         }
 
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v ->{
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
             if (!checkBoxDelBoth.isChecked()) {
                 bothDeleteMessageId = null;
             }
 
-            if (checkBoxDelDevice.isChecked()){
+            if (checkBoxDelDevice.isChecked()) {
                 deleteFileFromStorageIfExist(message);
             }
 
@@ -4804,7 +4829,7 @@ public class FragmentChat extends BaseFragment
                     if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
                         if (failedMessages.get(i).getAttachment() != null) {
                             if (!UploadManager.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
-                                UploadManager.getInstance().uploadMessageAndSend(chatType,message.realmRoomMessage);
+                                UploadManager.getInstance().uploadMessageAndSend(chatType, message.realmRoomMessage);
                             }
                         }
                         break;
@@ -6225,7 +6250,7 @@ public class FragmentChat extends BaseFragment
                                 break;
                             case video:
                                 if (HelperGetDataFromOtherApp.sharedList.size() == 1) {
-                                   mainVideoPath = sharedData.address;
+                                    mainVideoPath = sharedData.address;
                                     if (mainVideoPath == null) return;
 
                                     if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
@@ -6863,8 +6888,8 @@ public class FragmentChat extends BaseFragment
 
                     //delete one message with multiple are different , when list size one do job in another method that able to remove from storage
                     //todo:// do multiple delete in single method
-                    if (mAdapter.getSelectedItems().size() == 1){
-                        confirmAndDeleteMessage(item.structMessage , true);
+                    if (mAdapter.getSelectedItems().size() == 1) {
+                        confirmAndDeleteMessage(item.structMessage, true);
                         return;
                     }
 
@@ -7100,7 +7125,7 @@ public class FragmentChat extends BaseFragment
         });
 
         resultsContact = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
         });
 
         List<Long> te = new ArrayList<>();
@@ -7511,7 +7536,6 @@ public class FragmentChat extends BaseFragment
                 });
             }
         }).start();
-
 
 
         G.handler.postDelayed(new Runnable() {
@@ -8063,7 +8087,6 @@ public class FragmentChat extends BaseFragment
         });
 
 
-
     }
 
     /**
@@ -8528,21 +8551,25 @@ public class FragmentChat extends BaseFragment
         biggestMessageId = 0;
     }
 
-    private void deleteFileFromStorageIfExist(StructMessageInfo message){
+    private void deleteFileFromStorageIfExist(StructMessageInfo message) {
         String path = getFilePathIfExistInStorage(message);
         if (path == null) return;
-        if (!path.contains(G.IGAP + "/") && !path.contains("/net.iGap/")) return; //dont remove images was not in igap folder
+        if (!path.contains(G.IGAP + "/") && !path.contains("/net.iGap/"))
+            return; //dont remove images was not in igap folder
         File file = new File(path);
         if (file.exists()) file.delete();
     }
 
     private boolean isFileExistInLocalStorage(StructMessageInfo message) {
+        if (message.realmRoomMessage.getMessageType() == STICKER) return false;
         String path = getFilePathIfExistInStorage(message);
         if (path == null) return false;
+        if (!path.contains(G.IGAP + "/") && !path.contains("/net.iGap/"))
+            return false; //just remove from igap folder
         return new File(path).exists();
     }
 
-    private String getFilePathIfExistInStorage(StructMessageInfo message){
+    private String getFilePathIfExistInStorage(StructMessageInfo message) {
 
         if (message.getAttachment() == null) return null;
 
@@ -8873,19 +8900,19 @@ public class FragmentChat extends BaseFragment
                     setDownBtnGone();
                     setCountNewMessageZero();
                     DbManager.getInstance().doRealmTask(realm -> {
-                    RealmRoomMessage.ClearAllMessageRoomAsync(realm, mRoomId, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            recyclerView.addOnScrollListener(scrollListener);
-                            saveMessageIdPositionState(0);
-                            /**
-                             * get history from server
-                             */
-                            topMore = true;
-                            getOnlineMessage(0, UP);
-                        }
+                        RealmRoomMessage.ClearAllMessageRoomAsync(realm, mRoomId, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                recyclerView.addOnScrollListener(scrollListener);
+                                saveMessageIdPositionState(0);
+                                /**
+                                 * get history from server
+                                 */
+                                topMore = true;
+                                getOnlineMessage(0, UP);
+                            }
+                        });
                     });
-                });
 
                 } else if (items.get(position).equals(getString(R.string.report))) {
                     dialogReport(false, 0);
@@ -8965,12 +8992,12 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onAttachPopupVideoPickerResult(List<String> results) {
 
-        if (results.size() == 1){
+        if (results.size() == 1) {
             manageSelectedVideoResult(results.get(0));
             return;
         }
 
-        for (String path : results){
+        for (String path : results) {
             sendMessage(request_code_VIDEO_CAPTURED, path);
         }
         edtChat.setText("");
