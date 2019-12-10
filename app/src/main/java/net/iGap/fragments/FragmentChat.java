@@ -4520,6 +4520,7 @@ public class FragmentChat extends BaseFragment
                     ((ActivityMain) getActivity()).setForwardMessage(true);
                 }
                 finishChat();
+                new HelperFragment(getFragmentManager()).removeAll(true);
             } else if (items.get(position).equals(getString(R.string.delete_item_dialog))) {
                 confirmAndDeleteMessage(message , false);
             } else if (items.get(position).equals(getString(R.string.edit_item_dialog))) {

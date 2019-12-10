@@ -153,7 +153,7 @@
                         android:digits="0123456789"
                         android:imeOptions="actionNext"
                         android:lines="1"
-                        android:maxLength="11"
+                        android:maxLength="12"
                         android:maxLines="1"
                         android:textSize="@dimen/dp18" />
 
