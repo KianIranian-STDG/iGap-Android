@@ -204,7 +204,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     @Override
     public boolean onBack() {
         webView.stopLoading();
-        if (webView.canGoBack()) {
+        if (webView.canGoBack() && !forceCloseFragment) {
             webView.clearView();
             webView.goBack();
             customWebViewClient.isWebViewVisible = true;
