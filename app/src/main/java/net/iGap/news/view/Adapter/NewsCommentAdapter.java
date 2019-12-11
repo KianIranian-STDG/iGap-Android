@@ -1,14 +1,18 @@
 package net.iGap.news.view.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.news.repository.model.NewsComment;
 
 import java.util.List;
@@ -45,16 +49,31 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class GroupViewHolder extends RecyclerView.ViewHolder {
 
         private TextView author, comment;
+        private CardView container;
 
         GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             author = itemView.findViewById(R.id.author);
             comment = itemView.findViewById(R.id.comment);
+            container = itemView.findViewById(R.id.container);
         }
 
         void initView(int position) {
             author.setText(mData.get(position).getUsername());
             comment.setText(mData.get(position).getComment());
+            setColor();
+        }
+
+        private void setColor() {
+            if (G.themeColor == Theme.DARK) {
+                changeToDark();
+                return;
+            }
+            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+        }
+
+        private void changeToDark() {
+            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.background_setting_dark));
         }
     }
 
