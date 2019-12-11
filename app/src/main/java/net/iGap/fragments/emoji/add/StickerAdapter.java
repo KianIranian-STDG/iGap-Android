@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,16 +34,6 @@ public class StickerAdapter extends RecyclerView.Adapter {
     private String TAG = "abbasiStickerAdapter";
 
     public void setListener(AddStickerDialogListener listener) {
-
-        IGDownloadFileStruct igDownloadFileStruct = new IGDownloadFileStruct("15760518759260924", "FVBZ7BEPzKuHXEQ9OqGO5va7iV4oTRqW7MPVjrSK"
-                , 248836, "/data/data/net.iGap/files/stickers/abbasi248.json");
-
-        IGDownloadFileStruct igDownloadFileStruct2 = new IGDownloadFileStruct("15760518255969092", "rJyDlHOnZK6QmmRQF8KhQplVbIGWtr9wFKdpz4AS"
-                , 41942, "/data/data/net.iGap/files/stickers/abolfazl.json");
-
-//        IGDownloadFile.getInstance().startDownload(igDownloadFileStruct2);
-//        IGDownloadFile.getInstance().startDownload(igDownloadFileStruct);
-
         this.listener = listener;
     }
 
@@ -108,7 +97,6 @@ public class StickerAdapter extends RecyclerView.Adapter {
             if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals("")) {
                 if (structIGSticker.hasFileOnLocal()) {
                     Glide.with(itemView.getContext()).load(structIGSticker.getPath()).into(normalStickerCell);
-                    Log.i(TAG, "LOAD NORMAL STICKER WITH PATH -> " + structIGSticker.getPath());
                 } else {
                     EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
                         String filePath = (String) message[0];
@@ -116,7 +104,6 @@ public class StickerAdapter extends RecyclerView.Adapter {
 
                         if (token.equals(structIGSticker.getToken())) {
                             G.handler.post(() -> Glide.with(itemView.getContext()).load(filePath).into(normalStickerCell));
-                            Log.i(TAG, "DOWNLOAD STICKER SUCCESSFULLY  token -> " + token + " path -> " + filePath);
                         }
                     });
 
@@ -155,7 +142,6 @@ public class StickerAdapter extends RecyclerView.Adapter {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Log.i(TAG, "LOAD LOTTIE STICKER WITH PATH -> " + structIGSticker.getPath());
                 } else {
                     EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
                         String filePath = (String) message[0];
@@ -163,23 +149,16 @@ public class StickerAdapter extends RecyclerView.Adapter {
 
                         G.handler.post(() -> {
                             if (token.equals(structIGSticker.getToken())) {
-
-                                Toast.makeText(G.context, "" + token, Toast.LENGTH_SHORT).show();
-
                                 try {
-                                    stickerCell.setAnimation(new FileInputStream(structIGSticker.getPath()), null);
+                                    stickerCell.setAnimation(new FileInputStream(filePath), null);
                                     stickerCell.playAnimation();
-                                    Log.i(TAG, "MUST ANIMATION PLAYED " + token);
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 }
                             }
-
                         });
-                        Log.i(TAG, "DOWNLOAD STICKER SUCCESSFULLY  token -> " + token + " path -> " + filePath);
                     });
-//                    HelperDownloadSticker.downloadSticker(structIGSticker);
-//
+
                     IGDownloadFile.getInstance().startDownload(
                             new IGDownloadFileStruct(structIGSticker.getId(), structIGSticker.getToken(), structIGSticker.getFileSize(), structIGSticker.getPath()));
 

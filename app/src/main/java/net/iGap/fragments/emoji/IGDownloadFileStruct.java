@@ -16,4 +16,5 @@ public class IGDownloadFileStruct {
     public String path;
     public long nextOffset;
     public long progress;
+    public OnStickerDownload onStickerDownload;
 }

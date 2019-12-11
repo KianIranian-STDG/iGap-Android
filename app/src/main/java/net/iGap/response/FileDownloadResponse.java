@@ -10,8 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
 import net.iGap.G;
 import net.iGap.fragments.emoji.IGDownloadFileStruct;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -43,25 +41,16 @@ public class FileDownloadResponse extends MessageHandler {
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
 
         if (identity instanceof IGDownloadFileStruct) {
-            IGDownloadFileStruct sticker = (IGDownloadFileStruct) identity;
+            IGDownloadFileStruct fileStruct = (IGDownloadFileStruct) identity;
 
-            long fileSize = sticker.size;
-            String filePath = sticker.path;
-            long previousOffset = sticker.offset;
-            long arraySize = builder.getBytes().toByteArray().length;
+            fileStruct.nextOffset = fileStruct.offset + builder.getBytes().toByteArray().length;
 
-            sticker.nextOffset = previousOffset + arraySize;
-//            sticker.nextOffset = sticker.nextOffset + previousOffset > fileSize - previousOffset ? fileSize - previousOffset : sticker.nextOffset;
-            sticker.progress = (sticker.nextOffset * 100) / fileSize;
+            fileStruct.progress = (fileStruct.nextOffset * 100) / fileStruct.size;
 
-            AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
-//            Log.i("abbasiProgress", "progress: " + sticker.progress + " token " + sticker.id);
+            AndroidUtils.writeBytesToFile(fileStruct.path, builder.getBytes().toByteArray());
 
-            Log.i("abbasiProgress", "length " + builder.getBytes().toByteArray().length);
-            Log.i("abbasiProgress", "size " + builder.getBytes().size());
-
-            if (G.onStickerDownload != null)
-                G.onStickerDownload.onStickerDownload(sticker);
+            if (fileStruct.onStickerDownload != null)
+                fileStruct.onStickerDownload.onStickerDownload(fileStruct);
 
         } else {
             RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
@@ -126,6 +115,13 @@ public class FileDownloadResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+
+        if (identity instanceof IGDownloadFileStruct) {
+            IGDownloadFileStruct fileStruct = (IGDownloadFileStruct) identity;
+
+            if (fileStruct.onStickerDownload != null)
+                fileStruct.onStickerDownload.onError(fileStruct);
+        }
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
