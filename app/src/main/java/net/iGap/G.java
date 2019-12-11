@@ -39,6 +39,7 @@ import com.yariksoffice.lingver.Lingver;
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
+import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.*;
@@ -262,6 +263,7 @@ public class G extends ApplicationContext {
     //    public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
     public static OnStickerDownloaded onStickerDownloaded;
+    public static OnStickerDownload onStickerDownload;
     public static OnUserInfoMyClient onUserInfoMyClient;
     public static OnChannelAddMessageReaction onChannelAddMessageReaction;
     public static OnChannelGetMessagesStats onChannelGetMessagesStats;

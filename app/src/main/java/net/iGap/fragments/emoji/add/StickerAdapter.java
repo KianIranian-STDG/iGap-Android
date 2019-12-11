@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.IGDownloadFile;
+import net.iGap.fragments.emoji.IGDownloadFileStruct;
 import net.iGap.helper.LayoutCreator;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,9 +33,18 @@ public class StickerAdapter extends RecyclerView.Adapter {
     private List<StructIGSticker> igStickers = new ArrayList<>();
     private AddStickerDialogListener listener;
     private String TAG = "abbasiStickerAdapter";
-    private List<String> paths = new ArrayList<>();
 
     public void setListener(AddStickerDialogListener listener) {
+
+        IGDownloadFileStruct igDownloadFileStruct = new IGDownloadFileStruct("15760518759260924", "FVBZ7BEPzKuHXEQ9OqGO5va7iV4oTRqW7MPVjrSK"
+                , 248836, "/data/data/net.iGap/files/stickers/abbasi248.json");
+
+        IGDownloadFileStruct igDownloadFileStruct2 = new IGDownloadFileStruct("15760518255969092", "rJyDlHOnZK6QmmRQF8KhQplVbIGWtr9wFKdpz4AS"
+                , 41942, "/data/data/net.iGap/files/stickers/abolfazl.json");
+
+//        IGDownloadFile.getInstance().startDownload(igDownloadFileStruct2);
+//        IGDownloadFile.getInstance().startDownload(igDownloadFileStruct);
+
         this.listener = listener;
     }
 
@@ -149,18 +161,28 @@ public class StickerAdapter extends RecyclerView.Adapter {
                         String filePath = (String) message[0];
                         String token = (String) message[1];
 
-                        if (token.equals(structIGSticker.getToken())) {
-                            G.handler.post(() -> {
+                        G.handler.post(() -> {
+                            if (token.equals(structIGSticker.getToken())) {
+
+                                Toast.makeText(G.context, "" + token, Toast.LENGTH_SHORT).show();
+
                                 try {
                                     stickerCell.setAnimation(new FileInputStream(structIGSticker.getPath()), null);
+                                    stickerCell.playAnimation();
+                                    Log.i(TAG, "MUST ANIMATION PLAYED " + token);
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 }
-                            });
-                            Log.i(TAG, "DOWNLOAD STICKER SUCCESSFULLY  token -> " + token + " path -> " + filePath);
-                        }
+                            }
+
+                        });
+                        Log.i(TAG, "DOWNLOAD STICKER SUCCESSFULLY  token -> " + token + " path -> " + filePath);
                     });
-                    HelperDownloadSticker.downloadSticker(structIGSticker);
+//                    HelperDownloadSticker.downloadSticker(structIGSticker);
+//
+                    IGDownloadFile.getInstance().startDownload(
+                            new IGDownloadFileStruct(structIGSticker.getId(), structIGSticker.getToken(), structIGSticker.getFileSize(), structIGSticker.getPath()));
+
                 }
             }
 
