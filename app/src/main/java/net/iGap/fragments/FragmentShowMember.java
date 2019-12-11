@@ -422,6 +422,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setSearchBoxShown(true)

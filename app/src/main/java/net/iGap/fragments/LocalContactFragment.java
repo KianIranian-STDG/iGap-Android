@@ -174,6 +174,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     private void toolbarInit() {
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.share_icon)
                 .setSearchBoxShown(true)

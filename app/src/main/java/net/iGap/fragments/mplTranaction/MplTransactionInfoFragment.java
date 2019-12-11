@@ -246,6 +246,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(G.fragmentActivity)
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(this)
                 .setLogoShown(true)
                 .setRightIcons(R.string.download_icon)

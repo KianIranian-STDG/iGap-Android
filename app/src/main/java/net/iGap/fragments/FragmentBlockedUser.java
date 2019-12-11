@@ -67,6 +67,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.Block_Users))
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)

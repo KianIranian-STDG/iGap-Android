@@ -99,6 +99,7 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)
                 .setDefaultTitle(getString(R.string.add_new_member))

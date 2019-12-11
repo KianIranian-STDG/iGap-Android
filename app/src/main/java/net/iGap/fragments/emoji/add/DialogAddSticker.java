@@ -118,6 +118,7 @@ public class DialogAddSticker extends DialogFragment {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.add_icon_without_circle_font)
                 .setLogoShown(true)

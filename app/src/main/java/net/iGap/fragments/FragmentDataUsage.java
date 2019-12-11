@@ -48,6 +48,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {

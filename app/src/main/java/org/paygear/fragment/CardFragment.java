@@ -112,6 +112,7 @@ public class CardFragment extends Fragment {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.payment))
                 .setRightIcons(R.string.scan_qr_code_icon)

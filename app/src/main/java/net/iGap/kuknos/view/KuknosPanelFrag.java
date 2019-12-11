@@ -82,6 +82,7 @@ public class KuknosPanelFrag extends BaseFragment {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
                     @Override

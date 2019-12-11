@@ -110,6 +110,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.str_frag_sync_contactWelcome));

@@ -56,7 +56,9 @@ public class FragmentUserScore extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HelperToolbar t = HelperToolbar.create().setContext(getContext())
+        HelperToolbar t = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.history_icon)
                 .setLogoShown(true)

@@ -120,6 +120,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     private void initToolBar(ViewGroup viewGroup) {
         HelperToolbar helperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setListener(this)

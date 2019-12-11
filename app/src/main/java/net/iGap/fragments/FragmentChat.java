@@ -1467,6 +1467,7 @@ public class FragmentChat extends BaseFragment
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon)
                 .setLogoShown(false)

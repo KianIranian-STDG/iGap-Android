@@ -706,6 +706,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.igap_nearby))
                 .setLeftIcon(R.string.back_icon)

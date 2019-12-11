@@ -68,6 +68,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
         fragmentPrivacyAndSecurityBinding.fpsLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(getString(R.string.st_title_Privacy_Security))
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)

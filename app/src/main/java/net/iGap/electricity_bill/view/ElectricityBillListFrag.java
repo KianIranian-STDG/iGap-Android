@@ -75,6 +75,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.more_icon)
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

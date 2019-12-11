@@ -106,6 +106,7 @@ public class PopularChannelHomeFragment extends BaseAPIViewFrag implements Toolb
     private void setupViews() {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(G.fragmentActivity)
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(this)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.popular_channel))

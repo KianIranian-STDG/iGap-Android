@@ -84,6 +84,7 @@ public class FragmentActiveSessions extends BaseFragment {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(getString(R.string.Active_Sessions))
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)

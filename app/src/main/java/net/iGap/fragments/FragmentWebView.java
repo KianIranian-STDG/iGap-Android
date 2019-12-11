@@ -162,6 +162,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setRoundBackground(false)

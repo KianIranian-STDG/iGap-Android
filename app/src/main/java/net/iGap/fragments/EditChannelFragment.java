@@ -122,6 +122,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getContext().getResources().getString(R.string.tab_edit))
                 .setLeftIcon(R.string.back_icon)

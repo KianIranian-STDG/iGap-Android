@@ -161,6 +161,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.setting_icon , R.string.group_icon)

@@ -98,6 +98,7 @@ public class FragmentPaymentBill extends BaseFragment {
 
         billBinding.fpbLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(getArguments() != null ? getArguments().getInt("title") : R.string.pay_bills_crime))
                 .setLeftIcon(R.string.back_icon)

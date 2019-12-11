@@ -55,6 +55,7 @@ public class FragmentSecurity extends BaseFragment {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.two_step_verification_title))
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)

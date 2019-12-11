@@ -269,6 +269,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 //.setRightIcons(R.string.sort_icon)
                 .setPlayerEnable(true)

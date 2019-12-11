@@ -78,6 +78,7 @@ public class OrderInfoFragment extends Fragment {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(getString(R.string.order_info))

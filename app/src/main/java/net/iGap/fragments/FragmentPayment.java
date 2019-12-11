@@ -57,6 +57,7 @@ public class FragmentPayment extends BaseFragment {
 
         fragmentPaymentBinding.fpToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.financial_services))

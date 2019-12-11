@@ -112,6 +112,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)
                 .setDefaultTitle(G.context.getResources().getString(R.string.new_group))

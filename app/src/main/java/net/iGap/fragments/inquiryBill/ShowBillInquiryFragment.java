@@ -60,6 +60,7 @@ public class ShowBillInquiryFragment extends BaseFragment {
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(getArguments() != null ? getArguments().getInt("titleRes") : R.string.bills_inquiry))
                 .setLeftIcon(R.string.back_icon)

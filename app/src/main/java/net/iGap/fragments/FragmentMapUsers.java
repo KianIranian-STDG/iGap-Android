@@ -82,6 +82,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.igap_nearby))

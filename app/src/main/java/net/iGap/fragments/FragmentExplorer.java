@@ -75,6 +75,7 @@ public class FragmentExplorer extends BaseFragment {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle("root")
                 .setLeftIcon(R.string.back_icon)

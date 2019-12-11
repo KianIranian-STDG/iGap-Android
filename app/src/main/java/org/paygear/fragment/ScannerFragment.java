@@ -134,6 +134,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.scan_qr_code_icon)

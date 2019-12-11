@@ -107,6 +107,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         if (page != 0) {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
+                    .setLifecycleOwner(getViewLifecycleOwner())
                     .setLogoShown(true)
                     .setLeftIcon(R.string.back_icon)
                     .setListener(this);
@@ -114,6 +115,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         } else {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
+                    .setLifecycleOwner(getViewLifecycleOwner())
                     //.setLeftIcon(R.string.flag_icon)
                     // .setRightSmallAvatarShown(true)
                     .setLogoShown(true)

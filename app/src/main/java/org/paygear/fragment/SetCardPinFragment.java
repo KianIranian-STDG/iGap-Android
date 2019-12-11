@@ -105,6 +105,7 @@ public class SetCardPinFragment extends Fragment {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(getString(R.string.paygear_card_pin))
