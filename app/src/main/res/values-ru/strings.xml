@@ -275,7 +275,7 @@
     <string name="array_1_hour">1 час</string>
     <string name="array_2_hour">2 часа</string>
     <string name="array_4_hour">4 часа</string>
-    <string name="array_Default_Notification_tone">Песня уведомлений по умолчанию</string>
+    <string name="Default_Notification_tone">Песня уведомлений по умолчанию</string>
     <string name="replay_item_dialog">Ответ</string>
     <string name="copy_item_dialog">Копия</string>
     <string name="share_item_dialog">Поделиться</string>

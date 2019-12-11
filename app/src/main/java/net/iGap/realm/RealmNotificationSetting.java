@@ -33,7 +33,7 @@ public class RealmNotificationSetting extends RealmObject {
         RealmNotificationSetting realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
         realmNotificationSetting.setNotification(0);
         realmNotificationSetting.setVibrate(-1);
-        realmNotificationSetting.sound(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+        realmNotificationSetting.sound(G.fragmentActivity.getResources().getString(R.string.Default_Notification_tone));
         realmNotificationSetting.setIdRadioButtonSound(-1);
         realmNotificationSetting.setSmartNotification(G.fragmentActivity.getResources().getString(R.string.array_Default));
         realmNotificationSetting.setTimes(-1);

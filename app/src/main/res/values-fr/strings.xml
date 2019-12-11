@@ -276,7 +276,7 @@
     <string name="array_1_hour">une heure</string>
     <string name="array_2_hour">2 heures</string>
     <string name="array_4_hour">4 heures</string>
-    <string name="array_Default_Notification_tone">sonnerie en défaut des notifications</string>
+    <string name="Default_Notification_tone">sonnerie en défaut des notifications</string>
     <string name="replay_item_dialog">réponse</string>
     <string name="copy_item_dialog">copie</string>
     <string name="share_item_dialog">partager</string>

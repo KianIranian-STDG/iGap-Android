@@ -116,7 +116,7 @@ public class FragmentNotificationViewModel {
 
     private void startSound() {
         if (realmIdSound == 0 || realmIdSound == -1) {
-            sound.set(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+            sound.set(G.fragmentActivity.getResources().getString(R.string.Default_Notification_tone));
         } else {
             sound.set(realmSound);
         }
