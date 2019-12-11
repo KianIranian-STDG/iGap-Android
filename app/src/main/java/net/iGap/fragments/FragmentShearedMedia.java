@@ -259,6 +259,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         super.onDestroy();
 
         MusicPlayer.shearedMediaLayout = null;
+        G.onClientSearchRoomHistory = null;
 
         ActivityMain.setMediaLayout();
     }
@@ -275,6 +276,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 //.setSearchBoxShown(true)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.shared_media))
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(this);
 
         toolbarLayout.addView(mHelperToolbar.getView());
