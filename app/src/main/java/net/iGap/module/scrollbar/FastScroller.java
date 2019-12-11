@@ -101,7 +101,7 @@ public class FastScroller extends LinearLayout {
             setRecyclerViewPosition(event.getY());
             handle.setSelected(true);
             return true;
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+        } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
             recyclerView.setOnScrollListener(scrollListener);
             getHandler().postDelayed(handleHider, HANDLE_HIDE_DELAY);
             return true;
