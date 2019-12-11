@@ -3880,6 +3880,10 @@ public class FragmentChat extends BaseFragment
         if (isBot) {
             if (rootView != null) {
                 rootView.post(() -> {
+
+                    if (getActivity() == null || getActivity().isFinishing())
+                        return;
+
                     if (roomMessage.getAdditionalType() == Additional.WEB_VIEW.getAdditional()) {
                         openWebViewForSpecialUrlChat(roomMessage.getAdditionalData());
                         return;
@@ -3899,14 +3903,13 @@ public class FragmentChat extends BaseFragment
                             }
                         }
                     }
-                    if (getActivity() != null) {
-                        if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId) {
 
-                            if (rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
-                                botInit.updateCommandList(false, message, getActivity(), backToMenu, roomMessage, roomId, true);
-                            else
-                                botInit.updateCommandList(false, "clear", getActivity(), backToMenu, null, 0, true);
-                        }
+                    if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId) {
+
+                        if (rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
+                            botInit.updateCommandList(false, message, getActivity(), backToMenu, roomMessage, roomId, true);
+                        else
+                            botInit.updateCommandList(false, "clear", getActivity(), backToMenu, null, 0, true);
                     }
 
                     if (isShowStartButton) {
