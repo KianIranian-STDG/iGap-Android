@@ -26,11 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -57,8 +57,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
 
 import org.paygear.WalletActivity;
-
-import io.realm.Realm;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
@@ -305,7 +303,8 @@ public class HelperToolbar {
 
         //set default title name if user not set
         if (defaultTitleText == null || defaultTitleText.trim().equals("")) {
-            defaultTitleText = mContext.getResources().getString(R.string.app_name);
+            defaultTitleText = mContext.getString(R.string.app_name);
+            Log.wtf(this.getClass().getName(), "defaultTitleText: " + defaultTitleText);
         }
 
         typeFaceGenerator();
@@ -839,8 +838,28 @@ public class HelperToolbar {
         }
 
         if (isCheckIGapLogo) {
+            switch (G.selectedLanguage){
+                case"en":
+                case "ru":
+                case "fr":
+                    Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+                    mTxtLogo.setTypeface(tfFontIcon);
+                    mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
+                    break;
+                case "fa":
+                case "ar":
+                case"ur":
+                    Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+                    mTxtLogo.setTypeface(tfFontIcon);
+                    mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
+                    Log.wtf(this.getClass().getName(), "isCheckIGapLogo: igap_fa_icon");
+                    break;
+                    default:
+                        mTxtLogo.setTypeface(tfMain);
 
-            if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+            }
+            /*if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+                Log.wtf(this.getClass().getName(), "isCheckIGapLogo: igap_en_icon");
                 Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
                 mTxtLogo.setTypeface(tfFontIcon);
                 mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
@@ -848,11 +867,12 @@ public class HelperToolbar {
                 Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
                 mTxtLogo.setTypeface(tfFontIcon);
                 mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
+                Log.wtf(this.getClass().getName(), "isCheckIGapLogo: igap_fa_icon");
             } else {
                 mTxtLogo.setTypeface(tfMain);
-            }
+            }*/
 
-        }else{
+        } else {
             mTxtLogo.setTypeface(tfMain);
         }
 
@@ -904,7 +924,7 @@ public class HelperToolbar {
                     } else {
                         mTxtLogo.setText(defaultTitleText);
                     }
-                }else {
+                } else {
                     mTxtLogo.setText(defaultTitleText);
                 }
 
@@ -1023,11 +1043,11 @@ public class HelperToolbar {
                 } else {
                     phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 //maybe exception was for realm substring
-                try{
+                try {
                     phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     //nothing
                 }
             }
@@ -1035,7 +1055,7 @@ public class HelperToolbar {
             if (userInfo == null || !userInfo.isWalletRegister()) {
                 new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
             } else {
-                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber, true),WALLET_REQUEST_CODE);
+                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext, new Intent(mFragmentActivity, WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
             }
 
         });
