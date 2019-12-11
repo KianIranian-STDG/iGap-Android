@@ -362,12 +362,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        viewModel.onDestroy();
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getName());
