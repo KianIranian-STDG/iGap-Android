@@ -456,14 +456,6 @@ public class FragmentGallery extends BaseFragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        if (mGalleryVideoAdapter != null) mGalleryVideoAdapter.clearThumbnailCache();
-        if (mGalleryMusicAdapter != null) mGalleryMusicAdapter.clearThumbnailCache();
-
-        super.onDestroy();
-    }
-
     public interface GalleryFragmentListener {
         void openOsGallery();
 
