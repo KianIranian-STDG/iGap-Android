@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -304,7 +303,6 @@ public class HelperToolbar {
         //set default title name if user not set
         if (defaultTitleText == null || defaultTitleText.trim().equals("")) {
             defaultTitleText = mContext.getString(R.string.app_name);
-            Log.wtf(this.getClass().getName(), "defaultTitleText: " + defaultTitleText);
         }
 
         typeFaceGenerator();
@@ -473,7 +471,6 @@ public class HelperToolbar {
 
     public void registerTimerBroadcast() {
         if (mContext == null || callTimerReceiver == null) {
-            Log.wtf(this.getClass().getName(), "registerTimerBroadcast");
             return;
         }
         IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
