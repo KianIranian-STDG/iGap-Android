@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -188,6 +187,7 @@ public class ChatAttachmentPopup {
 
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
+        contentView.setVisibility(View.INVISIBLE);
 
         contentView.setOnClickListener(v -> {
             //nothing
@@ -577,7 +577,7 @@ public class ChatAttachmentPopup {
         }
     }
 
-    public void directDismiss(){
+    public void directDismiss() {
         if (mPopup != null) mPopup.dismiss();
     }
 
@@ -857,8 +857,7 @@ public class ChatAttachmentPopup {
                         HelperLog.setErrorLog(e);
                     })
                     .build();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fotoapparatSwitcher = null;
             HelperLog.setErrorLog(e);
         }
