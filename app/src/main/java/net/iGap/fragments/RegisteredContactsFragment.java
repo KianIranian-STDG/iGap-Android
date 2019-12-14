@@ -157,26 +157,24 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
-        if (mHelperToolbar == null)
-            if (isContact) {
-                mHelperToolbar = HelperToolbar.create()
-                        .setContext(getContext())
-                        .setLeftIcon(R.string.edit_icon)
-                        .setRightIcons(R.string.add_icon_without_circle_font)
-                        .setFragmentActivity(getActivity())
-                        .setPassCodeVisibility(true, R.string.unlock_icon)
-                        .setScannerVisibility(true, R.string.scan_qr_code_icon)
-                        .setSearchBoxShown(true)
-                        .setLogoShown(true);
-            } else {
-                mHelperToolbar = HelperToolbar.create()
-                        .setContext(getContext())
-                        .setLeftIcon(R.string.back_icon)
-                        .setRightIcons(R.string.add_icon_without_circle_font)
-                        .setSearchBoxShown(true)
-                        .setLogoShown(true);
-
-            }
+        if (isContact) {
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setLogoShown(true)
+                    .setLeftIcon(R.string.edit_icon)
+                    .setRightIcons(R.string.add_icon_without_circle_font)
+                    .setFragmentActivity(getActivity())
+                    .setPassCodeVisibility(true, R.string.unlock_icon)
+                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                    .setSearchBoxShown(true);
+        } else {
+            mHelperToolbar = HelperToolbar.create()
+                    .setContext(getContext())
+                    .setLogoShown(true)
+                    .setLeftIcon(R.string.back_icon)
+                    .setRightIcons(R.string.add_icon_without_circle_font)
+                    .setSearchBoxShown(true);
+        }
 
         if (mPageMode == CALL) {
             mHelperToolbar.setDefaultTitle(getString(R.string.make_call));

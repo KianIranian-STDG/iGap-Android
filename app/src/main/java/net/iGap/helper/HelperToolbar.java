@@ -838,28 +838,8 @@ public class HelperToolbar {
         }
 
         if (isCheckIGapLogo) {
-            switch (G.selectedLanguage){
-                case"en":
-                case "ru":
-                case "fr":
-                    Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
-                    mTxtLogo.setTypeface(tfFontIcon);
-                    mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-                    break;
-                case "fa":
-                case "ar":
-                case"ur":
-                    Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
-                    mTxtLogo.setTypeface(tfFontIcon);
-                    mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
-                    Log.wtf(this.getClass().getName(), "isCheckIGapLogo: igap_fa_icon");
-                    break;
-                    default:
-                        mTxtLogo.setTypeface(tfMain);
 
-            }
-            /*if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
-                Log.wtf(this.getClass().getName(), "isCheckIGapLogo: igap_en_icon");
+            if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
                 Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
                 mTxtLogo.setTypeface(tfFontIcon);
                 mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
@@ -867,10 +847,9 @@ public class HelperToolbar {
                 Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
                 mTxtLogo.setTypeface(tfFontIcon);
                 mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
-                Log.wtf(this.getClass().getName(), "isCheckIGapLogo: igap_fa_icon");
             } else {
                 mTxtLogo.setTypeface(tfMain);
-            }*/
+            }
 
         } else {
             mTxtLogo.setTypeface(tfMain);
