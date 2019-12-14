@@ -2247,6 +2247,7 @@ public class FragmentChat extends BaseFragment
     }
 
     public boolean onBackPressed() {
+        if (mAttachmentPopup != null) mAttachmentPopup.directDismiss();
         boolean stopSuperPress = true;
         try {
 

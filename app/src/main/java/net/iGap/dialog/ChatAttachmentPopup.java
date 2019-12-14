@@ -577,6 +577,10 @@ public class ChatAttachmentPopup {
         }
     }
 
+    public void directDismiss(){
+        if (mPopup != null) mPopup.dismiss();
+    }
+
     public void notifyRecyclerView() {
         if (fastItemAdapter == null) return;
         fastItemAdapter.notifyAdapterDataSetChanged();
