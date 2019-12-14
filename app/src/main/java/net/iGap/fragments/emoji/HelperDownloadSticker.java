@@ -29,6 +29,8 @@ public class HelperDownloadSticker {
 
     public static void stickerDownload(String token, String extention, long avatarSize, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type, UpdateStickerListener updateStickerListener) {
 
+        Log.i(TAG, "stickerDownload: " + token + " " + extention);
+
         try {
             String filePath = "";
             hashMap.put(token, updateStickerListener);
@@ -49,7 +51,7 @@ public class HelperDownloadSticker {
                 }
             };
 
-            filePath = createPathFile(token, extention);
+            filePath = downloadStickerPath(token, extention);
             if (new File(filePath).exists()) {
                 if (updateStickerListener != null)
                     updateStickerListener.OnProgress(filePath, token, 100);

@@ -99,6 +99,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.vanniktech.emoji.sticker.OnDownloadStickerListener;
+import com.vanniktech.emoji.sticker.OnLottieStickerItemDownloaded;
 import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
 import com.vanniktech.emoji.sticker.OnStickerAvatarDownloaded;
 import com.vanniktech.emoji.sticker.OnStickerItemDownloaded;
@@ -149,6 +150,8 @@ import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.IGDownloadFile;
+import net.iGap.fragments.emoji.IGDownloadFileStruct;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
@@ -307,7 +310,6 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
-import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
@@ -5797,57 +5799,64 @@ public class FragmentChat extends BaseFragment
                 .setOnDownloadStickerListener(new OnDownloadStickerListener() {
                     @Override
                     public void downloadStickerItem(String token, String extention, long avatarSize, OnStickerItemDownloaded onStickerItemDownloaded) {
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
 
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                                            return;
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention)));
 
-                                        if (progress == 100) {
-                                            onStickerItemDownloaded.onStickerItemDownload(token);
-                                        }
-                                    }
-                                });
-                            }
+                        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+                            String filePath = (String) message[0];
+                            String fileToken = (String) message[1];
 
-                            @Override
-                            public void OnError(String token) {
-
-                            }
+                            G.handler.post(() -> {
+                                if (token.equals(fileToken) && !filePath.endsWith(".json")) {
+                                    onStickerItemDownloaded.onStickerItemDownload(fileToken, filePath);
+                                }
+                            });
                         });
-
-
                     }
 
                     @Override
                     public void downloadStickerAvatar(String token, String extention, long avatarSize, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                                            return;
 
-                                        if (progress == 100) {
-                                            onStickerAvatarDownloaded.onStickerAvatarDownload(token);
-                                        }
-                                    }
-                                });
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention)));
 
-                            }
+                        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+                            String filePath = (String) message[0];
+                            String fileToken = (String) message[1];
 
-                            @Override
-                            public void OnError(String token) {
+                            G.handler.post(() -> {
+                                if (getActivity() == null || getActivity().isFinishing() || !isAdded())
+                                    return;
 
-                            }
+                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileToken);
+
+                            });
                         });
+                    }
 
+
+                    @Override
+                    public void downloadLottieStickerItem(String token, String extention, long avatarSize, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
+
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention)));
+
+
+                        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+                            String filePath = (String) message[0];
+                            String fileToken = (String) message[1];
+
+
+                            G.handler.post(() -> {
+                                if (token.equals(fileToken) && filePath.endsWith(".json")) {
+                                    lottieStickerItemDownloaded.onStickerItemDownload(fileToken, filePath);
+                                }
+                            });
+                        });
                     }
                 })
                 .setOpenPageSticker(new OnOpenPageStickerListener() {

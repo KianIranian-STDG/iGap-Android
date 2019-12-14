@@ -116,16 +116,18 @@ public class FileDownloadResponse extends MessageHandler {
     public void error() {
         super.error();
 
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+
         if (identity instanceof IGDownloadFileStruct) {
             IGDownloadFileStruct fileStruct = (IGDownloadFileStruct) identity;
 
             if (fileStruct.onStickerDownload != null)
-                fileStruct.onStickerDownload.onError(fileStruct);
+                fileStruct.onStickerDownload.onError(fileStruct, majorCode, minorCode);
         }
 
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
         RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
         type = identityFileDownload.typeDownload;
         RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
