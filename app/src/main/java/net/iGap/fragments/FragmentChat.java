@@ -154,7 +154,7 @@ import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
+import net.iGap.fragments.emoji.remove.StickersSettingFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
@@ -5870,7 +5870,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(recentStickerList)).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), StickersSettingFragment.newInstance(recentStickerList)).setReplace(false).load();
                         }
                     }
                 })

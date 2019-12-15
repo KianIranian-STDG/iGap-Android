@@ -71,6 +71,7 @@ public class StickerDialogViewModel extends BaseViewModel {
 
             @Override
             public void onError(String error) {
+                progressMutableLiveData.postValue(View.GONE);
                 Log.i(TAG, "on Error getSticker with group id -> " + stickerGroup.getGroupId());
             }
         });

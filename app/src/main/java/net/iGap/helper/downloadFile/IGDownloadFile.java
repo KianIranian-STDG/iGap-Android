@@ -29,6 +29,11 @@ public class IGDownloadFile {
 
     public void startDownload(IGDownloadFileStruct fileStruct) {
 
+        if (fileStruct.size <= 0) {
+            Log.e(TAG, "download with size 0 can not be start " + fileStruct.id);
+            return;
+        }
+
         if (!fileHashMap.containsKey(fileStruct.id)) {
             fileHashMap.put(fileStruct.id, fileStruct);
 

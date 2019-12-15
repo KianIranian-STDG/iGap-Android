@@ -21,7 +21,7 @@ import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperFragment;
 import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
-public class FragmentRemoveSticker extends BaseFragment {
+public class RemoveStickerFragment extends BaseFragment {
 
     private ProgressBar progressBar;
 
