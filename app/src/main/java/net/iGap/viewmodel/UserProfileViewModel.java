@@ -140,6 +140,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableBoolean showReferralErrorLiveData = new ObservableBoolean(false);
     private ObservableInt referralError = new ObservableInt(R.string.already_registered);
     private ObservableInt showAddAvatarButton = new ObservableInt(View.GONE);
+    private ObservableInt accountArrowVisibility = new ObservableInt(View.VISIBLE);
 
     private MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
     private MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
@@ -334,6 +335,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return showAddAvatarButton;
     }
 
+    public ObservableInt getAccountArrowVisibility() {
+        return accountArrowVisibility;
+    }
+
     public ArrayList<StructCountry> getStructCountryArrayList() {
         return structCountryArrayList;
     }
@@ -426,6 +431,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
         setCurrentFragment.setValue(isEditProfile);
         showAddAvatarButton.set(isEditProfile ? View.VISIBLE : View.GONE);
+        accountArrowVisibility.set(!isEditProfile ? View.VISIBLE : View.GONE);
     }
 
     public void onAccountsClicked() {
@@ -948,6 +954,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (isEditProfile) {
             isEditProfile = false;
             getEditProfileIcon().set(R.string.edit_icon);
+            accountArrowVisibility.set(View.VISIBLE);
             showAddAvatarButton.set(View.GONE);
             popBackStack.setValue(true);
             showAddAvatarButton.set(View.GONE);
