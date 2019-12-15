@@ -212,7 +212,6 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Log.wtf(this.getClass().getName(),"onAttachedToWindow");
         if (haveAvatarImage && avatarHandler == null) {
             avatarHandler = new AvatarHandler();
             avatarHandler.registerChangeFromOtherAvatarHandler();
@@ -223,7 +222,6 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        Log.wtf(this.getClass().getName(),"onAttachedToWindow");
         if (avatarHandler != null) {
             avatarHandler.unregisterChangeFromOtherAvatarHandler();
         }

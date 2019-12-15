@@ -90,8 +90,8 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
             return;
         }
 
-
         realmGroupRoom = realmRoom.getGroupRoom();
+        realmGroupRoom.addChangeListener(realmModel -> checkMemberCount());
         groupName.set(realmRoom.getTitle());
         initials = realmRoom.getInitials();
         role = realmGroupRoom.getRole();
@@ -102,12 +102,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         //group is private
         /*realmGroupRoom.isPrivate();*/
         //group participantsCountLabel
-        String c = realmGroupRoom.getParticipantsCountLabel();
-        if (HelperCalander.isPersianUnicode) {
-            membersCount.set(HelperCalander.convertToUnicodeFarsiNumber(c));
-        } else {
-            membersCount.set(c);
-        }
+        checkMemberCount();
         groupDescription.set(realmGroupRoom.getDescription());
         /*if (role == GroupChatRole.OWNER) {
             callBackDeleteLeaveGroup.set(G.fragmentActivity.getResources().getString(R.string.delete_group));
@@ -144,6 +139,15 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
 
         }
         chatHistoryForNewMemberStatus.set(t);
+    }
+
+    private void checkMemberCount() {
+        String c = realmGroupRoom.getParticipantsCountLabel();
+        if (HelperCalander.isPersianUnicode) {
+            membersCount.set(HelperCalander.convertToUnicodeFarsiNumber(c));
+        } else {
+            membersCount.set(c);
+        }
     }
 
     @Override

@@ -115,6 +115,11 @@ public class AccountManager {
         setUserAccountListInSharedPreferences();
     }
 
+    public void updatePhoneNumber(String phoneNumber){
+        userAccountList.get(currentUser).setPhoneNumber(phoneNumber);
+        setUserAccountListInSharedPreferences();
+    }
+
     public void setCurrentUser() {
         getCurrentUserFromSharedPreferences();
     }
@@ -169,6 +174,7 @@ public class AccountManager {
                 clearSomeStaticValue();
                 currentUser = userAccountList.size() - 1;
                 userAccountList.get(0).setDbName(getDbName());
+                userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
                 setCurrentUserInSharedPreferences();
                 setUserAccountListInSharedPreferences();
                 return userAccountList.get(currentUser).isAssigned();
