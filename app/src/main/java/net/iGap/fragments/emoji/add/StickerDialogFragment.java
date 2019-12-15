@@ -18,7 +18,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
+import net.iGap.viewmodel.sticker.StickerDialogViewModel;
 
 public class StickerDialogFragment extends BottomSheetDialogFragment {
     private View progressBar;

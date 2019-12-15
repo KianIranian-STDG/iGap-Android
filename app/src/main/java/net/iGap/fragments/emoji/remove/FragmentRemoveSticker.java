@@ -16,7 +16,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.emoji.add.StructIGStickerGroup;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
 public class FragmentRemoveSticker extends BaseFragment {
 

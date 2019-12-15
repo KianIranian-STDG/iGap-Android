@@ -4,7 +4,7 @@ import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.eventbus.EventManager;
-import net.iGap.fragments.emoji.add.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.interfaces.OnStickerDownloaded;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;

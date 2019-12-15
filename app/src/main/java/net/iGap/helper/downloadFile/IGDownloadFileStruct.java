@@ -1,4 +1,6 @@
-package net.iGap.fragments.emoji;
+package net.iGap.helper.downloadFile;
+
+import net.iGap.fragments.emoji.OnStickerDownload;
 
 public class IGDownloadFileStruct {
 

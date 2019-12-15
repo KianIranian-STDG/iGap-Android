@@ -1,4 +1,4 @@
-package net.iGap.fragments.emoji.add;
+package net.iGap.fragments.emoji.struct;
 
 import java.io.File;
 

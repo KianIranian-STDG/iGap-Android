@@ -6,8 +6,8 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.DbManager;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
-import net.iGap.fragments.emoji.add.StructIGSticker;
-import net.iGap.fragments.emoji.add.StructIGStickerGroup;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 

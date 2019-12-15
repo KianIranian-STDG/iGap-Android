@@ -1,4 +1,4 @@
-package net.iGap.fragments.emoji.remove;
+package net.iGap.viewmodel.sticker;
 
 import android.view.View;
 
@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.fragments.emoji.add.StickerRepository;
-import net.iGap.fragments.emoji.add.StructIGStickerGroup;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.viewmodel.BaseViewModel;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class RemoveStickerViewModel extends BaseViewModel {
     private MutableLiveData<Integer> removeStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> removeDialogLiveData = new MutableLiveData<>();
 
-    RemoveStickerViewModel() {
+    public RemoveStickerViewModel() {
         repository = new StickerRepository();
     }
 

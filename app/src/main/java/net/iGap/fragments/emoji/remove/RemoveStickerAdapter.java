@@ -16,11 +16,11 @@ import com.bumptech.glide.Glide;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.eventbus.EventManager;
-import net.iGap.fragments.emoji.IGDownloadFile;
-import net.iGap.fragments.emoji.IGDownloadFileStruct;
-import net.iGap.fragments.emoji.add.StructIGSticker;
-import net.iGap.fragments.emoji.add.StructIGStickerGroup;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.downloadFile.IGDownloadFile;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 
 import java.io.File;
 import java.io.FileInputStream;

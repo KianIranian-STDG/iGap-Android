@@ -17,9 +17,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
-import net.iGap.fragments.emoji.IGDownloadFile;
-import net.iGap.fragments.emoji.IGDownloadFileStruct;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.downloadFile.IGDownloadFile;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 
 import org.jetbrains.annotations.NotNull;
 

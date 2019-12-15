@@ -1,8 +1,9 @@
-package net.iGap.fragments.emoji;
+package net.iGap.helper.downloadFile;
 
 import android.util.Log;
 
 import net.iGap.eventbus.EventManager;
+import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;

@@ -1,11 +1,11 @@
-package net.iGap.fragments.emoji.add;
+package net.iGap.fragments.emoji.struct;
 
 import net.iGap.realm.RealmStickers;
 
 import java.util.List;
 
-import static net.iGap.fragments.emoji.add.StructIGSticker.ANIMATED_STICKER;
-import static net.iGap.fragments.emoji.add.StructIGSticker.NORMAL_STICKER;
+import static net.iGap.fragments.emoji.struct.StructIGSticker.ANIMATED_STICKER;
+import static net.iGap.fragments.emoji.struct.StructIGSticker.NORMAL_STICKER;
 
 public class StructIGStickerGroup {
     private String groupId;

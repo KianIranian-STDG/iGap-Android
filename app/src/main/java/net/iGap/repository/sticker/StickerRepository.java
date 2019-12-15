@@ -1,4 +1,4 @@
-package net.iGap.fragments.emoji.add;
+package net.iGap.repository.sticker;
 
 import android.util.Log;
 
@@ -11,6 +11,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.realm.RealmStickers;
 

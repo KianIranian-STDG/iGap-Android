@@ -11,9 +11,9 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.fragments.emoji.IGDownloadFileStruct;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoFileDownload;

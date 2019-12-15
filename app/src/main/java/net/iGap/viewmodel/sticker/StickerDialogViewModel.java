@@ -1,4 +1,4 @@
-package net.iGap.fragments.emoji.add;
+package net.iGap.viewmodel.sticker;
 
 import android.util.Log;
 import android.view.View;
@@ -6,6 +6,9 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.viewmodel.BaseCPayViewModel;
 import net.iGap.viewmodel.BaseViewModel;
 
@@ -27,7 +30,7 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     private int fragmentMode = LIST;
 
-    StickerDialogViewModel(StructIGStickerGroup stickerGroup) {
+    public StickerDialogViewModel(StructIGStickerGroup stickerGroup) {
         repository = new StickerRepository(stickerGroup);
         this.stickerGroup = stickerGroup;
         if (stickerGroup.hasData())
