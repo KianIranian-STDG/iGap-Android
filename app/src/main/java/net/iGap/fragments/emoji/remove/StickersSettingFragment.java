@@ -19,7 +19,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.tabs.TabLayout;
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.R;
@@ -27,26 +26,19 @@ import net.iGap.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
-import net.iGap.realm.RealmStickers;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
+public class StickersSettingFragment extends FragmentToolBarBack {
 
-    private List<StructGroupSticker> stickerList = new ArrayList<>();
     private ArrayList<StructItemSticker> recentStickerList;
 
-    public FragmentSettingRemoveStickers() {
-        // Required empty public constructor
-    }
+    public static StickersSettingFragment newInstance(ArrayList<StructItemSticker> recentStickerList) {
 
-    public static FragmentSettingRemoveStickers newInstance(ArrayList<StructItemSticker> recentStickerList) {
-
-        FragmentSettingRemoveStickers fragmentDetailStickers = new FragmentSettingRemoveStickers();
+        StickersSettingFragment fragmentDetailStickers = new StickersSettingFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("RECENT", recentStickerList);
         fragmentDetailStickers.setArguments(bundle);
@@ -62,8 +54,6 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         titleTextView.setText(R.string.remove_sticker);
-
-        stickerList = RealmStickers.getAllStickers(true);
         recentStickerList = (ArrayList<StructItemSticker>) getArguments().getSerializable("RECENT");
 
         menu_item1.setText(R.string.delete_icon);
@@ -71,7 +61,7 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
             @Override
             public void onClick(View v) {
 
-                if (FragmentRemoveRecentSticker.removeStickerList != null && FragmentRemoveRecentSticker.removeStickerList.size() > 0) {
+                if (RemoveRecentStickerFragment.removeStickerList != null && RemoveRecentStickerFragment.removeStickerList.size() > 0) {
                     new MaterialDialog.Builder(getActivity())
                             .title(getResources().getString(R.string.remove_sticker))
                             .content(getResources().getString(R.string.add_sticker_text))
@@ -80,8 +70,8 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    FragmentChat.onUpdateSticker.updateRecentlySticker(FragmentRemoveRecentSticker.removeStickerList);
-                                    FragmentRemoveRecentSticker.removeStickerList.clear();
+                                    FragmentChat.onUpdateSticker.updateRecentlySticker(RemoveRecentStickerFragment.removeStickerList);
+                                    RemoveRecentStickerFragment.removeStickerList.clear();
                                     popBackStackFragment();
                                 }
                             })
@@ -150,10 +140,10 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return FragmentRemoveSticker.newInstance(stickerList);
+                    return new RemoveStickerFragment();
                 case 1:
                 default:
-                    return FragmentRemoveRecentSticker.newInstance(recentStickerList);
+                    return RemoveRecentStickerFragment.newInstance(recentStickerList);
             }
         }
 

@@ -136,6 +136,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
     protected Theme theme;
     private VH holder;
+
     /**
      * add this prt for video player
      */
@@ -405,8 +406,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             }
         } else {
-            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS,this);
-            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_COMPRESS,this);
+            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
+            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
         }
 
         structMessage.addAttachmentChangeListener(this, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
@@ -510,7 +511,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 //                                    btnEntery.setLongValue(json.getLong("value"));
                                 }
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(theme,btnEntery, (view, buttonEntity) -> {
+                                childLayout = MakeButtons.addButtons(theme, btnEntery, (view, buttonEntity) -> {
                                     if (FragmentChat.isInSelectionMode) {
                                         holder.itemView.performLongClick();
                                         return;
@@ -634,7 +635,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             mHolder.getForwardContainer().setVisibility(View.VISIBLE);
             mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                if (!FragmentChat.isInSelectionMode) messageClickListener.onForwardClick(structMessage);
+                if (!FragmentChat.isInSelectionMode)
+                    messageClickListener.onForwardClick(structMessage);
             });
         }
 
@@ -657,7 +659,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         mHolder.getVoteContainer().setVisibility(View.GONE);
         mHolder.getViewContainer().setVisibility(View.GONE);
-        if (!(holder instanceof StickerItem.ViewHolder)) {
+        if (!(holder instanceof StickerItem.ViewHolder /*|| mHolder instanceof AnimatedStickerItem.ViewHolder*/)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
                 showVote(holder);
             } else {
@@ -1155,7 +1157,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     } else {
                         if (RealmRoom.needUpdateRoomInfo(mMessage.getForwardMessage().getAuthorRoomId())) {
                             if (!updateForwardInfo.containsKey(mMessage.getForwardMessage().getAuthorRoomId())) {
-                                updateForwardInfo.put(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId()+ "");
+                                updateForwardInfo.put(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId() + "");
                             }
                         }
                     }
@@ -1375,29 +1377,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getContentBloke().getLayoutParams().width = dimens[0];
             }
 
-            /**
-             * if file already exists, simply show the local one
-             */
-            if (structMessage.getAttachment().isFileExistsOnLocalAndIsThumbnail()) {
-                /**
-                 * load file from local
-                 */
+
+            if (structMessage.getAttachment().isFileExistsOnLocalAndIsImage() || structMessage.getAttachment().isFileExistsOnLocalAndIsAnimatedSticker()) {
                 onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
                 onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else {
-                /**
-                 * file doesn't exist on local, I check for a thumbnail
-                 * if thumbnail exists, I load it into the view
-                 */
                 if (structMessage.getAttachment().isThumbnailExistsOnLocal()) {
-                    /**
-                     * load thumbnail from local
-                     */
                     onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
-                        if (mHolder instanceof StickerItem.ViewHolder) {
+                        if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder) {
                             downLoadFile(holder, 0);
                         } else {
                             downLoadThumbnail(holder);
@@ -1411,7 +1401,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.setTag(mMessage.getMessageId());
                 _Progress.setVisibility(View.GONE);
 
-                if (mHolder instanceof StickerItem.ViewHolder)
+                if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder)
                     return;
 
                 AppUtils.setProgresColor(_Progress.progressBar);
@@ -1516,7 +1506,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
                 break;
         }
-
     }
 
 
@@ -1608,7 +1597,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         long size = 0;
 
-        if (structMessage.getAttachment().getSmallThumbnail() != null) size = structMessage.getAttachment().getSmallThumbnail().getSize();
+        if (structMessage.getAttachment().getSmallThumbnail() != null)
+            size = structMessage.getAttachment().getSmallThumbnail().getSize();
 
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
@@ -1665,7 +1655,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         final String token = structMessage.getAttachment().getToken();
         final String url = structMessage.getAttachment().getUrl();
         String name = structMessage.getAttachment().getName();
-        Long size = structMessage.getAttachment().getSize();
+        long size = structMessage.getAttachment().getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
         final ProtoGlobal.RoomMessageType messageType = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
@@ -1681,6 +1671,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             HelperDownloadFile.getInstance().startDownload(messageType, mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
+
+                    Log.i("abbasiAnimation", "On Progress  " + progress);
 
                     if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
@@ -1760,7 +1752,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * file is compressing do this action for add listener and use later
              */
             if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
-               //(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) this code newly added
+                //(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) this code newly added
                 hideThumbnailIf(holder);
 
                 ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);

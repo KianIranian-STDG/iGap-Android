@@ -30,7 +30,6 @@ import java.io.IOException;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
-import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
@@ -49,6 +48,7 @@ public class RealmAttachment extends RealmObject {
     private int width;
     private int height;
     private double duration;
+    private String mimType; //Added to detect sticker type.
 
     @Index
     private String cacheId;
@@ -94,6 +94,7 @@ public class RealmAttachment extends RealmObject {
         realmAttachment.setToken(attachment.getToken());
         realmAttachment.setUrl(attachment.getPublicUrl());
         realmAttachment.setWidth(attachment.getWidth());
+        realmAttachment.setMimType(attachment.getMime());
 
         long smallMessageThumbnail = SUID.id().get();
         RealmThumbnail.put(realm, smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
@@ -148,6 +149,7 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setToken(file.getToken());
             realmAttachment.setUrl(file.getPublicUrl());
             realmAttachment.setWidth(file.getWidth());
+            realmAttachment.setMimType(file.getMime());
         } else {
 
             if (realmAttachment.height != file.getHeight()) {
@@ -156,6 +158,10 @@ public class RealmAttachment extends RealmObject {
 
             if (realmAttachment.width != file.getWidth()) {
                 realmAttachment.setWidth(file.getWidth());
+            }
+
+            if (!realmAttachment.mimType.equals(file.getMime())) {
+                realmAttachment.setMimType(file.getMime());
             }
 
             if (realmAttachment.smallThumbnail != null) {
@@ -200,8 +206,8 @@ public class RealmAttachment extends RealmObject {
                                 _File1.renameTo(new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
                             } else {
-                                    AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
-                                    realmAttachment.setLocalFilePath(_defaultFilePAth);
+                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
+                                realmAttachment.setLocalFilePath(_defaultFilePAth);
 
                             }
                         }
@@ -359,6 +365,14 @@ public class RealmAttachment extends RealmObject {
         }
     }
 
+    public void setMimType(String mimType) {
+        this.mimType = mimType;
+    }
+
+    public String getMimType() {
+        return mimType;
+    }
+
     public int getHeight() {
         return height;
     }
@@ -397,9 +411,14 @@ public class RealmAttachment extends RealmObject {
         return localFilePath != null && new File(localFilePath).exists() && new File(localFilePath).canRead();
     }
 
-    public boolean isFileExistsOnLocalAndIsThumbnail() {
+    public boolean isFileExistsOnLocalAndIsImage() {
         assert localFilePath != null;
         return isFileExistsOnLocal() && HelperMimeType.isFileImage(localFilePath.toLowerCase());
+    }
+
+    public boolean isFileExistsOnLocalAndIsAnimatedSticker() {
+        assert localFilePath != null;
+        return isFileExistsOnLocal() && HelperMimeType.isFileJson(localFilePath.toLowerCase());
     }
 
     /**

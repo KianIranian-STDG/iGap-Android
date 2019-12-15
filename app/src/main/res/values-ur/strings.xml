@@ -1271,7 +1271,9 @@
     <string name="Please_select_an_option">تکایە بژاردەیەک هەڵبژێرە</string>
     <string name="sticker">ستیکێر</string>
     <string name="add_sticker">زیادکردنی ستیکێر</string>
+    <string name="add_sticker_with_size">زیادکردنی %s ستیکێر</string>
     <string name="remove_sticker">سڕینەوەی ستیکێر</string>
+    <string name="remove_sticker_with_size">سڕینەوەی %s ستیکێر</string>
     <string name="remove_sticker_text">دڵنیایت لەوەی کە دەتەوێ ئەم ستیکێرانە بسڕیتەوە؟</string>
     <string name="add_sticker_text">دڵنیایت لەوەی کە دەتەوێ ئەم ستیکێرانە دابەزێنیت؟</string>
     <string name="Add">زیادکردن</string>

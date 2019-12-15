@@ -50,6 +50,8 @@ public class EventManager {
     public static final int SOCKET_CONNECT_ERROR = 9;
     public static final int SOCKET_DISCONNECT = 10;
 
+    public static final int STICKER_DOWNLOAD = 20;
+
 
     private static EventManager eventListenerInstance;
 

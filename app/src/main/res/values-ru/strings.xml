@@ -1266,7 +1266,9 @@
     <string name="Please_select_an_option">Пожалуйста, выберите опцию</string>
     <string name="sticker">Стикер</string>
     <string name="add_sticker">Добавить стикер</string>
+    <string name="add_sticker_with_size">Добавить %s стикер</string>
     <string name="remove_sticker">Удалить стикер</string>
+    <string name="remove_sticker_with_size">Удалить %s стикер</string>
     <string name="remove_sticker_text">Вы уверены, что хотите удалить эти стикеры?</string>
     <string name="add_sticker_text">Вы уверены, что хотите установить эти стикеры?</string>
     <string name="Add">Добавить</string>
