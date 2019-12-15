@@ -1,5 +1,7 @@
 package net.iGap.fragments.emoji.struct;
 
+import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+
 import net.iGap.realm.RealmStickers;
 
 import java.util.List;
@@ -45,6 +47,23 @@ public class StructIGStickerGroup {
             setApproved(realmStickers.isApproved());
             setAvatarPath(realmStickers.getUri());
             setVip(realmStickers.isVip());
+        }
+    }
+
+    public void setValueWithOldStruct(StructGroupSticker structGroupSticker) {
+        if (structGroupSticker != null) {
+            setSort(structGroupSticker.getSort());
+            setRefId(structGroupSticker.getRefId());
+            setPrice(structGroupSticker.getPrice());
+            setName(structGroupSticker.getName());
+            setFavorite(structGroupSticker.getIsFavorite());
+            setCreatedBy(structGroupSticker.getCreatedBy());
+            setCreatedAt(structGroupSticker.getCreatedAt());
+            setAvatarToken(structGroupSticker.getAvatarToken());
+            setAvatarSize(structGroupSticker.getAvatarSize());
+            setAvatarName(structGroupSticker.getAvatarName());
+            setAvatarPath(structGroupSticker.getUri());
+            setVip(structGroupSticker.getIsVip());
         }
     }
 

@@ -182,7 +182,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         @Override
         public Fragment getItem(int position) {
             Gson gson = new Gson();
-            return FragmentAddStickers.newInstance(gson.toJson(tabs[position]));
+            return AddStickersFragment.newInstance(gson.toJson(tabs[position]));
         }
 
         @Override

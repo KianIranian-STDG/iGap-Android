@@ -3,8 +3,6 @@ package net.iGap.fragments.emoji;
 import android.util.Log;
 
 import net.iGap.G;
-import net.iGap.eventbus.EventManager;
-import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.interfaces.OnStickerDownloaded;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -62,52 +60,6 @@ public class HelperDownloadSticker {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void downloadSticker(StructIGSticker structIGSticker) {
-//        if (!downloadingQueue.containsKey(structIGSticker.getToken())) {
-//            downloadingQueue.put(structIGSticker.getToken(), structIGSticker.getFileName());
-        try {
-            G.onStickerDownloaded = new OnStickerDownloaded() {
-                @Override
-                public void onStickerDownloaded(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type, int progress) {
-//                        downloadingQueue.remove(structIGSticker.getToken());
-                    EventManager.getInstance().postEvent(EventManager.STICKER_DOWNLOAD, filePath, token);
-                }
-
-                @Override
-                public void onError(int major, Object identity) {
-                    downloadingQueue.remove(structIGSticker.getToken());
-                    Log.i(TAG, "onError: " + major + identity.toString());
-                }
-            };
-
-            new RequestFileDownload().download(structIGSticker.getToken(), 0, structIGSticker.getFileSize(), ProtoFileDownload.FileDownload.Selector.FILE,
-                    new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, structIGSticker.getToken(), structIGSticker.getPath(), ProtoFileDownload.FileDownload.Selector.FILE, structIGSticker.getFileSize(), 0, RequestFileDownload.TypeDownload.STICKER));
-
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-//            }
-        }
-    }
-/*
-    public static String stickerInternalPath(StructIGSticker structIGSticker){
-        String finalPath = structIGSticker.getToken();
-        if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
-            finalPath += ".json";
-        else
-            finalPath.endsWith()
-        return  finalPath;
-    }*/
-
-    public static String createPathFile(String token, String extension) {
-
-        String _mimeType = ".png";
-        int index = extension.lastIndexOf(".");
-        if (index >= 0) {
-            _mimeType = extension.substring(index);
-        }
-        return G.DIR_STICKER + "/" + token + _mimeType;
     }
 
     public static String downloadStickerPath(String token, String extension) {

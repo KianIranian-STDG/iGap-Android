@@ -8,8 +8,6 @@ import net.iGap.DbManager;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.proto.ProtoFileDownload;
-import net.iGap.request.RequestFileDownload;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,18 +60,6 @@ public class RealmStickers extends RealmObject {
         realmStickers.setApproved(approved);
         realmStickers.setCreatedBy(createdBy);
         realmStickers.setFavorite(isFavorite);
-
-        // TODO: 12/9/19 clear this method! must use in bind view check this
-        HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-            @Override
-            public void OnProgress(String path, String token, int progress) {
-            }
-
-            @Override
-            public void OnError(String token) {
-
-            }
-        });
 
         RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
         for (StructItemSticker itemSticker : stickers) {

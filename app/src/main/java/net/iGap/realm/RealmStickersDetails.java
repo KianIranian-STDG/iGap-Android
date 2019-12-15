@@ -2,8 +2,6 @@ package net.iGap.realm;
 
 
 import net.iGap.fragments.emoji.HelperDownloadSticker;
-import net.iGap.proto.ProtoFileDownload;
-import net.iGap.request.RequestFileDownload;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -36,17 +34,6 @@ public class RealmStickersDetails extends RealmObject {
             realmStickersDetails.setFileSize(avatarSize);
             realmStickersDetails.setSort(sort);
             realmStickersDetails.setGroupId(groupId);
-
-            // TODO: 12/9/19 clear this method! must use in bind view check this
-            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER_DETAIL, new HelperDownloadSticker.UpdateStickerListener() {
-                @Override
-                public void OnProgress(String path, String token, int progress) {
-                }
-
-                @Override
-                public void OnError(String token) {
-                }
-            });
         }
 
         return realmStickersDetails;
