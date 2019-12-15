@@ -16,6 +16,8 @@ import net.iGap.realm.RealmStickers;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,8 +29,12 @@ public class StickerRepository {
     private String TAG = "abbasiSticker Repository";
 
     public StickerRepository(StructIGStickerGroup stickerGroup) {
-        apiService = ApiEmojiUtils.getAPIService();
+        this();
         this.stickerGroup = stickerGroup;
+    }
+
+    public StickerRepository() {
+        apiService = ApiEmojiUtils.getAPIService();
     }
 
     public void getStickerListForStickerDialog(ResponseCallback<StructIGStickerGroup> callback) {
@@ -121,4 +127,7 @@ public class StickerRepository {
         }
     }
 
+    public List<StructIGStickerGroup> getFavoriteStickers() {
+        return RealmStickers.getFavoriteStickers();
+    }
 }

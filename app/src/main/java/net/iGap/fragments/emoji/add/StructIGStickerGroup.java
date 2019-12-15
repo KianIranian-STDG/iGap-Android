@@ -4,13 +4,16 @@ import net.iGap.realm.RealmStickers;
 
 import java.util.List;
 
+import static net.iGap.fragments.emoji.add.StructIGSticker.ANIMATED_STICKER;
+import static net.iGap.fragments.emoji.add.StructIGSticker.NORMAL_STICKER;
+
 public class StructIGStickerGroup {
     private String groupId;
     private long createdAt;
     private long refId;
     private String name;
     private String avatarToken;
-    private String uri = "";
+    private String avatarPath = "";
     private long avatarSize;
     private String avatarName;
     private long price;
@@ -19,6 +22,7 @@ public class StructIGStickerGroup {
     private boolean approved;
     private long createdBy;
     private boolean isFavorite;
+    private int avatarType;
     private List<StructIGSticker> stickers;
 
     public StructIGStickerGroup(String groupId) {
@@ -39,7 +43,7 @@ public class StructIGStickerGroup {
             setAvatarSize(realmStickers.getAvatarSize());
             setAvatarName(realmStickers.getAvatarName());
             setApproved(realmStickers.isApproved());
-            setUri(realmStickers.getUri());
+            setAvatarPath(realmStickers.getUri());
             setVip(realmStickers.isVip());
         }
     }
@@ -84,12 +88,28 @@ public class StructIGStickerGroup {
         this.avatarToken = avatarToken;
     }
 
-    public String getUri() {
-        return uri;
+    public int getAvatarType() {
+        return avatarType;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setAvatarType(int avatarType) {
+        this.avatarType = avatarType;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+
+        if (this.avatarPath == null || this.avatarPath.equals(""))
+            avatarType = 100;
+        else if (this.avatarPath.endsWith(".json")) {
+            avatarType = ANIMATED_STICKER;
+        } else {
+            avatarType = NORMAL_STICKER;
+        }
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
     }
 
     public long getAvatarSize() {
