@@ -321,7 +321,7 @@ public class RegisterRepository {
         requestLogin();
     }
 
-    public void setNickName(String name, String lastName,String countryCode, String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+    public void setNickName(String name, String lastName, String countryCode, String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         new RequestUserProfileSetNickname().userProfileNickName(name + " " + lastName, new OnUserProfileSetNickNameResponse() {
             @Override
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
@@ -394,6 +394,7 @@ public class RegisterRepository {
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (user.getId() == userId) {
                     AccountManager.getInstance().updateCurrentUserName(user.getDisplayName());
+                    AccountManager.getInstance().updatePhoneNumber(String.valueOf(user.getPhone()));
                     DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
                     });

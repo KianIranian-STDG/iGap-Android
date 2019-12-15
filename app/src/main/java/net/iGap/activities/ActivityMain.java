@@ -181,7 +181,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private TextView iconLock;
     private int retryConnectToWallet = 0;
     private MyPhonStateService myPhonStateService;
-    public DataTransformerListener<Intent> dataTransformer ;
+    public DataTransformerListener<Intent> dataTransformer;
     private BroadcastReceiver audioManagerReciver;
 
     public static void setMediaLayout() {
@@ -913,19 +913,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 break;
 
             case AttachFile.request_code_trim_video:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(G.twoPaneMode ? R.id.detailFrame : R.id.mainFrame);
-                    if (fragmentGallery instanceof FragmentGallery){
+                    if (fragmentGallery instanceof FragmentGallery) {
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().popBackStack();
                         goneDetailFrameInTabletMode();
                         Fragment fragmentChat = getSupportFragmentManager().findFragmentByTag(FragmentChat.class.getName());
-                        if (fragmentChat instanceof FragmentChat){
+                        if (fragmentChat instanceof FragmentChat) {
                             ((FragmentChat) fragmentChat).manageTrimVideoResult(data);
-                        }else{
+                        } else {
                             //todo:// fix fragment chat backstack
-                            if (dataTransformer != null){
-                                dataTransformer.transform(AttachFile.request_code_trim_video , data);
+                            if (dataTransformer != null) {
+                                dataTransformer.transform(AttachFile.request_code_trim_video, data);
                             }
                         }
                     }
@@ -934,7 +934,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public void goneDetailFrameInTabletMode(){
+    public void goneDetailFrameInTabletMode() {
         if (G.twoPaneMode) findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
     }
 
@@ -1874,7 +1874,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void goToUserProfile() {
-        getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(),0);
+        getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(), 0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).goToUserProfile();
@@ -1959,14 +1959,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         nMgr.cancelAll();
     }
 
-    public void chatBackgroundChanged(){
+    public void chatBackgroundChanged() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
-        if (fragment instanceof FragmentChatSettings){
+        if (fragment instanceof FragmentChatSettings) {
             ((FragmentChatSettings) fragment).chatBackgroundChange();
         }
-        if (G.twoPaneMode){
+        if (G.twoPaneMode) {
             Fragment f = getSupportFragmentManager().findFragmentByTag(TabletEmptyChatFragment.class.getName());
-            if (f instanceof TabletEmptyChatFragment){
+            if (f instanceof TabletEmptyChatFragment) {
                 ((TabletEmptyChatFragment) f).getChatBackground();
             }
         }
