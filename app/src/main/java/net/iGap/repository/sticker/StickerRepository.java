@@ -122,7 +122,7 @@ public class StickerRepository {
                 @Override
                 public void onFailure(@NotNull Call<StructStickerResult> call, @NotNull Throwable t) {
                     callback.onError(t.getMessage());
-                    Log.i(TAG, "add sticker to category API SERVICE  with group id" + groupId + " with error " + t.getMessage());
+                    Log.i(TAG, "remove sticker to category API SERVICE  with group id" + groupId + " with error " + t.getMessage());
                 }
             });
         }

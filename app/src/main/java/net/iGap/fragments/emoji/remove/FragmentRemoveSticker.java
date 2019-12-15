@@ -16,7 +16,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.emoji.stickerDetail.FragmentStickersDetail;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.helper.HelperFragment;
 import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
 public class FragmentRemoveSticker extends BaseFragment {
@@ -48,7 +50,8 @@ public class FragmentRemoveSticker extends BaseFragment {
         adapter.setListener(new RemoveStickerAdapter.RemoveStickerDialogListener() {
             @Override
             public void onStickerClick(StructIGStickerGroup stickerGroup) {
-//                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
+                if (getFragmentManager() != null)
+                    new HelperFragment(getFragmentManager(), FragmentStickersDetail.newInstance(stickerGroup)).setReplace(false).load();
             }
 
             @Override
@@ -62,7 +65,7 @@ public class FragmentRemoveSticker extends BaseFragment {
         viewModel.getRemoveStickerLiveData().observe(getViewLifecycleOwner(), removedItemPosition -> adapter.removeItem(removedItemPosition));
 
         viewModel.getRemoveDialogLiveData().observe(getViewLifecycleOwner(), position -> {
-            if (position != -1) {
+            if (position != -1 && getContext() != null) {
                 new MaterialDialog.Builder(getContext())
                         .title(getResources().getString(R.string.remove_sticker))
                         .content(getResources().getString(R.string.remove_sticker_text))

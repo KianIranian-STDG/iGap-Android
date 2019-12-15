@@ -29,13 +29,11 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.emoji.FragmentDetailStickers;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StickerCategory;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmStickers;
@@ -247,7 +245,7 @@ public class FragmentAddStickers extends BaseFragment {
 
                 itemView.setOnClickListener(v -> {
                     if (getActivity() != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
+//                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentStickersDetail.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
                     }
                 });
 
