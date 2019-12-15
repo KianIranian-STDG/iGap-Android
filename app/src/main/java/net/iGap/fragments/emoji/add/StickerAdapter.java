@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.eventbus.EventManager;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
@@ -108,7 +107,8 @@ public class StickerAdapter extends RecyclerView.Adapter {
                         }
                     });
 
-                    HelperDownloadSticker.downloadSticker(structIGSticker);
+                    IGDownloadFile.getInstance().startDownload(
+                            new IGDownloadFileStruct(structIGSticker.getId(), structIGSticker.getToken(), structIGSticker.getFileSize(), structIGSticker.getPath()));
                 }
             }
 
