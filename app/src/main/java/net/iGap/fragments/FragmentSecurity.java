@@ -138,4 +138,10 @@ public class FragmentSecurity extends BaseFragment {
     public interface OnPopBackStackFragment {
         void onBack();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        onPopBackStackFragment = null;
+    }
 }

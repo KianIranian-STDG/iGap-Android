@@ -117,7 +117,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     //    private TextView mBtnRemoveSelected;
     private RealmResults<RealmRoom> results;
     private ConstraintLayout root;
-    private ConstraintSet constraintSet;
     private TextView selectedItemCountTv;
     private RecyclerView multiSelectRv;
     /*private SelectedItemAdapter selectedItemAdapter;*/
@@ -151,8 +150,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         tagId = System.currentTimeMillis();
 
         root = view.findViewById(R.id.amr_layout_root);
-        constraintSet = new ConstraintSet();
-        constraintSet.clone(root);
 
         progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
@@ -748,7 +745,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();
-
     }
 
     @Override
@@ -797,7 +793,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void onPause() {
         super.onPause();
-
+        G.onClientGetRoomListResponse = null;
+        G.onSetActionInRoom = null;
+        G.onDateChanged = null;
     }
 
     @Override
@@ -1088,6 +1086,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void setMargin(int mTop) {
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(root);
         constraintSet.setMargin(selectedItemView.getId(), ConstraintSet.TOP, i_Dp(mTop));
         constraintSet.applyTo(root);
     }
