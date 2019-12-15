@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -62,7 +61,7 @@ import static net.iGap.fragments.FragmentChat.listPathString;
 
 public class ChatAttachmentPopup {
 
-    private final long POPUP_ANIMATION_DURATION = 160;
+    private final long POPUP_ANIMATION_DURATION = 260;
     private final String TAG = "ChatAttachmentPopup";
 
     public boolean isShowing = false;
@@ -188,6 +187,7 @@ public class ChatAttachmentPopup {
 
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
+        contentView.setVisibility(View.INVISIBLE);
 
         contentView.setOnClickListener(v -> {
             //nothing
@@ -577,6 +577,10 @@ public class ChatAttachmentPopup {
         }
     }
 
+    public void directDismiss() {
+        if (mPopup != null) mPopup.dismiss();
+    }
+
     public void notifyRecyclerView() {
         if (fastItemAdapter == null) return;
         fastItemAdapter.notifyAdapterDataSetChanged();
@@ -853,8 +857,7 @@ public class ChatAttachmentPopup {
                         HelperLog.setErrorLog(e);
                     })
                     .build();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fotoapparatSwitcher = null;
             HelperLog.setErrorLog(e);
         }

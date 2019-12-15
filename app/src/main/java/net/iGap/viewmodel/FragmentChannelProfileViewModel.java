@@ -379,10 +379,15 @@ public class FragmentChannelProfileViewModel extends ViewModel
         showLoading.set(View.GONE);
     }
 
-    public void onDestroy() {
-        admins.removeAllChangeListeners();
-        moderators.removeAllChangeListeners();
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (admins != null)
+            admins.removeAllChangeListeners();
+        if (moderators != null)
+            moderators.removeAllChangeListeners();
     }
+
 
     public void leaveChannel() {
         new RequestChannelLeft().channelLeft(roomId);

@@ -40,7 +40,7 @@ import net.iGap.module.WebAppInterface;
 
 import java.io.IOException;
 
-public class FragmentWebView extends FragmentToolBarBack implements IOnBackPressed {
+public class FragmentWebView extends BaseFragment implements IOnBackPressed , ToolbarListener {
 
     private String url;
     private boolean forceCloseFragment;
@@ -71,9 +71,10 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         return newInstance(url, true, "");
     }
 
+    @Nullable
     @Override
-    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.fragment_my_web_view, root, true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_my_web_view, container , false);
     }
 
     @Override
@@ -125,7 +126,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             CookieManager.getInstance().setAcceptCookie(true);
         }
 
-        titleTextView.setText(G.context.getString(R.string.igap));
         mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
@@ -158,24 +158,30 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
     private void setupToolbar(View view) {
 
-        appBarLayout.setVisibility(View.GONE);
-
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setRoundBackground(false)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                });
+                .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fwv_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
 
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        webView.stopLoading();
+        if (webView.canGoBack() && !forceCloseFragment) {
+            webView.clearView();
+            webView.goBack();
+            customWebViewClient.isWebViewVisible = true;
+            setWebViewVisibleWithDelay();
+        } else {
+            popBackStackFragment();
+        }
     }
 
     private void setWebViewVisibleWithDelay() {
@@ -215,19 +221,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         return false;
     }
 
-    @Override
-    protected void onBackButtonClicked(View view) {
-        webView.stopLoading();
-        if (webView.canGoBack() && !forceCloseFragment) {
-            webView.clearView();
-            webView.goBack();
-            customWebViewClient.isWebViewVisible = true;
-            setWebViewVisibleWithDelay();
-        } else {
-            super.onBackButtonClicked(view);
-        }
-    }
-
     private class CustomWebViewClient extends WebViewClient {
 
         public boolean isWebViewVisible = true;
@@ -241,7 +234,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 delayHandler.removeCallbacks(taskMakeVisibleWebViewWithDelay);
                 webViewError.setVisibility(View.VISIBLE);
                 webView.setVisibility(View.GONE);
-                titleTextView.setText(G.context.getString(R.string.igap));
                 mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
                 HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
             }
@@ -253,7 +245,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             if (url.toLowerCase().equals("igap://close")) {
                 isWebViewVisible = false;
                 forceCloseFragment = true;
-                FragmentWebView.this.onBackButtonClicked(view);
+                onLeftIconClickListener(view);
             }
 
         }
@@ -262,9 +254,8 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
-                titleTextView.setText(view.getTitle());
-                if (view.getTitle().length() > 23) {
-                    mHelperToolbar.setDefaultTitle(view.getTitle().substring(0, 23) + "...");
+                if (view.getTitle().length() > 27) {
+                    mHelperToolbar.setDefaultTitle(view.getTitle().substring(0, 27) + "...");
                 } else {
                     mHelperToolbar.setDefaultTitle(view.getTitle());
                 }
@@ -280,7 +271,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             }
             if (url.toLowerCase().equals("igap://close")) {
                 forceCloseFragment = true;
-                onBackButtonClicked(view);
+                onLeftIconClickListener(view);
             }
             return a;
         }
@@ -299,7 +290,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             FragmentWebView.this.callback = callback;
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             frameLayout.addView(view);
-            appBarLayout.setVisibility(View.GONE);
             pullToRefresh.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
             frameLayout.bringToFront();
@@ -317,7 +307,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             frameLayout.setVisibility(View.GONE);
             callback.onCustomViewHidden();
             pullToRefresh.setVisibility(View.VISIBLE);
-            appBarLayout.setVisibility(View.VISIBLE);
         }
 
         @Override

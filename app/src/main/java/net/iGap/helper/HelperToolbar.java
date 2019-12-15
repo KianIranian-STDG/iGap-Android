@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,11 +25,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -57,8 +56,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
 
 import org.paygear.WalletActivity;
-
-import io.realm.Realm;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
@@ -306,7 +303,7 @@ public class HelperToolbar {
 
         //set default title name if user not set
         if (defaultTitleText == null || defaultTitleText.trim().equals("")) {
-            defaultTitleText = mContext.getResources().getString(R.string.app_name);
+            defaultTitleText = mContext.getString(R.string.app_name);
         }
 
         typeFaceGenerator();
@@ -475,7 +472,6 @@ public class HelperToolbar {
 
     public void registerTimerBroadcast() {
         if (mContext == null || callTimerReceiver == null) {
-            Log.wtf(this.getClass().getName(), "registerTimerBroadcast");
             return;
         }
         IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
@@ -858,7 +854,7 @@ public class HelperToolbar {
                 mTxtLogo.setTypeface(tfMain);
             }
 
-        }else{
+        } else {
             mTxtLogo.setTypeface(tfMain);
         }
 
@@ -916,7 +912,7 @@ public class HelperToolbar {
                     } else {
                         mTxtLogo.setText(defaultTitleText);
                     }
-                }else {
+                } else {
                     mTxtLogo.setText(defaultTitleText);
                 }
 
@@ -1035,11 +1031,11 @@ public class HelperToolbar {
                 } else {
                     phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 //maybe exception was for realm substring
-                try{
+                try {
                     phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     //nothing
                 }
             }
@@ -1047,7 +1043,7 @@ public class HelperToolbar {
             if (userInfo == null || !userInfo.isWalletRegister()) {
                 new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
             } else {
-                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber, true),WALLET_REQUEST_CODE);
+                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext, new Intent(mFragmentActivity, WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
             }
 
         });
