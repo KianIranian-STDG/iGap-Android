@@ -54,6 +54,7 @@ public class RemoveRecentStickerAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         StructItemSticker item = mData.get(position);
 
         if (holder instanceof MotionViewHolder) {

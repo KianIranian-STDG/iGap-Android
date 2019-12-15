@@ -1,6 +1,8 @@
 package net.iGap.fragments.emoji.remove;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,11 +96,15 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
         private TextView stickerNameTv;
         private TextView stickerCountTv;
 
+        @SuppressLint("RtlHardcoded")
         public NormalStickerViewHolder(@NonNull View itemView) {
             super(itemView);
             avatarIv = itemView.findViewById(R.id.iv_itemRemoveSticker_stickerAvatar);
             stickerNameTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerName);
             stickerCountTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerCount);
+
+            stickerNameTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+            stickerCountTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
         }
 
         private void bindStickers(StructIGStickerGroup stickerGroup) {
@@ -143,11 +149,15 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
         private TextView stickerNameTv;
         private TextView stickerCountTv;
 
+        @SuppressLint("RtlHardcoded")
         public MotionStickerViewHolder(@NonNull View itemView) {
             super(itemView);
             avatarIv = itemView.findViewById(R.id.lv_itemRemoveSticker_stickerAvatar);
             stickerNameTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerName);
             stickerCountTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerCount);
+
+            stickerNameTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+            stickerCountTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
         }
 
         private void bindStickers(StructIGStickerGroup stickerGroup) {
