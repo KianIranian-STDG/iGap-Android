@@ -242,5 +242,6 @@ public class FragmentActiveSessions extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         G.onUserSessionGetActiveList = null;
+        G.onUserSessionTerminate = null;
     }
 }

@@ -140,7 +140,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isNeedResume = true;
-        G.onVersionCallBack = this;
     }
 
     @Override
@@ -745,6 +744,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();
+
     }
 
     @Override
@@ -753,6 +753,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
+        G.onVersionCallBack = this;
         if (G.isDepricatedApp)
             isDeprecated();
 
@@ -796,6 +797,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         G.onClientGetRoomListResponse = null;
         G.onSetActionInRoom = null;
         G.onDateChanged = null;
+        G.onVersionCallBack = null;
     }
 
     @Override
