@@ -34,6 +34,11 @@ public class IGDownloadFile {
             return;
         }
 
+        if (new File(fileStruct.path).exists()) {
+            Log.e(TAG, "this file exist " + fileStruct.path);
+            return;
+        }
+
         if (!fileHashMap.containsKey(fileStruct.id)) {
             fileHashMap.put(fileStruct.id, fileStruct);
 
