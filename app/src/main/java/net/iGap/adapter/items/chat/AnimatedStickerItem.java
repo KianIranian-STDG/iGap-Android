@@ -86,7 +86,6 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
     @NotNull
     @Override
     public ViewHolder getViewHolder(View v) {
-        v.setBackgroundColor(v.getContext().getResources().getColor(R.color.white_transparency));
         return new ViewHolder(v);
     }
 
