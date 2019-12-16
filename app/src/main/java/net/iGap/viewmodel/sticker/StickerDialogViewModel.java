@@ -22,6 +22,7 @@ public class StickerDialogViewModel extends BaseViewModel {
     private StructIGStickerGroup stickerGroup;
 
     private MutableLiveData<Integer> progressMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> addOrRemoveProgressLiveData = new MutableLiveData<>();
     private MutableLiveData<StructIGStickerGroup> stickersMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> addOrRemoveStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> closeDialogMutableLiveData = new MutableLiveData<>();
@@ -78,11 +79,11 @@ public class StickerDialogViewModel extends BaseViewModel {
     }
 
     public void addStickerToFavorite(String groupId) {
-        progressMutableLiveData.postValue(View.VISIBLE);
+        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
         repository.addStickerGroupToFavorite(groupId, new BaseCPayViewModel<Boolean>() {
             @Override
             public void onSuccess(Boolean data) {
-                progressMutableLiveData.postValue(View.GONE);
+                addOrRemoveProgressLiveData.postValue(View.GONE);
                 stickerGroup.setFavorite(data);
                 onStickerFavoriteChange(data);
                 Log.i(TAG, "on Success addStickerToFavorite with id -> " + stickerGroup.getGroupId());
@@ -90,7 +91,7 @@ public class StickerDialogViewModel extends BaseViewModel {
 
             @Override
             public void onError(String error) {
-                progressMutableLiveData.postValue(View.GONE);
+                addOrRemoveProgressLiveData.postValue(View.GONE);
                 closeDialogMutableLiveData.postValue(true);
                 Log.i(TAG, "on Error addStickerToFavorite with id -> " + stickerGroup.getGroupId() + " with error " + error);
             }
@@ -98,18 +99,18 @@ public class StickerDialogViewModel extends BaseViewModel {
     }
 
     public void removeStickerFromFavorite(String groupId) {
-        progressMutableLiveData.postValue(View.VISIBLE);
+        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
         repository.removeStickerGroupFromFavorite(groupId, new BaseCPayViewModel<Boolean>() {
             @Override
             public void onSuccess(Boolean data) {
-                progressMutableLiveData.postValue(View.GONE);
+                addOrRemoveProgressLiveData.postValue(View.GONE);
                 closeDialogMutableLiveData.postValue(true);
                 Log.i(TAG, "on Success removeStickerFromFavorite with id -> " + stickerGroup.getGroupId());
             }
 
             @Override
             public void onError(String error) {
-                progressMutableLiveData.postValue(View.GONE);
+                addOrRemoveProgressLiveData.postValue(View.GONE);
                 closeDialogMutableLiveData.postValue(true);
                 Log.i(TAG, "on Error addStickerToFavorite with id -> " + stickerGroup.getGroupId() + " and error -> " + error);
             }
@@ -153,5 +154,9 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     public MutableLiveData<StructIGSticker> getSendMessageLiveData() {
         return sendMessageLiveData;
+    }
+
+    public MutableLiveData<Integer> getAddOrRemoveProgressLiveData() {
+        return addOrRemoveProgressLiveData;
     }
 }
