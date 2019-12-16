@@ -173,9 +173,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="@{fragmentRegisterViewModel.isShowLoading}"
-                app:layout_constraintBottom_toTopOf="@id/registerButton"
                 app:layout_constraintEnd_toEndOf="@id/registerButton"
-                app:layout_constraintStart_toStartOf="@id/registerButton" />
+                app:layout_constraintStart_toStartOf="@id/registerButton"
+                app:layout_constraintTop_toBottomOf="@id/registerButton" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/retryView"
@@ -207,12 +207,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/conditionCheckBox"
-                app:layout_constraintWidth_percent=".5" />
+                app:layout_constraintWidth_percent=".7" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/scanBarcodeButton"
                 style="@style/iGapOutlinedButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:onClick="@{()->fragmentRegisterViewModel.onClickQrCode()}"
                 android:text="@string/register_with_barcode_scan"
@@ -221,7 +221,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/registerButton"
-                app:layout_constraintWidth_percent=".5" />
+                app:layout_constraintWidth_percent=".7" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
