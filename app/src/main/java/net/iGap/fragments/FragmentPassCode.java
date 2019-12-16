@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.andrognito.patternlockview.PatternLockView;
-import com.andrognito.patternlockview.utils.ResourceUtils;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -119,16 +117,9 @@ public class FragmentPassCode extends BaseFragment {
     }
 
     private void initDataBinding() {
-        fragmentPassCodeViewModel = new FragmentPassCodeViewModel(fragmentPassCodeBinding);
+        fragmentPassCodeViewModel = new FragmentPassCodeViewModel(this, fragmentPassCodeBinding);
         isPattern = fragmentPassCodeViewModel.isPattern;
         fragmentPassCodeBinding.setFragmentPassCodeViewModel(fragmentPassCodeViewModel);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        fragmentPassCodeViewModel.onDestroy();
-    }
-
 
 }

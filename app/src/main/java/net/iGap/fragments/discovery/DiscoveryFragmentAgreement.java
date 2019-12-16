@@ -126,7 +126,8 @@ public class DiscoveryFragmentAgreement extends FragmentToolBarBack {
 
     private void setStateErrorLoad() {
         G.handler.post(() -> {
-            if (getContext() != null) HelperError.showSnackMessage(getContext().getString(R.string.wallet_error_server), false);
+            if (getContext() != null)
+                HelperError.showSnackMessage(getContext().getString(R.string.wallet_error_server), false);
             emptyRecycle.setVisibility(View.VISIBLE);
             scroll_view.setVisibility(View.GONE);
             agreement.setVisibility(View.GONE);

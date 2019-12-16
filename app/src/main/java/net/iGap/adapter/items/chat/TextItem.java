@@ -44,7 +44,7 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.hasEmojiInText) {
+        if (structMessage.hasEmojiInText()) {
             if (myText.length() <= 2) {
                 if (EmojiUtils.emojisCount(myText.toString()) == 1) {
                     holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));

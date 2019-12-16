@@ -1,12 +1,11 @@
 package net.iGap.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 
 public abstract class BaseCPayViewModel<T> extends BaseAPIViewModel implements ResponseCallback<T> {
 

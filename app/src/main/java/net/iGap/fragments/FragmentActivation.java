@@ -21,6 +21,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -33,6 +34,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.helper.HelperError;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -77,6 +79,7 @@ public class FragmentActivation extends BaseFragment {
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
                 set.constrainCircle(binding.timerPosition.getId(), binding.timerView.getId(), binding.timerView.getWidth() / 2, 0);
+                set.constrainCircle(binding.timerTextView.getId(), binding.timerPosition.getId(), (int) getResources().getDimension(R.dimen.dp20), 0);
                 set.applyTo(binding.root);
             }
         });
@@ -88,7 +91,7 @@ public class FragmentActivation extends BaseFragment {
         });
         viewModel.showEnteredCodeError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && getContext() != null && aBoolean) {
-                new DefaultRoundDialog(getContext()).setTitle(R.string.Enter_Code).setMessage(R.string.Toast_Enter_Code).setPositiveButton(R.string.B_ok, null).show();
+                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.Toast_Enter_Code).setPositiveButton(R.string.B_ok, null).show();
             }
         });
         viewModel.currentTimePosition.observe(getViewLifecycleOwner(), integer -> {
@@ -96,8 +99,9 @@ public class FragmentActivation extends BaseFragment {
                 ConstraintSet set1 = new ConstraintSet();
                 set1.clone(binding.root);
                 set1.constrainCircle(binding.timerPosition.getId(), binding.timerView.getId(), binding.timerView.getWidth() / 2, -integer);
+                set1.constrainCircle(binding.timerTextView.getId(), binding.timerPosition.getId(), (int) getResources().getDimension(R.dimen.dp20), -integer);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    TransitionManager.beginDelayedTransition(binding.root);
+                    TransitionManager.beginDelayedTransition(binding.root, new ChangeBounds());
                     set1.applyTo(binding.root);
                 } else {
                     set1.applyTo(binding.root);
@@ -140,6 +144,12 @@ public class FragmentActivation extends BaseFragment {
         viewModel.showDialogVerificationCodeExpired.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
                 new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_EXPIRED).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+            }
+        });
+
+        viewModel.showConnectionError.observe(getViewLifecycleOwner(), isShow -> {
+            if (isShow != null && isShow) {
+                HelperError.showSnackMessage(getString(R.string.connection_error), false);
             }
         });
 

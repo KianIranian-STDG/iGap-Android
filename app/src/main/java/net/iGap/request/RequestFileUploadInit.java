@@ -20,7 +20,12 @@ import java.io.UnsupportedEncodingException;
 
 public class RequestFileUploadInit {
 
-    public void fileUploadInit(byte[] firstBytes, byte[] lastBytes, long size, byte[] fileHash, String identity, String fileName) throws UnsupportedEncodingException {
+    public interface OnFileUploadInit {
+        void onFileUploadInit(String token, double progress, long offset, int limit);
+        void onFileUploadInitError(int major, int minor);
+    }
+
+    public String fileUploadInit(byte[] firstBytes, byte[] lastBytes, long size, byte[] fileHash, String fileName, OnFileUploadInit onFileUploadInit) throws UnsupportedEncodingException {
 
         ProtoFileUploadInit.FileUploadInit.Builder fileUploadInit = ProtoFileUploadInit.FileUploadInit.newBuilder();
         fileUploadInit.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
@@ -30,11 +35,12 @@ public class RequestFileUploadInit {
         fileUploadInit.setFileHash(ByteString.copyFrom(fileHash));
         fileUploadInit.setFileName(fileName);
 
-        RequestWrapper requestWrapper = new RequestWrapper(701, fileUploadInit, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(701, fileUploadInit, onFileUploadInit);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            return RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        return "";
     }
 }

@@ -2356,7 +2356,6 @@
     <string name="way_receive_register_code">Way to receive code: </string>
     <string name="reply_label">Answer</string>
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
     <string name="start">بداية</string>
     <string name="bot">بوت</string>
     <string name="back_to_menu">العودة إلى القائمة الرئيسية</string>
@@ -3058,6 +3057,10 @@
     <string name="elecBill_error_zeroResultBill">لا توجد فواتير مسجلة باسمك.</string>
     <string name="elecBill_success_title">نجاح</string>
     <string name="elecBill_success_pay">الدفع ناجح</string>
+    <string name="add_new_account">أضف حساب جديد</string>
+    <string name="profile">الشخصي</string>
+    <string name="login_exist_account_error">This account is login on this device</string>
     <string name="delete_from_storage">حذف من التخزين</string>
     <string name="map_registration_enable">تمكين الرؤية القريبة</string>
+    <string name="need_browser">يتطلب متصفح للاستخدام.</string>
 </resources>

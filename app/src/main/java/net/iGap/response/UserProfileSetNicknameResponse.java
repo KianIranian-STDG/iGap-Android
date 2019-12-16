@@ -36,7 +36,6 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder userProfileNickNameResponse = (ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder) message;
         RealmUserInfo.updateNickname(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getInitials());
 
-        G.displayName = userProfileNickNameResponse.getNickname();
         if (identity instanceof OnUserProfileSetNickNameResponse) {
             ((OnUserProfileSetNickNameResponse) identity).onUserProfileNickNameResponse(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getInitials());
         }

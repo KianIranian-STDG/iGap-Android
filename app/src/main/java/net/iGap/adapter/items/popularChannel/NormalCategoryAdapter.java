@@ -4,11 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
@@ -62,7 +60,7 @@ public class NormalCategoryAdapter extends RecyclerView.Adapter<NormalCategoryAd
             channelImageGrid = itemView.findViewById(R.id.iv_item_popular_rv_grid);
             channelTitleGrid = itemView.findViewById(R.id.tv_item_popular_rv_grid);
             View v = itemView.findViewById(R.id.ll_item_pop_card_category);
-            v.setBackground(new Theme().tintDrawable(v.getBackground(),v.getContext(),R.attr.iGapDividerLine));
+            v.setBackground(new Theme().tintDrawable(v.getBackground(), v.getContext(), R.attr.iGapDividerLine));
         }
 
         public void bindChannel(Category category) {

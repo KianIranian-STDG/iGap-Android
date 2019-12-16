@@ -12,17 +12,20 @@ import net.iGap.module.StartupActions;
 public class RegistrationViewModel extends ViewModel {
 
     private boolean showPro;
+    private boolean isAddAccount;
     private RegisterRepository repository;
 
     private SingleLiveEvent<Boolean> grantPermission = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> goToNicknamePage = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> goToIntroduction = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goToRegisterPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> loadFromBackStack = new SingleLiveEvent<>();
 
-    public RegistrationViewModel(boolean showPro) {
+    public RegistrationViewModel(boolean showPro,boolean isAddAccount) {
         repository = RegisterRepository.getInstance();
         grantPermission.setValue(true);
         this.showPro = showPro;
+        this.isAddAccount = isAddAccount;
     }
 
     public SingleLiveEvent<Boolean> getGrantPermission() {
@@ -31,6 +34,14 @@ public class RegistrationViewModel extends ViewModel {
 
     public SingleLiveEvent<GoToMainFromRegister> goToMainPage() {
         return repository.getGoToMainPage();
+    }
+
+    public SingleLiveEvent<Long> goToContactPage(){
+        return repository.getGoToSyncContactPageForNewUser();
+    }
+
+    public SingleLiveEvent<Boolean> getExistUser(){
+        return repository.getLoginExistUser();
     }
 
     public SingleLiveEvent<Long> goToWelcomePage() {
@@ -49,12 +60,18 @@ public class RegistrationViewModel extends ViewModel {
         return loadFromBackStack;
     }
 
+    public SingleLiveEvent<Boolean> getGoToRegisterPage() {
+        return goToRegisterPage;
+    }
+
     public void startApp(int backStackCount) {
         Log.wtf(this.getClass().getName(), "startApp");
         StartupActions.makeFolder();
         if (backStackCount == 0) {
             if (showPro) {
                 goToNicknamePage.setValue(true);
+            } else if(isAddAccount){
+                goToRegisterPage.setValue(true);
             } else {
                 goToIntroduction.setValue(true);
             }

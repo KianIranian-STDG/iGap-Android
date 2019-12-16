@@ -2,6 +2,7 @@ package net.iGap.kuknos.service.Repository;
 
 import android.util.Log;
 
+import net.iGap.DbManager;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.mnemonic.Wallet;
 import net.iGap.kuknos.service.mnemonic.WalletException;
@@ -14,11 +15,8 @@ import net.iGap.request.RequestUserProfileGetEmail;
 
 import org.stellar.sdk.KeyPair;
 
-import io.realm.Realm;
-
 public class UserRepo {
 
-    private Realm realm;
     private RealmUserInfo userInfo;
     private RealmKuknos realmKuknos;
     private KuknosAPIRepository kuknosAPIRepository = new KuknosAPIRepository();
@@ -139,9 +137,9 @@ public class UserRepo {
     }
 
     private void updateUserInfo() {
-        userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        closeRealm();
-
+        userInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
         realmKuknos = userInfo.getKuknosM();
         if (realmKuknos == null) {
             userInfo.createKuknos();
@@ -151,17 +149,6 @@ public class UserRepo {
 
         if (userInfo.getEmail() == null)
             new RequestUserProfileGetEmail().userProfileGetEmail();
-    }
-
-    private Realm getRealm() {
-        if (realm == null || realm.isClosed()) {
-            realm = Realm.getDefaultInstance();
-        }
-        return realm;
-    }
-
-    private void closeRealm() {
-        realm.close();
     }
 
 }

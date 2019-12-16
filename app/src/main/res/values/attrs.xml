@@ -7,6 +7,7 @@
 
     <declare-styleable name="CircleImageView">
         <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_padding" format="dimension" />
         <attr name="civ_border_color" format="color" />
         <attr name="civ_border_overlay" format="boolean" />
         <attr name="civ_fill_color" format="color" />
@@ -106,7 +107,9 @@
     <attr name="iGapScrollerHandler" format="reference" />
     <attr name="iGapChatSendMessageBackground" format="reference" />
     <attr name="iGapCheckButton" format="reference" />
+    <attr name="iGapProfileStroke" format="reference" />
     <attr name="iGapProfileToolbar" format="reference" />
+    <attr name="iGapTimerPinter" format="reference" />
 
     <!--=======================custom theme=====================-->
 
@@ -124,6 +127,7 @@
         <attr name="dark_unselected_icon" format="reference" />
         <attr name="item_text" format="reference" />
         <attr name="item_text_size" format="dimension" />
+        <attr name="haveAvatarImage" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="PlaqueView">
@@ -196,8 +200,8 @@
     </declare-styleable>
 
     <declare-styleable name="RadiusImageView">
-        <attr name="riv_radius" format="dimension"/>
-        <attr name="riv_radius_right_side" format="boolean"/>
+        <attr name="riv_radius" format="dimension" />
+        <attr name="riv_radius_right_side" format="boolean" />
     </declare-styleable>
 
 </resources>

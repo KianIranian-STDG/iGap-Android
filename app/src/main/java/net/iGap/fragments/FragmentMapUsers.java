@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -23,7 +24,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
@@ -40,8 +40,6 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static net.iGap.G.context;
-import static net.iGap.G.inflater;
-import static net.iGap.G.isAppRtl;
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 import static net.iGap.fragments.FragmentiGapMap.pageUserList;
@@ -55,7 +53,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
     private RippleView rippleBack;
-    private Realm realmMapUsers;
 
     public FragmentMapUsers() {
         // Required empty public constructor
@@ -67,14 +64,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        realmMapUsers = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.fragment_map_users, container, false);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        realmMapUsers.close();
     }
 
     @Override
@@ -85,13 +75,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         if (FragmentiGapMap.location != null) {
             getDistanceLoop(0, false);
         }
-    }
-
-    private Realm getRealmMapUsers() {
-        if (realmMapUsers == null || realmMapUsers.isClosed()) {
-            realmMapUsers = Realm.getDefaultInstance();
-        }
-        return realmMapUsers;
     }
 
     private void initComponent(View view) {
@@ -120,14 +103,18 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         mRecyclerView = view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
-        getRealmMapUsers().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
-            }
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
+                }
+            });
         });
 
-        mAdapter = new MapUserAdapter(getRealmMapUsers().where(RealmGeoNearbyDistance.class).findAll(), true);
+        mAdapter = new MapUserAdapter(DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmGeoNearbyDistance.class).findAll();
+        }), true);
 
         //fastAdapter
         //mAdapter = new MapUserAdapterA();
@@ -362,54 +349,55 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             if (item == null) {
                 return;
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
-                RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
-                if (registeredInfo == null) {
-                    return;
-                }
+            RealmRegisteredInfo registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
+            });
 
-                if (!G.isAppRtl) {
-                    holder.arrow.setRotation(270);
-                } else {
-                    holder.arrow.setRotation(90);
-                }
+            if (registeredInfo == null) {
+                return;
+            }
+
+            if (!G.isAppRtl) {
+                holder.arrow.setRotation(270);
+            } else {
+                holder.arrow.setRotation(90);
+            }
 
 //            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
 
-                holder.layoutMap.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
-                        }
+            holder.layoutMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
                     }
-                });
-
-                if (HelperCalander.isPersianUnicode) {
-                    holder.username.setGravity(Gravity.RIGHT);
-                } else {
-                    holder.username.setGravity(Gravity.LEFT);
                 }
+            });
 
-                holder.username.setText(registeredInfo.getDisplayName());
-                if (item.isHasComment()) {
-                    if (item.getComment() == null || item.getComment().isEmpty()) {
-                        holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
-                        new RequestGeoGetComment().getComment(item.getUserId());
-                    } else {
-                        holder.comment.setText(item.getComment());
-                    }
-                } else {
-                    holder.comment.setText(context.getResources().getString(R.string.comment_no));
-                }
-
-                holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
-                if (HelperCalander.isPersianUnicode) {
-                    holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
-                }
-
-                avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
+            if (HelperCalander.isPersianUnicode) {
+                holder.username.setGravity(Gravity.RIGHT);
+            } else {
+                holder.username.setGravity(Gravity.LEFT);
             }
+
+            holder.username.setText(registeredInfo.getDisplayName());
+            if (item.isHasComment()) {
+                if (item.getComment() == null || item.getComment().isEmpty()) {
+                    holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
+                    new RequestGeoGetComment().getComment(item.getUserId());
+                } else {
+                    holder.comment.setText(item.getComment());
+                }
+            } else {
+                holder.comment.setText(context.getResources().getString(R.string.comment_no));
+            }
+
+            holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
+            if (HelperCalander.isPersianUnicode) {
+                holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
+            }
+
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

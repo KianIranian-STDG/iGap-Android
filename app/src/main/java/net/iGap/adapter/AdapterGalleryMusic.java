@@ -23,10 +23,9 @@ public class AdapterGalleryMusic extends RecyclerView.Adapter<AdapterGalleryMusi
     private List<GalleryMusicModel> musicsItem = new ArrayList<>();
     private List<GalleryMusicModel> mSelectedMusics = new ArrayList<>();
     private GalleryItemListener listener;
-    private HelperThumbnail mHelperVideo;
 
     public AdapterGalleryMusic() {
-        mHelperVideo = new HelperThumbnail(0);
+
     }
 
     @NonNull
@@ -66,9 +65,6 @@ public class AdapterGalleryMusic extends RecyclerView.Adapter<AdapterGalleryMusi
 
         holder.subtitle.setText(musicsItem.get(position).getArtist());
         holder.title.setText(musicsItem.get(position).getTitle());
-        String key = musicsItem.get(position).getArtist() + musicsItem.get(position).getId();
-        holder.cover.setTag(key);
-        mHelperVideo.loadThumbnail(false, key, musicsItem.get(position).getPath(), holder.cover);
         holder.itemView.setOnClickListener(v ->
                 listener.onItemClicked(musicsItem.get(holder.getAdapterPosition()).getPath(), musicsItem.get(holder.getAdapterPosition()).getId() + "")
         );
@@ -77,10 +73,6 @@ public class AdapterGalleryMusic extends RecyclerView.Adapter<AdapterGalleryMusi
     @Override
     public int getItemCount() {
         return musicsItem.size();
-    }
-
-    public void clearThumbnailCache() {
-        if (mHelperVideo != null) mHelperVideo.clearCache();
     }
 
     class MusicGalleryViewHolder extends RecyclerView.ViewHolder {

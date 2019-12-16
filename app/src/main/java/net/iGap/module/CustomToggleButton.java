@@ -10,7 +10,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -34,6 +33,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vanniktech.emoji.EmojiPopup;
 
+import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -42,7 +42,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEditChannelBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
@@ -54,6 +53,7 @@ import net.iGap.interfaces.OnChannelRemoveUsername;
 import net.iGap.interfaces.OnChannelUpdateUsername;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MEditText;
@@ -93,7 +93,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isNeedResume = true ;
+        isNeedResume = true;
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -159,9 +159,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             }
         });
 
-        viewModel.closePageImediatly.observe(getViewLifecycleOwner() , isClose -> {
+        viewModel.closePageImediatly.observe(getViewLifecycleOwner(), isClose -> {
             if (isClose == null || !isClose) return;
-                popBackStackFragment();
+            popBackStackFragment();
         });
 
         viewModel.initEmoji.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -231,7 +231,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (resultCode == Activity.RESULT_OK) {
             String filePath = null;
@@ -335,11 +335,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(EditChannelFragment.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(EditChannelFragment.this);
         } else {
             try {
                 new AttachFile(G.fragmentActivity).requestTakePicture(EditChannelFragment.this);
@@ -351,7 +347,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     private void showListForCustomRole(String SelectedRole) {
         if (getActivity() != null) {
-            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false, false);
+            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), AccountManager.getInstance().getCurrentUser().getId(), SelectedRole, false, false);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
     }
@@ -395,7 +391,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
-        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext() , R.font.main_font));
+        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext(), R.font.main_font));
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         /*if (isPopup) {*/
@@ -586,13 +582,14 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             @Override
             public void onChannelRemoveUsername(final long roomId) {
                 G.handler.post(() -> {
-                    viewModel.setPrivate(true);
-                    if (viewModel.inviteLink == null || viewModel.inviteLink.isEmpty() || viewModel.inviteLink.equals("https://")) {
-                        new RequestChannelRevokeLink().channelRevokeLink(roomId);
-                    } else {
-                        /*setTextChannelLik();*/
-                    }
-                    RealmRoom.setPrivate(roomId);
+                    RealmRoom.setPrivate(roomId, () -> {
+                        viewModel.setPrivate(true);
+                        if (viewModel.inviteLink == null || viewModel.inviteLink.isEmpty() || viewModel.inviteLink.equals("https://")) {
+                            new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                        } else {
+                            /*setTextChannelLik();*/
+                        }
+                    });
                 });
             }
 

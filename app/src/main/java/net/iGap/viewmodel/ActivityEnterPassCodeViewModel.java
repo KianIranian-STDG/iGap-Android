@@ -22,15 +22,16 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPreferences;
-import net.iGap.interfaces.OnUserSessionLogout;
+import net.iGap.model.PassCode;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestUserSessionLogout;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -43,8 +44,6 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-
-import io.realm.Realm;
 
 import static android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD;
 import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
@@ -63,28 +62,28 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearPassword = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> goToRegisterPage = new SingleLiveEvent<>();
 
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "androidHive";
     private final int PIN = 0;
 
-    private Realm realm;
     private KeyStore keyStore;
     private Cipher cipher;
 
     private RealmUserInfo realmUserInfo;
 
     public ActivityEnterPassCodeViewModel(boolean isLinePattern) {
-
-        realm = Realm.getDefaultInstance();
         initialPatternView.setValue(!isLinePattern);
 
-        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
 
         if (realmUserInfo != null) {
-            isPattern.set(realmUserInfo.isPattern() ? View.VISIBLE : View.GONE);
-            if (realmUserInfo.isPassCode()) {
-                if (realmUserInfo.isPattern()) {
+            isPattern.set(PassCode.getInstance().isPattern() ? View.VISIBLE : View.GONE);
+            if (PassCode.getInstance().isPassCode()) {
+                if (PassCode.getInstance().isPattern()) {
                     isEditText.set(View.GONE);
                     showCheckPasswordButton.set(View.GONE);
                     isPattern.set(View.VISIBLE);
@@ -92,7 +91,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
                     isEditText.set(View.VISIBLE);
                     showCheckPasswordButton.set(View.VISIBLE);
                     isPattern.set(View.GONE);
-                    if (realmUserInfo.getKindPassCode() == PIN) {
+                    if (PassCode.getInstance().getKindPassCode() == PIN) {
                         passwordInputType.set((InputType.TYPE_CLASS_NUMBER | TYPE_NUMBER_VARIATION_PASSWORD));
                         passwordMaxLength.set(4);
                     } else {
@@ -154,8 +153,12 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
         return clearPassword;
     }
 
+    public SingleLiveEvent<Boolean> getGoToRegisterPage() {
+        return goToRegisterPage;
+    }
+
     public void afterTextChanged(String s) {
-        if (realmUserInfo.getKindPassCode() == PIN) {
+        if (PassCode.getInstance().getKindPassCode() == PIN) {
             if (s.length() == 4) {
                 onCheckPasswordButtonClick(s);
             }
@@ -164,7 +167,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
 
     public void onCheckPasswordButtonClick(String password) {
         if (password != null && password.length() > 0) {
-            if (password.equals(realmUserInfo.getPassCode())) {
+            if (password.equals(PassCode.getInstance().getPassCode())) {
                 passwordCorrect();
             } else {
                 hideKeyword.setValue(true);
@@ -191,27 +194,9 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     }
 
     public void forgetPassword() {
-        G.isPassCode = false;
+        PassCode.getInstance().setPassCode(false);
         hideKeyword.setValue(true);
-        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
-            @Override
-            public void onUserSessionLogout() {
-                /*goBack.setValue(false);*/
-                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
-                HelperLogout.logout();
-                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
-            }
-
-            @Override
-            public void onError() {
-                showErrorMessage.setValue(R.string.error);
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        });
+        goToRegisterPage.postValue(!new HelperLogout().logoutAllUser());
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -258,11 +243,10 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     protected void onCleared() {
         super.onCleared();
         hideKeyword.setValue(true);
-        realm.close();
     }
 
     public void onResume() {
-        if (realmUserInfo.isFingerPrint()) {
+        if (PassCode.getInstance().isFingerPrint()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 generateKey();
                 if (cipherInit()) {

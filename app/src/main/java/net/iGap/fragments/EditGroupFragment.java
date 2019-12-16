@@ -25,13 +25,13 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.vanniktech.emoji.EmojiPopup;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEditGroupBinding;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
@@ -39,6 +39,7 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.PassCode;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
@@ -195,7 +196,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (resultCode == Activity.RESULT_OK) {
             String filePath = null;
@@ -303,11 +304,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(this);
         } else {
             try {
                 new AttachFile(G.fragmentActivity).requestTakePicture(this);
@@ -319,7 +316,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     private void showListForCustomRole(String SelectedRole) {
         if (getActivity() != null) {
-            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false, true);
+            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), AccountManager.getInstance().getCurrentUser().getId(), SelectedRole, false, true);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
     }

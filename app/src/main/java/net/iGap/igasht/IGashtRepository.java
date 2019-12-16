@@ -1,11 +1,11 @@
 package net.iGap.igasht;
 
+import net.iGap.DbManager;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.igasht.barcodescaner.TicketQRCodeResponse;
 import net.iGap.igasht.historylocation.IGashtTicketDetail;
 import net.iGap.igasht.historylocation.TicketHistoryListResponse;
@@ -19,14 +19,8 @@ import net.iGap.realm.RealmUserInfo;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class IGashtRepository {
 
@@ -96,13 +90,13 @@ public class IGashtRepository {
     }
 
     public void registeredOrder(HandShakeCallback handShakeCallback, ResponseCallback<RegisterTicketResponse> callback) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             new ApiInitializer<RegisterTicketResponse>().initAPI(igashtApi.registerOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
                     1,
                     selectedProvince.getId(),
                     selectedLocation.getId(),
                     selectedServiceList)), handShakeCallback, callback);
-        }
+        });
     }
 
     public void getTicketQRCode(String voucherNumber, HandShakeCallback handShakeCallback, ResponseCallback<TicketQRCodeResponse> callback) {

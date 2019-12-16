@@ -32,6 +32,7 @@ import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.SearchItem;
@@ -230,6 +231,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (getContext() == null) {
+                            return;
+                        }
+
                         loadingProgressBar.setVisibility(View.GONE);
                         fillAfterResponse();
                         HelperError.showSnackMessage(getString(R.string.connection_error), false);
@@ -292,8 +297,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     }
 
-    private void fillHashtag(String text) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+    private void fillHashtag(String tt) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String text = tt;
             if (!text.startsWith("#")) {
                 text = "#" + text;
             }
@@ -330,8 +336,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     }
                 }
             }
-        }
-
+        });
     }
 
 
@@ -361,7 +366,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     }
 
     private void fillRoomListGroup(String text) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRoom> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
@@ -407,11 +412,11 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     list.add(item);
                 }
             }
-        }
+        });
     }
 
     private void fillRoomListChannel(String text) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRoom> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
@@ -455,11 +460,11 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     list.add(item);
                 }
             }
-        }
+        });
     }
 
     private void fillBot(String text) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRegisteredInfo> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
@@ -491,12 +496,11 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     list.add(item);
                 }
             }
-
-        }
+        });
     }
 
     private void fillChat(String text) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRegisteredInfo> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
@@ -528,12 +532,11 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     list.add(item);
                 }
             }
-        }
-
+        });
     }
 
     private void fillContacts(String text) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmContacts> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
@@ -567,7 +570,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     list.add(item);
                 }
             }
-        }
+        });
     }
 
     private void addHeader(String header) {
@@ -578,7 +581,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     }
 
     private void fillMessages(String text) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
             if (results != null && results.size() > 0) {
                 addHeader(G.fragmentActivity.getResources().getString(R.string.messages));
@@ -618,11 +621,11 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     }
                 }
             }
-        }
+        });
     }
 
     private void goToRoom(final long id, SearchType type, long messageId, String userName) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = null;
 
             if (type == SearchType.message) {
@@ -641,7 +644,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     goToRoomWithRealm(realmRoom, type, id);
                 }
             }
-        }
+        });
     }
 
 
@@ -661,7 +664,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             new RequestChatGetRoom().chatGetRoom(id, new RequestChatGetRoom.OnChatRoomReady() {
                 @Override
                 public void onReady(ProtoGlobal.Room room) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
+                    DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -669,7 +672,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                                 room2.setDeleted(true);
                             }
                         });
-                    }
+                    });
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {

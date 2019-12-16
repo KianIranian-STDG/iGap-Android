@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent=".5"
         app:srcCompat="@drawable/ic_crash"
-        app:layout_constraintBottom_toTopOf="@id/title"/>
+        app:layout_constraintBottom_toTopOf="@id/title" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/description"/>
+        app:layout_constraintBottom_toTopOf="@id/description" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/description"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/restart_button"/>
+        app:layout_constraintBottom_toTopOf="@id/restart_button" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/restart_button"

@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.model.GoToWalletPage;
 import net.iGap.request.RequestInfoPage;
 import net.iGap.request.RequestWalletRegister;
@@ -44,7 +45,7 @@ public class FragmentWalletAgreementViewModel extends ViewModel {
 
             @Override
             public void onError(int major, int minor) {
-
+                HelperError.showSnackMessage("خطا", false);
             }
         });
     }

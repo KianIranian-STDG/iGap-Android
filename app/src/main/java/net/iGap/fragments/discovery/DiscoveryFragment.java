@@ -329,6 +329,11 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             try {
                 ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>() {
                 }.getType());
+                for (DiscoveryItem discoveryItem: discoveryArrayList) {
+                    if (discoveryItem.scale == null || discoveryItem.model == null) {
+                        return;
+                    }
+                }
                 setAdapterData(discoveryArrayList, title);
             } catch (Exception e) {
                 e.printStackTrace();

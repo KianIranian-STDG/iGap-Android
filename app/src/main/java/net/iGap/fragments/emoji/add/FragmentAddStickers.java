@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
@@ -174,14 +175,14 @@ public class FragmentAddStickers extends BaseFragment {
             if (!capitalCities.containsKey(item.getAvatarToken())) {
                 capitalCities.put(item.getAvatarToken(), item);
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmStickers realmStickers = RealmStickers.checkStickerExist(item.getId(), realm);
                 if (realmStickers == null) {
                     holder.txtRemove.setVisibility(View.VISIBLE);
                 } else if (realmStickers.isFavorite()) {
                     holder.txtRemove.setVisibility(View.GONE);
                 }
-            }
+            });
             String path = HelperDownloadSticker.createPathFile(item.getAvatarToken(), item.getAvatarName());
             if (!new File(path).exists()) {
                 HelperDownloadSticker.stickerDownload(item.getAvatarToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
@@ -267,7 +268,7 @@ public class FragmentAddStickers extends BaseFragment {
 
             }
 
-            private void addStickerByApi(int pos){
+            private void addStickerByApi(int pos) {
 
                 if (mData.size() > pos) {
 
@@ -278,34 +279,31 @@ public class FragmentAddStickers extends BaseFragment {
                         @Override
                         public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
                             if (response.body() != null && response.body().isSuccess()) {
-                                try (Realm realm = Realm.getDefaultInstance()) {
-                                    RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                                    if (realmStickers == null) {
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
+                                DbManager.getInstance().doRealmTask(realm -> {
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
+                                            if (realmStickers == null) {
                                                 RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                                            } else {
+                                                RealmStickers.updateFavorite(realm, item.getId(), true);
                                             }
-                                        });
-
-                                    } else {
-                                        RealmStickers.updateFavorite(item.getId(), true);
-                                    }
-
-                                }
-                            }
-
-                            if (getActivity() == null || getActivity().isFinishing() || !isAdded()) {
-                                return;
-                            }
-
-                            progressBar.setVisibility(View.GONE);
-                            if (response.body() != null && response.body().isSuccess()) {
-                                mData.get(pos).setIsFavorite(true);
-                                if (FragmentChat.onUpdateSticker != null) {
-                                    FragmentChat.onUpdateSticker.update();
-                                }
-                                notifyDataSetChanged();
+                                        }
+                                    }, () -> {
+                                        if (getAdapterPosition() == -1 || getActivity() == null || getActivity().isFinishing() || !isAdded()) {
+                                            return;
+                                        }
+                                        progressBar.setVisibility(View.GONE);
+                                        mData.get(pos).setIsFavorite(true);
+                                        if (FragmentChat.onUpdateSticker != null) {
+                                            FragmentChat.onUpdateSticker.update();
+                                        }
+                                        notifyDataSetChanged();
+                                    });
+                                });
+                            } else {
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
 

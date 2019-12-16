@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,12 +15,16 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
+import net.iGap.module.CircleImageView;
 import net.iGap.view.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -35,10 +40,11 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     private int darkUnSelectedIcon;
     private int position;
     private int text;
-
+    public boolean haveAvatarImage;
     private ImageView imageView;
     private TextBadge badgeView;
     private AppCompatTextView textView;
+    private AvatarHandler avatarHandler;
 
     private boolean active = false;
     private boolean isRtl = G.isAppRtl;
@@ -62,9 +68,22 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
+        if (haveAvatarImage) {
+            if (imageView == null) {
+                imageView = new CircleImageView(getContext());
+                imageView.setBackgroundResource(new Theme().getUserProfileTabSelector(getContext()));
+                imageView.setPadding((int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2));
+                if (avatarHandler == null) {
+                    avatarHandler = new AvatarHandler();
+                    avatarHandler.registerChangeFromOtherAvatarHandler();
+                    avatarHandler.getAvatar(new ParamWithAvatarType(imageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                }
+            }
+        } else {
+            if (imageView == null)
+                imageView = new AppCompatImageView(getContext());
 
-        if (imageView == null)
-            imageView = new AppCompatImageView(getContext());
+        }
 
         if (textView == null)
             textView = new AppCompatTextView(getContext());
@@ -135,19 +154,23 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
                 bottomNavigation = (BottomNavigation) getParent();
                 setupViews();
             }
+
         });
     }
 
-    private void setupViews() {
-        if (isDarkTheme) {
-            imageView.setImageResource(darkSelectedIcon);
-        } else {
-            imageView.setImageResource(selectedIcon);
-        }
 
+    private void setupViews() {
+        if (!haveAvatarImage) {
+            if (isDarkTheme) {
+                imageView.setImageResource(darkSelectedIcon);
+            } else {
+                imageView.setImageResource(selectedIcon);
+            }
+        }
         if (position == bottomNavigation.getDefaultItem())
             active = true;
         setSelectedItem(active);
+
     }
 
     private void parseAttr(AttributeSet attributeSet) {
@@ -160,6 +183,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
                 darkSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_selected_icon, -1);
                 darkUnSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
                 text = typedArray.getResourceId(R.styleable.TabItem_item_text, R.string.error);
+                haveAvatarImage = typedArray.getBoolean(R.styleable.TabItem_haveAvatarImage, false);
             } finally {
                 typedArray.recycle();
             }
@@ -185,22 +209,44 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
             onTabItemSelected.selectedTabItem(position);
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (haveAvatarImage && avatarHandler == null) {
+            avatarHandler = new AvatarHandler();
+            avatarHandler.registerChangeFromOtherAvatarHandler();
+            avatarHandler.getAvatar(new ParamWithAvatarType(imageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (avatarHandler != null) {
+            avatarHandler.unregisterChangeFromOtherAvatarHandler();
+        }
+    }
+
     public void setSelectedItem(boolean isActive) {
         if (active != isActive) {
             active = isActive;
         }
-        textView.setSelected(isActive);
-        if (isDarkTheme) {
-            if (active) {
-                imageView.setImageResource(darkSelectedIcon);
+        this.setSelected(isActive);
+        /*textView.setSelected(isActive);*/
+        /*imageView.setSelected(isActive);*/
+        if (!haveAvatarImage) {
+            if (isDarkTheme) {
+                if (active) {
+                    imageView.setImageResource(darkSelectedIcon);
+                } else {
+                    imageView.setImageResource(darkUnSelectedIcon);
+                }
             } else {
-                imageView.setImageResource(darkUnSelectedIcon);
-            }
-        } else {
-            if (active) {
-                imageView.setImageResource(selectedIcon);
-            } else {
-                imageView.setImageResource(unSelectedIcon);
+                if (active) {
+                    imageView.setImageResource(selectedIcon);
+                } else {
+                    imageView.setImageResource(unSelectedIcon);
+                }
             }
         }
 
@@ -213,6 +259,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
     }
+
 
     public void setBadgeCount(int count) {
         if (badgeView != null) {

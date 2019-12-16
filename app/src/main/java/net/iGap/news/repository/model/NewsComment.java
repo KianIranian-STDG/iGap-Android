@@ -7,85 +7,47 @@ import java.util.List;
 
 public class NewsComment {
 
-    @SerializedName("Ids")
-    private String IDs;
-    @SerializedName("content")
-    private List<Comment> comments;
+    @SerializedName("articleId")
+    private String articleIDِ;
+    @SerializedName("userName")
+    private String username;
+    @SerializedName("commentContent")
+    private String comment;
+    @SerializedName("commentDate")
+    private String date;
 
     public NewsComment() {
     }
 
-    public String getIDs() {
-        return IDs;
+    public String getArticleIDِ() {
+        return articleIDِ;
     }
 
-    public void setIDs(String IDs) {
-        this.IDs = IDs;
+    public void setArticleIDِ(String articleIDِ) {
+        this.articleIDِ = articleIDِ;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public String getUsername() {
+        return username;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public List<Comment> getFakeData() {
-        List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("ahmad", "good!", "19/04/98", "h.amini@yahoo.com"));
-        comments.add(new Comment("ahmad", "good!", "19/04/98", "h.amini@yahoo.com"));
-        comments.add(new Comment("ahmad", "good!", "19/04/98", "h.amini@yahoo.com"));
-        comments.add(new Comment("ahmad", "good!", "19/04/98", "h.amini@yahoo.com"));
-        comments.add(new Comment("ahmad", "good!", "19/04/98", "h.amini@yahoo.com"));
-        comments.add(new Comment("ahmad", "good!", "19/04/98", "h.amini@yahoo.com"));
-        return comments;
+    public String getComment() {
+        return comment;
     }
 
-    public class Comment {
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-        private String author;
-        private String body;
-        private String date;
-        private String email;
+    public String getDate() {
+        return date;
+    }
 
-        Comment(String author, String body, String date, String email) {
-            this.author = author;
-            this.body = body;
-            this.date = date;
-            this.email = email;
-        }
-
-        public String getAuthor() {
-            return author;
-        }
-
-        public void setAuthor(String author) {
-            this.author = author;
-        }
-
-        public String getBody() {
-            return body;
-        }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
+    public void setDate(String date) {
+        this.date = date;
     }
 }

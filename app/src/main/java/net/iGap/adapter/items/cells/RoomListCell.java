@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 
 import com.vanniktech.emoji.EmojiTextView;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -40,7 +41,6 @@ import net.iGap.view.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
-import static net.iGap.G.userId;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.adapter.items.chat.ViewMaker.setTextSize;
 import static net.iGap.adapter.items.chat.ViewMaker.setTypeFace;
@@ -95,7 +95,7 @@ public class RoomListCell extends FrameLayout {
                 pinView = new AppCompatImageView(getContext());
                 pinCornerView = new AppCompatImageView(getContext());
                 pinView.setBackgroundResource(R.drawable.pin);
-                pinCornerView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.pin_corner), getContext(), R.attr.colorAccent));
+                pinCornerView.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.pin_corner), getContext(), R.attr.colorAccent));
 
                 if (isRtl)
                     pinCornerView.setRotationY(180);
@@ -116,7 +116,7 @@ public class RoomListCell extends FrameLayout {
             haveAvatar = true;
             final boolean isMyCloud;
 
-            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
 
             if (isMyCloud) {
                 avatarHandler.removeImageViewFromHandler(avatarImageView);
@@ -128,7 +128,7 @@ public class RoomListCell extends FrameLayout {
         } else {
             final boolean isMyCloud;
 
-            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
 
             if (isMyCloud) {
                 avatarHandler.removeImageViewFromHandler(avatarImageView);
@@ -160,7 +160,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getLastMessage() != null && room.getLastMessage().getUpdateOrCreateTime() != 0 && !haveDate) {
             messageDataTv = new AppCompatTextView(getContext());
             messageDataTv.setSingleLine(true);
-            messageDataTv.setTextColor(new Theme().getSendMessageTextColor(messageDataTv.getContext()));
+            messageDataTv.setTextColor(Theme.getInstance().getSendMessageTextColor(messageDataTv.getContext()));
             messageDataTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
             setTextSize(messageDataTv, R.dimen.dp10);
             setTypeFace(messageDataTv);
@@ -176,7 +176,7 @@ public class RoomListCell extends FrameLayout {
                 muteIconTv = new FontIconTextView(getContext());
                 muteIconTv.setText(R.string.mute_icon);
                 muteIconTv.setGravity(Gravity.RIGHT);
-                muteIconTv.setTextColor(new Theme().getTitleTextColor(getContext()));
+                muteIconTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
                 setTextSize(muteIconTv, R.dimen.dp13);
                 addView(muteIconTv);
                 isMute = true;
@@ -192,7 +192,7 @@ public class RoomListCell extends FrameLayout {
                 chatIconTv = new FontIconTextView(getContext());
                 setTextSize(chatIconTv, R.dimen.standardTextSize);
                 addView(chatIconTv);
-                chatIconTv.setTextColor(new Theme().getSendMessageTextColor(chatIconTv.getContext()));
+                chatIconTv.setTextColor(Theme.getInstance().getSendMessageTextColor(chatIconTv.getContext()));
                 haveChatIcon = true;
 
             }
@@ -215,7 +215,7 @@ public class RoomListCell extends FrameLayout {
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
             roomNameTv.setEmojiSize(i_Dp(R.dimen.dp16));
             roomNameTv.setText(room.getTitle());
-            roomNameTv.setTextColor(new Theme().getSendMessageTextColor(roomNameTv.getContext()));
+            roomNameTv.setTextColor(Theme.getInstance().getSendMessageTextColor(roomNameTv.getContext()));
             roomNameTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
             addView(roomNameTv);
             haveName = true;
@@ -249,7 +249,7 @@ public class RoomListCell extends FrameLayout {
             if (room.getMute()) {
                 badgeView.setBadgeColor(getResources().getColor(R.color.gray_9d));
             } else {
-                badgeView.setBadgeColor(new Theme().getAccentColor(badgeView.getContext()));
+                badgeView.setBadgeColor(Theme.getInstance().getAccentColor(badgeView.getContext()));
             }
             badgeView.setText(getUnreadCount(room.getUnreadCount()));
         } else if (haveBadge) {
@@ -506,7 +506,7 @@ public class RoomListCell extends FrameLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(new Theme().getDividerColor(getContext()));
+        paint.setColor(Theme.getInstance().getDividerColor(getContext()));
         canvas.drawLine(isRtl ? 4 : avatarImageView.getRight(), getMeasuredHeight() - 1, isRtl ? avatarImageView.getLeft() : getWidth(), getMeasuredHeight(), paint);
         super.dispatchDraw(canvas);
     }
@@ -527,10 +527,10 @@ public class RoomListCell extends FrameLayout {
     private void getLastMessage(RealmRoom room, EmojiTextView lastMessageTv) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
 
-        if (room.getActionState() != null && room.getActionStateUserId() != userId) {
+        if (room.getActionState() != null && room.getActionStateUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
 
             SpannableString typingSpannableString = new SpannableString(room.getActionState());
-            typingSpannableString.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
+            typingSpannableString.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
 
             builder.append(typingSpannableString);
 
@@ -542,7 +542,7 @@ public class RoomListCell extends FrameLayout {
 
             String draftMessage = room.getDraft().getMessage();
             SpannableString message = new SpannableString(draftMessage);
-            message.setSpan(new ForegroundColorSpan(new Theme().getSendMessageTextColor(lastMessageTv.getContext())), 0, message.length(), 0);
+            message.setSpan(new ForegroundColorSpan(Theme.getInstance().getSendMessageTextColor(lastMessageTv.getContext())), 0, message.length(), 0);
 
             builder.append(redSpannable);
             builder.append(message);
@@ -564,7 +564,7 @@ public class RoomListCell extends FrameLayout {
                 if (lastMessage.isDeleted()) {
                     String deletedMessage = getResources().getString(R.string.deleted_message);
                     SpannableString deletedSpannable = new SpannableString(deletedMessage);
-                    deletedSpannable.setSpan(new ForegroundColorSpan(new Theme().getSendMessageTextColor(lastMessageTv.getContext())), 0, deletedMessage.length(), 0);
+                    deletedSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getSendMessageTextColor(lastMessageTv.getContext())), 0, deletedMessage.length(), 0);
                     builder.append(deletedSpannable);
                     lastMessageTv.setText(builder, TextView.BufferType.SPANNABLE);
                     return;
@@ -608,7 +608,7 @@ public class RoomListCell extends FrameLayout {
 
                         if (senderNameSpannable != null) {
                             haveSenderName = true;
-                            senderNameSpannable.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
+                            senderNameSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
                         }
                     }
 
@@ -695,12 +695,12 @@ public class RoomListCell extends FrameLayout {
 
                     if (attachmentSpannable != null) {
                         haveAttachment = true;
-                        attachmentSpannable.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
+                        attachmentSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
                     }
 
                     if (haveSenderName) {
                         senderNameQuoteSpannable = new SpannableString(haveAttachment ? ":" : nameIsPersian ? ": " : ": ");
-                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
+                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
                     }
                     String message;
                     if (lastMessage.getMessage().length() > 70) {
@@ -712,7 +712,7 @@ public class RoomListCell extends FrameLayout {
                         message = HelperCalander.convertToUnicodeFarsiNumber(message);
 
                     lastMessageSpannable = new SpannableString(/*subStringInternal(*/message/*)*/);
-                    lastMessageSpannable.setSpan(new ForegroundColorSpan(new Theme().getSendMessageTextColor(lastMessageTv.getContext())), 0, lastMessageSpannable.length(), 0);
+                    lastMessageSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getSendMessageTextColor(lastMessageTv.getContext())), 0, lastMessageSpannable.length(), 0);
 
                     if (haveSenderName) {
                         if (haveAttachment) {

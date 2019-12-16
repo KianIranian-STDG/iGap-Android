@@ -59,7 +59,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -275,7 +274,7 @@ public class AttachFile {
 
     //*************************************************************************************************************
 
-    public void dispatchTakePictureIntent(Fragment fragment) throws IOException {
+    public void dispatchTakePictureIntent(Fragment fragment) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
@@ -285,6 +284,7 @@ public class AttachFile {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
+                ex.printStackTrace();
                 return;
             }
             // Continue only if the File was successfully created
@@ -362,7 +362,7 @@ public class AttachFile {
 
         HelperPermission.getCameraPermission(context, new OnGetPermission() {
             @Override
-            public void Allow() throws IOException {
+            public void Allow() {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

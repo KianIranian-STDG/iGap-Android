@@ -1,7 +1,5 @@
 package net.iGap.api.apiService;
 
-import android.util.Log;
-
 import net.iGap.G;
 
 import java.io.IOException;

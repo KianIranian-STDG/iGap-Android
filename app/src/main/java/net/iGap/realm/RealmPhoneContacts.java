@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
@@ -122,7 +123,7 @@ public class RealmPhoneContacts extends RealmObject {
     }
 
     private static void addListToDB(final List<StructListOfContact> list) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -131,7 +132,7 @@ public class RealmPhoneContacts extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     private static void addContactToDB(final StructListOfContact item, Realm realm) {
@@ -153,7 +154,8 @@ public class RealmPhoneContacts extends RealmObject {
         if (list == null) {
             return notImportedList;
         }
-        try (Realm realm = Realm.getDefaultInstance()) {
+
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -174,7 +176,7 @@ public class RealmPhoneContacts extends RealmObject {
                     }
                 }
             });
-        }
+        });
 
         return notImportedList;
     }

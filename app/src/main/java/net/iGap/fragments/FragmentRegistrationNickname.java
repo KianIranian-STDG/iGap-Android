@@ -25,7 +25,6 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,14 +47,13 @@ import net.iGap.databinding.FragmentRegistrationNicknameBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.SHP_SETTING;
+import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
 
@@ -64,11 +62,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentRegistrationNickname extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
-    public final static String ARG_USER_ID = "arg_user_id";
     private FragmentRegistrationNicknameViewModel viewModel;
     private FragmentRegistrationNicknameBinding binding;
 
@@ -79,7 +75,10 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new FragmentRegistrationNicknameViewModel(getArguments() != null ? getArguments().getLong(ARG_USER_ID, -1) : -1, avatarHandler, getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
+                return (T) new FragmentRegistrationNicknameViewModel(
+                        avatarHandler,
+                        new CountryReader().readFromAssetsTextFile("country.txt", getContext())
+                );
             }
         }).get(FragmentRegistrationNicknameViewModel.class);
     }
@@ -97,36 +96,13 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ProgressBar prgWait = binding.prg;
-        AppUtils.setProgresColler(prgWait);
+        AppUtils.setProgresColler(binding.prg);
 
-        AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage,new Theme().getPrimaryColor(getContext()));
+        AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage, new Theme().getPrimaryColor(getContext()));
 
         viewModel.progressValue.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
                 binding.prg.setProgress(integer);
-            }
-        });
-
-        viewModel.showErrorName.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                binding.name.setErrorEnabled(true);
-                binding.name.setError(getString(R.string.Toast_Write_NickName));
-                binding.name.setHintTextAppearance(R.style.error_appearance);
-            } else {
-                binding.name.setErrorEnabled(false);
-                binding.name.setError("");
-            }
-        });
-
-        viewModel.showErrorLastName.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                binding.lastName.setErrorEnabled(true);
-                binding.lastName.setError(getString(R.string.Toast_Write_NickName));
-                binding.lastName.setHintTextAppearance(R.style.error_appearance);
-            } else {
-                binding.lastName.setErrorEnabled(false);
-                binding.lastName.setError("");
             }
         });
 
@@ -161,29 +137,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
         viewModel.showReagentPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), showError -> {
             if (showError != null && showError) {
                 Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.goToMain.observe(getViewLifecycleOwner(), userId -> {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
-
-            /*if (getActivity() != null && userId != null) {
-                Intent intent = new Intent(getActivity(), ActivityMain.class);
-                intent.putExtra(ARG_USER_ID, userId);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getActivity().startActivity(intent);
-                getActivity().finish();
-            }*/
-
-            if (getActivity() instanceof ActivityRegistration) {
-                FragmentSyncRegisteredContacts fragment = new FragmentSyncRegisteredContacts();
-                Bundle bundle = new Bundle();
-                bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().popBackStack();
-                ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
             }
         });
     }
@@ -249,11 +202,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
     public void useCamera() {
         if (getActivity() != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentRegistrationNickname.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentRegistrationNickname.this);
             } else {
                 try {
                     new AttachFile(getActivity()).requestTakePicture(FragmentRegistrationNickname.this);
@@ -311,7 +260,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
                                         e.printStackTrace();
                                     }
                                 } else {
-
                                     HelperError.showSnackMessage(getString(R.string.please_check_your_camera), false);
                                 }
                                 break;
@@ -348,7 +296,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             });
 
             ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
-            AdapterDialog adapterDialog = new AdapterDialog(getContext(), viewModel.getStructCountryArrayList());
+            AdapterDialog adapterDialog = new AdapterDialog(viewModel.getStructCountryArrayList());
             listView.setAdapter(adapterDialog);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 viewModel.setCountry(adapterDialog.getItem(position));

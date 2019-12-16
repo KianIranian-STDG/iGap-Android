@@ -1,7 +1,5 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.ViewModel;
-
 import net.iGap.api.apiService.BaseAPIViewModel;
 
 public class BaseViewModel extends BaseAPIViewModel implements BaseViewHolder {

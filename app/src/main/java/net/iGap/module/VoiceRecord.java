@@ -11,7 +11,6 @@
 package net.iGap.module;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.util.TypedValue;

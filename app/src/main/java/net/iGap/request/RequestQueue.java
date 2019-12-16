@@ -10,11 +10,10 @@
 
 package net.iGap.request;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-
-import com.neovisionaries.ws.client.WebSocket;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -172,11 +171,8 @@ public class RequestQueue {
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
-                    WebSocket webSocket = WebSocketClient.getInstance();
-                    if (webSocket != null) {
-                        Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
-                        webSocket.sendBinary(message, requestWrapper);
-                    }
+                    Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
+                    WebSocketClient.getInstance().sendBinary(message, requestWrapper);
                 } else {
                     if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
                         /**
@@ -186,10 +182,7 @@ public class RequestQueue {
                     }
                 }
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
-                WebSocket webSocket = WebSocketClient.getInstance();
-                if (webSocket != null) {
-                    webSocket.sendBinary(message, requestWrapper);
-                }
+                WebSocketClient.getInstance().sendBinary(message, requestWrapper);
             } else { //if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
                 timeOutImmediately(randomId, false);
                 /**
@@ -227,7 +220,12 @@ public class RequestQueue {
         for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
             String key = entry.getKey();
             RequestWrapper requestWrapper = entry.getValue();
-            boolean delete = timeDifference(requestWrapper.getTime());
+            boolean delete;
+            if (requestWrapper.actionId == 102) {
+                delete = timeDifference(requestWrapper.getTime(), (10 * DateUtils.SECOND_IN_MILLIS));
+            } else {
+                delete = timeDifference(requestWrapper.getTime(), Config.TIME_OUT_MS);
+            }
             if (delete) {
                 deleteRequest(key);
             }
@@ -339,7 +337,7 @@ public class RequestQueue {
     /**
      * if time not set yet don't set timeout
      */
-    private static boolean timeDifference(long beforeTime) {
+    private static boolean timeDifference(long beforeTime, long config) {
         if (beforeTime == 0) {
             return false;
         }
@@ -349,7 +347,7 @@ public class RequestQueue {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        return difference >= Config.TIME_OUT_MS;
+        return difference >= config;
     }
 
 

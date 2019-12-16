@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
@@ -17,23 +16,22 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import net.iGap.R;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.module.AppUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class BottomNavigation extends LinearLayout implements OnItemSelected {
+public class BottomNavigation extends LinearLayout implements OnItemSelected, View.OnClickListener {
 
     public static final String TAG = "aabolfazlNavigation";
     private OnItemChangeListener onItemChangeListener;
-    private List<TabItem> tabItems = new ArrayList<>();
     private int defaultItem;
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
     private int backgroundColor;
     private int badgeColor;
+    private OnLongClickListener onLongClickListener;
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -60,7 +58,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -68,15 +65,19 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     private void setupChildren() {
-        for (int i = 0; i < getChildCount(); i++) {
-            final TabItem tabItem = (TabItem) getChildAt(i);
-            tabItem.setPosition(i);
-            tabItems.add(tabItem);
-            tabItem.setOnTabItemSelected(this);
+        try {
+            for (int i = 0; i < getChildCount(); i++) {
+                TabItem tabItem = (TabItem) getChildAt(i);
+                tabItem.setPosition(i);
+                tabItem.setOnTabItemSelected(this);
+                if (tabItem.haveAvatarImage) {
+                    tabItem.setOnLongClickListener(this::onLongClick);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
-
 
     @Override
     public void selectedTabItem(final int position) {
@@ -84,12 +85,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             selectedItemPosition = position;
             onSelectedItemChanged();
             if (onItemChangeListener != null) {
-                onItemChangeListener.onSelectedItemChanged(tabItems.get(position).getPosition());
+                onItemChangeListener.onSelectedItemChanged(((TabItem) getChildAt(position)).getPosition());
             }
         } else {
-            if (onItemChangeListener != null) {
-                onItemChangeListener.onSelectAgain(tabItems.get(position).getPosition());
-            }
+            onItemChangeListener.onSelectAgain(((TabItem) getChildAt(position)).getPosition());
         }
     }
 
@@ -98,7 +97,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(backgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius, true), paint);
+            canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), LayoutCreator.dpToPx((int) cornerRadius), LayoutCreator.dpToPx((int) cornerRadius), true), paint);
             super.dispatchDraw(canvas);
         } else {
             super.dispatchDraw(canvas);
@@ -150,13 +149,13 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     public void setCurrentItem(int position) {
         defaultItem = position;
-        for (int i = 0; i < tabItems.size(); i++) {
-            if (tabItems.get(i).getPosition() == position) {
+        for (int i = 0; i < getChildCount(); i++) {
+            if (((TabItem) getChildAt(i)).getPosition() == position) {
                 if (position != selectedItemPosition) {
                     selectedItemPosition = position;
                     onSelectedItemChanged();
                     if (onItemChangeListener != null) {
-                        onItemChangeListener.onSelectedItemChanged(tabItems.get(position).getPosition());
+                        onItemChangeListener.onSelectedItemChanged(((TabItem) getChildAt(i)).getPosition());
                     }
                 }
             }
@@ -168,8 +167,12 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     private void onSelectedItemChanged() {
-        for (int i = 0; i < tabItems.size(); i++) {
-            tabItems.get(i).setSelectedItem(tabItems.get(i).getPosition() == selectedItemPosition);
+        try {
+            for (int i = 0; i < getChildCount(); i++) {
+                ((TabItem) getChildAt(i)).setSelectedItem(((TabItem) getChildAt(i)).getPosition() == selectedItemPosition);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -178,7 +181,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     public void setDefaultItem(int defaultItem) {
-        Log.wtf(this.getClass().getName(), "default tab: " + defaultItem);
         this.defaultItem = defaultItem;
         this.selectedItemPosition = defaultItem;
     }
@@ -194,7 +196,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     public void setOnBottomNavigationBadge(int unreadCount, int callCount) {
-        TabItem tabItem = tabItems.get(2);
+        TabItem tabItem = ((TabItem) getChildAt(2));
         tabItem.setBadgeColor(badgeColor);
         tabItem.setBadgeCount(unreadCount);
     }
@@ -202,4 +204,25 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     public int getCurrentTab() {
         return selectedItemPosition;
     }
+
+    @Override
+    public void onClick(View v) {
+        if (selectedItemPosition != 4) {
+            v.setSelected(!v.isSelected());
+        }
+        selectedTabItem(4);
+    }
+
+    public boolean onLongClick(View v) {
+        if (onItemChangeListener != null) {
+            onLongClickListener.onLongClick(v);
+            AppUtils.setVibrator(15);
+        }
+        return false;
+    }
+
+    public void setProfileOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
 }

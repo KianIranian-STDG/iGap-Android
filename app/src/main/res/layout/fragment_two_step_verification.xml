@@ -10,9 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -30,7 +30,7 @@
             android:layout_marginTop="@dimen/dp32"
             android:gravity="center"
             android:text="@string/please_enter_your_password"
-            android:textColor="?iGapTitleTextColor"
+            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/dp16"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -67,7 +67,7 @@
             android:onClick="@{()->viewModel.onClickForgotPassword()}"
             android:padding="@dimen/dp8"
             android:text="@string/forgot_password"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="?attr/iGapButtonTextColor"
             android:textSize="@dimen/dp14"
             app:layout_constraintLeft_toLeftOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/password" />

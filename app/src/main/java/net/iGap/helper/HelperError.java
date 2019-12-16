@@ -10,17 +10,18 @@
 
 package net.iGap.helper;
 
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import net.iGap.AccountHelper;
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
-import net.iGap.module.SHP_SETTING;
 
 public class HelperError {
 
@@ -43,13 +44,16 @@ public class HelperError {
                 }
                 break;
             case 3: //Error 3 - NEW_CLIENT_IN_SESSION (New client connected in this session , so you will be kicked out)
-                G.allowForConnect = false;
                 break;
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
                 break;
-            case 7:
-                WebSocketClient.getInstance().disconnect();
+            case 7:// socket connected to not ok core
+                WebSocketClient.getInstance().disconnectSocket(true);
+                break;
+            case 8://session is terminate
+                Log.wtf(HelperError.class.getName(),"case 8:");
+                G.logoutAccount.postValue(true);
                 break;
             case 9:
                 /*if (G.currentActivity != null) {
@@ -61,7 +65,8 @@ public class HelperError {
                 break;
             case 109:
                 error = G.fragmentActivity.getResources().getString(R.string.E_109);
-                HelperLogout.logout();
+                Log.wtf(HelperError.class.getName(),"case 109:");
+                G.logoutAccount.postValue(true);
                 break;
             case 110:
                 if (BuildConfig.DEBUG)
@@ -69,7 +74,8 @@ public class HelperError {
                 break;
             case 111:
                 if (minorCode != 4) {
-                    HelperLogout.logout();
+                    Log.wtf(HelperError.class.getName(),"case 111:");
+                    G.logoutAccount.postValue(true);
                 } else {
                     error = G.fragmentActivity.getResources().getString(R.string.E_111);
                 }

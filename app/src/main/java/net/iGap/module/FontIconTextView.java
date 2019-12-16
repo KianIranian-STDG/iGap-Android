@@ -7,7 +7,6 @@ import android.view.Gravity;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.R;
-import net.iGap.R;
 
 public class FontIconTextView extends androidx.appcompat.widget.AppCompatTextView {
     public FontIconTextView(Context context) {

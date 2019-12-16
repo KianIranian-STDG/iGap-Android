@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -62,7 +61,7 @@ import static net.iGap.fragments.FragmentChat.listPathString;
 
 public class ChatAttachmentPopup {
 
-    private final long POPUP_ANIMATION_DURATION = 160;
+    private final long POPUP_ANIMATION_DURATION = 260;
     private final String TAG = "ChatAttachmentPopup";
 
     public boolean isShowing = false;
@@ -188,6 +187,7 @@ public class ChatAttachmentPopup {
 
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
+        contentView.setVisibility(View.INVISIBLE);
 
         contentView.setOnClickListener(v -> {
             //nothing
@@ -577,6 +577,10 @@ public class ChatAttachmentPopup {
         }
     }
 
+    public void directDismiss() {
+        if (mPopup != null) mPopup.dismiss();
+    }
+
     public void notifyRecyclerView() {
         if (fastItemAdapter == null) return;
         fastItemAdapter.notifyAdapterDataSetChanged();
@@ -843,16 +847,20 @@ public class ChatAttachmentPopup {
 
     private void buildCameraSwitcher() {
 
-        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity)
-                .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview
-                .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
+        try {
+            fotoapparatSwitcher = Fotoapparat.with(mContext)
+                    .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview
+                    .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
 //                .lensPosition(back())     // we want back camera
-                .cameraErrorCallback(e -> {
-                    fotoapparatSwitcher = null;
-                    Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
-                    new HelperLog().setErrorLog(e);
-                })
-                .build();
+                    .cameraErrorCallback(e -> {
+                        fotoapparatSwitcher = null;
+                        HelperLog.setErrorLog(e);
+                    })
+                    .build();
+        } catch (Exception e) {
+            fotoapparatSwitcher = null;
+            HelperLog.setErrorLog(e);
+        }
 
     }
 
@@ -860,12 +868,12 @@ public class ChatAttachmentPopup {
         isCameraStart = state;
         try {
             G.handler.postDelayed(() -> {
-
-                if (state)
-                    fotoapparatSwitcher.start();
-                else
-                    fotoapparatSwitcher.stop();
-
+                if (fotoapparatSwitcher != null) {
+                    if (state)
+                        fotoapparatSwitcher.start();
+                    else
+                        fotoapparatSwitcher.stop();
+                }
             }, 50);
         } catch (Exception e) {
             e.getMessage();

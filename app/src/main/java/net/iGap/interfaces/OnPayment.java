@@ -14,6 +14,4 @@ public interface OnPayment {
 
     void onBillToken(int status, String token, int expireTime, String Message);
 
-    void onFinance(boolean mplActive, boolean walletActive);
-
 }

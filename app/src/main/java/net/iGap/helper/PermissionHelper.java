@@ -13,6 +13,7 @@ public class PermissionHelper {
     private Activity activity;
     private Fragment fragment;
     public final static int CameraAndVoicePermissionRequestCode = 100;
+    public final static int CameraAndStoragePermissionRequestCode = 140;
     public final static int VoicePermissionRequestCode = 110;
     public final static int CameraPermissionRequestCode = 120;
     public final static int StoragePermissionRequestCode = 130;
@@ -27,21 +28,50 @@ public class PermissionHelper {
     }
 
     public boolean grantCameraAndVoicePermission() {
-        String[] Permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+        String[] Permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (hasPermissions(Permissions)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(activity, Permissions, CameraAndVoicePermissionRequestCode);
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, CameraAndVoicePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, CameraAndVoicePermissionRequestCode);
+            return false;
+        }
+    }
+
+    public boolean grantCameraAndStoreagePermission() {
+        String[] Permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (hasPermissions(Permissions)) {
+            return true;
+        } else {
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, CameraAndStoragePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, CameraAndStoragePermissionRequestCode);
             return false;
         }
     }
 
     public boolean grantVoicePermission() {
-        String[] Permissions = {Manifest.permission.RECORD_AUDIO};
+        String[] Permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO};
         if (hasPermissions(Permissions)) {
             return true;
         } else {
             ActivityCompat.requestPermissions(activity, Permissions, VoicePermissionRequestCode);
+            return false;
+        }
+    }
+
+    public boolean grantReadPhoneStatePermission() {
+        String[] Permissions = {Manifest.permission.READ_PHONE_STATE};
+        if (hasPermissions(Permissions)) {
+            return true;
+        } else {
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, VoicePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, VoicePermissionRequestCode);
             return false;
         }
     }
@@ -64,7 +94,10 @@ public class PermissionHelper {
         if (hasPermissions(Permissions)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(activity, Permissions, StoragePermissionRequestCode);
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, StoragePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, StoragePermissionRequestCode);
             return false;
         }
     }

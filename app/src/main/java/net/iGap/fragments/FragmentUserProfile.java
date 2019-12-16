@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,14 +28,16 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
+import net.iGap.dialog.account.AccountDialogListener;
+import net.iGap.dialog.account.AccountsDialog;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
@@ -47,15 +47,22 @@ import net.iGap.viewmodel.UserProfileViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
+
+    public static FragmentUserProfile newInstance() {
+
+        Bundle args = new Bundle();
+
+        FragmentUserProfile fragment = new FragmentUserProfile();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,13 +89,19 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        viewModel.openAccountsDialog.observe(getViewLifecycleOwner(), show -> {
+            if (show == null) return;
+            if (show) {
+                openAccountsDialog();
+            }
+        });
+
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
         viewModel.setCurrentFragment.observe(getViewLifecycleOwner(), isEdit -> {
             if (isEdit != null) {
-                Log.wtf(this.getClass().getName(), "setCurrentFragment, isEditMode: " + isEdit);
                 if (isEdit) {
                     FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
@@ -97,7 +110,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                         fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
                     }
                     fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
-                    binding.addAvatar.setVisibility(View.VISIBLE);
                 } else {
                     FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
@@ -106,7 +118,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
-                    binding.addAvatar.setVisibility(View.GONE);
                 }
             }
         });
@@ -177,19 +188,18 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 getChildFragmentManager().popBackStack();
             }
         });
+    }
 
-        getChildFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Log.wtf(this.getClass().getName(), "-------------------------------------------");
-                for (int i = 0; i < getChildFragmentManager().getBackStackEntryCount(); i++) {
-                    Log.wtf(this.getClass().getName(), "fragment: " + getChildFragmentManager().getBackStackEntryAt(i).getName());
+    private void openAccountsDialog() {
+
+        if (getActivity() != null) {
+            new AccountsDialog().setData(avatarHandler, new AccountDialogListener() {
+                @Override
+                public void onAccountClick(boolean isAssigned, long id) {
+
                 }
-                Log.wtf(this.getClass().getName(), "-------------------------------------------");
-            }
-        });
-
-        Log.wtf(this.getClass().getName(), "onViewCreated");
+            }).show(getActivity().getSupportFragmentManager(), "account");
+        }
 
     }
 
@@ -201,7 +211,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
          */
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
         if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
@@ -229,52 +239,15 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(getString(R.string.array_From_Camera))) { // camera
-                    try {
-                        HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                dialog.dismiss();
-                                useCamera();
-                            }
-
-                            @Override
-                            public void deny() {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (new PermissionHelper(getActivity(), FragmentUserProfile.this).grantCameraAndStoreagePermission()) {
+                        useCamera();
                     }
                 } else {
-                    try {
-                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                if (getActivity() == null) return;
-                                Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO , true,getString(R.string.gallery) ,"-1" , new FragmentGallery.GalleryFragmentListener() {
-                                    @Override
-                                    public void openOsGallery() {
-                                    }
-
-                                    @Override
-                                    public void onGalleryResult(String path) {
-                                        popBackStackFragment();
-                                        handleGalleryImageResult(path);
-                                    }
-                                });
-                                new HelperFragment(getActivity().getSupportFragmentManager() , fragment).load();
-                            }
-
-                            @Override
-                            public void deny() {
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (new PermissionHelper(getActivity(), FragmentUserProfile.this).grantReadAndRightStoragePermission()) {
+                        goToFragmentGallery();
                     }
-                    dialog.dismiss();
                 }
+                dialog.dismiss();
             }
         }).show();
     }
@@ -290,20 +263,55 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     }
 
     private void useCamera() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentUserProfile.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            if (getActivity() != null && getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(viewModel.getImageFile()));
-                startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
-
+        if (getActivity() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentUserProfile.this);
             } else {
-                Toast.makeText(getContext(), R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                if (getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(viewModel.getImageFile()));
+                    startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+                } else {
+                    Toast.makeText(getContext(), R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void goToFragmentGallery() {
+        if (getActivity() != null) {
+            Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
+                @Override
+                public void openOsGallery() {
+                }
+
+                @Override
+                public void onGalleryResult(String path) {
+                    popBackStackFragment();
+                    handleGalleryImageResult(path);
+                }
+            });
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean tmp = true;
+        for (int grantResult : grantResults) {
+            tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
+        }
+        if (requestCode == PermissionHelper.StoragePermissionRequestCode) {
+            if (tmp) {
+                goToFragmentGallery();
+            } else {
+                HelperError.showSnackMessage(getString(R.string.permission_storage), false);
+            }
+        } else if (requestCode == PermissionHelper.CameraAndStoragePermissionRequestCode) {
+            if (tmp) {
+                useCamera();
+            } else {
+                HelperError.showSnackMessage(getString(R.string.permission_camera), false);
             }
         }
     }

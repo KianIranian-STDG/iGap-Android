@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
@@ -50,7 +51,7 @@ public class RealmNotificationSetting extends RealmObject {
     }
 
     public static void sound(final long roomId, final String sound, final int which, final ProtoGlobal.Room.Type roomType) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -82,11 +83,11 @@ public class RealmNotificationSetting extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void popupNotification(final long roomId, final ProtoGlobal.Room.Type roomType, final int notification) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -118,11 +119,11 @@ public class RealmNotificationSetting extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void vibrate(final long roomId, final ProtoGlobal.Room.Type roomType, final int vibrateLevel) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -155,11 +156,11 @@ public class RealmNotificationSetting extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void ledColor(final long roomId, final ProtoGlobal.Room.Type roomType, final int ledColor) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -191,7 +192,7 @@ public class RealmNotificationSetting extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public int getNotification() {

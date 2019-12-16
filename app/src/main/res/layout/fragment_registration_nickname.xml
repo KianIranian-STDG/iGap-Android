@@ -4,17 +4,15 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentRegistrationNicknameViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/register_background">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/pu_txt_title_information"
@@ -23,7 +21,7 @@
             android:layout_marginTop="@dimen/dp16"
             android:gravity="center"
             android:text="@string/pu_title_profileUser"
-            android:textColor="@color/black_register"
+            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/dp18"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/dp8"
-            android:background="@color/line2_background"
+            android:background="?attr/iGapDividerLine"
             app:layout_constraintLeft_toLeftOf="@id/pu_txt_title_desc"
             app:layout_constraintRight_toRightOf="@id/pu_txt_title_desc"
             app:layout_constraintTop_toBottomOf="@id/pu_txt_title_information" />
@@ -49,7 +47,7 @@
             android:layout_marginTop="@dimen/dp8"
             android:gravity="center"
             android:text="@string/pu_desc_profileUser"
-            android:textColor="@color/confirm_country"
+            android:textColor="?attr/iGapSubtitleTextColor"
             android:textSize="@dimen/dp14"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -75,26 +73,26 @@
             android:id="@+id/ng_profile_circle_image_holder"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:srcCompat="@drawable/ic_camera_holder"
             android:padding="@dimen/dp32"
             android:scaleType="fitCenter"
             android:visibility="@{viewModel.showCameraImage}"
-            app:layout_constraintStart_toStartOf="@id/pu_profile_circle_image"
+            app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image"
             app:layout_constraintEnd_toEndOf="@id/pu_profile_circle_image"
+            app:layout_constraintStart_toStartOf="@id/pu_profile_circle_image"
             app:layout_constraintTop_toTopOf="@id/pu_profile_circle_image"
-            app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image" />
+            app:srcCompat="@drawable/ic_camera_holder" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:counterTextAppearance="@style/remove_error_appearance"
-            app:hintTextAppearance="@style/remove_error_appearance"
+            android:textColorHint="?attr/iGapHintTextColor"
             app:layout_constraintBottom_toTopOf="@id/lastName"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/pu_profile_circle_image"
             app:layout_constraintTop_toTopOf="@id/pu_profile_circle_image"
-            app:layout_constraintWidth_percent=".5">
+            app:layout_constraintWidth_percent=".5"
+            app:errorText="@{viewModel.showErrorName}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameEditText"
@@ -105,7 +103,7 @@
                 android:lines="1"
                 android:maxLength="20"
                 android:singleLine="true"
-                android:textColorHint="@color/pu_edtHintText"
+                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/dp14"
                 app:errorTextAppearance="@style/remove_error_appearance" />
 
@@ -115,13 +113,13 @@
             android:id="@+id/lastName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:counterTextAppearance="@style/remove_error_appearance"
-            app:hintTextAppearance="@style/remove_error_appearance"
+            android:textColorHint="?attr/iGapHintTextColor"
             app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image"
             app:layout_constraintLeft_toLeftOf="@id/name"
             app:layout_constraintRight_toRightOf="@id/name"
             app:layout_constraintTop_toBottomOf="@id/name"
-            app:layout_constraintWidth_percent=".5">
+            app:layout_constraintWidth_percent=".5"
+            app:errorText="@{viewModel.showErrorLastName}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lastNameEditText"
@@ -132,7 +130,7 @@
                 android:lines="1"
                 android:maxLength="20"
                 android:singleLine="true"
-                android:textColorHint="@color/pu_edtHintText"
+                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/dp14"
                 app:errorTextAppearance="@style/remove_error_appearance" />
 
@@ -152,13 +150,15 @@
             android:padding="@dimen/dp8"
             android:text="@={viewModel.reagentPhoneNumber}"
             android:textAlignment="gravity"
-            android:textColor="@color/rg_black_register"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textColorHint="?attr/iGapHintTextColor"
             android:textSize="@dimen/dp14"
             app:layout_constraintBottom_toTopOf="@id/pu_btn_letsGo"
             app:layout_constraintLeft_toRightOf="@id/reagentCountryCode"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pu_profile_circle_image"
             app:layout_constraintWidth_percent=".6"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:mask="@{viewModel.reagentPhoneNumberMask}" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -168,6 +168,7 @@
             android:onClick="@{()->viewModel.onCountryCodeClick()}"
             android:padding="@dimen/dp8"
             android:text="@{viewModel.reagentCountryCode}"
+            android:textColor="?attr/iGapTitleTextColor"
             app:layout_constraintBottom_toBottomOf="@id/reagentPhoneNumber"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -176,15 +177,12 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pu_btn_letsGo"
-            style="@style/BaseIGapButtonStyle"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.OnClickBtnLetsGo(nameEditText.getEditableText().toString(),lastNameEditText.getEditableText().toString())}"
             android:text="@string/start"
-            android:textAllCaps="false"
-            android:textColor="@color/whit_background"
             android:textSize="@dimen/dp14"
-            app:backgroundTint="@color/buttonColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -196,7 +194,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="@{viewModel.prgVisibility , default = gone}"
+            android:visibility="@{viewModel.prgVisibility}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

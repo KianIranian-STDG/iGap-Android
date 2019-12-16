@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
@@ -316,24 +317,18 @@ public final class ContactUtils {
             HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(final Realm realm) {
+                    new Thread(() -> {
+                        DbManager.getInstance().doRealmTask(realm -> {
+                            realm.executeTransaction(realm1 -> {
 
-                                final RealmResults<RealmContacts> realmContacts = realm.where(RealmContacts.class).findAll();
+                                final RealmResults<RealmContacts> realmContacts = realm1.where(RealmContacts.class).findAll();
                                 final int contactsSize = realmContacts.size();
                                 final MaterialDialog[] dialog = new MaterialDialog[1];
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog[0] = new MaterialDialog.Builder(G.currentActivity)
-                                                .title(R.string.sync_contact)
-                                                .content(R.string.just_wait_en)
-                                                .progress(false, contactsSize, true)
-                                                .show();
-                                    }
-                                });
+                                G.handler.post(() -> dialog[0] = new MaterialDialog.Builder(G.currentActivity)
+                                        .title(R.string.sync_contact)
+                                        .content(R.string.just_wait_en)
+                                        .progress(false, contactsSize, true)
+                                        .show());
 
                                 for (RealmContacts realmContacts1 : realmContacts) {
                                     addContactToPhoneBook(realmContacts1);
@@ -341,23 +336,13 @@ public final class ContactUtils {
                                         break;
                                     }
 
-                                    G.handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            dialog[0].incrementProgress(1);
-                                        }
-                                    });
+                                    G.handler.post(() -> dialog[0].incrementProgress(1));
                                 }
 
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog[0].dismiss();
-                                    }
-                                }, 500);
-                            }
+                                G.handler.postDelayed(() -> dialog[0].dismiss(), 500);
+                            });
                         });
-                    }
+                    }).start();
                 }
 
                 @Override

@@ -10,22 +10,27 @@
 
 package net.iGap.request;
 
-import net.iGap.module.FileUploadStructure;
 import net.iGap.proto.ProtoFileUploadOption;
 
 public class RequestFileUploadOption {
 
-    public void fileUploadOption(FileUploadStructure fileUploadStructure, String identity) {
+    public interface OnFileUploadOption {
+        void onFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection);
+        void onFileUploadOptionError(int major, int minor);
+    }
 
+    public String fileUploadOption(long fileSize, OnFileUploadOption onFileUploadOption) {
         ProtoFileUploadOption.FileUploadOption.Builder fileUploadOption = ProtoFileUploadOption.FileUploadOption.newBuilder();
-        fileUploadOption.setSize(fileUploadStructure.fileSize);
+        fileUploadOption.setSize(fileSize);
 
         try {
-            RequestWrapper requestWrapper = new RequestWrapper(700, fileUploadOption, identity);
+            RequestWrapper requestWrapper = new RequestWrapper(700, fileUploadOption, onFileUploadOption);
 
-            RequestQueue.sendRequest(requestWrapper);
+            return RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        return "";
     }
 }

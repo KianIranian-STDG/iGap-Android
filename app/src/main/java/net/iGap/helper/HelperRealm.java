@@ -10,7 +10,10 @@
 
 package net.iGap.helper;
 
+import net.iGap.DbManager;
+
 import io.realm.Realm;
+import io.realm.RealmModel;
 
 /**
  * helper methods while working with Realm
@@ -26,13 +29,21 @@ public final class HelperRealm {
      */
 
     public static void realmTruncate() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     realm.deleteAll();
                 }
             });
-        }
+        });
+    }
+
+    public static <E extends RealmModel> void copyOrUpdateToRealm(E object) {
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(object));
+            });
+        }).start();
     }
 }

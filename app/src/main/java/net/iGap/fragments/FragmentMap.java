@@ -56,6 +56,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -76,8 +77,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import io.realm.Realm;
 
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.R.id.mf_fragment_map_view;
@@ -290,7 +289,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
 
 
-          rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
+        rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
 
         if (mode == Mode.sendPosition) {
             fabOpenMap.hide();
@@ -305,7 +304,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
 
                 if (HelperCalander.isPersianUnicode) {
@@ -340,7 +339,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                     setAvatar(roomId);
 
                 }
-            }
+            });
         }
     }
 

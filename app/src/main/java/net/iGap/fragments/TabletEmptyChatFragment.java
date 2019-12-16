@@ -81,7 +81,7 @@ public class TabletEmptyChatFragment extends Fragment {
                 imgBackGround.setImageResource(R.drawable.chat_bg_dark);
             } else {
                 //todo: fixed load default background in light mode
-                Log.wtf(this.getClass().getName(), "else else: ");
+                /*Log.wtf(this.getClass().getName(), "else else: ");*/
             }
         }
     }

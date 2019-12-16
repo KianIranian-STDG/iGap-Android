@@ -6,7 +6,6 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
@@ -85,7 +84,7 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         showViewRefresh.set(View.GONE);
         showLoadingView.set(View.VISIBLE);
         // base view model implements callback and get response in on Success
-        repository.getProvinceList(this,this);
+        repository.getProvinceList(this, this);
     }
 
     @Override

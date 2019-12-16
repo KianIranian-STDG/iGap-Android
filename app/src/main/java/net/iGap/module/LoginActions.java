@@ -3,12 +3,15 @@ package net.iGap.module;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
+import net.iGap.AccountHelper;
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogout;
@@ -33,8 +36,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import io.realm.Realm;
-
 import static net.iGap.G.firstEnter;
 
 /**
@@ -53,7 +54,6 @@ public class LoginActions {
         if (!G.ISRealmOK) {
             return;
         }
-
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
@@ -99,36 +99,48 @@ public class LoginActions {
 
             }
         };
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.isSecure) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                        if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
+        if (G.isSecure) {
+            DbManager.getInstance().doRealmTask(realm -> {
+                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                Log.wtf(LoginActions.class.getName(), "bagi: ");
+                if (!G.userLogin) {
+                    if (userInfo != null) {
+                        if (userInfo.getUserRegistrationState()) {
+                            Log.wtf(LoginActions.class.getName(), "LoginActions.login: RequestUserLogin().userLogin");
                             new RequestUserLogin().userLogin(userInfo.getToken());
+                        } else {
+                            Log.wtf(LoginActions.class.getName(), "LoginActions.login:getUserRegistrationState" + userInfo.getUserRegistrationState());
                         }
+                    } else {
+                        Log.wtf(LoginActions.class.getName(), "LoginActions.login:userInfo != null");
                     }
                 } else {
-                    login();
+                    Log.wtf(LoginActions.class.getName(), "LoginActions.login:else");
                 }
-            }
-        }, 500);
+            });
+        } else {
+            login();
+        }
     }
 
     private static void getUserInfo() {
-        final long userId;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo == null) {
-                throw new Exception("Empty Exception");
+        final Long userId;
+        userId = DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo == null) {
+                    throw new Exception("Empty Exception");
+                }
+                return realmUserInfo.getUserId();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.wtf(LoginActions.class.getName(),"catch");
+                G.logoutAccount.postValue(true);
+                return null;
             }
-            userId = realmUserInfo.getUserId();
-        } catch (Exception e) {
-            HelperLogout.logout();
+        });
+        if (userId == null)
             return;
-        }
 
         new RequestUserInfo().userInfo(userId);
     }
@@ -250,9 +262,11 @@ public class LoginActions {
      * securing is done and continue login actions
      */
     private void initSecureInterface() {
+        Log.wtf(this.getClass().getName(), "initSecureInterface");
         G.onSecuring = new OnSecuring() {
             @Override
             public void onSecure() {
+                Log.wtf(this.getClass().getName(), "onSecure");
                 login();
             }
         };

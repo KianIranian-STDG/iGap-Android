@@ -28,7 +28,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosRestoreSignupVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosRestoreSignupFrag extends BaseFragment {
 

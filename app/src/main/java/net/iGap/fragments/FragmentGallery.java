@@ -338,7 +338,7 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void setPhotoGalleryUI(View view, RecyclerView rvGallery) {
-        if (isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
+        if (!isReturnResultDirectly && isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
         }
 
@@ -359,7 +359,7 @@ public class FragmentGallery extends BaseFragment {
     private void openVideoForEdit(String path) {
         if (getActivity() == null) return;
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1)) {
+        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
             Intent intent = new Intent(getActivity(), ActivityTrimVideo.class);
             intent.putExtra("PATH", path);
             getActivity().startActivityForResult(intent, AttachFile.request_code_trim_video);
@@ -454,14 +454,6 @@ public class FragmentGallery extends BaseFragment {
         } else {
             mHelperToolbar.getRightButton().setText(R.string.close_icon);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mGalleryVideoAdapter != null) mGalleryVideoAdapter.clearThumbnailCache();
-        if (mGalleryMusicAdapter != null) mGalleryMusicAdapter.clearThumbnailCache();
-
-        super.onDestroy();
     }
 
     public interface GalleryFragmentListener {

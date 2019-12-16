@@ -3,15 +3,12 @@ package net.iGap.fragments;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.util.TypedValue;
@@ -38,6 +35,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
+import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -206,7 +204,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.goToShowMemberPage.observe(getViewLifecycleOwner(), type -> {
             if (getActivity() != null && type != null) {
-                FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, type, viewModel.isNeedgetContactlist, true);
+                FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), AccountManager.getInstance().getCurrentUser().getId(), type, viewModel.isNeedgetContactlist, true);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });

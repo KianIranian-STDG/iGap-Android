@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;

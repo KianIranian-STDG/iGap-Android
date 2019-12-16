@@ -12,6 +12,7 @@ package net.iGap.realm;
 
 import androidx.annotation.Nullable;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
@@ -65,16 +66,13 @@ public class Room {
     }
 
     public static boolean isBot(long userId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
             if (realmRegisteredInfo != null) {
                 return realmRegisteredInfo.isBot();
             } else
                 return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        });
     }
 
     public void setType(String type) {

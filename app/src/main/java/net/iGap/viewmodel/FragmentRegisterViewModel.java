@@ -10,6 +10,8 @@ package net.iGap.viewmodel;
  */
 
 import android.net.Uri;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.text.HtmlCompat;
@@ -21,8 +23,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.model.LocationModel;
@@ -34,6 +38,8 @@ import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.request.RequestQrCodeNewDevice;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,13 +50,13 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> showConditionErrorDialog = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> goNextStep = new SingleLiveEvent<>();
-    public MutableLiveData<Boolean> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
+    public MutableLiveData<Integer> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showEnteredPhoneNumberError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showChooseCountryDialog = new MutableLiveData<>();
     public SingleLiveEvent<String> showConfirmPhoneNumberDialog = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showConnectionErrorDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogUserBlock = new MutableLiveData<>();
-    public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
+    public SingleLiveEvent<Long> goToTwoStepVerificationPage = new SingleLiveEvent<>();
     public MutableLiveData<WaitTimeModel> showDialogWaitTime = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorMessageEmptyErrorPhoneNumberDialog = new MutableLiveData<>();
     public SingleLiveEvent<Integer> showDialogQrCode = new SingleLiveEvent<>();
@@ -112,7 +118,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public void onTextChanged(String s) {
         if (s.startsWith("0")) {
             callBackEdtPhoneNumber.set("");
-            showEnteredPhoneNumberStartWithZeroError.setValue(true);
+            showEnteredPhoneNumberStartWithZeroError.setValue(R.string.Toast_First_0);
         }
     }
 
@@ -120,7 +126,7 @@ public class FragmentRegisterViewModel extends ViewModel {
         showChooseCountryDialog.setValue(true);
     }
 
-    public void setCountry(StructCountry country) {
+    public void setCountry(@NotNull StructCountry country) {
         isShowLoading.set(View.VISIBLE);
         repository.getCountryInfo(country.getAbbreviation(), new RegisterRepository.RepositoryCallback<LocationModel>() {
             @Override
@@ -156,7 +162,7 @@ public class FragmentRegisterViewModel extends ViewModel {
         }
         if (phoneNumber.length() > 0 && regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex))) {
             if (termsAndConditionIsChecked) {
-                showConfirmPhoneNumberDialog.setValue(callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get());
+                showConfirmPhoneNumberDialog.setValue(callbackEdtCodeNumber.get() + callBackEdtPhoneNumber.get());
             } else {
                 showConditionErrorDialog.setValue(true);
             }
@@ -164,7 +170,7 @@ public class FragmentRegisterViewModel extends ViewModel {
             if (phoneNumber.length() == 0) {
                 showErrorMessageEmptyErrorPhoneNumberDialog.setValue(true);
             } else {
-                showEnteredPhoneNumberStartWithZeroError.setValue(phoneNumber.replace("-", "").matches(regex));
+                showEnteredPhoneNumberStartWithZeroError.setValue(R.string.Toast_Minimum_Characters);
             }
         }
     }
@@ -176,14 +182,18 @@ public class FragmentRegisterViewModel extends ViewModel {
     private void getTermsAndConditionData() {
         isShowLoading.set(View.VISIBLE);
         showRetryView.set(View.GONE);
-        repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
-            @Override
-            public void onSuccess(String data) {
-                if (data != null) {
-                    agreementDescription = HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
-                }
-                isShowLoading.set(View.INVISIBLE);
-                showTermsAndConditionDialog.postValue(agreementDescription);
+        if (G.isSecure) {
+            isShowLoading.set(View.VISIBLE);
+            showRetryView.set(View.GONE);
+            repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    if (data != null) {
+                        agreementDescription = HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
+                    }
+                    isShowLoading.set(View.INVISIBLE);
+                    showTermsAndConditionDialog.postValue(agreementDescription);
+                    viewVisibility.set(View.VISIBLE);
                 /*repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
                     @Override
                     public void onSuccess(LocationModel data) {
@@ -205,27 +215,38 @@ public class FragmentRegisterViewModel extends ViewModel {
                         showRetryView.set(View.VISIBLE);
                     }
                 });*/
-            }
+                }
 
-            @Override
-            public void onError() {
-                isShowLoading.set(View.INVISIBLE);
-                showRetryView.set(View.VISIBLE);
-            }
-        });
+                @Override
+                public void onError() {
+                    isShowLoading.set(View.INVISIBLE);
+                    //showRetryView.set(View.VISIBLE);
+                }
+            });
+        } else {
+            isShowLoading.set(View.GONE);
+            showRetryView.set(View.VISIBLE);
+            viewVisibility.set(View.INVISIBLE);
+        }
     }
 
     public void confirmPhoneNumber() {
-        if (G.socketConnection) { //connection ok
+        if (WebSocketClient.getInstance().isConnect()) { //connection ok
             btnStartEnable.set(false);
             isShowLoading.set(View.VISIBLE);
-            if (G.socketConnection) {
-                registerUser();
-            } else {
-                showError.setValue(R.string.connection_error);
-                edtPhoneNumberEnable.set(true);
+            if (AccountManager.getInstance().isExistThisAccount(callbackEdtCodeNumber.get().replace("+", "") + callBackEdtPhoneNumber.get().replace("-", ""))) {
+                Log.wtf(this.getClass().getName(), "exist");
                 btnStartEnable.set(true);
-                /*new Handler().postDelayed(this::registerUser, 1000);*/
+                isShowLoading.set(View.GONE);
+                repository.getLoginExistUser().postValue(true);
+            } else {
+                if (WebSocketClient.getInstance().isConnect()) {
+                    registerUser();
+                } else {
+                    showError.setValue(R.string.connection_error);
+                    edtPhoneNumberEnable.set(true);
+                    btnStartEnable.set(true);
+                }
             }
         } else { // connection error
             edtPhoneNumberEnable.set(true);
@@ -269,6 +290,8 @@ public class FragmentRegisterViewModel extends ViewModel {
                     showDialogWaitTime.postValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES_SEND, error.getWaitTime(), error.getMajorCode()));
                 } else if (error.getMajorCode() == 5 && error.getMinorCode() == 1) { // timeout
                     showError.postValue(R.string.connection_error);
+                }else if (error.getMajorCode() == 1038 && error.getMinorCode() == 1){
+                    showError.postValue(R.string.error);
                 }
             }
         });

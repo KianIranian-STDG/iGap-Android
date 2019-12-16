@@ -2,6 +2,7 @@ package net.iGap.api.apiService;
 
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.helper.HelperLog;
 import net.iGap.interfaces.OnRefreshToken;
 import net.iGap.request.RequestUserRefreshToken;
 
@@ -15,7 +16,7 @@ import retrofit2.Response;
 
 public class ApiInitializer<T> {
 
-    public void initAPI (Call<T> retrofitCall, HandShakeCallback handShakeCallback, ResponseCallback<T> retrofitCallback) {
+    public void initAPI(Call<T> retrofitCall, HandShakeCallback handShakeCallback, ResponseCallback<T> retrofitCallback) {
 
         retrofitCallback.setProgressIndicator(true);
         retrofitCall.enqueue(new Callback<T>() {
@@ -47,6 +48,14 @@ public class ApiInitializer<T> {
                         e.printStackTrace();
                         retrofitCallback.onError(new ErrorModel("", "Something went wrong. Please try again later."));
                         retrofitCallback.onError("Something went wrong. Please try again later.");
+                        new HelperLog().setErrorLog(e);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                        retrofitCallback.onError(new ErrorModel("", "Something went wrong. Please try again later."));
+                        retrofitCallback.onError("Something went wrong. Please try again later.");
+                        new HelperLog().setErrorLog(e);
+                        new HelperLog().setErrorLog(new Exception(retrofitCall.request().url().toString()));
                     }
                 }
                 retrofitCallback.setProgressIndicator(false);
@@ -71,7 +80,7 @@ public class ApiInitializer<T> {
 
     }
 
-    public void initAPI (Call<T> retrofitCall, ResponseCallback<T> retrofitCallback) {
+    public void initAPI(Call<T> retrofitCall, ResponseCallback<T> retrofitCallback) {
 
         retrofitCallback.setProgressIndicator(true);
         retrofitCall.enqueue(new Callback<T>() {

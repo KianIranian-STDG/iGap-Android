@@ -21,10 +21,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Parcelable;
-import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.Gravity;
@@ -53,6 +50,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -109,7 +107,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -118,7 +115,6 @@ import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
-import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShearedMedia extends BaseFragment implements ToolbarListener {
@@ -146,7 +142,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private mAdapter adapter;
     private OnComplete complete;
     private ProgressBar progressBar;
-    private Realm realmShearedMedia;
     private LinearLayout ll_AppBarSelected;
     private LinearLayout mediaLayout;
     private TextView txtNumberOfSelected;
@@ -219,7 +214,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmShearedMedia = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.activity_sheared_media, container, false));
     }
 
@@ -261,26 +255,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        realmShearedMedia.close();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
         MusicPlayer.shearedMediaLayout = null;
 
         ActivityMain.setMediaLayout();
-    }
-
-    private Realm getRealm() {
-        if (realmShearedMedia == null || realmShearedMedia.isClosed()) {
-            realmShearedMedia = Realm.getDefaultInstance();
-        }
-        return realmShearedMedia;
     }
 
     private void initComponent(View view) {
@@ -423,7 +403,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             public void onClick(View view) {
                 ArrayList<Parcelable> messageInfos = new ArrayList<>(SelectedList.size());
                 for (StructShearedMedia media : SelectedList) {
-                    messageInfos.add(Parcels.wrap(StructMessageInfo.convert(getRealm(), media.item)));
+                    messageInfos.add(Parcels.wrap(new StructMessageInfo(media.item)));
                 }
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();
@@ -445,54 +425,56 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                String count = SelectedList.size() + "";
-                final RealmRoom realmRoom = RealmRoom.getRealmRoom(getRealm(), roomId);
+                DbManager.getInstance().doRealmTask(realm -> {
+                    String count = SelectedList.size() + "";
+                    final RealmRoom realmRoom = RealmRoom.getRealmRoom(realm, roomId);
 
-                if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
-                    // show both Delete check box
-                    String delete;
-                    if (HelperCalander.isPersianUnicode) {
-                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
+                    if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
+                        // show both Delete check box
+                        String delete;
+                        if (HelperCalander.isPersianUnicode) {
+                            delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
+                        } else {
+                            delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
+                        }
+                        new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                if (!dialog.isPromptCheckBoxChecked()) {
+                                    bothDeleteMessageId = null;
+                                }
+                                if (realmRoom != null) {
+                                    ArrayList<Long> selectedListForDel = new ArrayList<>();
+
+                                    for (StructShearedMedia item : SelectedList) {
+                                        selectedListForDel.add(item.messageId);
+                                    }
+                                    RealmRoomMessage.deleteSelectedMessages(realm, roomId, selectedListForDel, bothDeleteMessageId, roomType);
+                                }
+                                resetItems();
+                            }
+                        }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
+
                     } else {
-                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
-                    }
-                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (!dialog.isPromptCheckBoxChecked()) {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 bothDeleteMessageId = null;
-                            }
-                            if (realmRoom != null) {
-                                ArrayList<Long> selectedListForDel = new ArrayList<>();
+                                if (realmRoom != null) {
+                                    //TODO:// optimize code
+                                    ArrayList<Long> selectedListForDel = new ArrayList<>();
 
-                                for (StructShearedMedia item : SelectedList) {
-                                    selectedListForDel.add(item.messageId);
+
+                                    for (StructShearedMedia item : SelectedList) {
+                                        selectedListForDel.add(item.messageId);
+                                    }
+                                    RealmRoomMessage.deleteSelectedMessages(realm, roomId, selectedListForDel, bothDeleteMessageId, roomType);
                                 }
-                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
+                                resetItems();
                             }
-                            resetItems();
-                        }
-                    }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
-
-                } else {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            bothDeleteMessageId = null;
-                            if (realmRoom != null) {
-                                //TODO:// optimize code
-                                ArrayList<Long> selectedListForDel = new ArrayList<>();
-
-
-                                for (StructShearedMedia item : SelectedList) {
-                                    selectedListForDel.add(item.messageId);
-                                }
-                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
-                            }
-                            resetItems();
-                        }
-                    }).show();
-                }
+                        }).show();
+                    }
+                });
             }
         });
 
@@ -577,7 +559,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         TextView textView = new TextView(getContext());
         textView.setText(mSharedTypesList.get(pos));
         Utils.setTextSize(textView, R.dimen.smallTextSize);
-        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
         textView.setSingleLine(true);
 
         textView.setBackgroundResource(new Theme().getButtonSelectorBackground(textView.getContext()));
@@ -839,7 +821,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
         }
-        mRealmList = RealmRoomMessage.filterMessage(getRealm(), roomId, ProtoGlobal.RoomMessageType.TEXT);
+        mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRoomMessage.filterMessage(realm, roomId, ProtoGlobal.RoomMessageType.TEXT);
+        });
 
         setListener();
 
@@ -866,7 +850,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = RealmRoomMessage.filterMessage(getRealm(), roomId, type);
+        mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRoomMessage.filterMessage(realm, roomId, type);
+        });
 
         setListener();
 
@@ -1009,20 +995,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-
-                getRealm().executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                            RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
-                        }
-                    }
-                });
-            }
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realm1 -> {
+                for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                    RealmRoomMessage.putOrUpdate(realm1, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
+                }
+            });
         });
     }
 
@@ -1430,7 +1408,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             boolean result = isSelectedMode;
 
-            if (isSelectedMode == true) {
+            if (isSelectedMode) {
                 isSelectedMode = false;
 
                 SelectedList.clear();
@@ -1520,8 +1498,20 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 messageProgress.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (isSelectedMode) {
+                            setSelectedItem(getPosition());
+                        } else {
+                            downloadFile(getPosition(), messageProgress);
+                        }
+                    }
+                });
 
-                        downloadFile(getPosition(), messageProgress);
+                messageProgress.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        isSelectedMode = true;
+                        setSelectedItem(getPosition());
+                        return true;
                     }
                 });
             }
@@ -1549,8 +1539,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             super(context, list);
         }
 
+        @NotNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (position == 0) {
@@ -1590,7 +1581,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                     RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
 
-                    if (at.getSmallThumbnail() != null) {
+                    if (at != null && at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
                             HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
@@ -2413,7 +2404,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         public class ViewHolder extends mHolder {
             private EmojiTextViewE tvMessage;
-            private LinearLayout lytLinks ;
+            private LinearLayout lytLinks;
             String rawLink = "";
 
             public ViewHolder(View view) {
@@ -2423,13 +2414,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 lytLinks = itemView.findViewById(R.id.lytLinks);
             }
 
-            public void bind(String message){
+            public void bind(String message) {
 
                 tvMessage.setText(message);
                 Linkify.addLinks(tvMessage, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
                 String[] links = getUrlsFromText(tvMessage);
-                if (links.length != 0){
+                if (links.length != 0) {
 
                     int txtColor = new Theme().getLinkColor(tvMessage.getContext());
                     lytLinks.removeAllViews();
@@ -2439,15 +2430,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             tvMessage.setText(message.replace(link, "").trim());
                         } else if (message.contains(link.replace("http://", ""))) {
                             tvMessage.setText(message.replace(link.replace("http://", ""), "").trim());
-                        }else if (message.contains(link.replace("mailto:", ""))) {
+                        } else if (message.contains(link.replace("mailto:", ""))) {
                             tvMessage.setText(message.replace(link.replace("mailto:", ""), "").trim());
                         }
 
-                        if (link.startsWith("mailto:")){
-                            link = link.replace("mailto:" , "");
+                        if (link.startsWith("mailto:")) {
+                            link = link.replace("mailto:", "");
                         }
 
-                        rawLink = link ;
+                        rawLink = link;
 
                         TextView tvLink = new TextView(tvMessage.getContext());
                         tvLink.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -2467,31 +2458,31 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             private void enableLinkOperation(TextView txt) {
 
-                if (getActivity() != null){
+                if (getActivity() != null) {
                     BetterLinkMovementMethod
                             .linkify(Linkify.ALL, txt)
                             .setOnLinkClickListener((tv, url) -> {
-                                if (HelperUrl.isTextEmail(url.replace("mailto:" , ""))){
-                                    HelperUrl.openEmail(getActivity() , url.replace("mailto:" , ""));
-                                }else {
-                                    HelperUrl.openWebBrowser(getActivity() , url);
+                                if (HelperUrl.isTextEmail(url.replace("mailto:", ""))) {
+                                    HelperUrl.openEmail(getActivity(), url.replace("mailto:", ""));
+                                } else {
+                                    HelperUrl.openWebBrowser(getActivity(), url);
                                 }
                                 return true;
                             })
                             .setOnLinkLongClickListener((tv, url) -> {
-                                if (HelperUrl.isTextLink(url)){
-                                    G.isLinkClicked = true ;
-                                    HelperUrl.openLinkDialog(getActivity() , url.replace("mailto:" , ""));
+                                if (HelperUrl.isTextLink(url)) {
+                                    G.isLinkClicked = true;
+                                    HelperUrl.openLinkDialog(getActivity(), url.replace("mailto:", ""));
                                 }
                                 return true;
                             });
                 }
             }
 
-            private String[] getUrlsFromText(TextView textView){
+            private String[] getUrlsFromText(TextView textView) {
                 URLSpan[] spans = textView.getUrls();
                 String[] results = new String[spans.length];
-                for(int i=0 ; i<spans.length ; i++) {
+                for (int i = 0; i < spans.length; i++) {
                     results[i] = spans[i].getURL();
                 }
                 return results;

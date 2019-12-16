@@ -166,7 +166,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    WebRTC.getInstance().close();
+//                    WebRTC.getInstance().close();
                     try {
                         AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                         G.appChangeRinggerMode = false;

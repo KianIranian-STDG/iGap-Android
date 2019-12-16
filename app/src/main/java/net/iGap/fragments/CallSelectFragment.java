@@ -5,24 +5,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperError;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.webrtc.WebRTC;
-
-import io.realm.Realm;
 
 public class CallSelectFragment extends BottomSheetDialogFragment {
 
@@ -46,7 +43,7 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
         if (G.userLogin) {
 
             if (!G.isInCall) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
 
                     if (realmCallConfig == null) {
@@ -78,7 +75,7 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
                         }
 
                     }
-                }
+                });
             }
         } else {
 

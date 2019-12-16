@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.RoomType;
@@ -64,7 +65,7 @@ public class RealmChannelRoom extends RealmObject {
      */
 
     public static void createChannelRoom(final long roomId, final String inviteLink, final String channelName) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -83,11 +84,11 @@ public class RealmChannelRoom extends RealmObject {
                     realmRoom.setChannelRoom(realmChannelRoom);
                 }
             });
-        }
+        });
     }
 
     public static void revokeLink(long roomId, final String inviteLink, final String inviteToken) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
                 final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -101,11 +102,11 @@ public class RealmChannelRoom extends RealmObject {
                     });
                 }
             }
-        }
+        });
     }
 
     public static void removeUsername(final long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -118,12 +119,12 @@ public class RealmChannelRoom extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static ProtoGlobal.ChannelRoom.Role detectMineRole(long roomId) {
-        ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -131,13 +132,13 @@ public class RealmChannelRoom extends RealmObject {
                     role = realmChannelRoom.getMainRole();
                 }
             }
-        }
-        return role;
+            return role;
+        });
     }
 
     public static ChannelChatRole detectMemberRole(long roomId, long messageSenderId) {
-        ChannelChatRole role = ChannelChatRole.UNRECOGNIZED;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ChannelChatRole role = ChannelChatRole.UNRECOGNIZED;
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getChannelRoom() != null) {
@@ -149,13 +150,13 @@ public class RealmChannelRoom extends RealmObject {
                     }
                 }
             }
-        }
-        return role;
+            return role;
+        });
     }
 
     public static ProtoGlobal.ChannelRoom.Role detectMemberRoleServerEnum(long roomId, long messageSenderId) {
-        ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getChannelRoom() != null) {
@@ -167,12 +168,13 @@ public class RealmChannelRoom extends RealmObject {
                     }
                 }
             }
-        }
-        return role;
+            return role;
+
+        });
     }
 
     public static void updateReactionStatus(final long roomId, final boolean statusReaction) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -182,7 +184,7 @@ public class RealmChannelRoom extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public ChannelChatRole getRole() {

@@ -1,5 +1,7 @@
 package net.iGap.kuknos.service.model;
 
+import net.iGap.DbManager;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 
@@ -53,7 +55,7 @@ public class RealmKuknos extends RealmObject {
     }
 
     public static void updateMnemonic(String kuknosMnemonic) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -63,11 +65,11 @@ public class RealmKuknos extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updatePIN(String kuknosPin) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -77,11 +79,11 @@ public class RealmKuknos extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateKey(String kuknosSeed, String publicKey) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -92,11 +94,11 @@ public class RealmKuknos extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateSeedKey(String kuknosSeed) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -106,7 +108,7 @@ public class RealmKuknos extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
 }

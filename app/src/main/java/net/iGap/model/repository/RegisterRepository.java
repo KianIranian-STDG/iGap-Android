@@ -5,19 +5,24 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
+import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperLogout;
-import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
+import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.interfaces.TwoStepVerificationGetPasswordDetail;
 import net.iGap.interfaces.TwoStepVerificationVerifyPassword;
+import net.iGap.model.AccountUser;
 import net.iGap.model.GoToMainFromRegister;
 import net.iGap.model.LocationModel;
 import net.iGap.model.UserPasswordDetail;
@@ -28,6 +33,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoUserRegister;
 import net.iGap.proto.ProtoUserVerify;
+import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestInfoLocation;
@@ -35,13 +41,15 @@ import net.iGap.request.RequestInfoPage;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
+import net.iGap.request.RequestUserProfileSetNickname;
+import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
-import io.realm.Realm;
+import java.util.List;
 
 public class RegisterRepository {
 
@@ -63,6 +71,8 @@ public class RegisterRepository {
     private ProtoUserRegister.UserRegisterResponse.Method method;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Long> goToSyncContactPageForNewUser = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> loginExistUser = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToWelcomePage = new SingleLiveEvent<>();
 
     //if need sharePreference pass it in constructor
@@ -86,8 +96,16 @@ public class RegisterRepository {
         return goToMainPage;
     }
 
+    public SingleLiveEvent<Boolean> getLoginExistUser() {
+        return loginExistUser;
+    }
+
     public SingleLiveEvent<Long> getGoToWelcomePage() {
         return goToWelcomePage;
+    }
+
+    public SingleLiveEvent<Long> getGoToSyncContactPageForNewUser() {
+        return goToSyncContactPageForNewUser;
     }
 
     public int getCallingCode() {
@@ -100,10 +118,6 @@ public class RegisterRepository {
 
     public String getPattern() {
         return pattern;
-    }
-
-    public String getCountryName() {
-        return countryName;
     }
 
     public String getRegex() {
@@ -134,31 +148,42 @@ public class RegisterRepository {
         this.forgetTwoStepVerification = forgetTwoStepVerification;
     }
 
-    public void saveInstance(int callingCode, String pattern, String phoneNumber, String countryName, String regex) {
-        this.callingCode = callingCode;
-        this.pattern = pattern;
-        this.phoneNumber = phoneNumber;
-        this.countryName = countryName;
-        this.regex = regex;
+    public void removeUserAvatar() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                RealmAvatar.deleteAvatarWithOwnerId(userId);
+            }
+        });
     }
 
     public void inRegisterMode(MutableLiveData<Boolean> hideDialogQRCode, MutableLiveData<Long> goToTwoStepVerificationPage) {
         G.onPushLoginToken = (tokenQrCode, userNameR, userIdR, authorHashR) -> {
-            token = tokenQrCode;
-            G.displayName = userName = userNameR;
-            new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
-            G.userId = userId = userIdR;
-            G.authorHash = authorHash = authorHashR;
-            hideDialogQRCode.postValue(true);
-            userLogin(token);
+            if (AccountManager.getInstance().isExistThisAccount(userIdR)) {
+                Log.wtf(this.getClass().getName(), "Exist");
+                loginExistUser.postValue(true);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Exist");
+                token = tokenQrCode;
+                userName = userNameR;
+                userId = userIdR;
+                authorHash = authorHashR;
+                hideDialogQRCode.postValue(true);
+                userLogin(token);
+            }
         };
 
         G.onPushTwoStepVerification = (userNameR, userIdR, authorHashR) -> {
-            G.displayName = userName = userNameR;
-            new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
-            G.userId = userId = userIdR;
-            G.authorHash = authorHash = authorHashR;
-            goToTwoStepVerificationPage.postValue(userIdR);
+            if (AccountManager.getInstance().isExistThisAccount(userIdR)) {
+                Log.wtf(this.getClass().getName(), "Exist");
+                loginExistUser.postValue(true);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Exist");
+                userName = userNameR;
+                userId = userIdR;
+                authorHash = authorHashR;
+                goToTwoStepVerificationPage.postValue(userIdR);
+            }
         };
     }
 
@@ -203,13 +228,12 @@ public class RegisterRepository {
                 RegisterRepository.this.callingCode = callingCode;
                 RegisterRepository.this.countryName = name;
                 RegisterRepository.this.pattern = pattern;
-                G.handler.post(() -> callback.onSuccess(new LocationModel(callingCode, name, pattern)));
+                callback.onSuccess(new LocationModel(callingCode, name, pattern));
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                //empty
-                G.handler.post(callback::onError);
+                callback.onError();
             }
         });
     }
@@ -221,14 +245,11 @@ public class RegisterRepository {
     //basically it is send request resend activation code and send this request for getting new activation code
     public void registration(RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         // check for re-use
-        if (phoneNumber == null || phoneNumber.isEmpty())
-            phoneNumber = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER);
         requestRegister(phoneNumber, callback);
     }
 
-    private void requestRegister(String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+    private void requestRegister(@NotNull String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         this.phoneNumber = phoneNumber.replace("-", "");
-        new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER, this.phoneNumber);
         ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
         builder.setCountryCode(isoCode);
         builder.setPhoneNumber(Long.parseLong(this.phoneNumber));
@@ -242,17 +263,10 @@ public class RegisterRepository {
                 /*digitCount = verifyCodeDigitCount;*/
                 regexFetchCodeVerification = regex;
                 userName = userNameR;
-                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
                 authorHash = authorHashR;
                 G.smsNumbers = smsNumbersR;
                 method = methodValue;
-                /*SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("callingCode", callingCode);
-                editor.putString("countryName", countryName);
-                editor.putString("pattern", pattern);
-                editor.putString("regex", regex);
-                editor.apply();*/
                 callback.onSuccess();
             }
 
@@ -272,9 +286,17 @@ public class RegisterRepository {
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    if (userName == null || userName.isEmpty())
-                        userName = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME);
+                G.onUserLogin = null;
+                DbManager.getInstance().doRealmTask(realm -> {
+
+                    AccountManager.getInstance().addAccount(new AccountUser(
+                            userId,
+                            null,
+                            "",
+                            phoneNumber,
+                            0,
+                            true));
+
                     realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
                     BotInit.setCheckDrIgap(true);
                     if (newUser) {
@@ -286,35 +308,52 @@ public class RegisterRepository {
                         requestUserInfo();
                         HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);
                     }
-                }
+                });
             }
 
             @Override
             public void onLoginError(int majorCode, int minorCode) {
-                if (majorCode == 111 && minorCode == 4) {
-                    HelperLogout.logout();
-                } else if (majorCode == 111) {
-                    G.handler.post(() -> {
-                        //requestLogin();
-                    });
-                } else if (majorCode == 5 && minorCode == 1) {
+                if (majorCode == 5 && minorCode == 1) {
                     requestLogin();
                 }
             }
         };
-
         requestLogin();
     }
 
+    public void setNickName(String name, String lastName, String countryCode, String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+        new RequestUserProfileSetNickname().userProfileNickName(name + " " + lastName, new OnUserProfileSetNickNameResponse() {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName, String initials) {
+                if ((reagentPhoneNumber == null || reagentPhoneNumber.isEmpty())) {
+                    getUserInfo();
+                    requestUserInfo();
+                } else {
+                    setReagent(countryCode + reagentPhoneNumber, callback);
+                }
+            }
+
+            @Override
+            public void onUserProfileNickNameError(int majorCode, int minorCode) {
+                callback.onError(null);
+            }
+
+            @Override
+            public void onUserProfileNickNameTimeOut() {
+                callback.onError(null);
+            }
+        });
+    }
+
     private void requestLogin() {
-        if (G.socketConnection) {
+        if (WebSocketClient.getInstance().isConnect()) {
             if (token == null) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     if (realmUserInfo != null) {
                         token = realmUserInfo.getToken();
                     }
-                }
+                });
             }
             new RequestUserLogin().userLogin(token);
         } else {
@@ -322,14 +361,12 @@ public class RegisterRepository {
         }
     }
 
-    public void userVerify(String verificationCode, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+    public void userVerify(@NotNull String verificationCode, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         try {
             ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
             userVerify.setCode(Integer.parseInt(verificationCode
                     .replaceAll("[^0-9]", "")
                     .replaceAll("[\u0000-\u001f]", "")));
-            if (userName == null || userName.isEmpty())
-                userName = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME);
             userVerify.setUsername(userName);
             RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
                 @Override
@@ -341,7 +378,7 @@ public class RegisterRepository {
 
                 @Override
                 public void onUserVerifyError(int majorCode, int minorCode, int time) {
-                    G.handler.post(() -> callback.onError(new ErrorWithWaitTime(majorCode, minorCode, time)));
+                    callback.onError(new ErrorWithWaitTime(majorCode, minorCode, time));
                 }
             });
             RequestQueue.sendRequest(requestWrapper);
@@ -351,20 +388,23 @@ public class RegisterRepository {
     }
 
     private void getUserInfo() {
+        Log.wtf(this.getClass().getName(), "getUserInfo");
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (user.getId() == userId) {
-                    G.onUserInfoResponse = null;
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.executeTransaction(realm1 -> {
-                            G.displayName = user.getDisplayName();
-                            G.userId = user.getId();
-                            RealmUserInfo.putOrUpdate(realm1, user);
-                            goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-                        });
+                    AccountManager.getInstance().updateCurrentUserName(user.getDisplayName());
+                    AccountManager.getInstance().updatePhoneNumber(String.valueOf(user.getPhone()));
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
+                    });
+                    if (newUser) {
+                        goToSyncContactPageForNewUser.postValue(userId);
+                    } else {
+                        goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
                     }
                 }
+
             }
 
             @Override
@@ -379,15 +419,36 @@ public class RegisterRepository {
         };
     }
 
+    private void setReagent(String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+        new RequestUserProfileSetRepresentative().userProfileSetRepresentative(
+                reagentPhoneNumber,
+                new OnUserProfileSetRepresentative() {
+                    @Override
+                    public void onSetRepresentative(String phone) {
+                        DbManager.getInstance().doRealmTask(realm -> {
+                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                            RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
+                        });
+                        getUserInfo();
+                        requestUserInfo();
+                    }
+
+                    @Override
+                    public void onErrorSetRepresentative(int majorCode, int minorCode) {
+                        callback.onError(new ErrorWithWaitTime(majorCode, minorCode, 0));
+                    }
+                });
+    }
+
     private void requestUserInfo() {
-        if (G.socketConnection) {
+        if (WebSocketClient.getInstance().isConnect()) {
             if (userId == 0) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     if (realmUserInfo != null) {
                         userId = realmUserInfo.getUserId();
                     }
-                }
+                });
             }
             new RequestUserInfo().userInfo(userId);
         } else {
@@ -399,12 +460,12 @@ public class RegisterRepository {
         new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail(new TwoStepVerificationGetPasswordDetail() {
             @Override
             public void getDetailPassword(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern) {
-                G.handler.post(() -> callback.onSuccess(new UserPasswordDetail(questionOne, questionTwo, hint, hasConfirmedRecoveryEmail, unconfirmedEmailPattern)));
+                callback.onSuccess(new UserPasswordDetail(questionOne, questionTwo, hint, hasConfirmedRecoveryEmail, unconfirmedEmailPattern));
             }
 
             @Override
             public void errorGetPasswordDetail(int majorCode, int minorCode) {
-
+                callback.onError();
             }
         });
     }
@@ -419,7 +480,7 @@ public class RegisterRepository {
 
             @Override
             public void errorVerifyPassword(int major, int minor, int wait) {
-                G.handler.post(() -> callback.onError(new ErrorWithWaitTime(major, minor, wait)));
+                callback.onError(new ErrorWithWaitTime(major, minor, wait));
             }
         });
     }

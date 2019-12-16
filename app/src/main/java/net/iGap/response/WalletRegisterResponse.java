@@ -10,8 +10,9 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.DbManager;
 import net.iGap.proto.ProtoWalletRegister;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWalletGetAccessToken;
 
 public class WalletRegisterResponse extends MessageHandler {
@@ -33,7 +34,12 @@ public class WalletRegisterResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoWalletRegister.WalletRegisterResponse.Builder builder = (ProtoWalletRegister.WalletRegisterResponse.Builder) message;
-        G.isWalletRegister = true;
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                realmUserInfo.setWalletRegister(true);
+            }
+        });
     }
 
     @Override

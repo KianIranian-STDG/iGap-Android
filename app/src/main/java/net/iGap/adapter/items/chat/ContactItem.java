@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,26 +22,23 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentCallAction;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
-import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
 
@@ -56,16 +52,16 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.contactName.setTextColor(new Theme().getSendMessageTextColor(holder.getContext()));
-        holder.contactNumberTv.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.contactName.setTextColor(theme.getSendMessageTextColor(holder.getContext()));
+        holder.contactNumberTv.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        holder.contactName.setTextColor(new Theme().getReceivedMessageColor(holder.getContext()));
-        holder.contactNumberTv.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.contactName.setTextColor(theme.getReceivedMessageColor(holder.getContext()));
+        holder.contactNumberTv.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
@@ -82,15 +78,15 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getRoomMessageContact() != null) {
-                holder.contactName.setText(mMessage.forwardedFrom.getRoomMessageContact().getFirstName() + " " + mMessage.forwardedFrom.getRoomMessageContact().getLastName());
-                holder.contactNumberTv.setText(mMessage.forwardedFrom.getRoomMessageContact().getLastPhoneNumber());
+        if (mMessage.getForwardMessage() != null) {
+            if (mMessage.getForwardMessage().getRoomMessageContact() != null) {
+                holder.contactName.setText(mMessage.getForwardMessage().getRoomMessageContact().getFirstName() + " " + mMessage.getForwardMessage().getRoomMessageContact().getLastName());
+                holder.contactNumberTv.setText(mMessage.getForwardMessage().getRoomMessageContact().getLastPhoneNumber());
             }
         } else {
-            if (mMessage.userInfo != null) {
-                holder.contactName.setText(mMessage.userInfo.displayName);
-                holder.contactNumberTv.setText(mMessage.userInfo.phone);
+            if (mMessage.getRoomMessageContact() != null) {
+                holder.contactName.setText(mMessage.getRoomMessageContact().getFirstName() + " " + mMessage.getRoomMessageContact().getLastName());
+                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getLastPhoneNumber());
             }
         }
     }
@@ -100,7 +96,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         return new ViewHolder(activity, v);
     }
 
-    protected static class ViewHolder extends NewChatItemHolder {
+    protected class ViewHolder extends NewChatItemHolder {
 
         private static final int IN_CONTACT_AND_HAVE_IGAP = 0;
         private static final int NOT_CONTACT_AND_HAVE_NOT_IGAP = 1;
@@ -122,7 +118,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactImage = new AppCompatImageView(getContext());
             contactImage.setId(R.id.iv_contactItem_contact);
             contactImage.setContentDescription(null);
-            contactImage.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_contact), getContext(), R.attr.colorPrimaryDark));
+            contactImage.setBackground(theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_contact), getContext(), R.attr.colorPrimaryDark));
 
             contactName = new AppCompatTextView(getContext());
             contactName.setId(R.id.tv_contactItem_contactName);
@@ -265,14 +261,14 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         }
 
         private void getContactInfo(String userPhoneNumber) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 contactId = RealmRegisteredInfo.getUserInfo(realm, userPhoneNumber);
 
                 if (contactId > 0)
                     contactStatus = IN_CONTACT_AND_HAVE_IGAP;
                 else
                     contactStatus = NOT_CONTACT_AND_HAVE_NOT_IGAP;
-            }
+            });
 
             Log.i("aabolfazl", "getContactInfo: " + contactStatus);
         }

@@ -21,6 +21,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -86,6 +87,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public MutableLiveData<Boolean> setAudioManagerWithBluetooth = new MutableLiveData<>();
     private MutableLiveData<Long> quickDeclineMessageLiveData = new MutableLiveData<>();
     public MutableLiveData<String> callTimerListener = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> finishActivity = new SingleLiveEvent<>();
 
 
     private boolean isIncomingCall;
@@ -111,6 +113,10 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         this.userId = userId;
         this.isIncomingCall = isIncomingCall;
         this.callTYpe = callTYpe;
+
+        if (userId == -1){
+            finishActivity.setValue(true);
+        }
 
         changeViewState.setValue(isIncomingCall);
 
@@ -520,9 +526,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         G.isInCall = false;
         EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
         playRingTone.postValue(false);
-        if (ActivityCall.onFinishActivity != null) {
-            ActivityCall.onFinishActivity.finishActivity();
-        }
+        finishActivity.postValue(true);
         if (G.iCallFinishChat != null) {
             G.iCallFinishChat.onFinish();
         }
@@ -570,7 +574,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     }
 
     private void setPicture() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
             if (registeredInfo != null) {
                 loadOrDownloadPicture(registeredInfo, realm);
@@ -580,17 +584,17 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        try (Realm realm = Realm.getDefaultInstance()) {
-                            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+                        DbManager.getInstance().doRealmTask(realm1 -> {
+                            RealmRegisteredInfo registeredInfo1 = RealmRegisteredInfo.getRegistrationInfo(realm1, userId);
 
-                            if (registeredInfo != null) {
-                                loadOrDownloadPicture(registeredInfo, realm);
+                            if (registeredInfo1 != null) {
+                                loadOrDownloadPicture(registeredInfo1, realm1);
                             }
-                        }
+                        });
                     }
                 }, 3000);
             }
-        }
+        });
     }
 
     private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo, Realm realm) {
@@ -673,9 +677,6 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
             playRingTone.postValue(false);
             txtAviVisibility.set(View.GONE);
             callBackTxtStatus.set(R.string.empty_error_message);
-//            G.handler.postDelayed(this::endVoiceAndFinish, 2000);
-        } else {
-//            G.handler.postDelayed(() -> endVoiceAndFinish(), 1000);
         }
         endVoiceAndFinish();
     }

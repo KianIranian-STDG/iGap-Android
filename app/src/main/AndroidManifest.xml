@@ -109,25 +109,6 @@
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance">
-
-            <!--
-                      <intent-filter>
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <data android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile" />
-                  </intent-filter>
-            -->
-
-
-            <!--
-            <intent-filter>
-              <action android:name="android.intent.action.VIEW" />
-              <category android:name="android.intent.category.DEFAULT" />
-              <category android:name="android.intent.category.BROWSABLE" />
-              <data android:scheme="http" android:host="@string/host" />
-            </intent-filter>
-            -->
-
         </activity>
         <activity
             android:name="org.paygear.WalletActivity"
@@ -141,14 +122,7 @@
             android:name=".activities.ActivityMain"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="stateHidden">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -244,6 +218,14 @@
         <activity
             android:name=".activities.ActivityRegistration"
             android:launchMode="singleTask" />
+        <activity android:name=".activities.SplashActivity"
+            android:theme="@style/AppTheme.Launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".module.ReceiverBootPhone"
@@ -341,6 +323,14 @@
                 android:resource="@xml/contacts" />
         </service>
         <service android:name=".module.BeepTunesPlayerService" />
+
+        <service
+            android:exported="false"
+            android:name=".webservice.JobServiceReconnect">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

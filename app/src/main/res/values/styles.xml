@@ -40,12 +40,11 @@
     </style>
 
     <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:editTextColor">@color/black_register</item>
-        <item name="android:textColorHint">@color/text_verify</item>
-        <item name="colorAccent">@color/toolbar_background</item>
-        <item name="android:tint">@color/border_editText</item>
+        <item name="android:editTextColor">?attr/iGapTitleTextColor</item>
+        <item name="android:textColorHint">?attr/iGapHintTextColor</item>
+        <item name="android:tint">?attr/iGapPrimaryIconTextColor</item>
         <item name="android:gravity">end|right</item>
-        <item name="android:textColor">@color/text_verify</item>
+        <item name="android:textColor">?attr/iGapTitleTextColor</item>
     </style>
 
     <style name="ChatMessages" />
@@ -139,8 +138,8 @@
     </style>
 
     <style name="iGapEditTextStyle">
-        <item name="android:textColorHint">?iGapHintTextColor</item>
-        <item name="android:textColor">?iGapTitleTextColor</item>
+        <item name="android:textColorHint">?attr/iGapHintTextColor</item>
+        <item name="android:textColor">?attr/iGapTitleTextColor</item>
     </style>
 
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
@@ -266,7 +265,7 @@
         <item name="strokeWidth">2dp</item>
         <item name="android:textColor">?iGapButtonTextColor</item>
         <item name="strokeColor">?iGapButtonTextColor</item>
-        <item name="rippleColor">?iGapButtonColor</item>
+        
     </style>
 
     <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">

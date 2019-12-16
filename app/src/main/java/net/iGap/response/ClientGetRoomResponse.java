@@ -13,6 +13,7 @@ package net.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
@@ -49,7 +50,7 @@ public class ClientGetRoomResponse extends MessageHandler {
         super.handler();
 
         final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom = (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(final Realm realm) {
@@ -107,33 +108,24 @@ public class ClientGetRoomResponse extends MessageHandler {
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        try (Realm realm = Realm.getDefaultInstance()) {
-                                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                        DbManager.getInstance().doRealmTask(realm1 -> {
+                                            realm1.executeTransactionAsync(new Realm.Transaction() {
                                                 @Override
-                                                public void execute(Realm realm) {
-                                                    putOrUpdate(clientGetRoom.getRoom(), realm);
+                                                public void execute(Realm realm1) {
+                                                    putOrUpdate(clientGetRoom.getRoom(), realm1);
                                                 }
-                                            }, new Realm.Transaction.OnSuccess() {
+                                            }, new OnSuccess() {
                                                 @Override
                                                 public void onSuccess() {
-                                                    G.handler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            if (G.onClientGetRoomResponse != null) {
-                                                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
-                                                            }
-                                                            if (G.onClientGetRoomResponseRoomList != null) {
-                                                                G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            }, new Realm.Transaction.OnError() {
-                                                @Override
-                                                public void onError(Throwable error) {
+                                                    if (G.onClientGetRoomResponse != null) {
+                                                        G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
+                                                    }
+                                                    if (G.onClientGetRoomResponseRoomList != null) {
+                                                        G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
+                                                    }
                                                 }
                                             });
-                                        }
+                                        });
                                     }
                                 });
                             }
@@ -155,7 +147,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                     }
                 }
             });
-        }
+        });
 
         // update chat message header forward after get user or room info
         if (AbstractMessage.updateForwardInfo != null) {

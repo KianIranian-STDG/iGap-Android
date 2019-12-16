@@ -36,6 +36,7 @@ import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -59,13 +60,13 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -93,7 +94,6 @@ public class FragmentShowImage extends BaseFragment {
     private MediaPlayer mMediaPlayer;
     private boolean isLockScreen = false;
     private boolean isFocusable = false;
-    private Realm realmShowImage;
     private TouchImageView touchImageViewTmp = null;
     private int lastOrientation = 0;
     public static FocusAudioListener focusAudioListener;
@@ -107,7 +107,23 @@ public class FragmentShowImage extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmShowImage = Realm.getDefaultInstance();
+
+        //View view = inflater.inflate(R.layout.activity_show_image, container, false);
+        //exitFragmentTransition = FragmentTransition.with(this).duration(200).interpolator(new LinearOutSlowInInterpolator()).to(view.findViewById(R.id.asi_view_pager)).start(savedInstanceState);
+        //
+        //exitFragmentTransition.exitListener(new AnimatorListenerAdapter() {
+        //    @Override
+        //    public void onAnimationStart(Animator animation) {
+        //
+        //    }
+        //
+        //    @Override
+        //    public void onAnimationEnd(Animator animation) {
+        //
+        //    }
+        //}).interpolator(new FastOutSlowInInterpolator());
+        //exitFragmentTransition.startExitListening(view.findViewById(R.id.rooShowImage));
+
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
@@ -139,28 +155,11 @@ public class FragmentShowImage extends BaseFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        realmShowImage.close();
-        /*if (appBarLayout != null) {
-            appBarLayout.setVisibility(View.VISIBLE);
-        }*/
-    }
-
-    @Override
     public void onAttach(Context context) {
         if (appBarLayout != null) {
             appBarLayout.setVisibility(View.GONE);
         }
         super.onAttach(context);
-    }
-
-    private Realm getRealm() {
-        if (realmShowImage == null || !realmShowImage.isClosed()) {
-            realmShowImage = Realm.getDefaultInstance();
-        }
-        return realmShowImage;
     }
 
     private boolean getIntentData(Bundle bundle) {
@@ -179,7 +178,9 @@ public class FragmentShowImage extends BaseFragment {
                 return false;
             }
 
-            RealmResults<RealmRoomMessage> mRealmList = RealmRoomMessage.findSorted(getRealm(), mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            RealmResults<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRoomMessage.findSorted(realm, mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            });
             if (mRealmList.size() < 1) {
                 popBackStackFragment();
                 return false;
@@ -312,7 +313,7 @@ public class FragmentShowImage extends BaseFragment {
      * show image info, time , name , description
      */
     private void showImageInfo(RealmRoomMessage realmRoomMessage) {
-        if (realmRoomMessage == null || G.authorHash == null) {
+        if (realmRoomMessage == null || RealmUserInfo.getCurrentUserAuthorHash().equals("")) {
             return;
         }
         RealmRoomMessage realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(realmRoomMessage);
@@ -324,7 +325,9 @@ public class FragmentShowImage extends BaseFragment {
             txtImageDesc.setVisibility(View.GONE);
         }
 
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), realmRoomMessageFinal.getUserId());
+        RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageFinal.getUserId());
+        });
 
         if (realmRegisteredInfo != null) {
             txtImageName.setText(realmRegisteredInfo.getDisplayName());
@@ -332,7 +335,7 @@ public class FragmentShowImage extends BaseFragment {
             txtImageName.setText("");
         }
 
-        if (realmRoomMessageFinal.getAuthorHash() != null && G.authorHash.equals(realmRoomMessageFinal.getAuthorHash())) {
+        if (realmRoomMessageFinal.getAuthorHash() != null && RealmUserInfo.getCurrentUserAuthorHash().equals(realmRoomMessageFinal.getAuthorHash())) {
 
             txtImageName.setText(R.string.you);
         }
@@ -382,7 +385,7 @@ public class FragmentShowImage extends BaseFragment {
             File file = new File(path);
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                AppUtils.shareItem(intent, StructMessageInfo.convert(getRealm(), roomMessage));
+                AppUtils.shareItem(intent, new StructMessageInfo(roomMessage));
                 if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                     intent.setType("video/*");
                     startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_video_from_igap)));

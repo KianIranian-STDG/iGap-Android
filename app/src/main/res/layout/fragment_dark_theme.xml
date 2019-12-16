@@ -37,7 +37,7 @@
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 >
-<!--               android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
+                <!--               android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                 <LinearLayout
                     android:layout_width="match_parent"

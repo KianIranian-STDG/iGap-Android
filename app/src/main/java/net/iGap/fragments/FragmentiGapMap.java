@@ -55,6 +55,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -128,7 +130,6 @@ import io.realm.Sort;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
-import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
 
 public class FragmentiGapMap extends BaseFragment implements ToolbarListener, OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
@@ -180,7 +181,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     private double lastLongitude;
     private boolean isEndLine = true;
     private String txtComment = "";
-    private Realm realmMapUsers;
     private boolean isSendRequestGeoCoordinate = false;
     private String url;
     static boolean changeState = false;
@@ -203,9 +203,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     public static Drawable avatarMark(long userId, MarkerColor markerColor) {
-        String pathName = "";
-        Bitmap bitmap = null;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        Bitmap bitmap = DbManager.getInstance().doRealmTask(realm -> {
+            String pathName = "";
+            Bitmap bitmap1 = null;
             for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING)) {
                 if (avatar.getFile() != null) {
                     pathName = avatar.getFile().getLocalFilePath();
@@ -216,41 +216,36 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             }
             if (pathName == null || pathName.isEmpty()) {
-                bitmap = getInitials(realm, userId);
+                bitmap1 = getInitials(realm, userId);
             } else {
                 try {
                     File imgFile = new File(pathName);
-                    bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    bitmap1 = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 } catch (OutOfMemoryError e) {
                     try {
                         File imgFile = new File(pathName);
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inSampleSize = 2;
-                        bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+                        bitmap1 = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
                     } catch (OutOfMemoryError e1) {
                         try {
                             File imgFile = new File(pathName);
                             BitmapFactory.Options options = new BitmapFactory.Options();
                             options.inSampleSize = 4;
-                            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+                            bitmap1 = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
                         } catch (OutOfMemoryError e2) {
                             e2.printStackTrace();
                         }
                     }
                 }
 
-                if (bitmap == null) {
-                    bitmap = getInitials(realm, userId);
+                if (bitmap1 == null) {
+                    bitmap1 = getInitials(realm, userId);
                 }
             }
-        }
-
-        boolean mineAvatar = false;
-        if (userId == G.userId) {
-            mineAvatar = true;
-        }
-
-        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, mineAvatar));
+            return bitmap1;
+        });
+        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, userId == AccountManager.getInstance().getCurrentUser().getId()));
     }
 
     private static Bitmap getInitials(Realm realm, long userId) {
@@ -413,7 +408,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmMapUsers = Realm.getDefaultInstance();
         Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
 
         KeyboardUtils.addKeyboardToggleListener(getActivity(), new KeyboardUtils.SoftKeyboardToggleListener() {
@@ -705,7 +699,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
 
         page = 1;
-        new RequestGeoGetComment().getComment(userId);
+        new RequestGeoGetComment().getComment(AccountManager.getInstance().getCurrentUser().getId());
     }
 
     private void initToolbar(View view) {
@@ -827,7 +821,15 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
             });
 
-            getRealmMapUsers().executeTransaction(realm -> realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm());
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
+                    }
+                });
+            });
+
             rootTurnOnGps = view.findViewById(R.id.scrollView);
             rootTurnOnGps.setOnClickListener(v -> {
                 //have to empty
@@ -1277,7 +1279,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         OverlayItem overlayItem = new OverlayItem("title", "City", geoPoint);
 
         //Drawable drawable = context.getResources().getDrawable(R.drawable.location_current);
-        overlayItem.setMarker(avatarMark(G.userId, MarkerColor.GRAY)); // marker color is not important in this line because for mineAvatar will be unused.
+        overlayItem.setMarker(avatarMark(AccountManager.getInstance().getCurrentUser().getId(), MarkerColor.GRAY)); // marker color is not important in this line because for mineAvatar will be unused.
 
         ArrayList<OverlayItem> overlayItemArrayList = new ArrayList<>();
         overlayItemArrayList.add(overlayItem);
@@ -1321,16 +1323,16 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     @Override
     public void onNearbyCoordinate(final List<ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result> results) {
         map.getOverlays().removeAll(markers);
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             for (final ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
                 downloadMarkerAvatar(realm, result.getUserId());
             }
-        }
+        });
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 for (final ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
-                    if (G.userId != result.getUserId()) { // don't show mine
+                    if (AccountManager.getInstance().getCurrentUser().getId() != result.getUserId()) { // don't show mine
                         RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
                             @Override
                             public void onInfo(Long registeredId) {
@@ -1454,7 +1456,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                     getCoordinateLoop(0, false);
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                     editor.apply();
-                    new RequestGeoGetComment().getComment(userId);
+                    new RequestGeoGetComment().getComment(AccountManager.getInstance().getCurrentUser().getId());
                 } else {
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
                     editor.apply();
@@ -1484,7 +1486,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             @Override
             public void run() {
                 txtComment = comment;
-                if (G.userId == userIdR && comment.length() > 0) {
+                if (AccountManager.getInstance().getCurrentUser().getId() == userIdR && comment.length() > 0) {
                     edtMessageGps.setText(comment);
                     txtSendMessageGps.setText(R.string.close_icon);
                 } else {
@@ -1552,19 +1554,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     public void onStop() {
         super.onStop();
         G.isFragmentMapActive = false;
-    }
-
-    private Realm getRealmMapUsers() {
-        if (realmMapUsers == null || realmMapUsers.isClosed()) {
-            realmMapUsers = Realm.getDefaultInstance();
-        }
-        return realmMapUsers;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        realmMapUsers.close();
     }
 
     @Override

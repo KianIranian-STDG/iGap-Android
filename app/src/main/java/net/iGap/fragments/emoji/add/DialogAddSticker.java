@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -61,7 +62,7 @@ public class DialogAddSticker extends DialogFragment {
     }
 
     private void getSticker(String groupID) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
             if (realmStickers == null) {
                 mAPIService.getSticker(groupID).enqueue(new Callback<StructEachSticker>() {
@@ -73,14 +74,14 @@ public class DialogAddSticker extends DialogFragment {
                             if (response.body().getOk() && response.body().getData() != null) {
 
                                 StructGroupSticker item = response.body().getData();
-                                try (Realm realm = Realm.getDefaultInstance()) {
+                                DbManager.getInstance().doRealmTask(realm -> {
                                     realm.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
                                             RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false);
                                         }
                                     });
-                                }
+                                });
                                 mAdapterAddDialogSticker.updateAdapter(item.getStickers());
                             }
                         }
@@ -98,7 +99,7 @@ public class DialogAddSticker extends DialogFragment {
                     mAdapterAddDialogSticker.updateAdapter(eachSticker.getStickers());
                 }
             }
-        }
+        });
     }
 
     @Override
@@ -133,15 +134,27 @@ public class DialogAddSticker extends DialogFragment {
                         mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
                             @Override
                             public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                                progressBar.setVisibility(View.GONE);
-                                if (response.body() != null && response.body().isSuccess()) {
-                                    RealmStickers.updateFavorite(groupId, true);
-                                    if (FragmentChat.onUpdateSticker != null) {
-                                        FragmentChat.onUpdateSticker.update();
-                                        DialogAddSticker.this.dismiss();
 
-                                        HelperError.showSnackMessage(G.context.getResources().getString(R.string.Sticker_added_successfully), false);
-                                    }
+                                if (response.body() != null && response.body().isSuccess()) {
+                                    DbManager.getInstance().doRealmTask(realm -> {
+                                        realm.executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                RealmStickers.updateFavorite(realm, groupId, true);
+                                            }
+                                        }, () -> {
+                                            progressBar.setVisibility(View.GONE);
+                                            if (FragmentChat.onUpdateSticker != null) {
+                                                FragmentChat.onUpdateSticker.update();
+                                                DialogAddSticker.this.dismiss();
+
+                                                HelperError.showSnackMessage(G.context.getResources().getString(R.string.Sticker_added_successfully), false);
+                                            }
+                                        });
+                                    });
+
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             }
 

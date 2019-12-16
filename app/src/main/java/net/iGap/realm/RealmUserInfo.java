@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
 import net.iGap.kuknos.service.model.RealmKuknos;
@@ -25,19 +26,16 @@ public class RealmUserInfo extends RealmObject {
     private boolean registrationStatus;
     private String email;
     private int gender;
-    private boolean isPassCode;
-    private boolean isPattern;
-    private boolean isFingerPrint;
-    private String passCode;
-    private int kindPassCode;
     private int selfRemove;
     private String token;
     private String authorHash;
-    private boolean importContactLimit;
     private String pushNotificationToken;
     private String representPhoneNumber;
     private RealmKuknos kuknosM;
     private String accessToken;
+    private boolean isWalletRegister;
+    private boolean isWalletActive;
+    private boolean isMplActive;
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
@@ -76,24 +74,24 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public static void setPushNotification(final String pushToken) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransaction(realm1 -> {
+                    RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
                     if (realmUserInfo != null) {
                         realmUserInfo.setPushNotificationToken(pushToken);
                     } else {
-                        realmUserInfo = realm.createObject(RealmUserInfo.class);
+                        realmUserInfo = realm1.createObject(RealmUserInfo.class);
                         realmUserInfo.setPushNotificationToken(pushToken);
                     }
-                }
+                });
             });
-        }
+        }).start();
+
     }
 
     public static void insertAccessToken(final String accessToken) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -103,11 +101,11 @@ public class RealmUserInfo extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void sendPushNotificationToServer() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
                 String token = realmUserInfo.getPushNotificationToken();
@@ -117,11 +115,11 @@ public class RealmUserInfo extends RealmObject {
                     HelperLog.setErrorLog(new Exception("FCM Token is Empty!" + token));
                 }
             }
-        }
+        });
     }
 
     public static void updateGender(final ProtoGlobal.Gender gender) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -131,11 +129,11 @@ public class RealmUserInfo extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateSelfRemove(final int selfRemove) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -145,11 +143,11 @@ public class RealmUserInfo extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateEmail(final String email) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -159,11 +157,11 @@ public class RealmUserInfo extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateNickname(final String displayName, final String initials) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -177,11 +175,11 @@ public class RealmUserInfo extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateUsername(final String username) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -194,37 +192,8 @@ public class RealmUserInfo extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
-
-
-    public static void updateImportContactLimit() {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setImportContactLimit(true);
-                    }
-                }
-            });
-        }
-    }
-
-    public static boolean isLimitImportContacts() {
-        boolean result = false;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (userInfo != null) {
-                if (userInfo.isImportContactLimit()) {
-                    result = true;
-                }
-            }
-        }
-        return result;
-    }
-
 
     public RealmRegisteredInfo getUserInfo() {
         return userInfo;
@@ -256,52 +225,12 @@ public class RealmUserInfo extends RealmObject {
 
     }
 
-    public boolean isFingerPrint() {
-        return isFingerPrint;
-    }
-
-    public void setFingerPrint(boolean fingerPrint) {
-        isFingerPrint = fingerPrint;
-    }
-
-    public int getKindPassCode() {
-        return kindPassCode;
-    }
-
-    public void setKindPassCode(int kindPassCode) {
-        this.kindPassCode = kindPassCode;
-    }
-
     public ProtoGlobal.Gender getGender() {
         return ProtoGlobal.Gender.valueOf(this.gender);
     }
 
     public void setGender(ProtoGlobal.Gender value) {
         this.gender = value.getNumber();
-    }
-
-    public boolean isPassCode() {
-        return isPassCode;
-    }
-
-    public boolean isPattern() {
-        return isPattern;
-    }
-
-    public void setPattern(boolean pattern) {
-        isPattern = pattern;
-    }
-
-    public void setPassCode(boolean passCode) {
-        isPassCode = passCode;
-    }
-
-    public String getPassCode() {
-        return passCode;
-    }
-
-    public void setPassCode(String passCode) {
-        this.passCode = passCode;
     }
 
     public String getToken() {
@@ -334,14 +263,6 @@ public class RealmUserInfo extends RealmObject {
 
     public boolean isAuthorMe(String author) {
         return author.equals(authorHash);
-    }
-
-    public boolean isImportContactLimit() {
-        return importContactLimit;
-    }
-
-    public void setImportContactLimit(boolean value) {
-        importContactLimit = value;
     }
 
     public String getPushNotificationToken() {
@@ -384,6 +305,16 @@ public class RealmUserInfo extends RealmObject {
         });
     }
 
+    public static String getCurrentUserAuthorHash() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo realmUser = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUser != null) {
+                return realmUser.getAuthorHash();
+            }
+            return "";
+        });
+    }
+
     // Kuknos seed key save and get process
 
 
@@ -396,7 +327,7 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public static void updateKuknos(RealmKuknos kuknosM) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -406,33 +337,56 @@ public class RealmUserInfo extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public void createKuknos() {
         if (kuknosM == null) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         setKuknosM(realm.createObject(RealmKuknos.class));
                     }
                 });
-            }
+            });
         }
     }
 
     public void deleteKuknos() {
         if (kuknosM != null) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         kuknosM.deleteFromRealm();
                     }
                 });
-            }
+            });
         }
     }
 
+    public boolean isWalletRegister() {
+        return isWalletRegister;
+    }
+
+    public void setWalletRegister(boolean walletRegister) {
+        isWalletRegister = walletRegister;
+    }
+
+    public boolean isWalletActive() {
+        return isWalletActive;
+    }
+
+    public void setWalletActive(boolean walletActive) {
+        isWalletActive = walletActive;
+    }
+
+    public boolean isMplActive() {
+        return isMplActive;
+    }
+
+    public void setMplActive(boolean mplActive) {
+        isMplActive = mplActive;
+    }
 }

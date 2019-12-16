@@ -10,11 +10,10 @@
 
 package net.iGap.interfaces;
 
-import okhttp3.Response;
-
 public interface OnRefreshToken {
 
     void onRefreshToken(String token);
+
     void onError(int majorCode, int minorCode);
 
 }

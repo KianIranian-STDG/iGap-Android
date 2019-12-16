@@ -16,6 +16,9 @@ import java.util.Map;
 
 public class HelperThumbnail {
 
+    /**
+     * dont use it until write best code with cursor
+     */
     private LruCache<String, Drawable> mThumbnailCacher;
     private int mThumbnailMode;
     private Map<String, AsyncTask> mTasks = new HashMap<>();

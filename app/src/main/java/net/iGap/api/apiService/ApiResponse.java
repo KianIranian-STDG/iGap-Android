@@ -1,8 +1,8 @@
 package net.iGap.api.apiService;
 
 /**
- * @deprecated
  * @param <T>
+ * @deprecated
  */
 public interface ApiResponse<T> {
     void onResponse(T t);

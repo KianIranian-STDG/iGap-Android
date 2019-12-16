@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,11 +25,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -38,6 +37,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -46,6 +47,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
@@ -54,8 +56,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
 
 import org.paygear.WalletActivity;
-
-import io.realm.Realm;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
@@ -302,7 +302,7 @@ public class HelperToolbar {
 
         //set default title name if user not set
         if (defaultTitleText == null || defaultTitleText.trim().equals("")) {
-            defaultTitleText = mContext.getResources().getString(R.string.app_name);
+            defaultTitleText = mContext.getString(R.string.app_name);
         }
 
         typeFaceGenerator();
@@ -471,7 +471,6 @@ public class HelperToolbar {
 
     public void registerTimerBroadcast() {
         if (mContext == null || callTimerReceiver == null) {
-            Log.wtf(this.getClass().getName(), "registerTimerBroadcast");
             return;
         }
         IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
@@ -674,7 +673,7 @@ public class HelperToolbar {
 
     public void checkPassCodeVisibility() {
         if (passCodeBtn != null) {
-            if (G.isPassCode) {
+            if (PassCode.getInstance().isPassCode()) {
                 passCodeBtn.setVisibility(View.VISIBLE);
                 ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
 
@@ -849,7 +848,7 @@ public class HelperToolbar {
                 mTxtLogo.setTypeface(tfMain);
             }
 
-        }else{
+        } else {
             mTxtLogo.setTypeface(tfMain);
         }
 
@@ -885,33 +884,29 @@ public class HelperToolbar {
             }
         }
 
-        G.connectionStateMutableLiveData.observe(owner, new androidx.lifecycle.Observer<ConnectionState>() {
-            @Override
-            public void onChanged(@Nullable ConnectionState connectionState) {
+        G.connectionStateMutableLiveData.observe(owner, connectionState -> {
 
-                if (mTxtLogo != null && connectionState != null) {
+            if (mTxtLogo != null) {
 
+                if (connectionState != null) {
                     if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                         mTxtLogo.setText(R.string.waiting_for_network);
-
                     } else if (connectionState == ConnectionState.CONNECTING) {
                         mTxtLogo.setText(R.string.connecting);
-
                     } else if (connectionState == ConnectionState.UPDATING) {
                         mTxtLogo.setText(R.string.updating);
-
                     } else if (connectionState == ConnectionState.IGAP) {
                         mTxtLogo.setText(defaultTitleText);
-
                     } else {
                         mTxtLogo.setText(defaultTitleText);
                     }
-
-                    checkIGapFont();
-
+                } else {
+                    mTxtLogo.setText(defaultTitleText);
                 }
 
+                checkIGapFont();
             }
+
         });
     }
 
@@ -1015,29 +1010,31 @@ public class HelperToolbar {
     }
 
     private void onScannerClickListener() {
-        String phoneNumber = "0";
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
             RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (userInfo != null) {
-                phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-            } else {
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
-            }
-        } catch (Exception e) {
-            //maybe exception was for realm substring
             try {
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
-            } catch (Exception ex) {
-                //nothing
+                if (userInfo != null) {
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }
+            } catch (Exception e) {
+                //maybe exception was for realm substring
+                try {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                } catch (Exception ex) {
+                    //nothing
+                }
             }
-        }
 
-        if (!G.isWalletRegister) {
-            new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-        } else {
-            mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber,true),WALLET_REQUEST_CODE);
-        }
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext, new Intent(mFragmentActivity, WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+            }
+
+        });
     }
 
     private void initViews(ViewMaker view) {
@@ -1475,6 +1472,7 @@ public class HelperToolbar {
                     edtSearch.setTypeface(tfMain);
                     edtSearch.setHint(R.string.search);
                     edtSearch.setSingleLine();
+                    edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
                     Utils.setTextSize(edtSearch, R.dimen.smallTextSize);
                     setLayoutParams(edtSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32));
                     searchLayout.addView(edtSearch);

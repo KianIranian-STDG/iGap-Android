@@ -18,9 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 
 import org.jetbrains.annotations.NotNull;
 

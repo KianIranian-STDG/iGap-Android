@@ -14,7 +14,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -251,7 +250,7 @@ public class FragmentContactsProfile extends BaseFragment {
             public void onClick(View view) {
 
                 if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
-try (Realm realm = Realm.getDefaultInstance()) {
+
 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
@@ -284,7 +283,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
 
                         new RequestChatGetRoom().chatGetRoom(userId);
                     }
-}
+
 
                 } else {
                     popBackStackFragment();

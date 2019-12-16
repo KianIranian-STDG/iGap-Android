@@ -2050,6 +2050,10 @@
     <string name="elecBill_error_notPossible">Cette action n\'est pas disponible pour le moment.</string>
     <string name="elecBill_success_title">Succès</string>
     <string name="elecBill_success_pay">Le paiement est réussi.</string>
+    <string name="add_new_account">Ajouter un nouveau compte</string>
+    <string name="profile">profil</string>
+    <string name="login_exist_account_error">This account is login in this device</string>
     <string name="delete_from_storage">Supprimer du stockage</string>
     <string name="map_registration_enable">Activer la visibilité à proximité</string>
+    <string name="need_browser">Nécessite un navigateur à utiliser.</string>
 </resources>

@@ -2,6 +2,7 @@ package net.iGap.fragments.emoji.api;
 
 import android.util.Base64;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 
 import java.security.KeyFactory;
@@ -23,7 +24,7 @@ public class EncryptKeySticker {
             PublicKey pubKey = keyFactory.generatePublic(keySpec);
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1PADDING"); //or try with "RSA"
             cipher.init(Cipher.ENCRYPT_MODE, pubKey);
-            encrypted = cipher.doFinal(String.valueOf(G.userId).getBytes());
+            encrypted = cipher.doFinal(String.valueOf(AccountManager.getInstance().getCurrentUser().getId()).getBytes());
             encoded = Base64.encodeToString(encrypted, Base64.NO_WRAP);
         } catch (Exception e) {
             e.printStackTrace();

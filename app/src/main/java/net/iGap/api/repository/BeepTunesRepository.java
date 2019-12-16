@@ -2,10 +2,8 @@ package net.iGap.api.repository;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
@@ -14,10 +12,6 @@ import net.iGap.module.api.beepTunes.PurchaseList;
 import net.iGap.module.api.beepTunes.SearchArtist;
 import net.iGap.module.api.beepTunes.SearchTrack;
 import net.iGap.module.api.beepTunes.TrackInfo;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BeepTunesRepository {
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();

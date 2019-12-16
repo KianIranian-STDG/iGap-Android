@@ -51,11 +51,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_fatsi"
-            style="@style/baseFontIcon"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/check_icon"
-            android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.isFarsi}"
             app:layout_constraintBottom_toBottomOf="@id/persianLanguage"
@@ -88,11 +87,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_english"
-            style="@style/baseFontIcon"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/check_icon"
-            android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.isEnglish}"
             app:layout_constraintBottom_toBottomOf="@id/englishLanguage"
@@ -125,11 +123,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_ar"
-            style="@style/baseFontIcon"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/check_icon"
-            android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.isArabic}"
             app:layout_constraintBottom_toBottomOf="@id/arabicLanguage"
@@ -162,11 +159,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_fr"
-            style="@style/baseFontIcon"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/check_icon"
-            android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.isFrance}"
             app:layout_constraintBottom_toBottomOf="@id/franceLanguage"
@@ -201,11 +197,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_ru"
-            style="@style/baseFontIcon"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/check_icon"
-            android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.isRussian}"
             app:layout_constraintBottom_toBottomOf="@id/russianLanguage"
@@ -240,11 +235,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_ku"
-            style="@style/baseFontIcon"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/check_icon"
-            android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.isKurdi}"
             app:layout_constraintBottom_toBottomOf="@id/kurdiLanguage"

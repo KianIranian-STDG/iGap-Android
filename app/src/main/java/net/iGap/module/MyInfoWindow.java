@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
@@ -77,12 +79,11 @@ public class MyInfoWindow extends InfoWindow {
         /**
          * don't show dialog for mine user
          */
-        if (userId == G.userId) {
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             return;
         }
-        String displayName = "";
 
-        try (Realm realm2 = Realm.getDefaultInstance()) {
+        String displayName = DbManager.getInstance().doRealmTask(realm2 -> {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm2, userId);
             if (realmRegisteredInfo == null) {
                 RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
@@ -96,9 +97,12 @@ public class MyInfoWindow extends InfoWindow {
                         });
                     }
                 });
-                return;
+                return null;
             }
-            displayName = realmRegisteredInfo.getDisplayName();
+            return realmRegisteredInfo.getDisplayName();
+        });
+        if (displayName == null) {
+            return;
         }
 
 
@@ -256,7 +260,7 @@ public class MyInfoWindow extends InfoWindow {
     }
 
     /*public void onOpen(Object arg0) {
-    try (Realm realm = Realm.getDefaultInstance()) {
+    DbManager.getInstance().doRealmTask(realm-> {
      RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
         if (realmRegisteredInfo == null) {
             return;

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -79,10 +80,10 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             rootView.setOnClickListener(v -> {
                 try {
                     Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + contact.getPhone()));
-                    smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + "+" + ActivityMain.userPhoneNumber);
+                    smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + "+" + AccountManager.getInstance().getCurrentUser().getPhoneNumber());
                     smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     G.context.startActivity(smsIntent);
-                }catch (ActivityNotFoundException e){
+                } catch (ActivityNotFoundException e) {
                     Toast.makeText(context, context.getString(R.string.device_dosenot_support), Toast.LENGTH_SHORT).show();
                 }
             });

@@ -9,6 +9,8 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentShearedMedia;
@@ -101,7 +103,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Boolean> editContactListener = new MutableLiveData<>();
 
     public List<String> items;
-    private Realm realm;
     private RealmRoom mRoom;
     private RealmRegisteredInfo registeredInfo;
     private RealmList<RealmAvatar> avatarList;
@@ -126,7 +127,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     private boolean isCloud;
 
     public FragmentContactsProfileViewModel() {
-        realm = Realm.getDefaultInstance();
+
     }
 
     public void init(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
@@ -165,7 +166,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             }
         }*/
         /*items.add(G.fragmentActivity.getString(R.string.clear_history));*/
-        if (G.userId != userId && !disableDeleteContact) {
+        if (AccountManager.getInstance().getCurrentUser().getId() != userId && !disableDeleteContact) {
             items.add(G.fragmentActivity.getString(R.string.delete_contact));
             items.add(G.fragmentActivity.getString(R.string.edit_contact));
         }
@@ -195,14 +196,17 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
     public void onClickGoToChat() {
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
-            RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            });
+
             if (realmRoom != null) {
                 goToChatPage.setValue(realmRoom.getId());
             } else {
                 new RequestChatGetRoom().chatGetRoom(userId, new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
                     public void onReady(ProtoGlobal.Room room) {
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -210,7 +214,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                                     realmRoom1.setDeleted(true);
                                 }
                             });
-                        }
+                        });
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -292,7 +296,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
     private void mainStart() {
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || roomId == 0) {
-            RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            });
             if (realmRoom != null) {
                 shearedId = realmRoom.getId();
             }
@@ -306,12 +312,14 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             isShowReportView.set(false);
         }
 
-        if (userId == G.userId) {
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             cloudVisibility.postValue(true);
         } else
             cloudVisibility.postValue(false);
 
-        registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
+        registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        });
         if (registeredInfo != null) {
             registeredInfo.addChangeListener((RealmObjectChangeListener<RealmRegisteredInfo>) (realmModel, changeSet) -> {
                 if (changeSet != null) {
@@ -323,7 +331,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 }
             });
             isBot = registeredInfo.isBot();
-            if (isBot || userId == G.userId) {
+            if (isBot || userId == AccountManager.getInstance().getCurrentUser().getId()) {
                 callVisibility.setValue(View.GONE);
                 menuVisibility.setValue(View.GONE);
                 videoCallVisibility.setValue(View.GONE);
@@ -336,19 +344,22 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             isBlockUser = registeredInfo.isBlockUser();
             userBlockState.set(isBlockUser ? R.string.un_block_user : R.string.block);
             registeredInfo.addChangeListener(element -> isBlockUser = registeredInfo.isBlockUser());
-
-            if (registeredInfo.getLastAvatar(getRealm()) != null) {
-                String mainFilePath = registeredInfo.getLastAvatar(getRealm()).getFile().getLocalFilePath();
-                if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
-                    avatarPath = mainFilePath;
-                } else {
-                    avatarPath = registeredInfo.getLastAvatar(getRealm()).getFile().getLocalThumbnailPath();
+            DbManager.getInstance().doRealmTask(realm -> {
+                if (registeredInfo.getLastAvatar(realm) != null) {
+                    String mainFilePath = registeredInfo.getLastAvatar(realm).getFile().getLocalFilePath();
+                    if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
+                        avatarPath = mainFilePath;
+                    } else {
+                        avatarPath = registeredInfo.getLastAvatar(realm).getFile().getLocalThumbnailPath();
+                    }
+                    avatarList = registeredInfo.getAvatars(realm);
                 }
-                avatarList = registeredInfo.getAvatars(getRealm());
-            }
+            });
         }
 
-        RealmContacts realmUser = getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+        RealmContacts realmUser = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+        });
 
         if (registeredInfo != null) {
             if (registeredInfo.getDisplayName() != null && !registeredInfo.getDisplayName().equals("")) {
@@ -406,8 +417,10 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
 
         //todo: fixed it two times check it and first and her
-        if (userId != 134 && G.userId != userId) {
-            RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
+        if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
+            RealmCallConfig callConfig = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmCallConfig.class).findFirst();
+            });
             if (callConfig != null) {
 
                 if (isBot) {
@@ -432,7 +445,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             callVisibility.setValue(View.GONE);
             videoCallVisibility.setValue(View.GONE);
         }
-        RealmContacts realmContacts = getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
+        RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
+        });
 
         /**
          * if this user isn't in my contacts don't show phone number
@@ -450,7 +465,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
 
         setUserStatus(userStatus, lastSeenValue);
-        setAvatar.setValue(userId != G.userId);
+        setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
         //todo: change it
         FragmentShearedMedia.getCountOfSharedMedia(shearedId);
 
@@ -473,9 +488,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
 
     public void onImageClick() {
-        if (userId == G.userId) return; //dont work when profile was cloud
-        if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
-            goToShowAvatarPage.setValue(userId == G.userId);
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) return; //dont work when profile was cloud
+        if (DbManager.getInstance().doRealmTask(realm -> { return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst(); }) != null) {
+            goToShowAvatarPage.setValue(userId == AccountManager.getInstance().getCurrentUser().getId());
         }
     }
 
@@ -492,7 +507,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                     if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
                         contactName.setValue(user.getDisplayName());
                     }
-                    setAvatar.setValue(userId != G.userId);
+                    setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
                 }
             });
         }
@@ -513,7 +528,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                setAvatar.setValue(userId != G.userId);
+                setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
                 contactName.setValue(firstName + " " + lastName);
             }
         });
@@ -547,8 +562,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         if (registeredInfo != null) {
             registeredInfo.removeAllChangeListeners();
         }
-
-        realm.close();
     }
 
     //===============================================================================
@@ -566,7 +579,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String status = LastSeenTimeUtil.computeTime(G.context ,userId, time, false);
+                String status = LastSeenTimeUtil.computeTime(G.context, userId, time, false);
 
                 lastSeen.setValue(status);
             } else {
@@ -575,15 +588,11 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
     }
 
-    private Realm getRealm() {
-        if (realm == null || realm.isClosed()) {
-            realm = Realm.getDefaultInstance();
-        }
-        return realm;
-    }
-
     public void onResume() {
-        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
+        mRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
+        });
+
         if (mRoom != null) {
             isMuteNotification.set(mRoom.getMute());
             if (changeListener == null) {

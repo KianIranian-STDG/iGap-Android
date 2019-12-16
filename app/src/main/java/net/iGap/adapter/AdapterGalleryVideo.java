@@ -1,5 +1,6 @@
 package net.iGap.adapter;
 
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.R;
 import net.iGap.helper.HelperThumbnail;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryVideoModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +30,9 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
     private List<GalleryVideoModel> videosItem = new ArrayList<>();
     private List<GalleryVideoModel> mSelectedVideos = new ArrayList<>();
     private GalleryItemListener listener;
-    private HelperThumbnail mHelperVideo;
 
     public AdapterGalleryVideo(boolean isVideoMode) {
         this.isVideoMode = isVideoMode;
-        this.mHelperVideo = new HelperThumbnail(isVideoMode ? MediaStore.Video.Thumbnails.MICRO_KIND : MediaStore.Video.Thumbnails.MINI_KIND);
     }
 
     public void setVideosItem(List<GalleryVideoModel> videosItem) {
@@ -113,20 +115,15 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         });
 
         //load image
-        String key = videosItem.get(position).getPath() + videosItem.get(position).getId();
-        holder.image.setImageBitmap(null);
-        holder.image.setTag(key);
-        mHelperVideo.loadThumbnail(true, key, videosItem.get(position).getPath(), holder.image);
+        Glide.with(holder.image.getContext())
+                .load(Uri.fromFile(new File(videosItem.get(position).getPath())))
+                .into(holder.image);
 
     }
 
     @Override
     public int getItemCount() {
         return videosItem.size();
-    }
-
-    public void clearThumbnailCache() {
-        if (mHelperVideo != null) mHelperVideo.clearCache();
     }
 
     class ViewHolderGallery extends RecyclerView.ViewHolder {

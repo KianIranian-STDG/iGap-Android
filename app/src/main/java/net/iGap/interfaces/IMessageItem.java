@@ -26,7 +26,7 @@ public interface IMessageItem {
 
     void onSenderAvatarClick(View view, StructMessageInfo message, int pos);
 
-    void onUploadOrCompressCancel(View view, StructMessageInfo message, int pos, SendingStep sendingStep);
+    void onUploadOrCompressCancel(View view, StructMessageInfo message, int pos);
 
     void onFailedMessageClick(View view, StructMessageInfo message, int pos);
 

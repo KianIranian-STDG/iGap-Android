@@ -3,7 +3,6 @@ package net.iGap.helper;
 import android.content.res.Configuration;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -126,10 +125,12 @@ public class HelperFragment {
                     if (SystemClock.elapsedRealtime() - G.mLastClickTime > 1000) {
                         G.mLastClickTime = SystemClock.elapsedRealtime();
                     } else {
+                        Log.wtf(this.getClass().getName(), "return1");
                         return;
                     }
                 } else if (fragmentManager.getBackStackEntryCount() > 1) {
                     if ((fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))) {
+                        Log.wtf(this.getClass().getName(), "return2");
                         return;
                     }
                 }
@@ -160,6 +161,7 @@ public class HelperFragment {
         if (resourceContainer == 0) {
             resourceContainer = getResContainer(tag);
         }
+
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(tag);
         }
@@ -262,7 +264,6 @@ public class HelperFragment {
 
     public void popBackStack(int count) {
         for (int i = 0; i < count; i++) {
-            Log.wtf(this.getClass().getName(), "fragment: " + fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1 - i).getName());
             fragmentManager.popBackStackImmediate();
         }
     }

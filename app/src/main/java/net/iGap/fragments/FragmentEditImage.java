@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -430,7 +429,7 @@ public class FragmentEditImage extends BaseFragment {
         });
     }
 
-    public void setIsReOpenChatAttachment(boolean enable){
+    public void setIsReOpenChatAttachment(boolean enable) {
         this.isReOpenChatAttachment = enable;
     }
 
@@ -466,7 +465,7 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     private void setUpEmojiPopup(View view) {
-        setEmojiColor(view,new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()),new Theme().getTitleTextColor(getContext()));
+        setEmojiColor(view, new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
 
     }
 

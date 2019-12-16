@@ -21,12 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentSyncRegisteredContactsBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.ContactManager;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
@@ -58,7 +61,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Case;
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
@@ -68,7 +70,6 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     RealmResults<RealmContacts> results;
     private Button skipBtn;
     private RecyclerView realmRecyclerView;
-    private Realm realm;
     private ProgressBar prgWaiting;
     private boolean isCallAction = false;
     boolean isMultiSelect = false;
@@ -86,17 +87,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         return new FragmentSyncRegisteredContacts();
     }
 
-    private Realm getRealm() {
-        if (realm == null || realm.isClosed()) {
-            realm = Realm.getDefaultInstance();
-        }
-        return realm;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realm = Realm.getDefaultInstance();
 
         fragmentSyncRegisteredContactsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sync_registered_contacts, container, false);
         return fragmentSyncRegisteredContactsBinding.getRoot();
@@ -143,7 +136,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         realmRecyclerView.setLayoutManager(layoutManager);
 
         // get all the contacts from realm
-        results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        });
 
         results.addChangeListener(new RealmChangeListener<RealmResults<RealmContacts>>() {
             @Override
@@ -283,8 +278,6 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         if (results != null)
             results.removeAllChangeListeners();
-
-        realm.close();
     }
 
     @Override
@@ -302,7 +295,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     public void onContactsGetList() {
 
         if (results == null || results.size() == 0) {
-            results = getRealm().where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            });
             contactListAdapter2 = new ContactListAdapter2(results);
             realmRecyclerView.setAdapter(contactListAdapter2);
             if (results.size() == 0) {
@@ -319,6 +314,18 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
             }
         }
         hideProgress();
+    }
+
+    @Override
+    public void onContactsGetListTimeOut() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (getContext() != null) {
+                    HelperError.showSnackMessage(getString(R.string.connection_error), false);
+                }
+            }
+        });
     }
 
     private class AddAsync extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
@@ -343,7 +350,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                     s = "98" + s;
                 contacts.get(i).setPhone(s);
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
 
@@ -363,7 +370,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 }
 
                 return slc;
-            }
+            });
         }
 
         @Override
@@ -390,9 +397,13 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     @Override
     public void onSearchTextChangeListener(View view, String text) {
         if (text.length() > 0) {
-            results = getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            });
         } else {
-            results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            });
         }
 //        contactListAdapter.usersList = results;
 //        contactListAdapter.notify();
@@ -454,7 +465,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
 
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext() ,contact.getId(), contact.getLast_seen(), false));
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));
 
                 setAvatar(viewHolder, contact.getId());
 
@@ -517,7 +528,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                     if (!isMultiSelect) {
                         if (isCallAction) {
                             long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
 
 
                                 new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {

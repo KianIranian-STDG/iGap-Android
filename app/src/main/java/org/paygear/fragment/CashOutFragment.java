@@ -95,20 +95,19 @@ public class CashOutFragment extends Fragment {
             mPager.setCurrentItem(1);
         }
 
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+        /*for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             if (tab != null) {
                 TextView textView = new AppCompatTextView(getContext());
                 textView.setId(android.R.id.text1);
                 textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextColor(Color.WHITE);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_MEDIUM));
 
                 tab.setCustomView(textView);
             }
-        }
+        }*/
 
         return view;
     }

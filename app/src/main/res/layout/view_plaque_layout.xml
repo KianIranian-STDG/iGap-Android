@@ -129,7 +129,7 @@
             android:gravity="center|bottom"
             android:text="ایران"
             android:textColor="@color/black"
-            android:textSize="@dimen/standardTextSize"/>
+            android:textSize="@dimen/standardTextSize" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/pv_et_pCity"

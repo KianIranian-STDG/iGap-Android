@@ -10,7 +10,6 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
@@ -61,7 +58,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView text;
 
@@ -75,7 +72,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             linearLayout_33.setPadding(0, ViewMaker.i_Dp(R.dimen.dp12), 0, ViewMaker.i_Dp(R.dimen.dp12));
 
             View view_12 = new View(view.getContext());
-            view_12.setBackgroundColor(new Theme().getDividerColor(view.getContext()));
+            view_12.setBackgroundColor(theme.getDividerColor(view.getContext()));
             LinearLayout.LayoutParams layout_522 = new LinearLayout.LayoutParams(0, 1, 1);
             view_12.setLayoutParams(layout_522);
             linearLayout_33.addView(view_12);
@@ -84,8 +81,8 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             text.setId(R.id.cslt_txt_time_date);
             text.setSingleLine(true);
             text.setPadding(ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4));
-            text.setTextColor(new Theme().getTitleTextColor(text.getContext()));
-            text.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.background_log_time),view.getContext(),R.attr.iGapDividerLine));
+            text.setTextColor(theme.getTitleTextColor(text.getContext()));
+            text.setBackground(theme.tintDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.background_log_time), view.getContext(), R.attr.iGapDividerLine));
 
             text.setText("Today");
             text.setAllCaps(false);
@@ -97,7 +94,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             linearLayout_33.addView(text);
 
             View vew_147 = new View(view.getContext());
-            vew_147.setBackgroundColor(new Theme().getDividerColor(view.getContext()));
+            vew_147.setBackgroundColor(theme.getDividerColor(view.getContext()));
             LinearLayout.LayoutParams layout_270 = new LinearLayout.LayoutParams(0, 1, 1);
             vew_147.setLayoutParams(layout_270);
             linearLayout_33.addView(vew_147);

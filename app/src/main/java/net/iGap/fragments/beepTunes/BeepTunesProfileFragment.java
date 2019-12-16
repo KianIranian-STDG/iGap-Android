@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -49,7 +50,7 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
         ViewGroup syncSong = rootView.findViewById(R.id.cl_beepTunesProfile_syncSong);
         ViewGroup favoriteSong = rootView.findViewById(R.id.cl_beepTunesProfile_favoriteSong);
 
-        userName.setText(G.displayName);
+        userName.setText(AccountManager.getInstance().getCurrentUser().getName());
 
         syncSong.setOnClickListener(v -> {
             callBack.onClick(SYNC_FRAGMENT);
@@ -70,7 +71,7 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
     public void onStart() {
         super.onStart();
         avatarHandler.registerChangeFromOtherAvatarHandler();
-        avatarHandler.getAvatar(new ParamWithAvatarType(profileImage, G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(profileImage, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     @Override

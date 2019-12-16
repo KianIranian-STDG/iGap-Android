@@ -24,13 +24,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperFragment;
@@ -45,7 +46,6 @@ import net.iGap.interfaces.OnGroupGetMemberList;
 import net.iGap.interfaces.OnGroupKickMember;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
@@ -63,9 +63,7 @@ import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmMemberFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -87,15 +85,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static net.iGap.G.context;
-import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupKickMember {
@@ -139,7 +134,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private EndlessRecyclerViewScrollListener scrollListener;
     private ProtoGlobal.Room.Type roomType;
     private boolean isOne = true;
-    private Realm mRealm;
 
     private HelperToolbar mHelperToolbar;
     private TextView mBtnAdd;
@@ -179,15 +173,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRealm = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_show_member, container, false));
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mRealm.close();
-    }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
@@ -251,8 +239,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-
-                            try (Realm realm = Realm.getDefaultInstance()) {
+                            DbManager.getInstance().doRealmTask(realm -> {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
@@ -291,14 +278,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                         fillItem();
 
                                     }
-                                }, new Realm.Transaction.OnError() {
-                                    @Override
-                                    public void onError(Throwable error) {
-                                    }
                                 });
-                            }
-                        }
-                    });
+                            });
+                    }});
                 } else {
                     mCurrentUpdateCount++;
                 }
@@ -397,12 +379,16 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
-                RealmMember.deleteAllMembers(mRoomID, selectedRole);
-                if (roomType == GROUP) {
-                    new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
-                } else {
-                    new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
-                }
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(realm1 -> RealmMember.deleteAllMembers(realm1, mRoomID, selectedRole), () -> {
+                        if (roomType == GROUP) {
+                            new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
+                        } else {
+                            new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
+                        }
+                    });
+                });
+
             }
         });
     }
@@ -446,7 +432,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
 
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+        });
 
         //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
@@ -527,7 +515,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             @Override
             public void afterTextChanged(final Editable s) {
-                RealmResults<RealmMember> searchMember = RealmMember.filterMember(mRealm, mRoomID, s.toString(), getUnselectRow(), selectedRole);
+                RealmResults<RealmMember> searchMember = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmMember.filterMember(realm, mRoomID, s.toString(), getUnselectRow(), selectedRole);
+                });
                 mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -575,7 +565,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private void goToAddMember() {
 
         List<StructContactInfo> userList = Contacts.retrieve(null);
-        RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), mRoomID);
+        RealmList<RealmMember> memberList = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmMember.getMembers(realm, mRoomID);
+        });
 
         for (int i = 0; i < memberList.size(); i++) {
             for (int j = 0; j < userList.size(); j++) {
@@ -651,7 +643,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             role = RealmChannelRoom.detectMineRole(mRoomID).toString();
         }
 
-        RealmResults<RealmMember> realmMembers = RealmMember.filterMember(mRealm, mRoomID, "", getUnselectRow(), selectedRole);
+        RealmResults<RealmMember> realmMembers = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmMember.filterMember(realm, mRoomID, "", getUnselectRow(), selectedRole);
+        });
 
         if (G.fragmentActivity != null) {
             mAdapter = new MemberAdapter(realmMembers, roomType, mMainRole, userID);
@@ -664,12 +658,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             //}
         }
 
-        realmMemberMe = RealmMember.filterMember(mRealm , mRoomID , G.userId);
+        realmMemberMe = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmMember.filterMember(realm, mRoomID, AccountManager.getInstance().getCurrentUser().getId());
+        });
+
         realmMemberMe.addChangeListener((realmMembers1, changeSet) -> {
             try {
                 mMainRole = realmMembers1.get(0).getRole();
                 mAdapter.setMainRole(mMainRole);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
@@ -722,7 +719,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             } else {
                 showMemberMode = ShowMemberMode.SELECT_FOR_ADD_MODERATOR;
             }
-            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, G.userId, SelectedRole, true, isGroup, false, showMemberMode);
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, AccountManager.getInstance().getCurrentUser().getId(), SelectedRole, true, isGroup, false, showMemberMode);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
         }
     }
@@ -805,8 +802,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                     switch (showMemberMode) {
                                         case NONE:
                                             if (mContact.peerId == userID) {
-                                                // bagi:// dont uncomment below line it has some bug
-                                                //new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
                                             } else {
                                                 long roomId = RealmRoom.getRoomIdByPeerId(mContact.peerId);
                                                 if (roomId != 0) {
@@ -925,7 +920,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             if (mContact.status != null) {
                 if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(holder.subtitle.getContext() ,mContact.peerId, mContact.lastSeen, false));
+                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(holder.subtitle.getContext(), mContact.peerId, mContact.lastSeen, false));
                 } else {
                     holder.subtitle.setText(mContact.status);
                 }
@@ -964,7 +959,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
         }
 
-        public void setMainRole(String role){
+        public void setMainRole(String role) {
             if (role != null) this.mainRole = role;
             notifyDataSetChanged();
         }
@@ -1006,7 +1001,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
 
         StructContactInfo convertRealmToStruct(RealmMember realmMember) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 String role = realmMember.getRole();
                 long id = realmMember.getPeerId();
                 RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, id);
@@ -1021,8 +1016,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     s.userID = userId;
                     return s;
                 }
-            }
-            return null;
+
+                return null;
+            });
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -1054,12 +1050,4 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         if (realmMemberMe != null) realmMemberMe.removeAllChangeListeners();
         super.onDestroy();
     }
-
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-        return mRealm;
-    }
-
 }

@@ -13,6 +13,7 @@ package net.iGap.realm;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperString;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
@@ -58,26 +60,26 @@ public class RealmAttachment extends RealmObject {
     private String localFilePath;
 
     public static void updateToken(long fakeId, String token) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, fakeId).findFirst();
             if (attachment != null) {
                 attachment.setToken(token);
             }
-        }
+        });
     }
 
     public static void updateFileSize(final long messageId, final long fileSize) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransaction(realm1 -> {
+                    RealmAttachment attachment = realm1.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
                     if (attachment != null) {
                         attachment.setSize(fileSize);
                     }
-                }
+                });
             });
-        }
+        }).start();
+
     }
 
     public static RealmAttachment putOrUpdate(Realm realm, long messageId, RealmAttachment realmAttachment, ProtoGlobal.File attachment) {
@@ -172,25 +174,25 @@ public class RealmAttachment extends RealmObject {
             String _Dir = "";
 
             if (_filePath != null && _filePath.length() > 0) {
-                if (_filePath.contains(G.DIR_APP)) {
-                    String _defaultFilePAth = "";
-                    switch (attachmentFor) {
-                        case MESSAGE_ATTACHMENT:
-                            _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
-                            _Dir = AndroidUtils.suitableAppFilePath(messageType);
-                            break;
-                        case AVATAR:
-                            _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
+                String _defaultFilePAth = "";
+                switch (attachmentFor) {
+                    case MESSAGE_ATTACHMENT:
+                        _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
+                        _Dir = AndroidUtils.suitableAppFilePath(messageType);
+                        break;
+                    case AVATAR:
+                        _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
 
-                            if (realmAttachment.getLocalThumbnailPath() == null) {
-                                realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
-                            }
-                            _Dir = G.DIR_IMAGE_USER;
+                        if (realmAttachment.getLocalThumbnailPath() == null) {
+                            realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
+                        }
+                        _Dir = G.DIR_IMAGE_USER;
 
-                            break;
-                    }
+                        break;
+                }
 
-                    if (!_filePath.equals(_defaultFilePAth)) {
+                if (!_filePath.equals(_defaultFilePAth)) {
+                    try {
                         File _File1 = new File(_filePath);
                         if (_File1.exists()) {
 
@@ -198,14 +200,13 @@ public class RealmAttachment extends RealmObject {
                                 _File1.renameTo(new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
                             } else {
-                                try {
                                     AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
                                     realmAttachment.setLocalFilePath(_defaultFilePAth);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+
                             }
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -215,7 +216,7 @@ public class RealmAttachment extends RealmObject {
     }
 
     public static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(@NonNull Realm realm) {
@@ -225,12 +226,11 @@ public class RealmAttachment extends RealmObject {
                     }
                 }
             });
-
-        }
+        });
     }
 
     public static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -241,7 +241,7 @@ public class RealmAttachment extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public RealmThumbnail getLargeThumbnail() {
@@ -249,6 +249,9 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setLargeThumbnail(RealmThumbnail largeThumbnail) {
+        if (largeThumbnail != null && this.largeThumbnail != null && this.largeThumbnail.getCacheId() != null && this.largeThumbnail.getCacheId().equals(largeThumbnail.getCacheId()))
+            return;
+
         this.largeThumbnail = largeThumbnail;
     }
 
@@ -257,6 +260,8 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setSmallThumbnail(RealmThumbnail smallThumbnail) {
+        if (smallThumbnail != null && this.smallThumbnail != null && this.smallThumbnail.getCacheId() != null && this.smallThumbnail.getCacheId().equals(smallThumbnail.getCacheId()))
+            return;
         this.smallThumbnail = smallThumbnail;
     }
 
@@ -266,6 +271,8 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setLocalThumbnailPath(@Nullable String localThumbnailPath) {
+        if (this.localThumbnailPath != null && this.localThumbnailPath.equals(localThumbnailPath))
+            return;
         this.localThumbnailPath = localThumbnailPath;
     }
 
@@ -283,6 +290,8 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setLocalFilePath(@Nullable String localFilePath) {
+        if (this.localFilePath != null && this.localFilePath.equals(localFilePath))
+            return;
         this.localFilePath = localFilePath;
     }
 
@@ -299,6 +308,9 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setToken(String token) {
+        if (this.token != null && this.token.equals(token))
+            return;
+
         this.token = token;
     }
 
@@ -307,6 +319,8 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setUrl(String url) {
+        if (this.url != null && this.url.equals(url))
+            return;
         this.url = url;
     }
 
@@ -315,6 +329,8 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setName(String name) {
+        if (this.name != null && this.name.equals(name))
+            return;
 
         try {
             this.name = name;
@@ -328,7 +344,9 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setSize(long size) {
-        this.size = size;
+        if (this.size != size) {
+            this.size = size;
+        }
     }
 
     public int getWidth() {
@@ -336,7 +354,9 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setWidth(int width) {
-        this.width = width;
+        if (this.width != width) {
+            this.width = width;
+        }
     }
 
     public int getHeight() {
@@ -344,7 +364,9 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setHeight(int height) {
-        this.height = height;
+        if (this.height != height) {
+            this.height = height;
+        }
     }
 
     public double getDuration() {
@@ -352,7 +374,9 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setDuration(double duration) {
-        this.duration = duration;
+        if (this.duration != duration) {
+            this.duration = duration;
+        }
     }
 
     public String getCacheId() {
@@ -360,6 +384,9 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setCacheId(String cacheId) {
+        if (this.cacheId != null && this.cacheId.equals(cacheId))
+            return;
+
         this.cacheId = cacheId;
     }
 

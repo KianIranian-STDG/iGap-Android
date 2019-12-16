@@ -9,7 +9,6 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;

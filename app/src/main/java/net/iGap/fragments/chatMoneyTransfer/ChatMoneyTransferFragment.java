@@ -30,7 +30,6 @@ import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiEditTextE;
 

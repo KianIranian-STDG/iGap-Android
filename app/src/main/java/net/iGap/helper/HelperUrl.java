@@ -17,6 +17,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ import androidx.fragment.app.FragmentManager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -243,7 +246,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(context);
+                ds.linkColor = Theme.getInstance().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -269,11 +272,11 @@ public class HelperUrl {
 
     public static void openEmail(Context context ,String email) {
 
-        try{
-            Intent intent = new Intent(Intent.ACTION_SENDTO , Uri.fromParts("mailto" , email , null));
-            context.startActivity(Intent.createChooser(intent , context.getString(R.string.email)));
-        }catch (ActivityNotFoundException e){
-            HelperError.showSnackMessage(context.getString(R.string.device_dosenot_support) , false);
+        try {
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.email)));
+        } catch (ActivityNotFoundException e) {
+            HelperError.showSnackMessage(context.getString(R.string.device_dosenot_support), false);
         }
 
     }
@@ -303,19 +306,24 @@ public class HelperUrl {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (intent.resolveActivity(G.fragmentActivity.getPackageManager()) != null) {
+        if (intent.resolveActivity(G.fragmentActivity.getPackageManager()) != null && isAvailable(G.fragmentActivity, intent)) {
             G.fragmentActivity.startActivity(intent);
         } else {
-//            Toast.makeText(G.fragmentActivity, "", Toast.LENGTH_SHORT).show();
             HelperError.showSnackMessage(G.context.getResources().getString(R.string.error), false);
         }
+    }
+
+    private static boolean isAvailable(Context ctx, Intent intent) {
+        final PackageManager mgr = ctx.getPackageManager();
+        List<ResolveInfo> list = mgr.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
     public static void openBrowser(String url) {
         //todo: fixed it and do not user G.currentActivity
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = new Theme().getPrimaryColor(G.currentActivity);
+        int mColorPrimary = Theme.getInstance().getPrimaryColor(G.currentActivity);
         final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
@@ -377,7 +385,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -400,7 +408,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(context);
+                ds.linkColor = Theme.getInstance().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -439,7 +447,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -459,7 +467,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -502,7 +510,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -570,7 +578,7 @@ public class HelperUrl {
             @Override
             public void updateDrawState(TextPaint ds) {
                 //ToDo: fixed it and pass color to this function
-                ds.linkColor = new Theme().getLinkColor(context);
+                ds.linkColor = Theme.getInstance().getLinkColor(context);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -643,7 +651,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = new Theme().getLinkColor(activity);
+                ds.linkColor = Theme.getInstance().getLinkColor(activity);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -828,7 +836,7 @@ public class HelperUrl {
         if (room == null) {
             return;
         }
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
             if (realmRoom != null) {
                 if (room.getId() != FragmentChat.lastChatRoomId) {
@@ -844,7 +852,7 @@ public class HelperUrl {
                     realmRoom.setDeleted(true);
                 }
             });
-        }
+        });
 
         String title = activity.getString(R.string.do_you_want_to_join_to_this);
         String memberNumber = "";
@@ -940,7 +948,7 @@ public class HelperUrl {
 
     private static boolean isInCurrentChat(String userName) {
         if (FragmentChat.lastChatRoomId > 0) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, FragmentChat.lastChatRoomId).findFirst();
                 String currentChatUserName = "";
                 String currentChatInviteLink = "";
@@ -972,7 +980,9 @@ public class HelperUrl {
                         }
                     }
                 }
-            }
+
+                return false;
+            });
         }
         return false;
     }
@@ -1023,69 +1033,75 @@ public class HelperUrl {
      * if message isn't exist in Realm resolve from server and then open chat
      */
     private static void resolveMessageAndOpenChat(FragmentActivity activity, final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-            if (rm != null) {
-                openChat(activity, username, type, user, room, chatEntry, messageId);
-            } else {
-                new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
-                    @Override
-                    public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
-                        if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
+        DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
+            @Override
+            public void doTask(Realm realm) {
+                RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                if (rm != null) {
+                    openChat(activity, username, type, user, room, chatEntry, messageId);
+                } else {
+                    new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+                        @Override
+                        public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
+                            if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        closeDialogWaiting();
+                                        HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
+                                        openChat(activity, username, type, user, room, chatEntry, 0);
+                                    }
+                                });
+                            } else {
+                                DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
+                                    @Override
+                                    public void doTask(Realm realm) {
+                                        realm.executeTransaction(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                                    if (roomMessage.getAuthor().hasUser()) {
+                                                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                                    }
+                                                    RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+
+                                RealmRoomMessage.setGap(messageList.get(0).getMessageId());
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        G.refreshRealmUi();
+                                        openChat(activity, username, type, user, room, chatEntry, messageList.get(0).getMessageId());
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onErrorHistory(int major, int minor) {
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     closeDialogWaiting();
-                                    HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
-                                    openChat(activity, username, type, user, room, chatEntry, 0);
-                                }
-                            });
-                        } else {
-                            try (Realm realm = Realm.getDefaultInstance()) {
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-                                            if (roomMessage.getAuthor().hasUser()) {
-                                                RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                                            }
-                                            RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
-                                        }
+                                    if (major == 626) {
+                                        HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
+                                    } else if (minor == 624) {
+                                        HelperError.showSnackMessage(activity.getString(R.string.ivnalid_data_provided), false);
+                                    } else {
+                                        HelperError.showSnackMessage(activity.getString(R.string.there_is_no_connection_to_server), false);
                                     }
-                                });
-                            }
-
-                            RealmRoomMessage.setGap(messageList.get(0).getMessageId());
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    G.refreshRealmUi();
-                                    openChat(activity, username, type, user, room, chatEntry, messageList.get(0).getMessageId());
                                 }
                             });
                         }
-                    }
+                    });
 
-                    @Override
-                    public void onErrorHistory(int major, int minor) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                closeDialogWaiting();
-                                if (major == 626) {
-                                    HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
-                                } else if (minor == 624) {
-                                    HelperError.showSnackMessage(activity.getString(R.string.ivnalid_data_provided), false);
-                                } else {
-                                    HelperError.showSnackMessage(activity.getString(R.string.there_is_no_connection_to_server), false);
-                                }
-                            }
-                        });
-                    }
-                });
-
+                }
             }
-        }
+        });
     }
 
     public static void closeDialogWaiting() {
@@ -1118,51 +1134,57 @@ public class HelperUrl {
         switch (chatEntry) {
             case chat:
                 if (roomId != FragmentChat.lastChatRoomId) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                    DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
+                        @Override
+                        public void doTask(Realm realm) {
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
-                        if (realmRoom != null) {
-                            new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(activity);
-                        } else {
-                            G.onChatGetRoom = new OnChatGetRoom() {
-                                @Override
-                                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                    try (Realm realm1 = Realm.getDefaultInstance()) {
-                                        realm1.executeTransaction(new Realm.Transaction() {
+                            if (realmRoom != null) {
+                                new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(activity);
+                            } else {
+                                G.onChatGetRoom = new OnChatGetRoom() {
+                                    @Override
+                                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                        DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
                                             @Override
-                                            public void execute(Realm realm) {
-                                                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
-                                                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                                    realmRoom1.setDeleted(true);
-                                                } else {
-                                                    RealmRoom.putOrUpdate(room, realm);
-                                                }
+                                            public void doTask(Realm realm1) {
+                                                realm1.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                                            realmRoom1.setDeleted(true);
+                                                        } else {
+                                                            RealmRoom.putOrUpdate(room, realm);
+                                                        }
+                                                    }
+                                                });
                                             }
                                         });
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                                G.onChatGetRoom = null;
+                                            }
+                                        }, 500);
                                     }
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
-                                            G.onChatGetRoom = null;
-                                        }
-                                    }, 500);
-                                }
 
-                                @Override
-                                public void onChatGetRoomTimeOut() {
+                                    @Override
+                                    public void onChatGetRoomTimeOut() {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onChatGetRoomError(int majorCode, int minorCode) {
+                                    @Override
+                                    public void onChatGetRoomError(int majorCode, int minorCode) {
 
-                                }
-                            };
+                                    }
+                                };
 
-                            new RequestChatGetRoom().chatGetRoom(peerId);
+                                new RequestChatGetRoom().chatGetRoom(peerId);
+                            }
                         }
-                    }
+                    });
                 }
 
                 break;
@@ -1186,89 +1208,92 @@ public class HelperUrl {
     public static void goToActivityFromFCM(FragmentActivity activity, final long roomId, final long peerId) {
 
         if (roomId != FragmentChat.lastChatRoomId) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                        if (realmRoom != null) {
-                            // room with given roomID exists.
-                            new GoToChatActivity(realmRoom.getId()).startActivity(activity);
-                        }
-                        else if (peerId > 0){
-                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
-                            if (realmRoom != null) {
-                                new GoToChatActivity(realmRoom.getId()).startActivity(activity);
-                            }
-                            else {
-                                G.onChatGetRoom = new OnChatGetRoom() {
+                if (realmRoom != null) {
+                    // room with given roomID exists.
+                    new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                }
+                else if (peerId > 0){
+                    realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                    if (realmRoom != null) {
+                        new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                    }
+                    else {
+                        G.onChatGetRoom = new OnChatGetRoom() {
+                            @Override
+                            public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
                                     @Override
-                                    public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                        try (Realm realm1 = Realm.getDefaultInstance()) {
-                                            realm1.executeTransaction(new Realm.Transaction() {
-                                                @Override
-                                                public void execute(Realm realm) {
-                                                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
-                                                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                                        realmRoom1.setDeleted(true);
-                                                    } else {
-                                                        RealmRoom.putOrUpdate(room, realm);
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        G.handler.postDelayed(new Runnable() {
+                                    public void doTask(Realm realm1) {
+                                        realm1.executeTransaction(new Realm.Transaction() {
                                             @Override
-                                            public void run() {
-                                                new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
-                                                G.onChatGetRoom = null;
+                                            public void execute(Realm realm) {
+                                                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                                    realmRoom1.setDeleted(true);
+                                                } else {
+                                                    RealmRoom.putOrUpdate(room, realm);
+                                                }
                                             }
-                                        }, 500);
+                                        });
                                     }
-
+                                });
+                                G.handler.postDelayed(new Runnable() {
                                     @Override
-                                    public void onChatGetRoomTimeOut() {
-
-                                    }
-
-                                    @Override
-                                    public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                                    }
-                                };
-                                new RequestChatGetRoom().chatGetRoom(peerId);
-                            }
-                        }
-                        else {
-                            G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-                                @Override
-                                public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
-                                    G.onClientGetRoomResponse = null;
-                                    G.handler.postDelayed(() -> {
+                                    public void run() {
                                         new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
                                         G.onChatGetRoom = null;
-                                    }, 500);
-                                }
+                                    }
+                                }, 500);
+                            }
 
-                                @Override
-                                public void onError(int majorCode, int minorCode) {
+                            @Override
+                            public void onChatGetRoomTimeOut() {
 
-                                }
+                            }
 
-                                @Override
-                                public void onTimeOut() {
+                            @Override
+                            public void onChatGetRoomError(int majorCode, int minorCode) {
 
-                                }
-                            };
-                            new RequestClientGetRoom().clientGetRoom(roomId, null);
-                            Toast.makeText(activity, "Please Wait...", Toast.LENGTH_SHORT).show();
-                        }
+                            }
+                        };
+                        new RequestChatGetRoom().chatGetRoom(peerId);
                     }
                 }
+                else {
+                    G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+                        @Override
+                        public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
+                            G.onClientGetRoomResponse = null;
+                            G.handler.postDelayed(() -> {
+                                new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                G.onChatGetRoom = null;
+                            }, 500);
+                        }
+
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
+
+                        }
+
+                        @Override
+                        public void onTimeOut() {
+
+                        }
+                    };
+                    new RequestClientGetRoom().clientGetRoom(roomId, null);
+                    Toast.makeText(activity, "Please Wait...", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
     }
 
     private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
         long id = user.getId();
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
 
             if (realmRoom != null) {
@@ -1283,7 +1308,7 @@ public class HelperUrl {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
             }
-        }
+        });
     }
 
     public static void showIndeterminateProgressDialog(Activity activity) {
@@ -1315,7 +1340,7 @@ public class HelperUrl {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -1324,18 +1349,16 @@ public class HelperUrl {
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-
                             goToActivity(activity, roomId, user.getId(), user.getBot() ? ChatEntry.chat : chatEntery, 0);
-
                         }
                     });
-                }
+                });
             }
         });
     }
 
     private static void goToRoom(FragmentActivity activity, String username, final ProtoGlobal.Room room, long messageId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
             if (realmRoom != null) {
@@ -1363,8 +1386,7 @@ public class HelperUrl {
             } else {
                 addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
             }
-
-        }
+        });
     }
 
     private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity, final String username, final ProtoGlobal.Room room, long messageId) {
@@ -1373,8 +1395,7 @@ public class HelperUrl {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -1400,7 +1421,7 @@ public class HelperUrl {
                             }
                         }
                     });
-                }
+                });
             }
         });
     }
@@ -1508,7 +1529,7 @@ public class HelperUrl {
 
         if (isTextEmail(url)) {
             items.add(fa.getString(R.string.email));
-        }else {
+        } else {
             if (!url.startsWith("https://") && !url.startsWith("http://")) {
                 url = "http://" + mUrl;
             }
@@ -1528,8 +1549,8 @@ public class HelperUrl {
 
                 } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
                     openWebBrowser(fa , finalUrl);
-                }else if (items.get(position).equals(fa.getString(R.string.email))){
-                    openEmail(fa , finalUrl);
+                } else if (items.get(position).equals(fa.getString(R.string.email))) {
+                    openEmail(fa, finalUrl);
                 }
             }
         }).show(fa.getSupportFragmentManager(), "bottom sheet");

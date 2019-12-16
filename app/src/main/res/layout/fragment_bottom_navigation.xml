@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         app:background_color="?attr/iGapDividerLine"
-        app:corner_radius="35"
+        app:corner_radius="15"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/viewpager"
         app:layout_constraintStart_toStartOf="@id/viewpager">
@@ -30,9 +30,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:item_text="@string/contacts"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
+            app:item_text="@string/contacts"
             app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
 
@@ -42,9 +42,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:item_text="@string/all_calls"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
+            app:item_text="@string/all_calls"
             app:selected_icon="@drawable/ic_bottomnavigation_call_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
 
@@ -54,9 +54,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:item_text="@string/chat"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
+            app:haveAvatarImage="false"
+            app:item_text="@string/chat"
             app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
 
@@ -66,11 +67,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:item_text="@string/iland"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
+            app:item_text="@string/iland"
             app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
+
 
         <net.iGap.libs.bottomNavigation.TabItem
             android:id="@+id/ti_main_setting"
@@ -78,13 +80,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:item_text="@string/settings"
-            app:item_text_size="@dimen/dp10"
-            app:dark_selected_icon="@drawable/ic_bottomnavigation_setting_on_darkmode"
-            app:dark_unselected_icon="@drawable/ic_bottomnavigation_setting_off_darkmode"
-            app:selected_icon="@drawable/ic_bottomnavigation_setting_on"
-            app:unselected_icon="@drawable/ic_bottomnavigation_setting_off" />
-
+            app:haveAvatarImage="true"
+            app:item_text="@string/profile" />
     </net.iGap.libs.bottomNavigation.BottomNavigation>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

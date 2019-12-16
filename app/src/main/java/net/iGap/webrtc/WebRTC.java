@@ -15,6 +15,7 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.activities.ActivityCall;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -52,8 +53,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import io.realm.Realm;
-
 public class WebRTC {
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
@@ -69,8 +68,6 @@ public class WebRTC {
     private MediaConstraints mediaConstraints;
     private MediaConstraints audioConstraints;
     private VideoCapturer videoCapturer;
-    private VideoTrack videoTrackFromCamera;
-    VideoSource videoSource;
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
     private static WebRTC webRTCInstance;
@@ -83,6 +80,10 @@ public class WebRTC {
         return webRTCInstance;
     }
 
+    public static boolean isAlive() {
+        return webRTCInstance != null;
+    }
+
     public void muteSound() {
 
         if (mediaStream == null) {
@@ -93,7 +94,6 @@ public class WebRTC {
             audioTrack.setEnabled(false);
         }
     }
-
 
     public void switchCamera() {
         if (Camera.getNumberOfCameras() > 1) {
@@ -135,11 +135,11 @@ public class WebRTC {
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
-            videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
+            VideoSource videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
             SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", getEglBaseContext());
             videoCapturer.initialize(surfaceTextureHelper, G.context, videoSource.getCapturerObserver());
             videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
-            videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
+            VideoTrack videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
             videoTrackFromCamera.setEnabled(true);
 
             videoTrackFromCamera.addSink(videoFrame -> {
@@ -262,8 +262,7 @@ public class WebRTC {
             }
 
             PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
-        }
-        catch (UnsatisfiedLinkError e) {
+        } catch (UnsatisfiedLinkError e) {
             e.printStackTrace();
         }
     }
@@ -271,12 +270,12 @@ public class WebRTC {
     PeerConnection peerConnectionInstance() {
         if (peerConnection == null) {
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
                 for (RealmIceServer ice : realmCallConfig.getIceServer()) {
                     iceServers.add(new PeerConnection.IceServer(ice.getUrl(), ice.getUsername(), ice.getCredential()));
                 }
-            }
+            });
 
             PeerConnection.RTCConfiguration configuration = new PeerConnection.RTCConfiguration(iceServers);
             configuration.bundlePolicy = PeerConnection.BundlePolicy.MAXBUNDLE;

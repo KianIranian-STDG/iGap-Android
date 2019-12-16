@@ -10,23 +10,26 @@ package net.iGap.viewmodel;
  */
 
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountHelper;
+import net.iGap.AccountManager;
+import net.iGap.G;
 import net.iGap.helper.HelperLogout;
-import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.request.RequestUserSessionLogout;
 
 import java.util.Locale;
 
 public class FragmentSettingViewModel extends ViewModel {
 
-    private MutableLiveData<Integer> showLoading = new MutableLiveData<>();
+    private ObservableInt showLoading = new ObservableInt(View.GONE);
     private ObservableField<String> currentLanguage = new ObservableField<>();
 
     //ui
@@ -39,22 +42,36 @@ public class FragmentSettingViewModel extends ViewModel {
     public SingleLiveEvent<Boolean> showDialogLogout = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showError = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> updateForOtherAccount = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goToRegisterPage = new SingleLiveEvent<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
 
+    private SharedPreferences sharedPreferences;
     public String phoneNumber;
     public long userId;
 
     public FragmentSettingViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
+    public void setCurrentLanguage(){
         currentLanguage.set(sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage()));
-        showLoading.postValue(View.GONE);
     }
 
     public ObservableField<String> getCurrentLanguage() {
         return currentLanguage;
     }
 
-    public MutableLiveData<Integer> getShowLoading() {
+    public ObservableInt getShowLoading() {
         return showLoading;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateForOtherAccount() {
+        return updateForOtherAccount;
+    }
+
+    public SingleLiveEvent<Boolean> getGoToRegisterPage() {
+        return goToRegisterPage;
     }
 
     public void onLanguageClick() {
@@ -82,23 +99,25 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public void logout() {
-        showLoading.setValue(View.VISIBLE);
-        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
+        showLoading.set(View.VISIBLE);
+        new HelperLogout().logoutUserWithRequest(new HelperLogout.LogOutUserCallBack() {
             @Override
-            public void onUserSessionLogout() {
-                HelperLogout.logout();
-                showLoading.postValue(View.GONE);
+            public void onLogOut() {
+                //ToDo: foxed it and remove G.handler
+                G.handler.post(() -> {
+                    boolean haveAnotherAccount = new AccountHelper().logoutAccount();
+                    showLoading.set(View.GONE);
+                    if (haveAnotherAccount) {
+                        updateForOtherAccount.postValue(true);
+                    } else {
+                        goToRegisterPage.postValue(true);
+                    }
+                });
             }
 
             @Override
             public void onError() {
-                showLoading.postValue(View.GONE);
-                showError.postValue(true);
-            }
-
-            @Override
-            public void onTimeOut() {
-                showLoading.postValue(View.GONE);
+                showLoading.set(View.GONE);
                 showError.postValue(true);
             }
         });

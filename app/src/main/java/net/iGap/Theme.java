@@ -43,6 +43,14 @@ public class Theme {
     public static final int ORANGE = 17;
     public static final int GREY = 20;
 
+    private static Theme theme;
+
+    public static Theme getInstance(){
+        if (theme == null){
+            theme = new Theme();
+        }
+        return theme;
+    }
 
     public static String default_appBarColor = "#45B321";
     public static String default_notificationColor = "#e05353";
@@ -130,16 +138,16 @@ public class Theme {
 
     public List<ThemeModel> getThemeList() {
         List<ThemeModel> themeModelList = new ArrayList<>();
-        themeModelList.add(new ThemeModel(Theme.DEFAULT, R.string.default_theme_title));
-        themeModelList.add(new ThemeModel(Theme.DARK, R.string.dark_theme_title));
-        themeModelList.add(new ThemeModel(Theme.RED, R.string.red_theme_title));
-        themeModelList.add(new ThemeModel(Theme.PINK, R.string.pink_theme_title));
-        themeModelList.add(new ThemeModel(Theme.PURPLE, R.string.purple_theme_title));
-        themeModelList.add(new ThemeModel(Theme.BLUE, R.string.blue_theme_title));
-        themeModelList.add(new ThemeModel(Theme.GREEN, R.string.green_theme_title));
-        themeModelList.add(new ThemeModel(Theme.AMBER, R.string.amber_theme_title));
-        themeModelList.add(new ThemeModel(Theme.ORANGE, R.string.orange_theme_title));
-        themeModelList.add(new ThemeModel(Theme.GREY, R.string.gray_theme_title));
+        themeModelList.add(new ThemeModel(DEFAULT, R.string.default_theme_title));
+        themeModelList.add(new ThemeModel(DARK, R.string.dark_theme_title));
+        themeModelList.add(new ThemeModel(RED, R.string.red_theme_title));
+        themeModelList.add(new ThemeModel(PINK, R.string.pink_theme_title));
+        themeModelList.add(new ThemeModel(PURPLE, R.string.purple_theme_title));
+        themeModelList.add(new ThemeModel(BLUE, R.string.blue_theme_title));
+        themeModelList.add(new ThemeModel(GREEN, R.string.green_theme_title));
+        themeModelList.add(new ThemeModel(AMBER, R.string.amber_theme_title));
+        themeModelList.add(new ThemeModel(ORANGE, R.string.orange_theme_title));
+        themeModelList.add(new ThemeModel(GREY, R.string.gray_theme_title));
         return themeModelList;
     }
 
@@ -167,6 +175,9 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapPrimaryIconTextColor);
     }
 
+    public int getUserProfileTabSelector(Context context) {
+        return getDrawableAttr(context, R.attr.iGapProfileStroke);
+    }
     public int getSendMessageOtherTextColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapSendMessageOtherTextColor);
     }
@@ -193,6 +204,10 @@ public class Theme {
 
     public int getAccentColor(Context context) {
         return getColorFromAttr(context, R.attr.colorAccent);
+    }
+
+    public int getDarkAccentColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorAccentDark);
     }
 
     public int getPrimaryDarkColor(Context context) {

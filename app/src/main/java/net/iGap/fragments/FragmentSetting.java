@@ -1,7 +1,8 @@
 package net.iGap.fragments;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,11 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
@@ -30,8 +33,10 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentSettingViewModel;
+import net.iGap.WebSocketClient;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -95,6 +100,8 @@ public class FragmentSetting extends BaseFragment {
                 });
         binding.toolbar.addView(t.getView());
 
+        viewModel.setCurrentLanguage();
+
         viewModel.showDialogDeleteAccount.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showDeleteAccountDialog();
@@ -109,7 +116,7 @@ public class FragmentSetting extends BaseFragment {
 
         viewModel.goToLanguagePage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(true).load();
             }
         });
 
@@ -146,6 +153,31 @@ public class FragmentSetting extends BaseFragment {
         viewModel.goBack.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 getActivity().onBackPressed();
+            }
+        });
+
+        viewModel.getUpdateForOtherAccount().observe(getViewLifecycleOwner(), isNeedUpdate -> {
+            if (getActivity() instanceof ActivityMain && isNeedUpdate != null && isNeedUpdate) {
+                //ToDO: handel remove notification for logout account
+                ((ActivityMain) getActivity()).updateUiForChangeAccount();
+            }
+        });
+
+        viewModel.getGoToRegisterPage().observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() != null && isGo != null && isGo) {
+                try {
+                    NotificationManager nMgr = (NotificationManager) getActivity().getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    nMgr.cancelAll();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                    MusicPlayer.stopSound();
+                    MusicPlayer.closeLayoutMediaPlayer();
+                }
+                WebSocketClient.getInstance().connect(true);
+                startActivity(new Intent(getActivity(), ActivityRegistration.class));
+                getActivity().finish();
             }
         });
 
@@ -237,7 +269,7 @@ public class FragmentSetting extends BaseFragment {
                 if (getActivity() != null) {
                     FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
                     Bundle bundle = new Bundle();
-                    bundle.putString("PHONE", ActivityMain.userPhoneNumber);
+                    bundle.putString("PHONE", AccountManager.getInstance().getCurrentUser().getPhoneNumber());
                     fragmentDeleteAccount.setArguments(bundle);
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragmentDeleteAccount).setReplace(false).load();
                 }

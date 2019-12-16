@@ -13,22 +13,24 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import net.iGap.AccountHelper;
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentActivation;
 import net.iGap.fragments.FragmentIntroduce;
+import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
+import net.iGap.fragments.FragmentSyncRegisteredContacts;
 import net.iGap.fragments.WelcomeFragment;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.viewmodel.RegistrationViewModel;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ActivityRegistration extends ActivityEnhanced {
 
     public static final String showProfile = "showProfile";
-    private static final String KEY_SAVE_DATA = "SAVE_DATA";
 
     private RegistrationViewModel viewModel;
 
@@ -43,15 +45,16 @@ public class ActivityRegistration extends ActivityEnhanced {
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 boolean showPro = false;
+                boolean isAddAccount = false;
                 if (getIntent() != null && getIntent().getExtras() != null) {
                     showPro = getIntent().getExtras().getBoolean(showProfile);
+                    isAddAccount = getIntent().getBooleanExtra("add account", false);
                 }
-                return (T) new RegistrationViewModel(showPro);
+                return (T) new RegistrationViewModel(showPro, isAddAccount);
             }
         }).get(RegistrationViewModel.class);
 
         viewModel.goToMainPage().observe(this, data -> {
-            Log.wtf(this.getClass().getName(), "go main page observe");
             if (data != null) {
                 if (data.isShowDialogDisableTwoStepVerification()) {
                     new DefaultRoundDialog(this)
@@ -65,17 +68,36 @@ public class ActivityRegistration extends ActivityEnhanced {
             }
         });
 
+        viewModel.goToContactPage().observe(this, userId -> {
+            if (!isFinishing() && userId != null) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
+                removeAllFragment();
+                FragmentSyncRegisteredContacts fragment = new FragmentSyncRegisteredContacts();
+                Bundle bundle = new Bundle();
+                bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
+                fragment.setArguments(bundle);
+                loadFragment(fragment, true);
+            }
+        });
+
+        viewModel.getExistUser().observe(this, isExist -> {
+            if (isExist != null && isExist) {
+                new DefaultRoundDialog(this)
+                        .setTitle(R.string.warning)
+                        .setMessage(R.string.login_exist_account_error)
+                        .setPositiveButton(R.string.dialog_ok, (dialog, which) -> {
+
+                        })
+                        .show();
+            }
+        });
+
         viewModel.goToWelcomePage().observe(this, userId -> {
             if (userId != null) {
-                WelcomeFragment fragment = new WelcomeFragment();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("newUser", true);
-                bundle.putLong("userId", userId);
-                fragment.setArguments(bundle);
                 getSupportFragmentManager().popBackStack();
                 getSupportFragmentManager().popBackStack();
                 getSupportFragmentManager().popBackStack();
-                loadFragment(fragment, true);
+                loadFragment(new WelcomeFragment(), true);
             }
         });
 
@@ -87,11 +109,11 @@ public class ActivityRegistration extends ActivityEnhanced {
             }
         });
 
-        viewModel.getGoToIntroduction().observe(this, isGo ->
-                loadFragment(new FragmentIntroduce(), true)
-        );
+        viewModel.getGoToIntroduction().observe(this, isGo -> loadFragment(new FragmentIntroduce(), true));
 
         viewModel.getGoToNicknamePage().observe(this, isGo -> loadFragment(new FragmentRegistrationNickname(), true));
+
+        viewModel.getGoToRegisterPage().observe(this, isGo -> loadFragment(new FragmentRegister(), true));
 
         viewModel.getLoadFromBackStack().observe(this, isLoad -> {
             if (isLoad != null && isLoad) {
@@ -130,16 +152,24 @@ public class ActivityRegistration extends ActivityEnhanced {
                 Log.wtf(this.getClass().getName(), "onBackPressed");
                 super.onBackPressed();
             } else {
-                Log.wtf(this.getClass().getName(), "finish");
-                finish();
+                if (getIntent().getBooleanExtra("add account", false)) {
+                    new AccountHelper().changeAccount();
+                    Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser());
+                    finish();
+                    startActivity(new Intent(this, ActivityMain.class));
+                } else {
+                    Log.wtf(this.getClass().getName(), "finish");
+                    finish();
+                }
             }
         }
     }
 
     private void goToMainPage(long userId) {
+        Log.wtf(this.getClass().getName(), "goToMainPage");
         Intent intent = new Intent(this, ActivityMain.class);
-        intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("arg_user_id", userId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
@@ -152,5 +182,12 @@ public class ActivityRegistration extends ActivityEnhanced {
         fragmentTransaction.replace(R.id.registrationFrame, fragment, fragment.getClass().getName())
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                 .commit();
+    }
+
+    private void removeAllFragment() {
+        int t = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = t; i > 0; i--) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 }

@@ -8,19 +8,20 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.ActivityMediaPlayerLandBindingImpl;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarDelete;
 import net.iGap.interfaces.OnChannelDelete;
 import net.iGap.interfaces.OnChannelEdit;
 import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
-import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.enums.ChannelChatRole;
@@ -35,9 +36,8 @@ import net.iGap.request.RequestChannelEdit;
 import net.iGap.request.RequestChannelUpdateReactionStatus;
 import net.iGap.request.RequestChannelUpdateSignature;
 
+import java.io.File;
 import java.util.ArrayList;
-
-import io.realm.Realm;
 
 public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
 
@@ -78,14 +78,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public String inviteLink;
     public String linkUsername;
     private boolean isPrivate;
-    private Realm realmChannelProfile;
     /*private AttachFile attachFile;*/
     private String pathSaveImage;
 
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
 
-        realmChannelProfile = Realm.getDefaultInstance();
         G.onChannelAvatarAdd = this;
         G.onChannelAvatarDelete = this;
         /*G.onChannelAddMember = this;*/
@@ -118,7 +116,10 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             });
         };
 
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        });
+
         //todo:fixed it
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
             goBack.setValue(true);
@@ -164,8 +165,11 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             e.getStackTrace();
         }*/
         subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
-        administratorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        DbManager.getInstance().doRealmTask(realm -> {
+            administratorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+            moderatorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+
+        });
 
         if (role == ChannelChatRole.OWNER) {
             leaveChannelText.set(R.string.channel_delete);
@@ -209,11 +213,11 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     }
 
 
-    public void updateGroupRole(){
+    public void updateGroupRole() {
         if (realmChannelRoom == null) return;
         role = realmChannelRoom.getRole();
         if (role.toString().equals(ProtoGlobal.ChannelRoom.Role.MEMBER.toString()) ||
-                role.toString().equals(ProtoGlobal.ChannelRoom.Role.MODERATOR.toString())){
+                role.toString().equals(ProtoGlobal.ChannelRoom.Role.MODERATOR.toString())) {
             closePageImediatly.setValue(true);
         }
     }
@@ -232,12 +236,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         } else {
             initEmoji.setValue(false);
         }
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        realmChannelProfile.close();
     }
 
     public void onSignMessageClick() {
@@ -358,14 +356,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     }
 
-    private Realm getRealm() {
-        if (realmChannelProfile == null || realmChannelProfile.isClosed()) {
-            realmChannelProfile = Realm.getDefaultInstance();
-        }
-        return realmChannelProfile;
-    }
-
-
     @Override
     public void OnChannelUpdateReactionStatusError() {
         G.handler.post(() -> isShowLoading.set(View.GONE));
@@ -395,22 +385,22 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public void uploadAvatar(String path) {
         long avatarId = SUID.id().get();
         long lastUploadedAvatarId = avatarId + 1L;
-
-        HelperUploadFile.startUploadTaskAvatar(path, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(path), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (progress < 100) {
-                    showUploadProgressLiveData.postValue(View.VISIBLE);
-                } else {
-                    new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
-                }
+            public void onProgress(String id, int progress) {
+                showUploadProgressLiveData.postValue(View.VISIBLE);
             }
 
             @Override
-            public void OnError() {
+            public void onFinish(String id, String token) {
+                new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
+            }
+
+            @Override
+            public void onError(String id) {
                 showUploadProgressLiveData.postValue(View.GONE);
             }
-        });
+        }));
     }
 
     public MutableLiveData<Long> getChannelAvatarUpdatedLiveData() {

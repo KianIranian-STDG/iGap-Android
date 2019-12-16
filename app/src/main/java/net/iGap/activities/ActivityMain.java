@@ -12,6 +12,7 @@ package net.iGap.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -46,12 +47,15 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import net.iGap.AccountHelper;
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
@@ -64,6 +68,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentChatSettings;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentLanguage;
+import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
@@ -82,6 +87,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.DataTransformerListener;
 import net.iGap.interfaces.FinishActivity;
@@ -101,6 +107,7 @@ import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.KuknosSendFrag;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ContactUtils;
@@ -118,7 +125,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -131,19 +137,21 @@ import org.paygear.fragment.PaymentHistoryFragment;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.realm.Realm;
 import ir.pec.mpl.pecpayment.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
-import static net.iGap.G.userId;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
+import static org.paygear.utils.Utils.signOutWallet;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
+    public static final String userId = "userId";
     public static final String OPEN_DEEP_LINK = "openDeepLink";
 
     public static final String DEEP_LINK = "deepLink";
@@ -170,14 +178,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isUseCamera = false;
     public static boolean waitingForConfiguration = false;
     private SharedPreferences sharedPreferences;
-    private Realm mRealm;
     private TextView iconLock;
-    private boolean isNeedToRegister = false;
     private int retryConnectToWallet = 0;
-    public static String userPhoneNumber;
-    private BroadcastReceiver audioManagerReciver;
     private MyPhonStateService myPhonStateService;
-    public DataTransformerListener<Intent> dataTransformer ;
+    public DataTransformerListener<Intent> dataTransformer;
+    private BroadcastReceiver audioManagerReciver;
 
     public static void setMediaLayout() {
         try {
@@ -259,20 +264,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISRealmOK) {
-            mRealm.close();
             if (myPhonStateService != null) {
                 unregisterReceiver(myPhonStateService);
             }
@@ -364,6 +359,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragmentBottomNav = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragmentBottomNav instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragmentBottomNav).checkHasSharedData(true);//set true just for checking state
+            ((BottomNavigationFragment) fragmentBottomNav).isFirstTabItem();
         }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
@@ -379,11 +375,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 //                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
                 // TODO this change is duo to room null bug. if it works server must change routine.
                 long peerId = extras.getLong("PeerID");
-                new HelperUrl().goToActivityFromFCM(this, roomId, peerId);
-//                if (peerId > 0) {
-//                    goToChatActivity.setPeerID(peerId);
-//                }
-//                goToChatActivity.startActivity(this);
+                long userId = extras.getLong(ActivityMain.userId);
+                if (AccountManager.getInstance().getCurrentUser().getId() != userId) {
+                    new AccountHelper().changeAccount(userId);
+                    RaadApp.onCreate(this);
+                    updateUiForChangeAccount();
+                }
+                HelperUrl.goToActivityFromFCM(this, roomId, peerId);
             }
             FragmentLanguage.languageChanged = false;
 
@@ -404,37 +402,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         detectDeviceType();
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (G.ISRealmOK) {
-            mRealm = Realm.getDefaultInstance();
-            try (Realm realm = Realm.getDefaultInstance()) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    String token = realmUserInfo.getPushNotificationToken();
-                    if (token == null || token.length() < 2) {
-                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
-                            String mToken = instanceIdResult.getToken();
-                            RealmUserInfo.setPushNotification(mToken);
-                        });
+
+        G.logoutAccount.observe(this, isLogout -> {
+            if (isLogout != null && isLogout) {
+                boolean haveOtherAccount = new AccountHelper().logoutAccount();
+                RaadApp.onCreate(this);
+                if (haveOtherAccount) {
+                    updateUiForChangeAccount();
+                } else {
+                    try {
+                        NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        nMgr.cancelAll();
+                    } catch (Exception e) {
+                        e.getStackTrace();
                     }
+                    if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                        MusicPlayer.stopSound();
+                        MusicPlayer.closeLayoutMediaPlayer();
+                    }
+                    startActivity(new Intent(this, ActivityRegistration.class));
+                    finish();
                 }
             }
-
-            RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-            if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-                isNeedToRegister = true;
-                Intent intent = new Intent(this, ActivityRegistration.class);
-                startActivity(intent);
-                finish();
-                return;
-            } else if (userInfo.getUserInfo() == null || userInfo.getUserInfo().getDisplayName() == null || userInfo.getUserInfo().getDisplayName().isEmpty()) {
-                Intent intent = new Intent(this, ActivityRegistration.class);
-                intent.putExtra(ActivityRegistration.showProfile, true);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return;
-            }
-
+        });
+        if (G.ISRealmOK) {
             finishActivity = new FinishActivity() {
                 @Override
                 public void finishActivity() {
@@ -500,16 +491,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-            if (checkValidationForRealm(userInfo)) {
-                userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
-            }
-
             boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
             if (deleteFolderBackground) {
                 deleteContentFolderChatBackground();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                editor.apply();
+                sharedPreferences.edit().putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false).apply();
             }
 
             if (G.twoPaneMode) {
@@ -557,6 +542,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             /**
              * just do this action once
              */
+            new PermissionHelper(this).grantReadPhoneStatePermission();
+
             if (!isGetContactList) {
                 try {
                     HelperPermission.getContactPermision(ActivityMain.this, new OnGetPermission() {
@@ -671,10 +658,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Log.wtf(this.getClass().getName(), "onCreate");
     }
 
-    private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
-        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
-    }
-
     /**
      * if device is tablet twoPaneMode will be enabled
      */
@@ -752,7 +735,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     /*private void getWallpaperAsDefault() {
         try {
-            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            });
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -928,19 +913,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 break;
 
             case AttachFile.request_code_trim_video:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(G.twoPaneMode ? R.id.detailFrame : R.id.mainFrame);
-                    if (fragmentGallery instanceof FragmentGallery){
+                    if (fragmentGallery instanceof FragmentGallery) {
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().popBackStack();
                         goneDetailFrameInTabletMode();
                         Fragment fragmentChat = getSupportFragmentManager().findFragmentByTag(FragmentChat.class.getName());
-                        if (fragmentChat instanceof FragmentChat){
+                        if (fragmentChat instanceof FragmentChat) {
                             ((FragmentChat) fragmentChat).manageTrimVideoResult(data);
-                        }else{
+                        } else {
                             //todo:// fix fragment chat backstack
-                            if (dataTransformer != null){
-                                dataTransformer.transform(AttachFile.request_code_trim_video , data);
+                            if (dataTransformer != null) {
+                                dataTransformer.transform(AttachFile.request_code_trim_video, data);
                             }
                         }
                     }
@@ -949,7 +934,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public void goneDetailFrameInTabletMode(){
+    public void goneDetailFrameInTabletMode() {
         if (G.twoPaneMode) findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
     }
 
@@ -1160,12 +1145,31 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.rotationState = newConfig.orientation;
     }
 
+    private void setViewConfigurationChanged() {
+        if (G.twoPaneMode) {
+            if (G.isLandscape) {
+                Log.wtf(this.getClass().getName(), "isLandscape");
+                findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
+                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Landscape");
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                if (fragment instanceof FragmentChat) {
+                    findViewById(R.id.roomListFrame).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.mainFrame).setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
     //******************************************************************************************************************************
 
     private void initTabStrip(Intent intent) {
         if (G.twoPaneMode) {
             new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
         }
+        Log.wtf(this.getClass().getName(), "initTabStrip");
         BottomNavigationFragment bottomNavigationFragment = new BottomNavigationFragment();
 
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
@@ -1199,11 +1203,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void openActivityPassCode() {
-        if (G.isPassCode) {
+        if (PassCode.getInstance().isPassCode()) {
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
         }
 
-        if (G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
+        if (PassCode.getInstance().isPassCode() && isLock && !G.isRestartActivity && !isUseCamera) {
             enterPassword();
         } else if (!G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();
@@ -1266,22 +1270,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        Log.wtf(this.getClass().getName(),"onBackPressed");
+        Log.wtf(this.getClass().getName(), "onBackPressed");
         if (G.ISRealmOK) {
             if (G.onBackPressedWebView != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedWebView");
+                Log.wtf(this.getClass().getName(), "onBackPressedWebView");
                 if (G.onBackPressedWebView.onBack()) {
                     return;
                 }
             }
 
             if (G.onBackPressedExplorer != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedExplorer");
+                Log.wtf(this.getClass().getName(), "onBackPressedExplorer");
                 if (G.onBackPressedExplorer.onBack()) {
                     return;
                 }
             } else if (G.onBackPressedChat != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedChat");
+                Log.wtf(this.getClass().getName(), "onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
@@ -1345,8 +1349,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
                         List fragmentList = getSupportFragmentManager().getFragments();
@@ -1354,8 +1357,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         try {
                             // because some of our fragments are NOT extended from BaseFragment
                             handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         if (!handled) {
@@ -1373,8 +1375,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             }
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -1459,8 +1460,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             iconLock.setVisibility(View.GONE);
         }*/
 
-        onFinance(G.isMplActive, G.isWalletActive);
-
     }
 
     private void enterPassword() {
@@ -1473,11 +1472,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Log.wtf(this.getClass().getName(), "onPause");
         super.onPause();
         if (G.ISRealmOK) {
-            if (isNeedToRegister) {
-                return;
-            }
-
-            AppUtils.updateBadgeOnly(getRealm(), -1);
+            DbManager.getInstance().doRealmTask(realm -> {
+                AppUtils.updateBadgeOnly(realm, -1);
+            });
         }
         Log.wtf(this.getClass().getName(), "onPause");
     }
@@ -1543,7 +1540,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -1559,12 +1556,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             });
-        }
+        });
 
         /**
          * don't send update status for own message
          */
-        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
             // user has received the message, so I make a new delivered update status request
             // todo:please check in group and channel that user is joined
 
@@ -1674,11 +1671,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             HelperError.showSnackMessage(message, false);
         }
-    }
-
-    @Override
-    public void onFinance(final boolean mplActive, final boolean walletActive) {
-
     }
 
     @Override
@@ -1882,12 +1874,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void goToUserProfile() {
-        getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(),0);
+        getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(), 0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).goToUserProfile();
-        }else{
-            Log.wtf(this.getClass().getName(),"test");
         }
     }
 
@@ -1935,6 +1925,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setForwardMessage(enable);
+            ((BottomNavigationFragment) fragment).isFirstTabItem();
         }
     }
 
@@ -1957,14 +1948,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);
     }
 
-    public void chatBackgroundChanged(){
+    public void updateUiForChangeAccount() {
+        int t = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < t; i++) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+        initTabStrip(getIntent());
+        // Clear all notification
+        NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+    }
+
+    public void chatBackgroundChanged() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
-        if (fragment instanceof FragmentChatSettings){
+        if (fragment instanceof FragmentChatSettings) {
             ((FragmentChatSettings) fragment).chatBackgroundChange();
         }
-        if (G.twoPaneMode){
+        if (G.twoPaneMode) {
             Fragment f = getSupportFragmentManager().findFragmentByTag(TabletEmptyChatFragment.class.getName());
-            if (f instanceof TabletEmptyChatFragment){
+            if (f instanceof TabletEmptyChatFragment) {
                 ((TabletEmptyChatFragment) f).getChatBackground();
             }
         }

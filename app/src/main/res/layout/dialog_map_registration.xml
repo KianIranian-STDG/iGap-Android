@@ -15,7 +15,7 @@
         android:gravity="center"
         android:text="@string/md_gap_eye_off"
         android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="?iGapTitleTextColor"/>
+        android:textColor="?iGapTitleTextColor" />
 
     <TextView
         android:id="@+id/txtMapRegister"

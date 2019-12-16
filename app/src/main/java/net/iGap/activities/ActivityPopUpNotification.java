@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -45,10 +44,12 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.HelperNotification;
+import net.iGap.helper.HelperRealm;
 import net.iGap.interfaces.IPopUpListener;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -157,7 +158,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     }
 
     private void setUpEmojiPopup() {
-        setEmojiColor(new Theme().getRootColor(this), new Theme().getTitleTextColor(this),new Theme().getTitleTextColor(this));
+        setEmojiColor(new Theme().getRootColor(this), new Theme().getTitleTextColor(this), new Theme().getTitleTextColor(this));
     }
 
     private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
@@ -202,13 +203,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         color = mList.get(position).color;
         txtName.setText(mList.get(position).name);
 
-
-        try {
-            Realm realm = Realm.getDefaultInstance();
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
             if (realmRegisteredInfo != null) {
                 if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
                 } else {
                     txtLastSeen.setText(realmRegisteredInfo.getStatus());
                 }
@@ -217,10 +216,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             }
 
             setAvatar(realmRegisteredInfo, realm);
-            realm.close();
-        }catch (Exception e){
-            //nothing
-        }
+        });
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -268,9 +264,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     }
 
     public static void sendMessage(final String message, final long mRoomId, ProtoGlobal.Room.Type chatType) {
-        String identity = Long.toString(System.currentTimeMillis());
-        RealmRoomMessage.makeTextMessage(mRoomId, Long.parseLong(identity), message);
-        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);
+        RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message);
+        HelperRealm.copyOrUpdateToRealm(roomMessage);
+        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(roomMessage.getMessageId() + "");
     }
 
     private void goToChatActivity() {
@@ -312,7 +308,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewAttachFile = findViewById(R.id.apn_layout_attach_file);
 
             viewMicRecorder = findViewById(R.id.apn_layout_mic_recorde);
-            findViewById(R.id.lmr_layout_bottom).setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_root_dark),ActivityPopUpNotification.this,R.attr.rootBackgroundColor));
+            findViewById(R.id.lmr_layout_bottom).setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_root_dark), ActivityPopUpNotification.this, R.attr.rootBackgroundColor));
 
             voiceRecord = new VoiceRecord(ActivityPopUpNotification.this, viewMicRecorder, viewAttachFile, new OnVoiceRecord() {
                 @Override
@@ -506,7 +502,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             });
 
             btnSend = findViewById(R.id.apn_btn_send);
-          //  btnSend.setTextColor(Color.parseColor(G.attachmentColor));
+            //  btnSend.setTextColor(Color.parseColor(G.attachmentColor));
 
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override

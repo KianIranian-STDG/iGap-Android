@@ -12,6 +12,7 @@ import net.iGap.model.SecurityRecoveryModel;
 import net.iGap.model.UserPasswordDetail;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.enums.Security;
 
 public class TwoStepVerificationViewModel extends ViewModel {
@@ -21,7 +22,7 @@ public class TwoStepVerificationViewModel extends ViewModel {
     public MutableLiveData<Long> showDialogWaitTime = new MutableLiveData<>();
     public MutableLiveData<Boolean> isHideKeyword = new MutableLiveData<>();
     public MutableLiveData<Integer> showDialogForgotPassword = new MutableLiveData<>();
-    public MutableLiveData<SecurityRecoveryModel> goToSecurityRecoveryPage = new MutableLiveData<>();
+    public SingleLiveEvent<SecurityRecoveryModel> goToSecurityRecoveryPage = new SingleLiveEvent<>();
 
     private ObservableField<String> passwordHint = new ObservableField<>("");
     private ObservableField<String> password = new ObservableField<>("");
@@ -52,7 +53,7 @@ public class TwoStepVerificationViewModel extends ViewModel {
             @Override
             public void onError() {
                 isShowLoading.set(View.GONE);
-                showErrorMessage.setValue(R.string.error);
+                showErrorMessage.postValue(R.string.error);
             }
         });
     }
@@ -83,9 +84,9 @@ public class TwoStepVerificationViewModel extends ViewModel {
                 public void onError(ErrorWithWaitTime error) {
                     if (error.getMajorCode() == 191) {
                         isShowLoading.set(View.GONE);
-                        showDialogWaitTime.setValue((long) error.getWaitTime());
+                        showDialogWaitTime.postValue((long) error.getWaitTime());
                     } else if (error.getMajorCode() == 194 && error.getMinorCode() == 1) {
-                        isHideKeyword.setValue(true);
+                        isHideKeyword.postValue(true);
                         isShowLoading.set(View.GONE);
                     }
                 }

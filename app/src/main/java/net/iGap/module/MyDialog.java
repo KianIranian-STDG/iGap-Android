@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
@@ -39,12 +40,10 @@ public class MyDialog {
      * create custom dialog for main page
      */
     public static void showDialogMenuItemRooms(FragmentActivity activity, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, long peerId, boolean isMyCloud, RealmRoom mInfo, final OnComplete complete, boolean isPinned) {
-        int pinCount;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmResults realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
-            pinCount = realmRoom.size();
-        }
 
+        int pinCount = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll().size();
+        });
 
         List<String> items = new ArrayList<>();
         if (isPinned) {

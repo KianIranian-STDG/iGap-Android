@@ -10,12 +10,14 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserContactsGetList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.request.RequestUserContactsGetList;
 
 import io.realm.Realm;
 
@@ -46,8 +48,7 @@ public class UserContactsGetListResponse extends MessageHandler {
          */
         if (HelperTimeOut.timeoutChecking(0, getListTime, 0)) {//Config.GET_CONTACT_LIST_TIME_OUT
             getListTime = System.currentTimeMillis();
-
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -59,7 +60,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                         }
                     }
                 });
-            }
+            });
 
             G.refreshRealmUi();
             G.handler.post(new Runnable() {
@@ -76,6 +77,9 @@ public class UserContactsGetListResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onContactsGetList != null) {
+            G.onContactsGetList.onContactsGetListTimeOut();
+        }
     }
 
     @Override

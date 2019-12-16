@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -88,9 +87,6 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
                     set.clone((ConstraintLayout) viewHolder.itemView);
                     set.setDimensionRatio(R.id.fc_sliderCv, bannerScale);
                     set.applyTo((ConstraintLayout) viewHolder.itemView);
-                 /* String[] scales = bannerScale.split(":");
-                    float height =viewHolder.itemView.getMeasuredWidth()*Resources.getSystem().getDisplayMetrics().widthPixels *1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-                    sliderViewHolder.itemView.getLayoutParams().height = Math.round(height);*/
                     sliderViewHolder.bindSlid(data.get(i).getSlides(), data.get(i).getInfo().getPlaybackTime());
                     break;
                 case TYPE_POPULAR_CHANNEL_FEATURED_CATEGORY:

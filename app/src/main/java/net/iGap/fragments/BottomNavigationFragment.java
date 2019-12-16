@@ -17,6 +17,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
+import net.iGap.dialog.account.AccountDialogListener;
+import net.iGap.dialog.account.AccountsDialog;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
@@ -32,7 +34,7 @@ import net.iGap.news.view.NewsMainFrag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
+public class BottomNavigationFragment extends BaseFragment implements OnUnreadChange {
 
     private static final int CONTACT_FRAGMENT = 0;
     private static final int CALL_FRAGMENT = 1;
@@ -106,10 +108,25 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 }
             }
         });
+
+        bottomNavigation.setProfileOnLongClickListener(v -> {
+            openAccountsDialog();
+            return false;
+        });
     }
 
     public void setCrawlerMap(String crawlerMap) {
         this.crawlerMap = crawlerMap;
+    }
+
+    private void openAccountsDialog() {
+        new AccountsDialog().setData(avatarHandler, new AccountDialogListener() {
+            @Override
+            public void onAccountClick(boolean isAssigned, long id) {
+
+            }
+        }).show(getActivity().getSupportFragmentManager(), "account");
+
     }
 
     private void loadFragment(int position) {
@@ -118,7 +135,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
-        Fragment current = fragmentManager.findFragmentById(R.id.viewpager);
         switch (position) {
             case 0:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
@@ -126,10 +142,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(current instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 1:
                 fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
@@ -137,23 +150,15 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragment = FragmentCall.newInstance(true);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 2:
                 fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
                 if (fragment == null) {
                     fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
-                } else {
-                    if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                        fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                    }
-                    fragmentTransaction.show(fragment).commit();
                 }
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 3:
                 fragment = fragmentManager.findFragmentByTag(DiscoveryFragment.class.getName());
@@ -165,22 +170,15 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 if (crawlerStruct != null && !crawlerStruct.isWorkDone()) {
                     ((DiscoveryFragment) fragment).setNeedToCrawl(true);
                 }
-
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
-            default:
+            case 4:
                 fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
                 if (fragment == null) {
                     fragment = new FragmentUserProfile();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                    fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                }
-                fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
         }
     }
@@ -199,6 +197,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     public void goToUserProfile() {
         bottomNavigation.setCurrentItem(4);
     }
+
 
     public boolean isFirstTabItem() {
         if (bottomNavigation.getSelectedItemPosition() == 2) {
@@ -243,7 +242,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         if (fragment instanceof FragmentMain) {
             if (enable) {
                 ((FragmentMain) fragment).checkHasSharedData();
-            }else {
+            } else {
                 ((FragmentMain) fragment).revertToolbarFromForwardMode();
             }
         }
@@ -375,7 +374,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                         if (uri.length > 1) {
                             PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
                             Bundle bundle = new Bundle();
-                            bundle.putString("id",uri[1]);
+                            bundle.putString("id", uri[1]);
                             popularMoreChannelFragment.setArguments(bundle);
                             new HelperFragment(getFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
                         } else {
@@ -405,7 +404,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    private void hideKeyboard() {
+    protected void hideKeyboard() {
         if (getActivity() != null) {
             View view = getActivity().getCurrentFocus();
             if (view != null) {
