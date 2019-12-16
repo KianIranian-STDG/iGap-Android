@@ -5779,19 +5779,8 @@ public class FragmentChat extends BaseFragment
                         realmAttachment.setSize(new File(st.getUri()).length());
                         realmAttachment.setName(new File(st.getUri()).getName());
                         realmAttachment.setDuration(0);
-                        // TODO: 12/16/19 must change this
-                        int type;
-                        String mimType;
 
-                        if (st.getUri().endsWith(".json")) {
-                            mimType = "text/plain";
-                            type = StructIGSticker.ANIMATED_STICKER;
-                        } else {
-                            mimType = "image/png";
-                            type = StructIGSticker.NORMAL_STICKER;
-                        }
-
-                        realmAttachment.setMimType(mimType);
+                        int type = st.getUri().endsWith(".json") ? StructIGSticker.ANIMATED_STICKER : StructIGSticker.NORMAL_STICKER;
 
                         roomMessage.setAttachment(realmAttachment);
 
@@ -5952,7 +5941,6 @@ public class FragmentChat extends BaseFragment
         realmAttachment.setSize(new File(structIGSticker.getPath()).length());
         realmAttachment.setName(new File(structIGSticker.getPath()).getName());
         realmAttachment.setDuration(0);
-        realmAttachment.setMimType("text/plain");
 
         roomMessage.setAttachment(realmAttachment);
 
@@ -7919,7 +7907,7 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER:
-                        if (messageInfo.realmRoomMessage.getAttachment().getMimType() != null && messageInfo.realmRoomMessage.getAttachment().getMimType().equalsIgnoreCase("text/plain")) {
+                        if (messageInfo.realmRoomMessage.getAttachment().getName() != null && messageInfo.realmRoomMessage.getAttachment().isAnimatedSticker()) {
                             if (!addTop) {
                                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
