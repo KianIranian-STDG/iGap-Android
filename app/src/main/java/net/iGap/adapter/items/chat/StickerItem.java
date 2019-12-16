@@ -23,6 +23,8 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.helper.downloadFile.IGDownloadFile;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.ReserveSpaceRoundedImageView;
@@ -89,6 +91,9 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
                     }
                 }
             });
+
+            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(),
+                    structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
         }
 
         holder.image.setOnLongClickListener(getLongClickPerform(holder));

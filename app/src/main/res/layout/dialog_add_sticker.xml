@@ -73,24 +73,16 @@
         app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/fl_stickerDialog_progressContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerInParent="true"
-        android:clickable="true"
-        android:background="#8B000000"
-        android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_stickerDialog_add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
+    <ProgressBar
+        android:id="@+id/fl_stickerDialog_progressContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_stickerDialog"
+        app:layout_constraintEnd_toEndOf="@+id/rv_stickerDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_stickerDialog_groupName" />
 
     <TextView
         android:id="@+id/tv_stickerDialog_add"
@@ -105,5 +97,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_stickerDialog_addOrRemove"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_stickerDialog"
+        app:layout_constraintStart_toStartOf="@+id/tv_stickerDialog_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

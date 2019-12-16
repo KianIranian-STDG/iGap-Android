@@ -2,11 +2,13 @@ package net.iGap.fragments.emoji.add;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
@@ -24,7 +27,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.viewmodel.sticker.StickerDialogViewModel;
 
 public class StickerDialogFragment extends BottomSheetDialogFragment {
-    private View progressBar;
     private StickerAdapter adapter;
     private StickerDialogViewModel viewModel;
     private StructIGStickerGroup stickerGroup;
@@ -32,6 +34,8 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
     private TextView addOrRemoveTv;
     private TextView groupNameTv;
     private ImageView previewIv;
+    private ProgressBar addOrRemoveProgressBar;
+    private ProgressBar progressBar;
     private AnimatedStickerCell stickerCell;
 
     private OnStickerDialogListener listener;
@@ -65,6 +69,10 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         addOrRemoveTv = view.findViewById(R.id.tv_stickerDialog_add);
         previewIv = view.findViewById(R.id.iv_stickerDialog_preview);
         stickerCell = view.findViewById(R.id.iv_stickerDialog_lottiePreview);
+        addOrRemoveProgressBar = view.findViewById(R.id.pb_stickerDialog_addOrRemove);
+
+        addOrRemoveProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(new Theme().getPrimaryDarkColor(getContext()), PorterDuff.Mode.SRC_IN);
 
         stickerRecyclerView.setAdapter(adapter);
 
@@ -140,6 +148,8 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
                 dismiss();
             }
         });
+
+        viewModel.getAddOrRemoveProgressLiveData().observe(getViewLifecycleOwner(), visibility -> addOrRemoveProgressBar.setVisibility(visibility));
 
         previewIv.setOnClickListener(v -> viewModel.onPreviewImageClicked());
         stickerCell.setOnClickListener(v -> viewModel.onPreviewImageClicked());
