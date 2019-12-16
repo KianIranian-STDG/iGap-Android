@@ -34,6 +34,11 @@ public class IGDownloadFile {
             return;
         }
 
+        if (new File(fileStruct.path).exists()) {
+            Log.e(TAG, "this file exist " + fileStruct.path);
+            return;
+        }
+
         if (!fileHashMap.containsKey(fileStruct.id)) {
             fileHashMap.put(fileStruct.id, fileStruct);
 
@@ -43,7 +48,7 @@ public class IGDownloadFile {
                     "\n size  -> " + fileStruct.size +
                     "\n path  -> " + fileStruct.path +
                     "\n token -> " + fileStruct.token +
-                    "\n ***************************");
+                    "\n ***************************\n");
 
             fileStruct.onStickerDownload = new OnStickerDownload() {
                 @Override
@@ -53,20 +58,23 @@ public class IGDownloadFile {
 
                 @Override
                 public void onError(IGDownloadFileStruct igDownloadFileStruct, int majorCode, int minorCode) {
-                    EventManager.getInstance().postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token);
-                    fileHashMap.remove(igDownloadFileStruct.id);
                     AndroidUtils.deleteFile(new File(igDownloadFileStruct.path));
+                    EventManager.getInstance().postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token);
+                    if (fileStruct.listener != null)
+                        fileStruct.listener.onDownloadFailed(fileStruct);
+                    fileHashMap.remove(igDownloadFileStruct.id);
 
-                    Log.i(TAG, "*" +
+                    Log.e(TAG, "*" +
                             "\n\n ****** DOWNLOAD FAILED ******" +
                             "\n id         -> " + fileStruct.id +
                             "\n size       -> " + fileStruct.size +
                             "\n path       -> " + fileStruct.path +
                             "\n token      -> " + fileStruct.token +
                             "\n progress   -> " + fileStruct.progress +
+                            "\n downloading size -> " + fileHashMap.size() +
                             "\n major Code -> " + majorCode +
                             "\n minor Code -> " + minorCode +
-                            "\n ***************************");
+                            "\n ***************************\n");
                 }
             };
 
@@ -86,6 +94,8 @@ public class IGDownloadFile {
         } else {
             fileHashMap.remove(fileStruct.id);
             EventManager.getInstance().postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token);
+            if (fileStruct.listener != null)
+                fileStruct.listener.onDownloadComplete(fileStruct);
 
             Log.i(TAG, "*" +
                     "\n\n ****** DOWNLOAD SUCCESSFULLY ******" +
@@ -94,7 +104,8 @@ public class IGDownloadFile {
                     "\n path     -> " + fileStruct.path +
                     "\n token    -> " + fileStruct.token +
                     "\n progress -> " + fileStruct.progress +
-                    "\n ***********************************");
+                    "\n downloading size -> " + fileHashMap.size() +
+                    "\n ***********************************\n");
         }
     }
 
