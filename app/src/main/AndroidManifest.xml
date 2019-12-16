@@ -57,7 +57,7 @@
         android:manageSpaceActivity=".activities.ActivityManageSpace"
         android:roundIcon="@mipmap/icon_round_round"
         android:supportsRtl="true"
-        android:theme="@style/iGapDarkTheme"
+        android:theme="@style/iGapLightTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup,supportsRtl,android:name,android:theme">
         <receiver

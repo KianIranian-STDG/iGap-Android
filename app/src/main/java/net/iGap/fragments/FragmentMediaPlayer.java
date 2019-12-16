@@ -214,18 +214,23 @@ public class FragmentMediaPlayer extends BaseFragment {
         view.findViewById(R.id.dragView).setBackground(new Theme().tintDrawable(view.findViewById(R.id.dragView).getBackground(), getContext(), R.attr.rootBackgroundColor));
 
         musicSeekbar = view.findViewById(R.id.ml_seekBar1);
-        musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
+
+        musicSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) MusicPlayer.setMusicProgress(progress);
+            }
 
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                MusicPlayer.pauseSound();
+            }
 
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
-                }
-                return false;
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                MusicPlayer.playAndPause();
             }
         });
-
 
         onBackFragment = new OnBackFragment() {
             @Override
