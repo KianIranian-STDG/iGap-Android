@@ -2269,8 +2269,6 @@ public class FragmentChat extends BaseFragment
                 goneSearchBox(edtSearchMessage);
             } else if (isEditMessage) {
                 removeEditedMessage();
-            } else if (ll_navigateHash != null && btnHashLayoutClose != null && ll_navigateHash.isShown()) {
-                btnHashLayoutClose.performClick();
             } else {
                 stopSuperPress = false;
             }
@@ -6452,17 +6450,7 @@ public class FragmentChat extends BaseFragment
         searchHash = new SearchHash();
 
         btnHashLayoutClose = rootView.findViewById(R.id.ac_btn_hash_close);
-        btnHashLayoutClose.setOnClickListener(v -> {
-
-            ll_navigateHash.setVisibility(View.GONE);
-            mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
-            if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
-                layoutMute.setVisibility(View.VISIBLE);
-            } else {
-                if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
-            }
-
-        });
+        btnHashLayoutClose.setOnClickListener(v -> goneSearchBox(edtSearchMessage));
 
         btnUpHash.setOnClickListener(view -> searchHash.upHash());
 
@@ -7042,18 +7030,13 @@ public class FragmentChat extends BaseFragment
         //});
 
         final RippleView rippleClose = rootView.findViewById(R.id.chl_btn_close_ripple_search_message);
-        rippleClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (edtSearchMessage.getText().toString().length() == 0) {
-
-                    goneSearchBox(view);
-
-                } else {
-                    // deSelectMessage(selectedPosition);
-                    edtSearchMessage.setText("");
-                    btnHashLayoutClose.performClick();
-                }
+        rippleClose.setOnClickListener(view -> {
+            if (edtSearchMessage.getText().toString().length() == 0) {
+                goneSearchBox(view);
+            } else {
+                // deSelectMessage(selectedPosition);
+                edtSearchMessage.setText("");
+                goneSearchHashFooter();
             }
         });
 
@@ -7073,9 +7056,8 @@ public class FragmentChat extends BaseFragment
                         FragmentChat.hashListener.complete(true, charSequence.toString(), "");
                     }
                 } else {
-                    btnHashLayoutClose.performClick();
+                    goneSearchHashFooter();
                 }
-
                 //mAdapter.filter(charSequence);
                 //
                 //new Handler().postDelayed(new Runnable() {
@@ -7114,9 +7096,21 @@ public class FragmentChat extends BaseFragment
         edtSearchMessage.setText("");
         ll_Search.setVisibility(View.GONE);
         layoutToolbar.setVisibility(View.VISIBLE);
-        btnHashLayoutClose.performClick();
+        goneSearchHashFooter();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+    }
+
+    private void goneSearchHashFooter() {
+
+        mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
+            layoutMute.setVisibility(View.VISIBLE);
+        } else {
+            if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
+        }
+        ll_navigateHash.setVisibility(View.GONE);
 
     }
 
