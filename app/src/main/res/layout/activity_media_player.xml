@@ -172,6 +172,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:progress="@{fragmentMediaPlayerViewModel.seekBar1}"
                         android:thumbTint="@color/toolbar_player_base_color"
                         app:layout_constraintLeft_toLeftOf="parent"

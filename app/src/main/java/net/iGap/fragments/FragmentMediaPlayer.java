@@ -218,7 +218,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         musicSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                MusicPlayer.setMusicProgress(progress);
+                if (fromUser) MusicPlayer.setMusicProgress(progress);
             }
 
             @Override
