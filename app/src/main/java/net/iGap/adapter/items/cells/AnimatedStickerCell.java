@@ -55,7 +55,7 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventLis
     }
 
     public void playAnimation(String path) {
-        if (path != null && this.path == null) {
+        if (path != null) {
             this.path = path;
             loadAnimation(path);
         }

@@ -1393,7 +1393,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder) {
 
                             String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
-                            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(), structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
+                            if (!new File(path).exists())
+                                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(), structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
+
                         } else {
                             downLoadThumbnail(holder);
                         }
