@@ -143,7 +143,7 @@ public class AccountManager {
 
     public boolean isExistThisAccount(String phoneNumber) {
         for (int i = 0; i < userAccountList.size(); i++) {
-            if (userAccountList.get(i).getPhoneNumber() != null && phoneNumber.contains(userAccountList.get(i).getPhoneNumber())) {
+            if (phoneNumber.equals(userAccountList.get(i).getPhoneNumber())) {
                 return true;
             }
         }
