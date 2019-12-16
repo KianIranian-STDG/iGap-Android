@@ -23,7 +23,6 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.stickerCell.setTag(structMessage.getAttachment().getCacheId());
+        holder.stickerCell.setTag(structMessage.getAttachment().getToken());
         super.bindView(holder, payloads);
 
         holder.stickerCell.setOnLongClickListener(getLongClickPerform(holder));
@@ -73,18 +72,6 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
                 }
             }
         });
-
-
-    }
-
-
-    @Override
-    public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-        if (holder.stickerCell != null && holder.stickerCell.getTag() == tag) {
-            Log.i(TAG, "onLoadThumbnailFromLocal: " + localPath);
-            holder.stickerCell.playAnimation(localPath);
-        }
     }
 
     @Override

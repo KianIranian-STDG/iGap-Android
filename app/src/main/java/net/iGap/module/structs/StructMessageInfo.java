@@ -191,7 +191,7 @@ public class StructMessageInfo implements Parcelable {
                     abstractMessage.onProgressFinish(holder, messageType);
                     Log.d("bagi", "onProgressFinish: " + realmAttachment.getLocalFilePath());
 
-                    if (realmAttachment.isFileExistsOnLocalAndIsImage() || realmAttachment.isFileExistsOnLocalAndIsAnimatedSticker()) {
+                    if (realmAttachment.isFileExistsOnLocalAndIsImage()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
                     } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);

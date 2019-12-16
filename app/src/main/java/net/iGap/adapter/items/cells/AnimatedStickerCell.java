@@ -7,13 +7,16 @@ import android.util.Log;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 
+import net.iGap.G;
+import net.iGap.eventbus.EventListener;
+import net.iGap.eventbus.EventManager;
 import net.iGap.module.structs.StructMessageInfo;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class AnimatedStickerCell extends LottieAnimationView {
+public class AnimatedStickerCell extends LottieAnimationView implements EventListener {
     private String TAG = "abbasiAnimation";
 
     public boolean animatedLoaded;
@@ -86,6 +89,7 @@ public class AnimatedStickerCell extends LottieAnimationView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         detached = true;
+        EventManager.getInstance().removeEventListener(EventManager.STICKER_DOWNLOAD, this);
 //        try {
 //            if (inputStream != null)
 //                inputStream.close();
@@ -108,5 +112,21 @@ public class AnimatedStickerCell extends LottieAnimationView {
                 loadAnimation(path);
             }
         detached = false;
+
+        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, this);
+    }
+
+    @Override
+    public void receivedMessage(int id, Object... message) {
+        if (id == EventManager.STICKER_DOWNLOAD) {
+            String filePath = (String) message[0];
+            String fileToken = (String) message[1];
+
+            if (getTag().equals(fileToken)) {
+                G.handler.post(() -> {
+                    playAnimation(filePath);
+                });
+            }
+        }
     }
 }
