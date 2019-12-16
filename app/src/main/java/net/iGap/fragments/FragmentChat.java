@@ -5758,7 +5758,7 @@ public class FragmentChat extends BaseFragment
                         int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
                         RealmRoomMessage roomMessage = new RealmRoomMessage();
                         roomMessage.setMessageId(identity);
-                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+                        roomMessage.setMessageType(STICKER);
                         roomMessage.setRoomId(mRoomId);
                         roomMessage.setMessage(st.getName());
                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -5781,6 +5781,19 @@ public class FragmentChat extends BaseFragment
                         realmAttachment.setSize(new File(st.getUri()).length());
                         realmAttachment.setName(new File(st.getUri()).getName());
                         realmAttachment.setDuration(0);
+                        // TODO: 12/16/19 must change this
+                        int type;
+                        String mimType;
+
+                        if (st.getUri().endsWith(".json")) {
+                            mimType = "text/plain";
+                            type = StructIGSticker.ANIMATED_STICKER;
+                        } else {
+                            mimType = "image/png";
+                            type = StructIGSticker.NORMAL_STICKER;
+                        }
+
+                        realmAttachment.setMimType(mimType);
 
                         roomMessage.setAttachment(realmAttachment);
 
@@ -5813,7 +5826,10 @@ public class FragmentChat extends BaseFragment
 
 
                         StructMessageInfo sm = new StructMessageInfo(roomMessage);
-                        mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+                        if (type == StructIGSticker.ANIMATED_STICKER)
+                            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+                        else
+                            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
                         if (isReply()) {
@@ -5938,6 +5954,7 @@ public class FragmentChat extends BaseFragment
         realmAttachment.setSize(new File(structIGSticker.getPath()).length());
         realmAttachment.setName(new File(structIGSticker.getPath()).getName());
         realmAttachment.setDuration(0);
+        realmAttachment.setMimType("text/plain");
 
         roomMessage.setAttachment(realmAttachment);
 
@@ -5966,7 +5983,12 @@ public class FragmentChat extends BaseFragment
 
 
         StructMessageInfo sm = new StructMessageInfo(roomMessage);
-        mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+
+        if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
+            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+        else
+            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+
         scrollToEnd();
 
         if (isReply()) {

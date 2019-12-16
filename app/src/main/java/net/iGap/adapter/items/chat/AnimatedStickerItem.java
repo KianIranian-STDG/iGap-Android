@@ -20,12 +20,15 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 import java.util.List;
 
 public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, AnimatedStickerItem.ViewHolder> {
@@ -48,7 +51,7 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.stickerCell.setTag(structMessage.getAttachment().getCacheId());
+        holder.stickerCell.setTag(structMessage.getAttachment().getToken());
         super.bindView(holder, payloads);
 
         holder.stickerCell.setOnLongClickListener(getLongClickPerform(holder));
@@ -74,19 +77,13 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
             }
         });
 
-
-    }
-
-
-    @Override
-    public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-        if (holder.stickerCell != null && holder.stickerCell.getTag() == tag) {
-            Log.i(TAG, "onLoadThumbnailFromLocal: " + localPath);
-            holder.stickerCell.playAnimation(localPath);
+        String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+        if (new File(path).exists()) {
+            holder.stickerCell.playAnimation(path);
         }
     }
 
+    @NotNull
     @Override
     public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);

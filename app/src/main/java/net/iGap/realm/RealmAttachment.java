@@ -160,7 +160,7 @@ public class RealmAttachment extends RealmObject {
                 realmAttachment.setWidth(file.getWidth());
             }
 
-            if (!realmAttachment.mimType.equals(file.getMime())) {
+            if (realmAttachment.mimType != null && file.getMime() != null && !realmAttachment.mimType.equals(file.getMime())) {
                 realmAttachment.setMimType(file.getMime());
             }
 
