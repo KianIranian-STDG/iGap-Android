@@ -90,13 +90,7 @@ public class UserLoginResponse extends MessageHandler {
         G.currentServerTime = builder.getResponse().getTimestamp();
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;
-        G.isMplActive = builder.getMplActive();
-        G.isWalletActive = builder.getWalletActive();
-        G.isWalletRegister = builder.getWalletAgreementAccepted();
 
-        if (G.onPayment != null) {
-            G.onPayment.onFinance(G.isMplActive, G.isWalletActive);
-        }
         /**
          * get Signaling Configuration
          * (( hint : call following request after set G.userLogin=true ))
@@ -116,11 +110,19 @@ public class UserLoginResponse extends MessageHandler {
         G.onUserLogin.onLogin();
         RealmUserInfo.sendPushNotificationToServer();
 
-        if (G.isWalletActive && G.isWalletRegister) {
+        if (builder.getWalletActive() && builder.getWalletAgreementAccepted()) {
             new RequestWalletGetAccessToken().walletGetAccessToken();
         }
 
-        RealmUserInfo.insertAccessToken(builder.getAccessToken());
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                realmUserInfo.setAccessToken(builder.getAccessToken());
+                realmUserInfo.setWalletActive(builder.getWalletActive());
+                realmUserInfo.setMplActive(builder.getMplActive());
+                realmUserInfo.setWalletRegister(builder.getWalletAgreementAccepted());
+            }
+        });
 
     }
 
@@ -142,18 +144,22 @@ public class UserLoginResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         if (majorCode == 110 || (majorCode == 10 && minorCode == 100)) {
-            G.handler.postDelayed(this::retryLogin, 1000);
+            retryLogin();
+//            G.handler.postDelayed(this::retryLogin, 1000);
         }
         G.onUserLogin.onLoginError(majorCode, minorCode);
     }
 
     private void retryLogin() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
-                new RequestUserLogin().userLogin(userInfo.getToken());
-            }
-        });
+        if (WebSocketClient.getInstance().isConnect()) {
+            WebSocketClient.getInstance().disconnectSocket(true);
+        }
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//            if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
+//                new RequestUserLogin().userLogin(userInfo.getToken());
+//            }
+//        });
     }
 
 

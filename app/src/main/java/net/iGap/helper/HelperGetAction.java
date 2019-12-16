@@ -289,7 +289,7 @@ public class HelperGetAction {
      *
      * @param roomID randomKey that should remove struct with that
      */
-    private static void removeStructWithRoomID(long roomID, long userID) {
+    private synchronized static void removeStructWithRoomID(long roomID, long userID) {
         for (int i = 0; i < activeActions.size(); i++) {
             if (activeActions.get(i).roomId == roomID && activeActions.get(i).userId == userID) {
                 activeActions.remove(i);

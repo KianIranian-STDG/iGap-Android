@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -86,12 +87,22 @@ public class FragmentLanguage extends BaseFragment {
 
         viewModel.getRefreshActivityForChangeLanguage().observe(getViewLifecycleOwner(), language -> {
             if (getActivity() instanceof ActivityEnhanced && language != null) {
-//                G.updateResources(getActivity().getBaseContext());
-                Lingver.getInstance().setLocale(getContext(), G.selectedLanguage);
-                ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
-                if (getActivity() instanceof ActivityRegistration) {
-                    getActivity().onBackPressed();
+                /*G.updateResources(getActivity().getBaseContext());*/
+                Lingver.getInstance().setLocale(getActivity(), language);
+
+                if (G.twoPaneMode) {
+                    Fragment frg;
+                    frg = getActivity().getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.detach(frg);
+                    ft.attach(frg);
+                    ft.commit();
                 }
+
+                /*((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);*/
+                /*if (getActivity() instanceof ActivityRegistration) {*/
+                    getActivity().onBackPressed();
+                /*}*/
             }
         });
 

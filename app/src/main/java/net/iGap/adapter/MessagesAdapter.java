@@ -39,6 +39,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,6 +180,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                         item.mMessage.setLinkInfo(HelperUrl.getLinkInfo(updatedText));
                     }
                     item.mMessage.setHasMessageLink(item.mMessage.getLinkInfo().length() > 0);
+                    RealmRoomMessage.isEmojiInText(item.mMessage , item.mMessage.getMessage());
 
                     item.updateMessageText(updatedText);
                     set(i, item);

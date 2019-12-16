@@ -39,6 +39,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnChannelAddMember;
@@ -47,9 +48,9 @@ import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
-import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.LoginActions;
 import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -341,6 +342,18 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     @Override
     public void onContactsGetList() {
         addItems();
+    }
+
+    @Override
+    public void onContactsGetListTimeOut() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (getContext() != null) {
+                    HelperError.showSnackMessage(getString(R.string.connection_error), false);
+                }
+            }
+        });
     }
 
     @Override

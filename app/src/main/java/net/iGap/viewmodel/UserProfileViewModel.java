@@ -140,6 +140,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableBoolean showReferralErrorLiveData = new ObservableBoolean(false);
     private ObservableInt referralError = new ObservableInt(R.string.already_registered);
     private ObservableInt showAddAvatarButton = new ObservableInt(View.GONE);
+    private ObservableInt accountArrowVisibility = new ObservableInt(View.VISIBLE);
 
     private MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
     private MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
@@ -175,7 +176,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private int phoneMax = 10;
     private boolean sendReferral = false;
-    private Realm mRealm;
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
@@ -216,14 +216,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         setCurrentFragment.setValue(isEditProfile);
         appVersion.set(BuildConfig.VERSION_NAME);
 
-    }
-
-    public SingleLiveEvent<Boolean> getUpdateNewTheme() {
-        return updateNewTheme;
-    }
-
-    public SingleLiveEvent<Boolean> getUpdateTwoPaneView() {
-        return updateTwoPaneView;
     }
 
     public void init() {
@@ -343,6 +335,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return showAddAvatarButton;
     }
 
+    public ObservableInt getAccountArrowVisibility() {
+        return accountArrowVisibility;
+    }
+
     public ArrayList<StructCountry> getStructCountryArrayList() {
         return structCountryArrayList;
     }
@@ -407,6 +403,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return goToWalletPage;
     }
 
+    public SingleLiveEvent<Boolean> getUpdateNewTheme() {
+        return updateNewTheme;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateTwoPaneView() {
+        return updateTwoPaneView;
+    }
+
     public void onEditProfileClick() {
         if (isEditProfile) {
             editProfileIcon.set(R.string.edit_icon);
@@ -417,13 +421,17 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             isEditProfile = true;
             if (editProfileIcon.get() == R.string.close_icon) {
                 isEditProfile = true;
-                getReferral();
+                String tmp = referralNumberObservableField.get();
+                if (tmp == null || tmp.isEmpty()) {
+                    getReferral();
+                }
             } else {
                 isEditProfile = false;
             }
         }
         setCurrentFragment.setValue(isEditProfile);
         showAddAvatarButton.set(isEditProfile ? View.VISIBLE : View.GONE);
+        accountArrowVisibility.set(!isEditProfile ? View.VISIBLE : View.GONE);
     }
 
     public void onAccountsClicked() {
@@ -480,7 +488,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCreditClick() {
-        if (!G.isWalletRegister) {
+        if (!userInfo.isWalletRegister()) {
             goToWalletAgreementPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
         } else {
             goToWalletPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
@@ -581,7 +589,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void usernameTextChangeListener(String newUsername) {
-        if (isEditProfile) {
+        if (!newUsername.equals(currentUserName)) {
             if (HelperString.regexCheckUsername(newUsername)) {
                 new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
                     @Override
@@ -946,6 +954,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (isEditProfile) {
             isEditProfile = false;
             getEditProfileIcon().set(R.string.edit_icon);
+            accountArrowVisibility.set(View.VISIBLE);
             showAddAvatarButton.set(View.GONE);
             popBackStack.setValue(true);
             showAddAvatarButton.set(View.GONE);

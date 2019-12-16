@@ -32,7 +32,6 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEditGroupBinding;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
@@ -305,11 +304,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(this);
         } else {
             try {
                 new AttachFile(G.fragmentActivity).requestTakePicture(this);

@@ -22,6 +22,7 @@ public class OperatorType {
             put("0919", Type.HAMRAH_AVAL);
             put("0990", Type.HAMRAH_AVAL);
             put("0991", Type.HAMRAH_AVAL);
+            put("0992", Type.HAMRAH_AVAL);
 
             put("0901", Type.IRANCELL);
             put("0902", Type.IRANCELL);

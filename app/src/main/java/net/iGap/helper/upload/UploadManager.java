@@ -79,6 +79,12 @@ public class UploadManager {
             );
             return;
         }
+
+        if (message.getAttachment() == null || message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
+            new ChatSendMessageUtil().build(roomType, message.getRoomId(), message);
+            return;
+        }
+
         Log.d("bagi", "uploadMessageAndSend222");
         String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + message.getMessageId() + ".mp4";
         File compressFile = new File(savePathVideoCompress);
@@ -124,10 +130,6 @@ public class UploadManager {
             return;
 
         Log.d("bagi", "after Compress");
-        if (message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
-            new ChatSendMessageUtil().build(roomType, message.getRoomId(), message);
-            return;
-        }
 
         OnUploadListener onUploadListener = new OnUploadListener() {
             @Override

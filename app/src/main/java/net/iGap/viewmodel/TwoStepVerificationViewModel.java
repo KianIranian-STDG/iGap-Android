@@ -53,7 +53,7 @@ public class TwoStepVerificationViewModel extends ViewModel {
             @Override
             public void onError() {
                 isShowLoading.set(View.GONE);
-                showErrorMessage.setValue(R.string.error);
+                showErrorMessage.postValue(R.string.error);
             }
         });
     }

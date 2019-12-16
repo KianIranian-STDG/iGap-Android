@@ -40,6 +40,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
 import net.iGap.databinding.ActivityMediaPlayerLandBinding;
 import net.iGap.helper.HelperDownloadFile;
@@ -59,6 +60,8 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientSearchRoomHistory;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +99,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
         if (G.twoPaneMode) {
             fragmentMediaPlayerBinding = DataBindingUtil.inflate(inflater, R.layout.activity_media_player, container, false);
@@ -113,7 +116,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();
@@ -207,6 +210,8 @@ public class FragmentMediaPlayer extends BaseFragment {
                 img_MusicImage.setImageBitmap(MusicPlayer.mediaThumpnail);
             }
         };
+
+        view.findViewById(R.id.dragView).setBackground(new Theme().tintDrawable(view.findViewById(R.id.dragView).getBackground(), getContext(), R.attr.rootBackgroundColor));
 
         musicSeekbar = view.findViewById(R.id.ml_seekBar1);
         musicSeekbar.setOnTouchListener(new View.OnTouchListener() {

@@ -5,6 +5,7 @@
 
     <data>
         <import type="net.iGap.G" />
+        <import type="net.iGap.Theme" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +29,7 @@
             app:layout_constraintDimensionRatio="3:1"
             app:cardCornerRadius="6dp"
             app:cardUseCompatPadding="true"
-            app:cardBackgroundColor="@color/kuknos_WH_itembg">
+            app:cardBackgroundColor="@{G.themeColor == Theme.DARK ? @color/chat_item_receive_dark : @color/kuknos_WH_itembg}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

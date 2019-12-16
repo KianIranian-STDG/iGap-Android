@@ -303,26 +303,22 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                //                                            new AttachFile(FragmentNewGroup.this.G.fragmentActivity).dispatchTakePictureIntent();
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(G.fragmentActivity.getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File
-                        return;
-                    }
-                    // Continue only if the File was successfully created
-                    if (photoFile != null && getActivity() != null) {
-                        new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentNewGroup.this);
-                    }
+            //                                            new AttachFile(FragmentNewGroup.this.G.fragmentActivity).dispatchTakePictureIntent();
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(G.fragmentActivity.getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    return;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+                // Continue only if the File was successfully created
+                if (photoFile != null && getActivity() != null) {
+                    new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentNewGroup.this);
+                }
             }
         } else {
             try {
@@ -763,7 +759,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 txtPhone.setVisibility(View.INVISIBLE);
                 chSelected.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.VISIBLE);
-                btnRemove.setTypeface(ResourcesCompat.getFont(btnRemove.getContext() , R.font.main_font));
+                btnRemove.setTypeface(ResourcesCompat.getFont(btnRemove.getContext(), R.font.main_font));
                 txtName.setText(data.displayName);
                 avatarHandler.getAvatar(new ParamWithAvatarType(imgAvatar, data.peerId).avatarType(AvatarHandler.AvatarType.USER));
 

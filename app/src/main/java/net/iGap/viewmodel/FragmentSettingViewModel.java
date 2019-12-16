@@ -46,10 +46,15 @@ public class FragmentSettingViewModel extends ViewModel {
     private SingleLiveEvent<Boolean> goToRegisterPage = new SingleLiveEvent<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
 
+    private SharedPreferences sharedPreferences;
     public String phoneNumber;
     public long userId;
 
     public FragmentSettingViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
+    public void setCurrentLanguage(){
         currentLanguage.set(sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage()));
     }
 

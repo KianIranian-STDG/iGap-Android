@@ -34,6 +34,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.helper.HelperError;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -90,7 +91,7 @@ public class FragmentActivation extends BaseFragment {
         });
         viewModel.showEnteredCodeError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && getContext() != null && aBoolean) {
-                new DefaultRoundDialog(getContext()).setTitle(R.string.Enter_Code).setMessage(R.string.Toast_Enter_Code).setPositiveButton(R.string.B_ok, null).show();
+                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.Toast_Enter_Code).setPositiveButton(R.string.B_ok, null).show();
             }
         });
         viewModel.currentTimePosition.observe(getViewLifecycleOwner(), integer -> {
@@ -143,6 +144,12 @@ public class FragmentActivation extends BaseFragment {
         viewModel.showDialogVerificationCodeExpired.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
                 new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_EXPIRED).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+            }
+        });
+
+        viewModel.showConnectionError.observe(getViewLifecycleOwner(), isShow -> {
+            if (isShow != null && isShow) {
+                HelperError.showSnackMessage(getString(R.string.connection_error), false);
             }
         });
 

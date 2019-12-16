@@ -95,7 +95,7 @@ public class CashOutFragment extends Fragment {
             mPager.setCurrentItem(1);
         }
 
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+        /*for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             if (tab != null) {
                 TextView textView = new AppCompatTextView(getContext());
@@ -107,7 +107,7 @@ public class CashOutFragment extends Fragment {
 
                 tab.setCustomView(textView);
             }
-        }
+        }*/
 
         return view;
     }

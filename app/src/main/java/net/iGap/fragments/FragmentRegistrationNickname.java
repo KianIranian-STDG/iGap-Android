@@ -47,7 +47,6 @@ import net.iGap.databinding.FragmentRegistrationNicknameBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.OnGetPermission;
@@ -203,11 +202,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
     public void useCamera() {
         if (getActivity() != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentRegistrationNickname.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new AttachFile(getActivity()).dispatchTakePictureIntent(FragmentRegistrationNickname.this);
             } else {
                 try {
                     new AttachFile(getActivity()).requestTakePicture(FragmentRegistrationNickname.this);

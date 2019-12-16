@@ -106,16 +106,7 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         });
 
         holder.cr.setOnClickListener(v -> {
-            if (holder.checkBoxSelect.isChecked()) {
-                holder.checkBoxSelect.setChecked(false);
-                onPathAdapterBottomSheet.path(mList.getPath(), false, true, mList, mList.getId());
-                mList.setSelected(false);
-            } else {
-                holder.checkBoxSelect.setChecked(true);
-                onPathAdapterBottomSheet.path(mList.getPath(), true, true, mList, mList.getId());
-                mList.setSelected(true);
-            }
-
+            onPathAdapterBottomSheet.path(mList.getPath(), holder.checkBoxSelect.isChecked(), true, mList, mList.getId());
         });
     }
 

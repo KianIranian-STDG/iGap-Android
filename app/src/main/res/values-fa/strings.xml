@@ -82,7 +82,7 @@
     <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
     <string name="Toast_Minimum_Characters">تعداد کاراکترها کمتر از حد مجاز است</string>
     <string name="Toast_Enter_Phone_Number">"لطفاً شماره تلفن خود را بدون صفر ابتدای آن وارد کنید"</string>
-    <string name="Toast_Enter_Code">"لطفاً کد تأیید ارسالرا وارد نمایید"</string>
+    <string name="Toast_Enter_Code">"لطفاً کد تأیید ارسال شده را وارد نمایید"</string>
     <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
     <string name="Toast_Invalid_nickname">"نام نامعتبر است. لطفاً نام را تغییر دهید."</string>
     <string name="Toast_Write_NickName">"لطفاً نام خود را وارد کنید"</string>
@@ -2326,7 +2326,7 @@
     <string name="elecBill_success_title">موفقیت</string>
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
     <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
-    <string name="delete_from_storage">حذف از حافظه</string>
+    <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
     <string name="need_browser">برای استفاده نیاز به مرورگر است.</string>
 </resources>

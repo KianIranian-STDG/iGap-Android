@@ -20,6 +20,8 @@ import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.proto.ProtoUserRegister;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 
 public class FragmentActivationViewModel extends ViewModel {
@@ -32,12 +34,14 @@ public class FragmentActivationViewModel extends ViewModel {
     public MutableLiveData<WaitTimeModel> showWaitDialog = new MutableLiveData<>();
     public SingleLiveEvent<Integer> showEnteredCodeErrorServer = new SingleLiveEvent<>();
     public ObservableInt showLoading = new ObservableInt(View.GONE);
-    public ObservableInt sendActivationStatus = new ObservableInt();
+    public ObservableInt sendActivationStatus = new ObservableInt(R.string.empty_error_message);
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogUserBlocked = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogVerificationCodeExpired = new MutableLiveData<>();
+    public ObservableBoolean isActive = new ObservableBoolean(true);
+    public MutableLiveData<Boolean> showConnectionError = new MutableLiveData<>();
 
     private RegisterRepository repository;
     private CountDownTimer countDownTimer;
@@ -51,7 +55,7 @@ public class FragmentActivationViewModel extends ViewModel {
             sendActivationStatus.set(R.string.verify_sms_message);
         } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
             sendActivationStatus.set(R.string.verify_socket_message);
-        }else if(repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET){
+        } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {
             sendActivationStatus.set(R.string.verify_sms_socket_message);
         } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL) {
             sendActivationStatus.set(R.string.verify_call_message);
@@ -96,14 +100,14 @@ public class FragmentActivationViewModel extends ViewModel {
         requestRegister();
     }
 
-    public void loginButtonOnClick(String enteredCode) {
+    public void loginButtonOnClick(@NotNull String enteredCode) {
         closeKeyword.setValue(true);
         if (enteredCode.length() == 5) {
             if (WebSocketClient.getInstance().isConnect()) {
                 showLoading.set(View.VISIBLE);
                 userVerification(enteredCode);
             } else {
-                requestRegister();
+                showConnectionError.setValue(true);
             }
         } else {
             showEnteredCodeError.setValue(true);
@@ -111,6 +115,7 @@ public class FragmentActivationViewModel extends ViewModel {
     }
 
     private void userVerification(String verificationCode) {
+        isActive.set(false);
         repository.userVerify(verificationCode, new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
             @Override
             public void onSuccess() {
@@ -120,6 +125,7 @@ public class FragmentActivationViewModel extends ViewModel {
             @Override
             public void onError(ErrorWithWaitTime error) {
                 showLoading.set(View.GONE);
+                isActive.set(true);
                 if (error.getMajorCode() == 184 && error.getMinorCode() == 1) {
                     goToTwoStepVerificationPage.postValue(repository.getUserId());
                 } else if (error.getMajorCode() == 102 && error.getMinorCode() == 1) {
@@ -153,7 +159,7 @@ public class FragmentActivationViewModel extends ViewModel {
         repository.registration(new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
             @Override
             public void onSuccess() {
-                G.handler.post(()->{
+                G.handler.post(() -> {
                     cancelTimer();
                     counterTimer();
                 });

@@ -337,6 +337,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             vibrator.cancel();
             vibrator = null;
         }
+
+        WebRTC.getInstance().close();
     }
 
     @Override

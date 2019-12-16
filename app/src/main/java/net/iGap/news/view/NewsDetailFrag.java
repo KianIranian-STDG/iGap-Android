@@ -37,6 +37,8 @@ import net.iGap.news.view.Adapter.NewsDetailRelatedCardsAdapter;
 import net.iGap.news.view.Adapter.NewsDetailSliderAdapter;
 import net.iGap.news.viewmodel.NewsDetailVM;
 
+import java.util.List;
+
 public class NewsDetailFrag extends BaseAPIViewFrag {
 
     private NewsDetailPageBinding binding;
@@ -158,8 +160,8 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
         newsMainVM.getRelatedNews().observe(getViewLifecycleOwner(), this::initRelatedNews);
     }
 
-    private void initCommentRecycler(NewsComment data) {
-        if (data == null || data.getComments() == null) {
+    private void initCommentRecycler(List<NewsComment> data) {
+        if (data == null || data.size() == 0) {
             binding.noItemInListError.setVisibility(View.VISIBLE);
             binding.commentList.setVisibility(View.GONE);
             return;

@@ -29,6 +29,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentSyncRegisteredContactsBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.ContactManager;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
@@ -313,6 +314,18 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
             }
         }
         hideProgress();
+    }
+
+    @Override
+    public void onContactsGetListTimeOut() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (getContext() != null) {
+                    HelperError.showSnackMessage(getString(R.string.connection_error), false);
+                }
+            }
+        });
     }
 
     private class AddAsync extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {

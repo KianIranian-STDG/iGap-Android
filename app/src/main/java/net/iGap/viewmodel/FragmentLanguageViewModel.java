@@ -202,9 +202,7 @@ public class FragmentLanguageViewModel extends ViewModel {
     public void onClickKurdi() {
         if (!G.selectedLanguage.equals("ur")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "کوردی");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "کوردی").apply();
             G.selectedLanguage = "ur";
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = true;
@@ -216,8 +214,9 @@ public class FragmentLanguageViewModel extends ViewModel {
                 MusicPlayer.updateName.rename();
             }
             updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
         }
-        goBack.setValue(true);
     }
 
     private void updateLocalDateTime() {

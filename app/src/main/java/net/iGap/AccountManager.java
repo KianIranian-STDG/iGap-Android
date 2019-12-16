@@ -2,7 +2,10 @@ package net.iGap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Base64;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -112,6 +115,11 @@ public class AccountManager {
         setUserAccountListInSharedPreferences();
     }
 
+    public void updatePhoneNumber(String phoneNumber){
+        userAccountList.get(currentUser).setPhoneNumber(phoneNumber);
+        setUserAccountListInSharedPreferences();
+    }
+
     public void setCurrentUser() {
         getCurrentUserFromSharedPreferences();
     }
@@ -135,7 +143,7 @@ public class AccountManager {
 
     public boolean isExistThisAccount(String phoneNumber) {
         for (int i = 0; i < userAccountList.size(); i++) {
-            if (phoneNumber.equals(userAccountList.get(i).getPhoneNumber())) {
+            if (userAccountList.get(i).getPhoneNumber() != null && phoneNumber.contains(userAccountList.get(i).getPhoneNumber())) {
                 return true;
             }
         }
@@ -166,6 +174,7 @@ public class AccountManager {
                 clearSomeStaticValue();
                 currentUser = userAccountList.size() - 1;
                 userAccountList.get(0).setDbName(getDbName());
+                userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
                 setCurrentUserInSharedPreferences();
                 setUserAccountListInSharedPreferences();
                 return userAccountList.get(currentUser).isAssigned();
@@ -198,9 +207,6 @@ public class AccountManager {
         RequestClientGetRoomList.isPendingGetRoomList = false;
         FragmentMain.mOffset = 0;
         G.serverHashContact = null;
-        G.isMplActive = false;
-        G.isWalletActive = false;
-        G.isWalletRegister = false;
         G.jwt = null;
         G.selectedCard = null;
         G.cardamount = 0;
@@ -221,7 +227,7 @@ public class AccountManager {
         }
     }
 
-    public void firstStepOfChangeAccount(){
+    public void firstStepOfChangeAccount() {
         WebSocketClient.getInstance().disconnectSocket(false);
         G.handler.removeCallbacksAndMessages(null);
 

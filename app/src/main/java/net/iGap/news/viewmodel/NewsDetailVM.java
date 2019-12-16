@@ -16,10 +16,12 @@ import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsList;
 
+import java.util.List;
+
 public class NewsDetailVM extends BaseAPIViewModel {
 
     private MutableLiveData<NewsDetail> data;
-    private MutableLiveData<NewsComment> comments;
+    private MutableLiveData<List<NewsComment>> comments;
     private MutableLiveData<NewsList> relatedNews;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressStateContext;
@@ -90,7 +92,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 } else {
                     viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
                 }
-                viewVisibility.set(View.VISIBLE);
+//                viewVisibility.set(View.VISIBLE);
                 commentNum.set(newsDetail.getView());
                 source.set(newsDetail.getSource());
                 if (newsDetail.getTags() == null || newsDetail.getTags().equals("null"))
@@ -116,9 +118,9 @@ public class NewsDetailVM extends BaseAPIViewModel {
     }
 
     private void getNewsComment() {
-        repo.getNewsComment(newsID, 1, 3, this, new ResponseCallback<NewsComment>() {
+        repo.getNewsComment(newsID, 1, 3, this, new ResponseCallback<List<NewsComment>>() {
             @Override
-            public void onSuccess(NewsComment data) {
+            public void onSuccess(List<NewsComment> data) {
                 comments.setValue(data);
             }
 
@@ -153,11 +155,11 @@ public class NewsDetailVM extends BaseAPIViewModel {
         });
     }
 
-    public MutableLiveData<NewsComment> getComments() {
+    public MutableLiveData<List<NewsComment>> getComments() {
         return comments;
     }
 
-    public void setComments(MutableLiveData<NewsComment> comments) {
+    public void setComments(MutableLiveData<List<NewsComment>> comments) {
         this.comments = comments;
     }
 
