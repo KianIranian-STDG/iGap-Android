@@ -5833,18 +5833,21 @@ public class FragmentChat extends BaseFragment
 
                         //download id must be unique
                         IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention)));
+                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention), new IGDownloadFileStruct.OnDownloadListener() {
+                                    @Override
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (token.equals(fileStruct.token) && !fileStruct.path.endsWith(".json")) {
+                                                onStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
+                                    }
 
-                        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
-                            String filePath = (String) message[0];
-                            String fileToken = (String) message[1];
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
 
-                            G.handler.post(() -> {
-                                if (token.equals(fileToken) && !filePath.endsWith(".json")) {
-                                    onStickerItemDownloaded.onStickerItemDownload(fileToken, filePath);
-                                }
-                            });
-                        });
+                                    }
+                                }));
                     }
 
                     @Override
@@ -5852,20 +5855,17 @@ public class FragmentChat extends BaseFragment
 
                         //download id must be unique
                         IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention)));
+                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention), new IGDownloadFileStruct.OnDownloadListener() {
+                                    @Override
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token));
+                                    }
 
-                        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
-                            String filePath = (String) message[0];
-                            String fileToken = (String) message[1];
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
 
-                            G.handler.post(() -> {
-                                if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                                    return;
-
-                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileToken);
-
-                            });
-                        });
+                                    }
+                                }));
                     }
 
 
@@ -5874,20 +5874,21 @@ public class FragmentChat extends BaseFragment
 
                         //download id must be unique
                         IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention)));
+                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention), new IGDownloadFileStruct.OnDownloadListener() {
+                                    @Override
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (token.equals(fileStruct.token) && fileStruct.path.endsWith(".json")) {
+                                                lottieStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
+                                    }
 
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
 
-                        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
-                            String filePath = (String) message[0];
-                            String fileToken = (String) message[1];
-
-
-                            G.handler.post(() -> {
-                                if (token.equals(fileToken) && filePath.endsWith(".json")) {
-                                    lottieStickerItemDownloaded.onStickerItemDownload(fileToken, filePath);
-                                }
-                            });
-                        });
+                                    }
+                                }));
                     }
                 })
                 .setOpenPageSticker(new OnOpenPageStickerListener() {
