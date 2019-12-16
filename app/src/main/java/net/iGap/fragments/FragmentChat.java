@@ -5857,7 +5857,11 @@ public class FragmentChat extends BaseFragment
                                 new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
                                     public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
-                                        G.handler.post(() -> onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token));
+                                        G.handler.post(() -> {
+                                            if (fileStruct.token.equals(token)) {
+                                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token);
+                                            }
+                                        });
                                     }
 
                                     @Override

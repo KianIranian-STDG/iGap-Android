@@ -2,7 +2,6 @@ package net.iGap.fragments.emoji.add;
 
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,11 +9,11 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.bumptech.glide.Glide;
 
 import net.iGap.G;
-import net.iGap.R;
+import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
@@ -23,8 +22,6 @@ import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +39,9 @@ public class StickerAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder;
         if (viewType == StructIGSticker.ANIMATED_STICKER) {
-//            LottieAnimationView stickerCell = new LottieAnimationView(parent.getContext());
-//            stickerCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 75, Gravity.CENTER, 1, 0, 1, 2));
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
-            viewHolder = new AnimatedViewHolder(view);
+            AnimatedStickerCell stickerCell = new AnimatedStickerCell(parent.getContext());
+            stickerCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 75, Gravity.CENTER, 1, 0, 1, 2));
+            viewHolder = new AnimatedViewHolder(stickerCell);
         } else {
             View normalSticker = new ImageView(parent.getContext());
             normalSticker.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 75, Gravity.CENTER, 1, 0, 1, 2));
@@ -64,7 +60,6 @@ public class StickerAdapter extends RecyclerView.Adapter {
             ((NormalViewHolder) holder).bindView(igStickers.get(position));
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -87,7 +82,6 @@ public class StickerAdapter extends RecyclerView.Adapter {
         NormalViewHolder(View itemView) {
             super(itemView);
             normalStickerCell = (ImageView) itemView;
-
         }
 
         /**
@@ -120,13 +114,14 @@ public class StickerAdapter extends RecyclerView.Adapter {
     }
 
     public class AnimatedViewHolder extends RecyclerView.ViewHolder {
-        private LottieAnimationView stickerCell;
+        private AnimatedStickerCell stickerCell;
 
         AnimatedViewHolder(View itemView) {
             super(itemView);
-            stickerCell = itemView.findViewById(R.id.lottie);
-//            stickerCell.setRepeatCount(LottieDrawable.INFINITE);
-//            stickerCell.setRepeatMode(LottieDrawable.REVERSE);
+            stickerCell = (AnimatedStickerCell) itemView;
+
+            stickerCell.setRepeatCount(LottieDrawable.INFINITE);
+            stickerCell.setRepeatMode(LottieDrawable.REVERSE);
 
             stickerCell.setFailureListener(result -> Log.e(getClass().getName(), "AnimatedViewHolder: ", result));
         }
@@ -136,33 +131,13 @@ public class StickerAdapter extends RecyclerView.Adapter {
          * @param structIGSticker file exist on local load with path but haven't file on local add to download queue and add event listener for load again after download
          */
         public void bindView(StructIGSticker structIGSticker) {
+            stickerCell.setTag(structIGSticker.getToken());
             if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals("")) {
                 if (structIGSticker.hasFileOnLocal()) {
-                    try {
-                        stickerCell.setAnimation(new FileInputStream(structIGSticker.getPath()), null);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    stickerCell.playAnimation(structIGSticker.getPath());
                 } else {
-                    EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
-                        String filePath = (String) message[0];
-                        String token = (String) message[1];
-
-                        G.handler.post(() -> {
-                            if (token.equals(structIGSticker.getToken())) {
-                                try {
-                                    stickerCell.setAnimation(new FileInputStream(filePath), null);
-                                    stickerCell.playAnimation();
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    });
-
                     IGDownloadFile.getInstance().startDownload(
                             new IGDownloadFileStruct(structIGSticker.getId(), structIGSticker.getToken(), structIGSticker.getFileSize(), structIGSticker.getPath()));
-
                 }
             }
 
