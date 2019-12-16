@@ -7553,7 +7553,7 @@ public class FragmentChat extends BaseFragment
      * do forward actions if any message forward to this room
      */
     private void manageForwardedMessage() {
-        if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
+        if (mForwardMessages != null && !isChatReadOnly) {
             final LinearLayout ll_Forward = rootView.findViewById(R.id.ac_ll_forward);
             int multiForwardSize = multiForwardList.size();
             if (hasForward || multiForwardSize > 0) {
