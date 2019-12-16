@@ -55,7 +55,6 @@ import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentPaymentBill;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -67,8 +66,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.helper.downloadFile.IGDownloadFile;
-import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
@@ -1391,10 +1388,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
                         if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder) {
-
-                            String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
-                            if (!new File(path).exists())
-                                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(), structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
 
                         } else {
                             downLoadThumbnail(holder);
