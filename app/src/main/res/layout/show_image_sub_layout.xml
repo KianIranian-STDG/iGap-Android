@@ -21,13 +21,12 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
-        <net.iGap.module.TouchImageView
+        <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/sisl_touch_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/empty_dark_shape"
             android:visibility="visible" />
 
 

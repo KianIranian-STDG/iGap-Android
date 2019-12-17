@@ -27,6 +27,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -43,11 +44,9 @@ import net.iGap.interfaces.OnGroupAvatarDelete;
 import net.iGap.interfaces.OnUserAvatarDelete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
-import net.iGap.module.TouchImageView;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoFileDownload;
@@ -586,7 +585,8 @@ public class FragmentShowAvatars extends BaseFragment {
             LayoutInflater inflater = LayoutInflater.from(container.getContext());
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
 
-            final TouchImageView touchImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            zoomableImageView.setZoomable(false);
             final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
             imgPlay.setVisibility(View.GONE);
 
@@ -598,7 +598,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
             if (HelperDownloadFile.getInstance().isDownLoading(ra.getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
-                startDownload(position, progress, touchImageView);
+                startDownload(position, progress, zoomableImageView);
             } else {
                 progress.withDrawable(R.drawable.ic_download, true);
             }
@@ -607,13 +607,14 @@ public class FragmentShowAvatars extends BaseFragment {
 
             File file = new File(path);
             if (file.exists()) {
-                loadFileToImageView(touchImageView, file, position);
+                loadFileToImageView(zoomableImageView, file, position);
                 progress.setVisibility(View.GONE);
+                zoomableImageView.setZoomable(true);
             } else {
                 path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
                 file = new File(path);
                 if (file.exists()) {
-                    loadFileToImageView(touchImageView, file, position);
+                    loadFileToImageView(zoomableImageView, file, position);
                 } else {
                     // if thumpnail not exist download it
                     ProtoFileDownload.FileDownload.Selector selector = null;
@@ -639,8 +640,8 @@ public class FragmentShowAvatars extends BaseFragment {
                                     G.currentActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (touchImageView != null) {
-                                                loadFileToImageView(touchImageView, new File(path), position);
+                                            if (zoomableImageView != null) {
+                                                loadFileToImageView(zoomableImageView, new File(path), position);
                                             }
 
                                         }
@@ -667,12 +668,12 @@ public class FragmentShowAvatars extends BaseFragment {
                         HelperDownloadFile.getInstance().stopDownLoad(_cashId);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
-                        startDownload(position, progress, touchImageView);
+                        startDownload(position, progress, zoomableImageView);
                     }
                 }
             });
 
-            touchImageView.setOnClickListener(new View.OnClickListener() {
+            zoomableImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (isShowToolbar) {
@@ -716,22 +717,15 @@ public class FragmentShowAvatars extends BaseFragment {
             }
         }
 
-        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView) {
+        private void startDownload(int position, final MessageProgress progress, final PhotoView zoomableImageView) {
             final RealmAttachment ra = avatarList.get(position).getFile();
             final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
-            progress.withOnProgress(new OnProgress() {
-                @Override
-                public void onProgressFinished() {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(0);
-                            progress.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            });
+            progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
+                progress.withProgress(0);
+                progress.setVisibility(View.GONE);
+                zoomableImageView.setZoomable(true);
+            }));
 
 
             HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
@@ -742,7 +736,7 @@ public class FragmentShowAvatars extends BaseFragment {
                         public void run() {
                             progress.withProgress(progres);
                             if (progres == 100) {
-                                loadFileToImageView(touchImageView, new File(path), position);
+                                loadFileToImageView(zoomableImageView, new File(path), position);
                             }
                         }
                     });
