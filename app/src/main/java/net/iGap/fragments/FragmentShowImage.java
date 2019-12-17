@@ -545,7 +545,7 @@ public class FragmentShowImage extends BaseFragment {
             zoomableImageView.setZoomable(false);
 
             FrameLayout frameLayout = layout.findViewById(R.id.Layout_showImage);
-            frameLayout.setOnClickListener(v -> zoomableImageView.performClick());
+            frameLayout.setOnClickListener(v -> setPageViewState(imgPlay));
 
             final MessageProgress progress = layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
@@ -647,27 +647,7 @@ public class FragmentShowImage extends BaseFragment {
             });
 
             zoomableImageView.setOnClickListener(view -> {
-                if (isShowToolbar) {
-                    toolbarShowImage.animate().setDuration(150).alpha(0F).start();
-                    ltImageName.setVisibility(View.GONE);
-                    ltImageName.animate().setDuration(150).alpha(0F).start();
-                    toolbarShowImage.setVisibility(View.GONE);
-                    isShowToolbar = false;
-                } else {
-                    toolbarShowImage.animate().setDuration(150).alpha(1F).start();
-                    toolbarShowImage.setVisibility(View.VISIBLE);
-                    ltImageName.animate().setDuration(150).alpha(1F).start();
-                    ltImageName.setVisibility(View.VISIBLE);
-                    isShowToolbar = true;
-                }
-
-                if (zoomableImageViewTmp != null && imgPlay.getVisibility() != View.VISIBLE && mMediaPlayer != null && videoController != null) {
-                    if (videoController.isShowing()) {
-                        videoController.hide();
-                    } else {
-                        videoController.show();
-                    }
-                }
+                setPageViewState(imgPlay);
             });
 
             imgPlay.setOnClickListener(v -> {
@@ -675,7 +655,7 @@ public class FragmentShowImage extends BaseFragment {
                 playVideo(position, mTextureView, imgPlay, zoomableImageView);
             });
 
-            mTextureView.setOnClickListener(v -> zoomableImageView.performClick());
+            mTextureView.setOnClickListener(v -> setPageViewState(imgPlay));
 
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -729,6 +709,30 @@ public class FragmentShowImage extends BaseFragment {
 
             container.addView(layout);
             return layout;
+        }
+
+        private void setPageViewState(ImageView imgPlay) {
+            if (isShowToolbar) {
+                toolbarShowImage.animate().setDuration(150).alpha(0F).start();
+                ltImageName.setVisibility(View.GONE);
+                ltImageName.animate().setDuration(150).alpha(0F).start();
+                toolbarShowImage.setVisibility(View.GONE);
+                isShowToolbar = false;
+            } else {
+                toolbarShowImage.animate().setDuration(150).alpha(1F).start();
+                toolbarShowImage.setVisibility(View.VISIBLE);
+                ltImageName.animate().setDuration(150).alpha(1F).start();
+                ltImageName.setVisibility(View.VISIBLE);
+                isShowToolbar = true;
+            }
+
+            if (zoomableImageViewTmp != null && imgPlay.getVisibility() != View.VISIBLE && mMediaPlayer != null && videoController != null) {
+                if (videoController.isShowing()) {
+                    videoController.hide();
+                } else {
+                    videoController.show();
+                }
+            }
         }
 
         /**
