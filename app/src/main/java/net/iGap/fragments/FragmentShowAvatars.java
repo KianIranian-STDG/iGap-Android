@@ -11,8 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +25,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import net.iGap.DbManager;
@@ -311,7 +310,6 @@ public class FragmentShowAvatars extends BaseFragment {
                     avatarListSize = element.size();
 
                     if (avatarListSize > 0) {
-                        mAdapter.clearBitmaps();
                         mAdapter = new AdapterViewPager();
                         viewPager.setAdapter(mAdapter);
                         txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarListSize);
@@ -551,27 +549,14 @@ public class FragmentShowAvatars extends BaseFragment {
     }
 
     private class AdapterViewPager extends PagerAdapter {
-        Bitmap[] bitmaps;
-        final Object mutex;
 
         public AdapterViewPager() {
-            bitmaps = new Bitmap[avatarList.size()];
-            mutex = new Object();
+
         }
 
         @Override
         public int getCount() {
             return avatarList.size();
-        }
-
-        public void clearBitmaps() {
-            synchronized (mutex) {
-                for (Bitmap bitmap : bitmaps) {
-                    if (bitmap != null && !bitmap.isRecycled()) {
-                        bitmap.recycle();
-                    }
-                }
-            }
         }
 
         @Override
@@ -607,14 +592,14 @@ public class FragmentShowAvatars extends BaseFragment {
 
             File file = new File(path);
             if (file.exists()) {
-                loadFileToImageView(zoomableImageView, file, position);
+                loadImage(zoomableImageView, file);
                 progress.setVisibility(View.GONE);
                 zoomableImageView.setZoomable(true);
             } else {
                 path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
                 file = new File(path);
                 if (file.exists()) {
-                    loadFileToImageView(zoomableImageView, file, position);
+                    loadImage(zoomableImageView, file);
                 } else {
                     // if thumpnail not exist download it
                     ProtoFileDownload.FileDownload.Selector selector = null;
@@ -628,24 +613,13 @@ public class FragmentShowAvatars extends BaseFragment {
                         fileSize = ra.getLargeThumbnail().getSize();
                     }
 
-                    final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_TEMP, true);
-
                     if (selector != null && fileSize > 0) {
                         HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(final String path, int progress) {
 
                                 if (progress == 100) {
-
-                                    G.currentActivity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (zoomableImageView != null) {
-                                                loadFileToImageView(zoomableImageView, new File(path), position);
-                                            }
-
-                                        }
-                                    });
+                                    G.currentActivity.runOnUiThread(() -> loadImage(zoomableImageView, path));
                                 }
                             }
 
@@ -658,37 +632,27 @@ public class FragmentShowAvatars extends BaseFragment {
                 }
             }
 
-            progress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            progress.setOnClickListener(view -> {
 
-                    String _cashId = avatarList.get(position).getFile().getCacheId();
+                String _cashId = avatarList.get(position).getFile().getCacheId();
 
-                    if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
-                        HelperDownloadFile.getInstance().stopDownLoad(_cashId);
-                    } else {
-                        progress.withDrawable(R.drawable.ic_cancel, true);
-                        startDownload(position, progress, zoomableImageView);
-                    }
+                if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
+                    HelperDownloadFile.getInstance().stopDownLoad(_cashId);
+                } else {
+                    progress.withDrawable(R.drawable.ic_cancel, true);
+                    startDownload(position, progress, zoomableImageView);
                 }
             });
 
-            zoomableImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isShowToolbar) {
-                        toolbarShowImage.animate().setDuration(150).alpha(0F).start();
-                        //  ltImageName.setVisibility(View.GONE);
-                        // ltImageName.animate().setDuration(150).alpha(0F).start();
-                        toolbarShowImage.setVisibility(View.GONE);
-                        isShowToolbar = false;
-                    } else {
-                        toolbarShowImage.animate().setDuration(150).alpha(1F).start();
-                        toolbarShowImage.setVisibility(View.VISIBLE);
-                        //  ltImageName.animate().setDuration(150).alpha(1F).start();
-                        //  ltImageName.setVisibility(View.VISIBLE);
-                        isShowToolbar = true;
-                    }
+            zoomableImageView.setOnClickListener(view -> {
+                if (isShowToolbar) {
+                    toolbarShowImage.animate().setDuration(150).alpha(0F).start();
+                    toolbarShowImage.setVisibility(View.GONE);
+                    isShowToolbar = false;
+                } else {
+                    toolbarShowImage.animate().setDuration(150).alpha(1F).start();
+                    toolbarShowImage.setVisibility(View.VISIBLE);
+                    isShowToolbar = true;
                 }
             });
 
@@ -696,25 +660,12 @@ public class FragmentShowAvatars extends BaseFragment {
             return layout;
         }
 
-        private void loadFileToImageView(ImageView imageView, File file, int pos) {
-            synchronized (mutex) {
-                if (imageView == null)
-                    return;
+        private void loadImage(PhotoView img, File file) {
+            Glide.with(img.getContext()).load(file).into(img);
+        }
 
-                if (bitmaps[pos] != null && !bitmaps[pos].isRecycled()) {
-                    bitmaps[pos].recycle();
-                    bitmaps[pos] = null;
-                }
-
-                Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                if (myBitmap == null) {
-                    return;
-                }
-
-                bitmaps[pos] = myBitmap;
-
-                imageView.setImageBitmap(myBitmap);
-            }
+        private void loadImage(PhotoView img, String path) {
+            Glide.with(img.getContext()).load(path).into(img);
         }
 
         private void startDownload(int position, final MessageProgress progress, final PhotoView zoomableImageView) {
@@ -731,13 +682,10 @@ public class FragmentShowAvatars extends BaseFragment {
             HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progres) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(progres);
-                            if (progres == 100) {
-                                loadFileToImageView(zoomableImageView, new File(path), position);
-                            }
+                    G.currentActivity.runOnUiThread(() -> {
+                        progress.withProgress(progres);
+                        if (progres == 100) {
+                            loadImage(zoomableImageView, path);
                         }
                     });
 
@@ -746,12 +694,9 @@ public class FragmentShowAvatars extends BaseFragment {
                 @Override
                 public void OnError(String token) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(0);
-                            progress.withDrawable(R.drawable.ic_download, true);
-                        }
+                    G.currentActivity.runOnUiThread(() -> {
+                        progress.withProgress(0);
+                        progress.withDrawable(R.drawable.ic_download, true);
                     });
                 }
             });
@@ -759,13 +704,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            synchronized (mutex) {
-                if (bitmaps[position] != null && !bitmaps[position].isRecycled()) {
-                    bitmaps[position].recycle();
-                    bitmaps[position] = null;
-                }
-                container.removeView((View) object);
-            }
+            container.removeView((View) object);
         }
     }
 }
