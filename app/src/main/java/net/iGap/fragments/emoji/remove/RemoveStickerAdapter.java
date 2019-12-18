@@ -1,23 +1,16 @@
 package net.iGap.fragments.emoji.remove;
 
-import android.annotation.SuppressLint;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 
 import net.iGap.G;
-import net.iGap.R;
-import net.iGap.eventbus.EventManager;
+import net.iGap.adapter.items.cells.AddAnimatedStickerCell;
+import net.iGap.adapter.items.cells.AddNormalStickerCell;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
@@ -33,7 +26,7 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
     private List<StructIGStickerGroup> stickerGroups;
     private RemoveStickerDialogListener listener;
 
-    public void updateAdapter(List<StructIGStickerGroup> data) {
+    void updateAdapter(List<StructIGStickerGroup> data) {
         this.stickerGroups = data;
         notifyDataSetChanged();
     }
@@ -42,7 +35,7 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
         this.listener = listener;
     }
 
-    public StructIGStickerGroup getStickerGroup(int pos) {
+    StructIGStickerGroup getStickerGroup(int pos) {
         return stickerGroups.get(pos);
     }
 
@@ -52,10 +45,10 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder holder;
 
         if (viewType == StructIGSticker.NORMAL_STICKER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_remove_normal_sticker, parent, false);
+            AddNormalStickerCell view = new AddNormalStickerCell(parent.getContext());
             holder = new NormalStickerViewHolder(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_remove_motion_sticker, parent, false);
+            AddAnimatedStickerCell view = new AddAnimatedStickerCell(parent.getContext());
             holder = new MotionStickerViewHolder(view);
         }
 
@@ -86,129 +79,116 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
         return stickerGroups.size();
     }
 
-    public void removeItem(int removedItemPosition) {
+    void removeItem(int removedItemPosition) {
         stickerGroups.remove(removedItemPosition);
         notifyItemRemoved(removedItemPosition);
     }
 
     private class NormalStickerViewHolder extends RecyclerView.ViewHolder {
-        private ImageView avatarIv;
-        private TextView stickerNameTv;
-        private TextView stickerCountTv;
+        private AddNormalStickerCell stickerCell;
 
-        @SuppressLint("RtlHardcoded")
-        public NormalStickerViewHolder(@NonNull View itemView) {
+        NormalStickerViewHolder(@NonNull View itemView) {
             super(itemView);
-            avatarIv = itemView.findViewById(R.id.iv_itemRemoveSticker_stickerAvatar);
-            stickerNameTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerName);
-            stickerCountTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerCount);
-
-            stickerNameTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
-            stickerCountTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+            stickerCell = (AddNormalStickerCell) itemView;
         }
 
         private void bindStickers(StructIGStickerGroup stickerGroup) {
-            stickerNameTv.setText(stickerGroup.getName());
-            stickerCountTv.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())));
+            stickerCell.getGroupNameTv().setText(stickerGroup.getName());
+            stickerCell.getGroupStickerCountTv().setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())));
 
             File file = new File(stickerGroup.getAvatarPath());
 
-            if (file.exists() && file.canRead()) {
-                Glide.with(itemView.getContext()).load(stickerGroup.getAvatarPath()).into(avatarIv);
-            } else {
-                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(stickerGroup.getGroupId(),
-                        stickerGroup.getAvatarToken(), stickerGroup.getAvatarSize(), stickerGroup.getAvatarPath()));
+            stickerCell.getButton().setMode(0);
+            stickerCell.getButton().changeProgressTo(View.GONE);
 
-                EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+            if (file.exists() && file.canRead()) {
+                Glide.with(itemView.getContext()).load(stickerGroup.getAvatarPath()).into(stickerCell.getGroupAvatarIv());
+            } else {
+
+                stickerCell.setEventListener((id, message) -> {
                     String filePath = (String) message[0];
                     String token = (String) message[1];
 
                     G.handler.post(() -> {
                         if (token.equals(stickerGroup.getAvatarToken())) {
-                            Glide.with(itemView.getContext()).load(filePath).into(avatarIv);
+                            Glide.with(itemView.getContext()).load(filePath).into(stickerCell.getGroupAvatarIv());
                         }
                     });
-
                 });
+
+                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(stickerGroup.getGroupId(), stickerGroup.getAvatarToken(), stickerGroup.getAvatarSize(), stickerGroup.getAvatarPath()));
             }
 
-            itemView.findViewById(R.id.btn_itemRemoveSticker).setOnClickListener(v -> {
-                if (listener != null)
-                    listener.onRemoveStickerClick(stickerGroup, getAdapterPosition());
-            });
+            stickerCell.getButton().setOnClickListener(v -> listener.onRemoveStickerClick(stickerGroup, getAdapterPosition(), visibility -> {
+                if (visibility)
+                    stickerCell.getButton().changeProgressTo(View.VISIBLE);
+            }));
 
-            itemView.setOnClickListener(v -> {
-                if (listener != null) listener.onStickerClick(stickerGroup);
-            });
+            stickerCell.setOnClickListener(v -> listener.onStickerClick(stickerGroup));
+
         }
     }
 
 
     private class MotionStickerViewHolder extends RecyclerView.ViewHolder {
-        private LottieAnimationView avatarIv;
-        private TextView stickerNameTv;
-        private TextView stickerCountTv;
+        private AddAnimatedStickerCell stickerCell;
 
-        @SuppressLint("RtlHardcoded")
-        public MotionStickerViewHolder(@NonNull View itemView) {
+        MotionStickerViewHolder(@NonNull View itemView) {
             super(itemView);
-            avatarIv = itemView.findViewById(R.id.lv_itemRemoveSticker_stickerAvatar);
-            stickerNameTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerName);
-            stickerCountTv = itemView.findViewById(R.id.tv_itemRemoveSticker_stickerCount);
-
-            stickerNameTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
-            stickerCountTv.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+            stickerCell = (AddAnimatedStickerCell) itemView;
         }
 
         private void bindStickers(StructIGStickerGroup stickerGroup) {
-            stickerNameTv.setText(stickerGroup.getName());
-            stickerCountTv.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())));
+            stickerCell.getGroupNameTv().setText(stickerGroup.getName());
+            stickerCell.getGroupStickerCountTv().setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())));
 
-            avatarIv.setFailureListener(result -> Log.e(getClass().getName(), "bindStickers: ", result));
+            stickerCell.getButton().setMode(0);
+            stickerCell.getButton().changeProgressTo(View.GONE);
 
             File file = new File(stickerGroup.getAvatarPath());
 
             if (file.exists() && file.canRead()) {
                 try {
-                    avatarIv.setAnimation(new FileInputStream(stickerGroup.getAvatarPath()), stickerGroup.getAvatarToken());
+                    stickerCell.getGroupAvatarIv().setAnimation(new FileInputStream(stickerGroup.getAvatarPath()), stickerGroup.getAvatarToken());
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             } else {
-                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(stickerGroup.getGroupId(),
-                        stickerGroup.getAvatarToken(), stickerGroup.getAvatarSize(), stickerGroup.getAvatarPath()));
-
-                EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+                stickerCell.setEventListener((id, message) -> {
                     String filePath = (String) message[0];
                     String token = (String) message[1];
 
                     G.handler.post(() -> {
                         if (token.equals(stickerGroup.getAvatarToken())) {
                             try {
-                                avatarIv.setAnimation(new FileInputStream(filePath), stickerGroup.getAvatarToken());
+                                stickerCell.getGroupAvatarIv().setAnimation(new FileInputStream(filePath), token);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
                         }
                     });
-
                 });
+
+                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(stickerGroup.getGroupId(), stickerGroup.getAvatarToken(), stickerGroup.getAvatarSize(), stickerGroup.getAvatarPath()));
             }
 
-            itemView.findViewById(R.id.btn_itemRemoveSticker).setOnClickListener(v -> {
-                if (listener != null)
-                    listener.onRemoveStickerClick(stickerGroup, getAdapterPosition());
-            });
+            stickerCell.getButton().setOnClickListener(v -> listener.onRemoveStickerClick(stickerGroup, getAdapterPosition(), visibility -> {
+                if (visibility)
+                    stickerCell.getButton().changeProgressTo(View.VISIBLE);
+            }));
 
-            itemView.setOnClickListener(v -> {
-                if (listener != null) listener.onStickerClick(stickerGroup);
-            });
+            stickerCell.setOnClickListener(v -> listener.onStickerClick(stickerGroup));
+
         }
     }
 
     public interface RemoveStickerDialogListener {
         void onStickerClick(StructIGStickerGroup stickerGroup);
 
-        void onRemoveStickerClick(StructIGStickerGroup stickerGroup, int pos);
+        void onRemoveStickerClick(StructIGStickerGroup stickerGroup, int pos, ProgressStatus progressStatus);
+    }
+
+    public interface ProgressStatus {
+        void setVisibility(boolean visibility);
     }
 }

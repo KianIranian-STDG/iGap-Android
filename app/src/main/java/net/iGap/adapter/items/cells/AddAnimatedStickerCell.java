@@ -88,6 +88,9 @@ public class AddAnimatedStickerCell extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+
+        groupAvatarIv.playAnimation();
+
         if (eventListener != null)
             EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, eventListener);
     }

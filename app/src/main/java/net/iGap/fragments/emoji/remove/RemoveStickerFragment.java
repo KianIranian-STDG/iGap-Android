@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,8 +22,6 @@ import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
 public class RemoveStickerFragment extends BaseFragment {
 
-    private ProgressBar progressBar;
-
     private RemoveStickerAdapter adapter;
     private RemoveStickerViewModel viewModel;
 
@@ -39,7 +36,6 @@ public class RemoveStickerFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressBar = view.findViewById(R.id.pb_removeSticker);
         RecyclerView recyclerView = view.findViewById(R.id.rv_removeSticker);
 
         recyclerView.setAdapter(adapter);
@@ -55,29 +51,23 @@ public class RemoveStickerFragment extends BaseFragment {
             }
 
             @Override
-            public void onRemoveStickerClick(StructIGStickerGroup stickerGroup, int pos) {
-                viewModel.onRemoveStickerClicked(pos);
+            public void onRemoveStickerClick(StructIGStickerGroup stickerGroup, int pos, RemoveStickerAdapter.ProgressStatus progressStatus) {
+                if (pos != -1 && getContext() != null) {
+                    new MaterialDialog.Builder(getContext())
+                            .title(getResources().getString(R.string.remove_sticker))
+                            .content(getResources().getString(R.string.remove_sticker_text))
+                            .positiveText(getString(R.string.yes))
+                            .negativeText(getString(R.string.no))
+                            .onPositive((dialog, which) -> {
+                                progressStatus.setVisibility(true);
+                                viewModel.removeStickerFromFavorite(adapter.getStickerGroup(pos).getGroupId(), pos);
+                                dialog.dismiss();
+                            }).show();
+                }
             }
         });
-
-        viewModel.getRemoveProgressLiveData().observe(getViewLifecycleOwner(), visibility -> progressBar.setVisibility(visibility));
 
         viewModel.getRemoveStickerLiveData().observe(getViewLifecycleOwner(), removedItemPosition -> adapter.removeItem(removedItemPosition));
-
-        viewModel.getRemoveDialogLiveData().observe(getViewLifecycleOwner(), position -> {
-            if (position != -1 && getContext() != null) {
-                new MaterialDialog.Builder(getContext())
-                        .title(getResources().getString(R.string.remove_sticker))
-                        .content(getResources().getString(R.string.remove_sticker_text))
-                        .positiveText(getString(R.string.yes))
-                        .negativeText(getString(R.string.no))
-                        .onPositive((dialog, which) -> {
-                            viewModel.removeStickerFromFavorite(adapter.getStickerGroup(position).getGroupId(), position);
-                            dialog.dismiss();
-                        })
-                        .show();
-            }
-        });
 
     }
 }
