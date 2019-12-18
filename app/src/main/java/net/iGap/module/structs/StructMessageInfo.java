@@ -228,6 +228,17 @@ public class StructMessageInfo implements Parcelable {
         if (realmRoomMessage.getChannelExtra() != null) {
             return realmRoomMessage.getChannelExtra();
         } else {
+            //Todo: maybe use this code for instead create thread and to Db work in it (bagi check it :D)
+            /*DbManager.getInstance().doRealmTransactionLowPriorityAsync(new DbManager.RealmTransaction() {
+                @Override
+                public void doTransaction(Realm realm) {
+                    RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                    RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                    if (newMessage != null && channelExtra != null) {
+                        newMessage.setChannelExtra(channelExtra);
+                    }
+                }
+            });*/
             new Thread(() -> {
                 DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(realm1 -> {

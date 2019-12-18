@@ -189,7 +189,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 TextInputLayout inputChannelLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
                 edtLink.setHint(R.string.channel_public_hint_revoke);
-                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
+                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext(), R.font.main_font));
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
                 edtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
@@ -219,9 +219,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                         .widgetColor(new Theme().getAccentColor(getContext()))
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog1, which) -> {
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("LINK_GROUP", Config.IGAP_LINK_PREFIX + link);
-                            clipboard.setPrimaryClip(clip);
+                            if (getActivity() != null) {
+                                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", Config.IGAP_LINK_PREFIX + link);
+                                clipboard.setPrimaryClip(clip);
+                            }
                         })
                         .build();
 
@@ -255,11 +257,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                     return false;
                 })
                 .setOnLinkLongClickListener((tv, url) -> {
-                        if (HelperUrl.isTextLink(url)){
-                            G.isLinkClicked = true ;
+                    if (HelperUrl.isTextLink(url)) {
+                        G.isLinkClicked = true;
 
-                            HelperUrl.openLinkDialog(getActivity() , url);
-                        }
+                        HelperUrl.openLinkDialog(getActivity(), url);
+                    }
                     return true;
                 });
 

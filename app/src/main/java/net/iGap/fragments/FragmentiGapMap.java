@@ -1379,7 +1379,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     public void statusCheck() {
-        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager manager = (LocationManager) G.fragmentActivity.getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
