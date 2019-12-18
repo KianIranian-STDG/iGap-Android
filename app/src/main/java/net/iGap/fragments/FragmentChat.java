@@ -3901,7 +3901,7 @@ public class FragmentChat extends BaseFragment
                     });
                     if (result.size() > 0) {
                         rm = result.last();
-                        if (rm.getMessage() != null) {
+                        if (rm != null && rm.getMessage() != null) {
                             if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
                                 backToMenu = false;
                             }
@@ -3910,7 +3910,7 @@ public class FragmentChat extends BaseFragment
 
                     if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId) {
 
-                        if (rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
+                        if (rm != null && rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
                             botInit.updateCommandList(false, message, getActivity(), backToMenu, roomMessage, roomId, true);
                         else
                             botInit.updateCommandList(false, "clear", getActivity(), backToMenu, null, 0, true);
