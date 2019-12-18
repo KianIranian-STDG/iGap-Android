@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,8 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         progressBar.getIndeterminateDrawable().setColorFilter(new Theme().getPrimaryDarkColor(getContext()), PorterDuff.Mode.SRC_IN);
 
         stickerRecyclerView.setAdapter(adapter);
+
+        stickerCell.setFailureListener(result -> Log.e(TAG, "setFailureListener: ", result));
 
         viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), visibility -> progressBar.setVisibility(visibility));
 
