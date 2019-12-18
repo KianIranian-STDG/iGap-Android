@@ -78,14 +78,48 @@ public class StickerRepository {
             });
     }
 
+    private void getStickerFromServerAndInsetToDb(String groupId) {
+        if (apiService != null)
+            apiService.getSticker(groupId).enqueue(new Callback<StructEachSticker>() {
+                @Override
+                public void onResponse(@NotNull Call<StructEachSticker> call, @NotNull Response<StructEachSticker> response) {
+                    if (response.body() != null) {
+                        if (response.body().getOk() && response.body().getData() != null) {
+
+                            StructGroupSticker structGroupSticker = response.body().getData();
+
+                            DbManager.getInstance().doRealmTransaction(realm -> {
+                                RealmStickers.put(realm, structGroupSticker.getCreatedAt(), structGroupSticker.getId(), structGroupSticker.getRefId(), structGroupSticker.getName(), structGroupSticker.getAvatarToken(), structGroupSticker.getAvatarSize(), structGroupSticker.getAvatarName(), structGroupSticker.getPrice(), structGroupSticker.getIsVip(), structGroupSticker.getSort(), structGroupSticker.getIsVip(), structGroupSticker.getCreatedBy(), structGroupSticker.getStickers(), false);
+                            });
+
+                            Log.i(TAG, "get sticker from API SERVICE with group id" + groupId + " * successfully * ");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<StructEachSticker> call, @NotNull Throwable t) {
+                    Log.i(TAG, "get sticker from API SERVICE  with group id" + stickerGroup.getGroupId() + " with error " + t.getMessage());
+                }
+            });
+    }
+
     public void addStickerGroupToFavorite(String groupId, ResponseCallback<Boolean> callback) {
         if (apiService != null)
             apiService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
                 @Override
                 public void onResponse(@NotNull Call<StructStickerResult> call, @NotNull Response<StructStickerResult> response) {
                     if (response.body() != null && response.body().isSuccess()) {
+
                         DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransactionAsync(realm1 -> RealmStickers.updateFavorite(realm1, groupId, true), () -> {
+                            realm.executeTransactionAsync(realm1 -> {
+                                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm1);
+                                if (realmStickers == null) {
+                                    getStickerFromServerAndInsetToDb(groupId);
+                                } else {
+                                    RealmStickers.updateFavorite(realm1, groupId, true);
+                                }
+                            }, () -> {
                                 if (FragmentChat.onUpdateSticker != null) {
                                     FragmentChat.onUpdateSticker.update();
                                 }
@@ -93,6 +127,7 @@ public class StickerRepository {
                         });
 
                         callback.onSuccess(true);
+
                         Log.i(TAG, "add sticker to category successfully with group id --> " + groupId);
                     }
                 }

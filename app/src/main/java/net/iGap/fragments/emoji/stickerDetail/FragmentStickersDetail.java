@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.emoji.add.StickerAdapter;
@@ -48,7 +47,7 @@ public class FragmentStickersDetail extends BaseFragment {
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setShowConnectionState(false)
-                .setDefaultTitle(G.context.getResources().getString(R.string.sticker))
+                .setDefaultTitle(stickerGroup.getName())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
                     @Override

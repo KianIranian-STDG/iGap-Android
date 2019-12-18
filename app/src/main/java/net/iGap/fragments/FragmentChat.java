@@ -149,7 +149,6 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
@@ -4115,7 +4114,7 @@ public class FragmentChat extends BaseFragment
         if (realmStickers != null && realmStickers.isValid())
             stickerGroup.setValueWithRealmStickers(realmStickers);
 
-        StickerDialogFragment dialogFragment = StickerDialogFragment.newInstance(stickerGroup);
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup);
         dialogFragment.setListener(this::sendStickerAsMessage);
 
         if (getFragmentManager() != null)
@@ -5828,15 +5827,15 @@ public class FragmentChat extends BaseFragment
                 })
                 .setOnDownloadStickerListener(new OnDownloadStickerListener() {
                     @Override
-                    public void downloadStickerItem(String token, String extention, long avatarSize, OnStickerItemDownloaded onStickerItemDownloaded) {
+                    public void downloadStickerItem(StructItemSticker sticker, OnStickerItemDownloaded onStickerItemDownloaded) {
 
                         //download id must be unique
                         IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention), new IGDownloadFileStruct.OnDownloadListener() {
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
                                     public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
                                         G.handler.post(() -> {
-                                            if (token.equals(fileStruct.token) && !fileStruct.path.endsWith(".json")) {
+                                            if (sticker.getToken().equals(fileStruct.token) && !fileStruct.path.endsWith(".json")) {
                                                 onStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
                                             }
                                         });
@@ -5850,16 +5849,16 @@ public class FragmentChat extends BaseFragment
                     }
 
                     @Override
-                    public void downloadStickerAvatar(String token, String extention, long avatarSize, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
+                    public void downloadStickerAvatar(StructGroupSticker sticker, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
 
                         //download id must be unique
                         IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention), new IGDownloadFileStruct.OnDownloadListener() {
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
                                     public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
                                         G.handler.post(() -> {
-                                            if (fileStruct.token.equals(token)) {
-                                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token);
+                                            if (fileStruct.token.equals(sticker.getAvatarToken())) {
+                                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token, fileStruct.path);
                                             }
                                         });
                                     }
@@ -5873,15 +5872,15 @@ public class FragmentChat extends BaseFragment
 
 
                     @Override
-                    public void downloadLottieStickerItem(String token, String extention, long avatarSize, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
+                    public void downloadLottieStickerItem(StructItemSticker sticker, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
 
                         //download id must be unique
                         IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(token, token, avatarSize, HelperDownloadSticker.downloadStickerPath(token, extention), new IGDownloadFileStruct.OnDownloadListener() {
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
                                     public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
                                         G.handler.post(() -> {
-                                            if (token.equals(fileStruct.token) && fileStruct.path.endsWith(".json")) {
+                                            if (sticker.getToken().equals(fileStruct.token) && fileStruct.path.endsWith(".json")) {
                                                 lottieStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
                                             }
                                         });
@@ -7912,7 +7911,7 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER:
-                        if (messageInfo.realmRoomMessage.getAttachment().getName() != null && messageInfo.realmRoomMessage.getAttachment().isAnimatedSticker()) {
+                        if (messageInfo.getAttachment().getName() != null && messageInfo.getAttachment().isAnimatedSticker()) {
                             if (!addTop) {
                                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {

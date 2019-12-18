@@ -249,7 +249,7 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation 'com.github.KianIranian-STDG.ig_sticker:emoji-ios:4.0.0'
+    implementation 'com.github.KianIranian-STDG.ig_sticker:emoji-ios:4.0.2'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation project(':paygearcore')
