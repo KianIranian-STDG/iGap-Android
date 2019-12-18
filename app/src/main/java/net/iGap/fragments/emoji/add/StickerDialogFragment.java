@@ -43,9 +43,15 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
 
     private String TAG = "abbasiStickerDialog";
 
-    public static StickerDialogFragment newInstance(StructIGStickerGroup stickerGroup) {
+    public static StickerDialogFragment getInstance(StructIGStickerGroup stickerGroup) {
         StickerDialogFragment dialogAddSticker = new StickerDialogFragment();
         dialogAddSticker.stickerGroup = stickerGroup;
+        return dialogAddSticker;
+    }
+
+    public static StickerDialogFragment getInstance(String groupId) {
+        StickerDialogFragment dialogAddSticker = new StickerDialogFragment();
+        dialogAddSticker.stickerGroup = new StructIGStickerGroup(groupId);
         return dialogAddSticker;
     }
 
