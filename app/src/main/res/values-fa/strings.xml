@@ -658,7 +658,7 @@
     <string name="share_video_file_2">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_video_file">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_file">به اشتراک گذاشتن فایل</string>
-    <string name="text_copied">متن کپی شده</string>
+    <string name="text_copied">متن کپی شد</string>
 
     <string name="message">پیام</string>
     <string name="future_done">این قابلیت در آینده ارائه خواهد شد.</string>
