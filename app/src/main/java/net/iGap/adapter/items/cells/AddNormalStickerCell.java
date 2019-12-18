@@ -22,7 +22,7 @@ import net.iGap.eventbus.EventManager;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.view.ProgressButton;
 
-public class NormalStickerCell extends FrameLayout {
+public class AddNormalStickerCell extends FrameLayout {
 
     private EventListener eventListener;
 
@@ -32,15 +32,14 @@ public class NormalStickerCell extends FrameLayout {
     private ProgressButton button;
     private boolean isRtl = G.isAppRtl;
 
-    public NormalStickerCell(@NonNull Context context) {
+    public AddNormalStickerCell(@NonNull Context context) {
         super(context);
         setWillNotDraw(false);
-        groupAvatarIv = new AppCompatImageView(getContext());
-        groupNameTv = new TextView(getContext());
-        groupStickerCountTv = new TextView(getContext());
 
+        groupAvatarIv = new AppCompatImageView(getContext());
         addView(groupAvatarIv, LayoutCreator.createFrame(52, 52, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 16, 0, 16, 0));
 
+        groupNameTv = new TextView(getContext());
         groupNameTv.setTextColor(new Theme().getTitleTextColor(getContext()));
         groupNameTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         groupNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
@@ -51,6 +50,7 @@ public class NormalStickerCell extends FrameLayout {
         groupNameTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
         addView(groupNameTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 120 : 78, 8, isRtl ? 78 : 120, 0));
 
+        groupStickerCountTv = new TextView(getContext());
         groupStickerCountTv.setTextColor(new Theme().getTitleTextColor(getContext()));
         groupStickerCountTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         groupStickerCountTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
