@@ -20,8 +20,10 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
+import net.iGap.fragments.emoji.stickerDetail.FragmentStickersDetail;
 import net.iGap.fragments.emoji.struct.StickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.helper.HelperFragment;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.viewmodel.AddStickerViewModel;
 
@@ -116,10 +118,13 @@ public class AddStickersFragment extends BaseFragment {
             StructIGStickerGroup stickerGroup = new StructIGStickerGroup(sticker.getId());
             stickerGroup.setValueWithOldStruct(sticker);
 
-            StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup);
-
             if (getFragmentManager() != null)
-                dialogFragment.show(getFragmentManager(), "dialogFragment");
+                new HelperFragment(getFragmentManager(), FragmentStickersDetail.newInstance(stickerGroup)).setReplace(false).load();
+//
+//            StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup);
+//
+//            if (getFragmentManager() != null)
+//                dialogFragment.show(getFragmentManager(), "dialogFragment");
 
         });
 
