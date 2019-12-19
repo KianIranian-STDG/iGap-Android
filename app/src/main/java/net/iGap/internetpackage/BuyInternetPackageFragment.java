@@ -47,6 +47,7 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag {
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.buy_internet_package_title))

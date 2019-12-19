@@ -72,6 +72,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
 
         helperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

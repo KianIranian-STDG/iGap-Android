@@ -42,14 +42,17 @@ public class DailNumberFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HelperToolbar t = HelperToolbar.create().setContext(getContext()).setLeftIcon(R.string.back_icon).setLogoShown(true).setListener(new ToolbarListener() {
-            @Override
-            public void onLeftIconClickListener(View view) {
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
-            }
-        });
+        HelperToolbar t = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    }});
 
         binding.toolbar.addView(t.getView());
     }

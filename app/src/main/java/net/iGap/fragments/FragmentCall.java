@@ -107,6 +107,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon_without_circle_font)
                 .setFragmentActivity(getActivity())

@@ -100,9 +100,10 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
             holder.checkBoxSelect.setChecked(true);
         }
 
-        holder.checkBoxSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            onPathAdapterBottomSheet.path(mList.getPath(), isChecked, false, mList, mList.getId());
-            mList.setSelected(!isChecked);
+        holder.checkBoxSelect.setOnClickListener(v -> {
+            holder.checkBoxSelect.setChecked(holder.checkBoxSelect.isChecked());
+            onPathAdapterBottomSheet.path(mList.getPath(), holder.checkBoxSelect.isChecked(), false, mList, mList.getId());
+            mList.setSelected(!holder.checkBoxSelect.isChecked());
         });
 
         holder.cr.setOnClickListener(v -> {

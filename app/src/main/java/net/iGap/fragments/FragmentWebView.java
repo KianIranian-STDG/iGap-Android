@@ -160,6 +160,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed , To
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setRoundBackground(false)

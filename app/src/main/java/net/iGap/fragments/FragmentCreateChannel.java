@@ -82,6 +82,7 @@ public class FragmentCreateChannel extends BaseFragment {
 
         binding.fchLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setRightIcons(R.string.check_icon)
                 .setLeftIcon(R.string.back_icon)

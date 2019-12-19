@@ -29,6 +29,7 @@ public class PurchaseFragment extends BaseFragment implements ToolbarListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(this)
                 .setDefaultTitle("لیست دانلود ها");

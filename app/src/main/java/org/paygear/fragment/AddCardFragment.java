@@ -82,6 +82,7 @@ public class AddCardFragment extends Fragment {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(getString(R.string.add_new_card))

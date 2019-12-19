@@ -100,6 +100,7 @@ public class PollFragment extends BaseFragment {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 // .setRightSmallAvatarShown(true)
                 .setLogoShown(true)

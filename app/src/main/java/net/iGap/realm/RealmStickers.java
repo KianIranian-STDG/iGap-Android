@@ -6,8 +6,8 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.DbManager;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
-import net.iGap.proto.ProtoFileDownload;
-import net.iGap.request.RequestFileDownload;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public class RealmStickers extends RealmObject {
         realmStickers.setRefId(refId);
         realmStickers.setName(name);
         realmStickers.setAvatarToken(avatarToken);
-        realmStickers.setUri(HelperDownloadSticker.createPathFile(avatarToken, avatarName));
+        realmStickers.setUri(HelperDownloadSticker.downloadStickerPath(avatarToken, avatarName));
         realmStickers.setAvatarSize(avatarSize);
         realmStickers.setAvatarName(avatarName);
         realmStickers.setPrice(price);
@@ -60,17 +60,6 @@ public class RealmStickers extends RealmObject {
         realmStickers.setApproved(approved);
         realmStickers.setCreatedBy(createdBy);
         realmStickers.setFavorite(isFavorite);
-
-        HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-            @Override
-            public void OnProgress(String path, String token, int progress) {
-            }
-
-            @Override
-            public void OnError(String token) {
-
-            }
-        });
 
         RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
         for (StructItemSticker itemSticker : stickers) {
@@ -166,6 +155,93 @@ public class RealmStickers extends RealmObject {
             itemSticker.setStickers(stickerDetails);
 
             return itemSticker;
+        });
+    }
+
+    public static List<StructIGSticker> getGroupStickers(String groupId) {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
+
+            if (realmStickers == null)
+                return new ArrayList<>();
+
+            List<StructIGSticker> stickerDetails = new ArrayList<>();
+            for (RealmStickersDetails stickersDetails : realmStickers.getRealmStickersDetails()) {
+                StructIGSticker structIGSticker = new StructIGSticker();
+                structIGSticker.setId(stickersDetails.getSt_id());
+                structIGSticker.setName(stickersDetails.getName());
+                structIGSticker.setPath(stickersDetails.getUri());
+                stickerDetails.add(structIGSticker);
+            }
+
+            return stickerDetails;
+        });
+    }
+
+    public List<StructIGSticker> getIGGroupStickers() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+
+            if (getRealmStickersDetails() == null || getRealmStickersDetails().size() <= 0 || !getRealmStickersDetails().isValid())
+                return new ArrayList<>();
+
+            List<StructIGSticker> stickerDetails = new ArrayList<>();
+
+            for (RealmStickersDetails stickersDetails : getRealmStickersDetails()) {
+                StructIGSticker structIGSticker = new StructIGSticker();
+                structIGSticker.setId(stickersDetails.getSt_id());
+                structIGSticker.setName(stickersDetails.getName());
+                structIGSticker.setPath(stickersDetails.getUri());
+                structIGSticker.setGroupId(stickersDetails.getGroupId());
+                structIGSticker.setToken(stickersDetails.getToken());
+                structIGSticker.setFileName(stickersDetails.getFileName());
+                structIGSticker.setFileSize((int) stickersDetails.getFileSize());
+                stickerDetails.add(structIGSticker);
+            }
+
+            return stickerDetails;
+        });
+    }
+
+    public static List<StructIGStickerGroup> getFavoriteStickers() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            List<StructIGStickerGroup> stickers = new ArrayList<>();
+            RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, true).findAll();
+
+            for (RealmStickers item : realmStickers) {
+                StructIGStickerGroup stickerGroup = new StructIGStickerGroup(item.getSt_id());
+
+                stickerGroup.setCreatedAt(item.getCreatedAt());
+                stickerGroup.setRefId(item.refId);
+                stickerGroup.setName(item.name);
+                stickerGroup.setAvatarToken(item.avatarToken);
+                stickerGroup.setAvatarPath(HelperDownloadSticker.downloadStickerPath(item.avatarToken, item.avatarName));
+                stickerGroup.setAvatarSize((int) item.getAvatarSize());
+                stickerGroup.setAvatarName(item.getAvatarName());
+                stickerGroup.setPrice(item.getPrice());
+                stickerGroup.setVip(item.isVip);
+                stickerGroup.setSort(item.sort);
+                stickerGroup.setCreatedBy(item.createdBy);
+
+                List<StructIGSticker> stickerDetails = new ArrayList<>();
+
+                for (RealmStickersDetails it : item.getRealmStickersDetails()) {
+
+                    StructIGSticker structIGSticker = new StructIGSticker();
+                    structIGSticker.setId(it.getSt_id());
+                    structIGSticker.setId(it.getSt_id());
+                    structIGSticker.setName(it.getName());
+                    structIGSticker.setToken(it.getToken());
+                    structIGSticker.setPath(it.getUri());
+                    structIGSticker.setName(it.getFileName());
+                    structIGSticker.setFileSize((int) it.getFileSize());
+                    structIGSticker.setGroupId(it.getGroupId());
+                    stickerDetails.add(structIGSticker);
+
+                }
+                stickerGroup.setStickers(stickerDetails);
+                stickers.add(stickerGroup);
+            }
+            return stickers;
         });
     }
 

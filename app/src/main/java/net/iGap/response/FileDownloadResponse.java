@@ -13,6 +13,7 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoFileDownload;
@@ -36,59 +37,73 @@ public class FileDownloadResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
         super.handler();
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
-        RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
-        String cacheId = identityFileDownload.cacheId;
-        long fileSize = identityFileDownload.size;
-        String filePath = identityFileDownload.filepath;
-        int previousOffset = (int) identityFileDownload.offset;
-        type = identityFileDownload.typeDownload;
 
-        //  String type = filePath.substring(filePath.lastIndexOf(".") + 1);
-        nextOffset = previousOffset + builder.getBytes().size();
+        if (identity instanceof IGDownloadFileStruct) {
+            IGDownloadFileStruct fileStruct = (IGDownloadFileStruct) identity;
+
+            fileStruct.nextOffset = fileStruct.offset + builder.getBytes().toByteArray().length;
+
+            fileStruct.progress = (fileStruct.nextOffset * 100) / fileStruct.size;
+
+            AndroidUtils.writeBytesToFile(fileStruct.path, builder.getBytes().toByteArray());
+
+            if (fileStruct.onStickerDownload != null)
+                fileStruct.onStickerDownload.onStickerDownload(fileStruct);
+
+        } else {
+            RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
+            String cacheId = identityFileDownload.cacheId;
+            long fileSize = identityFileDownload.size;
+            String filePath = identityFileDownload.filepath;
+            int previousOffset = (int) identityFileDownload.offset;
+            type = identityFileDownload.typeDownload;
+
+            //  String type = filePath.substring(filePath.lastIndexOf(".") + 1);
+            nextOffset = previousOffset + builder.getBytes().size();
 
 
-        boolean connectivityType = true;
-        try {
-            if (HelperCheckInternetConnection.currentConnectivityType != null) {
-                connectivityType = HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI;
+            boolean connectivityType = true;
+            try {
+                if (HelperCheckInternetConnection.currentConnectivityType != null) {
+                    connectivityType = HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        if (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-            HelperDataUsage.progressDownload(builder.getBytes().size(), identityFileDownload.type);
-        }
-        long progress = (nextOffset * 100) / fileSize;
+            if (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                HelperDataUsage.progressDownload(builder.getBytes().size(), identityFileDownload.type);
+            }
+            long progress = (nextOffset * 100) / fileSize;
 
-        RequestFileDownload.downloadPending.remove(cacheId + "" + identityFileDownload.offset);
+            RequestFileDownload.downloadPending.remove(cacheId + "" + identityFileDownload.offset);
 
-        if (progress == 100 && (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE)) {
-            HelperDataUsage.increaseDownloadFiles(identityFileDownload.type);
-        }
+            if (progress == 100 && (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE)) {
+                HelperDataUsage.increaseDownloadFiles(identityFileDownload.type);
+            }
 
-        AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
+            AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
 
-        switch (type) {
-            case FILE:
-                if (G.onFileDownloadResponse != null) {
-                    G.onFileDownloadResponse.onFileDownload(cacheId, nextOffset, identityFileDownload.selector, (int) progress);
-                }
-                break;
-            case AVATAR:
-                if (G.onFileDownloaded != null) {
-                    G.onFileDownloaded.onFileDownload(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector, (int) progress);
-                }
-                break;
-            case STICKER:
-            case STICKER_DETAIL:
-                if (G.onStickerDownloaded != null) {
-                    G.onStickerDownloaded.onStickerDownloaded(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector, identityFileDownload.typeDownload, 0);
-                }
-                break;
+            switch (type) {
+                case FILE:
+                    if (G.onFileDownloadResponse != null) {
+                        G.onFileDownloadResponse.onFileDownload(cacheId, nextOffset, identityFileDownload.selector, (int) progress);
+                    }
+                    break;
+                case AVATAR:
+                    if (G.onFileDownloaded != null) {
+                        G.onFileDownloaded.onFileDownload(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector, (int) progress);
+                    }
+                    break;
+                case STICKER:
+                case STICKER_DETAIL:
+                    if (G.onStickerDownloaded != null) {
+                        G.onStickerDownloaded.onStickerDownloaded(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector, identityFileDownload.typeDownload, 0);
+                    }
+                    break;
+            }
         }
     }
 
@@ -104,6 +119,15 @@ public class FileDownloadResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+
+
+        if (identity instanceof IGDownloadFileStruct) {
+            IGDownloadFileStruct fileStruct = (IGDownloadFileStruct) identity;
+
+            if (fileStruct.onStickerDownload != null)
+                fileStruct.onStickerDownload.onError(fileStruct, majorCode, minorCode);
+        }
+
         RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
         type = identityFileDownload.typeDownload;
         RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);

@@ -1446,7 +1446,9 @@ Want to get it?</string>
     <string name="startUpdate">update</string>
     <string name="sticker">Sticker</string>
     <string name="add_sticker">Add Sticker</string>
+    <string name="add_sticker_with_size">Add %s Sticker</string>
     <string name="remove_sticker">Remove Sticker</string>
+    <string name="remove_sticker_with_size">Remove %s Sticker</string>
     <string name="remove_sticker_text">Are you sure you want to remove this stickers?</string>
     <string name="add_sticker_text">Are you sure you want to install this stickers?</string>
     <string name="access_phone_number">Are you sure to send your phone number?</string>

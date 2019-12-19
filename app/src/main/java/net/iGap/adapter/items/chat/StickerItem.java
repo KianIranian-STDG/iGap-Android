@@ -20,13 +20,17 @@ import android.widget.LinearLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.helper.downloadFile.IGDownloadFile;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.ReserveSpaceRoundedImageView;
-import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
+import java.io.File;
 import java.util.List;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
@@ -49,39 +53,51 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
+        holder.image.setTag(structMessage.getAttachment().getToken());
         super.bindView(holder, payloads);
 
         holder.getChatBloke().setBackgroundResource(0);
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.image.setOnClickListener(v -> {
 
-                if (FragmentChat.isInSelectionMode) {
-                    holder.itemView.performLongClick();
+            if (FragmentChat.isInSelectionMode) {
+                holder.itemView.performLongClick();
+            } else {
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    return;
+                }
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                 } else {
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
-                    }
+                    messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                 }
             }
         });
 
+        String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+        if (new File(path).exists()) {
+            G.imageLoader.displayImage(suitablePath(path), holder.image);
+        } else {
+            EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+                if (id == EventManager.STICKER_DOWNLOAD) {
+
+                    String filePath = (String) message[0];
+                    String fileToken = (String) message[1];
+
+                    if (holder.image.getTag().equals(fileToken)) {
+                        G.handler.post(() -> {
+                            G.imageLoader.displayImage(suitablePath(filePath), holder.image);
+                        });
+                    }
+                }
+            });
+
+            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(),
+                    structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
+        }
+
         holder.image.setOnLongClickListener(getLongClickPerform(holder));
         holder.progress.setVisibility(View.GONE);
-    }
-
-
-    @Override
-    public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-
-        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override

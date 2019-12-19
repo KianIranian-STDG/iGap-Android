@@ -139,6 +139,7 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(G.fragmentActivity)
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(this)
                 .setLogoShown(true)
                 .setDefaultTitle(getResources().getString(R.string.payment_history))

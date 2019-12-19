@@ -92,7 +92,7 @@ public class GoToChatActivity {
             }
         }
 
-        Log.e(TAG, "startActivity: activity ->" + activity.getClass().getName());
+//        Log.e(TAG, "startActivity: activity ->" + activity.getClass().getName());
 
         if (HelperGetDataFromOtherApp.hasSharedData) {
 

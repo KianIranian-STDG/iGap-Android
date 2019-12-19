@@ -51,6 +51,7 @@ public class FragmentIgashtBarcodeScan extends IGashtBaseView {
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {

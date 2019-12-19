@@ -61,6 +61,7 @@ public class FragmentPassCode extends BaseFragment {
 
         final HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.two_step_pass_code))
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)

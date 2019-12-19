@@ -95,6 +95,7 @@ public class FragmentDeleteAccount extends BaseFragment implements ToolbarListen
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setRightIcons(R.string.check_icon)
                 .setLeftIcon(R.string.back_icon)

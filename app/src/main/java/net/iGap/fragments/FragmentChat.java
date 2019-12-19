@@ -76,7 +76,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -100,6 +99,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.vanniktech.emoji.sticker.OnDownloadStickerListener;
+import com.vanniktech.emoji.sticker.OnLottieStickerItemDownloaded;
 import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
 import com.vanniktech.emoji.sticker.OnStickerAvatarDownloaded;
 import com.vanniktech.emoji.sticker.OnStickerItemDownloaded;
@@ -121,6 +121,7 @@ import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.adapter.items.chat.AnimatedStickerItem;
 import net.iGap.adapter.items.chat.AudioItem;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.CardToCardItem;
@@ -148,12 +149,13 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
-import net.iGap.fragments.emoji.add.DialogAddSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
+import net.iGap.fragments.emoji.remove.StickersSettingFragment;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -177,6 +179,8 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.helper.downloadFile.IGDownloadFile;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
@@ -305,7 +309,6 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
-import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
@@ -1467,6 +1470,7 @@ public class FragmentChat extends BaseFragment
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon)
                 .setLogoShown(false)
@@ -3896,7 +3900,7 @@ public class FragmentChat extends BaseFragment
                     });
                     if (result.size() > 0) {
                         rm = result.last();
-                        if (rm.getMessage() != null) {
+                        if (rm != null && rm.getMessage() != null) {
                             if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
                                 backToMenu = false;
                             }
@@ -3905,7 +3909,7 @@ public class FragmentChat extends BaseFragment
 
                     if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId) {
 
-                        if (rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
+                        if (rm != null && rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
                             botInit.updateCommandList(false, message, getActivity(), backToMenu, roomMessage, roomId, true);
                         else
                             botInit.updateCommandList(false, "clear", getActivity(), backToMenu, null, 0, true);
@@ -4094,12 +4098,9 @@ public class FragmentChat extends BaseFragment
         try {
             JSONObject jObject = new JSONObject(message.getAdditional().getAdditionalData());
             String groupId = jObject.getString("groupId");
-            String token = jObject.getString("token");
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                if (realmStickers == null || !realmStickers.isFavorite()) {
-                    openFragmentAddStickerToFavorite(groupId, token);
-                }
+                openFragmentAddStickerToFavorite(groupId, realmStickers);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -4107,13 +4108,18 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    private void openFragmentAddStickerToFavorite(String groupId, String token) {
+    private void openFragmentAddStickerToFavorite(String groupId, RealmStickers realmStickers) {
+        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        DialogAddSticker dialogFragment = new DialogAddSticker().newInstance(groupId, token);
-        if (fm != null) {
-            dialogFragment.show(fm, "dialogFragment");
-        }
+        if (realmStickers != null && realmStickers.isValid())
+            stickerGroup.setValueWithRealmStickers(realmStickers);
+
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup);
+        dialogFragment.setListener(this::sendStickerAsMessage);
+
+        if (getFragmentManager() != null)
+            dialogFragment.show(getFragmentManager(), "dialogFragment");
+
     }
 
     private void openMessage(StructMessageInfo message) {
@@ -5749,7 +5755,7 @@ public class FragmentChat extends BaseFragment
                         int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
                         RealmRoomMessage roomMessage = new RealmRoomMessage();
                         roomMessage.setMessageId(identity);
-                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+                        roomMessage.setMessageType(STICKER);
                         roomMessage.setRoomId(mRoomId);
                         roomMessage.setMessage(st.getName());
                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -5766,11 +5772,14 @@ public class FragmentChat extends BaseFragment
                         RealmAttachment realmAttachment = new RealmAttachment();
                         realmAttachment.setId(identity);
                         realmAttachment.setLocalFilePath(st.getUri());
+
                         realmAttachment.setWidth(imageSize[0]);
                         realmAttachment.setHeight(imageSize[1]);
                         realmAttachment.setSize(new File(st.getUri()).length());
                         realmAttachment.setName(new File(st.getUri()).getName());
                         realmAttachment.setDuration(0);
+
+                        int type = st.getUri().endsWith(".json") ? StructIGSticker.ANIMATED_STICKER : StructIGSticker.NORMAL_STICKER;
 
                         roomMessage.setAttachment(realmAttachment);
 
@@ -5801,8 +5810,12 @@ public class FragmentChat extends BaseFragment
                             });
                         }).start();
 
+
                         StructMessageInfo sm = new StructMessageInfo(roomMessage);
-                        mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+                        if (type == StructIGSticker.ANIMATED_STICKER)
+                            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+                        else
+                            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
                         if (isReply()) {
@@ -5814,58 +5827,70 @@ public class FragmentChat extends BaseFragment
                 })
                 .setOnDownloadStickerListener(new OnDownloadStickerListener() {
                     @Override
-                    public void downloadStickerItem(String token, String extention, long avatarSize, OnStickerItemDownloaded onStickerItemDownloaded) {
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+                    public void downloadStickerItem(StructItemSticker sticker, OnStickerItemDownloaded onStickerItemDownloaded) {
 
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-                                G.handler.post(new Runnable() {
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
-                                    public void run() {
-                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                                            return;
-
-                                        if (progress == 100) {
-                                            onStickerItemDownloaded.onStickerItemDownload(token);
-                                        }
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (sticker.getToken().equals(fileStruct.token) && !fileStruct.path.endsWith(".json")) {
+                                                onStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
                                     }
-                                });
-                            }
 
-                            @Override
-                            public void OnError(String token) {
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
 
-                            }
-                        });
-
-
+                                    }
+                                }));
                     }
 
                     @Override
-                    public void downloadStickerAvatar(String token, String extention, long avatarSize, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-                                G.handler.post(new Runnable() {
+                    public void downloadStickerAvatar(StructGroupSticker sticker, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
+
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
-                                    public void run() {
-                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                                            return;
-
-                                        if (progress == 100) {
-                                            onStickerAvatarDownloaded.onStickerAvatarDownload(token);
-                                        }
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (fileStruct.token.equals(sticker.getAvatarToken())) {
+                                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
                                     }
-                                });
 
-                            }
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
 
-                            @Override
-                            public void OnError(String token) {
+                                    }
+                                }));
+                    }
 
-                            }
-                        });
 
+                    @Override
+                    public void downloadLottieStickerItem(StructItemSticker sticker, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
+
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
+                                    @Override
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (sticker.getToken().equals(fileStruct.token) && fileStruct.path.endsWith(".json")) {
+                                                lottieStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
+
+                                    }
+                                }));
                     }
                 })
                 .setOpenPageSticker(new OnOpenPageStickerListener() {
@@ -5879,7 +5904,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(recentStickerList)).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), StickersSettingFragment.newInstance(recentStickerList)).setReplace(false).load();
                         }
                     }
                 })
@@ -5888,6 +5913,78 @@ public class FragmentChat extends BaseFragment
                 .setDividerColor(dividerColor)
                 .build(edtChat);
 
+    }
+
+    private void sendStickerAsMessage(StructIGSticker structIGSticker) {
+
+        String additional = new Gson().toJson(new StructSendSticker(structIGSticker.getId(), structIGSticker.getName(), structIGSticker.getGroupId(), structIGSticker.getToken()));
+        long identity = AppUtils.makeRandomId();
+        int[] imageSize = AndroidUtils.getImageDimens(structIGSticker.getPath());
+        RealmRoomMessage roomMessage = new RealmRoomMessage();
+        roomMessage.setMessageId(identity);
+        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+        roomMessage.setRoomId(mRoomId);
+        roomMessage.setMessage(structIGSticker.getName());
+        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+        RealmAdditional realmAdditional = new RealmAdditional();
+        realmAdditional.setId(AppUtils.makeRandomId());
+        realmAdditional.setAdditionalType(AdditionalType.STICKER);
+        realmAdditional.setAdditionalData(additional);
+
+        roomMessage.setRealmAdditional(realmAdditional);
+
+        RealmAttachment realmAttachment = new RealmAttachment();
+        realmAttachment.setId(identity);
+        realmAttachment.setLocalFilePath(structIGSticker.getPath());
+
+        realmAttachment.setWidth(imageSize[0]);
+        realmAttachment.setHeight(imageSize[1]);
+        realmAttachment.setSize(new File(structIGSticker.getPath()).length());
+        realmAttachment.setName(new File(structIGSticker.getPath()).getName());
+        realmAttachment.setDuration(0);
+
+        roomMessage.setAttachment(realmAttachment);
+
+        roomMessage.getAttachment().setToken(structIGSticker.getToken());
+        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
+        roomMessage.setShowMessage(true);
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+        if (isReply()) {
+            RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                if (copyReplyMessage1 != null) {
+                    return realm.copyFromRealm(copyReplyMessage1);
+                }
+                return null;
+            });
+
+            if (copyReplyMessage != null) {
+                roomMessage.setReplyTo(copyReplyMessage);
+            }
+        }
+
+        new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
+        })).start();
+
+
+        StructMessageInfo sm = new StructMessageInfo(roomMessage);
+
+        if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
+            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+        else
+            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+
+        scrollToEnd();
+
+        if (isReply()) {
+            mReplayLayout.setTag(null);
+            mReplayLayout.setVisibility(View.GONE);
+        }
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
@@ -7814,10 +7911,18 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER:
-                        if (!addTop) {
-                            mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        if (messageInfo.getAttachment().getName() != null && messageInfo.getAttachment().isAnimatedSticker()) {
+                            if (!addTop) {
+                                mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         } else {
-                            mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            if (!addTop) {
+                                mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                     case VOICE:

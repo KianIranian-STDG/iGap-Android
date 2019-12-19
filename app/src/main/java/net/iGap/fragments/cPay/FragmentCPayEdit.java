@@ -114,6 +114,7 @@ public class FragmentCPayEdit extends BaseAPIViewFrag implements ToolbarListener
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.c_pay_title))
                 .setLeftIcon(R.string.back_icon)

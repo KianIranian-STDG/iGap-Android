@@ -117,7 +117,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     //    private TextView mBtnRemoveSelected;
     private RealmResults<RealmRoom> results;
     private ConstraintLayout root;
-    private ConstraintSet constraintSet;
     private TextView selectedItemCountTv;
     private RecyclerView multiSelectRv;
     /*private SelectedItemAdapter selectedItemAdapter;*/
@@ -141,7 +140,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isNeedResume = true;
-        G.onVersionCallBack = this;
     }
 
     @Override
@@ -151,8 +149,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         tagId = System.currentTimeMillis();
 
         root = view.findViewById(R.id.amr_layout_root);
-        constraintSet = new ConstraintSet();
-        constraintSet.clone(root);
 
         progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
@@ -174,6 +170,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.edit_icon)
                 .setRightIcons(R.string.add_icon_without_circle_font)
                 .setFragmentActivity(getActivity())
@@ -756,6 +753,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
+        G.onVersionCallBack = this;
         if (G.isDepricatedApp)
             isDeprecated();
 
@@ -796,7 +794,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void onPause() {
         super.onPause();
-
+        G.onClientGetRoomListResponse = null;
+        G.onSetActionInRoom = null;
+        G.onDateChanged = null;
+        G.onVersionCallBack = null;
     }
 
     @Override
@@ -1087,6 +1088,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void setMargin(int mTop) {
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(root);
         constraintSet.setMargin(selectedItemView.getId(), ConstraintSet.TOP, i_Dp(mTop));
         constraintSet.applyTo(root);
     }

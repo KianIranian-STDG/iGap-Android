@@ -76,6 +76,7 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.your_password))
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)

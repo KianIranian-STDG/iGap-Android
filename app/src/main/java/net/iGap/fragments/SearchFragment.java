@@ -107,6 +107,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setSearchBoxShown(true, true)

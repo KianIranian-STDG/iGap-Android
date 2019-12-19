@@ -2396,7 +2396,9 @@
     <string name="Sticker_added_successfully">تمت إضافة الملصق بنجاح</string>
     <string name="sticker">لاصقة</string>
     <string name="add_sticker">أضف ملصقا</string>
+    <string name="add_sticker_with_size">أضف %s ملصقا</string>
     <string name="remove_sticker">إزالة اللاصق</string>
+    <string name="remove_sticker_with_size">إزالة %s اللاصق</string>
     <string name="remove_sticker_text">هل أنت متأكد من أنك تريد إزالة هذه الملصقات؟</string>
     <string name="add_sticker_text">هل أنت متأكد من أنك تريد تثبيت هذه الملصقات؟</string>
     <string name="Add">إضافة</string>

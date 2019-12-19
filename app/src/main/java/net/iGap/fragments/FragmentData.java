@@ -61,6 +61,7 @@ public class FragmentData extends BaseFragment {
 
         binding.fdLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.date))
                 .setLeftIcon(R.string.back_icon)

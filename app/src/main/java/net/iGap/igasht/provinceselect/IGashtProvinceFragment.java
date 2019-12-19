@@ -48,6 +48,7 @@ public class IGashtProvinceFragment extends IGashtBaseView {
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(/*R.string.score_star_icon,*/R.string.history_icon)

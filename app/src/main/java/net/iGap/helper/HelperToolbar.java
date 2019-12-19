@@ -106,6 +106,7 @@ public class HelperToolbar {
     private FragmentActivity mFragmentActivity;
     private ViewGroup mViewGroup = null;
     private ToolbarListener mToolbarListener;
+    private LifecycleOwner lifecycleOwner;
 
     private int[] mLeftIcon = {0, 0};
     private int[] mRightIcons = {0, 0, 0, 0};
@@ -670,6 +671,11 @@ public class HelperToolbar {
         return mTabletEditIcon;
     }
 
+    public HelperToolbar setLifecycleOwner(LifecycleOwner lifecycleOwner) {
+        this.lifecycleOwner = lifecycleOwner;
+        return this;
+    }
+
     public void checkPassCodeVisibility() {
         if (passCodeBtn != null) {
             if (PassCode.getInstance().isPassCode()) {
@@ -859,10 +865,16 @@ public class HelperToolbar {
         if (!isShowConnectionState) return;
 
         try {
-            connectionStateChecker(G.fragmentActivity);
+            if (lifecycleOwner != null)
+                connectionStateChecker(lifecycleOwner);
+            else
+                connectionStateChecker(G.fragmentActivity);
         } catch (Exception e) {
             try {
-                connectionStateChecker(G.currentActivity);
+                if (lifecycleOwner != null)
+                    connectionStateChecker(lifecycleOwner);
+                else
+                    connectionStateChecker(G.currentActivity);
             } catch (Exception e2) {
 
             }

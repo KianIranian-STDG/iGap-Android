@@ -30,7 +30,6 @@ import java.io.IOException;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
-import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
@@ -200,8 +199,8 @@ public class RealmAttachment extends RealmObject {
                                 _File1.renameTo(new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
                             } else {
-                                    AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
-                                    realmAttachment.setLocalFilePath(_defaultFilePAth);
+                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
+                                realmAttachment.setLocalFilePath(_defaultFilePAth);
 
                             }
                         }
@@ -397,9 +396,13 @@ public class RealmAttachment extends RealmObject {
         return localFilePath != null && new File(localFilePath).exists() && new File(localFilePath).canRead();
     }
 
-    public boolean isFileExistsOnLocalAndIsThumbnail() {
+    public boolean isFileExistsOnLocalAndIsImage() {
         assert localFilePath != null;
         return isFileExistsOnLocal() && HelperMimeType.isFileImage(localFilePath.toLowerCase());
+    }
+
+    public boolean isAnimatedSticker() {
+        return name != null && HelperMimeType.isFileJson(name);
     }
 
     /**
