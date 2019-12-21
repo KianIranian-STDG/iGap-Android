@@ -6553,64 +6553,56 @@ public class FragmentChat extends BaseFragment
      * manage need showSpamBar for user or no
      */
     private void showSpamBar() {
-        /**
-         * use handler for run async
-         */
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-                    return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
-                });
-                RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-                });
-                if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                    if (phoneNumber == null) {
-                        if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
-                            initSpamBarLayout(realmRegisteredInfo);
-                            vgSpamUser.setVisibility(View.VISIBLE);
-                        }
-                    }
+        RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
+        });
+        RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+        });
+        if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
+            if (phoneNumber == null) {
+                if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
+                    initSpamBarLayout(realmRegisteredInfo);
+                    vgSpamUser.setVisibility(View.VISIBLE);
+                }
+            }
 
-                    if (realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                        if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+            if (realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
+                if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
 
-                            if (realmRegisteredInfo.isBlockUser()) {
-                                initSpamBarLayout(realmRegisteredInfo);
-                                blockUser = true;
-                                txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-                                vgSpamUser.setVisibility(View.VISIBLE);
-                            } else {
-                                if (vgSpamUser != null) {
-                                    vgSpamUser.setVisibility(View.GONE);
-                                }
-                            }
-                        }
-                    }
-
-                    if (realmContacts != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                        if (realmContacts.isBlockUser()) {
-                            if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
-                                initSpamBarLayout(realmRegisteredInfo);
-                                blockUser = true;
-                                txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-                                vgSpamUser.setVisibility(View.VISIBLE);
-                            } else {
-                                initSpamBarLayout(realmRegisteredInfo);
-                                blockUser = true;
-                                txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-                                vgSpamUser.setVisibility(View.VISIBLE);
-                            }
-                        } else {
-                            if (vgSpamUser != null) {
-                                vgSpamUser.setVisibility(View.GONE);
-                            }
+                    if (realmRegisteredInfo.isBlockUser()) {
+                        initSpamBarLayout(realmRegisteredInfo);
+                        blockUser = true;
+                        txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    } else {
+                        if (vgSpamUser != null) {
+                            vgSpamUser.setVisibility(View.GONE);
                         }
                     }
                 }
             }
-        });
+
+            if (realmContacts != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
+                if (realmContacts.isBlockUser()) {
+                    if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+                        initSpamBarLayout(realmRegisteredInfo);
+                        blockUser = true;
+                        txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    } else {
+                        initSpamBarLayout(realmRegisteredInfo);
+                        blockUser = true;
+                        txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (vgSpamUser != null) {
+                        vgSpamUser.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
     }
 
     /**
