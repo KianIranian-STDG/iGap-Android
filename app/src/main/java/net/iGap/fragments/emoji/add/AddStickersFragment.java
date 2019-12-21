@@ -20,10 +20,8 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.stickerDetail.FragmentStickersDetail;
 import net.iGap.fragments.emoji.struct.StickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.viewmodel.AddStickerViewModel;
 
@@ -114,21 +112,20 @@ public class AddStickersFragment extends BaseFragment {
 
 
         viewModel.getOpenStickerDetailLiveData().observe(getViewLifecycleOwner(), sticker -> {
-
-            StructIGStickerGroup stickerGroup = new StructIGStickerGroup(sticker.getId());
-            stickerGroup.setValueWithOldStruct(sticker);
-
-            if (getFragmentManager() != null)
-                new HelperFragment(getFragmentManager(), FragmentStickersDetail.newInstance(stickerGroup)).setReplace(false).load();
-//
-//            StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup);
-//
-//            if (getFragmentManager() != null)
-//                dialogFragment.show(getFragmentManager(), "dialogFragment");
-
+            openFragmentAddStickerToFavorite(sticker.getId());
         });
 
     }
+
+    private void openFragmentAddStickerToFavorite(String groupId) {
+        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
+
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, true);
+
+        if (getFragmentManager() != null)
+            dialogFragment.show(getFragmentManager(), "dialogFragment");
+    }
+
 
     private void getDataStickers() {
 

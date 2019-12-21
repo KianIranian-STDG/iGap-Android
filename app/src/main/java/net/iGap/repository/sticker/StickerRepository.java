@@ -26,37 +26,43 @@ import retrofit2.Response;
 public class StickerRepository {
 
     private APIEmojiService apiService;
-    private StructIGStickerGroup stickerGroup;
     private String TAG = "abbasiSticker Repository";
-
-    public StickerRepository(StructIGStickerGroup stickerGroup) {
-        this();
-        this.stickerGroup = stickerGroup;
-    }
 
     public StickerRepository() {
         apiService = ApiEmojiUtils.getAPIService();
     }
 
-    public void getStickerListForStickerDialog(ResponseCallback<StructIGStickerGroup> callback) {
-        if (stickerGroup != null && stickerGroup.hasData()) {
+    public void getStickerListForStickerDialog(String groupId, ResponseCallback<StructIGStickerGroup> callback) {
+
+        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
+
+            if (realmStickers != null && realmStickers.isValid())
+                stickerGroup.setValueWithRealmStickers(realmStickers);
+        });
+
+
+        if (stickerGroup.hasData()) {
             callback.onSuccess(stickerGroup);
             Log.i(TAG, "load sticker from DB with group id --> " + stickerGroup.getGroupId());
-        } else if (stickerGroup != null) {
-            getStickerFromServer(callback);
+        } else {
+            getStickerFromServer(groupId, callback);
             Log.i(TAG, "get sticker from API SERVICE with group id --> " + stickerGroup.getGroupId());
         }
     }
 
-    private void getStickerFromServer(ResponseCallback<StructIGStickerGroup> callback) {
-        if (apiService != null && stickerGroup != null)
-            apiService.getSticker(stickerGroup.getGroupId()).enqueue(new Callback<StructEachSticker>() {
+    private void getStickerFromServer(String groupId, ResponseCallback<StructIGStickerGroup> callback) {
+        if (apiService != null)
+            apiService.getSticker(groupId).enqueue(new Callback<StructEachSticker>() {
                 @Override
                 public void onResponse(@NotNull Call<StructEachSticker> call, @NotNull Response<StructEachSticker> response) {
                     if (response.body() != null) {
                         if (response.body().getOk() && response.body().getData() != null) {
 
                             StructGroupSticker structGroupSticker = response.body().getData();
+                            StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 RealmStickers realmStickers = RealmStickers.put(realm, structGroupSticker.getCreatedAt(), structGroupSticker.getId(), structGroupSticker.getRefId(), structGroupSticker.getName(), structGroupSticker.getAvatarToken(), structGroupSticker.getAvatarSize(), structGroupSticker.getAvatarName(), structGroupSticker.getPrice(), structGroupSticker.getIsVip(), structGroupSticker.getSort(), structGroupSticker.getIsVip(), structGroupSticker.getCreatedBy(), structGroupSticker.getStickers(), false);
@@ -65,14 +71,14 @@ public class StickerRepository {
 
                             G.handler.postDelayed(() -> callback.onSuccess(stickerGroup), 300);
 
-                            Log.i(TAG, "get sticker from API SERVICE with group id" + stickerGroup.getGroupId() + " * and size " + stickerGroup.getGroupId() + " * successfully * ");
+                            Log.i(TAG, "get sticker from API SERVICE with group id " + stickerGroup.getGroupId() + " * and size " + stickerGroup.getStickersSize() + " * successfully * ");
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(@NotNull Call<StructEachSticker> call, @NotNull Throwable t) {
-                    Log.i(TAG, "get sticker from API SERVICE  with group id" + stickerGroup.getGroupId() + " with error " + t.getMessage());
+                    Log.i(TAG, "get sticker from API SERVICE  with group id" + groupId + " with error " + t.getMessage());
                     callback.onError(t.getMessage());
                 }
             });
@@ -99,7 +105,7 @@ public class StickerRepository {
 
                 @Override
                 public void onFailure(@NotNull Call<StructEachSticker> call, @NotNull Throwable t) {
-                    Log.i(TAG, "get sticker from API SERVICE  with group id" + stickerGroup.getGroupId() + " with error " + t.getMessage());
+                    Log.i(TAG, "get sticker from API SERVICE  with group id" + groupId + " with error " + t.getMessage());
                 }
             });
     }

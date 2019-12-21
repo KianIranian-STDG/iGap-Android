@@ -15,9 +15,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.emoji.stickerDetail.FragmentStickersDetail;
+import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.helper.HelperFragment;
 import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
 public class RemoveStickerFragment extends BaseFragment {
@@ -46,8 +45,7 @@ public class RemoveStickerFragment extends BaseFragment {
         adapter.setListener(new RemoveStickerAdapter.RemoveStickerDialogListener() {
             @Override
             public void onStickerClick(StructIGStickerGroup stickerGroup) {
-                if (getFragmentManager() != null)
-                    new HelperFragment(getFragmentManager(), FragmentStickersDetail.newInstance(stickerGroup)).setReplace(false).load();
+                openFragmentAddStickerToFavorite(stickerGroup);
             }
 
             @Override
@@ -69,5 +67,13 @@ public class RemoveStickerFragment extends BaseFragment {
 
         viewModel.getRemoveStickerLiveData().observe(getViewLifecycleOwner(), removedItemPosition -> adapter.removeItem(removedItemPosition));
 
+    }
+
+    private void openFragmentAddStickerToFavorite(StructIGStickerGroup stickerGroup) {
+
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, true);
+
+        if (getFragmentManager() != null)
+            dialogFragment.show(getFragmentManager(), "dialogFragment");
     }
 }

@@ -4098,21 +4098,15 @@ public class FragmentChat extends BaseFragment
         try {
             JSONObject jObject = new JSONObject(message.getAdditional().getAdditionalData());
             String groupId = jObject.getString("groupId");
-            DbManager.getInstance().doRealmTask(realm -> {
-                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                openFragmentAddStickerToFavorite(groupId, realmStickers);
-            });
+            openFragmentAddStickerToFavorite(groupId);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void openFragmentAddStickerToFavorite(String groupId, RealmStickers realmStickers) {
+    private void openFragmentAddStickerToFavorite(String groupId) {
         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
-
-        if (realmStickers != null && realmStickers.isValid())
-            stickerGroup.setValueWithRealmStickers(realmStickers);
 
         StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, isChatReadOnly);
         dialogFragment.setListener(this::sendStickerAsMessage);

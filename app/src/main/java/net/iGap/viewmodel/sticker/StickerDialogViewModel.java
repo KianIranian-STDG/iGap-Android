@@ -32,10 +32,8 @@ public class StickerDialogViewModel extends BaseViewModel {
     private int fragmentMode = LIST;
 
     public StickerDialogViewModel(StructIGStickerGroup stickerGroup) {
-        repository = new StickerRepository(stickerGroup);
+        repository = new StickerRepository();
         this.stickerGroup = stickerGroup;
-        if (stickerGroup.hasData())
-            onStickerFavoriteChange(stickerGroup.isFavorite());
     }
 
     public void onAddOrRemoveStickerClicked() {
@@ -53,7 +51,7 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     public void getSticker() {
         progressMutableLiveData.postValue(View.VISIBLE);
-        repository.getStickerListForStickerDialog(new BaseCPayViewModel<StructIGStickerGroup>() {
+        repository.getStickerListForStickerDialog(stickerGroup.getGroupId(), new BaseCPayViewModel<StructIGStickerGroup>() {
             @Override
             public void onSuccess(StructIGStickerGroup data) {
 
@@ -63,9 +61,9 @@ public class StickerDialogViewModel extends BaseViewModel {
                     stickerGroup = data;
                 }
 
-                onStickerFavoriteChange(data.isFavorite());
-
                 stickersMutableLiveData.postValue(stickerGroup);
+
+                onStickerFavoriteChange(data.isFavorite());
 
                 Log.i(TAG, "on Success getSticker with group id -> " + stickerGroup.getGroupId() + " and size -> " + stickerGroup.getStickers().size());
             }
