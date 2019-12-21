@@ -68,7 +68,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
-                    new HandleResponse(binary).start();
+                    new HandleResponse(binary).run();
                     super.onBinaryMessage(websocket, binary);
                 }
 
