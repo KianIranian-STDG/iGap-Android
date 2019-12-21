@@ -380,7 +380,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             if (results != null) {
 
                 if (results.size() > 0)
-                    addHeader(getString(R.string.Groups));
+                    addHeader(edtSearch.getContext().getString(R.string.Groups));
 
 
                 for (RealmRoom realmRoom : results) {
