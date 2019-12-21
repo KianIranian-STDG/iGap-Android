@@ -7650,10 +7650,10 @@ public class FragmentChat extends BaseFragment
      * do forward actions if any message forward to this room
      */
     private void manageForwardedMessage() {
-        if (mForwardMessages != null && !isChatReadOnly) {
+        if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
             final LinearLayout ll_Forward = rootView.findViewById(R.id.ac_ll_forward);
             int multiForwardSize = multiForwardList.size();
-            if (hasForward || multiForwardSize > 0) {
+            if ((hasForward || multiForwardSize > 0) && mForwardMessages != null) {
 
                 for (int i = 0; i < mForwardMessages.size(); i++) {
                     if (hasForward) {
@@ -7692,7 +7692,7 @@ public class FragmentChat extends BaseFragment
 
                 sendButtonVisibility(true);
 
-                int _count = mForwardMessages.size();
+                int _count = mForwardMessages != null ? mForwardMessages.size() : 0;
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = rootView.findViewById(R.id.cslhf_txt_message);
