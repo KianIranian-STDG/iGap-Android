@@ -94,7 +94,8 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
 
         private void bindStickers(StructIGStickerGroup stickerGroup) {
             stickerCell.getGroupNameTv().setText(stickerGroup.getName());
-            stickerCell.getGroupStickerCountTv().setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())));
+            String size = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())) : String.valueOf(stickerGroup.getStickersSize());
+            stickerCell.getGroupStickerCountTv().setText(size);
 
             File file = new File(stickerGroup.getAvatarPath());
 
@@ -140,7 +141,8 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter {
 
         private void bindStickers(StructIGStickerGroup stickerGroup) {
             stickerCell.getGroupNameTv().setText(stickerGroup.getName());
-            stickerCell.getGroupStickerCountTv().setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())));
+            String size = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())) : String.valueOf(stickerGroup.getStickersSize());
+            stickerCell.getGroupStickerCountTv().setText(size);
 
             stickerCell.getButton().setMode(0);
             stickerCell.getButton().changeProgressTo(View.GONE);

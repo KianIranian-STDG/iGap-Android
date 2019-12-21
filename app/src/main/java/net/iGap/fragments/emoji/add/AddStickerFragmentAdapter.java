@@ -107,7 +107,7 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
             stickerCell.getButton().setMode(sticker.getIsFavorite() ? 0 : 1);
             stickerCell.getGroupNameTv().setText(sticker.getName());
 
-            String size = G.selectedLanguage.equals("fa") ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(sticker.getStickers().size())) : String.valueOf(sticker.getStickers().size());
+            String size = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(sticker.getStickers().size())) : String.valueOf(sticker.getStickers().size());
             stickerCell.getGroupStickerCountTv().setText(size);
 
             stickerCell.setOnClickListener(v -> listener.onCellClick(sticker));
@@ -150,7 +150,7 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
             stickerCell.getButton().setMode(sticker.getIsFavorite() ? 0 : 1);
             stickerCell.getGroupNameTv().setText(sticker.getName());
 
-            String size = G.selectedLanguage.equals("fa") ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(sticker.getStickers().size())) : String.valueOf(sticker.getStickers().size());
+            String size = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(sticker.getStickers().size())) : String.valueOf(sticker.getStickers().size());
             stickerCell.getGroupStickerCountTv().setText(size);
 
             stickerCell.setOnClickListener(v -> listener.onCellClick(sticker));
