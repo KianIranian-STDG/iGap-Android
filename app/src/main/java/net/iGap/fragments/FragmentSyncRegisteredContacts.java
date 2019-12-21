@@ -166,17 +166,13 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (getActivity() == null || getActivity().isFinishing()) {
-                    return;
+                if (getActivity() != null){
+                    Intent intent = new Intent(getActivity(), ActivityMain.class);
+                    intent.putExtra(ARG_USER_ID, userID);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
                 }
-
-                Intent intent = new Intent(getContext(), ActivityMain.class);
-                intent.putExtra(ARG_USER_ID, userID);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                G.context.startActivity(intent);
-                G.fragmentActivity.finish();
-
             }
         });
 
@@ -294,6 +290,10 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
     @Override
     public void onContactsGetList() {
+
+        if (getActivity() == null || getActivity().isFinishing()) {
+            return;
+        }
 
         if (results == null || results.size() == 0) {
             results = DbManager.getInstance().doRealmTask(realm -> {
