@@ -25,12 +25,15 @@ import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.viewmodel.sticker.StickerDialogViewModel;
 
 public class StickerDialogFragment extends BottomSheetDialogFragment {
     private StickerAdapter adapter;
     private StickerDialogViewModel viewModel;
     private StructIGStickerGroup stickerGroup;
+    private ProtoGlobal.Room.Type chatType;
+    private boolean isJoin;
 
     private TextView addOrRemoveTv;
     private TextView groupNameTv;
@@ -43,9 +46,11 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
 
     private String TAG = "abbasiStickerDialog";
 
-    public static StickerDialogFragment getInstance(StructIGStickerGroup stickerGroup) {
+    public static StickerDialogFragment getInstance(StructIGStickerGroup stickerGroup, ProtoGlobal.Room.Type chatType, boolean isNotJoin) {
         StickerDialogFragment dialogAddSticker = new StickerDialogFragment();
         dialogAddSticker.stickerGroup = stickerGroup;
+        dialogAddSticker.chatType = chatType;
+        dialogAddSticker.isJoin = !isNotJoin;
         return dialogAddSticker;
     }
 
@@ -129,7 +134,12 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
                     });
                 }
 
-                addOrRemoveTv.setText(getResources().getString(R.string.send));
+                if ((chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) && isJoin) {
+                    addOrRemoveTv.setText(getResources().getString(R.string.send));
+                    addOrRemoveTv.setVisibility(View.VISIBLE);
+                } else {
+                    addOrRemoveTv.setVisibility(View.GONE);
+                }
             } else if (previewIv.getVisibility() == View.VISIBLE) {
 
                 previewIv.animate().alpha(0.0f).setDuration(150).setListener(new AnimatorListenerAdapter() {
