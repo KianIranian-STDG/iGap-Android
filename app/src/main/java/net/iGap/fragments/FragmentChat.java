@@ -4114,7 +4114,7 @@ public class FragmentChat extends BaseFragment
         if (realmStickers != null && realmStickers.isValid())
             stickerGroup.setValueWithRealmStickers(realmStickers);
 
-        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup , chatType , isNotJoin);
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, isChatReadOnly);
         dialogFragment.setListener(this::sendStickerAsMessage);
 
         if (getFragmentManager() != null)
