@@ -592,14 +592,14 @@ public class FragmentShowAvatars extends BaseFragment {
 
             File file = new File(path);
             if (file.exists()) {
-                loadImage(zoomableImageView, file);
+                loadImage(zoomableImageView, path);
                 progress.setVisibility(View.GONE);
                 zoomableImageView.setZoomable(true);
             } else {
                 path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
                 file = new File(path);
                 if (file.exists()) {
-                    loadImage(zoomableImageView, file);
+                    loadImage(zoomableImageView, path);
                 } else {
                     // if thumpnail not exist download it
                     ProtoFileDownload.FileDownload.Selector selector = null;
@@ -660,12 +660,8 @@ public class FragmentShowAvatars extends BaseFragment {
             return layout;
         }
 
-        private void loadImage(PhotoView img, File file) {
-            Glide.with(img.getContext()).load(file).into(img);
-        }
-
         private void loadImage(PhotoView img, String path) {
-            Glide.with(img.getContext()).load(path).into(img);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(path) , img);
         }
 
         private void startDownload(int position, final MessageProgress progress, final PhotoView zoomableImageView) {
