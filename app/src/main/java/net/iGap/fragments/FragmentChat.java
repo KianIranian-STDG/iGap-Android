@@ -7511,7 +7511,7 @@ public class FragmentChat extends BaseFragment
         new Thread(() -> {
             DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    RealmRoom room = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                     if (room != null) {
                         room.setDeleted(false);
                     }
