@@ -58,7 +58,7 @@ public class KuknosRestorePassVM extends ViewModel {
     }
 
     private void checkUserInfo() {
-        userRepo.getUserInfo(userRepo.getAccountID(), new ApiResponse<KuknosInfoM>() {
+        /*userRepo.getUserInfo(userRepo.getAccountID(), new ApiResponse<KuknosInfoM>() {
             @Override
             public void onResponse(KuknosInfoM kuknosInfoM) {
                 nextPage.setValue(1);
@@ -73,7 +73,7 @@ public class KuknosRestorePassVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     // setter and getter

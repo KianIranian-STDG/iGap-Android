@@ -2030,16 +2030,18 @@ Want to get it?</string>
     <string name="prayerRoom_textView">Prayer room</string>
 
     <!-- kuknos -->
-    <string name="kuknos_login_messge_str">Please enter your ID number for registration.</string>
-    <string name="kuknos_login_id_str">ID Number</string>
-    <string name="kuknos_login_tel_str">Phone Number</string>
+    <string name="kuknos_login_messge_str">Please enter your info for registration.</string>
+    <string name="kuknos_login_id_str">ID Number *</string>
+    <string name="kuknos_login_tel_str">Phone Number *</string>
+    <string name="kuknos_login_name_str">Name</string>
+    <string name="kuknos_login_email_str">Email</string>
     <string name="kuknos_login_submit_str">Register</string>
     <string name="kuknos_login_error_empty_str">Enter your ID number</string>
     <string name="kuknos_login_error_invalid_str">Enter a Valid ID number</string>
     <string name="kuknos_login_error_server_str">Server Error: User already exists.</string>
     <string name="kuknos_login_progress_str">Checking...</string>
-    <string name="kuknos_Entry_NT_str">New Token Wallet</string>
-    <string name="kuknos_Entry_RT_str">Retrieve Token Wallet</string>
+    <string name="kuknos_Entry_NT_str">New Wallet</string>
+    <string name="kuknos_Entry_RT_str">Retrieve Wallet</string>
     <string name="kuknos_Entry_Message">Please select one of the below options:</string>
     <string name="kuknos_Restore_Title">Please enter your account recovery keys.</string>
     <string name="kuknos_Restore_Message">By using these words, you will be able to retrieve your account.</string>
@@ -2053,7 +2055,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_username">Username *</string>
     <string name="kuknos_SignupInfo_name">Name *</string>
     <string name="kuknos_SignupInfo_family">Family *</string>
-    <string name="kuknos_SignupInfo_email">Email Address</string>
+    <string name="kuknos_SignupInfo_email">Email Address *</string>
     <string name="kuknos_SignupInfo_submitBtn">Submit</string>
     <string name="kuknos_SignupInfo_checkUsername">checking....</string>
     <string name="kuknos_SignupInfo_submitConnecting">Saving...</string>
@@ -2061,6 +2063,9 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorUsernameInvalid">This username is not available.</string>
     <string name="kuknos_SignupInfo_ValidUsername">Good to go</string>
     <string name="kuknos_SignupInfo_errorEmailInvalid">Email Format is incorrect.</string>
+    <string name="kuknos_SignupInfo_errorNameEmptyInvalid">Name can not be empty.</string>
+    <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
+    <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>

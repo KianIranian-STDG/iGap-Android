@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRecoveryKeyBinding;
@@ -26,6 +27,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {
@@ -86,8 +88,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
     private void getCachedData() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        kuknosShowRecoveryKeyVM.setToken(sharedpreferences.getString("Token", ""));
-        kuknosShowRecoveryKeyVM.setUsername(sharedpreferences.getString("Username", ""));
+        kuknosShowRecoveryKeyVM.setInfo(new Gson().fromJson(sharedpreferences.getString("RegisterInfo", ""), KuknosSignupM.class));
     }
 
     private void onErrorObserver() {

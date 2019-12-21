@@ -155,9 +155,9 @@ public class KuknosLogoutFrag extends BaseFragment {
                     popBackStackFragment();
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosLoginFrag.class.getName());
+                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosEntryOptionFrag.class.getName());
                     if (fragment == null) {
-                        fragment = KuknosLoginFrag.newInstance();
+                        fragment = KuknosEntryOptionFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

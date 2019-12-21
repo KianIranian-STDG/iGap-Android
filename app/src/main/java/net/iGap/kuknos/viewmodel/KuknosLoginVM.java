@@ -37,7 +37,7 @@ public class KuknosLoginVM extends ViewModel {
         } else if (ID.get().length() != 10) {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_login_error_invalid_str));
         } else {
-            if (isRegisteredBefore == true)
+            if (isRegisteredBefore)
                 nextPage.setValue(true);
             else
                 checkUser();
@@ -45,7 +45,7 @@ public class KuknosLoginVM extends ViewModel {
     }
 
     private void checkUser() {
-        userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
+        /*userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
             @Override
             public void onResponse(KuknoscheckUserM kuknoscheckUserM) {
                 if (kuknoscheckUserM.getToken() != null) {
@@ -69,7 +69,7 @@ public class KuknosLoginVM extends ViewModel {
                 else
                     progressState.setValue(0);
             }
-        });
+        });*/
     }
 
     public boolean loginStatus() {

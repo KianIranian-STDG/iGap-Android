@@ -1,13 +1,18 @@
 package net.iGap.kuknos.service.Repository;
 
 import net.iGap.api.KuknosApi;
+import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.apiService.HandShakeCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosLoginM;
 import net.iGap.kuknos.service.model.KuknosSendM;
+import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.KuknosSubmitM;
 import net.iGap.kuknos.service.model.KuknoscheckUserM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.AssetResponse;
@@ -22,85 +27,12 @@ import retrofit2.Response;
 
 public class KuknosAPIRepository {
     private KuknosApi apiService = ApiServiceProvider.getKuknosClient();
-    //private KuknosHorizenApi apiHorizenService = ApiServiceProvider.getKuknosHorizonClient();
 
-    public void getUserAuthentication(String phoneNum, String nID, ApiResponse<KuknosLoginM> apiResponse) {
-        apiResponse.setProgressIndicator(true);
-        apiService.getUserVerfication(phoneNum, nID).enqueue(new Callback<KuknosLoginM>() {
-            @Override
-            public void onResponse(Call<KuknosLoginM> call, Response<KuknosLoginM> response) {
-                if (response.isSuccessful())
-                    apiResponse.onResponse(response.body());
-                else if (response.code() == 400) {
-                    apiResponse.onFailed("registeredBefore");
-                }
-                apiResponse.setProgressIndicator(false);
-            }
-
-            @Override
-            public void onFailure(Call<KuknosLoginM> call, Throwable t) {
-                apiResponse.onFailed(t.getMessage());
-                apiResponse.setProgressIndicator(false);
-            }
-        });
-    }
-
-    public void getUserInfo(String publicKey, ApiResponse<KuknosInfoM> apiResponse) {
-        apiResponse.setProgressIndicator(true);
-        apiService.getUserInfo(publicKey).enqueue(new Callback<KuknosInfoM>() {
-            @Override
-            public void onResponse(Call<KuknosInfoM> call, Response<KuknosInfoM> response) {
-                if (response.isSuccessful())
-                    apiResponse.onResponse(response.body());
-                else if (response.code() == 400)
-                    apiResponse.onFailed("notRegisteredBefore");
-                apiResponse.setProgressIndicator(false);
-            }
-
-            @Override
-            public void onFailure(Call<KuknosInfoM> call, Throwable t) {
-                apiResponse.onFailed(t.getMessage());
-                apiResponse.setProgressIndicator(false);
-            }
-        });
-    }
-
-    public void checkUser(String phoneNum, String nID, ApiResponse<KuknoscheckUserM> apiResponse) {
-        apiResponse.setProgressIndicator(true);
-        apiService.checkUser(phoneNum, nID).enqueue(new Callback<KuknoscheckUserM>() {
-            @Override
-            public void onResponse(Call<KuknoscheckUserM> call, Response<KuknoscheckUserM> response) {
-                apiResponse.onResponse(response.body());
-                apiResponse.setProgressIndicator(false);
-            }
-
-            @Override
-            public void onFailure(Call<KuknoscheckUserM> call, Throwable t) {
-                apiResponse.onFailed(t.getMessage());
-                apiResponse.setProgressIndicator(false);
-            }
-        });
-    }
-
-    public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {
-        apiResponse.setProgressIndicator(true);
-        apiService.registerUser(token, publicKey, friendlyID + "*igap.net").enqueue(new Callback<KuknosSubmitM>() {
-            @Override
-            public void onResponse(Call<KuknosSubmitM> call, Response<KuknosSubmitM> response) {
-                if (response.isSuccessful())
-                    apiResponse.onResponse(response.body());
-                else if (response.code() == 400) {
-                    apiResponse.onFailed("Server Error");
-                }
-                apiResponse.setProgressIndicator(false);
-            }
-
-            @Override
-            public void onFailure(Call<KuknosSubmitM> call, Throwable t) {
-                apiResponse.onFailed(t.getMessage());
-                apiResponse.setProgressIndicator(false);
-            }
-        });
+    public void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
+        new ApiInitializer<KuknosResponseModel>()
+                .initAPI(apiService.createAccount(info.getName(), "", info.getPhoneNum(),
+                        info.getNID(), info.getEmail(), info.getKeyString()),
+                        handShakeCallback, apiResponse);
     }
 
     public void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {

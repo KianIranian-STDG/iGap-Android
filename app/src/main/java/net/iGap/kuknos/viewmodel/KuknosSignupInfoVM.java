@@ -11,52 +11,67 @@ import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
 
+import java.util.Objects;
+
 public class KuknosSignupInfoVM extends ViewModel {
 
     private MutableLiveData<KuknosSignupM> kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-    private MutableLiveData<Integer> checkUsernameState;
+//    private MutableLiveData<Integer> checkUsernameState;
     private MutableLiveData<Boolean> progressSendDServerState;
-    private ObservableField<String> username = new ObservableField<>();
+//    private ObservableField<String> username = new ObservableField<>();
     private ObservableField<String> name = new ObservableField<>();
-    private ObservableField<String> family = new ObservableField<>();
+    private ObservableField<String> phoneNum = new ObservableField<>();
     private ObservableField<String> email = new ObservableField<>();
+    private ObservableField<String> NID = new ObservableField<>();
     private boolean usernameIsValid = false;
-    private String token;
     private UserRepo userRepo = new UserRepo();
 
     public KuknosSignupInfoVM() {
 
+        UserRepo userRepo = new UserRepo();
         name.set(userRepo.getUserFirstName());
-        family.set(userRepo.getUserLastName());
+        phoneNum.set(userRepo.getUserNum());
         email.set(userRepo.getUserEmail());
 
         kuknosSignupM = new MutableLiveData<>();
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
-        checkUsernameState = new MutableLiveData<>();
-        checkUsernameState.setValue(-1);
+//        checkUsernameState = new MutableLiveData<>();
+//        checkUsernameState.setValue(-1);
         progressSendDServerState = new MutableLiveData<>();
         progressSendDServerState.setValue(false);
     }
 
+    public boolean loginStatus() {
+        if (userRepo.getSeedKey() != null) {
+            return !userRepo.getSeedKey().equals("-1");
+        }
+        return false;
+    }
+
     public void onSubmitBtn() {
 
-        if (!checkEmail()) {
+        if (!checkEntryData()) {
             return;
         }
-        if (usernameIsValid) {
+
+        kuknosSignupM.setValue(new KuknosSignupM(name.get(), phoneNum.get(), email.get(), NID.get()));
+        nextPage.setValue(true);
+
+        // this part is for the older version with userID option
+        /*if (usernameIsValid) {
             nextPage.setValue(true);
             return;
         }
-        isUsernameValid(true);
+        isUsernameValid(true);*/
 
     }
 
-    public void isUsernameValid(boolean isCallFromBTN) {
+    /*public void isUsernameValid(boolean isCallFromBTN) {
 
-        /*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*/
+        *//*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*//*
 
         if (username.get() == null) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
@@ -66,23 +81,52 @@ public class KuknosSignupInfoVM extends ViewModel {
             // TODO: fetch data from server for valid username
             checkUsernameServer(isCallFromBTN);
         }
+    }*/
+
+    private boolean checkEntryData() {
+        // name
+        if (name.get() == null) {
+            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
+            return false;
+        }
+        if (Objects.requireNonNull(name.get()).isEmpty()) {
+            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
+            return false;
+        }
+        if (name.get().length() < 3) {
+            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameLengthInvalid));
+            return false;
+        }
+        // NID
+        if (NID.get() == null) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            return false;
+        }
+        if (Objects.requireNonNull(NID.get()).isEmpty()) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            return false;
+        }
+        if (NID.get().length() != 10) {
+            error.setValue(new ErrorM(true, "Invalid NID Length", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            return false;
+        }
+        // email
+        if (email.get() == null) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            return false;
+        }
+        if (Objects.requireNonNull(email.get()).isEmpty()) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            return false;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.get()).matches()) {
+            error.setValue(new ErrorM(true, "Invalid NID Length", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            return false;
+        }
+        return true;
     }
 
-    private boolean checkEmail() {
-        if (email.get() != null) {
-            if (!email.get().isEmpty()) {
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.get()).matches()) {
-                    error.setValue(new ErrorM(true, "Invalid Email Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
-                    return false;
-                } else
-                    return true;
-            } else
-                return true;
-        } else
-            return true;
-    }
-
-    public void checkUsernameServer(boolean isCallFromBTN) {
+    /*public void checkUsernameServer(boolean isCallFromBTN) {
         checkUsernameState.setValue(0);
         // TODO check from server for avalibility
         Handler handler = new Handler();
@@ -99,12 +143,11 @@ public class KuknosSignupInfoVM extends ViewModel {
 //                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
             }
         }, 1000);
-    }
+    }*/
 
-    public void cancelUsernameServer() {
+    /*public void cancelUsernameServer() {
         checkUsernameState.setValue(-1);
-        // TODO cancel current API checking
-    }
+    }*/
 
     //Setter and Getter
 
@@ -132,13 +175,13 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public MutableLiveData<Integer> getCheckUsernameState() {
+    /*public MutableLiveData<Integer> getCheckUsernameState() {
         return checkUsernameState;
     }
 
     public void setCheckUsernameState(MutableLiveData<Integer> checkUsernameState) {
         this.checkUsernameState = checkUsernameState;
-    }
+    }*/
 
     public MutableLiveData<Boolean> getProgressSendDServerState() {
         return progressSendDServerState;
@@ -156,13 +199,13 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.usernameIsValid = usernameIsValid;
     }
 
-    public ObservableField<String> getUsername() {
+    /*public ObservableField<String> getUsername() {
         return username;
     }
 
     public void setUsername(ObservableField<String> username) {
         this.username = username;
-    }
+    }*/
 
     public ObservableField<String> getName() {
         return name;
@@ -170,14 +213,6 @@ public class KuknosSignupInfoVM extends ViewModel {
 
     public void setName(ObservableField<String> name) {
         this.name = name;
-    }
-
-    public ObservableField<String> getFamily() {
-        return family;
-    }
-
-    public void setFamily(ObservableField<String> family) {
-        this.family = family;
     }
 
     public ObservableField<String> getEmail() {
@@ -188,5 +223,19 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.email = email;
     }
 
+    public ObservableField<String> getPhoneNum() {
+        return phoneNum;
+    }
 
+    public void setPhoneNum(ObservableField<String> phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public ObservableField<String> getNID() {
+        return NID;
+    }
+
+    public void setNID(ObservableField<String> NID) {
+        this.NID = NID;
+    }
 }

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosSignupInfoBinding;
@@ -78,6 +79,18 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosSIToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        if (kuknosSignupInfoVM.loginStatus()) {
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+            if (fragment == null) {
+                fragment = KuknosPanelFrag.newInstance();
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            popBackStackFragment();
+        }
+
         onError();
         onGoNextPage();
         onCheckUsernameState();
@@ -86,11 +99,11 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         progressSubmitVisibility();
     }
 
-    private void saveUsername() {
+    private void saveRegisterInfo() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("Username", kuknosSignupInfoVM.getUsername().get());
-        editor.commit();
+        editor.putString("RegisterInfo", new Gson().toJson(kuknosSignupInfoVM.getKuknosSignupM().getValue()));
+        editor.apply();
     }
 
     private void onError() {
@@ -99,12 +112,23 @@ public class KuknosSignupInfoFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
-                    if (errorM.getMessage().equals("1")) {
-                        binding.fragKuknosSIEmailHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIEmail.requestFocus();
-                    } else if (errorM.getMessage().equals("0")) {
-                        binding.fragKuknosSIUsernameHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIUsername.requestFocus();
+                    switch (errorM.getMessage()) {
+                        case "0":
+                            binding.fragKuknosSIUsernameHolder.setError("" + getString(errorM.getResID()));
+                            binding.fragKuknosSIUsername.requestFocus();
+                            break;
+                        case "1":
+                            binding.fragKuknosSIEmailHolder.setError("" + getString(errorM.getResID()));
+                            binding.fragKuknosSIEmail.requestFocus();
+                            break;
+                        case "2":
+                            binding.fragKuknosSINameHolder.setError("" + getString(errorM.getResID()));
+                            binding.fragKuknosSIName.requestFocus();
+                            break;
+                        case "3":
+                            binding.fragKuknosSINIDHolder.setError("" + getString(errorM.getResID()));
+                            binding.fragKuknosSINID.requestFocus();
+                            break;
                     }
                 }
             }
@@ -114,28 +138,25 @@ public class KuknosSignupInfoFrag extends BaseFragment {
 
     private void onGoNextPage() {
 
-        kuknosSignupInfoVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    saveUsername();
+        kuknosSignupInfoVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage) {
+                saveRegisterInfo();
 
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeyFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosShowRecoveryKeyFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeyFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosShowRecoveryKeyFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
 
     }
 
     private void onCheckUsernameState() {
-        kuknosSignupInfoVM.getCheckUsernameState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        /*kuknosSignupInfoVM.getCheckUsernameState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
                 if (integer == 0) {
@@ -159,11 +180,11 @@ public class KuknosSignupInfoFrag extends BaseFragment {
                     usernameStatusGone();
                 }
             }
-        });
+        });*/
     }
 
     private void onCheckUsernameETFocus() {
-        binding.fragKuknosSIUsername.addTextChangedListener(new TextWatcher() {
+        /*binding.fragKuknosSIUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.fragKuknosSIUsernameHolder.setErrorEnabled(false);
@@ -176,32 +197,60 @@ public class KuknosSignupInfoFrag extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                kuknosSignupInfoVM.setUsernameIsValid(false);
+            }
+        });*/
+        /*binding.fragKuknosSIUsername.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                kuknosSignupInfoVM.cancelUsernameServer();
+            } else {
+                //TODO delete log
+                if (!kuknosSignupInfoVM.getProgressSendDServerState().getValue())
+                    kuknosSignupInfoVM.isUsernameValid(false);
+            }
+        });*/
+        binding.fragKuknosSIName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.fragKuknosSINameHolder.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
-        binding.fragKuknosSIUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        binding.fragKuknosSINID.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Log.d("amini", "false in here");
-                    kuknosSignupInfoVM.cancelUsernameServer();
-                } else {
-                    //TODO delete log
-                    Log.d("amini", "true in here");
-                    if (kuknosSignupInfoVM.getProgressSendDServerState().getValue() != true)
-                        kuknosSignupInfoVM.isUsernameValid(false);
-                }
-                /*if (usernameFocusState) {
-                    //TODO delete log
-                    Log.d("amini" , "true in here");
-                    kuknosSignupInfoVM.isUsernameValid(false);
-                    usernameFocusState = false;
-                }
-                else {
-                    Log.d("amini" , "false in here");
-                    kuknosSignupInfoVM.cancelUsernameServer();
-                    usernameFocusState = true;
-                }*/
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.fragKuknosSINIDHolder.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        binding.fragKuknosSIEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.fragKuknosSIEmailHolder.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
     }

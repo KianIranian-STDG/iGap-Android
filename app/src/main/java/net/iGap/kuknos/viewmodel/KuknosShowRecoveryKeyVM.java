@@ -8,12 +8,17 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.KuknosSubmitM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
-public class KuknosShowRecoveryKeyVM extends ViewModel {
+public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
 
     private UserRepo userRepo = new UserRepo();
     private MutableLiveData<ErrorM> error;
@@ -21,20 +26,14 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
     private ObservableField<Boolean> pinCheck = new ObservableField<>(false);
-    private String token, username;
+    private KuknosSignupM info;
 
     public KuknosShowRecoveryKeyVM() {
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<>();
-            nextPage.setValue(false);
-        }
-        if (error == null) {
-            error = new MutableLiveData<>();
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(false);
-        }
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(false);
     }
 
     public void initMnemonic() {
@@ -60,22 +59,19 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
                 error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
                 e.printStackTrace();
             }
-            userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
+
+            progressState.setValue(true);
+            info.setKeyString(userRepo.getAccountID());
+            userRepo.registerUser(info, this, new ResponseCallback<KuknosResponseModel>() {
                 @Override
-                public void onResponse(KuknosSubmitM kuknosSubmitM) {
-                    if (kuknosSubmitM.getOk() == 1) {
-                        nextPage.setValue(true);
-                    }
+                public void onSuccess(KuknosResponseModel data) {
+                    nextPage.setValue(true);
+                    progressState.setValue(false);
                 }
 
                 @Override
-                public void onFailed(String error) {
-
-                }
-
-                @Override
-                public void setProgressIndicator(boolean visibility) {
-                    progressState.setValue(visibility);
+                public void onError(ErrorModel error) {
+                    progressState.setValue(false);
                 }
             });
         }
@@ -123,11 +119,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         this.pinCheck = pinCheck;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setInfo(KuknosSignupM info) {
+        this.info = info;
     }
 }

@@ -104,7 +104,7 @@ public class KuknosRestoreSignupVM extends ViewModel {
     }
 
     private void submitUser() {
-        userRepo.registerUser(token, userRepo.getAccountID(), username.get(), new ApiResponse<KuknosSubmitM>() {
+        /*userRepo.registerUser(token, userRepo.getAccountID(), username.get(), new ApiResponse<KuknosSubmitM>() {
             @Override
             public void onResponse(KuknosSubmitM kuknosSubmitM) {
                 if (kuknosSubmitM.getOk() == 1) {
@@ -122,7 +122,7 @@ public class KuknosRestoreSignupVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressSendDServerState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public void cancelUsernameServer() {
