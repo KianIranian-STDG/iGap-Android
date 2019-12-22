@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import net.iGap.G;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
@@ -90,14 +91,20 @@ public class StickerAdapter extends RecyclerView.Adapter {
         public void bindView(StructIGSticker structIGSticker) {
             if (structIGSticker.getPath() != null && !structIGSticker.getPath().equals("")) {
                 if (structIGSticker.hasFileOnLocal()) {
-                    Glide.with(itemView.getContext()).load(structIGSticker.getPath()).into(normalStickerCell);
+                    Glide.with(itemView.getContext())
+                            .load(structIGSticker.getPath())
+                            .transition(DrawableTransitionOptions.withCrossFade(200))
+                            .into(normalStickerCell);
                 } else {
                     EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
                         String filePath = (String) message[0];
                         String token = (String) message[1];
 
                         if (token.equals(structIGSticker.getToken())) {
-                            G.handler.post(() -> Glide.with(itemView.getContext()).load(filePath).into(normalStickerCell));
+                            G.handler.post(() -> Glide.with(itemView.getContext())
+                                    .load(filePath)
+                                    .transition(DrawableTransitionOptions.withCrossFade(200))
+                                    .into(normalStickerCell));
                         }
                     });
 
