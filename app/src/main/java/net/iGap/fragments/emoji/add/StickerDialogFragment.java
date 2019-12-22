@@ -102,7 +102,7 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         });
 
         viewModel.getAddOrRemoveStickerLiveData().observe(getViewLifecycleOwner(), resourceId -> {
-            addOrRemoveTv.setText(getResources().getString(resourceId, HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize()))));
+            addOrRemoveTv.setText(getResources().getString(resourceId, HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stickerGroup.getStickersSize())) : String.valueOf(stickerGroup.getStickersSize())));
             addOrRemoveTv.setVisibility(View.VISIBLE);
         });
 
