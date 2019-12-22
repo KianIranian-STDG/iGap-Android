@@ -1349,11 +1349,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
 
                 showProgress(false);
-
+                isSendRequestGeoCoordinate = false;
             }
         }, 2000);
-
-        isSendRequestGeoCoordinate = false;
     }
 
     private void showProgress(final boolean show) {
