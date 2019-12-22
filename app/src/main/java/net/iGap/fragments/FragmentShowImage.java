@@ -375,8 +375,9 @@ public class FragmentShowImage extends BaseFragment {
      * share Image and video
      */
     private void shareImage() {
+        RealmRoomMessage roomMessage = null;
 
-        RealmRoomMessage roomMessage = mFList.get(viewPager.getCurrentItem());
+        if (mFList.size() > viewPager.getCurrentItem()) roomMessage = mFList.get(viewPager.getCurrentItem());
 
         if (roomMessage != null) {
             roomMessage = RealmRoomMessage.getFinalMessage(roomMessage);
