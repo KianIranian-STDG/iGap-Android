@@ -18,7 +18,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,7 +39,7 @@ import net.iGap.module.WebAppInterface;
 
 import java.io.IOException;
 
-public class FragmentWebView extends BaseFragment implements IOnBackPressed , ToolbarListener {
+public class FragmentWebView extends BaseFragment implements IOnBackPressed, ToolbarListener {
 
     private String url;
     private boolean forceCloseFragment;
@@ -74,7 +73,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed , To
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_my_web_view, container , false);
+        return inflater.inflate(R.layout.fragment_my_web_view, container, false);
     }
 
     @Override
@@ -88,19 +87,19 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed , To
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             url = "http://" + url;
         }
-
-        frameLayout = view.findViewById(R.id.full);
-        webView = view.findViewById(R.id.webView);
         webViewError = view.findViewById(R.id.webViewError);
-
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        frameLayout = view.findViewById(R.id.full);
+
+
+        pullToRefresh.setOnRefreshListener(() -> {
+            if (webView != null) {
                 customWebViewClient.isWebViewVisible = true;
                 webView.clearView();
                 webView.reload();
                 setWebViewVisibleWithDelay();
+            } else {
+                pullToRefresh.setRefreshing(false);
             }
         });
 
@@ -108,6 +107,18 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed , To
             pullToRefresh.setEnabled(true);
         } else {
             pullToRefresh.setEnabled(false);
+        }
+
+        if (webView == null) {
+            try {
+                webView = new WebView(getContext());
+                SwipeRefreshLayout.LayoutParams params = new SwipeRefreshLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                webView.setLayoutParams(params);
+                pullToRefresh.addView(webView, params);
+            } catch (Exception e) {
+                webViewError.setVisibility(View.VISIBLE);
+                return;
+            }
         }
 
         webViewError.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +137,6 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed , To
             CookieManager.getInstance().setAcceptCookie(true);
         }
 
-        mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.clearCache(true);
@@ -168,11 +178,17 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed , To
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fwv_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
 
     }
 
     @Override
     public void onLeftIconClickListener(View view) {
+        if (webView == null) {
+            popBackStackFragment();
+            return;
+        }
+
         webView.stopLoading();
         if (webView.canGoBack() && !forceCloseFragment) {
             webView.clearView();
@@ -210,6 +226,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed , To
 
     @Override
     public boolean onBack() {
+        if (webView == null) return false;
         webView.stopLoading();
         if (webView.canGoBack() && !forceCloseFragment) {
             webView.clearView();
