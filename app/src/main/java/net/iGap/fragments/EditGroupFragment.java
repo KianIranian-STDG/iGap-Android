@@ -251,11 +251,10 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
                                     @Override
                                     public void onGalleryResult(String path) {
-                                        popBackStackFragment();
                                         handleGalleryImageResult(path);
                                     }
                                 });
-                                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                             }
 
                             @Override
@@ -408,6 +407,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     @Override
     public void profileImageAdd(String path) {
+        popBackStackFragment();
         viewModel.uploadAvatar(path);
     }
 }
