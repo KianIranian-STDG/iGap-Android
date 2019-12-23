@@ -8,6 +8,8 @@ import org.stellar.sdk.AssetTypeNative;
 import java.util.List;
 
 public class KuknosBalance {
+
+    @SerializedName("assets")
     private List<Balance> assets;
 
     public List<Balance> getAssets() {

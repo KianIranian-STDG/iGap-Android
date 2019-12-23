@@ -3,24 +3,26 @@ package net.iGap.kuknos.viewmodel;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
-import org.stellar.sdk.responses.AccountResponse;
-import org.stellar.sdk.responses.AssetResponse;
-import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
-public class KuknosAddAssetVM extends ViewModel {
+public class KuknosAddAssetVM extends BaseAPIViewModel {
 
-    private MutableLiveData<Page<AssetResponse>> assetPageMutableLiveData;
-    private MutableLiveData<Page<AssetResponse>> advAssetPageMutableLiveData;
-    private MutableLiveData<AccountResponse> accountPageMutableLiveData;
+    private MutableLiveData<KuknosAsset> assetPageMutableLiveData;
+    private MutableLiveData<KuknosAsset> advAssetPageMutableLiveData;
+    private MutableLiveData<KuknosBalance> accountPageMutableLiveData;
     private TradeRepo tradeRepo = new TradeRepo();
     private PanelRepo panelRepo = new PanelRepo();
 
@@ -40,47 +42,44 @@ public class KuknosAddAssetVM extends ViewModel {
     }
 
     public void getAccountDataFromServer() {
-        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+        progressState.setValue(true);
+        panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
-            public void onResponse(AccountResponse accountResponse) {
-                accountPageMutableLiveData.setValue(accountResponse);
+            public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
+                //todo fix it here
+                accountPageMutableLiveData.setValue(data.getData());
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String errorM) {
+            public void onError(ErrorModel errorM) {
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+                progressState.setValue(false);
             }
         });
     }
 
     public void getAssetDataFromServer() {
-        tradeRepo.getAssets(new ApiResponse<Page<AssetResponse>>() {
+        progressStateAdv.setValue(true);
+        tradeRepo.getAssets(this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
-            public void onResponse(Page<AssetResponse> assetResponsePage) {
-                assetPageMutableLiveData.setValue(assetResponsePage);
+            public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
+                assetPageMutableLiveData.setValue(data.getData());
                 // TODO: 8/18/2019 change this part to get data from server
-                advAssetPageMutableLiveData.setValue(assetResponsePage);
+                advAssetPageMutableLiveData.setValue(data.getData());
+                progressStateAdv.setValue(false);
             }
 
             @Override
-            public void onFailed(String errorM) {
+            public void onError(ErrorModel errorM) {
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressStateAdv.setValue(visibility);
+                progressStateAdv.setValue(false);
             }
         });
     }
 
     public void addAsset(int position) {
-        AssetResponse temp = assetPageMutableLiveData.getValue().getRecords().get(position);
+        KuknosAsset.Asset temp = assetPageMutableLiveData.getValue().getAssets().get(position);
         Log.d("amini", "addAsset: " + temp.getAssetCode() + " " + temp.getAssetIssuer());
         tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), new ApiResponse<SubmitTransactionResponse>() {
             @Override
@@ -104,19 +103,19 @@ public class KuknosAddAssetVM extends ViewModel {
         openAddList.setValue(1);
     }
 
-    public MutableLiveData<Page<AssetResponse>> getAssetPageMutableLiveData() {
+    public MutableLiveData<KuknosAsset> getAssetPageMutableLiveData() {
         return assetPageMutableLiveData;
     }
 
-    public void setAssetPageMutableLiveData(MutableLiveData<Page<AssetResponse>> assetPageMutableLiveData) {
+    public void setAssetPageMutableLiveData(MutableLiveData<KuknosAsset> assetPageMutableLiveData) {
         this.assetPageMutableLiveData = assetPageMutableLiveData;
     }
 
-    public MutableLiveData<Page<AssetResponse>> getAdvAssetPageMutableLiveData() {
+    public MutableLiveData<KuknosAsset> getAdvAssetPageMutableLiveData() {
         return advAssetPageMutableLiveData;
     }
 
-    public void setAdvAssetPageMutableLiveData(MutableLiveData<Page<AssetResponse>> advAssetPageMutableLiveData) {
+    public void setAdvAssetPageMutableLiveData(MutableLiveData<KuknosAsset> advAssetPageMutableLiveData) {
         this.advAssetPageMutableLiveData = advAssetPageMutableLiveData;
     }
 
@@ -144,11 +143,11 @@ public class KuknosAddAssetVM extends ViewModel {
         this.openAddList = openAddList;
     }
 
-    public MutableLiveData<AccountResponse> getAccountPageMutableLiveData() {
+    public MutableLiveData<KuknosBalance> getAccountPageMutableLiveData() {
         return accountPageMutableLiveData;
     }
 
-    public void setAccountPageMutableLiveData(MutableLiveData<AccountResponse> accountPageMutableLiveData) {
+    public void setAccountPageMutableLiveData(MutableLiveData<KuknosBalance> accountPageMutableLiveData) {
         this.accountPageMutableLiveData = accountPageMutableLiveData;
     }
 

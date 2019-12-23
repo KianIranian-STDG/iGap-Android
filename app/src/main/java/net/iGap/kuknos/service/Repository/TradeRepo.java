@@ -1,8 +1,11 @@
 package net.iGap.kuknos.service.Repository;
 
 import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.HandShakeCallback;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
-import org.stellar.sdk.responses.AssetResponse;
 import org.stellar.sdk.responses.OfferResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
@@ -15,8 +18,8 @@ public class TradeRepo {
     public TradeRepo() {
     }
 
-    public void getAssets(ApiResponse<Page<AssetResponse>> apiResponse) {
-        kuknosAPIRepository.getAssets(apiResponse);
+    public void getAssets(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
+        kuknosAPIRepository.getAssets(handShakeCallback, apiResponse);
     }
 
     public void changeTrustline(String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {

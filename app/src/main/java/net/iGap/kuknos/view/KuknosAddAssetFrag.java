@@ -27,6 +27,8 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.view.adapter.AddAssetAdvAdapter;
 import net.iGap.kuknos.view.adapter.AddAssetCurrentAdapter;
 import net.iGap.kuknos.viewmodel.KuknosAddAssetVM;
@@ -150,15 +152,15 @@ public class KuknosAddAssetFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosAddAssetVM.getAccountPageMutableLiveData().observe(getViewLifecycleOwner(), new Observer<AccountResponse>() {
+        kuknosAddAssetVM.getAccountPageMutableLiveData().observe(getViewLifecycleOwner(), new Observer<KuknosBalance>() {
             @Override
-            public void onChanged(@Nullable AccountResponse accountResponse) {
+            public void onChanged(@Nullable KuknosBalance accountResponse) {
                 initCurrentAssets(accountResponse);
             }
         });
-        kuknosAddAssetVM.getAdvAssetPageMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Page<AssetResponse>>() {
+        kuknosAddAssetVM.getAdvAssetPageMutableLiveData().observe(getViewLifecycleOwner(), new Observer<KuknosAsset>() {
             @Override
-            public void onChanged(@Nullable Page<AssetResponse> assetResponsePage) {
+            public void onChanged(@Nullable KuknosAsset assetResponsePage) {
                 initAdvPager(assetResponsePage);
             }
         });
@@ -173,10 +175,11 @@ public class KuknosAddAssetFrag extends BaseFragment {
         });
     }
 
-    private void initNewAssetBS(Page<AssetResponse> response) {
+    private void initNewAssetBS(KuknosAsset response) {
         List<String> items = new ArrayList<>();
-        for (AssetResponse temp : response.getRecords()) {
-            items.add(temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode());
+        for (KuknosAsset.Asset temp : response.getAssets()) {
+            items.add(temp.getLabel());
+//            items.add(temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode());
         }
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
             @Override
@@ -187,13 +190,13 @@ public class KuknosAddAssetFrag extends BaseFragment {
         bottomSheetFragment.show(getFragmentManager(), "AddAssetBottomSheet");
     }
 
-    private void initCurrentAssets(AccountResponse accountResponse) {
-        AddAssetCurrentAdapter adapter = new AddAssetCurrentAdapter(Arrays.asList(accountResponse.getBalances()), getContext());
+    private void initCurrentAssets(KuknosBalance accountResponse) {
+        AddAssetCurrentAdapter adapter = new AddAssetCurrentAdapter(accountResponse.getAssets(), getContext());
         binding.fragKuknosAddARecycler.setAdapter(adapter);
     }
 
-    private void initAdvPager(Page<AssetResponse> response) {
-        AddAssetAdvAdapter adapter = new AddAssetAdvAdapter(response.getRecords(), getContext(), getDisplayMetrics());
+    private void initAdvPager(KuknosAsset response) {
+        AddAssetAdvAdapter adapter = new AddAssetAdvAdapter(response.getAssets(), getContext(), getDisplayMetrics());
         adapter.setItemMargin((int) getResources().getDimension(R.dimen.pager_margin));
         adapter.updateDisplayMetrics();
         adapter.setListener(this::addAsset);
@@ -215,7 +218,7 @@ public class KuknosAddAssetFrag extends BaseFragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        AddAssetAdvAdapter adapter = new AddAssetAdvAdapter(kuknosAddAssetVM.getAdvAssetPageMutableLiveData().getValue().getRecords(), getContext(), getDisplayMetrics());
+        AddAssetAdvAdapter adapter = new AddAssetAdvAdapter(kuknosAddAssetVM.getAdvAssetPageMutableLiveData().getValue().getAssets(), getContext(), getDisplayMetrics());
         adapter.setItemMargin((int) getResources().getDimension(R.dimen.pager_margin));
         adapter.updateDisplayMetrics();
         binding.fragKuknosAddARecyclerAdv.setAdapter(adapter);
