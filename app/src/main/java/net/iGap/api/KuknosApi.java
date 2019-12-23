@@ -6,6 +6,7 @@ import net.iGap.kuknos.service.model.KuknoscheckUserM;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -68,6 +69,15 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("get-assets")
     Call<KuknosResponseModel<KuknosAsset>> getAllAssets(@Field("asset_code") String assetCode);
+
+    /**
+     * this api submit the new currency in your account
+     * @param XDR
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("change-trust")
+    Call<KuknosResponseModel<KuknosTransactionResult>> changeTrust(@Field("xdr") String XDR);
 
     @FormUrlEncoded
     @POST("activate-account")

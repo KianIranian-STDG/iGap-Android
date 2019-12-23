@@ -15,6 +15,7 @@ import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
@@ -80,21 +81,18 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
 
     public void addAsset(int position) {
         KuknosAsset.Asset temp = assetPageMutableLiveData.getValue().getAssets().get(position);
-        Log.d("amini", "addAsset: " + temp.getAssetCode() + " " + temp.getAssetIssuer());
-        tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), new ApiResponse<SubmitTransactionResponse>() {
+        progressState.setValue(false);
+        tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
             @Override
-            public void onResponse(SubmitTransactionResponse submitTransactionResponse) {
+            public void onSuccess(KuknosResponseModel<KuknosTransactionResult> data) {
                 getAccountDataFromServer();
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String errorM) {
+            public void onError(ErrorModel errorM) {
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+                progressState.setValue(false);
             }
         });
     }

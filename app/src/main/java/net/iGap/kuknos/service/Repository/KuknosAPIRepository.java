@@ -11,6 +11,7 @@ import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.AssetResponse;
@@ -55,6 +56,12 @@ public class KuknosAPIRepository {
     public void getAssets(ApiResponse<Page<AssetResponse>> apiResponse) {
         KuknosAPIAsync<Page<AssetResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.ASSETS);
         temp.execute();
+    }
+
+    public void changeTrust(String accountSeed, String code, String issuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+                .initAPI(apiService.changeTrust(new KuknosSDKRepo().TrustlineXDR(accountSeed, code, issuer))
+                        , handShakeCallback, apiResponse);
     }
 
     public void changeTrust(String accountSeed, String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
