@@ -2272,7 +2272,9 @@ public class FragmentChat extends BaseFragment
                 emojiPopup.dismiss();
             } else if (ll_Search != null && ll_Search.isShown()) {
                 goneSearchBox(edtSearchMessage);
-            } else if (isEditMessage) {
+            } else if (ll_navigateHash != null && ll_navigateHash.isShown()){
+                goneSearchHashFooter();
+            }else if (isEditMessage) {
                 removeEditedMessage();
             } else {
                 stopSuperPress = false;
@@ -6543,7 +6545,7 @@ public class FragmentChat extends BaseFragment
         searchHash = new SearchHash();
 
         btnHashLayoutClose = rootView.findViewById(R.id.ac_btn_hash_close);
-        btnHashLayoutClose.setOnClickListener(v -> goneSearchBox(edtSearchMessage));
+        btnHashLayoutClose.setOnClickListener(v -> goneSearchBox(v));
 
         btnUpHash.setOnClickListener(view -> searchHash.upHash());
 
@@ -7184,9 +7186,11 @@ public class FragmentChat extends BaseFragment
 
     private void goneSearchBox(View view) {
 
-        edtSearchMessage.setText("");
-        ll_Search.setVisibility(View.GONE);
-        layoutToolbar.setVisibility(View.VISIBLE);
+        if (edtSearchMessage != null) {
+            edtSearchMessage.setText("");
+            ll_Search.setVisibility(View.GONE);
+            layoutToolbar.setVisibility(View.VISIBLE);
+        }
         goneSearchHashFooter();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
