@@ -68,6 +68,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
@@ -436,7 +437,7 @@ public class FragmentChat extends BaseFragment
     private boolean isRepley = false;
     private boolean swipeBack = false;
     private AttachFile attachFile;
-    private EditText edtSearchMessage;
+    private AppCompatEditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
     private net.iGap.module.EmojiEditTextE edtChat;
     private MaterialDesignTextView imvSendButton;
@@ -7127,6 +7128,11 @@ public class FragmentChat extends BaseFragment
 
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
+        edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        edtSearchMessage.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
+            return true;
+        });
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
