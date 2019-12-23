@@ -50,6 +50,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.JoinDialogFragment;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.FragmentAddContact;
@@ -855,69 +856,14 @@ public class HelperUrl {
         });
 
         if (!room.getIsParticipant()) {
-
-            String title = activity.getString(R.string.do_you_want_to_join_to_this);
-            String memberNumber = "";
-            final CircleImageView[] imageView = new CircleImageView[1];
-
-            switch (room.getType()) {
-                case CHANNEL:
-
-                    if (HelperCalander.isPersianUnicode) {
-                        title += activity.getString(R.string.channel) + " " + "عضو شوید؟";
-                    } else {
-                        title += activity.getString(R.string.channel) + "?";
-                    }
-
-                    memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member_chat);
-                    break;
-                case GROUP:
-
-                    if (HelperCalander.isPersianUnicode) {
-                        title += activity.getString(R.string.group) + " " + "عضو شوید؟";
-                    } else {
-                        title += activity.getString(R.string.group) + "?";
-                    }
-
-                    memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + activity.getString(R.string.member_chat);
-                    break;
-            }
-
-            final String finalMemberNumber = memberNumber;
-            final String finalTitle = title;
-
             activity.runOnUiThread(() -> {
-
-                final MaterialDialog dialog = new MaterialDialog.Builder(activity)
-                        .title(finalTitle)
-                        .customView(R.layout.dialog_alert_join, true)
-                        .positiveText(R.string.join)
-                        .cancelable(true)
-                        .negativeText(android.R.string.cancel)
-                        .onPositive((dialog12, which) -> joinToRoom(activity, token, room))
-                        .onNegative((dialog1, which) -> RealmRoom.deleteRoom(room.getId()))
-                        .build();
-
-                imageView[0] = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
-
-                TextView txtRoomName = (TextView) dialog.findViewById(R.id.daj_txt_room_name);
-                txtRoomName.setText(room.getTitle());
-
-                TextView txtMemberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
-                txtMemberNumber.setText(finalMemberNumber);
-
-                if (G.isAppRtl) {
-                    txtMemberNumber.setGravity(Gravity.RIGHT);
-                    txtRoomName.setGravity(Gravity.RIGHT);
-                } else {
-                    txtMemberNumber.setGravity(Gravity.LEFT);
-                    txtRoomName.setGravity(Gravity.LEFT);
-                }
-
-                if (!activity.isFinishing() && !activity.isFinishing() && activity instanceof ActivityEnhanced) {
-                    ((ActivityEnhanced) activity).avatarHandler.getAvatar(new ParamWithAvatarType(imageView[0], room.getId()).avatarType(AvatarHandler.AvatarType.ROOM));
-                    dialog.show();
-                }
+                closeDialogWaiting();
+                new JoinDialogFragment().setData(room, new JoinDialogFragment.JoinDialogListener() {
+                    @Override
+                    public void onJoinClicked() { joinToRoom(activity, token, room); }
+                    @Override
+                    public void onCancelClicked() { RealmRoom.deleteRoom(room.getId()); }
+                }).show(activity.getSupportFragmentManager() , "JoinDialogFragment");
             });
         }
     }
