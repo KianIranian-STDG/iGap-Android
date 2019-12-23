@@ -36,6 +36,7 @@ import com.pchmn.materialchips.model.ChipInterface;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
@@ -128,7 +129,13 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
          * library does not support change text color or background color at run time until 1.0.8
          */
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
-        layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
+
+        //todo:// use material chips
+        if (G.themeColor == Theme.DARK){
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
+        }else {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
+        }
 
         if (typeCreate.equals("CHANNEL")) {
             mHelperToolbar.setDefaultTitle(G.context.getResources().getString(R.string.new_channel));
