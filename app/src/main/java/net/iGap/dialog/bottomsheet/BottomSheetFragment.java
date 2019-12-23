@@ -92,14 +92,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), getTheme());
-        dialog.setOnShowListener(dialog1 -> {
-            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-            if (bottomSheet != null)
-                BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
-
-        });
-        return dialog;
+        return new BottomSheetDialog(requireContext(), getTheme());
     }
 
     @Override
