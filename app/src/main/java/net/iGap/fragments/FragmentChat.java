@@ -6700,6 +6700,11 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
+        edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH|EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        edtSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
+            return true;
+        });
         edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         final AppCompatTextView textSend = viewBottomSheetForward.findViewById(R.id.txtSend);
         textSend.setVisibility(View.GONE);
@@ -7130,7 +7135,7 @@ public class FragmentChat extends BaseFragment
 
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
-        edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH|EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtSearchMessage.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
             return true;

@@ -33,7 +33,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true" />
 
-        <net.iGap.module.MEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edtSearch"
             style="@style/iGapEditTextStyle"
             android:layout_width="match_parent"
