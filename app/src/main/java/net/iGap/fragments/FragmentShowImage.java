@@ -162,8 +162,8 @@ public class FragmentShowImage extends BaseFragment {
     }
 
     private boolean getIntentData(Bundle bundle) {
-        if (G.fragmentActivity != null) {
-            G.fragmentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (getActivity() != null) {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
         if (bundle != null) { // get a list of image
@@ -477,6 +477,9 @@ public class FragmentShowImage extends BaseFragment {
         if (videoController != null) {
             videoController.hide();
             videoController = null;
+        }
+        if (getActivity() != null) {
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 
