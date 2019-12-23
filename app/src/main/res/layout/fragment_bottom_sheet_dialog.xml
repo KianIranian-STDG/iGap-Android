@@ -3,57 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <import type="net.iGap.G" />
-
         <variable
             name="bottomSheetViewModel"
             type="net.iGap.dialog.bottomsheet.BottomSheetViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <View
             android:id="@+id/lineViewTop"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dp100"
             android:layout_height="4dp"
             android:layout_marginTop="8dp"
-            android:background="?attr/iGapBottomSheetHeaderLine"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".34" />
+            android:layout_gravity="center"
+            android:background="?attr/iGapBottomSheetHeaderLine" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/dp10"
             android:padding="@dimen/dp8"
-            android:textColor="?iGapTitleTextColor"
+            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="gone"
-            android:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+            android:singleLine="true" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bottomSheetList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp8"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>

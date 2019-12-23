@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,6 +31,8 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
 import net.iGap.viewmodel.sticker.StickerDialogViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 public class StickerDialogFragment extends BottomSheetDialogFragment {
     private StickerAdapter adapter;
@@ -75,6 +78,17 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+                FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                behavior.setPeekHeight(0);
+            }
+        });
 
         RecyclerView stickerRecyclerView = view.findViewById(R.id.rv_stickerDialog);
         progressBar = view.findViewById(R.id.fl_stickerDialog_progressContainer);
@@ -190,14 +204,9 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         return R.style.BaseBottomSheetDialog;
     }
 
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), getTheme());
-        dialog.setOnShowListener(dialog1 -> {
-            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-            if (bottomSheet != null) BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
-
-        });
-        return dialog;
+        return new BottomSheetDialog(requireContext(), getTheme());
     }
 }
