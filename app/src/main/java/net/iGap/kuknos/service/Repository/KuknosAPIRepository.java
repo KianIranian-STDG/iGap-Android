@@ -6,12 +6,9 @@ import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.kuknos.service.model.KuknosInfoM;
-import net.iGap.kuknos.service.model.KuknosLoginM;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
-import net.iGap.kuknos.service.model.KuknoscheckUserM;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 import org.stellar.sdk.responses.AccountResponse;
@@ -21,10 +18,6 @@ import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class KuknosAPIRepository {
     private KuknosApi apiService = ApiServiceProvider.getKuknosClient();
 
@@ -33,6 +26,10 @@ public class KuknosAPIRepository {
                 .initAPI(apiService.createAccount(info.getName(), "", info.getPhoneNum(),
                         info.getNID(), info.getEmail(), info.getKeyString()),
                         handShakeCallback, apiResponse);
+    }
+
+    public void getUserAccount(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBalance>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosBalance>>().initAPI(apiService.getUserAsset(userID), handShakeCallback, apiResponse);
     }
 
     public void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {

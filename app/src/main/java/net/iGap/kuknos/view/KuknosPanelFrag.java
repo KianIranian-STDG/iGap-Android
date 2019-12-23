@@ -33,16 +33,12 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
 import net.iGap.kuknos.view.adapter.WalletSpinnerArrayAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
-
-import org.stellar.sdk.responses.AccountResponse;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class KuknosPanelFrag extends BaseFragment {
@@ -100,7 +96,7 @@ public class KuknosPanelFrag extends BaseFragment {
         walletSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getBalances().length))
+                if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getAssets().size()))
                     kuknosPanelVM.spinnerSelect(position);
                 else {
                     walletSpinner.setSelection(kuknosPanelVM.getPosition());
@@ -186,15 +182,11 @@ public class KuknosPanelFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosPanelVM.getKuknosWalletsM().observe(getViewLifecycleOwner(), new Observer<AccountResponse>() {
-            @Override
-            public void onChanged(@Nullable AccountResponse accountResponse) {
-                if (accountResponse.getBalances().length != 0) {
-                    WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(),
-                            Arrays.asList(accountResponse.getBalances()));
-                    walletSpinner.setAdapter(adapter);
-                    binding.fragKuknosPError.setVisibility(View.GONE);
-                }
+        kuknosPanelVM.getKuknosWalletsM().observe(getViewLifecycleOwner(), accountResponse -> {
+            if (accountResponse.getAssets().size() != 0) {
+                WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), accountResponse.getAssets());
+                walletSpinner.setAdapter(adapter);
+                binding.fragKuknosPError.setVisibility(View.GONE);
             }
         });
     }

@@ -1,23 +1,26 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.util.Log;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
 
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-
-import org.stellar.sdk.responses.AccountResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 import java.text.DecimalFormat;
 
-public class KuknosPanelVM extends ViewModel {
+public class KuknosPanelVM extends BaseAPIViewModel {
 
-    private MutableLiveData<AccountResponse> kuknosWalletsM;
+    private MutableLiveData<KuknosBalance> kuknosWalletsM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Integer> openPage;
@@ -26,6 +29,8 @@ public class KuknosPanelVM extends ViewModel {
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
     private int position = 0;
+
+    private static final String TAG = "KuknosPanelVM";
 
     public KuknosPanelVM() {
         //TODO clear Hard Code
@@ -49,35 +54,34 @@ public class KuknosPanelVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+        progressState.setValue(true);
+        panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
-            public void onResponse(AccountResponse accountResponse) {
-                kuknosWalletsM.setValue(accountResponse);
+            public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
+                //todo fix it here
+                kuknosWalletsM.setValue(data.getData());
                 spinnerSelect(0);
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String errorM) {
+            public void onError(ErrorModel errorM) {
                 balance.set("0.0");
                 currency.set("currency");
                 error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+                progressState.setValue(false);
             }
         });
     }
 
     public String convertToJSON(int position) {
         Gson gson = new Gson();
-        return gson.toJson(kuknosWalletsM.getValue().getBalances()[position]);
+        return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
     }
 
     public void spinnerSelect(int position) {
         this.position = position;
-        AccountResponse.Balance temp = kuknosWalletsM.getValue().getBalances()[position];
+        KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
         DecimalFormat df = new DecimalFormat("#,##0.00");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
@@ -170,11 +174,11 @@ public class KuknosPanelVM extends ViewModel {
         this.position = position;
     }
 
-    public MutableLiveData<AccountResponse> getKuknosWalletsM() {
+    public MutableLiveData<KuknosBalance> getKuknosWalletsM() {
         return kuknosWalletsM;
     }
 
-    public void setKuknosWalletsM(MutableLiveData<AccountResponse> kuknosWalletsM) {
+    public void setKuknosWalletsM(MutableLiveData<KuknosBalance> kuknosWalletsM) {
         this.kuknosWalletsM = kuknosWalletsM;
     }
 }

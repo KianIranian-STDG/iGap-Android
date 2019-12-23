@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,18 +17,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
-
-import org.stellar.sdk.responses.AccountResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WalletSpinnerArrayAdapter extends ArrayAdapter<AccountResponse.Balance> {
+public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balance> {
 
-    ArrayList<AccountResponse.Balance> wallets;
+    ArrayList<KuknosBalance.Balance> wallets;
     Context context;
 
-    public WalletSpinnerArrayAdapter(Context context, List<AccountResponse.Balance> objects) {
+    public WalletSpinnerArrayAdapter(Context context, List<KuknosBalance.Balance> objects) {
         super(context, 0, objects);
         if (wallets == null)
             wallets = new ArrayList<>();
@@ -134,7 +132,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<AccountResponse.Bala
     }
 
     @Override
-    public AccountResponse.Balance getItem(int position) {
+    public KuknosBalance.Balance getItem(int position) {
         return wallets.get(position);
     }
 

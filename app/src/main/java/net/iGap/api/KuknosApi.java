@@ -1,17 +1,15 @@
 package net.iGap.api;
 
 import net.iGap.kuknos.service.model.KuknosInfoM;
-import net.iGap.kuknos.service.model.KuknosLoginM;
 import net.iGap.kuknos.service.model.KuknosSubmitM;
 import net.iGap.kuknos.service.model.KuknoscheckUserM;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 public interface KuknosApi {
 
@@ -23,6 +21,10 @@ public interface KuknosApi {
                                             @Field("national_code") String NID,
                                             @Field("mail") String email,
                                             @Field("public_key") String publicKey);
+
+    @FormUrlEncoded
+    @POST("get-account-assets")
+    Call<KuknosResponseModel<KuknosBalance>> getUserAsset(@Field("public_key") String publicKey);
 
     @FormUrlEncoded
     @POST("activate-account")

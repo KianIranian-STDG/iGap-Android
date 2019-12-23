@@ -1,9 +1,13 @@
 package net.iGap.kuknos.service.Repository;
 
 import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.HandShakeCallback;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosSendM;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
-import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
@@ -23,8 +27,8 @@ public class PanelRepo {
                 + "\nmnemonic is: " + userRepo.getMnemonic();
     }
 
-    public void getAccountInfo(ApiResponse<AccountResponse> apiResponse) {
-        kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), apiResponse);
+    public void getAccountInfo(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBalance>> apiResponse) {
+        kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), handShakeCallback, apiResponse);
     }
 
     public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
