@@ -70,8 +70,6 @@ public class JoinDialogFragment extends BottomSheetDialogFragment {
         TextView tvMemberCount = view.findViewById(R.id.tvMemberCount);
         TextView btnCancel = view.findViewById(R.id.btnCancel);
         TextView btnJoin = view.findViewById(R.id.btnJoin);
-        RelativeLayout lytJoin = view.findViewById(R.id.lytJoin);
-        lytJoin.setBackground(Theme.getInstance().tintDrawable(lytJoin.getBackground() , lytJoin.getContext() ,R.attr.iGapDividerLine ));
 
         String title = getString(R.string.do_you_want_to_join_to_this);
         String memberNumber = "";
