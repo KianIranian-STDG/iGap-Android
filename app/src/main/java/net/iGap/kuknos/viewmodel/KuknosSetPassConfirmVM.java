@@ -28,19 +28,11 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private String token, username;
 
     public KuknosSetPassConfirmVM() {
-        if (kuknosPassM == null) {
-            kuknosPassM = new MutableLiveData<KuknosPassM>();
-        }
-        if (error == null) {
-            error = new MutableLiveData<ErrorM>();
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<Boolean>();
-            nextPage.setValue(false);
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-        }
+        kuknosPassM = new MutableLiveData<>();
+        error = new MutableLiveData<>();
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
+        progressState = new MutableLiveData<>();
     }
 
     public void onSubmitBtn() {
@@ -73,7 +65,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
             error.setValue(new ErrorM(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
-
+        nextPage.setValue(true);
         /*userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
             @Override
             public void onResponse(KuknosSubmitM kuknosSubmitM) {

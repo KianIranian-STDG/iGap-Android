@@ -26,7 +26,7 @@ public class KuknosAPIRepository {
 
     public void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
         new ApiInitializer<KuknosResponseModel>()
-                .initAPI(apiService.createAccount(info.getName(), "", info.getPhoneNum(),
+                .initAPI(apiService.createAccount(info.getName(), "IGap", info.getPhoneNum(),
                         info.getNID(), info.getEmail(), info.getKeyString()),
                         handShakeCallback, apiResponse);
     }

@@ -137,7 +137,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
 
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeyFrag.class.getName());
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
                 if (fragment == null) {
                     fragment = KuknosShowRecoveryKeyFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());

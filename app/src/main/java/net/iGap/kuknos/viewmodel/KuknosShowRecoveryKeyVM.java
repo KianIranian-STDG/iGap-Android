@@ -60,9 +60,10 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
                 e.printStackTrace();
             }
 
-            progressState.setValue(true);
             info.setKeyString(userRepo.getAccountID());
-            userRepo.registerUser(info, this, new ResponseCallback<KuknosResponseModel>() {
+            nextPage.setValue(true);
+            progressState.setValue(false);
+            /*userRepo.registerUser(info, this, new ResponseCallback<KuknosResponseModel>() {
                 @Override
                 public void onSuccess(KuknosResponseModel data) {
                     nextPage.setValue(true);
@@ -73,7 +74,7 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
                 public void onError(ErrorModel error) {
                     progressState.setValue(false);
                 }
-            });
+            });*/
         }
     }
 

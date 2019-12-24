@@ -9,15 +9,18 @@ public class KuknosSignupM {
     private String NID;
     private String pinCode;
     private String keyString;
+    private boolean isRegistered = false;
 
     public KuknosSignupM() {
     }
 
-    public KuknosSignupM(String name, String phoneNum, String email, String NID) {
+    public KuknosSignupM(String name, String phoneNum, String email, String NID, String keyString, boolean isRegistered) {
         this.name = name;
         this.phoneNum = phoneNum;
         this.email = email;
         this.NID = NID;
+        this.isRegistered = isRegistered;
+        this.keyString = keyString;
     }
 
     public String getUsername() {
@@ -74,5 +77,13 @@ public class KuknosSignupM {
 
     public void setNID(String NID) {
         this.NID = NID;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 }

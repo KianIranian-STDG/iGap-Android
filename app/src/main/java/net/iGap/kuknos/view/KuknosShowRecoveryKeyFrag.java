@@ -113,7 +113,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                 } else {
-                    fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                    fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
                     if (fragment == null) {
                         fragment = KuknosPanelFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());

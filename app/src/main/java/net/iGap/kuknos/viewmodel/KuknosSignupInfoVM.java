@@ -1,19 +1,20 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.os.Handler;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 import java.util.Objects;
 
-public class KuknosSignupInfoVM extends ViewModel {
+public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosSignupM> kuknosSignupM;
     private MutableLiveData<ErrorM> error;
@@ -57,8 +58,8 @@ public class KuknosSignupInfoVM extends ViewModel {
             return;
         }
 
-        kuknosSignupM.setValue(new KuknosSignupM(name.get(), phoneNum.get(), email.get(), NID.get()));
-        nextPage.setValue(true);
+        kuknosSignupM.setValue(new KuknosSignupM(name.get(), phoneNum.get(), email.get(), NID.get(), userRepo.getAccountID(), true));
+        sendDataToServer();
 
         // this part is for the older version with userID option
         /*if (usernameIsValid) {
@@ -67,6 +68,22 @@ public class KuknosSignupInfoVM extends ViewModel {
         }
         isUsernameValid(true);*/
 
+    }
+
+    private void sendDataToServer() {
+        progressSendDServerState.setValue(true);
+        userRepo.registerUser(kuknosSignupM.getValue(), this, new ResponseCallback<KuknosResponseModel>() {
+                @Override
+                public void onSuccess(KuknosResponseModel data) {
+                    nextPage.setValue(true);
+                    progressSendDServerState.setValue(false);
+                }
+
+                @Override
+                public void onError(ErrorModel error) {
+                    progressSendDServerState.setValue(false);
+                }
+            });
     }
 
     /*public void isUsernameValid(boolean isCallFromBTN) {
