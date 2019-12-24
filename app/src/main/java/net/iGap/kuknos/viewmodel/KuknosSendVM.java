@@ -1,22 +1,26 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.util.Log;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSendM;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 import org.stellar.sdk.KeyPair;
-import org.stellar.sdk.responses.AccountResponse;
-import org.stellar.sdk.responses.SubmitTransactionResponse;
 
-public class KuknosSendVM extends ViewModel {
+public class KuknosSendVM extends BaseAPIViewModel {
 
     private KuknosSendM kuknosSendM;
     private MutableLiveData<ErrorM> errorM;
@@ -26,25 +30,20 @@ public class KuknosSendVM extends ViewModel {
     private ObservableField<String> text = new ObservableField<>();
     private ObservableField<String> amount = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
-    private AccountResponse.Balance balanceInfoM;
+    private KuknosBalance.Balance balanceInfoM;
     private MutableLiveData<Boolean> openQrScanner;
     private PanelRepo panelRepo = new PanelRepo();
 
+    private static final String TAG = "KuknosSendVM";
+
     public KuknosSendVM() {
-        if (kuknosSendM == null)
-            kuknosSendM = new KuknosSendM();
-        if (errorM == null)
-            errorM = new MutableLiveData<>();
-        if (payResult == null)
-            payResult = new MutableLiveData<>();
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(false);
-        }
-        if (openQrScanner == null) {
-            openQrScanner = new MutableLiveData<>();
-            openQrScanner.setValue(false);
-        }
+        kuknosSendM = new KuknosSendM();
+        errorM = new MutableLiveData<>();
+        payResult = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(false);
+        openQrScanner = new MutableLiveData<>();
+        openQrScanner.setValue(false);
     }
 
     public void QrcodeScan() {
@@ -116,30 +115,26 @@ public class KuknosSendVM extends ViewModel {
         kuknosSendM.setDest(walletID.get());
         kuknosSendM.setMemo((text.get() == null ? "" : text.get()));
 
-        Gson gson = new Gson();
-
-        panelRepo.paymentUser(kuknosSendM, new ApiResponse<SubmitTransactionResponse>() {
+        progressState.setValue(true);
+        panelRepo.paymentUser(kuknosSendM, this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
             @Override
-            public void onResponse(SubmitTransactionResponse accountResponse) {
-                if (accountResponse.isSuccess())
+            public void onSuccess(KuknosResponseModel<KuknosTransactionResult> data) {
+                if (data.getData().isSuccess())
                     payResult.setValue(new ErrorM(false, "", "", R.string.kuknos_send_successServer));
                 else {
                     //TransactionResult.TransactionResultResult.
-                    accountResponse.getExtras().getResultCodes().getTransactionResultCode();
+                    data.getData().getExtras().getResultCodes().getTransactionResultCode();
                 }
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String error) {
-                if (error == null || error.length() == 0)
+            public void onError(ErrorModel error) {
+                if (error == null)
                     payResult.setValue(new ErrorM(true, "", "", R.string.kuknos_send_errorServer));
                 else
-                    payResult.setValue(new ErrorM(true, "", "", Integer.parseInt(error)));
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+                    payResult.setValue(new ErrorM(true, "", error.getMessage(), 0));
+                progressState.setValue(false);
             }
         });
     }
@@ -212,7 +207,7 @@ public class KuknosSendVM extends ViewModel {
 
     public void setBalanceInfoM(String balanceInfoM) {
         Gson gson = new Gson();
-        this.balanceInfoM = gson.fromJson(balanceInfoM, AccountResponse.Balance.class);
+        this.balanceInfoM = gson.fromJson(balanceInfoM, KuknosBalance.Balance.class);
         this.currency.set((this.balanceInfoM.getAsset().getType().equals("native") ? "PMN" : this.balanceInfoM.getAssetCode()));
     }
 

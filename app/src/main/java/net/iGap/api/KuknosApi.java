@@ -80,6 +80,10 @@ public interface KuknosApi {
     Call<KuknosResponseModel<KuknosTransactionResult>> changeTrust(@Field("xdr") String XDR);
 
     @FormUrlEncoded
+    @POST("transfer")
+    Call<KuknosResponseModel<KuknosTransactionResult>> payment(@Field("xdr") String XDR);
+
+    @FormUrlEncoded
     @POST("activate-account")
     Call<KuknosInfoM> activateAccount(@Field("initial_balance") int initialBalance,
                                       @Field("receipt_number") String recNumber,

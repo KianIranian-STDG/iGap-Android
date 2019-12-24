@@ -109,7 +109,6 @@ public class KuknosRecieveFrag extends BaseFragment {
     }
 
     private Bitmap TextToImageEncode(String Value) {
-        Log.d("amini", "TextToImageEncode: " + Value);
         BitMatrix bitMatrix = null;
         try {
             bitMatrix = new MultiFormatWriter().encode(

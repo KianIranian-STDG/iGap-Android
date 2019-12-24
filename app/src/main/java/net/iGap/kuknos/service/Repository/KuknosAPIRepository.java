@@ -39,6 +39,12 @@ public class KuknosAPIRepository {
         temp.execute(userID);
     }
 
+    public void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+                .initAPI(apiService.payment(new KuknosSDKRepo().paymentToOtherXDR(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo()))
+                        , handShakeCallback, apiResponse);
+    }
+
     public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
         temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
