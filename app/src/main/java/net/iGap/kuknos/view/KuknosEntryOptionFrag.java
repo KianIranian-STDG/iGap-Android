@@ -68,6 +68,18 @@ public class KuknosEntryOptionFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosEToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        if (kuknosEntryOptionVM.loginStatus()) {
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+            if (fragment == null) {
+                fragment = KuknosPanelFrag.newInstance();
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            popBackStackFragment();
+        }
+
         onNewTObserver();
         onRestoreTObserver();
         onRestoreSeedObserver();
