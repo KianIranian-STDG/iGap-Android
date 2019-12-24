@@ -211,8 +211,6 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         };
 
-        view.findViewById(R.id.dragView).setBackground(new Theme().tintDrawable(view.findViewById(R.id.dragView).getBackground(), getContext(), R.attr.rootBackgroundColor));
-
         musicSeekbar = view.findViewById(R.id.ml_seekBar1);
 
         musicSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

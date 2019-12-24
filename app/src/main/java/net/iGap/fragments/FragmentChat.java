@@ -783,7 +783,6 @@ public class FragmentChat extends BaseFragment
         txtChannelMute = rootView.findViewById(R.id.chl_txt_mute_channel);
         iconChannelMute = rootView.findViewById(R.id.chl_icon_mute_channel);
         layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
-        layoutMute.setBackground(new Theme().tintDrawable(layoutMute.getBackground(), layoutMute.getContext(), R.attr.iGapButtonColor));
 
         gongingRunnable = new Runnable() {
             @Override
@@ -2000,7 +1999,6 @@ public class FragmentChat extends BaseFragment
     private void manageExtraLayout() {
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
-            layoutJoin.setBackground(new Theme().tintDrawable(layoutJoin.getBackground(), layoutJoin.getContext(), R.attr.iGapButtonColor));
 
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);

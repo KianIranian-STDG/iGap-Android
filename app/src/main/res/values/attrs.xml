@@ -99,6 +99,7 @@
     <attr name="iGapSendReplayBackground" format="reference" />
     <attr name="iGapButtonSelector" format="reference" />
     <attr name="iGapBottomSheetBackground" format="reference" />
+    <attr name="iGapTopRoundButtonPrimary" format="reference" />
     <attr name="iGapCardToCardBackground" format="reference" />
     <attr name="iGapCardToCardButtonBackground" format="reference" />
     <attr name="iGapCardToCardIconBackground" format="reference" />

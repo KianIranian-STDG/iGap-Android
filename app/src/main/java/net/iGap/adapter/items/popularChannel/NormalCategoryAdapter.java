@@ -59,8 +59,6 @@ public class NormalCategoryAdapter extends RecyclerView.Adapter<NormalCategoryAd
             super(itemView);
             channelImageGrid = itemView.findViewById(R.id.iv_item_popular_rv_grid);
             channelTitleGrid = itemView.findViewById(R.id.tv_item_popular_rv_grid);
-            View v = itemView.findViewById(R.id.ll_item_pop_card_category);
-            v.setBackground(new Theme().tintDrawable(v.getBackground(), v.getContext(), R.attr.iGapDividerLine));
         }
 
         public void bindChannel(Category category) {

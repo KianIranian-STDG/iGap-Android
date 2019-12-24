@@ -252,7 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
-                android:background="?attr/iGapBottomSheetBackground"
+                android:background="?attr/iGapTopRoundButtonPrimary"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -273,7 +273,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:layoutDirection="locale"
-                android:background="?attr/iGapBottomSheetBackground"
+                android:background="?attr/iGapTopRoundButtonPrimary"
                 android:visibility="gone">
 
                 <TextView
