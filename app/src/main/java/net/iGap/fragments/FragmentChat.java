@@ -7535,18 +7535,15 @@ public class FragmentChat extends BaseFragment
         }).start();
 
 
-        if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
-            if (finalMessageType != CONTACT) {
-            } else {
-                ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
-                messageUtil.contact(structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getFirstName(),
-                        structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getLastName(),
-                        structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getPhones().first().getString());
-                if (isReply()) {
-                    messageUtil.replyMessage(replyMessageId);
-                }
-                messageUtil.sendMessage(Long.toString(messageId));
+        if (finalMessageType == CONTACT) {
+            ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
+            messageUtil.contact(structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getFirstName(),
+                    structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getLastName(),
+                    structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getPhones().first().getString());
+            if (isReply()) {
+                messageUtil.replyMessage(replyMessageId);
             }
+            messageUtil.sendMessage(Long.toString(messageId));
         }
 
         if (isReply()) {
