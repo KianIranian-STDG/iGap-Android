@@ -80,7 +80,11 @@ public class UploadManager {
             return;
         }
 
-        if (message.getForwardMessage() != null || message.getAttachment() == null || message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
+        if (message.getForwardMessage() != null ||
+                message.getAttachment() == null ||
+                message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER ||
+                message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT
+        ) {
             new ChatSendMessageUtil().build(roomType, message.getRoomId(), message);
             return;
         }

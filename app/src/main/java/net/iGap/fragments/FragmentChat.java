@@ -7450,8 +7450,9 @@ public class FragmentChat extends BaseFragment
         realmAttachment.setSize(finalFileSize);
         realmAttachment.setName(finalFileName);
         realmAttachment.setDuration(finalDuration);
-
-        roomMessage.setAttachment(realmAttachment);
+        if (messageType != CONTACT) {
+            roomMessage.setAttachment(realmAttachment);
+        }
 
         roomMessage.setUserId(senderID);
         roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
