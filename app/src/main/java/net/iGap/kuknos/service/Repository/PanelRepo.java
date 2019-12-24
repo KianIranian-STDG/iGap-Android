@@ -6,6 +6,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
@@ -35,8 +36,8 @@ public class PanelRepo {
         kuknosAPIRepository.paymentUser(model, handShakeCallback, apiResponse);
     }
 
-    public void getUserHistory(ApiResponse<Page<OperationResponse>> apiResponse) {
-        kuknosAPIRepository.getUserHistory(userRepo.getAccountID(), apiResponse);
+    public void getUserHistory(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
+        kuknosAPIRepository.getUserHistory(userRepo.getAccountID(), handShakeCallback, apiResponse);
     }
 
     public UserRepo getUserRepo() {

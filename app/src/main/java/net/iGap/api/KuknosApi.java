@@ -5,6 +5,7 @@ import net.iGap.kuknos.service.model.KuknosSubmitM;
 import net.iGap.kuknos.service.model.KuknoscheckUserM;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
@@ -79,9 +80,27 @@ public interface KuknosApi {
     @POST("change-trust")
     Call<KuknosResponseModel<KuknosTransactionResult>> changeTrust(@Field("xdr") String XDR);
 
+    /**
+     * this api handles payment operation to others
+     * @param XDR
+     * @return
+     */
     @FormUrlEncoded
     @POST("transfer")
     Call<KuknosResponseModel<KuknosTransactionResult>> payment(@Field("xdr") String XDR);
+
+    /**
+     * this api returns all of history of an account
+     * @param publicKey
+     * @param limit
+     * @param order
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("wallet-history")
+    Call<KuknosResponseModel<KuknosOperationResponse>> getWalletHistory(@Field("public_key") String publicKey,
+                                                                     @Field("limit") int limit,
+                                                                     @Field("order") String order);
 
     @FormUrlEncoded
     @POST("activate-account")
@@ -101,11 +120,5 @@ public interface KuknosApi {
                                      @Field("public_key") String publicKey,
                                      @Field("fee") int fee,
                                      @Field("description") String description);
-
-    @FormUrlEncoded
-    @POST("charge-wallet")
-    Call<KuknosSubmitM> walletHistory(@Field("public_key") String publicKey,
-                                     @Field("limit") String limit,
-                                     @Field("order") int order);
 
 }

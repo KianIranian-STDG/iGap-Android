@@ -21,6 +21,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.view.adapter.WalletHistoryRAdapter;
 import net.iGap.kuknos.viewmodel.KuknosWHistoryVM;
 
@@ -31,11 +32,9 @@ public class KuknosWHistoryFrag extends BaseFragment {
 
     private FragmentKuknosWHistoryBinding binding;
     private KuknosWHistoryVM kuknosWHistoryVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosWHistoryFrag newInstance() {
-        KuknosWHistoryFrag kuknosLoginFrag = new KuknosWHistoryFrag();
-        return kuknosLoginFrag;
+        return new KuknosWHistoryFrag();
     }
 
     @Override
@@ -62,7 +61,7 @@ public class KuknosWHistoryFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -88,10 +87,10 @@ public class KuknosWHistoryFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosWHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Page<OperationResponse>>() {
+        kuknosWHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<KuknosOperationResponse>() {
             @Override
-            public void onChanged(@Nullable Page<OperationResponse> operationResponsePage) {
-                if (operationResponsePage.getRecords().size() != 0) {
+            public void onChanged(@Nullable KuknosOperationResponse operationResponsePage) {
+                if (operationResponsePage.getOperations().size() != 0) {
                     WalletHistoryRAdapter mAdapter = new WalletHistoryRAdapter(kuknosWHistoryVM.getListMutableLiveData().getValue(), getContext());
                     binding.kuknosWHistoryRecycler.setAdapter(mAdapter);
                 }
@@ -103,7 +102,7 @@ public class KuknosWHistoryFrag extends BaseFragment {
         kuknosWHistoryVM.getErrorM().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true) {
+                if (errorM.getState()) {
                     DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
                     defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
                             .setMessage(getResources().getString(R.string.kuknos_wHistory_error));
@@ -120,14 +119,11 @@ public class KuknosWHistoryFrag extends BaseFragment {
     }
 
     private void onProgressVisibility() {
-        kuknosWHistoryVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.kuknosWHistoryProgressV.setVisibility(View.VISIBLE);
-                } else {
-                    binding.kuknosWHistoryProgressV.setVisibility(View.GONE);
-                }
+        kuknosWHistoryVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                binding.kuknosWHistoryProgressV.setVisibility(View.VISIBLE);
+            } else {
+                binding.kuknosWHistoryProgressV.setVisibility(View.GONE);
             }
         });
     }

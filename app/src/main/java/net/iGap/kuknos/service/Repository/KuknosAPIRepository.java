@@ -10,6 +10,7 @@ import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
@@ -48,6 +49,10 @@ public class KuknosAPIRepository {
     public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
         temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
+    }
+
+    public void getUserHistory(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosOperationResponse>>().initAPI(apiService.getWalletHistory(userID, 100, "desc"), handShakeCallback, apiResponse);
     }
 
     public void getUserHistory(String userID, ApiResponse<Page<OperationResponse>> apiResponse) {
