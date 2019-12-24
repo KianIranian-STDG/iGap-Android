@@ -1,6 +1,5 @@
 package net.iGap.kuknos.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +14,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
@@ -25,18 +23,15 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosViewRecoveryEPVM;
 
 public class KuknosViewRecoveryEPFrag extends BaseFragment {
 
     private FragmentKuknosViewRecoveryEpBinding binding;
     private KuknosViewRecoveryEPVM kuknosViewRecoveryEPVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosViewRecoveryEPFrag newInstance() {
-        KuknosViewRecoveryEPFrag kuknosLoginFrag = new KuknosViewRecoveryEPFrag();
-        return kuknosLoginFrag;
+        return new KuknosViewRecoveryEPFrag();
     }
 
     @Override
@@ -63,7 +58,7 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -85,15 +80,12 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
 
 
     private void onError() {
-        kuknosViewRecoveryEPVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true && errorM.getMessage().equals("0")) {
-                    binding.fragKuknosVRPassHolder.setError(getResources().getString(errorM.getResID()));
-                    binding.fragKuknosVRPassHolder.requestFocus();
-                } else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
-                    showDialog(errorM.getResID());
-                }
+        kuknosViewRecoveryEPVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState() && errorM.getMessage().equals("0")) {
+                binding.fragKuknosVRPassHolder.setError(getResources().getString(errorM.getResID()));
+                binding.fragKuknosVRPassHolder.requestFocus();
+            } else if (errorM.getState() && errorM.getMessage().equals("1")) {
+                showDialog(errorM.getResID());
             }
         });
     }
@@ -102,27 +94,22 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
         defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
         defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
 
-            }
         });
         defaultRoundDialog.show();
     }
 
     private void onProgress() {
-        kuknosViewRecoveryEPVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.fragKuknosVRProgressV.setVisibility(View.VISIBLE);
-                    binding.fragKuknosVRPass.setEnabled(false);
-                    binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_load));
-                } else {
-                    binding.fragKuknosVRProgressV.setVisibility(View.GONE);
-                    binding.fragKuknosVRPass.setEnabled(true);
-                    binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_btn));
-                }
+        kuknosViewRecoveryEPVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                binding.fragKuknosVRProgressV.setVisibility(View.VISIBLE);
+                binding.fragKuknosVRPass.setEnabled(false);
+                binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_load));
+            } else {
+                binding.fragKuknosVRProgressV.setVisibility(View.GONE);
+                binding.fragKuknosVRPass.setEnabled(true);
+                binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_btn));
             }
         });
     }
@@ -147,20 +134,17 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
     }
 
     private void onNextPage() {
-        kuknosViewRecoveryEPVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    popBackStackFragment();
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosShowRecoveryKeySFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        kuknosViewRecoveryEPVM.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                popBackStackFragment();
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosShowRecoveryKeySFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }

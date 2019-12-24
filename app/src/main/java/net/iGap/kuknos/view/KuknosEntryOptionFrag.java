@@ -28,8 +28,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     private KuknosEntryOptionVM kuknosEntryOptionVM;
 
     public static KuknosEntryOptionFrag newInstance() {
-        KuknosEntryOptionFrag kuknosLoginFrag = new KuknosEntryOptionFrag();
-        return kuknosLoginFrag;
+        return new KuknosEntryOptionFrag();
     }
 
     @Override
@@ -77,7 +76,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     private void onNewTObserver() {
 
         kuknosEntryOptionVM.getGoNewTPage().observe(getViewLifecycleOwner(), nextPage -> {
-            if (nextPage == true) {
+            if (nextPage) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
@@ -94,7 +93,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     private void onRestoreTObserver() {
 
         kuknosEntryOptionVM.getGoRestoreTPage().observe(getViewLifecycleOwner(), nextPage -> {
-            if (nextPage == true) {
+            if (nextPage) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreFrag.class.getName());

@@ -1,6 +1,5 @@
 package net.iGap.kuknos.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -17,7 +16,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -25,14 +23,12 @@ import com.google.android.material.snackbar.Snackbar;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.view.adapter.WalletSpinnerArrayAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 
@@ -45,12 +41,10 @@ public class KuknosPanelFrag extends BaseFragment {
 
     private FragmentKuknosPanelBinding binding;
     private KuknosPanelVM kuknosPanelVM;
-    private HelperToolbar mHelperToolbar;
     private Spinner walletSpinner;
 
     public static KuknosPanelFrag newInstance() {
-        KuknosPanelFrag kuknosLoginFrag = new KuknosPanelFrag();
-        return kuknosLoginFrag;
+        return new KuknosPanelFrag();
     }
 
     @Override
@@ -77,7 +71,7 @@ public class KuknosPanelFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -142,40 +136,37 @@ public class KuknosPanelFrag extends BaseFragment {
         items.add(getString(R.string.kuknos_setting_copySeedKey));
         items.add(getString(R.string.kuknos_setting_logout));
 
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
-            @Override
-            public void onClick(int position) {
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = null;
-                switch (position) {
-                    case 0:
-                        fragment = fragmentManager.findFragmentByTag(KuknosChangePassFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosChangePassFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
-                    case 1:
-                        fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosViewRecoveryEPFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
-                    case 2:
-                        showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
-                        return;
-                    case 3:
-                        fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosLogoutFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
-                }
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, position -> {
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = null;
+            switch (position) {
+                case 0:
+                    fragment = fragmentManager.findFragmentByTag(KuknosChangePassFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosChangePassFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 1:
+                    fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosViewRecoveryEPFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 2:
+                    showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
+                    return;
+                case 3:
+                    fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosLogoutFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
             }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
         bottomSheetFragment.setTitle(getResources().getString(R.string.kuknos_setting_title));
         bottomSheetFragment.show(getFragmentManager(), "SettingBottomSheet");
@@ -193,26 +184,18 @@ public class KuknosPanelFrag extends BaseFragment {
 
     private void onErrorObserver() {
 
-        kuknosPanelVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true) {
-                    if (errorM.getMessage().equals("0")) {
-                        binding.fragKuknosPError.setVisibility(View.VISIBLE);
-                        binding.fragKuknosPSend.setEnabled(false);
-                        binding.fragKuknosPHistory.setEnabled(false);
-                        binding.fragKuknosPTrading.setEnabled(false);
-                    }
-                    if (errorM.getMessage().equals("1")) {
-                        Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                        snackbar.show();
-                    }
+        kuknosPanelVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState()) {
+                if (errorM.getMessage().equals("0")) {
+                    binding.fragKuknosPError.setVisibility(View.VISIBLE);
+                    binding.fragKuknosPSend.setEnabled(false);
+                    binding.fragKuknosPHistory.setEnabled(false);
+                    binding.fragKuknosPTrading.setEnabled(false);
+                }
+                if (errorM.getMessage().equals("1")) {
+                    Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
+                    snackbar.show();
                 }
             }
         });
@@ -220,89 +203,83 @@ public class KuknosPanelFrag extends BaseFragment {
     }
 
     private void openPage() {
-        kuknosPanelVM.getOpenPage().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer pageID) {
-                if (pageID == -1)
+        kuknosPanelVM.getOpenPage().observe(getViewLifecycleOwner(), pageID -> {
+            if (pageID == -1)
+                return;
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = null;
+            switch (pageID) {
+                case 0:
+                    fragment = fragmentManager.findFragmentByTag(KuknosRecieveFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosRecieveFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 1:
+                    fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosSendFrag.newInstance();
+                        Bundle b = new Bundle();
+                        b.putString("balanceClientInfo", kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()));
+                        fragment.setArguments(b);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 2:
+                    fragment = fragmentManager.findFragmentByTag(KuknosWHistoryFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosWHistoryFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 3:
+                    initialSettingBS();
+                    kuknosPanelVM.getOpenPage().setValue(-1);
                     return;
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = null;
-                switch (pageID) {
-                    case 0:
-                        fragment = fragmentManager.findFragmentByTag(KuknosRecieveFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosRecieveFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                case 4:
+                    fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosBuyPeymanFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
+                case 5:
+                    fragment = fragmentManager.findFragmentByTag(KuknosTradePagerFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosTradePagerFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }/*
+                    Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
                         }
-                        break;
-                    case 1:
-                        fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosSendFrag.newInstance();
-                            Bundle b = new Bundle();
-                            b.putString("balanceClientInfo", kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()));
-                            fragment.setArguments(b);
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
-                    case 2:
-                        fragment = fragmentManager.findFragmentByTag(KuknosWHistoryFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosWHistoryFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
-                    case 3:
-                        initialSettingBS();
-                        kuknosPanelVM.getOpenPage().setValue(-1);
-                        return;
-                    case 4:
-                        fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosBuyPeymanFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
-                    case 5:
-                        fragment = fragmentManager.findFragmentByTag(KuknosTradePagerFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosTradePagerFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }/*
-                        Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                        snackbar.show();*/
-                        break;
-                }
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-                kuknosPanelVM.getOpenPage().setValue(-1);
+                    });
+                    snackbar.show();*/
+                    break;
             }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            kuknosPanelVM.getOpenPage().setValue(-1);
         });
     }
 
     private void onProgress() {
-        kuknosPanelVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.fragKuknosPProgressV.setVisibility(View.VISIBLE);
-                    binding.fragKuknosPRecieve.setEnabled(false);
-                    binding.fragKuknosPSend.setEnabled(false);
-                    binding.fragKuknosPHistory.setEnabled(false);
-                    binding.fragKuknosPBalanceHolder.setEnabled(false);
-                } else {
-                    binding.fragKuknosPProgressV.setVisibility(View.GONE);
-                    binding.fragKuknosPRecieve.setEnabled(true);
-                    binding.fragKuknosPSend.setEnabled(true);
-                    binding.fragKuknosPHistory.setEnabled(true);
-                    binding.fragKuknosPBalanceHolder.setEnabled(true);
-                }
+        kuknosPanelVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                binding.fragKuknosPProgressV.setVisibility(View.VISIBLE);
+                binding.fragKuknosPRecieve.setEnabled(false);
+                binding.fragKuknosPSend.setEnabled(false);
+                binding.fragKuknosPHistory.setEnabled(false);
+                binding.fragKuknosPBalanceHolder.setEnabled(false);
+            } else {
+                binding.fragKuknosPProgressV.setVisibility(View.GONE);
+                binding.fragKuknosPRecieve.setEnabled(true);
+                binding.fragKuknosPSend.setEnabled(true);
+                binding.fragKuknosPHistory.setEnabled(true);
+                binding.fragKuknosPBalanceHolder.setEnabled(true);
             }
         });
     }
@@ -311,11 +288,9 @@ public class KuknosPanelFrag extends BaseFragment {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
         defaultRoundDialog.setTitle(getResources().getString(titleRes));
         defaultRoundDialog.setMessage(getResources().getString(messageRes));
-        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (mode == 1) {
-                    writeSeedKey();
-                }
+        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), (dialog, id) -> {
+            if (mode == 1) {
+                writeSeedKey();
             }
         });
         defaultRoundDialog.show();
@@ -345,19 +320,19 @@ public class KuknosPanelFrag extends BaseFragment {
     }
 
     /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
+    private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     /* Checks if external storage is available to at least read */
-    public boolean isExternalStorageReadable() {
+    private boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state) ||
                 Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
-    public File getDownloadStorageDir(String fileName) {
+    private File getDownloadStorageDir(String fileName) {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
         if (file.isDirectory())

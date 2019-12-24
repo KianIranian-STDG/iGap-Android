@@ -27,15 +27,11 @@ import net.iGap.kuknos.view.adapter.TabAdapter;
 public class KuknosTradePagerFrag extends BaseFragment {
 
     private FragmentKuknosTradePagerBinding binding;
-    private HelperToolbar mHelperToolbar;
-    private TabAdapter adapter;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
 
 
     public static KuknosTradePagerFrag newInstance() {
-        KuknosTradePagerFrag kuknosLoginFrag = new KuknosTradePagerFrag();
-        return kuknosLoginFrag;
+        return new KuknosTradePagerFrag();
     }
 
     @Override
@@ -60,7 +56,7 @@ public class KuknosTradePagerFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -74,9 +70,9 @@ public class KuknosTradePagerFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.kuknosTradePagerToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        viewPager = binding.kuknosTradePager;
+        ViewPager viewPager = binding.kuknosTradePager;
         tabLayout = binding.kuknosTradePagerTabLayout;
-        adapter = new TabAdapter(getFragmentManager());
+        TabAdapter adapter = new TabAdapter(getFragmentManager());
         adapter.addFragment(new KuknosTradeFrag(), getResources().getString(R.string.kuknos_tradePager_trade));
         adapter.addFragment(new KuknosTradeActiveFrag(), getResources().getString(R.string.kuknos_tradePager_active));
         adapter.addFragment(new KuknosTradeHistoryFrag(), getResources().getString(R.string.kuknos_tradePager_history));

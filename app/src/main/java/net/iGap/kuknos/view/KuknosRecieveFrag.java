@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,12 +35,10 @@ public class KuknosRecieveFrag extends BaseFragment {
 
     private FragmentKuknosRecieveBinding binding;
     private KuknosRecieveVM kuknosRecieveVM;
-    private HelperToolbar mHelperToolbar;
-    public final static int QRcodeWidth = 500;
+    private final static int QRcodeWidth = 500;
 
     public static KuknosRecieveFrag newInstance() {
-        KuknosRecieveFrag kuknosLoginFrag = new KuknosRecieveFrag();
-        return kuknosLoginFrag;
+        return new KuknosRecieveFrag();
     }
 
     @Override
@@ -68,7 +65,7 @@ public class KuknosRecieveFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -83,12 +80,7 @@ public class KuknosRecieveFrag extends BaseFragment {
         toolbarLayout.addView(mHelperToolbar.getView());
 
         Button copyBtn = binding.fragKuknosRcCopy;
-        copyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                copyWalletID();
-            }
-        });
+        copyBtn.setOnClickListener(v -> copyWalletID());
 
         loadImage loadImage = new loadImage();
         loadImage.execute();
@@ -109,11 +101,11 @@ public class KuknosRecieveFrag extends BaseFragment {
     }
 
     private Bitmap TextToImageEncode(String Value) {
-        BitMatrix bitMatrix = null;
+        BitMatrix bitMatrix;
         try {
             bitMatrix = new MultiFormatWriter().encode(
                     Value,
-                    BarcodeFormat.DATA_MATRIX.QR_CODE,
+                    BarcodeFormat.QR_CODE,
                     QRcodeWidth, QRcodeWidth, null
             );
 

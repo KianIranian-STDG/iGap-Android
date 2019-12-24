@@ -1,6 +1,5 @@
 package net.iGap.kuknos.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -20,13 +18,8 @@ import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.view.adapter.WalletHistoryRAdapter;
 import net.iGap.kuknos.viewmodel.KuknosWHistoryVM;
-
-import org.stellar.sdk.responses.Page;
-import org.stellar.sdk.responses.operations.OperationResponse;
 
 public class KuknosWHistoryFrag extends BaseFragment {
 
@@ -87,33 +80,25 @@ public class KuknosWHistoryFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosWHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<KuknosOperationResponse>() {
-            @Override
-            public void onChanged(@Nullable KuknosOperationResponse operationResponsePage) {
-                if (operationResponsePage.getOperations().size() != 0) {
-                    WalletHistoryRAdapter mAdapter = new WalletHistoryRAdapter(kuknosWHistoryVM.getListMutableLiveData().getValue(), getContext());
-                    binding.kuknosWHistoryRecycler.setAdapter(mAdapter);
-                }
+        kuknosWHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), operationResponsePage -> {
+            if (operationResponsePage.getOperations().size() != 0) {
+                WalletHistoryRAdapter mAdapter = new WalletHistoryRAdapter(kuknosWHistoryVM.getListMutableLiveData().getValue(), getContext());
+                binding.kuknosWHistoryRecycler.setAdapter(mAdapter);
             }
         });
     }
 
     private void onError() {
-        kuknosWHistoryVM.getErrorM().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState()) {
-                    DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-                    defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
-                            .setMessage(getResources().getString(R.string.kuknos_wHistory_error));
-                    defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //close frag
-                            popBackStackFragment();
-                        }
-                    });
-                    defaultRoundDialog.show();
-                }
+        kuknosWHistoryVM.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState()) {
+                DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+                defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
+                        .setMessage(getResources().getString(R.string.kuknos_wHistory_error));
+                defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
+                    //close frag
+                    popBackStackFragment();
+                });
+                defaultRoundDialog.show();
             }
         });
     }
