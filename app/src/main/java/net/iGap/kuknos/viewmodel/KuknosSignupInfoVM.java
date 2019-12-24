@@ -58,7 +58,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             return;
         }
 
-        kuknosSignupM.setValue(new KuknosSignupM(name.get(), phoneNum.get(), email.get(), NID.get(), userRepo.getAccountID(), true));
+        kuknosSignupM.setValue(new KuknosSignupM(name.get(), phoneNum.get().replace("98","0"), email.get(), NID.get(), userRepo.getAccountID(), true));
         sendDataToServer();
 
         // this part is for the older version with userID option
@@ -80,7 +80,8 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
                 }
 
                 @Override
-                public void onError(ErrorModel error) {
+                public void onError(ErrorModel errorM) {
+                    error.setValue(new ErrorM(true, "", errorM.getMessage(), 0));
                     progressSendDServerState.setValue(false);
                 }
             });

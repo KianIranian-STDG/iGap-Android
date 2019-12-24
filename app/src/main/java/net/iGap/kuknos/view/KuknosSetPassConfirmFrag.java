@@ -98,7 +98,7 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosPanelFrag.newInstance();
+                    fragment = KuknosSignupInfoFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

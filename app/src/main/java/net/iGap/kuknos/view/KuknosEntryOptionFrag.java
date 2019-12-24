@@ -104,7 +104,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeyFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosSignupInfoFrag.newInstance();
+                    fragment = KuknosShowRecoveryKeyFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

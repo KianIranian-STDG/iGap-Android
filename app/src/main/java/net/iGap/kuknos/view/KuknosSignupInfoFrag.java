@@ -75,7 +75,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosSIToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        if (kuknosSignupInfoVM.loginStatus()) {
+        /*if (kuknosSignupInfoVM.loginStatus()) {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
@@ -85,7 +85,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             popBackStackFragment();
-        }
+        }*/
 
         onError();
         onGoNextPage();
@@ -139,7 +139,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosShowRecoveryKeyFrag.newInstance();
+                    fragment = KuknosPanelFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
