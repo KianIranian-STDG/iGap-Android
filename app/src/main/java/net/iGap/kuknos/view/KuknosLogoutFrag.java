@@ -1,5 +1,7 @@
 package net.iGap.kuknos.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -136,6 +138,7 @@ public class KuknosLogoutFrag extends BaseFragment {
     private void onNextPage() {
         kuknoslogoutVM.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
+                updateRegisterInfo();
                 popBackStackFragment();
                 popBackStackFragment();
                 FragmentManager fragmentManager = getChildFragmentManager();
@@ -150,4 +153,10 @@ public class KuknosLogoutFrag extends BaseFragment {
         });
     }
 
+    private void updateRegisterInfo() {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("RegisterInfo", null);
+        editor.apply();
+    }
 }

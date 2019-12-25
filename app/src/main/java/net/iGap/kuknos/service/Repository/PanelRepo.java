@@ -19,6 +19,14 @@ public class PanelRepo {
     private KuknosAPIRepository kuknosAPIRepository = new KuknosAPIRepository();
 
     public PanelRepo() {
+        /*userRepo.setPIN("0000");
+        userRepo.setSeedKey("SAQO3N7T5GBDBFV5LEOPDR4NWMSCU6PMKVGXUXC6JJAGJTUXSHN5A4IX");
+        userRepo.setMnemonic("mesh february noise come loud own hand quiz cabin torch assault bundle");
+        try {
+            userRepo.generateKeyPairWithMnemonicAndPIN();
+        } catch (WalletException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public String getUserInfo() {

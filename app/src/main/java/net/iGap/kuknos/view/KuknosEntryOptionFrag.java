@@ -3,6 +3,7 @@ package net.iGap.kuknos.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,9 @@ public class KuknosEntryOptionFrag extends BaseFragment {
 
     private boolean isRegisteredSharesPref() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        KuknosSignupM temp = new Gson().fromJson(sharedpreferences.getString("RegisterInfo", ""), KuknosSignupM.class);
+        KuknosSignupM temp = new Gson().fromJson(sharedpreferences.getString("RegisterInfo", null), KuknosSignupM.class);
+        if (temp == null)
+            return false;
         return temp.isRegistered();
     }
 

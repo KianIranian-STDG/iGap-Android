@@ -26,7 +26,6 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
     private ObservableField<Boolean> pinCheck = new ObservableField<>(false);
-    private KuknosSignupM info;
 
     public KuknosShowRecoveryKeyVM() {
         nextPage = new MutableLiveData<>();
@@ -60,21 +59,8 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
                 e.printStackTrace();
             }
 
-            info.setKeyString(userRepo.getAccountID());
             nextPage.setValue(true);
             progressState.setValue(false);
-            /*userRepo.registerUser(info, this, new ResponseCallback<KuknosResponseModel>() {
-                @Override
-                public void onSuccess(KuknosResponseModel data) {
-                    nextPage.setValue(true);
-                    progressState.setValue(false);
-                }
-
-                @Override
-                public void onError(ErrorModel error) {
-                    progressState.setValue(false);
-                }
-            });*/
         }
     }
 
@@ -120,7 +106,4 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
         this.pinCheck = pinCheck;
     }
 
-    public void setInfo(KuknosSignupM info) {
-        this.info = info;
-    }
 }

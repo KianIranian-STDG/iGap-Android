@@ -1,7 +1,5 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
@@ -37,20 +35,12 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         balance.set("...");
         currency.set("PMN");
 
-        if (kuknosWalletsM == null) {
-            kuknosWalletsM = new MutableLiveData<>();
-            //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
-        }
-        if (error == null) {
-            error = new MutableLiveData<ErrorM>();
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<Boolean>();
-        }
-        if (openPage == null) {
-            openPage = new MutableLiveData<Integer>();
-            openPage.setValue(-1);
-        }
+        kuknosWalletsM = new MutableLiveData<>();
+        //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        openPage = new MutableLiveData<>();
+        openPage.setValue(-1);
     }
 
     public void getDataFromServer() {

@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
-    private MutableLiveData<KuknosSignupM> kuknosSignupM;
+    private KuknosSignupM kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
 //    private MutableLiveData<Integer> checkUsernameState;
@@ -36,7 +36,6 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         phoneNum.set(userRepo.getUserNum());
         email.set(userRepo.getUserEmail());
 
-        kuknosSignupM = new MutableLiveData<>();
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
 //        checkUsernameState = new MutableLiveData<>();
@@ -45,20 +44,13 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         progressSendDServerState.setValue(false);
     }
 
-    public boolean loginStatus() {
-        if (userRepo.getSeedKey() != null) {
-            return !userRepo.getSeedKey().equals("-1");
-        }
-        return false;
-    }
-
     public void onSubmitBtn() {
 
         if (!checkEntryData()) {
             return;
         }
 
-        kuknosSignupM.setValue(new KuknosSignupM(name.get(), phoneNum.get().replace("98","0"), email.get(), NID.get(), userRepo.getAccountID(), true));
+        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98","0"), email.get(), NID.get(), userRepo.getAccountID(), true);
         sendDataToServer();
 
         // this part is for the older version with userID option
@@ -72,7 +64,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
     private void sendDataToServer() {
         progressSendDServerState.setValue(true);
-        userRepo.registerUser(kuknosSignupM.getValue(), this, new ResponseCallback<KuknosResponseModel>() {
+        userRepo.registerUser(kuknosSignupM, this, new ResponseCallback<KuknosResponseModel>() {
                 @Override
                 public void onSuccess(KuknosResponseModel data) {
                     nextPage.setValue(true);
@@ -81,7 +73,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
                 @Override
                 public void onError(ErrorModel errorM) {
-                    error.setValue(new ErrorM(true, "", errorM.getMessage(), 0));
+                    error.setValue(new ErrorM(true, "", errorM.getName(), 0));
                     progressSendDServerState.setValue(false);
                 }
             });
@@ -169,11 +161,11 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
     //Setter and Getter
 
-    public MutableLiveData<KuknosSignupM> getKuknosSignupM() {
+    public KuknosSignupM getKuknosSignupM() {
         return kuknosSignupM;
     }
 
-    public void setKuknosSignupM(MutableLiveData<KuknosSignupM> kuknosSignupM) {
+    public void setKuknosSignupM(KuknosSignupM kuknosSignupM) {
         this.kuknosSignupM = kuknosSignupM;
     }
 

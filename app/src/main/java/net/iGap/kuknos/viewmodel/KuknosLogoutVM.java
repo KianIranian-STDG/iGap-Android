@@ -19,16 +19,11 @@ public class KuknosLogoutVM extends ViewModel {
     private UserRepo userRepo = new UserRepo();
 
     public KuknosLogoutVM() {
-        if (error == null)
-            error = new MutableLiveData<>();
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(false);
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<>();
-            nextPage.setValue(false);
-        }
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(false);
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
     }
 
     public void onSubmitBtn() {

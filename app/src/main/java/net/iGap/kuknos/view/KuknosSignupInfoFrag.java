@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import net.iGap.R;
@@ -98,7 +99,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     private void saveRegisterInfo() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("RegisterInfo", new Gson().toJson(kuknosSignupInfoVM.getKuknosSignupM().getValue()));
+        editor.putString("RegisterInfo", new Gson().toJson(kuknosSignupInfoVM.getKuknosSignupM()));
         editor.apply();
     }
 
@@ -122,6 +123,12 @@ public class KuknosSignupInfoFrag extends BaseFragment {
                     case "3":
                         binding.fragKuknosSINIDHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSINID.requestFocus();
+                        break;
+                    default:
+                        Snackbar.make(binding.pageContainer, errorM.getMessage(), Snackbar.LENGTH_LONG)
+                                .setAction(R.string.ok, v -> {
+
+                                }).show();
                         break;
                 }
             }

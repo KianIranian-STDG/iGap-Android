@@ -81,12 +81,6 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         onErrorObserver();
         onNextObserver();
         progressState();
-        getCachedData();
-    }
-
-    private void getCachedData() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        kuknosShowRecoveryKeyVM.setInfo(new Gson().fromJson(sharedpreferences.getString("RegisterInfo", ""), KuknosSignupM.class));
     }
 
     private void onErrorObserver() {
