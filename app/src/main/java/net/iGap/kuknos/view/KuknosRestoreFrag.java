@@ -129,9 +129,9 @@ public class KuknosRestoreFrag extends BaseFragment {
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
             } else if (nextPage == 3) {
-                fragment = fragmentManager.findFragmentByTag(KuknosRestoreSignupFrag.class.getName());
+                fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosRestoreSignupFrag.newInstance();
+                    fragment = KuknosSignupInfoFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
             }

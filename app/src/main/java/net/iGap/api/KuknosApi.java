@@ -8,6 +8,7 @@ import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
+import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -102,6 +103,15 @@ public interface KuknosApi {
                                                                      @Field("limit") int limit,
                                                                      @Field("order") String order);
 
+    /**
+     * this api returns the user status
+     * @param publicKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("account-status")
+    Call<KuknosResponseModel<KuknosUserInfo>> accountStatus(@Field("public_key") String publicKey);
+
     @FormUrlEncoded
     @POST("activate-account")
     Call<KuknosInfoM> activateAccount(@Field("initial_balance") int initialBalance,
@@ -110,9 +120,7 @@ public interface KuknosApi {
                                       @Field("fee") int fee,
                                       @Field("description") String description);
 
-    @FormUrlEncoded
-    @POST("account-status")
-    Call<KuknoscheckUserM> accountStatus(@Field("public_key") String publicKey);
+
 
     @FormUrlEncoded
     @POST("charge-wallet")

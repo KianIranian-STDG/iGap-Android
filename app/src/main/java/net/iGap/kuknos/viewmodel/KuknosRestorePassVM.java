@@ -1,17 +1,19 @@
 package net.iGap.kuknos.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosPassM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 
-public class KuknosRestorePassVM extends ViewModel {
+public class KuknosRestorePassVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosPassM> kuknosPassM;
     private MutableLiveData<ErrorM> error;
@@ -58,6 +60,27 @@ public class KuknosRestorePassVM extends ViewModel {
     }
 
     private void checkUserInfo() {
+        progressState.setValue(true);
+        userRepo.getUserStatus(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosUserInfo> data) {
+                switch (data.getData().getStatus()) {
+                    case "CREATED":
+                    case "ACTIVATED":
+                        nextPage.setValue(1);
+                        break;
+                    case "NOT_CREATED":
+                        nextPage.setValue(2);
+                        break;
+                }
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onError(ErrorModel error) {
+                progressState.setValue(false);
+            }
+        });
         /*userRepo.getUserInfo(userRepo.getAccountID(), new ApiResponse<KuknosInfoM>() {
             @Override
             public void onResponse(KuknosInfoM kuknosInfoM) {

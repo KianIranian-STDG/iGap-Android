@@ -105,9 +105,9 @@ public class KuknosRestorePassFrag extends BaseFragment {
             } else if (nextPage == 2) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreSignupFrag.class.getName());
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosRestoreSignupFrag.newInstance();
+                    fragment = KuknosSignupInfoFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

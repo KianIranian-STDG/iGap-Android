@@ -1,17 +1,14 @@
 package net.iGap.kuknos.service.Repository;
 
-import net.iGap.api.apiService.ApiResponse;
+import android.util.Log;
+
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
-
-import org.stellar.sdk.responses.Page;
-import org.stellar.sdk.responses.operations.OperationResponse;
 
 public class PanelRepo {
 
@@ -19,6 +16,7 @@ public class PanelRepo {
     private KuknosAPIRepository kuknosAPIRepository = new KuknosAPIRepository();
 
     public PanelRepo() {
+        Log.d("amini", "PanelRepo: " + userRepo.getAccountID() + "\n" + userRepo.getMnemonic() + "\n" + userRepo.getSeedKey() + "\n" + userRepo.getPIN());
         /*userRepo.setPIN("0000");
         userRepo.setSeedKey("SAQO3N7T5GBDBFV5LEOPDR4NWMSCU6PMKVGXUXC6JJAGJTUXSHN5A4IX");
         userRepo.setMnemonic("mesh february noise come loud own hand quiz cabin torch assault bundle");
