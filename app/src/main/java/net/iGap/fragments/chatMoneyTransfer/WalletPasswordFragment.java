@@ -11,6 +11,8 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
@@ -18,6 +20,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.webservice.APIService;
 import net.iGap.webservice.ApiUtils;
 import net.iGap.webservice.Post;
@@ -42,7 +46,7 @@ import retrofit2.Response;
 
 import static org.paygear.utils.RSAUtils.getRSA;
 
-public class WalletPasswordFragment extends BaseFragment {
+public class WalletPasswordFragment extends Fragment {
 
     private ProgressBar progressBar;
     private Button confirmBtn;
@@ -50,6 +54,20 @@ public class WalletPasswordFragment extends BaseFragment {
     private EditText passwordEt;
     private Card selectedCard = null;
     private PaymentAuth paymentAuth;
+
+    private AvatarHandler avatarHandler;
+    private String userName;
+    private long peerId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userName = getArguments().getString("userName", "");
+            peerId = getArguments().getLong("peerId", -1);
+            avatarHandler = new AvatarHandler();
+        }
+    }
 
     @Nullable
     @Override
@@ -60,7 +78,30 @@ public class WalletPasswordFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         passwordEt = view.findViewById(R.id.et_enterPassword);
+
+        confirmBtn = view.findViewById(R.id.btn_moneyAction_confirm);
+        progressBar = view.findViewById(R.id.pb_moneyAction);
+        cancelBtn = view.findViewById(R.id.btn_moneyAction_cancel);
+
         confirmBtn.setText(R.string.pay);
+
+        AppCompatTextView creditTv = view.findViewById(R.id.tv_moneyAction_credit);
+        AppCompatTextView userNameTextView = view.findViewById(R.id.tv_moneyAction_transferTo);
+        userNameTextView.setText(String.format(getString(R.string.transfer_to_dialog), userName));
+
+        avatarHandler.getAvatar(new ParamWithAvatarType(view.findViewById(R.id.iv_moneyAction_userAvatar), peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+
+        if (G.selectedCard != null) {
+            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
+        } else {
+            creditTv.setVisibility(View.GONE);
+        }
+
+        cancelBtn.setOnClickListener(v -> {
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).dismissDialog();
+            }
+        });
     }
 
     @Override
@@ -172,23 +213,11 @@ public class WalletPasswordFragment extends BaseFragment {
         confirmBtn.setEnabled(false);
     }
 
-    public void setProgressBar(ProgressBar progressBar) {
-        this.progressBar = progressBar;
-    }
-
     public void setSelectedCard(Card selectedCard) {
         this.selectedCard = selectedCard;
     }
 
     public void setPaymentAuth(PaymentAuth paymentAuth) {
         this.paymentAuth = paymentAuth;
-    }
-
-    public void setConfirmBtn(Button confirmBtn) {
-        this.confirmBtn = confirmBtn;
-    }
-
-    public void setCancelBtn(Button cancelBtn) {
-        this.cancelBtn = cancelBtn;
     }
 }

@@ -1151,7 +1151,7 @@
     <string name="transfer_amount_hint">Введите сумму вклада:</string>
     <string name="amount_in_rial">Сумма в риалах:</string>
     <string name="pay">Оплатить</string>
-    <string name="transfer_to_dialog">Перевод в:</string>
+    <string name="transfer_to_dialog">Перевод в:%s</string>
     <string name="am_money">деньги</string>
     <string name="trace_number">Код отслеживания</string>
     <string name="amount_2">Сумма:</string>
@@ -1701,7 +1701,7 @@
     <string name="str_frag_sync_contactWelcome">Добро пожаловать в  iGap</string>
     <string name="str_frag_sync_skipBtn">Начало </string>
     <string name="str_frag_sync_error">Не удалось подключиться к серверу. Пожалуйста, попробуйте еще раз.</string>
-    <string name="money_request">Запрос перевода с карты на карту:</string>
+    <string name="money_request">Запрос перевода с карты на карту:%s</string>
     <string name="cardtocard_descriotion_error">Описание не может быть пустым.</string>
     <string name="cardtocard_amount_empty_error">Сумма не может быть пустой.</string>
     <string name="cardtocard_morethan_error">Минимальная сумма для карты на карту составляет 10 тысяч риалов.</string>

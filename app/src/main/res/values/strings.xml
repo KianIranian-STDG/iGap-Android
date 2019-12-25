@@ -1326,7 +1326,7 @@ Want to get it?</string>
     <string name="transfer_amount_hint">Enter the transfer amount below</string>
     <string name="amount_in_rial">Amount in Rial</string>
     <string name="pay">Pay</string>
-    <string name="transfer_to_dialog">Transfer to :</string>
+    <string name="transfer_to_dialog">Transfer to :%s</string>
     <string name="am_money">money</string>
     <string name="trace_number">Trace Number</string>
     <string name="amount_2">amount :</string>
@@ -1946,7 +1946,7 @@ Want to get it?</string>
     <string name="igasht_total_ticket_price">Total Price: %d Rials</string>
     <string name="igasht_add_ticket_error">Please Add Ticket</string>
     <string name="igasht_buy_ticket_successful">Buy Ticket Successful</string>
-    <string name="money_request">Card To Card Request to:</string>
+    <string name="money_request">Card To Card Request to: %s</string>
     <string name="cardtocard_descriotion_error">Description can not be empty</string>
     <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>

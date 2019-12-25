@@ -11,12 +11,17 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 
+import org.jetbrains.annotations.NotNull;
 import org.paygear.RaadApp;
 import org.paygear.web.Web;
 
@@ -31,36 +36,70 @@ import retrofit2.Response;
 
 import static net.iGap.G.fragmentActivity;
 
-public class WalletConfirmPasswordFragment extends BaseFragment {
-    private View rootView;
+public class WalletConfirmPasswordFragment extends Fragment {
+
     private ProgressBar progressBar;
     private Button confirmBtn;
     private EditText passwordEt;
     private EditText confirmPasswordEt;
 
+    private AvatarHandler avatarHandler;
+    private String userName;
+    private long peerId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userName = getArguments().getString("userName", "");
+            peerId = getArguments().getLong("peerId", -1);
+            avatarHandler = new AvatarHandler();
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_send_money_confirm_password, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_send_money_confirm_password, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        passwordEt = rootView.findViewById(R.id.et_confirm_enterPassword);
-        confirmPasswordEt = rootView.findViewById(R.id.et_confirm_confirmPassword);
-        dismissProgress();
+        passwordEt = view.findViewById(R.id.et_confirm_enterPassword);
+        confirmPasswordEt = view.findViewById(R.id.et_confirm_confirmPassword);
+        progressBar = view.findViewById(R.id.pb_moneyAction);
+        confirmBtn = view.findViewById(R.id.btn_moneyAction_confirm);
+
+        AppCompatTextView creditTv = view.findViewById(R.id.tv_moneyAction_credit);
+        AppCompatTextView userNameTextView = view.findViewById(R.id.tv_moneyAction_transferTo);
+        userNameTextView.setText(String.format(getString(R.string.transfer_to_dialog), userName));
+
+        avatarHandler.getAvatar(new ParamWithAvatarType(view.findViewById(R.id.iv_moneyAction_userAvatar), peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+
+        if (G.selectedCard != null) {
+            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
+        } else {
+            creditTv.setVisibility(View.GONE);
+        }
+
+        view.findViewById(R.id.btn_moneyAction_cancel).setOnClickListener(v -> {
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).dismissDialog();
+            }
+        });
+        confirmBtn.setOnClickListener(v -> startSavePin(passwordEt.getEditableText().toString(), confirmPasswordEt.getEditableText().toString()));
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
+    }
 
-        confirmBtn.setOnClickListener(v -> {
-            startSavePin(passwordEt.getText().toString(), confirmPasswordEt.getText().toString());
-        });
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        avatarHandler.unregisterChangeFromOtherAvatarHandler();
     }
 
     private void startSavePin(String newPassword, String confirmPassword) {
@@ -80,10 +119,10 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
         if (RaadApp.paygearCard.isProtected)
             map.put("old_password", data[0]);
         map.put("new_password", data[1]);
-
+        showProgress();
         Web.getInstance().getWebService().setCreditCardPin(RaadApp.paygearCard.token, Auth.getCurrentAuth().getId(), PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
                 dismissProgress();
                 Boolean success = Web.checkResponse(WalletConfirmPasswordFragment.this, call, response);
                 if (success == null)
@@ -97,7 +136,7 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
                 dismissProgress();
                 if (Web.checkFailureResponse(WalletConfirmPasswordFragment.this, call, t)) {
                 }
@@ -114,13 +153,5 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
     private void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
         confirmBtn.setEnabled(false);
-    }
-
-    public void setProgressBar(ProgressBar progressBar) {
-        this.progressBar = progressBar;
-    }
-
-    public void setConfirmBtn(Button confirmBtn) {
-        this.confirmBtn = confirmBtn;
     }
 }

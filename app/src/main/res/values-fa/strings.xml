@@ -1288,7 +1288,7 @@
     <string name="transfer_amount_hint">مبلغ واریزی را وارد کنید</string>
     <string name="amount_in_rial">مبلغ به ریال:</string>
     <string name="pay">پرداخت</string>
-    <string name="transfer_to_dialog">انتقال به:</string>
+    <string name="transfer_to_dialog">انتقال به:%s</string>
     <string name="am_money">پول</string>
     <string name="trace_number">کد پیگیری</string>
     <string name="amount_2">مبلغ:</string>
@@ -1927,7 +1927,7 @@
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
     <string name="str_frag_sync_skipBtn">شروع</string>
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
-    <string name="money_request">درخواست کارت به کارت به:</string>
+    <string name="money_request">درخواست کارت به کارت به:%s</string>
     <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
     <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
     <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارت ۱۰ هزار ریال میباشد.</string>

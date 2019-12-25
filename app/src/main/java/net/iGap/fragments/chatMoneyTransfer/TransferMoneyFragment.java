@@ -4,37 +4,34 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.Fragment;
 
-import net.iGap.AccountManager;
+import com.google.android.material.button.MaterialButton;
+
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperWallet;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
 import net.iGap.request.RequestWalletPaymentInit;
 
-import org.paygear.WalletActivity;
 import org.paygear.model.Card;
-import org.paygear.model.Payment;
-import org.paygear.model.PaymentAuth;
 import org.paygear.model.PaymentResult;
 import org.paygear.web.Web;
 
@@ -47,44 +44,76 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
 
-public class WalletTransferFragment extends BaseFragment implements EventListener {
-    private static final String TAG = "aabolfazlWallet";
+public class TransferMoneyFragment extends Fragment implements EventListener {
+
+    private long peerId;
+    private String userName;
 
     private final String[] mPrice = {""};
-    private View rootView;
-    private EditText amountEt, descriptionEt;
-    private Button confirmBtn;
-    private Card selectedCard = null;
-    private Long userId;
-    private ProgressBar progressBar;
-    private FragmentManager fragmentManager;
-    private Button cancelBtn;
 
+    private AvatarHandler avatarHandler;
+
+    private ProgressBar progressBar;
+    private MaterialButton confirmBtn;
+
+    private Card selectedCard = null;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            peerId = getArguments().getLong("peerId", -1);
+            userName = getArguments().getString("userName", "");
+            avatarHandler = new AvatarHandler();
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_send_money_detail, container, false);
-        rootView.setBackgroundColor(new Theme().getRootColor(getContext()));
-        return rootView;
+        return inflater.inflate(R.layout.fragment_transfer_money, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        amountEt = rootView.findViewById(R.id.et_moneyAction_amount);
-        descriptionEt = rootView.findViewById(R.id.et_moneyAction_description);
+        super.onViewCreated(view, savedInstanceState);
+
+        confirmBtn = view.findViewById(R.id.btn_moneyAction_confirm);
+        Button cancelBtn = view.findViewById(R.id.btn_moneyAction_cancel);
+        progressBar = view.findViewById(R.id.pb_moneyAction);
+
+        AppCompatTextView creditTv = view.findViewById(R.id.tv_moneyAction_credit);
+        AppCompatTextView userNameTextView = view.findViewById(R.id.tv_moneyAction_transferTo);
+        userNameTextView.setText(String.format(getString(R.string.transfer_to_dialog), userName));
+
+        avatarHandler.getAvatar(new ParamWithAvatarType(view.findViewById(R.id.iv_moneyAction_userAvatar), peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+
+
+        if (G.selectedCard != null) {
+            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
+        } else {
+            creditTv.setVisibility(View.GONE);
+        }
+
+        AppCompatEditText amountEt = view.findViewById(R.id.et_moneyAction_amount);
+        AppCompatEditText descriptionEt = view.findViewById(R.id.et_moneyAction_description);
 
         confirmBtn.setOnClickListener(v -> {
             if (mPrice[0] != null && !mPrice[0].isEmpty()) {
                 confirmBtn.setEnabled(false);
                 showProgress();
                 new RequestWalletPaymentInit().walletPaymentInit(ProtoGlobal.Language.FA_IR,
-                        Auth.getCurrentAuth().accessToken, userId, Long.parseLong(mPrice[0]),
-                        descriptionEt.getText().toString());
+                        Auth.getCurrentAuth().accessToken, peerId, Long.parseLong(mPrice[0]),
+                        descriptionEt.getEditableText().toString());
                 showProgress();
+            }
+        });
+
+        cancelBtn.setOnClickListener(v -> {
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).dismissDialog();
             }
         });
 
@@ -111,7 +140,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                 try {
                     s = String.format(Locale.US, "%,d", Long.parseLong(mPrice[0]));
                 } catch (NumberFormatException e) {
-                    Log.d(TAG, "afterTextChanged: " + e);
+                    e.printStackTrace();
                 }
 
                 amountEt.setText(s);
@@ -120,6 +149,18 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
 
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        avatarHandler.unregisterChangeFromOtherAvatarHandler();
     }
 
     @Override
@@ -135,7 +176,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                             try {
                                 HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                             } catch (Exception e) {
-                                Log.e(TAG, "receivedMessage: ", e);
+                                e.printStackTrace();
                             }
                     });
                     return;
@@ -165,16 +206,18 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                                                 }
 
                                                 if (selectedCard != null) {
-                                                    if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
-                                                        if (!selectedCard.isProtected) {
-                                                            setWalletPassword();
+                                                    if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                                                        if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
+                                                            if (!selectedCard.isProtected) {
+                                                                ((ParentChatMoneyTransferFragment) getParentFragment()).setWalletPassword();
+                                                            } else {
+                                                                ((ParentChatMoneyTransferFragment) getParentFragment()).showPasswordFragment(initPayResponse, selectedCard);
+                                                            }
                                                         } else {
-                                                            showPasswordFragment(initPayResponse);
+                                                            dismissProgress();
+                                                            ((ParentChatMoneyTransferFragment) getParentFragment()).showWalletActivity(initPayResponse, Long.parseLong(mPrice[0]));
                                                         }
-                                                    } else {
-                                                        showWalletActivity(initPayResponse);
                                                     }
-
                                                 }
                                             }
                                         }
@@ -227,62 +270,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         }
     }
 
-    private void showPasswordFragment(ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse) {
-        PaymentAuth paymentAuth = new PaymentAuth();
-        paymentAuth.publicKey = initPayResponse.getPublicKey();
-        paymentAuth.token = initPayResponse.getToken();
-
-        WalletPasswordFragment passwordFragment = new WalletPasswordFragment();
-        passwordFragment.setConfirmBtn(confirmBtn);
-        passwordFragment.setPaymentAuth(paymentAuth);
-        passwordFragment.setProgressBar(progressBar);
-        passwordFragment.setCancelBtn(cancelBtn);
-        passwordFragment.setSelectedCard(selectedCard);
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-        fragmentTransaction.replace(R.id.fl_moneyAction_Container, passwordFragment, "passwordFragment");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    private void showWalletActivity(ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse) {
-        dismissProgress();
-        Payment payment = new Payment();
-        PaymentAuth paymentAuth = new PaymentAuth();
-        paymentAuth.token = initPayResponse.getToken();
-        paymentAuth.publicKey = initPayResponse.getPublicKey();
-        payment.account = null;
-        payment.paymentAuth = paymentAuth;
-        payment.isCredit = false;
-        payment.orderId = null;
-        payment.price = Long.parseLong(mPrice[0]);
-        startActivityForResult(new HelperWallet().goToWallet(payment, getContext(), new Intent(context, WalletActivity.class), "0" + AccountManager.getInstance().getCurrentUser().getId(), false), 66);
-        cancelBtn.performClick();
-    }
-
-    private void setWalletPassword() {
-        WalletConfirmPasswordFragment confirmPasswordFragment = new WalletConfirmPasswordFragment();
-        confirmPasswordFragment.setConfirmBtn(confirmBtn);
-        confirmPasswordFragment.setProgressBar(progressBar);
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-        fragmentTransaction.replace(R.id.fl_moneyAction_Container, confirmPasswordFragment, "confirmPasswordFragment");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    private void dismissProgress() {
-        progressBar.setVisibility(View.INVISIBLE);
-        confirmBtn.setEnabled(true);
-    }
-
-    private void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-        confirmBtn.setEnabled(false);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 66) {
@@ -307,24 +294,13 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    private void dismissProgress() {
+        progressBar.setVisibility(View.INVISIBLE);
+        confirmBtn.setEnabled(true);
     }
 
-    public void setProgressBar(ProgressBar progressBar) {
-        this.progressBar = progressBar;
-    }
-
-    public void setFragmentManager(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-    }
-
-    public void setConfirmBtn(Button confirmBtn) {
-        this.confirmBtn = confirmBtn;
-    }
-
-    public void setCancelBtn(Button cancelBtn) {
-        this.cancelBtn = cancelBtn;
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        confirmBtn.setEnabled(false);
     }
 }

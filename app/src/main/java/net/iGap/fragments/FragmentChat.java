@@ -149,7 +149,7 @@ import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
-import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
+import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
@@ -3267,7 +3267,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showSelectItem() {
-        ChatMoneyTransferFragment transferAction;
 
         RealmRoom realmRoom = getRoom();
         if (realmRoom != null) {
@@ -3275,25 +3274,32 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 chatPeerId = realmRoom.getChatRoom().getPeerId();
                 if (imvUserPicture != null && txtName != null) {
-                    ChatMoneyTransferFragment chatMoneyTransferFragment = ChatMoneyTransferFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
-                    transferAction = chatMoneyTransferFragment;
+                    if (getActivity() != null) {
+                        ParentChatMoneyTransferFragment fragment = new ParentChatMoneyTransferFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("userName", txtName.getText().toString());
+                        bundle.putLong("roomId", mRoomId);
+                        bundle.putLong("peerId", chatPeerId);
+                        fragment.setArguments(bundle);
+                        fragment.setTransferAction(new ParentChatMoneyTransferFragment.MoneyTransferAction() {
+                            @Override
+                            public void TransferAction() {
 
-                    chatMoneyTransferFragment.setCardToCardCallBack((cardNum, amountNum, descriptionTv) -> {
+                            }
 
-                        sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
+                            @Override
+                            public void cardToCardClicked(String cardNum, String amountNum, String descriptionTv) {
+                                sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
 
-                        ll_attach_text.setVisibility(View.GONE);
-                        edtChat.setFilters(new InputFilter[]{});
-                        edtChat.setText("");
+                                ll_attach_text.setVisibility(View.GONE);
+                                edtChat.setFilters(new InputFilter[]{});
+                                edtChat.setText("");
 
-                        clearReplyView();
-
-                    });
-
-                    if (getFragmentManager() != null)
-                        transferAction.show(getFragmentManager(), "PaymentFragment");
-//                        transferAction.show(getFragmentManager(), "PaymentFragment");
-                    transferAction.setMoneyTransferAction(this::showCardToCard);
+                                clearReplyView();
+                            }
+                        });
+                        fragment.show(getActivity().getSupportFragmentManager(), "PaymentFragment");
+                    }
                 }
             }
         }
