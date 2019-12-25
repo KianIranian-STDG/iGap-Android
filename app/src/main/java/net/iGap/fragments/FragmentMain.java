@@ -23,7 +23,6 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.AccountManager;
-import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -86,8 +85,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -507,13 +504,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private void getChatLists() {
         if (!ClientGetRoomListResponse.roomListFetched) {
-            progressBar.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            },500);
-
+            progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
         }
@@ -694,6 +685,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                Log.wtf(this.getClass().getName(), "onClientGetRoomList: hide progress");
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -792,8 +784,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         G.onClientGetRoomListResponse = null;
         G.onSetActionInRoom = null;
         G.onDateChanged = null;
@@ -897,7 +889,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getLeftButton().setVisibility(View.GONE);
-            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+            if (PassCode.getInstance().isPassCode())
+                mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mSelectedRoomList.clear();
             roomListAdapter.setMultiSelect(false);
             roomListAdapter.notifyDataSetChanged();
@@ -976,7 +969,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         checkConnectionStateAndSetToolbarTitle();
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
-        if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+        if (PassCode.getInstance().isPassCode())
+            mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
     }
 
@@ -1178,7 +1172,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-                if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                if (PassCode.getInstance().isPassCode())
+                    mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
             } else {
@@ -1195,7 +1190,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-                if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                if (PassCode.getInstance().isPassCode())
+                    mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
             } else {
