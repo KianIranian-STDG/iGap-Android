@@ -15,10 +15,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 
-public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
+public class BeepTunesProfileFragment extends BaseBottomSheet {
     public static final String SYNC_FRAGMENT = "syncSong";
     public static final String PERCHES_FRAGMENT = "perchesSong";
     public static final String FAVORITE_FRAGMENT = "favoriteSong";
@@ -44,6 +45,7 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         TextView userName = rootView.findViewById(R.id.tv_userProfile_userName);
         profileImage = rootView.findViewById(R.id.iv_userProfile_userImage);
         ViewGroup perchesSong = rootView.findViewById(R.id.cl_beepTunesProfile_perchesSong);

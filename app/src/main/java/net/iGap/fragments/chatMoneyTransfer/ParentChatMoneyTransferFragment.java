@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.AccountManager;
 import net.iGap.R;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.helper.HelperWallet;
 import net.iGap.proto.ProtoWalletPaymentInit;
 
@@ -28,7 +29,7 @@ import org.paygear.model.Card;
 import org.paygear.model.Payment;
 import org.paygear.model.PaymentAuth;
 
-public class ParentChatMoneyTransferFragment extends BottomSheetDialogFragment {
+public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
 
     private long roomId;
     private String userName;
@@ -51,27 +52,16 @@ public class ParentChatMoneyTransferFragment extends BottomSheetDialogFragment {
         }
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        loadStep();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_parent_chat_money_transfer, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-            if (dialog == null) return;
-            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-            if (bottomSheet == null) return;
-            BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            behavior.setPeekHeight(0);
-        });
-
-        loadStep();
     }
 
     @Override

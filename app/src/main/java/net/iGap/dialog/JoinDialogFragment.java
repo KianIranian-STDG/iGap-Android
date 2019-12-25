@@ -5,21 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -27,7 +21,7 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.proto.ProtoGlobal;
 
-public class JoinDialogFragment extends BottomSheetDialogFragment {
+public class JoinDialogFragment extends BaseBottomSheet {
 
     private JoinDialogListener mListener;
     private ProtoGlobal.Room mRoom;
@@ -47,20 +41,7 @@ public class JoinDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        expandView(view);
         setupView(view);
-    }
-
-    private void expandView(View view) {
-        view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-            if (dialog == null) return;
-            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-            if (bottomSheet  == null) return;
-            BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            behavior.setPeekHeight(0);
-        });
     }
 
     private void setupView(View view) {

@@ -13,8 +13,9 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
+import net.iGap.dialog.BaseBottomSheet;
 
-public class FragmentCallAction extends BottomSheetDialogFragment {
+public class FragmentCallAction extends BaseBottomSheet {
     private View rootView;
     private String phoneNumber;
 

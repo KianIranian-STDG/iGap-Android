@@ -18,9 +18,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
 import net.iGap.databinding.NewsAddAccountBottomSheetDialogBinding;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.news.viewmodel.NewsAddCommentVM;
 
-public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
+public class NewsAddCommentBottomSheetFrag extends BaseBottomSheet {
 
     private NewsAddAccountBottomSheetDialogBinding binding;
     private NewsAddCommentVM addCommentVM;
