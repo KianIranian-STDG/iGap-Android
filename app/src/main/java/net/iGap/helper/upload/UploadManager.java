@@ -114,7 +114,7 @@ public class UploadManager {
                         compressFile.renameTo(CompletedCompressFile);
                         EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
 
-                        uploadMessageAndSend(roomType, message, true);
+                        uploadMessageAndSend(roomType, message, ignoreCompress);
                     }
                 }
             });
@@ -128,9 +128,8 @@ public class UploadManager {
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
-                !CompletedCompressFile.exists() &&
-                G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 &&
-                        compressTask == null)
+                !ignoreCompress &&
+                (compressTask == null || !CompletedCompressFile.exists()))
             return;
 
         Log.d("bagi", "after Compress");
