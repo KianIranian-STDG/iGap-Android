@@ -5,15 +5,20 @@ import android.util.Log;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
+import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 import java.text.DecimalFormat;
 
-public class KuknosBuyPeymanVM extends ViewModel {
+public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private ObservableField<String> amount = new ObservableField<>();
     private ObservableField<String> sum = new ObservableField<>();
@@ -23,23 +28,17 @@ public class KuknosBuyPeymanVM extends ViewModel {
     private MutableLiveData<Boolean> sumState;
     //go to bank
     private MutableLiveData<Boolean> nextPage;
-    private int PMNprice = 2000;
+    private int PMNprice = -1;
+    private PanelRepo panelRepo = new PanelRepo();
 
     public KuknosBuyPeymanVM() {
-        if (error == null)
-            error = new MutableLiveData<>();
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(0);
-        }
-        if (sumState == null) {
-            sumState = new MutableLiveData<>();
-            sumState.setValue(false);
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<>();
-            nextPage.setValue(false);
-        }
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(0);
+        sumState = new MutableLiveData<>();
+        sumState.setValue(false);
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
     }
 
     public void onSubmitBtn() {
@@ -53,13 +52,31 @@ public class KuknosBuyPeymanVM extends ViewModel {
         if (!checkEntry()) {
             return false;
         }
-        if (Integer.parseInt(amount.get()) > 10000) {
+        if (Integer.parseInt(amount.get()) > 1000000) {
             return false;
         }
+        if (PMNprice == -1)
+            return false;
         int sumTemp = Integer.parseInt(amount.get()) * PMNprice;
         DecimalFormat df = new DecimalFormat(",###");
         sum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(sumTemp)) : df.format(sumTemp));
         return true;
+    }
+
+    public void getAssetValue() {
+        progressState.setValue(1);
+        panelRepo.getSpecificAssets("PMN", this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
+                PMNprice = data.getData().getAssets().get(0).getBuyRate();
+                progressState.setValue(0);
+            }
+
+            @Override
+            public void onError(ErrorModel error) {
+                progressState.setValue(0);
+            }
+        });
     }
 
     private void sendDataServer() {

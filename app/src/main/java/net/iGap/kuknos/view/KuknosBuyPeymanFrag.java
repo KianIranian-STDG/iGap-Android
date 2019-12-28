@@ -68,6 +68,8 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosBuyPToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        kuknosBuyPeymanVM.getAssetValue();
+
         onSumVisibility();
         onBankPage();
         onError();

@@ -65,6 +65,8 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public String convertToJSON(int position) {
+        if (kuknosWalletsM.getValue()==null)
+            return "";
         Gson gson = new Gson();
         return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
     }

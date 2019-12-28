@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -219,12 +220,15 @@ public class KuknosPanelFrag extends BaseFragment {
                     break;
                 case 1:
                     fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
-                    if (fragment == null) {
+                    if (fragment == null && !kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()).equals("")) {
                         fragment = KuknosSendFrag.newInstance();
                         Bundle b = new Bundle();
                         b.putString("balanceClientInfo", kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()));
                         fragment.setArguments(b);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Can NOT send this token.", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case 2:

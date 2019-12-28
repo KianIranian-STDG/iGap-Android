@@ -40,13 +40,13 @@ public class KuknosAsset {
         @SerializedName("label")
         private String label;
         @SerializedName("remain_amount")
-        private String remainAmount;
+        private int remainAmount;
         @SerializedName("issued_amount")
-        private String initialAmount;
+        private int initialAmount;
         @SerializedName("buy_rate")
-        private String buyRate;
+        private int buyRate;
         @SerializedName("sell_rate")
-        private String sellRate;
+        private int sellRate;
 
         public org.stellar.sdk.Asset getAsset() {
             return org.stellar.sdk.Asset.create(this.assetType, this.assetCode, this.assetIssuer);
@@ -124,35 +124,35 @@ public class KuknosAsset {
             this.label = label;
         }
 
-        public String getRemainAmount() {
+        public int getRemainAmount() {
             return remainAmount;
         }
 
-        public void setRemainAmount(String remainAmount) {
+        public void setRemainAmount(int remainAmount) {
             this.remainAmount = remainAmount;
         }
 
-        public String getInitialAmount() {
+        public int getInitialAmount() {
             return initialAmount;
         }
 
-        public void setInitialAmount(String initialAmount) {
+        public void setInitialAmount(int initialAmount) {
             this.initialAmount = initialAmount;
         }
 
-        public String getBuyRate() {
+        public int getBuyRate() {
             return buyRate;
         }
 
-        public void setBuyRate(String buyRate) {
+        public void setBuyRate(int buyRate) {
             this.buyRate = buyRate;
         }
 
-        public String getSellRate() {
+        public int getSellRate() {
             return sellRate;
         }
 
-        public void setSellRate(String sellRate) {
+        public void setSellRate(int sellRate) {
             this.sellRate = sellRate;
         }
     }

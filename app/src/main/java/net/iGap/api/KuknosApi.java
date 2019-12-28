@@ -120,8 +120,6 @@ public interface KuknosApi {
                                       @Field("fee") int fee,
                                       @Field("description") String description);
 
-
-
     @FormUrlEncoded
     @POST("charge-wallet")
     Call<KuknosSubmitM> chargeWallet(@Field("xdr") String XDR,
