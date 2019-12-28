@@ -72,13 +72,14 @@ public class KeyboardView extends FrameLayout {
 
             @Override
             public void onStickerClick(StructIGSticker structIGSticker) {
-
+                listener.onSendStickerAsMessage(structIGSticker);
             }
 
             @Override
             public void onStickerSettingClick() {
                 listener.onStickerSettingClicked();
             }
+
         });
 
         addView(emojiView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
@@ -96,6 +97,8 @@ public class KeyboardView extends FrameLayout {
         void onStickerSettingClicked();
 
         void onBackSpace();
+
+        void onSendStickerAsMessage(StructIGSticker structIGSticker);
     }
 
     public void setKeyboardHeight(int keyboardHeightLand, int keyboardHeight) {

@@ -3326,9 +3326,6 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public void onStickerSettingClicked() {
-//                    if (getActivity() != null) {
-//                        new HelperFragment(getActivity().getSupportFragmentManager(), StickersSettingFragment.newInstance(recentStickerList)).setReplace(false).load();
-//                    }
                     if (getActivity() != null) {
                         new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                     }
@@ -3337,6 +3334,11 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onBackSpace() {
                     Toast.makeText(getContext(), "back press clicked", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onSendStickerAsMessage(StructIGSticker structIGSticker) {
+
                 }
             }, KeyboardView.MODE_KEYBOARD);
 

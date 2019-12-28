@@ -19,10 +19,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
 import net.iGap.emojiKeyboard.adapter.EmojiAdapter;
+import net.iGap.emojiKeyboard.adapter.StickerCategoryAdapter;
 import net.iGap.emojiKeyboard.adapter.ViewPagerAdapter;
+import net.iGap.emojiKeyboard.struct.StructStickerCategory;
 import net.iGap.fragments.emoji.add.StickerAdapter;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.realm.RealmStickers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +64,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private StickerAdapter stickerAdapter;
     private FrameLayout stickerCategoryContainer;
     private RecyclerView stickerCategoryRecyclerView;
-    private StickerAdapter stickerCategoryAdapter;
+    private StickerCategoryAdapter stickerCategoryAdapter;
     private GridLayoutManager stickersLayoutManager;
     private LinearLayoutManager stickerCategoryLayoutManager;
 
@@ -109,12 +113,14 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             stickerAdapter = new StickerAdapter();
 
-            stickerCategoryAdapter = new StickerAdapter();
+            stickerCategoryAdapter = new StickerCategoryAdapter();
 
             stickerCategoryContainer = new FrameLayout(getContext());
 
             stickerCategoryRecyclerView = new RecyclerView(getContext());
             stickerCategoryRecyclerView.setAdapter(stickerCategoryAdapter);
+            stickerCategoryRecyclerView.setPadding(0, 0, LayoutCreator.dpToPx(8), 0);
+            stickerCategoryRecyclerView.setClipToPadding(false);
             stickerCategoryRecyclerView.setBackgroundColor(Color.parseColor("#E0E0E0"));
             stickerCategoryRecyclerView.setLayoutManager(stickerCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
@@ -124,6 +130,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerContainer.addView(stickerCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.TOP));
 
             views.add(stickerContainer);
+
+            createStickers();
         }
 
         stickerIv = new AppCompatImageView(getContext());
@@ -167,6 +175,10 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         viewPager.addOnPageChangeListener(this);
 
         addView(viewPager, 0, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+    }
+
+    private void createStickers() {
+        stickerCategoryAdapter.setCategories(getStickerCategory());
     }
 
     @Override
@@ -228,6 +240,27 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             settingIv.setImageResource(R.drawable.ic_settings);
         }
         currentPage = position;
+    }
+
+    private List<StructStickerCategory> getStickerCategory() {
+        List<StructStickerCategory> categories = new ArrayList<>();
+
+        StructStickerCategory recentCategory = new StructStickerCategory();
+        recentCategory.setType(StructStickerCategory.DRAWABLE);
+        recentCategory.setResId(R.drawable.ic_recent);
+        categories.add(0, recentCategory);
+
+        List<StructIGStickerGroup> groups = RealmStickers.getAllStickers();
+
+        for (int i = 0; i < groups.size(); i++) {
+            StructStickerCategory category = new StructStickerCategory();
+            category.setResId(0);
+            category.setStructIGStickerGroup(groups.get(i));
+            category.setType(groups.get(i).getAvatarType());
+            categories.add(category);
+        }
+
+        return categories;
     }
 
     public interface Listener {

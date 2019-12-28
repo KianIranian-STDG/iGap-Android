@@ -36,7 +36,7 @@ public class RealmStickers extends RealmObject {
     private long createdBy;
     private boolean isFavorite;
     private RealmList<RealmStickersDetails> realmStickersDetails;
-
+    private long recentTime;
 
     public static RealmStickers put(Realm realm, long createdAt, String st_id, long refId, String name, String avatarToken, long avatarSize, String avatarName, long price, boolean isVip, int sort, boolean approved, long createdBy, List<StructItemSticker> stickers, boolean isFavorite) {
 
@@ -245,6 +245,49 @@ public class RealmStickers extends RealmObject {
         });
     }
 
+    public static List<StructIGStickerGroup> getAllStickers() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            List<StructIGStickerGroup> stickers = new ArrayList<>();
+            RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).findAll();
+
+            for (RealmStickers item : realmStickers) {
+                StructIGStickerGroup stickerGroup = new StructIGStickerGroup(item.getSt_id());
+
+                stickerGroup.setCreatedAt(item.getCreatedAt());
+                stickerGroup.setRefId(item.refId);
+                stickerGroup.setName(item.name);
+                stickerGroup.setAvatarToken(item.avatarToken);
+                stickerGroup.setAvatarPath(HelperDownloadSticker.downloadStickerPath(item.avatarToken, item.avatarName));
+                stickerGroup.setAvatarSize((int) item.getAvatarSize());
+                stickerGroup.setAvatarName(item.getAvatarName());
+                stickerGroup.setPrice(item.getPrice());
+                stickerGroup.setVip(item.isVip);
+                stickerGroup.setSort(item.sort);
+                stickerGroup.setCreatedBy(item.createdBy);
+
+                List<StructIGSticker> stickerDetails = new ArrayList<>();
+
+                for (RealmStickersDetails it : item.getRealmStickersDetails()) {
+
+                    StructIGSticker structIGSticker = new StructIGSticker();
+                    structIGSticker.setId(it.getSt_id());
+                    structIGSticker.setId(it.getSt_id());
+                    structIGSticker.setName(it.getName());
+                    structIGSticker.setToken(it.getToken());
+                    structIGSticker.setPath(it.getUri());
+                    structIGSticker.setName(it.getFileName());
+                    structIGSticker.setFileSize((int) it.getFileSize());
+                    structIGSticker.setGroupId(it.getGroupId());
+                    stickerDetails.add(structIGSticker);
+
+                }
+                stickerGroup.setStickers(stickerDetails);
+                stickers.add(stickerGroup);
+            }
+            return stickers;
+        });
+    }
+
     public static RealmStickers checkStickerExist(String groupId, Realm realm) {
         return realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
     }
@@ -368,6 +411,17 @@ public class RealmStickers extends RealmObject {
 
     public void setRealmStickersDetails(RealmList<RealmStickersDetails> realmStickersDetails) {
         this.realmStickersDetails = realmStickersDetails;
+    }
+
+    public void setRecent(boolean recent) {
+        if (recent)
+            setRecentTime(System.currentTimeMillis());
+        else
+            setRecentTime(0);
+    }
+
+    private void setRecentTime(long recentTime) {
+        this.recentTime = recentTime;
     }
 
     public boolean isFavorite() {

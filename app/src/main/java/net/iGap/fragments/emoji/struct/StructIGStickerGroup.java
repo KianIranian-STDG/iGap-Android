@@ -4,6 +4,7 @@ import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
 import net.iGap.realm.RealmStickers;
 
+import java.io.File;
 import java.util.List;
 
 import static net.iGap.fragments.emoji.struct.StructIGSticker.ANIMATED_STICKER;
@@ -209,5 +210,9 @@ public class StructIGStickerGroup {
 
     public int getStickersSize() {
         return getStickers() != null ? getStickers().size() : 0;
+    }
+
+    public boolean hasFileOnLocal() {
+        return new File(avatarPath).exists() && new File(avatarPath).canRead();
     }
 }
