@@ -69,12 +69,6 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
-    }
-
     private void loadStep() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import androidx.annotation.IdRes;
@@ -17,7 +16,6 @@ import androidx.databinding.DataBindingUtil;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
@@ -83,12 +81,6 @@ public class BottomSheetFragment extends BaseBottomSheet {
     @Override
     public int getTheme() {
         return R.style.BaseBottomSheetDialog;
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
     }
 
     @Override

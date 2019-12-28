@@ -1,5 +1,6 @@
 package net.iGap.dialog;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -29,4 +30,31 @@ public abstract class BaseBottomSheet extends BottomSheetDialogFragment {
         });
     }
 
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), getTheme());
+        dialog.setOnShowListener(dialog1 -> {
+
+            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet == null) return;
+            BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(bottomSheet);
+            if (behavior == null) return;
+            behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View view, int state) {
+                    //dismiss dialog when collapsed
+                    if (state == BottomSheetBehavior.STATE_COLLAPSED) dialog.dismiss();
+                }
+
+                @Override
+                public void onSlide(@NonNull View view, float v) {
+
+                }
+            });
+
+        });
+        return dialog;
+    }
 }

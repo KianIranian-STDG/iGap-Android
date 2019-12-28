@@ -73,9 +73,4 @@ public class AccountsDialog extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
-    }
 }

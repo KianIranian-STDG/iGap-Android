@@ -194,9 +194,4 @@ public class StickerDialogFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    @NotNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
-    }
 }
