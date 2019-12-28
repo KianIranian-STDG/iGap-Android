@@ -3756,7 +3756,7 @@ public class FragmentChat extends BaseFragment
                 mTxtSelectedCounter.setText(convertToUnicodeFarsiNumber(mTxtSelectedCounter.getText().toString()));
             }
 
-            if (selectedCount > 1) {
+            if (selectedCount > 1 || isNotJoin) {
                 mBtnReplySelected.setVisibility(View.INVISIBLE);
             } else {
 
