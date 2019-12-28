@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 
 @SuppressLint("ViewConstructor")
@@ -63,7 +64,23 @@ public class KeyboardView extends FrameLayout {
             public void onTabOpened(int type) {
 
             }
+
+            @Override
+            public void onBackSpace() {
+                listener.onBackSpace();
+            }
+
+            @Override
+            public void onStickerClick(StructIGSticker structIGSticker) {
+
+            }
+
+            @Override
+            public void onStickerSettingClick() {
+                listener.onStickerSettingClicked();
+            }
         });
+
         addView(emojiView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
     }
 
@@ -75,6 +92,10 @@ public class KeyboardView extends FrameLayout {
 
     public interface Listener {
         void onViewCreated(int mode);
+
+        void onStickerSettingClicked();
+
+        void onBackSpace();
     }
 
     public void setKeyboardHeight(int keyboardHeightLand, int keyboardHeight) {

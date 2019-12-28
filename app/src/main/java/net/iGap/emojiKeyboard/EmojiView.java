@@ -3,6 +3,7 @@ package net.iGap.emojiKeyboard;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -18,15 +19,16 @@ import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
 import net.iGap.emojiKeyboard.adapter.EmojiAdapter;
-import net.iGap.emojiKeyboard.adapter.StickerAdapter;
 import net.iGap.emojiKeyboard.adapter.ViewPagerAdapter;
+import net.iGap.fragments.emoji.add.StickerAdapter;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ViewConstructor")
-public class EmojiView extends FrameLayout {
+public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeListener {
 
     public static final int EMOJI = 0;
     public static final int STICKER = 1;
@@ -90,7 +92,7 @@ public class EmojiView extends FrameLayout {
             emojiCategoryAdapter = new EmojiAdapter();
 
             emojiCategoryRecyclerView = new RecyclerView(getContext());
-            emojiCategoryRecyclerView.setBackgroundColor(Color.parseColor("#B0BEC5"));
+            emojiCategoryRecyclerView.setBackgroundColor(Color.parseColor("#E0E0E0"));
             emojiCategoryRecyclerView.setAdapter(emojiCategoryAdapter);
             emojiCategoryRecyclerView.setLayoutManager(emojiCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
@@ -99,8 +101,7 @@ public class EmojiView extends FrameLayout {
             emojiGridView.setLayoutManager(emojiLayoutManager = new GridLayoutManager(context, 20));
             views.add(emojiContainer);
 
-
-            emojiContainer.addView(emojiCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 45, Gravity.TOP));
+            emojiContainer.addView(emojiCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.TOP));
         }
 
         if (hasSticker) {
@@ -114,10 +115,13 @@ public class EmojiView extends FrameLayout {
 
             stickerCategoryRecyclerView = new RecyclerView(getContext());
             stickerCategoryRecyclerView.setAdapter(stickerCategoryAdapter);
+            stickerCategoryRecyclerView.setBackgroundColor(Color.parseColor("#E0E0E0"));
             stickerCategoryRecyclerView.setLayoutManager(stickerCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
             stickerGridView = new RecyclerView(getContext());
             stickerGridView.setLayoutManager(stickersLayoutManager = new GridLayoutManager(context, 5));
+
+            stickerContainer.addView(stickerCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.TOP));
 
             views.add(stickerContainer);
         }
@@ -131,42 +135,63 @@ public class EmojiView extends FrameLayout {
         emojiIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         settingIv = new AppCompatImageView(getContext());
-        settingIv.setImageResource(R.drawable.ic_backspace);
         settingIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
+        settingIv.setOnClickListener(v -> {
+            if (currentPage == EMOJI)
+                listener.onBackSpace();
+            else if (currentPage == STICKER)
+                listener.onStickerSettingClick();
+        });
 
         bottomContainer = new FrameLayout(getContext());
 
-        int emojiX = (layoutWidth / 2) - 23;
-        int stickerX = (layoutWidth / 2) + 23;
+        int emojiX = (layoutWidth / 2) - 19;
+        int stickerX = (layoutWidth / 2) + 19;
 
-        bottomContainer.addView(stickerIv, LayoutCreator.createFrame(45, 45, Gravity.CENTER, stickerX, 0, 0, 0));
-        bottomContainer.addView(emojiIv, LayoutCreator.createFrame(45, 45, Gravity.CENTER, emojiX, 0, 0, 0));
-        bottomContainer.addView(settingIv, LayoutCreator.createFrame(45, 45, Gravity.RIGHT));
+        bottomContainer.addView(stickerIv, LayoutCreator.createFrame(38, 38, Gravity.CENTER, stickerX, 0, 0, 0));
+        bottomContainer.addView(emojiIv, LayoutCreator.createFrame(38, 38, Gravity.CENTER, emojiX, 0, 0, 0));
+        bottomContainer.addView(settingIv, LayoutCreator.createFrame(38, 38, Gravity.RIGHT));
 
-
-        bottomContainer.setBackgroundColor(Color.parseColor("#B0BEC5"));
-        addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 45, Gravity.BOTTOM));
-
+        bottomContainer.setBackgroundColor(Color.parseColor("#E0E0E0"));
+        addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM));
 
         pagerAdapter = new ViewPagerAdapter(views);
 
         viewPager = new ViewPager(getContext());
         viewPager.setAdapter(pagerAdapter);
 
+        stickerIv.setOnClickListener(v -> setToSticker());
+        emojiIv.setOnClickListener(v -> setToEmoji());
+
+        viewPager.addOnPageChangeListener(this);
+
         addView(viewPager, 0, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
     }
-
-    public void onOpen() {
-        setVisibility(VISIBLE);
-        listener.onTabOpened(currentPage == 0 ? EMOJI : STICKER);
-    }
-
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setBackgroundColor(backgroundColor);
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
+    }
+
+    public void addStickerToRecentTab(List<StructIGSticker> structIGStickers) {
+
+    }
+
+    public void setContentView(int contentView) {
+        viewPager.setCurrentItem(contentView);
+        viewPagerItemChanged(contentView);
+    }
+
+    private void setToSticker() {
+        if (hasSticker)
+            viewPager.setCurrentItem(1, true);
+    }
+
+    private void setToEmoji() {
+        if (hasSticker)
+            viewPager.setCurrentItem(0, true);
     }
 
     @Override
@@ -177,11 +202,41 @@ public class EmojiView extends FrameLayout {
         super.onLayout(changed, left, top, right, bottom);
     }
 
-    public void setContentView(int contentView) {
-        viewPager.setCurrentItem(contentView);
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        viewPagerItemChanged(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    private void viewPagerItemChanged(int position) {
+        if (position == EMOJI) {
+            stickerIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
+            emojiIv.setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_IN);
+            settingIv.setImageResource(R.drawable.ic_backspace);
+        } else if (position == STICKER) {
+            emojiIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
+            stickerIv.setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_IN);
+            settingIv.setImageResource(R.drawable.ic_settings);
+        }
+        currentPage = position;
     }
 
     public interface Listener {
         void onTabOpened(int type);
+
+        void onBackSpace();
+
+        void onStickerClick(StructIGSticker structIGSticker);
+
+        void onStickerSettingClick();
     }
 }
