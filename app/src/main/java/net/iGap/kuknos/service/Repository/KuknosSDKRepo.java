@@ -7,6 +7,7 @@ import org.stellar.sdk.AssetTypeCreditAlphaNum4;
 import org.stellar.sdk.AssetTypeNative;
 import org.stellar.sdk.ChangeTrustOperation;
 import org.stellar.sdk.KeyPair;
+import org.stellar.sdk.ManageDataOperation;
 import org.stellar.sdk.Memo;
 import org.stellar.sdk.Network;
 import org.stellar.sdk.PaymentOperation;
@@ -21,7 +22,7 @@ public class KuknosSDKRepo {
 
     private static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org" /*"https://horizon-testnet.stellar.org"*/;
 
-    public String paymentToOtherXDR(String sourceS, String destinationS, String amount, String memo) {
+    String paymentToOtherXDR(String sourceS, String destinationS, String amount, String memo) {
         Server server = new Server(KUKNOS_Horizan_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
         KeyPair destination = KeyPair.fromAccountId(destinationS);
@@ -63,7 +64,69 @@ public class KuknosSDKRepo {
         return transaction.toEnvelopeXdrBase64();
     }
 
-    public String TrustlineXDR(String AccountSeed, String code, String issuer) {
+    String chargeWalletXDR(String sourceS, String amount, String receiptNumber, String memo) {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        KeyPair source = KeyPair.fromSecretSeed(sourceS);
+
+        // load up-to-date information on your account.
+        AccountResponse sourceAccount = null;
+        try {
+            sourceAccount = server.accounts().account(source.getAccountId());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "" + R.string.kuknos_send_errorServer;
+        }
+
+        // Start building the transaction.
+        Network network = new Network("Kuknos-NET");
+        Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
+                .addOperation(new ManageDataOperation.Builder("amount", amount.getBytes()).build())
+                .addOperation(new ManageDataOperation.Builder("receiptNumber", receiptNumber.getBytes()).build())
+                // A memo allows you to add your own metadata to a transaction. It's
+                // optional and does not affect how Stellar treats the transaction.
+                .addMemo(Memo.text(memo))
+                .setOperationFee(1000)
+                // Wait a maximum of three minutes for the transaction
+                .setTimeout(60)
+                .build();
+        // Sign the transaction to prove you are actually the person sending it.
+        transaction.sign(source);
+        return transaction.toEnvelopeXdrBase64();
+    }
+
+    String chargeWalletOtherCurrencyXDR(String sourceS, String amount, String receiptNumber, String assetCode, String assetType, String memo) {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        KeyPair source = KeyPair.fromSecretSeed(sourceS);
+
+        // load up-to-date information on your account.
+        AccountResponse sourceAccount = null;
+        try {
+            sourceAccount = server.accounts().account(source.getAccountId());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "" + R.string.kuknos_send_errorServer;
+        }
+
+        // Start building the transaction.
+        Network network = new Network("Kuknos-NET");
+        Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
+                .addOperation(new ManageDataOperation.Builder("amount", amount.getBytes()).build())
+                .addOperation(new ManageDataOperation.Builder("receiptNumber", receiptNumber.getBytes()).build())
+                .addOperation(new ManageDataOperation.Builder("assetCode", assetCode.getBytes()).build())
+                .addOperation(new ManageDataOperation.Builder("assetType", assetType.getBytes()).build())
+                // A memo allows you to add your own metadata to a transaction. It's
+                // optional and does not affect how Stellar treats the transaction.
+                .addMemo(Memo.text(memo))
+                .setOperationFee(1000)
+                // Wait a maximum of three minutes for the transaction
+                .setTimeout(60)
+                .build();
+        // Sign the transaction to prove you are actually the person sending it.
+        transaction.sign(source);
+        return transaction.toEnvelopeXdrBase64();
+    }
+
+    String TrustlineXDR(String AccountSeed, String code, String issuer) {
         Server server = new Server(KUKNOS_Horizan_Server);
         Network network = new Network("Kuknos-NET");
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
