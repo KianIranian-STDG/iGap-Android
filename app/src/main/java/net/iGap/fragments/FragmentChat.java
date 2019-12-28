@@ -6621,20 +6621,21 @@ public class FragmentChat extends BaseFragment
         txtSpamClose = rootView.findViewById(R.id.chat_txt_close);
         txtSpamClose.setOnClickListener(view -> {
             vgSpamUser.setVisibility(View.GONE);
-            new Thread(() -> {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(realm1 -> {
-                        if (registeredInfo != null) {
-                            RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfo.getId()).findFirst();
+            if (registeredInfo != null) {
+                long registeredInfoID = registeredInfo.getId();
+                new Thread(() -> {
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        realm.executeTransaction(realm1 -> {
+                            RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfoID).findFirst();
                             if (registeredInfo2 != null) {
                                 registeredInfo2.setDoNotshowSpamBar(true);
                             }
-                        }
 
+                        });
                     });
-                });
 
-            }).start();
+                }).start();
+            }
         });
 
         txtSpamUser.setOnClickListener(new View.OnClickListener() {
