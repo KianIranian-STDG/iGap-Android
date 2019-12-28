@@ -14,12 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import net.iGap.R;
 import net.iGap.Theme;
@@ -162,7 +164,10 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteDownIv.setTextColor(otherColor);
         setTextSize(voteDownIv, R.dimen.standardTextSize);
 
-        channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(channelForwardIv.getContext(), Theme.getInstance().getTheme(channelForwardIv.getContext()));
+        channelForwardIv.setImageDrawable(VectorDrawableCompat.create(getResources(), R.drawable.ic_channel_forward_light, wrapper.getTheme()));
+
+        /*channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);*/
 
         forwardContainer.addView(channelForwardIv, LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
         forwardContainer.setVisibility(View.GONE);
