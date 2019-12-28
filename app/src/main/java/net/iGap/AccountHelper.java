@@ -5,6 +5,8 @@ import android.os.Build;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
+import net.iGap.fragments.FragmentChat;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLogout;
 
 import static org.paygear.utils.Utils.signOutWallet;
@@ -37,6 +39,7 @@ public class AccountHelper {
     }
 
     private void baseBefore(){
+        clearSharedDataAndForward();
         clearCookies(G.context);
         WebSocketClient.getInstance().disconnectSocket(false);
         G.handler.removeCallbacksAndMessages(null);
@@ -52,7 +55,7 @@ public class AccountHelper {
     }
 
     @SuppressWarnings("deprecation")
-    public static void clearCookies(Context context)
+    public void clearCookies(Context context)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             CookieManager.getInstance().removeAllCookies(null);
@@ -66,5 +69,11 @@ public class AccountHelper {
             cookieSyncMngr.stopSync();
             cookieSyncMngr.sync();
         }
+    }
+
+    private void clearSharedDataAndForward() {
+        FragmentChat.mForwardMessages = null;
+        HelperGetDataFromOtherApp.hasSharedData = false;
+        HelperGetDataFromOtherApp.sharedList.clear();
     }
 }

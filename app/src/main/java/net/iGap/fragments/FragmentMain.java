@@ -268,7 +268,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         //check is available forward,shared message
         setForwardMessage(true);
-        checkHasSharedData();
+        checkHasSharedData(true);
 
         //just check at first time page loaded
         notifyChatRoomsList();
@@ -1183,10 +1183,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     }
 
-    public void checkHasSharedData() {
+    public void checkHasSharedData(boolean enable) {
 
-        if (!(G.isLandscape && G.twoPaneMode)) {
-            if (HelperGetDataFromOtherApp.hasSharedData) {
+        if (!(G.isLandscape && G.twoPaneMode) && HelperGetDataFromOtherApp.hasSharedData) {
+            if (enable) {
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
