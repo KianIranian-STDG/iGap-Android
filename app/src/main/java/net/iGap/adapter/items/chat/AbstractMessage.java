@@ -635,7 +635,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             mHolder.getForwardContainer().setVisibility(View.VISIBLE);
             mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                if (!FragmentChat.isInSelectionMode)
+                if (!FragmentChat.isInSelectionMode && mMessage != null &&
+                        !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                        !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
                     messageClickListener.onForwardClick(structMessage);
             });
         }
