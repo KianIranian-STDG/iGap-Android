@@ -147,6 +147,9 @@ import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.dialog.ChatAttachmentPopup;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.emojiKeyboard.EmojiView;
+import net.iGap.emojiKeyboard.KeyboardView;
+import net.iGap.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
@@ -439,6 +442,7 @@ public class FragmentChat extends BaseFragment
     private AttachFile attachFile;
     private AppCompatEditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences emojiSharedPreferences;
     private net.iGap.module.EmojiEditTextE edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
@@ -597,7 +601,7 @@ public class FragmentChat extends BaseFragment
     private boolean receiveMessageLoaded;
     private int sendMessageSound;
     private int receiveMessageSound;
-    private String TAG = "messageSound";
+    private String TAG = "abbasiKeyboard";
     private ChatAttachmentPopup mAttachmentPopup;
     private int messageLentghCounter;
     private int oldMessageLentghCounter;
@@ -620,6 +624,18 @@ public class FragmentChat extends BaseFragment
     public static void removeResendList(long messageId) {
         FragmentChat.resentedMessageId.remove(messageId);
     }
+
+    //    private EmojiView emojiView;
+    private FrameLayout keyboardContainer;
+    private KeyboardView keyboardView;
+    private NotifyFrameLayout notifyFrameLayout;
+
+    private int keyboardHeight = -1;
+    private int keyboardHeightLand = -1;
+
+    private boolean keyboardVisible;
+    private boolean keyboardViewVisible;
+    private int currentKeyboardViewContent;
 
     /**
      * get images for show in bottom sheet
@@ -679,9 +695,22 @@ public class FragmentChat extends BaseFragment
                 isWalletRegister = userInfo.isWalletRegister();
             }
         });
+
+        notifyFrameLayout = new NotifyFrameLayout(context) {
+            @Override
+            protected void onAttachedToWindow() {
+                super.onAttachedToWindow();
+                Log.i(TAG, "onAttachedToWindow: " + notifyFrameLayout.getKeyboardHeight());
+            }
+        };
+
+        notifyFrameLayout.setListener(this::onScreenSizeChanged);
+
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
-        ViewGroup chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
+        notifyFrameLayout.addView(rootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+
+        keyboardContainer = rootView.findViewById(R.id.fl_chat_keyboardContainer);
 
         sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
 
@@ -693,9 +722,11 @@ public class FragmentChat extends BaseFragment
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
         edtChat.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_edittext), edtChat.getContext(), R.attr.iGapEditTxtColor));
 
+        edtChat.setListener(this::chatMotionEvent);
+
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
 
-        return attachToSwipeBack(rootView);
+        return attachToSwipeBack(notifyFrameLayout);
     }
 
     public void exportChat() {
@@ -2268,11 +2299,14 @@ public class FragmentChat extends BaseFragment
                 mAdapter.deselect();
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
+            } else if (keyboardView != null && keyboardViewVisible) {
+                keyboardView.setVisibility(View.GONE);
+                keyboardViewVisible = false;
             } else if (ll_Search != null && ll_Search.isShown()) {
                 goneSearchBox(edtSearchMessage);
-            } else if (ll_navigateHash != null && ll_navigateHash.isShown()){
+            } else if (ll_navigateHash != null && ll_navigateHash.isShown()) {
                 goneSearchHashFooter();
-            }else if (isEditMessage) {
+            } else if (isEditMessage) {
                 removeEditedMessage();
             } else {
                 stopSuperPress = false;
@@ -2310,6 +2344,7 @@ public class FragmentChat extends BaseFragment
          * get sendByEnter action from setting value
          */
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        emojiSharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
         sendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) == 1;
 
         soundInChatPlay = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1) == 1;
@@ -2320,6 +2355,9 @@ public class FragmentChat extends BaseFragment
         /**
          * set background
          */
+
+        keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 869);
+        keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
 
         recyclerView = rootView.findViewById(R.id.chl_recycler_view_chat);
 
@@ -2605,9 +2643,9 @@ public class FragmentChat extends BaseFragment
         // final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
-        if (emojiPopup == null) {
-            setUpEmojiPopup();
-        }
+//        if (emojiPopup == null) {
+//            setUpEmojiPopup();
+//        }
         edtChat.requestFocus();
 
         edtChat.setOnClickListener(new View.OnClickListener() {
@@ -3149,12 +3187,12 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onClick(View v) {
-
-                emojiPopup.toggle();
-                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
-                if (data != null && emojiPopup != null) {
-                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
-                }
+//                emojiPopup.toggle();
+//                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
+//                if (data != null && emojiPopup != null) {
+//                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+//                }
+                onEmojiButtonClick();
             }
         });
 
@@ -3226,6 +3264,168 @@ public class FragmentChat extends BaseFragment
             }
         });
 
+    }
+
+    private void onScreenSizeChanged(int height, boolean land) {
+        keyboardVisible = height > 0;
+
+        if (height > LayoutCreator.dp(50) && keyboardVisible) {
+            if (land) {
+                keyboardHeightLand = height;
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, keyboardHeightLand).apply();
+                Log.i(TAG, "onScreenSizeChanged: set SHP value -> " + keyboardHeightLand + " in land");
+            } else {
+                keyboardHeight = height;
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, keyboardHeight).apply();
+                Log.i(TAG, "onScreenSizeChanged: set SHP value -> " + keyboardHeight + " in portrait");
+            }
+        }
+
+        if (isPopupShowing()) {
+            int newHeight = land ? keyboardHeightLand : keyboardHeight;
+
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
+            if (/*!closeAnimationInProgress && */(layoutParams.width != AndroidUtils.displaySize.x || layoutParams.height != newHeight)/* && !stickersExpanded*/) {
+                layoutParams.width = AndroidUtils.displaySize.x;
+                layoutParams.height = newHeight;
+
+                Log.i(TAG, "onScreenSizeChanged: emoji popUp params layout -> " + newHeight);
+
+                keyboardView.setLayoutParams(layoutParams);
+//                if (notifyFrameLayout != null) {
+////                    emojiPadding = layoutParams.height;
+//                    notifyFrameLayout.requestLayout();
+////                    onWindowSizeChanged();
+//                }
+            }
+        }
+    }
+
+    public boolean isPopupShowing() {
+        return keyboardViewVisible || keyboardView != null;
+    }
+
+    private void onEmojiButtonClick() {
+        if (keyboardView == null)
+            createKeyboardView();
+
+        AndroidUtils.hideKeyboard(edtChat);
+        showPopup(KeyboardView.MODE_EMOJI);
+    }
+
+    private void createKeyboardView() {
+        if (getContext() != null) {
+            keyboardView = new KeyboardView(getContext(), new KeyboardView.Listener() {
+                @Override
+                public void onViewCreated(int mode) {
+
+                }
+            }, KeyboardView.MODE_KEYBOARD);
+            keyboardView.setVisibility(View.GONE);
+
+            keyboardContainer.addView(keyboardView);
+        }
+    }
+
+    private void showPopup(int mode) {
+        keyboardViewVisible = true;
+
+        if (mode == KeyboardView.MODE_EMOJI) {
+            if (keyboardView == null) {
+                createKeyboardView();
+            }
+
+            if (keyboardView.getParent() == null)
+                keyboardContainer.addView(keyboardView);
+
+            keyboardVisible = false;
+            currentKeyboardViewContent = KeyboardView.MODE_EMOJI;
+
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
+            }
+
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
+            }
+
+            int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
+            keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
+
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
+            layoutParams.height = currentHeight;
+            keyboardView.setLayoutParams(layoutParams);
+
+            keyboardView.setCurrentMode(KeyboardView.MODE_EMOJI, EmojiView.EMOJI);
+
+            keyboardView.setVisibility(View.VISIBLE);
+
+        } else if (mode == KeyboardView.MODE_ATTACHMENT) {
+            currentKeyboardViewContent = KeyboardView.MODE_ATTACHMENT;
+
+        } else if (mode == KeyboardView.MODE_KEYBOARD) {
+            currentKeyboardViewContent = KeyboardView.MODE_KEYBOARD;
+
+            if (keyboardView == null)
+                createKeyboardView();
+
+            if (keyboardView != null) {
+
+                if (keyboardHeight <= 0) {
+                    keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
+                }
+
+                if (keyboardHeightLand <= 0) {
+                    keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
+                }
+
+                int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
+                keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
+
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
+                layoutParams.height = currentHeight;
+                keyboardView.setLayoutParams(layoutParams);
+
+                keyboardView.setVisibility(View.VISIBLE);
+
+                keyboardVisible = true;
+            }
+        }
+    }
+
+    private Runnable openKeyboardRunnable = new Runnable() {
+        @Override
+        public void run() {
+            edtChat.requestFocus();
+            AndroidUtils.showKeyboard(edtChat);
+        }
+    };
+
+    private void chatMotionEvent(MotionEvent event) {
+        if (/*isPopupShowing() && */event.getAction() == MotionEvent.ACTION_DOWN) {
+            showPopup(KeyboardView.MODE_KEYBOARD);
+            openKeyboardInternal();
+        }
+    }
+
+    public void openKeyboard() {
+        AndroidUtils.showKeyboard(edtChat);
+    }
+
+    public void closeKeyboard() {
+        AndroidUtils.hideKeyboard(edtChat);
+    }
+
+    private void openKeyboardInternal() {
+        edtChat.requestFocus();
+        AndroidUtils.showKeyboard(edtChat);
+        if (!keyboardVisible) {
+            G.cancelRunOnUiThread(openKeyboardRunnable);
+            G.runOnUiThread(openKeyboardRunnable, 50);
+            Log.i(TAG, "openKeyboardInternal: height -> " + keyboardHeight);
+        }
     }
 
     private void initPopupAttachment() {
@@ -6698,7 +6898,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
-        edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH|EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
             return true;
@@ -7133,7 +7333,7 @@ public class FragmentChat extends BaseFragment
 
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
-        edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH|EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtSearchMessage.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
             return true;

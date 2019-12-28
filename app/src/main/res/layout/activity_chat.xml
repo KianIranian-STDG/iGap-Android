@@ -162,9 +162,9 @@
                 android:id="@+id/ac_ll_hash_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
+                android:background="?rootBackgroundColor"
                 android:clickable="true"
                 android:gravity="center"
-                android:background="?rootBackgroundColor"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -239,6 +239,11 @@
                 android:id="@+id/layout_attach_file"
                 layout="@layout/layout_chatroom_botoom" />
 
+            <FrameLayout
+                android:id="@+id/fl_chat_keyboardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <include
                 android:id="@+id/layout_bot"
                 layout="@layout/bot_action_layout"
@@ -251,8 +256,8 @@
                 android:id="@+id/ac_ll_join"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:clickable="true"
                 android:background="?attr/iGapTopRoundButtonPrimary"
+                android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -261,8 +266,8 @@
                     android:id="@+id/ac_txt_join"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/join"
                     android:paddingBottom="@dimen/dp6"
+                    android:text="@string/join"
                     android:textColor="@color/white"
                     android:textSize="@dimen/largeTextSize" />
 
@@ -272,42 +277,42 @@
                 android:id="@+id/chl_ll_channel_footer"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:layoutDirection="locale"
                 android:background="?attr/iGapTopRoundButtonPrimary"
+                android:layoutDirection="locale"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/chl_icon_mute_channel"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/myIconTextViewStyle"
-                    android:layout_marginRight="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:gravity="center"
                     android:paddingBottom="@dimen/dp6"
+                    android:text="@string/mute_icon"
                     android:textColor="?iGapPrimaryTextColor"
                     android:textSize="@dimen/standardTextSize"
-                    android:text="@string/mute_icon"
-                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/chl_txt_mute_channel"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/chl_txt_mute_channel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:paddingBottom="@dimen/dp6"
                     android:text="Mute"
                     android:textColor="?attr/iGapPrimaryTextColor"
                     android:textSize="@dimen/largeTextSize"
-                    android:paddingBottom="@dimen/dp6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toEndOf="@id/chl_icon_mute_channel"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -344,9 +349,9 @@
                         android:id="@+id/ac_layout_selected_item"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp44"
-                        android:layoutDirection="ltr"
                         android:clickable="true"
                         android:focusable="true"
+                        android:layoutDirection="ltr"
                         android:visibility="gone">
 
                         <TextView
@@ -461,10 +466,10 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:hint="@string/search"
-                        android:padding="@dimen/dp8"
-                        android:lines="1"
-                        android:singleLine="true"
                         android:imeOptions="actionSearch"
+                        android:lines="1"
+                        android:padding="@dimen/dp8"
+                        android:singleLine="true"
                         android:textColor="@color/white"
                         android:textColorHint="#FDFDFD"
                         android:textCursorDrawable="@drawable/white_cursor_color"

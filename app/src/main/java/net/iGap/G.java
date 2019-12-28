@@ -44,6 +44,7 @@ import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.*;
 import net.iGap.model.PassCode;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
@@ -456,6 +457,9 @@ public class G extends ApplicationContext {
 
         JobServiceReconnect.scheduleJob(getApplicationContext());
         PassCode.initPassCode(getApplicationContext());
+
+        AndroidUtils.density = getApplicationContext().getResources().getDisplayMetrics().density;
+
         //init account manager for handle multi account
 
         try {
@@ -523,9 +527,29 @@ public class G extends ApplicationContext {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateResources(this);
+        try {
+            AndroidUtils.checkDisplaySize(G.context, newConfig);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void showToast(String message) {
         G.handler.post(() -> Toast.makeText(G.context, message, Toast.LENGTH_SHORT).show());
+    }
+
+    public static void runOnUiThread(Runnable runnable, long delay) {
+        if (handler != null)
+            handler.postDelayed(runnable, delay);
+    }
+
+    public static void runOnUiThread(Runnable runnable) {
+        if (handler != null)
+            handler.post(runnable);
+    }
+
+    public static void cancelRunOnUiThread(Runnable runnable) {
+        if (handler != null)
+            handler.removeCallbacks(runnable);
     }
 }

@@ -55,7 +55,6 @@ import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
@@ -68,7 +67,6 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentChatSettings;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentLanguage;
-import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
@@ -108,6 +106,7 @@ import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.KuknosSendFrag;
 import net.iGap.model.PassCode;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ContactUtils;
@@ -137,7 +136,6 @@ import org.paygear.fragment.PaymentHistoryFragment;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.realm.Realm;
 import ir.pec.mpl.pecpayment.view.PaymentInitiator;
@@ -146,7 +144,6 @@ import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
-import static org.paygear.utils.Utils.signOutWallet;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
@@ -489,7 +486,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
             boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
             if (deleteFolderBackground) {
@@ -645,6 +642,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setContentView(textView);
             showToast(textView);
         }
+
+
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
+        }
+
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -1123,7 +1128,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-
+        AndroidUtils.checkDisplaySize(this, newConfig);
         if (G.twoPaneMode) {
 
             boolean beforeState = G.isLandscape;
@@ -1386,7 +1391,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onResume();
         if (G.ISRealmOK) {
             resume();
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
         Log.wtf(this.getClass().getName(), "onResume");
     }

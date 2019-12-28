@@ -12,22 +12,27 @@ package net.iGap.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
@@ -43,6 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
@@ -602,4 +608,126 @@ public final class AndroidUtils {
     public static boolean canOpenDialog() {
         return isActivityRunning();
     }
+
+    public static boolean showKeyboard(View view) {
+        if (view == null) {
+            return false;
+        }
+        try {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputManager != null) {
+                return inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean isKeyboardShowed(View view) {
+        if (view == null) {
+            return false;
+        }
+        try {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            return inputManager.isActive(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void hideKeyboard(View view) {
+        if (view == null) {
+            return;
+        }
+        try {
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (!imm.isActive()) {
+                return;
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int statusBarHeight = 0;
+    public static Point displaySize = new Point();
+
+    private static Field mAttachInfoField;
+    private static Field mStableInsetsField;
+
+    public static float density = 1;
+    public static DisplayMetrics displayMetrics = new DisplayMetrics();
+
+
+    public static int getViewInset(View view) {
+        if (view == null || Build.VERSION.SDK_INT < 21 || view.getHeight() == AndroidUtils.displaySize.y || view.getHeight() == AndroidUtils.displaySize.y - statusBarHeight) {
+            return 0;
+        }
+        try {
+            if (mAttachInfoField == null) {
+                mAttachInfoField = View.class.getDeclaredField("mAttachInfo");
+                mAttachInfoField.setAccessible(true);
+            }
+            Object mAttachInfo = mAttachInfoField.get(view);
+            if (mAttachInfo != null) {
+                if (mStableInsetsField == null) {
+                    mStableInsetsField = mAttachInfo.getClass().getDeclaredField("mStableInsets");
+                    mStableInsetsField.setAccessible(true);
+                }
+                Rect insets = (Rect) mStableInsetsField.get(mAttachInfo);
+                return insets.bottom;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("abbasiKeyboard", "getViewInset: ", e);
+        }
+        return 0;
+    }
+
+    static {
+        checkDisplaySize(G.context, null);
+    }
+
+    public static void checkDisplaySize(Context context, Configuration newConfiguration) {
+        try {
+
+            density = context.getResources().getDisplayMetrics().density;
+
+            Configuration configuration = newConfiguration;
+            if (configuration == null) {
+                configuration = context.getResources().getConfiguration();
+            }
+
+            WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            if (manager != null) {
+                Display display = manager.getDefaultDisplay();
+                if (display != null) {
+                    display.getMetrics(displayMetrics);
+                    display.getSize(displaySize);
+                }
+            }
+            if (configuration.screenWidthDp != Configuration.SCREEN_WIDTH_DP_UNDEFINED) {
+                int newSize = (int) Math.ceil(configuration.screenWidthDp * density);
+                if (Math.abs(displaySize.x - newSize) > 3) {
+                    displaySize.x = newSize;
+                }
+            }
+            if (configuration.screenHeightDp != Configuration.SCREEN_HEIGHT_DP_UNDEFINED) {
+                int newSize = (int) Math.ceil(configuration.screenHeightDp * density);
+                if (Math.abs(displaySize.y - newSize) > 3) {
+                    displaySize.y = newSize;
+                }
+            }
+
+            Log.i("abbasiKeyboard", "display size = x -> " + displaySize.x + " y -> " + displaySize.y + " " + displayMetrics.xdpi + " " + displayMetrics.ydpi);
+
+        } catch (Exception e) {
+            Log.e("abbasiKeyboard", "checkDisplaySize: ", e);
+        }
+    }
+
+
 }
