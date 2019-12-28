@@ -2692,8 +2692,10 @@ public class FragmentChat extends BaseFragment
                 public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                     super.clearView(recyclerView, viewHolder);
                     try {
-                        if (isRepley)
-                            replay((mAdapter.getItem(viewHolder.getAdapterPosition())).structMessage, false);
+                        RealmRoomMessage message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage;
+                        if (message_ != null && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            if (isRepley) replay((mAdapter.getItem(viewHolder.getAdapterPosition())).structMessage, false);
+                        }
                     } catch (Exception ignored) {
                     }
                     isRepley = false;
