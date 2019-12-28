@@ -2,6 +2,7 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ToggleButton;
@@ -9,6 +10,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import net.iGap.R;
 import net.iGap.Theme;
@@ -37,14 +39,15 @@ public class CustomToggleButton extends ToggleButton {
     private void init() {
         setTextOff("");
         setTextOn("");
-        /*if (Theme.isUnderLollipop()) {
-            setButtonDrawable(R.drawable.st_switch_button_dark);
-        } else {*/
 
-        ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), new Theme().getTheme(getContext()));
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.st_switch_button, wrapper.getTheme());
-        setButtonDrawable(drawable);
-        /*}*/
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), Theme.getInstance().getTheme(getContext()));
+
+        StateListDrawable listDrawable = new StateListDrawable();
+        listDrawable.addState(new int[]{android.R.attr.state_checked,android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_on, wrapper.getTheme()));
+        listDrawable.addState(new int[]{android.R.attr.state_checked,-android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_on, wrapper.getTheme()));
+        listDrawable.addState(new int[]{-android.R.attr.state_checked,android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_off, wrapper.getTheme()));
+        listDrawable.addState(new int[]{-android.R.attr.state_checked,-android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_off, wrapper.getTheme()));
+        setButtonDrawable(listDrawable);
     }
 
 }

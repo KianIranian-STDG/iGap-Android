@@ -129,18 +129,18 @@ public class FragmentChatSettings extends BaseFragment {
 
         viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
             if (getActivity() != null && isUpdate != null && isUpdate) {
-                if (Theme.isUnderLollipop()) {
+                /*if (Theme.isUnderLollipop()) {
                     if (getActivity() instanceof ActivityEnhanced) {
                         ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
                     }
-                } else {
+                } else {*/
                     Fragment frg;
                     frg = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.detach(frg);
                     ft.attach(frg);
                     ft.commit();
-                }
+                /*}*/
             }
         });
 
