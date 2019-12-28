@@ -4306,7 +4306,7 @@ public class FragmentChat extends BaseFragment
 
         //TODO: optimize code
         List<String> items = new ArrayList<>();
-        items.add(getString(R.string.replay_item_dialog));
+        if (!isNotJoin) items.add(getString(R.string.replay_item_dialog));
         items.add(getString(R.string.share_item_dialog));
         if (shareLinkIsOn)
             items.add(getString(R.string.share_link_item_dialog));
