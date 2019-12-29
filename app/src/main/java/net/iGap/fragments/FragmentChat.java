@@ -3199,10 +3199,10 @@ public class FragmentChat extends BaseFragment
         onUpdateSticker = new OnUpdateSticker() {
             @Override
             public void update() {
-                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
-                if (data != null && emojiPopup != null) {
-                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
-                }
+//                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
+//                if (data != null && emojiPopup != null) {
+//                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+//                }
             }
 
             @Override

@@ -129,7 +129,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerGridView.setPadding(0, 0, 0, LayoutCreator.dpToPx(50));
 
             stickerGridAdapter = new StickerGroupAdapter();
-            stickerGridAdapter.setGroups(RealmStickers.getAllStickers());
+            stickerGridAdapter.setGroups(RealmStickers.getMyStickers());
 
             stickerGridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -308,7 +308,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         recentCategory.setResId(R.drawable.ic_emoji_history);
         categories.add(0, recentCategory);
 
-        List<StructIGStickerGroup> groups = RealmStickers.getAllStickers();
+        List<StructIGStickerGroup> groups = RealmStickers.getMyStickers();
 
         for (int i = 0; i < groups.size(); i++) {
             StructStickerCategory category = new StructStickerCategory();

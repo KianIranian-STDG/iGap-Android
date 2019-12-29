@@ -32,22 +32,22 @@ public class StructIGStickerGroup {
         this.groupId = groupId;
     }
 
-    public void setValueWithRealmStickers(RealmStickers realmStickers) {
-        if (realmStickers != null && realmStickers.isValid()) {
-            setStickers(realmStickers.getIGGroupStickers());
-            setSort(realmStickers.getSort());
-            setRefId(realmStickers.getRefId());
-            setPrice(realmStickers.getPrice());
-            setName(realmStickers.getName());
-            setFavorite(realmStickers.isFavorite());
-            setCreatedBy(realmStickers.getCreatedBy());
-            setCreatedAt(realmStickers.getCreatedAt());
-            setAvatarToken(realmStickers.getAvatarToken());
-            setAvatarSize(realmStickers.getAvatarSize());
-            setAvatarName(realmStickers.getAvatarName());
-            setApproved(realmStickers.isApproved());
-            setAvatarPath(realmStickers.getUri());
-            setVip(realmStickers.isVip());
+    public void setValueWithRealmStickers(RealmStickers realmStickersGroup) {
+        if (realmStickersGroup != null && realmStickersGroup.isValid()) {
+            setStickers(realmStickersGroup.getIGGroupStickers());
+            setSort(realmStickersGroup.getSort());
+            setRefId(realmStickersGroup.getRefId());
+            setPrice(realmStickersGroup.getPrice());
+            setName(realmStickersGroup.getName());
+            setFavorite(realmStickersGroup.isFavorite());
+            setCreatedBy(realmStickersGroup.getCreatedBy());
+            setCreatedAt(realmStickersGroup.getCreatedAt());
+            setAvatarToken(realmStickersGroup.getAvatarToken());
+            setAvatarSize(realmStickersGroup.getAvatarSize());
+            setAvatarName(realmStickersGroup.getAvatarName());
+            setApproved(realmStickersGroup.isApproved());
+            setAvatarPath(realmStickersGroup.getUri());
+            setVip(realmStickersGroup.isVip());
         }
     }
 

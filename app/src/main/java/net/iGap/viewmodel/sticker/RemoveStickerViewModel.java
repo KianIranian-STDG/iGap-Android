@@ -20,7 +20,7 @@ public class RemoveStickerViewModel extends BaseViewModel {
     }
 
     public List<StructIGStickerGroup> getFavoriteStickers() {
-        return repository.getFavoriteStickers();
+        return repository.getMyStickers();
     }
 
     public void removeStickerFromFavorite(String groupId, int adapterPosition) {

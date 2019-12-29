@@ -43,13 +43,10 @@ public class StickerRepository {
                 stickerGroup.setValueWithRealmStickers(realmStickers);
         });
 
-
         if (stickerGroup.hasData()) {
             callback.onSuccess(stickerGroup);
-            Log.i(TAG, "load sticker from DB with group id --> " + stickerGroup.getGroupId());
         } else {
             getStickerFromServer(groupId, callback);
-            Log.i(TAG, "get sticker from API SERVICE with group id --> " + stickerGroup.getGroupId());
         }
     }
 
@@ -70,8 +67,6 @@ public class StickerRepository {
                             });
 
                             G.handler.postDelayed(() -> callback.onSuccess(stickerGroup), 300);
-
-                            Log.i(TAG, "get sticker from API SERVICE with group id " + stickerGroup.getGroupId() + " * and size " + stickerGroup.getStickersSize() + " * successfully * ");
                         }
                     }
                 }
@@ -97,8 +92,6 @@ public class StickerRepository {
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 RealmStickers.put(realm, structGroupSticker.getCreatedAt(), structGroupSticker.getId(), structGroupSticker.getRefId(), structGroupSticker.getName(), structGroupSticker.getAvatarToken(), structGroupSticker.getAvatarSize(), structGroupSticker.getAvatarName(), structGroupSticker.getPrice(), structGroupSticker.getIsVip(), structGroupSticker.getSort(), structGroupSticker.getIsVip(), structGroupSticker.getCreatedBy(), structGroupSticker.getStickers(), false);
                             });
-
-                            Log.i(TAG, "get sticker from API SERVICE with group id" + groupId + " * successfully * ");
                         }
                     }
                 }
@@ -118,23 +111,15 @@ public class StickerRepository {
                     if (response.body() != null && response.body().isSuccess()) {
 
                         DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransactionAsync(realm1 -> {
-                                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm1);
-                                if (realmStickers == null) {
-                                    getStickerFromServerAndInsetToDb(groupId);
-                                } else {
-                                    RealmStickers.updateFavorite(realm1, groupId, true);
-                                }
-                            }, () -> {
-                                if (FragmentChat.onUpdateSticker != null) {
-                                    FragmentChat.onUpdateSticker.update();
-                                }
-                            });
+
+                            getStickerFromServerAndInsetToDb(groupId);
+
+                            if (FragmentChat.onUpdateSticker != null)
+                                FragmentChat.onUpdateSticker.update();
+
                         });
 
                         callback.onSuccess(true);
-
-                        Log.i(TAG, "add sticker to category successfully with group id --> " + groupId);
                     }
                 }
 
@@ -153,7 +138,11 @@ public class StickerRepository {
                 public void onResponse(@NotNull Call<StructStickerResult> call, @NotNull Response<StructStickerResult> response) {
                     if (response.body() != null && response.body().isSuccess()) {
                         DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransactionAsync(realm1 -> RealmStickers.updateFavorite(realm1, groupId, false), () -> FragmentChat.onUpdateSticker.update());
+                            realm.executeTransactionAsync(realm1 -> {
+                                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm1);
+                                if (realmStickers != null)
+                                    realmStickers.removeFromRealm();
+                            }, () -> FragmentChat.onUpdateSticker.update());
                         });
 
                         callback.onSuccess(false);
@@ -169,7 +158,7 @@ public class StickerRepository {
         }
     }
 
-    public List<StructIGStickerGroup> getFavoriteStickers() {
-        return RealmStickers.getFavoriteStickers();
+    public List<StructIGStickerGroup> getMyStickers() {
+        return RealmStickers.getMyStickers();
     }
 }
