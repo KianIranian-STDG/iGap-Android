@@ -980,9 +980,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         if (G.connectionState != null) {
             if (G.connectionState == ConnectionState.CONNECTING) {
                 mHelperToolbar.getTextViewLogo().setText(getString(R.string.connecting));
+                mHelperToolbar.changeDefaultTitle(getString(R.string.app_name));
                 mHelperToolbar.checkIGapFont();
             } else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                 mHelperToolbar.getTextViewLogo().setText(getString(R.string.waiting_for_network));
+                mHelperToolbar.changeDefaultTitle(getString(R.string.app_name));
                 mHelperToolbar.checkIGapFont();
             } else {
                 mHelperToolbar.setDefaultTitle(getString(R.string.app_name));

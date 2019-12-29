@@ -378,6 +378,10 @@ public class HelperToolbar {
 
     }
 
+    public void changeDefaultTitle(String title) {
+        this.defaultTitleText = title;
+    }
+
     //offset must be negative or zero
     public void animateSearchBox(boolean isGone, int lastItemPosition, int offset) {
 
