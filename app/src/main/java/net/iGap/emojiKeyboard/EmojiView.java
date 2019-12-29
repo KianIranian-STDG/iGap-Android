@@ -1,5 +1,7 @@
 package net.iGap.emojiKeyboard;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -18,11 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
+import net.iGap.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.emojiKeyboard.adapter.EmojiAdapter;
 import net.iGap.emojiKeyboard.adapter.StickerCategoryAdapter;
 import net.iGap.emojiKeyboard.adapter.ViewPagerAdapter;
+import net.iGap.emojiKeyboard.sticker.StickerGroupAdapter;
 import net.iGap.emojiKeyboard.struct.StructStickerCategory;
-import net.iGap.fragments.emoji.add.StickerAdapter;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
@@ -61,17 +64,21 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
     private FrameLayout stickerContainer;
     private RecyclerView stickerGridView;
-    private StickerAdapter stickerAdapter;
+    private StickerGroupAdapter stickerGroupAdapter;
     private FrameLayout stickerCategoryContainer;
     private RecyclerView stickerCategoryRecyclerView;
     private StickerCategoryAdapter stickerCategoryAdapter;
-    private GridLayoutManager stickersLayoutManager;
+    private LinearLayoutManager stickersLayoutManager;
     private LinearLayoutManager stickerCategoryLayoutManager;
+    private AnimatorSet bottomTabContainerAnimation;
+    private float lastBottomScrollDy;
+
 
     private int layoutHeight;
     private int layoutWidth;
 
     private Listener listener;
+    private String TAG = "abbasiEmoji";
 
 
     public void setListener(Listener listener) {
@@ -111,8 +118,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         if (hasSticker) {
             stickerContainer = new FrameLayout(getContext());
 
-            stickerAdapter = new StickerAdapter();
-
             stickerCategoryAdapter = new StickerCategoryAdapter();
 
             stickerCategoryContainer = new FrameLayout(getContext());
@@ -125,10 +130,27 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerCategoryRecyclerView.setLayoutManager(stickerCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
             stickerGridView = new RecyclerView(getContext());
-            stickerGridView.setLayoutManager(stickersLayoutManager = new GridLayoutManager(context, 5));
+            stickerGridView.setLayoutManager(stickersLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+            stickerGridView.setClipToPadding(false);
+            stickerGridView.setPadding(0, 0, 0, LayoutCreator.dpToPx(50));
 
+            stickerGroupAdapter = new StickerGroupAdapter();
+            stickerGroupAdapter.setGroups(RealmStickers.getAllStickers());
+
+            stickerGridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    checkBottomTabScroll(dy);
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+            });
+
+            stickerGridView.setAdapter(stickerGroupAdapter);
+
+            stickerGroupAdapter.setListener(structIGSticker -> listener.onStickerClick(structIGSticker));
+
+            stickerContainer.addView(stickerGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 27, 0, 4));
             stickerContainer.addView(stickerCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.TOP));
-
             views.add(stickerContainer);
 
             createStickers();
@@ -153,15 +175,20 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         });
 
         bottomContainer = new FrameLayout(getContext());
+        bottomViewShado = new View(getContext());
 
-        int emojiX = (layoutWidth / 2) - 19;
-        int stickerX = (layoutWidth / 2) + 19;
+        bottomViewShado.setBackgroundColor(Color.parseColor("#BDBDBD"));
 
-        bottomContainer.addView(stickerIv, LayoutCreator.createFrame(38, 38, Gravity.CENTER, stickerX, 0, 0, 0));
-        bottomContainer.addView(emojiIv, LayoutCreator.createFrame(38, 38, Gravity.CENTER, emojiX, 0, 0, 0));
-        bottomContainer.addView(settingIv, LayoutCreator.createFrame(38, 38, Gravity.RIGHT));
+        int emojiX = (layoutWidth / 2) - 20;
+        int stickerX = (layoutWidth / 2) + 20;
+
+        bottomContainer.addView(stickerIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, stickerX, 0, 0, 0));
+        bottomContainer.addView(emojiIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, emojiX, 0, 0, 0));
+        bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
         bottomContainer.setBackgroundColor(Color.parseColor("#E0E0E0"));
+        bottomContainer.addView(bottomViewShado, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
+
         addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM));
 
         pagerAdapter = new ViewPagerAdapter(views);
@@ -228,6 +255,43 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
+    private void checkBottomTabScroll(float dy) {
+        lastBottomScrollDy += dy;
+        int offset = LayoutCreator.dp(38);
+        if (lastBottomScrollDy >= offset) {
+            showBottomTab(false);
+        } else if (lastBottomScrollDy <= -offset) {
+            showBottomTab(true);
+        } else if (bottomContainer.getTag() == null && lastBottomScrollDy < 0 || bottomContainer.getTag() != null && lastBottomScrollDy > 0) {
+            lastBottomScrollDy = 0;
+        }
+    }
+
+    private void showBottomTab(boolean show) {
+        lastBottomScrollDy = 0;
+
+        if (show && bottomContainer.getTag() == null || !show && bottomContainer.getTag() != null) {
+            return;
+        }
+
+        if (bottomTabContainerAnimation != null) {
+            bottomTabContainerAnimation.cancel();
+            bottomTabContainerAnimation = null;
+        }
+
+        bottomContainer.setTag(show ? null : 1);
+
+        bottomTabContainerAnimation = new AnimatorSet();
+        bottomTabContainerAnimation.playTogether(
+                ObjectAnimator.ofFloat(bottomContainer, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(54)),
+                ObjectAnimator.ofFloat(bottomViewShado, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(49)));
+        bottomTabContainerAnimation.setDuration(200);
+        bottomTabContainerAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        bottomTabContainerAnimation.start();
+    }
+
 
     private void viewPagerItemChanged(int position) {
         if (position == EMOJI) {

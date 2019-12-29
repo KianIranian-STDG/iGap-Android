@@ -3338,7 +3338,7 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public void onSendStickerAsMessage(StructIGSticker structIGSticker) {
-
+                    sendStickerAsMessage(structIGSticker);
                 }
             }, KeyboardView.MODE_KEYBOARD);
 
