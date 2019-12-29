@@ -51,6 +51,10 @@ public class PanelRepo {
         kuknosAPIRepository.getSpecificAssets(assetCode, handShakeCallback, apiResponse);
     }
 
+    public boolean isPinSet() {
+        return userRepo.getPIN() != null && userRepo.getPIN().length() == 4;
+    }
+
     public UserRepo getUserRepo() {
         return userRepo;
     }

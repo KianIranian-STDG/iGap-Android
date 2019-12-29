@@ -132,7 +132,7 @@ public class KuknosPanelFrag extends BaseFragment {
 
     private void initialSettingBS() {
         List<String> items = new ArrayList<>();
-        items.add(getString(R.string.kuknos_setting_changePin));
+//        items.add(getString(R.string.kuknos_setting_changePin));
         items.add(getString(R.string.kuknos_setting_viewRecoveryP));
         items.add(getString(R.string.kuknos_setting_copySeedKey));
         items.add(getString(R.string.kuknos_setting_logout));
@@ -142,24 +142,33 @@ public class KuknosPanelFrag extends BaseFragment {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = null;
             switch (position) {
-                case 0:
+                /*case 0:
                     fragment = fragmentManager.findFragmentByTag(KuknosChangePassFrag.class.getName());
                     if (fragment == null) {
                         fragment = KuknosChangePassFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    break;
-                case 1:
-                    fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosViewRecoveryEPFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    break;*/
+                case 0:
+                    if (kuknosPanelVM.isPinSet()) {
+                        fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosViewRecoveryEPFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                    }
+                    else {
+                        fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosShowRecoveryKeySFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
                     }
                     break;
-                case 2:
+                case 1:
                     showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
                     return;
-                case 3:
+                case 2:
                     fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());
                     if (fragment == null) {
                         fragment = KuknosLogoutFrag.newInstance();

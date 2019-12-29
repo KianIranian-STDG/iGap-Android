@@ -64,6 +64,10 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         });
     }
 
+    public boolean isPinSet() {
+        return panelRepo.isPinSet();
+    }
+
     public String convertToJSON(int position) {
         if (kuknosWalletsM.getValue()==null)
             return "";
