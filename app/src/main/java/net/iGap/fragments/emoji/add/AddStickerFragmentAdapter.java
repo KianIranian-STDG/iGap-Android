@@ -62,7 +62,7 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
             RealmStickers realmStickers = RealmStickers.checkStickerExist(item.getId(), realm);
             if (realmStickers == null) {
                 item.setIsFavorite(false);
-            } else if (realmStickers.isFavorite()) {
+            } else {
                 item.setIsFavorite(true);
             }
         });
