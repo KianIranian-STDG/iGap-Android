@@ -29,6 +29,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     //go to bank
     private MutableLiveData<Boolean> nextPage;
     private int PMNprice = -1;
+    private int maxAmount = 1000000;
     private PanelRepo panelRepo = new PanelRepo();
 
     public KuknosBuyPeymanVM() {
@@ -52,7 +53,8 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         if (!checkEntry()) {
             return false;
         }
-        if (Integer.parseInt(amount.get()) > 1000000) {
+        if (Integer.parseInt(amount.get()) > maxAmount) {
+            error.setValue(new ErrorM(true, "", "1", R.string.kuknos_buyP_MaxAmount));
             return false;
         }
         if (PMNprice == -1)
@@ -64,11 +66,12 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     }
 
     public void getAssetValue() {
-        progressState.setValue(1);
+        progressState.setValue(3);
         panelRepo.getSpecificAssets("PMN", this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
                 PMNprice = data.getData().getAssets().get(0).getBuyRate();
+                maxAmount = data.getData().getAssets().get(0).getRemainAmount();
                 progressState.setValue(0);
             }
 

@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRestoreBinding;
@@ -123,6 +124,7 @@ public class KuknosRestoreFrag extends BaseFragment {
                 bundle.putString("key_phrase", kuknosRestoreVM.getKeys().get());
                 fragment.setArguments(bundle);
             } else if (nextPage == 2) {
+                saveRegisterInfo();
                 fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
                 if (fragment == null) {
                     fragment = KuknosPanelFrag.newInstance();
@@ -137,6 +139,13 @@ public class KuknosRestoreFrag extends BaseFragment {
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
+    }
+
+    private void saveRegisterInfo() {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("RegisterInfo", new Gson().toJson(kuknosRestoreVM.getKuknosSignupM()));
+        editor.apply();
     }
 
     private void progressState() {

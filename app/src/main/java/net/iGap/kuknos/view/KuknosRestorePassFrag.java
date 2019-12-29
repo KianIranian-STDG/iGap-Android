@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRestorePasswordBinding;
@@ -94,6 +95,7 @@ public class KuknosRestorePassFrag extends BaseFragment {
     private void onNext() {
         kuknosSetPassVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage == 1) {
+                saveRegisterInfo();
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
@@ -113,6 +115,13 @@ public class KuknosRestorePassFrag extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
+    }
+
+    private void saveRegisterInfo() {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("RegisterInfo", new Gson().toJson(kuknosSetPassVM.getKuknosSignupM()));
+        editor.apply();
     }
 
     private void onError() {

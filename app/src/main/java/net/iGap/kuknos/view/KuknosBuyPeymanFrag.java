@@ -111,6 +111,8 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server));
             } else if (integer == 2) {
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server2));
+            } else if (integer == 3) {
+                binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server3));
             }
         });
     }

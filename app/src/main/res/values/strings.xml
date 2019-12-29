@@ -2158,6 +2158,7 @@ Want to get it?</string>
     <string name="kuknos_buyP_btn">Buy</string>
     <string name="kuknos_buyP_btn_server">Checking...</string>
     <string name="kuknos_buyP_btn_server2">Finilizing...</string>
+    <string name="kuknos_buyP_btn_server3">Fetching data...</string>
     <string name="kuknos_buyP_desc">PS:\n
         - Rest of the assets in kuknos is valuated by this Paymon\n
         - Since Paymon has been backed by gold (one unit of PMN is equal to 30 mg 24-karat gold)\n
@@ -2169,6 +2170,7 @@ Want to get it?</string>
     <string name="kuknos_buyP_zeroAmount">Number of PMN can NOT be zero.</string>
     <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
+    <string name="kuknos_buyP_MaxAmount">You are exceeding the maximum buyable value of this token.</string>
     <string name="kuknos_buyP_currency">IRR</string>
     <string name="kuknos_trade_origin">Selling*</string>
     <string name="kuknos_trade_dest">Buying*</string>

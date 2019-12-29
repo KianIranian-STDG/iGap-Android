@@ -12,6 +12,7 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 
@@ -23,7 +24,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
     private ObservableField<String> keys = new ObservableField<>();
     private MutableLiveData<Boolean> pinCheck;
     private UserRepo userRepo = new UserRepo();
-    private String token;
+    private KuknosSignupM kuknosSignupM;
 
     public KuknosRestoreVM() {
         nextPage = new MutableLiveData<>();
@@ -67,6 +68,8 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
                 switch (data.getData().getStatus()) {
                     case "CREATED":
                     case "ACTIVATED":
+                        kuknosSignupM = new KuknosSignupM();
+                        kuknosSignupM.setRegistered(true);
                         nextPage.setValue(2);
                         break;
                     case "NOT_CREATED":
@@ -134,7 +137,6 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
     }
 
     public void setToken(String token) {
-        this.token = token;
     }
 
     public MutableLiveData<Integer> getNextPage() {
@@ -143,5 +145,21 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     public void setNextPage(MutableLiveData<Integer> nextPage) {
         this.nextPage = nextPage;
+    }
+
+    public UserRepo getUserRepo() {
+        return userRepo;
+    }
+
+    public void setUserRepo(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    public KuknosSignupM getKuknosSignupM() {
+        return kuknosSignupM;
+    }
+
+    public void setKuknosSignupM(KuknosSignupM kuknosSignupM) {
+        this.kuknosSignupM = kuknosSignupM;
     }
 }
