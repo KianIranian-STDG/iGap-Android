@@ -4479,15 +4479,7 @@ public class FragmentChat extends BaseFragment
             } else if (items.get(position).equals(getString(R.string.replay_item_dialog))) {
                 G.handler.postDelayed(() -> replay(message, false), 200);
             } else if (items.get(position).equals(getString(R.string.copy_item_dialog))) {
-                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                String _text = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessage() : message.realmRoomMessage.getMessage();
-                if (_text != null && _text.length() > 0) {
-                    ClipData clip = ClipData.newPlainText("Copied Text", _text);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
-                }
+                copyMessageToClipboard(message , true);
             } else if (items.get(position).equals(getString(R.string.share_item_dialog))) {
                 shearedDataToOtherProgram(message);
             } else if (items.get(position).equals(getString(R.string.share_link_item_dialog))) {
@@ -4696,6 +4688,18 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    private void copyMessageToClipboard(StructMessageInfo message , boolean isShowEmpty) {
+        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+        String _text = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessage() : message.realmRoomMessage.getMessage();
+        if (_text != null && _text.length() > 0) {
+            ClipData clip = ClipData.newPlainText("Copied Text", _text);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
+        } else {
+            if (isShowEmpty) Toast.makeText(context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void confirmAndDeleteFromStorage(StructMessageInfo message, int pos) {
         if (getContext() == null) return;
         new MaterialDialog.Builder(getContext())
@@ -4872,6 +4876,11 @@ public class FragmentChat extends BaseFragment
                     }, 1000 * i);
 
                 }
+            }
+
+            @Override
+            public void copyMessage() {
+                copyMessageToClipboard(message , false);
             }
         }, message.realmRoomMessage.getMessageId(), failedMessages);
     }

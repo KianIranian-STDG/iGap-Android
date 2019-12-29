@@ -16,4 +16,6 @@ public interface IResendMessage {
     void resendMessage();
 
     void resendAllMessages();
+
+    void copyMessage();
 }
