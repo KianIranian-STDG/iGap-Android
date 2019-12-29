@@ -1265,7 +1265,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.dispatchTochEventChat.getToch(ev);
         }
 
-        return super.dispatchTouchEvent(ev);
+        try {
+            return super.dispatchTouchEvent(ev);
+        }catch (IllegalArgumentException e){
+            //Fix for support lib bug, happening when onDestroy() is
+            HelperLog.setErrorLog(e);
+            return true;
+        }
     }
 
     @Override
