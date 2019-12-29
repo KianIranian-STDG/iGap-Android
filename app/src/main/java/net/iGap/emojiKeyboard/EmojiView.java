@@ -47,7 +47,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private ViewPagerAdapter pagerAdapter;
     private List<View> views = new ArrayList<>();
 
-    private View bottomViewShado;
+    private View bottomViewShadow;
     private FrameLayout bottomContainer;
     private ImageView emojiIv;
     private ImageView stickerIv;
@@ -73,13 +73,11 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private AnimatorSet bottomTabContainerAnimation;
     private float lastBottomScrollDy;
 
-
     private int layoutHeight;
     private int layoutWidth;
 
     private Listener listener;
     private String TAG = "abbasiEmoji";
-
 
     public void setListener(Listener listener) {
         this.listener = listener;
@@ -150,7 +148,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerGroupAdapter.setListener(structIGSticker -> listener.onStickerClick(structIGSticker));
 
             stickerContainer.addView(stickerGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 27, 0, 4));
-            stickerContainer.addView(stickerCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.TOP));
+            stickerContainer.addView(stickerCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 42, Gravity.TOP));
             views.add(stickerContainer);
 
             createStickers();
@@ -158,14 +156,14 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
         stickerIv = new AppCompatImageView(getContext());
         stickerIv.setImageResource(R.drawable.ic_sticker);
-        stickerIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        stickerIv.setScaleType(ImageView.ScaleType.CENTER);
 
         emojiIv = new AppCompatImageView(getContext());
         emojiIv.setImageResource(R.drawable.ic_emoji);
-        emojiIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        emojiIv.setScaleType(ImageView.ScaleType.CENTER);
 
         settingIv = new AppCompatImageView(getContext());
-        settingIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        settingIv.setScaleType(ImageView.ScaleType.CENTER);
 
         settingIv.setOnClickListener(v -> {
             if (currentPage == EMOJI)
@@ -175,9 +173,9 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         });
 
         bottomContainer = new FrameLayout(getContext());
-        bottomViewShado = new View(getContext());
+        bottomViewShadow = new View(getContext());
 
-        bottomViewShado.setBackgroundColor(Color.parseColor("#BDBDBD"));
+        bottomViewShadow.setBackgroundColor(Color.parseColor("#BDBDBD"));
 
         int emojiX = (layoutWidth / 2) - 20;
         int stickerX = (layoutWidth / 2) + 20;
@@ -187,7 +185,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
         bottomContainer.setBackgroundColor(Color.parseColor("#E0E0E0"));
-        bottomContainer.addView(bottomViewShado, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
+        bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
 
         addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM));
 
@@ -286,7 +284,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         bottomTabContainerAnimation = new AnimatorSet();
         bottomTabContainerAnimation.playTogether(
                 ObjectAnimator.ofFloat(bottomContainer, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(54)),
-                ObjectAnimator.ofFloat(bottomViewShado, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(49)));
+                ObjectAnimator.ofFloat(bottomViewShadow, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(49)));
         bottomTabContainerAnimation.setDuration(200);
         bottomTabContainerAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
         bottomTabContainerAnimation.start();
@@ -311,7 +309,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
         StructStickerCategory recentCategory = new StructStickerCategory();
         recentCategory.setType(StructStickerCategory.DRAWABLE);
-        recentCategory.setResId(R.drawable.ic_recent);
+        recentCategory.setResId(R.drawable.ic_emoji_history);
         categories.add(0, recentCategory);
 
         List<StructIGStickerGroup> groups = RealmStickers.getAllStickers();

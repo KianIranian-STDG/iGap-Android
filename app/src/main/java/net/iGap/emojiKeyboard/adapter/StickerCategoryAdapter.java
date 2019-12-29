@@ -46,15 +46,15 @@ public class StickerCategoryAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder holder;
         if (viewType == StructStickerCategory.DRAWABLE) {
             AppCompatImageView view = new AppCompatImageView(parent.getContext());
-            view.setLayoutParams(LayoutCreator.createFrame(38, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
+            view.setLayoutParams(LayoutCreator.createFrame(42, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 1, 0, 1, 0));
             holder = new DrawableViewHolder(view);
         } else if (viewType == StructIGSticker.ANIMATED_STICKER) {
             AnimatedStickerCell stickerCell = new AnimatedStickerCell(parent.getContext());
-            stickerCell.setLayoutParams(LayoutCreator.createFrame(38, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
+            stickerCell.setLayoutParams(LayoutCreator.createFrame(42, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 1, 0, 1, 0));
             holder = new AnimatedViewHolder(stickerCell);
         } else {
             AppCompatImageView normalSticker = new AppCompatImageView(parent.getContext());
-            normalSticker.setLayoutParams(LayoutCreator.createFrame(38, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
+            normalSticker.setLayoutParams(LayoutCreator.createFrame(42, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 1, 0, 1, 0));
             holder = new NormalViewHolder(normalSticker);
         }
         return holder;
@@ -124,7 +124,9 @@ public class StickerCategoryAdapter extends RecyclerView.Adapter {
         NormalViewHolder(View itemView) {
             super(itemView);
             normalStickerCell = (AppCompatImageView) itemView;
-            normalStickerCell.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            int padding = LayoutCreator.dp(4);
+            normalStickerCell.setPadding(padding, padding, padding, padding);
+            normalStickerCell.setScaleType(ImageView.ScaleType.CENTER);
         }
 
         public void bindView(StructStickerCategory category) {
@@ -171,7 +173,7 @@ public class StickerCategoryAdapter extends RecyclerView.Adapter {
 
             drawableIv.setImageResource(category.getResId());
 
-            drawableIv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            drawableIv.setScaleType(ImageView.ScaleType.CENTER);
 
             drawableIv.setOnClickListener(v -> {
                 if (listener != null)
