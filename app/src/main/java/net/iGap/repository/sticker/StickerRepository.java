@@ -19,6 +19,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,9 +31,22 @@ public class StickerRepository {
     private APIEmojiService apiService;
     private String TAG = "abbasiSticker Repository";
 
+    public interface Listener {
+        void onAddSticker(int startIndex, int length);
+
+        void onDeletedSticker(int startIndex, int length);
+
+        void onUpdatedSticker(int startIndex, int length);
+
+        void dataChange();
+    }
+
     public StickerRepository() {
         apiService = ApiEmojiUtils.getAPIService();
     }
+
+    private RealmResults<RealmStickers> liveRealmStickers;
+    private OrderedRealmCollectionChangeListener<RealmResults<RealmStickers>> stickerChangeListener;
 
     public void getStickerListForStickerDialog(String groupId, ResponseCallback<StructIGStickerGroup> callback) {
 
@@ -61,10 +77,7 @@ public class StickerRepository {
                             StructGroupSticker structGroupSticker = response.body().getData();
                             StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-                            DbManager.getInstance().doRealmTransaction(realm -> {
-                                RealmStickers realmStickers = RealmStickers.put(realm, structGroupSticker.getCreatedAt(), structGroupSticker.getId(), structGroupSticker.getRefId(), structGroupSticker.getName(), structGroupSticker.getAvatarToken(), structGroupSticker.getAvatarSize(), structGroupSticker.getAvatarName(), structGroupSticker.getPrice(), structGroupSticker.getIsVip(), structGroupSticker.getSort(), structGroupSticker.getIsVip(), structGroupSticker.getCreatedBy(), structGroupSticker.getStickers(), false);
-                                stickerGroup.setValueWithRealmStickers(realmStickers);
-                            });
+                            stickerGroup.setValueWithOldStruct(structGroupSticker);
 
                             G.handler.postDelayed(() -> callback.onSuccess(stickerGroup), 300);
                         }
@@ -161,4 +174,52 @@ public class StickerRepository {
     public List<StructIGStickerGroup> getMyStickers() {
         return RealmStickers.getMyStickers();
     }
+
+    public void addStickerChangeListener(Listener listener) {
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            liveRealmStickers = realm.where(RealmStickers.class).findAll();
+
+            stickerChangeListener = (realmStickers, changeSet) -> {
+                if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
+                    listener.dataChange();
+                    return;
+                }
+
+                OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
+                for (int i = deletions.length - 1; i >= 0; i--) {
+                    OrderedCollectionChangeSet.Range range = deletions[i];
+                    listener.onDeletedSticker(range.startIndex, range.length);
+                }
+
+                OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
+                for (OrderedCollectionChangeSet.Range range : insertions) {
+                    listener.onAddSticker(range.startIndex, range.length);
+                }
+
+
+                OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
+                for (OrderedCollectionChangeSet.Range range : modifications) {
+                    listener.onUpdatedSticker(range.startIndex, range.length);
+                }
+
+                Log.i(TAG, "---------------------------------------");
+            };
+
+            liveRealmStickers.addChangeListener(stickerChangeListener);
+        });
+    }
+
+    private void removeStickerChangeListener() {
+        if (liveRealmStickers != null && stickerChangeListener != null) {
+            liveRealmStickers.removeChangeListener(stickerChangeListener);
+            liveRealmStickers = null;
+            stickerChangeListener = null;
+        }
+    }
+
+    public void onDestroy() {
+        removeStickerChangeListener();
+    }
+
 }

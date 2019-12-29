@@ -3318,22 +3318,24 @@ public class FragmentChat extends BaseFragment
     private void createKeyboardView() {
         if (getContext() != null) {
             keyboardView = new KeyboardView(getContext(), new KeyboardView.Listener() {
-                int cuerrentMode;
                 @Override
                 public void onViewCreated(int mode) {
-                    cuerrentMode = mode;
+
                 }
 
                 @Override
                 public void onStickerSettingClicked() {
                     if (getActivity() != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), StickersSettingFragment.newInstance(new ArrayList<>())).setReplace(false).load();
                     }
                 }
 
                 @Override
                 public void onBackSpace() {
                     Toast.makeText(getContext(), "back press clicked", Toast.LENGTH_SHORT).show();
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                    }
                 }
 
                 @Override

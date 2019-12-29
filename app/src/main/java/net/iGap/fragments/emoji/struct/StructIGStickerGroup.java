@@ -1,10 +1,13 @@
 package net.iGap.fragments.emoji.struct;
 
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.realm.RealmStickers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.iGap.fragments.emoji.struct.StructIGSticker.ANIMATED_STICKER;
@@ -26,6 +29,7 @@ public class StructIGStickerGroup {
     private long createdBy;
     private boolean isFavorite;
     private int avatarType;
+    private boolean inMySticker;
     private List<StructIGSticker> stickers;
 
     public StructIGStickerGroup(String groupId) {
@@ -48,6 +52,7 @@ public class StructIGStickerGroup {
             setApproved(realmStickersGroup.isApproved());
             setAvatarPath(realmStickersGroup.getUri());
             setVip(realmStickersGroup.isVip());
+            setInMySticker(true);
         }
     }
 
@@ -65,6 +70,8 @@ public class StructIGStickerGroup {
             setAvatarName(structGroupSticker.getAvatarName());
             setAvatarPath(structGroupSticker.getUri());
             setVip(structGroupSticker.getIsVip());
+            setStickersWithOldStruct(structGroupSticker.getStickers());
+            setInMySticker(false);
         }
     }
 
@@ -204,6 +211,22 @@ public class StructIGStickerGroup {
         this.stickers = stickers;
     }
 
+    private void setStickersWithOldStruct(List<StructItemSticker> stickers) {
+        List<StructIGSticker> stickers1 = new ArrayList<>();
+        for (int i = 0; i < stickers.size(); i++) {
+            StructIGSticker structIGSticker = new StructIGSticker();
+            structIGSticker.setToken(stickers.get(i).getToken());
+            structIGSticker.setPath(HelperDownloadSticker.downloadStickerPath(stickers.get(i).getToken(), stickers.get(i).getAvatarName()));
+            structIGSticker.setId(stickers.get(i).getId());
+            structIGSticker.setGroupId(stickers.get(i).getGroupId());
+            structIGSticker.setFileSize(stickers.get(i).getAvatarSize());
+            structIGSticker.setFileName(stickers.get(i).getAvatarName());
+            structIGSticker.setName(stickers.get(i).getName());
+            stickers1.add(structIGSticker);
+        }
+        this.stickers = stickers1;
+    }
+
     public boolean hasData() {
         return getStickers() != null && getStickers().size() > 0;
     }
@@ -214,5 +237,13 @@ public class StructIGStickerGroup {
 
     public boolean hasFileOnLocal() {
         return new File(avatarPath).exists() && new File(avatarPath).canRead();
+    }
+
+    public void setInMySticker(boolean inMySticker) {
+        this.inMySticker = inMySticker;
+    }
+
+    public boolean isInMySticker() {
+        return inMySticker;
     }
 }

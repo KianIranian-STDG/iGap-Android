@@ -38,7 +38,7 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     public void onAddOrRemoveStickerClicked() {
         if (fragmentMode == LIST) {
-            if (stickerGroup.isFavorite()) {
+            if (stickerGroup.isInMySticker()) {
                 removeStickerFromFavorite(stickerGroup.getGroupId());
             } else {
                 addStickerToFavorite(stickerGroup.getGroupId());
@@ -63,7 +63,7 @@ public class StickerDialogViewModel extends BaseViewModel {
 
                 stickersMutableLiveData.postValue(stickerGroup);
 
-                onStickerFavoriteChange(data.isFavorite());
+                onStickerFavoriteChange(data.isInMySticker());
 
                 Log.i(TAG, "on Success getSticker with group id -> " + stickerGroup.getGroupId() + " and size -> " + stickerGroup.getStickers().size());
             }
@@ -82,7 +82,7 @@ public class StickerDialogViewModel extends BaseViewModel {
             @Override
             public void onSuccess(Boolean data) {
                 addOrRemoveProgressLiveData.postValue(View.GONE);
-                stickerGroup.setFavorite(data);
+                stickerGroup.setInMySticker(data);
                 onStickerFavoriteChange(data);
                 Log.i(TAG, "on Success addStickerToFavorite with id -> " + stickerGroup.getGroupId());
             }
@@ -123,7 +123,7 @@ public class StickerDialogViewModel extends BaseViewModel {
     public void onPreviewImageClicked() {
         fragmentMode = LIST;
         openPreviewViewLiveData.postValue(null);
-        onStickerFavoriteChange(stickerGroup.isFavorite());
+        onStickerFavoriteChange(stickerGroup.isInMySticker());
     }
 
     private void onStickerFavoriteChange(boolean favorite) {

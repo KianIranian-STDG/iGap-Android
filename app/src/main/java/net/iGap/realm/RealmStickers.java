@@ -113,6 +113,7 @@ public class RealmStickers extends RealmObject {
                 stickerGroup.setVip(item.isVip);
                 stickerGroup.setSort(item.sort);
                 stickerGroup.setCreatedBy(item.createdBy);
+                stickerGroup.setInMySticker(true);
 
                 List<StructIGSticker> stickerDetails = new ArrayList<>();
 

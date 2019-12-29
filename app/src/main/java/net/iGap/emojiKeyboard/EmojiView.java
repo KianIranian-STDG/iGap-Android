@@ -30,12 +30,13 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.realm.RealmStickers;
+import net.iGap.repository.sticker.StickerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ViewConstructor")
-public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeListener {
+public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeListener, StickerRepository.Listener {
 
     public static final int EMOJI = 0;
     public static final int STICKER = 1;
@@ -77,6 +78,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private Listener listener;
     private String TAG = "abbasiEmoji";
 
+    private StickerRepository stickerRepository;
+
     public void setListener(Listener listener) {
         this.listener = listener;
     }
@@ -112,6 +115,9 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         }
 
         if (hasSticker) {
+            stickerRepository = new StickerRepository();
+            stickerRepository.addStickerChangeListener(this);
+
             stickerContainer = new FrameLayout(getContext());
 
             stickerTopAdapter = new StickerCategoryAdapter();
@@ -231,7 +237,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         layoutWidth = right - left;
         layoutHeight = bottom - top;
-        Log.i("abbasiTag", "onLayout: " + layoutWidth + " H " + layoutHeight);
         super.onLayout(changed, left, top, right, bottom);
     }
 
@@ -319,6 +324,26 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         }
 
         return categories;
+    }
+
+    @Override
+    public void onAddSticker(int startIndex, int length) {
+        Log.i(TAG, "onAddSticker: " + startIndex + " " + length);
+    }
+
+    @Override
+    public void onDeletedSticker(int startIndex, int length) {
+        Log.i(TAG, "onDeletedSticker: " + startIndex + " " + length);
+    }
+
+    @Override
+    public void onUpdatedSticker(int startIndex, int length) {
+        Log.i(TAG, "onUpdatedSticker: " + startIndex + " " + length);
+    }
+
+    @Override
+    public void dataChange() {
+        Log.i(TAG, "dataChange: ");
     }
 
     public interface Listener {
