@@ -56,18 +56,16 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private FrameLayout emojiContainer;
     private RecyclerView emojiGridView;
     private EmojiAdapter emojiAdapter;
-    private FrameLayout emojiCategoryContainer;
-    private RecyclerView emojiCategoryRecyclerView;
-    private EmojiAdapter emojiCategoryAdapter;
+    private RecyclerView emojiTopLinearView;
+    private EmojiAdapter emojiTopAdapter;
     private GridLayoutManager emojiLayoutManager;
     private LinearLayoutManager emojiCategoryLayoutManager;
 
     private FrameLayout stickerContainer;
     private RecyclerView stickerGridView;
-    private StickerGroupAdapter stickerGroupAdapter;
-    private FrameLayout stickerCategoryContainer;
-    private RecyclerView stickerCategoryRecyclerView;
-    private StickerCategoryAdapter stickerCategoryAdapter;
+    private StickerGroupAdapter stickerGridAdapter;
+    private RecyclerView stickerTopLinearView;
+    private StickerCategoryAdapter stickerTopAdapter;
     private LinearLayoutManager stickersLayoutManager;
     private LinearLayoutManager stickerCategoryLayoutManager;
     private AnimatorSet bottomTabContainerAnimation;
@@ -98,42 +96,40 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             emojiAdapter = new EmojiAdapter();
 
-            emojiCategoryAdapter = new EmojiAdapter();
+            emojiTopAdapter = new EmojiAdapter();
 
-            emojiCategoryRecyclerView = new RecyclerView(getContext());
-            emojiCategoryRecyclerView.setBackgroundColor(Color.parseColor("#E0E0E0"));
-            emojiCategoryRecyclerView.setAdapter(emojiCategoryAdapter);
-            emojiCategoryRecyclerView.setLayoutManager(emojiCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+            emojiTopLinearView = new RecyclerView(getContext());
+            emojiTopLinearView.setBackgroundColor(Color.parseColor("#E0E0E0"));
+            emojiTopLinearView.setAdapter(emojiTopAdapter);
+            emojiTopLinearView.setLayoutManager(emojiCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
             emojiGridView = new RecyclerView(getContext());
             emojiGridView.setAdapter(emojiAdapter);
             emojiGridView.setLayoutManager(emojiLayoutManager = new GridLayoutManager(context, 20));
             views.add(emojiContainer);
 
-            emojiContainer.addView(emojiCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.TOP));
+            emojiContainer.addView(emojiTopLinearView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.TOP));
         }
 
         if (hasSticker) {
             stickerContainer = new FrameLayout(getContext());
 
-            stickerCategoryAdapter = new StickerCategoryAdapter();
+            stickerTopAdapter = new StickerCategoryAdapter();
 
-            stickerCategoryContainer = new FrameLayout(getContext());
-
-            stickerCategoryRecyclerView = new RecyclerView(getContext());
-            stickerCategoryRecyclerView.setAdapter(stickerCategoryAdapter);
-            stickerCategoryRecyclerView.setPadding(0, 0, LayoutCreator.dpToPx(8), 0);
-            stickerCategoryRecyclerView.setClipToPadding(false);
-            stickerCategoryRecyclerView.setBackgroundColor(Color.parseColor("#E0E0E0"));
-            stickerCategoryRecyclerView.setLayoutManager(stickerCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+            stickerTopLinearView = new RecyclerView(getContext());
+            stickerTopLinearView.setAdapter(stickerTopAdapter);
+            stickerTopLinearView.setPadding(0, 0, LayoutCreator.dpToPx(8), 0);
+            stickerTopLinearView.setClipToPadding(false);
+            stickerTopLinearView.setBackgroundColor(Color.parseColor("#E0E0E0"));
+            stickerTopLinearView.setLayoutManager(stickerCategoryLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
             stickerGridView = new RecyclerView(getContext());
             stickerGridView.setLayoutManager(stickersLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             stickerGridView.setClipToPadding(false);
             stickerGridView.setPadding(0, 0, 0, LayoutCreator.dpToPx(50));
 
-            stickerGroupAdapter = new StickerGroupAdapter();
-            stickerGroupAdapter.setGroups(RealmStickers.getAllStickers());
+            stickerGridAdapter = new StickerGroupAdapter();
+            stickerGridAdapter.setGroups(RealmStickers.getAllStickers());
 
             stickerGridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -143,12 +139,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                 }
             });
 
-            stickerGridView.setAdapter(stickerGroupAdapter);
+            stickerGridView.setAdapter(stickerGridAdapter);
 
-            stickerGroupAdapter.setListener(structIGSticker -> listener.onStickerClick(structIGSticker));
+            stickerGridAdapter.setListener(structIGSticker -> listener.onStickerClick(structIGSticker));
 
             stickerContainer.addView(stickerGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 27, 0, 4));
-            stickerContainer.addView(stickerCategoryRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 42, Gravity.TOP));
+            stickerContainer.addView(stickerTopLinearView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 42, Gravity.TOP));
             views.add(stickerContainer);
 
             createStickers();
@@ -203,7 +199,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     }
 
     private void createStickers() {
-        stickerCategoryAdapter.setCategories(getStickerCategory());
+        stickerTopAdapter.setCategories(getStickerCategory());
     }
 
     @Override
