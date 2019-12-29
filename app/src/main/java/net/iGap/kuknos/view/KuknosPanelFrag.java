@@ -1,5 +1,6 @@
 package net.iGap.kuknos.view;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -29,6 +30,7 @@ import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.WalletSpinnerArrayAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
@@ -310,6 +312,10 @@ public class KuknosPanelFrag extends BaseFragment {
     }
 
     private void writeSeedKey() {
+        PermissionHelper permissionHelper = new PermissionHelper(getActivity(), this);
+        if (!permissionHelper.grantReadAndRightStoragePermission()){
+            return;
+        }
         if (!isExternalStorageReadable()) {
             showDialog(2, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailReadM, R.string.kuknos_setting_copySFailBtn);
             return;
@@ -355,5 +361,18 @@ public class KuknosPanelFrag extends BaseFragment {
             showDialog(6, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailDir, R.string.kuknos_setting_copySFailBtn);
         }
         return file;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean tmp = true;
+        for (int grantResult : grantResults) {
+            tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
+        }
+        if (tmp) {
+            writeSeedKey();
+        } else {
+            showDialog(2, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailReadM, R.string.kuknos_setting_copySFailBtn);
+        }
     }
 }

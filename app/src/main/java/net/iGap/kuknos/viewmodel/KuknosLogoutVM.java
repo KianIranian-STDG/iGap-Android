@@ -61,7 +61,7 @@ public class KuknosLogoutVM extends ViewModel {
             error.setValue(new ErrorM(true, "wrong length pin", "0", R.string.kuknos_viewRecoveryEP_wrongPIN));
             return false;
         }
-        if (userRepo.getPIN()!=null && userRepo.getPIN().length()==4 && !PIN.get().equals(userRepo.getPIN())) {
+        if (!PIN.get().equals(userRepo.getPIN())) {
             error.setValue(new ErrorM(true, "wrong length pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
             return false;
         }
