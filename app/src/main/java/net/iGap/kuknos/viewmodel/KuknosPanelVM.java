@@ -28,8 +28,6 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     private ObservableField<String> currency = new ObservableField<>();
     private int position = 0;
 
-    private static final String TAG = "KuknosPanelVM";
-
     public KuknosPanelVM() {
         //TODO clear Hard Code
         balance.set("...");
@@ -69,7 +67,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public String convertToJSON(int position) {
-        if (kuknosWalletsM.getValue()==null)
+        if (kuknosWalletsM.getValue() == null)
             return "";
         Gson gson = new Gson();
         return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
@@ -142,10 +140,6 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         return openPage;
     }
 
-    public void setOpenPage(MutableLiveData<Integer> openPage) {
-        this.openPage = openPage;
-    }
-
     public ObservableField<String> getBalance() {
         return balance;
     }
@@ -174,7 +168,4 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         return kuknosWalletsM;
     }
 
-    public void setKuknosWalletsM(MutableLiveData<KuknosBalance> kuknosWalletsM) {
-        this.kuknosWalletsM = kuknosWalletsM;
-    }
 }

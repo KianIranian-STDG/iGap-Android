@@ -7,15 +7,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
 
 public class KuknosRestoreSignupVM extends ViewModel {
 
-    private MutableLiveData<KuknosSignupM> kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Integer> checkUsernameState;
@@ -25,16 +22,14 @@ public class KuknosRestoreSignupVM extends ViewModel {
     private ObservableField<String> family = new ObservableField<>();
     private ObservableField<String> email = new ObservableField<>();
     private boolean usernameIsValid = false;
-    private String token;
-    private UserRepo userRepo = new UserRepo();
 
     public KuknosRestoreSignupVM() {
 
+        UserRepo userRepo = new UserRepo();
         name.set(userRepo.getUserFirstName());
         family.set(userRepo.getUserLastName());
         email.set(userRepo.getUserEmail());
 
-        kuknosSignupM = new MutableLiveData<>();
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
         checkUsernameState = new MutableLiveData<>();
@@ -84,22 +79,19 @@ public class KuknosRestoreSignupVM extends ViewModel {
             return true;
     }
 
-    public void checkUsernameServer(boolean isCallFromBTN) {
+    private void checkUsernameServer(boolean isCallFromBTN) {
         checkUsernameState.setValue(0);
         // TODO check from server for avalibility
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //success
-                checkUsernameState.setValue(1);
-                usernameIsValid = true;
-                if (isCallFromBTN)
-                    submitUser();
-                //error
+        handler.postDelayed(() -> {
+            //success
+            checkUsernameState.setValue(1);
+            usernameIsValid = true;
+            if (isCallFromBTN)
+                submitUser();
+            //error
 //                checkUsernameState.setValue(2);
 //                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
-            }
         }, 1000);
     }
 
@@ -132,14 +124,6 @@ public class KuknosRestoreSignupVM extends ViewModel {
 
     //Setter and Getter
 
-    public MutableLiveData<KuknosSignupM> getKuknosSignupM() {
-        return kuknosSignupM;
-    }
-
-    public void setKuknosSignupM(MutableLiveData<KuknosSignupM> kuknosSignupM) {
-        this.kuknosSignupM = kuknosSignupM;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
@@ -166,14 +150,6 @@ public class KuknosRestoreSignupVM extends ViewModel {
 
     public MutableLiveData<Boolean> getProgressSendDServerState() {
         return progressSendDServerState;
-    }
-
-    public void setProgressSendDServerState(MutableLiveData<Boolean> progressSendDServerState) {
-        this.progressSendDServerState = progressSendDServerState;
-    }
-
-    public boolean isUsernameIsValid() {
-        return usernameIsValid;
     }
 
     public void setUsernameIsValid(boolean usernameIsValid) {

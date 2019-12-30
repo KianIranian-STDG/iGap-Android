@@ -23,16 +23,10 @@ public class KuknosTradeHistoryVM extends ViewModel {
     }
 
     public KuknosTradeHistoryVM() {
-        if (listMutableLiveData == null) {
-            listMutableLiveData = new MutableLiveData<>();
-        }
-        if (errorM == null) {
-            errorM = new MutableLiveData<>();
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(true);
-        }
+        listMutableLiveData = new MutableLiveData<>();
+        errorM = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(true);
     }
 
     public void getDataFromServer() {
@@ -91,10 +85,6 @@ public class KuknosTradeHistoryVM extends ViewModel {
 
     public MutableLiveData<Page<OfferResponse>> getListMutableLiveData() {
         return listMutableLiveData;
-    }
-
-    public void setListMutableLiveData(MutableLiveData<Page<OfferResponse>> listMutableLiveData) {
-        this.listMutableLiveData = listMutableLiveData;
     }
 
     public API getMode() {

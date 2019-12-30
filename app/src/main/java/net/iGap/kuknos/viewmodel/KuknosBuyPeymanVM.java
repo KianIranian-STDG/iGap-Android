@@ -43,14 +43,14 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     }
 
     public void onSubmitBtn() {
-        if (!checkEntry()) {
+        if (checkEntry()) {
             return;
         }
         sendDataServer();
     }
 
     public boolean updateSum() {
-        if (!checkEntry()) {
+        if (checkEntry()) {
             return false;
         }
         if (Integer.parseInt(amount.get()) > maxAmount) {
@@ -118,19 +118,19 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         if (amount.get() == null) {
             // empty
             error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
-            return false;
+            return true;
         }
         if (amount.get().isEmpty()) {
             // empty
             error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
-            return false;
+            return true;
         }
         Log.d("amini", "checkEntry: " + amount.get());
         if (Integer.parseInt(amount.get()) == 0) {
             error.setValue(new ErrorM(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public MutableLiveData<ErrorM> getError() {
@@ -161,16 +161,8 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         return sum;
     }
 
-    public void setSum(ObservableField<String> sum) {
-        this.sum = sum;
-    }
-
     public MutableLiveData<Boolean> getSumState() {
         return sumState;
-    }
-
-    public void setSumState(MutableLiveData<Boolean> sumState) {
-        this.sumState = sumState;
     }
 
     public MutableLiveData<Integer> getProgressState() {

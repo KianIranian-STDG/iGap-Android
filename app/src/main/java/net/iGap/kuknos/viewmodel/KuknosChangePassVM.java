@@ -19,12 +19,9 @@ public class KuknosChangePassVM extends ViewModel {
     private MutableLiveData<Boolean> progressState;
 
     public KuknosChangePassVM() {
-        if (error == null)
-            error = new MutableLiveData<>();
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(false);
-        }
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(false);
     }
 
     public void onSubmitBtn() {
@@ -106,24 +103,12 @@ public class KuknosChangePassVM extends ViewModel {
         return currentPIN;
     }
 
-    public void setCurrentPIN(ObservableField<String> currentPIN) {
-        this.currentPIN = currentPIN;
-    }
-
     public ObservableField<String> getNewPIN() {
         return newPIN;
     }
 
-    public void setNewPIN(ObservableField<String> newPIN) {
-        this.newPIN = newPIN;
-    }
-
     public ObservableField<String> getRnewPIN() {
         return rnewPIN;
-    }
-
-    public void setRnewPIN(ObservableField<String> rnewPIN) {
-        this.rnewPIN = rnewPIN;
     }
 
     public MutableLiveData<ErrorM> getError() {

@@ -1,7 +1,5 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
@@ -33,8 +31,6 @@ public class KuknosSendVM extends BaseAPIViewModel {
     private KuknosBalance.Balance balanceInfoM;
     private MutableLiveData<Boolean> openQrScanner;
     private PanelRepo panelRepo = new PanelRepo();
-
-    private static final String TAG = "KuknosSendVM";
 
     public KuknosSendVM() {
         kuknosSendM = new KuknosSendM();
@@ -145,24 +141,8 @@ public class KuknosSendVM extends BaseAPIViewModel {
         return kuknosSendM.getAssetcode();
     }
 
-    public void setAssetCode(String assetCode) {
-        kuknosSendM = new KuknosSendM();
-    }
-
-    public KuknosSendM getKuknosSendM() {
-        return kuknosSendM;
-    }
-
-    public void setKuknosSendM(KuknosSendM kuknosSendM) {
-        this.kuknosSendM = kuknosSendM;
-    }
-
     public ObservableField<String> getWalletID() {
         return walletID;
-    }
-
-    public void setWalletID(ObservableField<String> walletID) {
-        this.walletID = walletID;
     }
 
     public ObservableField<String> getText() {
@@ -201,10 +181,6 @@ public class KuknosSendVM extends BaseAPIViewModel {
         return payResult;
     }
 
-    public void setPayResult(MutableLiveData<ErrorM> payResult) {
-        this.payResult = payResult;
-    }
-
     public void setBalanceInfoM(String balanceInfoM) {
         Gson gson = new Gson();
         this.balanceInfoM = gson.fromJson(balanceInfoM, KuknosBalance.Balance.class);
@@ -223,7 +199,4 @@ public class KuknosSendVM extends BaseAPIViewModel {
         return openQrScanner;
     }
 
-    public void setOpenQrScanner(MutableLiveData<Boolean> openQrScanner) {
-        this.openQrScanner = openQrScanner;
-    }
 }

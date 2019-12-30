@@ -25,7 +25,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private String PIN4;
     private boolean completePin = false;
     private UserRepo userRepo = new UserRepo();
-    private String token, username;
 
     public KuknosSetPassConfirmVM() {
         kuknosPassM = new MutableLiveData<>();
@@ -44,7 +43,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         }
     }
 
-    public void checkPIN() {
+    private void checkPIN() {
         if (PIN.equals(selectedPin)) {
             sendDataToServer();
         } else {
@@ -52,11 +51,11 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         }
     }
 
-    public void sendDataToServer() {
+    private void sendDataToServer() {
         registerUser();
     }
 
-    public void registerUser() {
+    private void registerUser() {
         progressState.setValue(true);
         userRepo.setPIN(PIN);
         try {
@@ -121,14 +120,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         this.PIN4 = PIN4;
     }
 
-    public MutableLiveData<KuknosPassM> getKuknosPassM() {
-        return kuknosPassM;
-    }
-
-    public void setKuknosPassM(MutableLiveData<KuknosPassM> kuknosPassM) {
-        this.kuknosPassM = kuknosPassM;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
@@ -145,10 +136,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public boolean isCompletePin() {
-        return completePin;
-    }
-
     public void setCompletePin(boolean completePin) {
         this.completePin = completePin;
     }
@@ -159,10 +146,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
 
     public void setPIN(String PIN) {
         this.PIN = PIN;
-    }
-
-    public String getSelectedPin() {
-        return selectedPin;
     }
 
     public void setSelectedPin(String selectedPin) {
@@ -178,10 +161,8 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     }
 
     public void setToken(String token) {
-        this.token = token;
     }
 
     public void setUsername(String username) {
-        this.username = username;
     }
 }

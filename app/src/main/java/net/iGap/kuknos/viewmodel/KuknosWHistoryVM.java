@@ -44,10 +44,6 @@ public class KuknosWHistoryVM extends BaseAPIViewModel {
         return listMutableLiveData;
     }
 
-    public void setListMutableLiveData(MutableLiveData<KuknosOperationResponse> listMutableLiveData) {
-        this.listMutableLiveData = listMutableLiveData;
-    }
-
     public MutableLiveData<ErrorM> getErrorM() {
         return errorM;
     }

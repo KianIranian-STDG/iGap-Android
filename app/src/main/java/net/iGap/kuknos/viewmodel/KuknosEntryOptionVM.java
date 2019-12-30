@@ -43,23 +43,12 @@ public class KuknosEntryOptionVM extends ViewModel {
         return goNewTPage;
     }
 
-    public void setGoNewTPage(MutableLiveData<Boolean> goNewTPage) {
-        this.goNewTPage = goNewTPage;
-    }
-
     public MutableLiveData<Boolean> getGoRestoreTPage() {
         return goRestoreTPage;
-    }
-
-    public void setGoRestoreTPage(MutableLiveData<Boolean> goRestoreTPage) {
-        this.goRestoreTPage = goRestoreTPage;
     }
 
     public MutableLiveData<Boolean> getGoRestoreSeedPage() {
         return goRestoreSeedPage;
     }
 
-    public void setGoRestoreSeedPage(MutableLiveData<Boolean> goRestoreSeedPage) {
-        this.goRestoreSeedPage = goRestoreSeedPage;
-    }
 }

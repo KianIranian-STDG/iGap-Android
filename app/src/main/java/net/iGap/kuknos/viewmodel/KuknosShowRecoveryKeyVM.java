@@ -1,22 +1,13 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
 
@@ -100,10 +91,6 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
 
     public ObservableField<Boolean> getPinCheck() {
         return pinCheck;
-    }
-
-    public void setPinCheck(ObservableField<Boolean> pinCheck) {
-        this.pinCheck = pinCheck;
     }
 
 }

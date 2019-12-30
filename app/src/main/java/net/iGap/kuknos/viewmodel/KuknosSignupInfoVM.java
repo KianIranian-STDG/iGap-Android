@@ -165,10 +165,6 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         return kuknosSignupM;
     }
 
-    public void setKuknosSignupM(KuknosSignupM kuknosSignupM) {
-        this.kuknosSignupM = kuknosSignupM;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
@@ -195,14 +191,6 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
     public MutableLiveData<Boolean> getProgressSendDServerState() {
         return progressSendDServerState;
-    }
-
-    public void setProgressSendDServerState(MutableLiveData<Boolean> progressSendDServerState) {
-        this.progressSendDServerState = progressSendDServerState;
-    }
-
-    public boolean isUsernameIsValid() {
-        return usernameIsValid;
     }
 
     public void setUsernameIsValid(boolean usernameIsValid) {
@@ -237,15 +225,8 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         return phoneNum;
     }
 
-    public void setPhoneNum(ObservableField<String> phoneNum) {
-        this.phoneNum = phoneNum;
-    }
-
     public ObservableField<String> getNID() {
         return NID;
     }
 
-    public void setNID(ObservableField<String> NID) {
-        this.NID = NID;
-    }
 }

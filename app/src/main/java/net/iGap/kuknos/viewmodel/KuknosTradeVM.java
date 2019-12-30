@@ -58,8 +58,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
         panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
-                ArrayList<KuknosBalance.Balance> temp = new ArrayList<>();
-                temp.addAll(data.getData().getAssets());
+                ArrayList<KuknosBalance.Balance> temp = new ArrayList<>(data.getData().getAssets());
                 kuknosOriginWalletsM.setValue(temp);
                 originSpinnerSelect(0);
                 fetchProgressState.setValue(false);
@@ -186,48 +185,24 @@ public class KuknosTradeVM extends BaseAPIViewModel {
         return originAmount;
     }
 
-    public void setOriginAmount(ObservableField<String> originAmount) {
-        this.originAmount = originAmount;
-    }
-
     public ObservableField<String> getDestAmount() {
         return destAmount;
-    }
-
-    public void setDestAmount(ObservableField<String> destAmount) {
-        this.destAmount = destAmount;
     }
 
     public MutableLiveData<Boolean> getFetchProgressState() {
         return fetchProgressState;
     }
 
-    public void setFetchProgressState(MutableLiveData<Boolean> fetchProgressState) {
-        this.fetchProgressState = fetchProgressState;
-    }
-
     public MutableLiveData<Boolean> getSendProgressState() {
         return sendProgressState;
-    }
-
-    public void setSendProgressState(MutableLiveData<Boolean> sendProgressState) {
-        this.sendProgressState = sendProgressState;
     }
 
     public MutableLiveData<ArrayList<KuknosBalance.Balance>> getKuknosOriginWalletsM() {
         return kuknosOriginWalletsM;
     }
 
-    public void setKuknosOriginWalletsM(MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosOriginWalletsM) {
-        this.kuknosOriginWalletsM = kuknosOriginWalletsM;
-    }
-
     public MutableLiveData<ArrayList<KuknosBalance.Balance>> getKuknosDestinationWalletsM() {
         return kuknosDestinationWalletsM;
-    }
-
-    public void setKuknosDestinationWalletsM(MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosDestinationWalletsM) {
-        this.kuknosDestinationWalletsM = kuknosDestinationWalletsM;
     }
 
     public void setDestPosition(int destPosition) {

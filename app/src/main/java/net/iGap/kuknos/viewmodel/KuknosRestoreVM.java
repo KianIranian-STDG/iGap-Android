@@ -132,10 +132,6 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         return pinCheck;
     }
 
-    public void setPinCheck(MutableLiveData<Boolean> pinCheck) {
-        this.pinCheck = pinCheck;
-    }
-
     public void setToken(String token) {
     }
 
@@ -159,7 +155,4 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         return kuknosSignupM;
     }
 
-    public void setKuknosSignupM(KuknosSignupM kuknosSignupM) {
-        this.kuknosSignupM = kuknosSignupM;
-    }
 }

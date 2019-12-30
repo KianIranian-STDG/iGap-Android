@@ -136,24 +136,12 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
         this.PIN4 = PIN4;
     }
 
-    public MutableLiveData<KuknosPassM> getKuknosPassM() {
-        return kuknosPassM;
-    }
-
-    public void setKuknosPassM(MutableLiveData<KuknosPassM> kuknosPassM) {
-        this.kuknosPassM = kuknosPassM;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
 
     public void setError(MutableLiveData<ErrorM> error) {
         this.error = error;
-    }
-
-    public boolean isCompletePin() {
-        return completePin;
     }
 
     public void setCompletePin(boolean completePin) {
@@ -195,7 +183,4 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
         return kuknosSignupM;
     }
 
-    public void setKuknosSignupM(KuknosSignupM kuknosSignupM) {
-        this.kuknosSignupM = kuknosSignupM;
-    }
 }

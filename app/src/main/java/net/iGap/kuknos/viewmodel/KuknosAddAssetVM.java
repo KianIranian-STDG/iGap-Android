@@ -1,11 +1,8 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -16,8 +13,6 @@ import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
-
-import org.stellar.sdk.responses.SubmitTransactionResponse;
 
 public class KuknosAddAssetVM extends BaseAPIViewModel {
 
@@ -105,16 +100,8 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         return assetPageMutableLiveData;
     }
 
-    public void setAssetPageMutableLiveData(MutableLiveData<KuknosAsset> assetPageMutableLiveData) {
-        this.assetPageMutableLiveData = assetPageMutableLiveData;
-    }
-
     public MutableLiveData<KuknosAsset> getAdvAssetPageMutableLiveData() {
         return advAssetPageMutableLiveData;
-    }
-
-    public void setAdvAssetPageMutableLiveData(MutableLiveData<KuknosAsset> advAssetPageMutableLiveData) {
-        this.advAssetPageMutableLiveData = advAssetPageMutableLiveData;
     }
 
     public MutableLiveData<ErrorM> getError() {
@@ -137,23 +124,12 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         return openAddList;
     }
 
-    public void setOpenAddList(MutableLiveData<Integer> openAddList) {
-        this.openAddList = openAddList;
-    }
-
     public MutableLiveData<KuknosBalance> getAccountPageMutableLiveData() {
         return accountPageMutableLiveData;
-    }
-
-    public void setAccountPageMutableLiveData(MutableLiveData<KuknosBalance> accountPageMutableLiveData) {
-        this.accountPageMutableLiveData = accountPageMutableLiveData;
     }
 
     public MutableLiveData<Boolean> getProgressStateAdv() {
         return progressStateAdv;
     }
 
-    public void setProgressStateAdv(MutableLiveData<Boolean> progressStateAdv) {
-        this.progressStateAdv = progressStateAdv;
-    }
 }

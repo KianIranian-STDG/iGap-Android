@@ -36,16 +36,13 @@ public class KuknosViewRecoveryEPVM extends ViewModel {
         progressState.setValue(true);
         // TODO: send data to server
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progressState.setValue(false);
+        handler.postDelayed(() -> {
+            progressState.setValue(false);
 
-                //success
-                nextPage.setValue(true);
-                //error
-                //error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
-            }
+            //success
+            nextPage.setValue(true);
+            //error
+            //error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
         }, 1000);
     }
 
