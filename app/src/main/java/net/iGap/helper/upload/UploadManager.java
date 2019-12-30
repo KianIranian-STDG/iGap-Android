@@ -110,11 +110,18 @@ public class UploadManager {
                 public void onCompressFinish(String id, boolean compress) {
 
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
-                    if (compressFile.exists()) {
+                    if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {
                         compressFile.renameTo(CompletedCompressFile);
                         EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
 
                         uploadMessageAndSend(roomType, message, ignoreCompress);
+                    } else {
+                        if (compressFile.exists()) {
+                            compressFile.delete();
+                        }
+
+                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+                        uploadMessageAndSend(roomType, message, true);
                     }
                 }
             });
