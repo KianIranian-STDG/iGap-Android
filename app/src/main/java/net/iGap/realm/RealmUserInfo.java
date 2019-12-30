@@ -44,6 +44,16 @@ public class RealmUserInfo extends RealmObject {
         return realm.where(RealmUserInfo.class).findFirst();
     }
 
+    public static long queryWalletAmount() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo user = realm.where(RealmUserInfo.class).findFirst();
+            if (user != null) {
+                return user.getWalletAmount();
+            }
+            return 0L;
+        });
+    }
+
     public static RealmUserInfo putOrUpdate(Realm realm, long userId, String username, String phoneNumber, String token, String authorHash) {
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         if (userInfo == null) {

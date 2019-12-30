@@ -209,7 +209,6 @@ public class AccountManager {
         G.serverHashContact = null;
         G.jwt = null;
         G.selectedCard = null;
-        G.cardamount = 0;
         G.pullRequestQueueRunned = new AtomicBoolean(false);
     }
 

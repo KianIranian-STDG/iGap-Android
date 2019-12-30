@@ -16,12 +16,13 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.webservice.APIService;
 import net.iGap.webservice.ApiUtils;
 import net.iGap.webservice.Post;
@@ -92,7 +93,7 @@ public class WalletPasswordFragment extends Fragment {
         avatarHandler.getAvatar(new ParamWithAvatarType(view.findViewById(R.id.iv_moneyAction_userAvatar), peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
 
         if (G.selectedCard != null) {
-            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
+            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), RealmUserInfo.queryWalletAmount()));
         } else {
             creditTv.setVisibility(View.GONE);
         }
@@ -140,7 +141,14 @@ public class WalletPasswordFragment extends Fragment {
                         RaadApp.cards = null;
                         dialog.dismiss();
                         sendPost(response.body().callbackUrl, paymentAuth.token);
-                        G.cardamount -= response.body().amount;
+                        new Thread(() -> {
+                            DbManager.getInstance().doRealmTransaction(realm -> {
+                                RealmUserInfo user = realm.where(RealmUserInfo.class).findFirst();
+                                if (user != null) {
+                                    user.setWalletAmount(user.getWalletAmount() - response.body().amount);
+                                }
+                            });
+                        }).start();
                     }, "");
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                     cancelBtn.performClick();

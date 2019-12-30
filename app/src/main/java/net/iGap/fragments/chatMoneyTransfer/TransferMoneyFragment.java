@@ -23,12 +23,12 @@ import net.iGap.R;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWalletPaymentInit;
 
 import org.paygear.model.Card;
@@ -92,7 +92,7 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
 
 
         if (G.selectedCard != null) {
-            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
+            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), RealmUserInfo.queryWalletAmount()));
         } else {
             creditTv.setVisibility(View.GONE);
         }

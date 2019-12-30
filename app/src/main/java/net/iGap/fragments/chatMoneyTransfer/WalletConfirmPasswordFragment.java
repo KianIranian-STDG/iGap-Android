@@ -16,10 +16,10 @@ import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.realm.RealmUserInfo;
 
 import org.jetbrains.annotations.NotNull;
 import org.paygear.RaadApp;
@@ -77,7 +77,7 @@ public class WalletConfirmPasswordFragment extends Fragment {
         avatarHandler.getAvatar(new ParamWithAvatarType(view.findViewById(R.id.iv_moneyAction_userAvatar), peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
 
         if (G.selectedCard != null) {
-            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
+            creditTv.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), RealmUserInfo.queryWalletAmount()));
         } else {
             creditTv.setVisibility(View.GONE);
         }

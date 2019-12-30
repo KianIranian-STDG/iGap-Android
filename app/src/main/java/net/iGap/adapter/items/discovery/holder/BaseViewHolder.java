@@ -65,6 +65,7 @@ import net.iGap.news.view.NewsMainFrag;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
+import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +76,6 @@ import java.io.IOException;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
-import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -129,7 +129,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();
                 break;
             case IVANDQR:
-                scanBarCode(activity);
+                UserScoreViewModel.scanBarCode(activity);
                 break;
             case IVANDLIST:
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentIVandActivities.newInstance()).setReplace(false).load();
