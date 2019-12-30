@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.emojiKeyboard.View.CubicBezierInterpolator;
@@ -30,10 +31,13 @@ import net.iGap.emojiKeyboard.sticker.StickerGroupAdapter;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.realm.RealmStickersDetails;
 import net.iGap.repository.sticker.StickerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmResults;
 
 @SuppressLint("ViewConstructor")
 public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeListener, StickerRepository.Listener {
@@ -157,6 +161,15 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             });
 
+            RealmResults<RealmStickersDetails> realmStickersDetails = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmStickersDetails.class).sort("recentTime").findAll();
+            });
+
+            if (realmStickersDetails != null)
+                for (int i = 0; i < realmStickersDetails.size(); i++) {
+                    Log.i(TAG, "EmojiView: " + realmStickersDetails.get(i).getSt_id());
+                }
+
             stickerTabView.addIconTab(stickerTabDrawable[0]);
 
             addStickerIv = new AppCompatImageView(getContext());
@@ -229,6 +242,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private void checkStickersTabY(View list, int dy) {
         if (list == null) {
             stickerTabView.setTranslationY(stickersTabViewY = 0);
+            addStickerIv.setTranslationY(stickersTabViewY = 0);
             return;
         }
         if (list.getVisibility() != VISIBLE) {
@@ -248,6 +262,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickersTabViewY = -LayoutCreator.dp(48 * 6);
         }
         stickerTabView.setTranslationY(Math.max(-LayoutCreator.dp(48), stickersTabViewY));
+        addStickerIv.setTranslationY(Math.max(-LayoutCreator.dp(48), stickersTabViewY));
     }
 
     public void setContentView(int contentView) {

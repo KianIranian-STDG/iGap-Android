@@ -36,7 +36,6 @@ public class RealmStickers extends RealmObject {
     private long createdBy;
     private boolean isFavorite;
     private RealmList<RealmStickersDetails> realmStickersDetails;
-    private long recentTime;
 
     public static RealmStickers put(Realm realm, long createdAt, String st_id, long refId, String name, String avatarToken, long avatarSize, String avatarName, long price, boolean isVip, int sort, boolean approved, long createdBy, List<StructItemSticker> stickers, boolean isFavorite) {
 
@@ -252,17 +251,6 @@ public class RealmStickers extends RealmObject {
 
     public void setRealmStickersDetails(RealmList<RealmStickersDetails> realmStickersDetails) {
         this.realmStickersDetails = realmStickersDetails;
-    }
-
-    public void setRecent(boolean recent) {
-        if (recent)
-            setRecentTime(System.currentTimeMillis());
-        else
-            setRecentTime(0);
-    }
-
-    private void setRecentTime(long recentTime) {
-        this.recentTime = recentTime;
     }
 
     public boolean isFavorite() {

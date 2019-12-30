@@ -17,7 +17,7 @@ public class RealmStickersDetails extends RealmObject {
     private long fileSize;
     private int sort;
     private String groupId;
-
+    private long recentTime;
 
     public static RealmStickersDetails put(Realm realm, String st_id, long refId, String name, String avatarToken, String uri, long avatarSize, String avatarName, int sort, String groupId) {
 
@@ -109,5 +109,16 @@ public class RealmStickersDetails extends RealmObject {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public void setRecent(boolean recent) {
+        if (recent)
+            setRecentTime(System.currentTimeMillis());
+        else
+            setRecentTime(0);
+    }
+
+    private void setRecentTime(long recentTime) {
+        this.recentTime = recentTime;
     }
 }

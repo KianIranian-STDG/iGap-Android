@@ -296,6 +296,8 @@ import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmRoomMessageLocation;
 import net.iGap.realm.RealmStickers;
+import net.iGap.realm.RealmStickersDetails;
+import net.iGap.realm.RealmStickersDetailsFields;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelEditMessage;
@@ -6193,6 +6195,15 @@ public class FragmentChat extends BaseFragment
         new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
         })).start();
+
+        DbManager.getInstance().doRealmTransaction(realm -> {
+
+            RealmStickersDetails stickersDetails = realm.where(RealmStickersDetails.class).equalTo(RealmStickersDetailsFields.ST_ID, structIGSticker.getId()).findFirst();
+            if (stickersDetails != null && stickersDetails.isValid()) {
+                stickersDetails.setRecent(true);
+            }
+
+        });
 
 
         StructMessageInfo sm = new StructMessageInfo(roomMessage);
