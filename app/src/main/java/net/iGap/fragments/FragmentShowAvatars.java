@@ -19,19 +19,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -190,6 +189,7 @@ public class FragmentShowAvatars extends BaseFragment {
             if (getContext() == null) return;
 
             List<String> items = new ArrayList<>();
+            items.add(getString(R.string.save_to_gallery));
 
             switch (from) {
                 case setting:
@@ -198,41 +198,31 @@ public class FragmentShowAvatars extends BaseFragment {
                 case group:
                     if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
                         items.add(getString(R.string.array_Delete_photo));
-                    } else {
-                        items.add(getString(R.string.save_to_gallery));
                     }
                     break;
                 case channel:
                     if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
                         items.add(getString(R.string.array_Delete_photo));
-                    } else {
-                        items.add(getString(R.string.save_to_gallery));
                     }
                     break;
-                case chat:
-                    items.add(getString(R.string.save_to_gallery));
-                    break;
             }
-            new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
-                @Override
-                public void onClick(int position) {
-                    if (items.get(position).equals(getString(R.string.save_to_gallery))) {
-                        saveToGallery();
-                    } else if (items.get(position).equals(getString(array_Delete_photo))) {
-                        switch (from) {
-                            case setting:
-                                deletePhotoSetting();
-                                break;
-                            case group:
-                                deletePhotoGroup();
-                                break;
-                            case channel:
-                                deletePhotoChannel();
-                                break;
-                            case chat:
-                                deletePhotoChat();
-                                break;
-                        }
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                if (items.get(position).equals(getString(R.string.save_to_gallery))) {
+                    saveToGallery();
+                } else if (items.get(position).equals(getString(array_Delete_photo))) {
+                    switch (from) {
+                        case setting:
+                            deletePhotoSetting();
+                            break;
+                        case group:
+                            deletePhotoGroup();
+                            break;
+                        case channel:
+                            deletePhotoChannel();
+                            break;
+                        case chat:
+                            deletePhotoChat();
+                            break;
                     }
                 }
             }).show();
@@ -416,6 +406,9 @@ public class FragmentShowAvatars extends BaseFragment {
                 if (file.exists()) {
                     HelperSaveFile.savePicToGallery(media, true);
                 }
+            } else {
+                if (getContext() != null)
+                    Toast.makeText(getContext(), R.string.file_not_download_yet, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -661,7 +654,7 @@ public class FragmentShowAvatars extends BaseFragment {
         }
 
         private void loadImage(PhotoView img, String path) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(path) , img);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), img);
         }
 
         private void startDownload(int position, final MessageProgress progress, final PhotoView zoomableImageView) {
