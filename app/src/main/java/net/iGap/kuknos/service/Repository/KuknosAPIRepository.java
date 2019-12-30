@@ -25,83 +25,113 @@ import org.stellar.sdk.responses.operations.OperationResponse;
 public class KuknosAPIRepository {
     private KuknosApi apiService = ApiServiceProvider.getKuknosClient();
 
-    public void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
+    void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
         new ApiInitializer<KuknosResponseModel>()
                 .initAPI(apiService.createAccount(info.getName(), "IGap", info.getPhoneNum(),
                         info.getNID(), info.getEmail(), info.getKeyString()),
                         handShakeCallback, apiResponse);
     }
 
-    public void getUserStatus(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfo>> apiResponse) {
+    void getUserStatus(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfo>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosUserInfo>>().initAPI(apiService.accountStatus(userID), handShakeCallback, apiResponse);
     }
 
-    public void getUserAccount(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBalance>> apiResponse) {
+    void getUserAccount(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBalance>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosBalance>>().initAPI(apiService.getUserAsset(userID), handShakeCallback, apiResponse);
     }
 
-    public void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
+    void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
         KuknosAPIAsync<AccountResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.USER_ACCOUNT);
         temp.execute(userID);
     }
 
-    public void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
-        new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+    void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, new KuknosSDKRepo.callBack() {
+            @Override
+            public void getResponseXDR(String XDR) {
+                new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+                        .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse);
+            }
+        }).execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
+        /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.payment(new KuknosSDKRepo().paymentToOtherXDR(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo()))
-                        , handShakeCallback, apiResponse);
+                        , handShakeCallback, apiResponse);*/
     }
 
-    public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
+    void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
         temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
     }
 
-    public void getUserHistory(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
+    void getUserHistory(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosOperationResponse>>().initAPI(apiService.getWalletHistory(userID, 100, "desc"), handShakeCallback, apiResponse);
     }
 
-    public void getUserHistory(String userID, ApiResponse<Page<OperationResponse>> apiResponse) {
+    void getUserHistory(String userID, ApiResponse<Page<OperationResponse>> apiResponse) {
         KuknosAPIAsync<Page<OperationResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENTS_ACCOUNT);
         temp.execute(userID);
     }
 
-    public void getAssets(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
+    void getAssets(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosAsset>>().initAPI(apiService.getAllAssets(), handShakeCallback, apiResponse);
     }
 
-    public void getSpecificAssets(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
+    void getSpecificAssets(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosAsset>>().initAPI(apiService.getAllAssets(assetCode), handShakeCallback, apiResponse);
     }
 
-    public void getAssets(ApiResponse<Page<AssetResponse>> apiResponse) {
+    void getAssets(ApiResponse<Page<AssetResponse>> apiResponse) {
         KuknosAPIAsync<Page<AssetResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.ASSETS);
         temp.execute();
     }
 
-    public void changeTrust(String accountSeed, String code, String issuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
-        new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
-                .initAPI(apiService.changeTrust(new KuknosSDKRepo().TrustlineXDR(accountSeed, code, issuer))
-                        , handShakeCallback, apiResponse);
+    void changeTrust(String accountSeed, String code, String issuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+        new KuknosSDKRepo(KuknosSDKRepo.API.CHANGE_TRUST, new KuknosSDKRepo.callBack() {
+            @Override
+            public void getResponseXDR(String XDR) {
+                new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+                        .initAPI(apiService.changeTrust(XDR), handShakeCallback, apiResponse);
+            }
+        }).execute(accountSeed, code, issuer);
+        /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+                .initAPI(apiService.changeTrust(new KuknosSDKRepo().trustlineXDR(accountSeed, code, issuer))
+                        , handShakeCallback, apiResponse);*/
     }
 
-    public void changeTrust(String accountSeed, String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
+    void changeTrust(String accountSeed, String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.CHANGE_TRUST);
         temp.execute(accountSeed, code, issuer);
     }
 
-    public void getOffersList(String userID, ApiResponse<Page<OfferResponse>> apiResponse) {
+    void getOffersList(String userID, ApiResponse<Page<OfferResponse>> apiResponse) {
         KuknosAPIAsync<Page<OfferResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.OFFERS_LIST);
         temp.execute(userID);
     }
 
-    public void getTradesList(String userID, ApiResponse<Page<OfferResponse>> apiResponse) {
+    void getTradesList(String userID, ApiResponse<Page<OfferResponse>> apiResponse) {
         KuknosAPIAsync<Page<OfferResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.TRADES_LIST);
         temp.execute(userID);
     }
 
-    public void manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
+    void manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
                             String counterCode, String counterIssuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.MANAGE_OFFER);
         temp.execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer);
+    }
+
+    void manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
+                            String counterCode, String counterIssuer, String amount, String price,
+                            HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
+        new KuknosSDKRepo(KuknosSDKRepo.API.MANAGE_OFFER, new KuknosSDKRepo.callBack() {
+            @Override
+            public void getResponseXDR(String XDR) {
+                new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
+                        .initAPI(apiService.buyOffer(XDR), handShakeCallback, apiResponse);
+            }
+        }).execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer, amount, price);
+        /*new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
+                .initAPI(apiService.buyOffer(new KuknosSDKRepo().manageOffer(accountSeed, sourceCode, sourceIssuer,
+                        counterCode, counterIssuer, amount, price))
+                        , handShakeCallback, apiResponse);*/
     }
 }

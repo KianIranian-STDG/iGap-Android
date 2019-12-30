@@ -75,6 +75,7 @@ public class KuknosTradeFrag extends BaseFragment {
         destSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                kuknosTradeVM.setDestPosition(position);
             }
 
             @Override
@@ -94,15 +95,13 @@ public class KuknosTradeFrag extends BaseFragment {
     private void onDataChanged() {
         kuknosTradeVM.getKuknosOriginWalletsM().observe(getViewLifecycleOwner(), balances -> {
             if (balances.size() != 0) {
-                WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(),
-                        balances);
+                WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(), balances);
                 originSpinner.setAdapter(adapter);
             }
         });
         kuknosTradeVM.getKuknosDestinationWalletsM().observe(getViewLifecycleOwner(), balances -> {
             if (balances.size() != 0) {
-                WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(),
-                        balances);
+                WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(), balances);
                 destSpinner.setAdapter(adapter);
             }
         });
@@ -122,6 +121,9 @@ public class KuknosTradeFrag extends BaseFragment {
             } else if (errorM.getMessage().equals("2")) {
                 showDialog(errorM.getState(), errorM.getResID());
             }
+            else {
+                showDialog(errorM.getMessage());
+            }
         });
     }
 
@@ -135,6 +137,15 @@ public class KuknosTradeFrag extends BaseFragment {
         defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
             if (!state)
                 popBackStackFragment();
+        });
+        defaultRoundDialog.show();
+    }
+
+    private void showDialog(String messageResource) {
+        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_changePIN_failTitle));
+        defaultRoundDialog.setMessage(messageResource);
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
         });
         defaultRoundDialog.show();
     }

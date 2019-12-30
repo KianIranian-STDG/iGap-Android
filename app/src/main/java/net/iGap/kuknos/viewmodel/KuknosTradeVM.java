@@ -1,38 +1,43 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.os.Handler;
+import android.util.Log;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
+import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
-import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.SubmitTransactionResponse;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
-public class KuknosTradeVM extends ViewModel {
+public class KuknosTradeVM extends BaseAPIViewModel {
 
-    private MutableLiveData<ArrayList<AccountResponse.Balance>> kuknosOriginWalletsM;
-    private MutableLiveData<ArrayList<AccountResponse.Balance>> kuknosDestinationWalletsM;
+    private MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosOriginWalletsM;
+    private MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosDestinationWalletsM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> fetchProgressState;
     private MutableLiveData<Boolean> sendProgressState;
     private PanelRepo panelRepo = new PanelRepo();
+    private TradeRepo tradeRepo = new TradeRepo();
 
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
     private ObservableField<String> originAmount = new ObservableField<>();
     private ObservableField<String> destAmount = new ObservableField<>();
-    private int position = 0;
+    private int originPosition = 0;
+    private int destPosition = 0;
 
     public KuknosTradeVM() {
         //TODO clear Hard Code
@@ -49,31 +54,30 @@ public class KuknosTradeVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+        fetchProgressState.setValue(true);
+        panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
-            public void onResponse(AccountResponse accountResponse) {
-                ArrayList<AccountResponse.Balance> temp = new ArrayList<>(Arrays.asList(accountResponse.getBalances()));
+            public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
+                ArrayList<KuknosBalance.Balance> temp = new ArrayList<>();
+                temp.addAll(data.getData().getAssets());
                 kuknosOriginWalletsM.setValue(temp);
                 originSpinnerSelect(0);
+                fetchProgressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String errorM) {
+            public void onError(ErrorModel errorM) {
                 balance.set("0.0");
                 currency.set("currency");
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                fetchProgressState.setValue(visibility);
+                fetchProgressState.setValue(false);
             }
         });
     }
 
     public void originSpinnerSelect(int position) {
-        this.position = position;
-        AccountResponse.Balance temp = Objects.requireNonNull(kuknosOriginWalletsM.getValue()).get(position);
+        this.originPosition = position;
+        KuknosBalance.Balance temp = Objects.requireNonNull(kuknosOriginWalletsM.getValue()).get(position);
         DecimalFormat df = new DecimalFormat("#,##0.00");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance())))
@@ -83,9 +87,10 @@ public class KuknosTradeVM extends ViewModel {
     }
 
     private void destSpinnerSelect(int position) {
-        ArrayList<AccountResponse.Balance> Ttemp = new ArrayList<>(Objects.requireNonNull(kuknosOriginWalletsM.getValue()));
-        Ttemp.remove(position);
-        kuknosDestinationWalletsM.setValue(Ttemp);
+        this.destPosition=0;
+        ArrayList<KuknosBalance.Balance> Temp = new ArrayList<>(Objects.requireNonNull(kuknosOriginWalletsM.getValue()));
+        Temp.remove(position);
+        kuknosDestinationWalletsM.setValue(Temp);
     }
 
     public void exchangeAction() {
@@ -96,15 +101,27 @@ public class KuknosTradeVM extends ViewModel {
 
     private void sendDataServer() {
         sendProgressState.setValue(true);
-        // TODO Hard code in here baby
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            sendProgressState.setValue(false);
-            // success
-            error.setValue(new ErrorM(false, "success submission", "2", R.string.kuknos_trade_success));
-            // fail
-            //error.setValue(new ErrorM(true, "fail during submission", "2", R.string.kuknos_trade_fail));
-        }, 1000);
+        double price = Double.valueOf(originAmount.get())/Double.valueOf(destAmount.get());
+        Log.d("amini", "sendDataServer: " + price + " ");
+        tradeRepo.manangeOffer(
+                kuknosOriginWalletsM.getValue().get(originPosition).getAsset().getType().equals("native") ? "PMN" : kuknosOriginWalletsM.getValue().get(originPosition).getAssetCode(),
+                kuknosOriginWalletsM.getValue().get(originPosition).getAssetIssuer(),
+                kuknosDestinationWalletsM.getValue().get(destPosition).getAsset().getType().equals("native") ? "PMN" : kuknosDestinationWalletsM.getValue().get(destPosition).getAssetCode(),
+                kuknosDestinationWalletsM.getValue().get(destPosition).getAssetIssuer(),
+                destAmount.get(), Double.toString(price), this,
+                new ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<SubmitTransactionResponse> data) {
+                error.setValue(new ErrorM(false, "success submission", "2", R.string.kuknos_trade_success));
+                sendProgressState.setValue(false);
+            }
+
+            @Override
+            public void onError(ErrorModel errorM) {
+                error.setValue(new ErrorM(true, "fail during submission", errorM.getName(), R.string.kuknos_trade_fail));
+                sendProgressState.setValue(false);
+            }
+        });
     }
 
     private boolean checkEntry() {
@@ -165,14 +182,6 @@ public class KuknosTradeVM extends ViewModel {
         this.currency = currency;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public ObservableField<String> getOriginAmount() {
         return originAmount;
     }
@@ -205,19 +214,23 @@ public class KuknosTradeVM extends ViewModel {
         this.sendProgressState = sendProgressState;
     }
 
-    public MutableLiveData<ArrayList<AccountResponse.Balance>> getKuknosOriginWalletsM() {
+    public MutableLiveData<ArrayList<KuknosBalance.Balance>> getKuknosOriginWalletsM() {
         return kuknosOriginWalletsM;
     }
 
-    public void setKuknosOriginWalletsM(MutableLiveData<ArrayList<AccountResponse.Balance>> kuknosOriginWalletsM) {
+    public void setKuknosOriginWalletsM(MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosOriginWalletsM) {
         this.kuknosOriginWalletsM = kuknosOriginWalletsM;
     }
 
-    public MutableLiveData<ArrayList<AccountResponse.Balance>> getKuknosDestinationWalletsM() {
+    public MutableLiveData<ArrayList<KuknosBalance.Balance>> getKuknosDestinationWalletsM() {
         return kuknosDestinationWalletsM;
     }
 
-    public void setKuknosDestinationWalletsM(MutableLiveData<ArrayList<AccountResponse.Balance>> kuknosDestinationWalletsM) {
+    public void setKuknosDestinationWalletsM(MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosDestinationWalletsM) {
         this.kuknosDestinationWalletsM = kuknosDestinationWalletsM;
+    }
+
+    public void setDestPosition(int destPosition) {
+        this.destPosition = destPosition;
     }
 }

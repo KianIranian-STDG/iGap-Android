@@ -8,18 +8,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.iGap.R;
-
-import org.stellar.sdk.responses.AccountResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WalletHistorySpinnerAdapter extends BaseAdapter {
 
-    ArrayList<AccountResponse.Balance> wallets;
+    ArrayList<KuknosBalance.Balance> wallets;
     Context context;
 
-    public WalletHistorySpinnerAdapter(Context context, List<AccountResponse.Balance> objects) {
+    public WalletHistorySpinnerAdapter(Context context, List<KuknosBalance.Balance> objects) {
         if (wallets == null)
             wallets = new ArrayList<>();
         wallets.addAll(objects);

@@ -10,6 +10,8 @@ import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 
+import org.stellar.sdk.responses.SubmitTransactionResponse;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -111,6 +113,15 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("account-status")
     Call<KuknosResponseModel<KuknosUserInfo>> accountStatus(@Field("public_key") String publicKey);
+
+    /**
+     * this api creates a buy offer.
+     * @param XDR
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("buy-offer")
+    Call<KuknosResponseModel<SubmitTransactionResponse>> buyOffer(@Field("xdr") String XDR);
 
     @FormUrlEncoded
     @POST("activate-account")
