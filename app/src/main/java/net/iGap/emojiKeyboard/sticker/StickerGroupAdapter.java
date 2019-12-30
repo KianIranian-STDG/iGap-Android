@@ -13,12 +13,16 @@ import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class StickerGroupAdapter extends RecyclerView.Adapter<StickerGroupAdapter.StickerGroupViewHolder> implements StickerAdapter.AddStickerDialogListener {
 
     private List<StructIGStickerGroup> groups = new ArrayList<>();
     private StickerAdapter.AddStickerDialogListener listener;
+    private HashMap<Object, Integer> groupPositionHashMap = new HashMap<>();
+    private int totalItems;
+
 
     public void setListener(StickerAdapter.AddStickerDialogListener listener) {
         this.listener = listener;
@@ -26,12 +30,21 @@ public class StickerGroupAdapter extends RecyclerView.Adapter<StickerGroupAdapte
 
     public void setGroups(List<StructIGStickerGroup> groups) {
         this.groups = groups;
-        notifyDataSetChanged();
+        notifyDataChanged();
+    }
+
+
+    public int getPositionForGroup(Object pack) {
+        Integer pos = groupPositionHashMap.get(pack);
+        if (pos == null) {
+            return -1;
+        }
+        return pos;
     }
 
     public void addGroups(StructIGStickerGroup group) {
         this.groups.add(group);
-        notifyDataSetChanged();
+        notifyDataChanged();
     }
 
 
@@ -43,6 +56,28 @@ public class StickerGroupAdapter extends RecyclerView.Adapter<StickerGroupAdapte
         stickerGridView.setListener(this);
         return new StickerGroupViewHolder(stickerGridView);
     }
+
+    public List<StructIGStickerGroup> getGroups() {
+        return groups;
+    }
+
+    public void notifyDataChanged() {
+        groupPositionHashMap.clear();
+
+        totalItems = 0;
+
+        for (int a = -1; a < groups.size(); a++) {
+            if (a == -1) {
+                groupPositionHashMap.put("recent", totalItems);
+            } else {
+                groupPositionHashMap.put(groups.get(a), totalItems);
+            }
+            totalItems++;
+        }
+
+        super.notifyDataSetChanged();
+    }
+
 
     @Override
     public void onBindViewHolder(@NonNull StickerGroupViewHolder holder, int position) {

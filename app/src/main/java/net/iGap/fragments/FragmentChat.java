@@ -3333,15 +3333,21 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onBackSpace() {
                     Toast.makeText(getContext(), "back press clicked", Toast.LENGTH_SHORT).show();
-                    if (getActivity() != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
-                    }
+
                 }
 
                 @Override
                 public void onSendStickerAsMessage(StructIGSticker structIGSticker) {
                     sendStickerAsMessage(structIGSticker);
                 }
+
+                @Override
+                public void onAddStickerClicked() {
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                    }
+                }
+
             }, KeyboardView.MODE_KEYBOARD);
 
             keyboardView.setVisibility(View.GONE);
@@ -3379,7 +3385,7 @@ public class FragmentChat extends BaseFragment
             layoutParams.height = currentHeight;
             keyboardView.setLayoutParams(layoutParams);
 
-            keyboardView.setCurrentMode(KeyboardView.MODE_EMOJI, EmojiView.EMOJI);
+            keyboardView.setCurrentMode(KeyboardView.MODE_EMOJI, EmojiView.STICKER);
 
             keyboardView.setVisibility(View.VISIBLE);
 

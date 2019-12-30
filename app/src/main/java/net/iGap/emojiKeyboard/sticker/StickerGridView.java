@@ -1,7 +1,6 @@
 package net.iGap.emojiKeyboard.sticker;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -33,7 +32,6 @@ public class StickerGridView extends FrameLayout implements StickerAdapter.AddSt
 
     public StickerGridView(@NonNull Context context) {
         super(context);
-        setBackgroundColor(Color.parseColor("#F5F5F5"));
         boolean isRtl = G.isAppRtl;
 
         stickerNameTv = new AppCompatTextView(getContext());

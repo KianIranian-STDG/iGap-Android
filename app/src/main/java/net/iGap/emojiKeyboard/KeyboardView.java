@@ -61,11 +61,6 @@ public class KeyboardView extends FrameLayout {
         emojiView = new EmojiView(getContext(), true, true);
         emojiView.setListener(new EmojiView.Listener() {
             @Override
-            public void onTabOpened(int type) {
-
-            }
-
-            @Override
             public void onBackSpace() {
                 listener.onBackSpace();
             }
@@ -78,6 +73,11 @@ public class KeyboardView extends FrameLayout {
             @Override
             public void onStickerSettingClick() {
                 listener.onStickerSettingClicked();
+            }
+
+            @Override
+            public void onAddStickerClicked() {
+                listener.onAddStickerClicked();
             }
 
         });
@@ -99,6 +99,9 @@ public class KeyboardView extends FrameLayout {
         void onBackSpace();
 
         void onSendStickerAsMessage(StructIGSticker structIGSticker);
+
+        void onAddStickerClicked();
+
     }
 
     public void setKeyboardHeight(int keyboardHeightLand, int keyboardHeight) {
