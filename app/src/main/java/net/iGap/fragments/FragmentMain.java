@@ -388,10 +388,14 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(new String[]{RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList, this::disableMultiSelect);
-            getChatLists();
-
         } else {
             pbLoading.setVisibility(View.GONE);
+        }
+
+        if (!ClientGetRoomListResponse.roomListFetched) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
         }
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -500,15 +504,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
     //***************************************************************************************************************************
-
-
-    private void getChatLists() {
-        if (!ClientGetRoomListResponse.roomListFetched) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
-    }
 
     private void deleteChat(Room item, boolean exit) {
 
