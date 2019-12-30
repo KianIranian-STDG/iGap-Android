@@ -39,6 +39,9 @@ public class UserIVandGetScoreResponse extends MessageHandler {
                 user.setIvandScore(builder.getScore());
             }
         });
+        if (identity instanceof OnUserIVandGetScore) {
+            ((OnUserIVandGetScore) identity).getScore(builder);
+        }
     }
 
     @Override

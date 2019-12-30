@@ -7,12 +7,16 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoUserIVandGetScore;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 public class UserScoreViewModel extends ViewModel {
 
@@ -24,8 +28,20 @@ public class UserScoreViewModel extends ViewModel {
     private MutableLiveData<String> userRank = new MutableLiveData<>();
     private MutableLiveData<String> totalRank = new MutableLiveData<>();
 
+    private RealmUserInfo userInfo;
+
     public UserScoreViewModel() {
         //Todo:move to repository
+        userInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
+
+        if (userInfo != null){
+            userInfo.addChangeListener(realmModel -> {
+                userInfo = (RealmUserInfo) realmModel;
+
+            });
+        }
         getUserIVandScore();
     }
 
@@ -105,16 +121,14 @@ public class UserScoreViewModel extends ViewModel {
         userRankPointer.setValue(0);
 
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
-
-            // Todo Ehsan Fix it
-//            @Override
-//            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-//                userRankPointer.postValue((score.getUserRank() * 360) / score.getTotalRank());
-//                userScore.postValue(checkPersianNumber(String.valueOf(score.getScore())));
-//                totalRank.postValue(checkPersianNumber(String.valueOf(score.getTotalRank())));
-//                userRank.postValue(checkPersianNumber(String.valueOf(score.getUserRank())));
-//                ivandScore.postValue(score.getScoresList());
-//            }
+            @Override
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
+                userRankPointer.postValue((score.getUserRank() * 360) / score.getTotalRank());
+                userScore.postValue(checkPersianNumber(String.valueOf(score.getScore())));
+                totalRank.postValue(checkPersianNumber(String.valueOf(score.getTotalRank())));
+                userRank.postValue(checkPersianNumber(String.valueOf(score.getUserRank())));
+                ivandScore.postValue(score.getScoresList());
+            }
 
             @Override
             public void onError(int major, int minor) {

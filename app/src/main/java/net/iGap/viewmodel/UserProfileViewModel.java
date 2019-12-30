@@ -942,10 +942,18 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private void getIVandScore() {
         getIvanScoreTime++;
-        new RequestUserIVandGetScore().userIVandGetScore((major, minor) -> {
-            if (getIvanScoreTime > 3) {
-                if (major == 5 && minor == 1) {
-                    getIVandScore();
+        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
+            @Override
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder ivandGetScore) {
+
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                if (getIvanScoreTime > 3) {
+                    if (major == 5 && minor == 1) {
+                        getIVandScore();
+                    }
                 }
             }
         });
