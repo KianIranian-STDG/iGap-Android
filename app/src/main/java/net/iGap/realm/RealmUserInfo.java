@@ -36,6 +36,9 @@ public class RealmUserInfo extends RealmObject {
     private boolean isWalletRegister;
     private boolean isWalletActive;
     private boolean isMplActive;
+    private long walletAmount;
+    private long ivandScore;
+
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
@@ -388,5 +391,21 @@ public class RealmUserInfo extends RealmObject {
 
     public void setMplActive(boolean mplActive) {
         isMplActive = mplActive;
+    }
+
+    public long getWalletAmount() {
+        return walletAmount;
+    }
+
+    public void setWalletAmount(long walletAmount) {
+        this.walletAmount = walletAmount;
+    }
+
+    public long getIvandScore() {
+        return ivandScore;
+    }
+
+    public void setIvandScore(long ivandScore) {
+        this.ivandScore = ivandScore;
     }
 }

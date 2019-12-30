@@ -711,6 +711,16 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 42) {
+            RealmObjectSchema realmUser = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUser != null) {
+                realmUser.addField("walletAmount", long.class, FieldAttribute.REQUIRED);
+                realmUser.addField("ivandScore", long.class, FieldAttribute.REQUIRED);
+            }
+
+            oldVersion++;
+        }
     }
 
     @Override
