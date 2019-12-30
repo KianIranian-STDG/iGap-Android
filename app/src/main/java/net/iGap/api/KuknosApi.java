@@ -1,8 +1,5 @@
 package net.iGap.api;
 
-import net.iGap.kuknos.service.model.KuknosInfoM;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
-import net.iGap.kuknos.service.model.KuknoscheckUserM;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
@@ -21,6 +18,7 @@ public interface KuknosApi {
 
     /**
      * This api create an account in Parsian network.
+     *
      * @param firstName
      * @param lastName
      * @param phoneNumber
@@ -40,6 +38,7 @@ public interface KuknosApi {
 
     /**
      * This api returns all of user's assets
+     *
      * @param publicKey
      * @return
      */
@@ -49,6 +48,7 @@ public interface KuknosApi {
 
     /**
      * This api returns a user's asset detail
+     *
      * @param publicKey
      * @param assetCode
      * @return
@@ -60,6 +60,7 @@ public interface KuknosApi {
 
     /**
      * This api returns all of assets that are available in the network
+     *
      * @return
      */
     @POST("get-assets")
@@ -67,6 +68,7 @@ public interface KuknosApi {
 
     /**
      * this api returns the detail of a specific asset in the network
+     *
      * @param assetCode
      * @return
      */
@@ -76,6 +78,7 @@ public interface KuknosApi {
 
     /**
      * this api submit the new currency in your account
+     *
      * @param XDR
      * @return
      */
@@ -85,6 +88,7 @@ public interface KuknosApi {
 
     /**
      * this api handles payment operation to others
+     *
      * @param XDR
      * @return
      */
@@ -94,6 +98,7 @@ public interface KuknosApi {
 
     /**
      * this api returns all of history of an account
+     *
      * @param publicKey
      * @param limit
      * @param order
@@ -102,11 +107,12 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("wallet-history")
     Call<KuknosResponseModel<KuknosOperationResponse>> getWalletHistory(@Field("public_key") String publicKey,
-                                                                     @Field("limit") int limit,
-                                                                     @Field("order") String order);
+                                                                        @Field("limit") int limit,
+                                                                        @Field("order") String order);
 
     /**
      * this api returns the user status
+     *
      * @param publicKey
      * @return
      */
@@ -116,6 +122,7 @@ public interface KuknosApi {
 
     /**
      * this api creates a buy offer.
+     *
      * @param XDR
      * @return
      */
@@ -123,7 +130,7 @@ public interface KuknosApi {
     @POST("buy-offer")
     Call<KuknosResponseModel<SubmitTransactionResponse>> buyOffer(@Field("xdr") String XDR);
 
-    @FormUrlEncoded
+    /*@FormUrlEncoded
     @POST("activate-account")
     Call<KuknosInfoM> activateAccount(@Field("initial_balance") int initialBalance,
                                       @Field("receipt_number") String recNumber,
@@ -136,6 +143,6 @@ public interface KuknosApi {
     Call<KuknosSubmitM> chargeWallet(@Field("xdr") String XDR,
                                      @Field("public_key") String publicKey,
                                      @Field("fee") int fee,
-                                     @Field("description") String description);
+                                     @Field("description") String description);*/
 
 }

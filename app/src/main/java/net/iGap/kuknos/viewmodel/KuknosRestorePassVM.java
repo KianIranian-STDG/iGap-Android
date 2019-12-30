@@ -9,14 +9,12 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosPassM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 
 public class KuknosRestorePassVM extends BaseAPIViewModel {
 
-    private MutableLiveData<KuknosPassM> kuknosPassM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Integer> nextPage;
     private MutableLiveData<Boolean> progressState;
@@ -31,7 +29,6 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
     private KuknosSignupM kuknosSignupM;
 
     public KuknosRestorePassVM() {
-        kuknosPassM = new MutableLiveData<>();
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
         nextPage.setValue(0);

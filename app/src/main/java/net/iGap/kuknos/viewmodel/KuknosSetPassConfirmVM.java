@@ -4,16 +4,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosPassM;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
 
 public class KuknosSetPassConfirmVM extends ViewModel {
 
-    private MutableLiveData<KuknosPassM> kuknosPassM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
@@ -27,7 +23,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private UserRepo userRepo = new UserRepo();
 
     public KuknosSetPassConfirmVM() {
-        kuknosPassM = new MutableLiveData<>();
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
         nextPage.setValue(false);

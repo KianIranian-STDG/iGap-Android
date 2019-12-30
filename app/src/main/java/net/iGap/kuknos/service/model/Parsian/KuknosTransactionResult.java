@@ -115,7 +115,7 @@ public class KuknosTransactionResult extends Response {
      * This will be <code>Optional.absent()</code> if transaction has failed.
      */
     public Optional<TransactionResult> getDecodedTransactionResult() throws IOException {
-        if(!this.isSuccess()) {
+        if (!this.isSuccess()) {
             return Optional.absent();
         }
 

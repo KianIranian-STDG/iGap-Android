@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosRestoreM;
 
 public class KuknosShowRecoveryKeySVM extends ViewModel {
 

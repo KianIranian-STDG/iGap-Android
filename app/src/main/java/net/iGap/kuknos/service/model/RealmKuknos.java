@@ -2,7 +2,6 @@ package net.iGap.kuknos.service.model;
 
 import net.iGap.DbManager;
 
-import io.realm.Realm;
 import io.realm.RealmObject;
 
 public class RealmKuknos extends RealmObject {
@@ -56,13 +55,10 @@ public class RealmKuknos extends RealmObject {
 
     public static void updateMnemonic(String kuknosMnemonic) {
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setKuknosMnemonic(kuknosMnemonic);
-                    }
+            realm.executeTransaction(realm1 -> {
+                RealmKuknos realmUserInfo = realm1.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosMnemonic(kuknosMnemonic);
                 }
             });
         });
@@ -70,13 +66,10 @@ public class RealmKuknos extends RealmObject {
 
     public static void updatePIN(String kuknosPin) {
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setKuknosPIN(kuknosPin);
-                    }
+            realm.executeTransaction(realm1 -> {
+                RealmKuknos realmUserInfo = realm1.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosPIN(kuknosPin);
                 }
             });
         });
@@ -84,14 +77,11 @@ public class RealmKuknos extends RealmObject {
 
     public static void updateKey(String kuknosSeed, String publicKey) {
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setKuknosSeedKey(kuknosSeed);
-                        realmUserInfo.setKuknosPublicKey(publicKey);
-                    }
+            realm.executeTransaction(realm1 -> {
+                RealmKuknos realmUserInfo = realm1.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosSeedKey(kuknosSeed);
+                    realmUserInfo.setKuknosPublicKey(publicKey);
                 }
             });
         });
@@ -99,13 +89,10 @@ public class RealmKuknos extends RealmObject {
 
     public static void updateSeedKey(String kuknosSeed) {
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setKuknosSeedKey(kuknosSeed);
-                    }
+            realm.executeTransaction(realm1 -> {
+                RealmKuknos realmUserInfo = realm1.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosSeedKey(kuknosSeed);
                 }
             });
         });

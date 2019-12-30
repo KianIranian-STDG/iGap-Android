@@ -7,7 +7,7 @@ import org.stellar.sdk.responses.Response;
 
 import java.util.List;
 
-public class KuknosOperationResponse{
+public class KuknosOperationResponse {
 
     @SerializedName("history")
     private List<KuknosPaymentOpResponse> operations;
@@ -53,17 +53,17 @@ public class KuknosOperationResponse{
         /**
          * <p>Returns operation type. Possible types:</p>
          * <ul>
-         *   <li>create_account</li>
-         *   <li>payment</li>
-         *   <li>allow_trust</li>
-         *   <li>change_trust</li>
-         *   <li>set_options</li>
-         *   <li>account_merge</li>
-         *   <li>manage_offer</li>
-         *   <li>path_payment</li>
-         *   <li>create_passive_offer</li>
-         *   <li>inflation</li>
-         *   <li>manage_data</li>
+         * <li>create_account</li>
+         * <li>payment</li>
+         * <li>allow_trust</li>
+         * <li>change_trust</li>
+         * <li>set_options</li>
+         * <li>account_merge</li>
+         * <li>manage_offer</li>
+         * <li>path_payment</li>
+         * <li>create_passive_offer</li>
+         * <li>inflation</li>
+         * <li>manage_data</li>
          * </ul>
          */
         public String getType() {
