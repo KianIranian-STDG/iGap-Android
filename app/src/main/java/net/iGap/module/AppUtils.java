@@ -329,6 +329,7 @@ public final class AppUtils {
                 iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case SEEN:
+            case LISTENED:
                 iconTextView.setText(R.string.delivery_icon);
                 iconTextView.setTextColor(Theme.getInstance().getAccentColor(iconTextView.getContext()));
                 break;
