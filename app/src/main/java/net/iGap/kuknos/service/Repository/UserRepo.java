@@ -126,10 +126,6 @@ public class UserRepo {
         return userInfo.getEmail();
     }
 
-    public RealmKuknos getRealmKuknos() {
-        return realmKuknos;
-    }
-
     // Realm and Data
 
     public void deleteAccount() {

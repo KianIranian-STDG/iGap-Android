@@ -22,7 +22,7 @@ import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
 
-public class KuknosAPIRepository {
+class KuknosAPIRepository {
     private KuknosApi apiService = ApiServiceProvider.getKuknosClient();
 
     void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
@@ -46,13 +46,9 @@ public class KuknosAPIRepository {
     }
 
     void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
-        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, new KuknosSDKRepo.callBack() {
-            @Override
-            public void getResponseXDR(String XDR) {
-                new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
-                        .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse);
-            }
-        }).execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
+        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, XDR -> new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+                .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse))
+                .execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.payment(new KuknosSDKRepo().paymentToOtherXDR(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo()))
                         , handShakeCallback, apiResponse);*/
@@ -86,13 +82,9 @@ public class KuknosAPIRepository {
     }
 
     void changeTrust(String accountSeed, String code, String issuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
-        new KuknosSDKRepo(KuknosSDKRepo.API.CHANGE_TRUST, new KuknosSDKRepo.callBack() {
-            @Override
-            public void getResponseXDR(String XDR) {
-                new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
-                        .initAPI(apiService.changeTrust(XDR), handShakeCallback, apiResponse);
-            }
-        }).execute(accountSeed, code, issuer);
+        new KuknosSDKRepo(KuknosSDKRepo.API.CHANGE_TRUST, XDR -> new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+                .initAPI(apiService.changeTrust(XDR), handShakeCallback, apiResponse))
+                .execute(accountSeed, code, issuer);
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.changeTrust(new KuknosSDKRepo().trustlineXDR(accountSeed, code, issuer))
                         , handShakeCallback, apiResponse);*/
@@ -114,21 +106,17 @@ public class KuknosAPIRepository {
     }
 
     void manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
-                            String counterCode, String counterIssuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
+                     String counterCode, String counterIssuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.MANAGE_OFFER);
         temp.execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer);
     }
 
     void manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
-                            String counterCode, String counterIssuer, String amount, String price,
-                            HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
-        new KuknosSDKRepo(KuknosSDKRepo.API.MANAGE_OFFER, new KuknosSDKRepo.callBack() {
-            @Override
-            public void getResponseXDR(String XDR) {
-                new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
-                        .initAPI(apiService.buyOffer(XDR), handShakeCallback, apiResponse);
-            }
-        }).execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer, amount, price);
+                     String counterCode, String counterIssuer, String amount, String price,
+                     HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
+        new KuknosSDKRepo(KuknosSDKRepo.API.MANAGE_OFFER, XDR -> new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
+                .initAPI(apiService.buyOffer(XDR), handShakeCallback, apiResponse))
+                .execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer, amount, price);
         /*new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
                 .initAPI(apiService.buyOffer(new KuknosSDKRepo().manageOffer(accountSeed, sourceCode, sourceIssuer,
                         counterCode, counterIssuer, amount, price))

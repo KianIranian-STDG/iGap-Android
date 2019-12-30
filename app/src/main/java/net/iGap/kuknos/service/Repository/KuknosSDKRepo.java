@@ -31,7 +31,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     private API apiEnum;
     private callBack response;
 
-    public KuknosSDKRepo(API apiEnum, callBack response) {
+    KuknosSDKRepo(API apiEnum, callBack response) {
         this.apiEnum = apiEnum;
         this.response = response;
     }
@@ -66,7 +66,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         return null;
     }
 
-    String paymentToOtherXDR(String sourceS, String destinationS, String amount, String memo) {
+    private String paymentToOtherXDR(String sourceS, String destinationS, String amount, String memo) {
         Server server = new Server(KUKNOS_Horizan_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
         KeyPair destination = KeyPair.fromAccountId(destinationS);
@@ -83,7 +83,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         }
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {
@@ -108,7 +108,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         return transaction.toEnvelopeXdrBase64();
     }
 
-    String chargeWalletXDR(String sourceS, String amount, String receiptNumber, String memo) {
+    private String chargeWalletXDR(String sourceS, String amount, String receiptNumber, String memo) {
         Server server = new Server(KUKNOS_Horizan_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
 
@@ -138,7 +138,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         return transaction.toEnvelopeXdrBase64();
     }
 
-    String chargeWalletOtherCurrencyXDR(String sourceS, String amount, String receiptNumber, String assetCode, String assetType, String memo) {
+    private String chargeWalletOtherCurrencyXDR(String sourceS, String amount, String receiptNumber, String assetCode, String assetType, String memo) {
         Server server = new Server(KUKNOS_Horizan_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
 
@@ -170,7 +170,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         return transaction.toEnvelopeXdrBase64();
     }
 
-    String trustlineXDR(String AccountSeed, String code, String issuer) {
+    private String trustlineXDR(String AccountSeed, String code, String issuer) {
         Server server = new Server(KUKNOS_Horizan_Server);
         Network network = new Network("Kuknos-NET");
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
@@ -196,8 +196,8 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         return transaction.toEnvelopeXdrBase64();
     }
 
-    String manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
-                       String counterCode, String counterIssuer, String amount, String price) {
+    private String manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
+                               String counterCode, String counterIssuer, String amount, String price) {
         Server server = new Server(KUKNOS_Horizan_Server);
         Network network = new Network("Kuknos-NET");
         KeyPair source = KeyPair.fromSecretSeed(accountSeed);
@@ -205,7 +205,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         Asset counterAsset = new AssetTypeCreditAlphaNum4(counterCode, counterIssuer);
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {

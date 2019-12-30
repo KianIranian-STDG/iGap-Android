@@ -19,10 +19,7 @@ public enum TranResultCode {
     tx_internal_error(-11),
     ;
 
-    private int mValue;
-
     TranResultCode(int value) {
-        this.mValue = value;
     }
 
     static TranResultCode decode(XdrDataInputStream stream) throws IOException {
