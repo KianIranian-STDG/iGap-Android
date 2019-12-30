@@ -25,14 +25,11 @@ import net.iGap.Theme;
 import net.iGap.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.emojiKeyboard.View.ScrollTabView;
 import net.iGap.emojiKeyboard.adapter.EmojiAdapter;
-import net.iGap.emojiKeyboard.adapter.StickerCategoryAdapter;
 import net.iGap.emojiKeyboard.adapter.ViewPagerAdapter;
 import net.iGap.emojiKeyboard.sticker.StickerGroupAdapter;
-import net.iGap.emojiKeyboard.struct.StructStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.realm.RealmStickers;
 import net.iGap.repository.sticker.StickerRepository;
 
 import java.util.ArrayList;
@@ -68,7 +65,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private FrameLayout stickerContainer;
     private RecyclerView stickerGridView;
     private StickerGroupAdapter stickerGridAdapter;
-    private StickerCategoryAdapter stickerTopAdapter;
     private LinearLayoutManager stickersLayoutManager;
     private AnimatorSet bottomTabContainerAnimation;
     private float lastBottomScrollY;
@@ -123,8 +119,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             stickerContainer = new FrameLayout(getContext());
 
-            stickerTopAdapter = new StickerCategoryAdapter();
-
             stickerGridView = new RecyclerView(getContext());
             stickerGridView.setLayoutManager(stickersLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             stickerGridView.setClipToPadding(false);
@@ -176,7 +170,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerContainer.addView(addStickerIv, LayoutCreator.createFrame(48, 48, Gravity.TOP | Gravity.RIGHT));
             views.add(stickerContainer);
 
-            createStickers();
         }
 
         stickerIv = new AppCompatImageView(getContext());
@@ -225,10 +218,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         viewPager.addOnPageChangeListener(this);
 
         addView(viewPager, 0, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
-    }
-
-    private void createStickers() {
-        stickerTopAdapter.setCategories(getStickerCategory());
     }
 
     @Override
@@ -348,40 +337,19 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         currentPage = position;
     }
 
-    private List<StructStickerCategory> getStickerCategory() {
-        List<StructStickerCategory> categories = new ArrayList<>();
+    @Override
+    public void onAddSticker(StructIGStickerGroup stickerGroup, int position) {
 
-        StructStickerCategory recentCategory = new StructStickerCategory();
-        recentCategory.setType(StructStickerCategory.DRAWABLE);
-        recentCategory.setResId(R.drawable.ic_emoji_history);
-        categories.add(0, recentCategory);
-
-        List<StructIGStickerGroup> groups = RealmStickers.getMyStickers();
-
-        for (int i = 0; i < groups.size(); i++) {
-            StructStickerCategory category = new StructStickerCategory();
-            category.setResId(0);
-            category.setStructIGStickerGroup(groups.get(i));
-            category.setType(groups.get(i).getAvatarType());
-            categories.add(category);
-        }
-
-        return categories;
     }
 
     @Override
-    public void onAddSticker(int startIndex, int length) {
-        Log.i(TAG, "onAddSticker: " + startIndex + " " + length);
+    public void onDeletedSticker(StructIGStickerGroup stickerGroup, int position) {
+
     }
 
     @Override
-    public void onDeletedSticker(int startIndex, int length) {
-        Log.i(TAG, "onDeletedSticker: " + startIndex + " " + length);
-    }
+    public void onUpdatedSticker(StructIGStickerGroup stickerGroup, int position) {
 
-    @Override
-    public void onUpdatedSticker(int startIndex, int length) {
-        Log.i(TAG, "onUpdatedSticker: " + startIndex + " " + length);
     }
 
     @Override

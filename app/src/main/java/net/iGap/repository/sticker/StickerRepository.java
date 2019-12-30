@@ -32,11 +32,11 @@ public class StickerRepository {
     private String TAG = "abbasiSticker Repository";
 
     public interface Listener {
-        void onAddSticker(int startIndex, int length);
+        void onAddSticker(StructIGStickerGroup stickerGroup, int pos);
 
-        void onDeletedSticker(int startIndex, int length);
+        void onDeletedSticker(StructIGStickerGroup stickerGroup, int pos);
 
-        void onUpdatedSticker(int startIndex, int length);
+        void onUpdatedSticker(StructIGStickerGroup stickerGroup, int pos);
 
         void dataChange();
     }
@@ -175,7 +175,8 @@ public class StickerRepository {
         return RealmStickers.getMyStickers();
     }
 
-    public void addStickerChangeListener(Listener listener) {
+    public void addChangeListener(Listener listener) {
+        removeStickerChangeListener();
 
         DbManager.getInstance().doRealmTask(realm -> {
             liveRealmStickers = realm.where(RealmStickers.class).findAll();
@@ -189,21 +190,20 @@ public class StickerRepository {
                 OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
                 for (int i = deletions.length - 1; i >= 0; i--) {
                     OrderedCollectionChangeSet.Range range = deletions[i];
-                    listener.onDeletedSticker(range.startIndex, range.length);
+                    listener.onDeletedSticker(null, 0);
                 }
 
                 OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
                 for (OrderedCollectionChangeSet.Range range : insertions) {
-                    listener.onAddSticker(range.startIndex, range.length);
+                    listener.onAddSticker(null, 0);
                 }
 
 
                 OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
                 for (OrderedCollectionChangeSet.Range range : modifications) {
-                    listener.onUpdatedSticker(range.startIndex, range.length);
+                    listener.onUpdatedSticker(null, 0);
                 }
 
-                Log.i(TAG, "---------------------------------------");
             };
 
             liveRealmStickers.addChangeListener(stickerChangeListener);
