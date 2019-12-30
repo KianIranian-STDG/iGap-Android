@@ -221,11 +221,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void init() {
         isDarkMode.set(G.themeColor == Theme.DARK);
         //set credit amount
-        if (G.selectedCard != null) {
-            currentCredit.set(G.cardamount);
-        } else {
-            getUserCredit();
-        }
+
+        getUserCredit();
+
 
         //set user info text gravity
         if (!G.isAppRtl) {
@@ -256,6 +254,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
             userId = userInfo.getUserId();
+
+            currentCredit.set(userInfo.getWalletAmount());
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             userPhoneNumber.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(phoneNumber) : phoneNumber);
             setUserAvatar.setValue(userInfo.getUserId());
@@ -263,6 +263,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             currentUserName = userInfo.getUserInfo().getUsername() != null ? userInfo.getUserInfo().getUsername() : "";
             currentUserEmail = userInfo.getEmail() != null ? userInfo.getEmail() : "";
             currentBio = userInfo.getUserInfo().getBio() != null ? userInfo.getUserInfo().getBio() : "";
+            currentScore.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(userInfo.getIvandScore())) : String.valueOf(userInfo.getIvandScore()));
+
             ProtoGlobal.Gender userGender = userInfo.getGender();
             if (userGender != null) {
                 if (userGender == ProtoGlobal.Gender.MALE) {
@@ -717,19 +719,26 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 public void onResponse(@NotNull Call<ArrayList<Card>> call, @NotNull Response<ArrayList<Card>> response) {
                     if (response.body() != null) {
                         retryConnectToWallet = 0;
-                        G.cardamount = 0;
+                        long cardAmount = 0;
 
                         for (Card card : response.body()) {
                             if (card.isRaadCard()) {
                                 G.selectedCard = card;
-                                G.cardamount += card.balance;
+                                cardAmount += card.balance;
                             }
                             if (card.type == 1 && (card.bankCode == 69 && card.clubId != null)) {
-                                G.cardamount += card.balance;
+                                cardAmount += card.balance;
                             }
                         }
 
-                        currentCredit.set(G.cardamount);
+                        long finalCardAmount = cardAmount;
+                        new Thread(() -> DbManager.getInstance().doRealmTransaction(realm -> {
+                            RealmUserInfo user = realm.where(RealmUserInfo.class).findFirst();
+                            if (user != null) {
+                                user.setWalletAmount(finalCardAmount);
+                            }
+
+                        })).start();
                     }
                 }
 
@@ -935,8 +944,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         getIvanScoreTime++;
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
-            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {
-                G.handler.post(() -> currentScore.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(score.getScore())) : String.valueOf(score.getScore())));
+            public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder ivandGetScore) {
+
             }
 
             @Override

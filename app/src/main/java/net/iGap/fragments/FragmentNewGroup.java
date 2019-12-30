@@ -340,6 +340,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)

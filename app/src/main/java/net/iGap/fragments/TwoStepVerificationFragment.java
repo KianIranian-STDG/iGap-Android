@@ -61,6 +61,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.empty_error_message)
                 .setRightIcons(R.string.check_icon)
                 .setLogoShown(true)

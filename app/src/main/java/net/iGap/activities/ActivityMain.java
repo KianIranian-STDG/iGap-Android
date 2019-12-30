@@ -129,7 +129,7 @@ import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
-import net.iGap.viewmodel.FragmentIVandProfileViewModel;
+import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.paygear.RaadApp;
 import org.paygear.fragment.PaymentHistoryFragment;
@@ -897,7 +897,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }*/
 
                 break;
-            case FragmentIVandProfileViewModel.REQUEST_CODE_QR_IVAND_CODE:
+            case UserScoreViewModel.REQUEST_CODE_QR_IVAND_CODE:
                 IntentResult result2 = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (result2.getContents() != null) {
                     doIvandScore(result2.getContents(), ActivityMain.this);
@@ -1265,7 +1265,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.dispatchTochEventChat.getToch(ev);
         }
 
-        return super.dispatchTouchEvent(ev);
+        try {
+            return super.dispatchTouchEvent(ev);
+        }catch (IllegalArgumentException e){
+            //Fix for support lib bug, happening when onDestroy() is
+            HelperLog.setErrorLog(e);
+            return true;
+        }
     }
 
     @Override

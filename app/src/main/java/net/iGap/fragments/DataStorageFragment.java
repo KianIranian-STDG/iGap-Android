@@ -63,6 +63,7 @@ public class DataStorageFragment extends BaseFragment {
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.data_storage))

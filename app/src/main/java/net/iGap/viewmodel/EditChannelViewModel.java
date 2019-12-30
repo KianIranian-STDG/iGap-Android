@@ -8,6 +8,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -53,6 +54,9 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public ObservableBoolean canChangeChannelName = new ObservableBoolean(false);
     public ObservableInt isShowLoading = new ObservableInt(View.GONE);
     public ObservableInt leaveChannelText = new ObservableInt();
+    public ObservableInt showUsername = new ObservableInt(View.GONE);
+    public SingleLiveEvent<String> showChangeUsername = new SingleLiveEvent<>();
+    public ObservableField<String> channelUsername = new ObservableField<>();
     //ui
     public MutableLiveData<Boolean> goToMembersPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToAdministratorPage = new MutableLiveData<>();
@@ -137,6 +141,14 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         linkUsername = realmChannelRoom.getUsername();
         inviteLink = realmChannelRoom.getInviteLink();
 
+        if (isPrivate) {
+            channelUsername.set("");
+            showUsername.set(View.GONE);
+        } else {
+            channelUsername.set(Config.IGAP_LINK_PREFIX + linkUsername);
+            showUsername.set(View.VISIBLE);
+        }
+
         /*isVerifiedChannel.setValue(realmChannelRoom.isVerified());*/
         /*if (isPrivate) {
             channelLink.setValue(realmChannelRoom.getInviteLink());
@@ -212,6 +224,9 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         /*attachFile = new AttachFile(G.fragmentActivity);*/
     }
 
+    public void usernameClicked() {
+        showChangeUsername.setValue(linkUsername);
+    }
 
     public void updateGroupRole() {
         if (realmChannelRoom == null) return;
@@ -370,8 +385,10 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         });
     }
 
-    public void setPrivate(boolean aPrivate) {
+    public void setPrivate(boolean aPrivate, String username) {
         isPrivate = aPrivate;
+        showUsername.set(isPrivate ? View.GONE : View.VISIBLE);
+        channelUsername.set(isPrivate ? username : Config.IGAP_LINK_PREFIX + username);
         channelType.set(isPrivate ? R.string.private_channel : R.string.public_channel);
     }
 

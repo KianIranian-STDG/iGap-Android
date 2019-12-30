@@ -658,7 +658,7 @@
     <string name="share_video_file_2">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_video_file">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_file">به اشتراک گذاشتن فایل</string>
-    <string name="text_copied">متن کپی شده</string>
+    <string name="text_copied">متن کپی شد</string>
 
     <string name="message">پیام</string>
     <string name="future_done">این قابلیت در آینده ارائه خواهد شد.</string>
@@ -1288,7 +1288,7 @@
     <string name="transfer_amount_hint">مبلغ واریزی را وارد کنید</string>
     <string name="amount_in_rial">مبلغ به ریال:</string>
     <string name="pay">پرداخت</string>
-    <string name="transfer_to_dialog">انتقال به:</string>
+    <string name="transfer_to_dialog">انتقال به:%s</string>
     <string name="am_money">پول</string>
     <string name="trace_number">کد پیگیری</string>
     <string name="amount_2">مبلغ:</string>
@@ -1446,7 +1446,9 @@
 
     <string name="sticker">استیکر</string>
     <string name="add_sticker">اضافه کردن استیکر</string>
+    <string name="add_sticker_with_size">اضافه کردن %s استیکر</string>
     <string name="remove_sticker">حذف استیکر</string>
+    <string name="remove_sticker_with_size">حذف %s استیکر</string>
     <string name="remove_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را حذف کنید؟</string>
     <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
     <string name="Add">افزودن</string>
@@ -1925,7 +1927,7 @@
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
     <string name="str_frag_sync_skipBtn">شروع</string>
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
-    <string name="money_request">درخواست کارت به کارت به:</string>
+    <string name="money_request">درخواست کارت به کارت به:%s</string>
     <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
     <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
     <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارت ۱۰ هزار ریال میباشد.</string>

@@ -46,7 +46,6 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.CongratulationsDialogBinding;
 import net.iGap.databinding.QrVoucherDialogBinding;
@@ -54,6 +53,7 @@ import net.iGap.databinding.UnsuccessfulDialogBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.realm.RealmUserInfo;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -134,6 +134,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.scan_qr_code_icon)
@@ -200,7 +201,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                     RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, true));
         } else {
             balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
-                    String.format(getString(R.string.wallet_Reial), G.cardamount));
+                    String.format(getString(R.string.wallet_Reial), RealmUserInfo.queryWalletAmount()));
         }
 
         flashImage.setOnClickListener(new View.OnClickListener() {

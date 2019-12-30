@@ -30,6 +30,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.JoinDialogFragment;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.FragmentAddContact;
@@ -93,7 +95,6 @@ import io.realm.Realm;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
@@ -798,7 +799,7 @@ public class HelperUrl {
         if (text == null || text.length() < 1) {
             return result;
         }
-        Pattern p = Pattern.compile("[#]+[\\p{L}A-Za-z0-9-_]+\\b");
+        Pattern p = Pattern.compile("[#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b");
         Matcher m = p.matcher(text);
         while (m.find()) {
             result += m.start() + "_" + m.end() + "_" + linkType.hash.toString() + "@";
@@ -854,66 +855,17 @@ public class HelperUrl {
             });
         });
 
-        String title = activity.getString(R.string.do_you_want_to_join_to_this);
-        String memberNumber = "";
-        final CircleImageView[] imageView = new CircleImageView[1];
-
-        switch (room.getType()) {
-            case CHANNEL:
-
-                if (HelperCalander.isPersianUnicode) {
-                    title += activity.getString(R.string.channel) + " " + "عضو شوید؟";
-                } else {
-                    title += activity.getString(R.string.channel) + "?";
-                }
-
-                memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member_chat);
-                break;
-            case GROUP:
-
-                if (HelperCalander.isPersianUnicode) {
-                    title += activity.getString(R.string.group) + " " + "عضو شوید؟";
-                } else {
-                    title += activity.getString(R.string.group) + "?";
-                }
-
-                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + activity.getString(R.string.member_chat);
-                break;
+        if (!room.getIsParticipant()) {
+            activity.runOnUiThread(() -> {
+                closeDialogWaiting();
+                new JoinDialogFragment().setData(room, new JoinDialogFragment.JoinDialogListener() {
+                    @Override
+                    public void onJoinClicked() { joinToRoom(activity, token, room); }
+                    @Override
+                    public void onCancelClicked() { RealmRoom.deleteRoom(room.getId()); }
+                }).show(activity.getSupportFragmentManager() , "JoinDialogFragment");
+            });
         }
-
-        final String finalMemberNumber = memberNumber;
-        final String finalTitle = title;
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                final MaterialDialog dialog = new MaterialDialog.Builder(activity).title(finalTitle).customView(R.layout.dialog_alert_join, true).positiveText(R.string.join).cancelable(true).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        joinToRoom(activity, token, room);
-                    }
-                }).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        RealmRoom.deleteRoom(room.getId());
-                    }
-                }).build();
-
-                imageView[0] = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
-
-                TextView txtRoomName = (TextView) dialog.findViewById(R.id.daj_txt_room_name);
-                txtRoomName.setText(room.getTitle());
-
-                TextView txtMemberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
-                txtMemberNumber.setText(finalMemberNumber);
-
-                if (!activity.isFinishing() && !activity.isFinishing() && activity instanceof ActivityEnhanced) {
-                    ((ActivityEnhanced) activity).avatarHandler.getAvatar(new ParamWithAvatarType(imageView[0], room.getId()).avatarType(AvatarHandler.AvatarType.ROOM));
-                    dialog.show();
-                }
-            }
-        });
     }
 
     private static void joinToRoom(FragmentActivity activity, String token, final ProtoGlobal.Room room) {

@@ -36,6 +36,8 @@ import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.github.chrisbanes.photoview.PhotoView;
+
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -46,14 +48,11 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.TouchImageView;
 import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.module.transition.fragment.ExitFragmentTransition;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -94,7 +93,7 @@ public class FragmentShowImage extends BaseFragment {
     private MediaPlayer mMediaPlayer;
     private boolean isLockScreen = false;
     private boolean isFocusable = false;
-    private TouchImageView touchImageViewTmp = null;
+    private PhotoView zoomableImageViewTmp = null;
     private int lastOrientation = 0;
     public static FocusAudioListener focusAudioListener;
     private ProtoGlobal.RoomMessageType messageType;
@@ -140,9 +139,9 @@ public class FragmentShowImage extends BaseFragment {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation != lastOrientation) {
             lastOrientation = newConfig.orientation;
-            if (touchImageViewTmp != null && videoController != null && mMediaPlayer != null) {
-                touchImageViewTmp.setVisibility(View.GONE);
-                touchImageViewTmp.setVisibility(View.VISIBLE);
+            if (zoomableImageViewTmp != null && videoController != null && mMediaPlayer != null) {
+                zoomableImageViewTmp.setVisibility(View.GONE);
+                zoomableImageViewTmp.setVisibility(View.VISIBLE);
                 if (mMediaPlayer.isPlaying()) {
                     videoController.show();
                 }
@@ -163,8 +162,8 @@ public class FragmentShowImage extends BaseFragment {
     }
 
     private boolean getIntentData(Bundle bundle) {
-        if (G.fragmentActivity != null) {
-            G.fragmentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (getActivity() != null) {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
         if (bundle != null) { // get a list of image
@@ -376,8 +375,9 @@ public class FragmentShowImage extends BaseFragment {
      * share Image and video
      */
     private void shareImage() {
+        RealmRoomMessage roomMessage = null;
 
-        RealmRoomMessage roomMessage = mFList.get(viewPager.getCurrentItem());
+        if (mFList.size() > viewPager.getCurrentItem()) roomMessage = mFList.get(viewPager.getCurrentItem());
 
         if (roomMessage != null) {
             roomMessage = RealmRoomMessage.getFinalMessage(roomMessage);
@@ -394,8 +394,8 @@ public class FragmentShowImage extends BaseFragment {
                     startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
                 }
 
-            }else {
-                HelperError.showSnackMessage(getString(R.string.file_not_download_yet) , false);
+            } else {
+                HelperError.showSnackMessage(getString(R.string.file_not_download_yet), false);
             }
         }
     }
@@ -405,7 +405,8 @@ public class FragmentShowImage extends BaseFragment {
      * share Image and video
      */
     private void saveToGallery() {
-        RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
+        RealmRoomMessage rm = null;
+        if (mFList.size() > viewPager.getCurrentItem()) rm = mFList.get(viewPager.getCurrentItem());
         if (rm != null) {
             String path = getFilePath(viewPager.getCurrentItem());
             ProtoGlobal.RoomMessageType messageType;
@@ -477,6 +478,9 @@ public class FragmentShowImage extends BaseFragment {
             videoController.hide();
             videoController = null;
         }
+        if (getActivity() != null) {
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     @Override
@@ -542,10 +546,11 @@ public class FragmentShowImage extends BaseFragment {
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
             final TextureView mTextureView = layout.findViewById(R.id.textureView);
             final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
-            final TouchImageView touchImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            zoomableImageView.setZoomable(false);
 
             FrameLayout frameLayout = layout.findViewById(R.id.Layout_showImage);
-            frameLayout.setOnClickListener(v -> touchImageView.performClick());
+            frameLayout.setOnClickListener(v -> setPageViewState(imgPlay));
 
             final MessageProgress progress = layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
@@ -555,7 +560,7 @@ public class FragmentShowImage extends BaseFragment {
             if (rm != null && rm.isValid()) {
                 if (HelperDownloadFile.getInstance().isDownLoading(rm.getAttachment().getCacheId())) {
                     progress.withDrawable(R.drawable.ic_cancel, true);
-                    startDownload(position, progress, touchImageView, imgPlay, mTextureView);
+                    startDownload(position, progress, zoomableImageView, imgPlay, mTextureView);
                 } else {
                     progress.withDrawable(R.drawable.ic_download, true);
                 }
@@ -569,16 +574,17 @@ public class FragmentShowImage extends BaseFragment {
                 }
                 if (file.exists()) {
                     progress.setVisibility(View.GONE);
-                    G.imageLoader.displayImage(suitablePath(path), touchImageView);
+                    G.imageLoader.displayImage(suitablePath(path), zoomableImageView);
+                    zoomableImageView.setZoomable(true);
                     if (rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                        touchImageView.setVisibility(View.VISIBLE);
+                        zoomableImageView.setVisibility(View.VISIBLE);
                         imgPlay.setVisibility(View.GONE);
                         isFirstPlay = false;
                     } else {
                         if (isFirstPlay) {
                             mTextureView.setVisibility(View.VISIBLE);
 
-                            G.handler.postDelayed(() -> playVideo(position, mTextureView, imgPlay, touchImageView), 100);
+                            G.handler.postDelayed(() -> playVideo(position, mTextureView, imgPlay, zoomableImageView), 100);
                             isFirstPlay = false;
                         }
                         imgPlay.setVisibility(View.VISIBLE);
@@ -588,10 +594,10 @@ public class FragmentShowImage extends BaseFragment {
                 } else {
                     imgPlay.setVisibility(View.GONE);
                     path = getThumbnailPath(rm);
-                    touchImageView.setVisibility(View.VISIBLE);
+                    zoomableImageView.setVisibility(View.VISIBLE);
                     file = new File(path);
                     if (file.exists()) {
-                        G.imageLoader.displayImage(suitablePath(path), touchImageView);
+                        G.imageLoader.displayImage(suitablePath(path), zoomableImageView);
                     } else if (rm.getAttachment() != null) {
                         // if thumpnail not exist download it
                         ProtoFileDownload.FileDownload.Selector selector = null;
@@ -617,7 +623,7 @@ public class FragmentShowImage extends BaseFragment {
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), zoomableImageView);
                                             }
                                         });
                                     }
@@ -641,40 +647,20 @@ public class FragmentShowImage extends BaseFragment {
                     HelperDownloadFile.getInstance().stopDownLoad(_cashID);
                 } else {
                     progress.withDrawable(R.drawable.ic_cancel, true);
-                    startDownload(position, progress, touchImageView, imgPlay, mTextureView);
+                    startDownload(position, progress, zoomableImageView, imgPlay, mTextureView);
                 }
             });
 
-            touchImageView.setOnClickListener(view -> {
-                if (isShowToolbar) {
-                    toolbarShowImage.animate().setDuration(150).alpha(0F).start();
-                    ltImageName.setVisibility(View.GONE);
-                    ltImageName.animate().setDuration(150).alpha(0F).start();
-                    toolbarShowImage.setVisibility(View.GONE);
-                    isShowToolbar = false;
-                } else {
-                    toolbarShowImage.animate().setDuration(150).alpha(1F).start();
-                    toolbarShowImage.setVisibility(View.VISIBLE);
-                    ltImageName.animate().setDuration(150).alpha(1F).start();
-                    ltImageName.setVisibility(View.VISIBLE);
-                    isShowToolbar = true;
-                }
-
-                if (touchImageViewTmp != null && imgPlay.getVisibility() != View.VISIBLE && mMediaPlayer != null && videoController != null) {
-                    if (videoController.isShowing()) {
-                        videoController.hide();
-                    } else {
-                        videoController.show();
-                    }
-                }
+            zoomableImageView.setOnClickListener(view -> {
+                setPageViewState(imgPlay);
             });
 
             imgPlay.setOnClickListener(v -> {
                 mTextureView.setVisibility(View.VISIBLE);
-                playVideo(position, mTextureView, imgPlay, touchImageView);
+                playVideo(position, mTextureView, imgPlay, zoomableImageView);
             });
 
-            mTextureView.setOnClickListener(v -> touchImageView.performClick());
+            mTextureView.setOnClickListener(v -> setPageViewState(imgPlay));
 
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -690,7 +676,7 @@ public class FragmentShowImage extends BaseFragment {
                 @Override
                 public void onPageSelected(final int position) {
 
-                    touchImageViewTmp = null;
+                    zoomableImageViewTmp = null;
 
                     txtImageNumber.setText(position + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + mFList.size());
                     if (HelperCalander.isPersianUnicode) {
@@ -709,7 +695,7 @@ public class FragmentShowImage extends BaseFragment {
                         File f = new File(getFilePath(position));
                         if (f.exists()) {
                             imgPlay.setVisibility(View.VISIBLE);
-                            touchImageView.setVisibility(View.VISIBLE);
+                            zoomableImageView.setVisibility(View.VISIBLE);
                         } else {
                             imgPlay.setVisibility(View.GONE);
                         }
@@ -730,10 +716,34 @@ public class FragmentShowImage extends BaseFragment {
             return layout;
         }
 
+        private void setPageViewState(ImageView imgPlay) {
+            if (isShowToolbar) {
+                toolbarShowImage.animate().setDuration(150).alpha(0F).start();
+                ltImageName.setVisibility(View.GONE);
+                ltImageName.animate().setDuration(150).alpha(0F).start();
+                toolbarShowImage.setVisibility(View.GONE);
+                isShowToolbar = false;
+            } else {
+                toolbarShowImage.animate().setDuration(150).alpha(1F).start();
+                toolbarShowImage.setVisibility(View.VISIBLE);
+                ltImageName.animate().setDuration(150).alpha(1F).start();
+                ltImageName.setVisibility(View.VISIBLE);
+                isShowToolbar = true;
+            }
+
+            if (zoomableImageViewTmp != null && imgPlay.getVisibility() != View.VISIBLE && mMediaPlayer != null && videoController != null) {
+                if (videoController.isShowing()) {
+                    videoController.hide();
+                } else {
+                    videoController.show();
+                }
+            }
+        }
+
         /**
          * start download
          */
-        private void startDownload(final int position, final MessageProgress progress, final TouchImageView touchImageView, final ImageView imgPlay, final TextureView mTextureView) {
+        private void startDownload(final int position, final MessageProgress progress, final PhotoView ZoomableImageView, final ImageView imgPlay, final TextureView mTextureView) {
 
             final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
 
@@ -747,9 +757,9 @@ public class FragmentShowImage extends BaseFragment {
             progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
                 progress.withProgress(0);
                 progress.setVisibility(View.GONE);
+                ZoomableImageView.setZoomable(true);
                 if (rm.isValid() && rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
                     imgPlay.setVisibility(View.VISIBLE);
-                    //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
                 }
             }));
 
@@ -760,7 +770,8 @@ public class FragmentShowImage extends BaseFragment {
                     G.currentActivity.runOnUiThread(() -> {
                         progress.withProgress(progres);
                         if (progres == 100) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ZoomableImageView);
+                            ZoomableImageView.setZoomable(true);
                         }
                     });
 
@@ -785,16 +796,16 @@ public class FragmentShowImage extends BaseFragment {
         /**
          * video player
          */
-        private void playVideo(final int position, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
+        private void playVideo(final int position, final TextureView mTextureView, final ImageView imgPlay, final PhotoView zoomableImageView) {
 
-            touchImageViewTmp = touchImageView;
+            zoomableImageViewTmp = zoomableImageView;
             if (mMediaPlayer == null) mMediaPlayer = new MediaPlayer();
             if (videoController == null) videoController = new MediaController(G.fragmentActivity);
             mTextureView.setVisibility(View.VISIBLE);
 
             videoPath = getFilePath(position);
             ViewCompat.setLayoutDirection(videoController, View.LAYOUT_DIRECTION_LTR);
-            videoController.setAnchorView(touchImageView);
+            videoController.setAnchorView(zoomableImageView);
             videoController.setMediaPlayer(this);
             imgPlay.setVisibility(View.GONE);
             mMediaPlayer.reset();
@@ -807,7 +818,7 @@ public class FragmentShowImage extends BaseFragment {
                 mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                     @Override
                     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                        setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
+                        setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, zoomableImageView);
                     }
 
                     @Override
@@ -827,7 +838,7 @@ public class FragmentShowImage extends BaseFragment {
                     }
                 });
                 if (mTextureView.getSurfaceTexture() != null) {
-                    setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
+                    setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, zoomableImageView);
                 }
             } catch (IOException | IllegalArgumentException e) {
                 e.printStackTrace();
@@ -841,7 +852,7 @@ public class FragmentShowImage extends BaseFragment {
             //mMediaPlayer.seekTo(100);
         }
 
-        private void setMediaPlayer(MediaPlayer mMediaPlayer, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
+        private void setMediaPlayer(MediaPlayer mMediaPlayer, final TextureView mTextureView, final ImageView imgPlay, final PhotoView zoomableImageView) {
 
             if (mTextureView == null) {
                 return;
@@ -870,11 +881,11 @@ public class FragmentShowImage extends BaseFragment {
                 mp.start();
                 MusicPlayer.pauseSound();
                 mTextureView.setVisibility(View.VISIBLE);
-                touchImageView.animate().setDuration(700).alpha(0F).start();
+                zoomableImageView.animate().setDuration(700).alpha(0F).start();
 
                 G.handler.postDelayed(() -> {
-                    touchImageView.setVisibility(View.GONE);
-                    touchImageView.clearAnimation();
+                    zoomableImageView.setVisibility(View.GONE);
+                    zoomableImageView.clearAnimation();
                 }, 700);
 
                 videoController.setEnabled(true);

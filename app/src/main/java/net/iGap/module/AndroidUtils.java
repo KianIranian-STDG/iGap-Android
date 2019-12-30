@@ -360,7 +360,7 @@ public final class AndroidUtils {
         out.close();
     }
 
-    private static boolean deleteFile(File src) {
+    public static boolean deleteFile(File src) {
         return src.delete();
     }
 

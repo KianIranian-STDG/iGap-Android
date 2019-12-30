@@ -70,6 +70,7 @@ public class FragmentLanguage extends BaseFragment {
 
         binding.flLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setShowConnectionState(false)

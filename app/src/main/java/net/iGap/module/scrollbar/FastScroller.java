@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -154,6 +155,7 @@ public class FastScroller extends LinearLayout {
         bubble.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         textView = new TextView(getContext());
         textView.setGravity(Gravity.CENTER);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
         textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         bubble.setContentView(textView);
 

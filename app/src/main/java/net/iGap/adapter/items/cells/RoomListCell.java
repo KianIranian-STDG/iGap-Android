@@ -416,7 +416,7 @@ public class RoomListCell extends FrameLayout {
                     }
                 } else {
                     if (!isRtl)
-                        nameRight = avatarLeft - smallMargin;
+                        nameRight = getWidth() - paddingEnd;
                 }
                 roomNameTv.layout(nameLeft, roomTop, nameRight, h2);
             }

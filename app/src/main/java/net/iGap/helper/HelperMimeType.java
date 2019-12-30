@@ -35,6 +35,10 @@ public class HelperMimeType {
         return path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".webp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff") || path.endsWith(".tif") || path.endsWith(".ai");
     }
 
+    public static boolean isFileJson(String path) {
+        return path.endsWith(".json");
+    }
+
     public static boolean isFileVideo(String path) {
         return path.endsWith(".mp4")
                 || path.endsWith(".3gp")

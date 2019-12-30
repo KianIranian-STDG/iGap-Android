@@ -142,6 +142,7 @@ public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListen
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.charge))
                 .setLeftIcon(R.string.back_icon)

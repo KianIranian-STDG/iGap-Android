@@ -29,7 +29,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -107,6 +106,7 @@ public class HelperToolbar {
     private FragmentActivity mFragmentActivity;
     private ViewGroup mViewGroup = null;
     private ToolbarListener mToolbarListener;
+    private LifecycleOwner lifecycleOwner;
 
     private int[] mLeftIcon = {0, 0};
     private int[] mRightIcons = {0, 0, 0, 0};
@@ -376,6 +376,10 @@ public class HelperToolbar {
 
         return rootView;
 
+    }
+
+    public void changeDefaultTitle(String title) {
+        this.defaultTitleText = title;
     }
 
     //offset must be negative or zero
@@ -671,6 +675,11 @@ public class HelperToolbar {
         return mTabletEditIcon;
     }
 
+    public HelperToolbar setLifecycleOwner(LifecycleOwner lifecycleOwner) {
+        this.lifecycleOwner = lifecycleOwner;
+        return this;
+    }
+
     public void checkPassCodeVisibility() {
         if (passCodeBtn != null) {
             if (PassCode.getInstance().isPassCode()) {
@@ -860,10 +869,16 @@ public class HelperToolbar {
         if (!isShowConnectionState) return;
 
         try {
-            connectionStateChecker(G.fragmentActivity);
+            if (lifecycleOwner != null)
+                connectionStateChecker(lifecycleOwner);
+            else
+                connectionStateChecker(G.fragmentActivity);
         } catch (Exception e) {
             try {
-                connectionStateChecker(G.currentActivity);
+                if (lifecycleOwner != null)
+                    connectionStateChecker(lifecycleOwner);
+                else
+                    connectionStateChecker(G.currentActivity);
             } catch (Exception e2) {
 
             }
@@ -965,6 +980,10 @@ public class HelperToolbar {
                 }
             });
 
+            mEdtSearch.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard();
+                return true;
+            });
         }
     }
 

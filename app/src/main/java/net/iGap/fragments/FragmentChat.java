@@ -68,6 +68,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
@@ -76,7 +77,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -100,6 +100,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.vanniktech.emoji.sticker.OnDownloadStickerListener;
+import com.vanniktech.emoji.sticker.OnLottieStickerItemDownloaded;
 import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
 import com.vanniktech.emoji.sticker.OnStickerAvatarDownloaded;
 import com.vanniktech.emoji.sticker.OnStickerItemDownloaded;
@@ -121,6 +122,7 @@ import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.adapter.items.chat.AnimatedStickerItem;
 import net.iGap.adapter.items.chat.AudioItem;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.CardToCardItem;
@@ -147,13 +149,14 @@ import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
-import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.OnUpdateSticker;
-import net.iGap.fragments.emoji.add.DialogAddSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
+import net.iGap.fragments.emoji.remove.StickersSettingFragment;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -177,6 +180,8 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.helper.downloadFile.IGDownloadFile;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
@@ -305,7 +310,6 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
-import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
@@ -433,7 +437,7 @@ public class FragmentChat extends BaseFragment
     private boolean isRepley = false;
     private boolean swipeBack = false;
     private AttachFile attachFile;
-    private EditText edtSearchMessage;
+    private AppCompatEditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
     private net.iGap.module.EmojiEditTextE edtChat;
     private MaterialDesignTextView imvSendButton;
@@ -779,7 +783,6 @@ public class FragmentChat extends BaseFragment
         txtChannelMute = rootView.findViewById(R.id.chl_txt_mute_channel);
         iconChannelMute = rootView.findViewById(R.id.chl_icon_mute_channel);
         layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
-        layoutMute.setBackground(new Theme().tintDrawable(layoutMute.getBackground(), layoutMute.getContext(), R.attr.iGapButtonColor));
 
         gongingRunnable = new Runnable() {
             @Override
@@ -1467,6 +1470,7 @@ public class FragmentChat extends BaseFragment
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon)
                 .setLogoShown(false)
@@ -1995,7 +1999,6 @@ public class FragmentChat extends BaseFragment
     private void manageExtraLayout() {
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
-            layoutJoin.setBackground(new Theme().tintDrawable(layoutJoin.getBackground(), layoutJoin.getContext(), R.attr.iGapButtonColor));
 
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);
@@ -2267,10 +2270,10 @@ public class FragmentChat extends BaseFragment
                 emojiPopup.dismiss();
             } else if (ll_Search != null && ll_Search.isShown()) {
                 goneSearchBox(edtSearchMessage);
-            } else if (isEditMessage) {
+            } else if (ll_navigateHash != null && ll_navigateHash.isShown()){
+                goneSearchHashFooter();
+            }else if (isEditMessage) {
                 removeEditedMessage();
-            } else if (ll_navigateHash != null && btnHashLayoutClose != null && ll_navigateHash.isShown()) {
-                btnHashLayoutClose.performClick();
             } else {
                 stopSuperPress = false;
             }
@@ -2689,8 +2692,10 @@ public class FragmentChat extends BaseFragment
                 public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                     super.clearView(recyclerView, viewHolder);
                     try {
-                        if (isRepley)
-                            replay((mAdapter.getItem(viewHolder.getAdapterPosition())).structMessage, false);
+                        RealmRoomMessage message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage;
+                        if (message_ != null && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            if (isRepley) replay((mAdapter.getItem(viewHolder.getAdapterPosition())).structMessage, false);
+                        }
                     } catch (Exception ignored) {
                     }
                     isRepley = false;
@@ -3264,7 +3269,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showSelectItem() {
-        ChatMoneyTransferFragment transferAction;
 
         RealmRoom realmRoom = getRoom();
         if (realmRoom != null) {
@@ -3272,25 +3276,32 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 chatPeerId = realmRoom.getChatRoom().getPeerId();
                 if (imvUserPicture != null && txtName != null) {
-                    ChatMoneyTransferFragment chatMoneyTransferFragment = ChatMoneyTransferFragment.getInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
-                    transferAction = chatMoneyTransferFragment;
+                    if (getActivity() != null) {
+                        ParentChatMoneyTransferFragment fragment = new ParentChatMoneyTransferFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("userName", txtName.getText().toString());
+                        bundle.putLong("roomId", mRoomId);
+                        bundle.putLong("peerId", chatPeerId);
+                        fragment.setArguments(bundle);
+                        fragment.setTransferAction(new ParentChatMoneyTransferFragment.MoneyTransferAction() {
+                            @Override
+                            public void TransferAction() {
 
-                    chatMoneyTransferFragment.setCardToCardCallBack((cardNum, amountNum, descriptionTv) -> {
+                            }
 
-                        sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
+                            @Override
+                            public void cardToCardClicked(String cardNum, String amountNum, String descriptionTv) {
+                                sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
 
-                        ll_attach_text.setVisibility(View.GONE);
-                        edtChat.setFilters(new InputFilter[]{});
-                        edtChat.setText("");
+                                ll_attach_text.setVisibility(View.GONE);
+                                edtChat.setFilters(new InputFilter[]{});
+                                edtChat.setText("");
 
-                        clearReplyView();
-
-                    });
-
-                    if (getFragmentManager() != null)
-                        transferAction.show(getFragmentManager(), "PaymentFragment");
-//                        transferAction.show(getFragmentManager(), "PaymentFragment");
-                    transferAction.setMoneyTransferAction(this::showCardToCard);
+                                clearReplyView();
+                            }
+                        });
+                        fragment.show(getActivity().getSupportFragmentManager(), "PaymentFragment");
+                    }
                 }
             }
         }
@@ -3747,7 +3758,7 @@ public class FragmentChat extends BaseFragment
                 mTxtSelectedCounter.setText(convertToUnicodeFarsiNumber(mTxtSelectedCounter.getText().toString()));
             }
 
-            if (selectedCount > 1) {
+            if (selectedCount > 1 || isNotJoin) {
                 mBtnReplySelected.setVisibility(View.INVISIBLE);
             } else {
 
@@ -3898,7 +3909,7 @@ public class FragmentChat extends BaseFragment
                     });
                     if (result.size() > 0) {
                         rm = result.last();
-                        if (rm.getMessage() != null) {
+                        if (rm != null && rm.getMessage() != null) {
                             if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
                                 backToMenu = false;
                             }
@@ -3907,7 +3918,7 @@ public class FragmentChat extends BaseFragment
 
                     if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId) {
 
-                        if (rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
+                        if (rm != null && rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
                             botInit.updateCommandList(false, message, getActivity(), backToMenu, roomMessage, roomId, true);
                         else
                             botInit.updateCommandList(false, "clear", getActivity(), backToMenu, null, 0, true);
@@ -4096,26 +4107,22 @@ public class FragmentChat extends BaseFragment
         try {
             JSONObject jObject = new JSONObject(message.getAdditional().getAdditionalData());
             String groupId = jObject.getString("groupId");
-            String token = jObject.getString("token");
-            DbManager.getInstance().doRealmTask(realm -> {
-                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                if (realmStickers == null || !realmStickers.isFavorite()) {
-                    openFragmentAddStickerToFavorite(groupId, token);
-                }
-            });
+            openFragmentAddStickerToFavorite(groupId);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void openFragmentAddStickerToFavorite(String groupId, String token) {
+    private void openFragmentAddStickerToFavorite(String groupId) {
+        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        DialogAddSticker dialogFragment = new DialogAddSticker().newInstance(groupId, token);
-        if (fm != null) {
-            dialogFragment.show(fm, "dialogFragment");
-        }
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, isChatReadOnly);
+        dialogFragment.setListener(this::sendStickerAsMessage);
+
+        if (getFragmentManager() != null)
+            dialogFragment.show(getFragmentManager(), "dialogFragment");
+
     }
 
     private void openMessage(StructMessageInfo message) {
@@ -4299,7 +4306,7 @@ public class FragmentChat extends BaseFragment
 
         //TODO: optimize code
         List<String> items = new ArrayList<>();
-        items.add(getString(R.string.replay_item_dialog));
+        if (!isNotJoin) items.add(getString(R.string.replay_item_dialog));
         items.add(getString(R.string.share_item_dialog));
         if (shareLinkIsOn)
             items.add(getString(R.string.share_link_item_dialog));
@@ -4472,15 +4479,7 @@ public class FragmentChat extends BaseFragment
             } else if (items.get(position).equals(getString(R.string.replay_item_dialog))) {
                 G.handler.postDelayed(() -> replay(message, false), 200);
             } else if (items.get(position).equals(getString(R.string.copy_item_dialog))) {
-                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                String _text = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessage() : message.realmRoomMessage.getMessage();
-                if (_text != null && _text.length() > 0) {
-                    ClipData clip = ClipData.newPlainText("Copied Text", _text);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
-                }
+                copyMessageToClipboard(message , true);
             } else if (items.get(position).equals(getString(R.string.share_item_dialog))) {
                 shearedDataToOtherProgram(message);
             } else if (items.get(position).equals(getString(R.string.share_link_item_dialog))) {
@@ -4689,6 +4688,18 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    private void copyMessageToClipboard(StructMessageInfo message , boolean isShowEmpty) {
+        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+        String _text = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessage() : message.realmRoomMessage.getMessage();
+        if (_text != null && _text.length() > 0) {
+            ClipData clip = ClipData.newPlainText("Copied Text", _text);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
+        } else {
+            if (isShowEmpty) Toast.makeText(context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void confirmAndDeleteFromStorage(StructMessageInfo message, int pos) {
         if (getContext() == null) return;
         new MaterialDialog.Builder(getContext())
@@ -4865,6 +4876,11 @@ public class FragmentChat extends BaseFragment
                     }, 1000 * i);
 
                 }
+            }
+
+            @Override
+            public void copyMessage() {
+                copyMessageToClipboard(message , false);
             }
         }, message.realmRoomMessage.getMessageId(), failedMessages);
     }
@@ -5427,7 +5443,7 @@ public class FragmentChat extends BaseFragment
     /**
      * copy text
      */
-    public void copySelectedItemTextToClipboard() {
+    private void copySelectedItemTextToClipboard() {
         String copyText = "";
         for (AbstractMessage _message : mAdapter.getSelectedItems()) {
             String text = _message.mMessage.getForwardMessage() != null ? _message.mMessage.getForwardMessage().getMessage() : _message.mMessage.getMessage();
@@ -5444,6 +5460,7 @@ public class FragmentChat extends BaseFragment
 
         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newPlainText("Copied Text", copyText));
+        Toast.makeText(ll_AppBarSelected.getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
 
         mAdapter.deselect();
         ll_AppBarSelected.setVisibility(View.GONE);
@@ -5751,7 +5768,7 @@ public class FragmentChat extends BaseFragment
                         int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
                         RealmRoomMessage roomMessage = new RealmRoomMessage();
                         roomMessage.setMessageId(identity);
-                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+                        roomMessage.setMessageType(STICKER);
                         roomMessage.setRoomId(mRoomId);
                         roomMessage.setMessage(st.getName());
                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -5768,11 +5785,14 @@ public class FragmentChat extends BaseFragment
                         RealmAttachment realmAttachment = new RealmAttachment();
                         realmAttachment.setId(identity);
                         realmAttachment.setLocalFilePath(st.getUri());
+
                         realmAttachment.setWidth(imageSize[0]);
                         realmAttachment.setHeight(imageSize[1]);
                         realmAttachment.setSize(new File(st.getUri()).length());
                         realmAttachment.setName(new File(st.getUri()).getName());
                         realmAttachment.setDuration(0);
+
+                        int type = st.getUri().endsWith(".json") ? StructIGSticker.ANIMATED_STICKER : StructIGSticker.NORMAL_STICKER;
 
                         roomMessage.setAttachment(realmAttachment);
 
@@ -5803,8 +5823,12 @@ public class FragmentChat extends BaseFragment
                             });
                         }).start();
 
+
                         StructMessageInfo sm = new StructMessageInfo(roomMessage);
-                        mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+                        if (type == StructIGSticker.ANIMATED_STICKER)
+                            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+                        else
+                            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
                         if (isReply()) {
@@ -5816,58 +5840,70 @@ public class FragmentChat extends BaseFragment
                 })
                 .setOnDownloadStickerListener(new OnDownloadStickerListener() {
                     @Override
-                    public void downloadStickerItem(String token, String extention, long avatarSize, OnStickerItemDownloaded onStickerItemDownloaded) {
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+                    public void downloadStickerItem(StructItemSticker sticker, OnStickerItemDownloaded onStickerItemDownloaded) {
 
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-                                G.handler.post(new Runnable() {
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
-                                    public void run() {
-                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                                            return;
-
-                                        if (progress == 100) {
-                                            onStickerItemDownloaded.onStickerItemDownload(token);
-                                        }
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (sticker.getToken().equals(fileStruct.token) && !fileStruct.path.endsWith(".json")) {
+                                                onStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
                                     }
-                                });
-                            }
 
-                            @Override
-                            public void OnError(String token) {
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
 
-                            }
-                        });
-
-
+                                    }
+                                }));
                     }
 
                     @Override
-                    public void downloadStickerAvatar(String token, String extention, long avatarSize, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
-                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-                            @Override
-                            public void OnProgress(String path, String token, int progress) {
-                                G.handler.post(new Runnable() {
+                    public void downloadStickerAvatar(StructGroupSticker sticker, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
+
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
                                     @Override
-                                    public void run() {
-                                        if (getActivity() == null || getActivity().isFinishing() || !isAdded())
-                                            return;
-
-                                        if (progress == 100) {
-                                            onStickerAvatarDownloaded.onStickerAvatarDownload(token);
-                                        }
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (fileStruct.token.equals(sticker.getAvatarToken())) {
+                                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
                                     }
-                                });
 
-                            }
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
 
-                            @Override
-                            public void OnError(String token) {
+                                    }
+                                }));
+                    }
 
-                            }
-                        });
 
+                    @Override
+                    public void downloadLottieStickerItem(StructItemSticker sticker, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
+
+                        //download id must be unique
+                        IGDownloadFile.getInstance().startDownload(
+                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
+                                    @Override
+                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
+                                        G.handler.post(() -> {
+                                            if (sticker.getToken().equals(fileStruct.token) && fileStruct.path.endsWith(".json")) {
+                                                lottieStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
+
+                                    }
+                                }));
                     }
                 })
                 .setOpenPageSticker(new OnOpenPageStickerListener() {
@@ -5881,7 +5917,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(recentStickerList)).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), StickersSettingFragment.newInstance(recentStickerList)).setReplace(false).load();
                         }
                     }
                 })
@@ -5890,6 +5926,78 @@ public class FragmentChat extends BaseFragment
                 .setDividerColor(dividerColor)
                 .build(edtChat);
 
+    }
+
+    private void sendStickerAsMessage(StructIGSticker structIGSticker) {
+
+        String additional = new Gson().toJson(new StructSendSticker(structIGSticker.getId(), structIGSticker.getName(), structIGSticker.getGroupId(), structIGSticker.getToken()));
+        long identity = AppUtils.makeRandomId();
+        int[] imageSize = AndroidUtils.getImageDimens(structIGSticker.getPath());
+        RealmRoomMessage roomMessage = new RealmRoomMessage();
+        roomMessage.setMessageId(identity);
+        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+        roomMessage.setRoomId(mRoomId);
+        roomMessage.setMessage(structIGSticker.getName());
+        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+        RealmAdditional realmAdditional = new RealmAdditional();
+        realmAdditional.setId(AppUtils.makeRandomId());
+        realmAdditional.setAdditionalType(AdditionalType.STICKER);
+        realmAdditional.setAdditionalData(additional);
+
+        roomMessage.setRealmAdditional(realmAdditional);
+
+        RealmAttachment realmAttachment = new RealmAttachment();
+        realmAttachment.setId(identity);
+        realmAttachment.setLocalFilePath(structIGSticker.getPath());
+
+        realmAttachment.setWidth(imageSize[0]);
+        realmAttachment.setHeight(imageSize[1]);
+        realmAttachment.setSize(new File(structIGSticker.getPath()).length());
+        realmAttachment.setName(new File(structIGSticker.getPath()).getName());
+        realmAttachment.setDuration(0);
+
+        roomMessage.setAttachment(realmAttachment);
+
+        roomMessage.getAttachment().setToken(structIGSticker.getToken());
+        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
+        roomMessage.setShowMessage(true);
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+        if (isReply()) {
+            RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                if (copyReplyMessage1 != null) {
+                    return realm.copyFromRealm(copyReplyMessage1);
+                }
+                return null;
+            });
+
+            if (copyReplyMessage != null) {
+                roomMessage.setReplyTo(copyReplyMessage);
+            }
+        }
+
+        new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
+        })).start();
+
+
+        StructMessageInfo sm = new StructMessageInfo(roomMessage);
+
+        if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
+            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+        else
+            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+
+        scrollToEnd();
+
+        if (isReply()) {
+            mReplayLayout.setTag(null);
+            mReplayLayout.setVisibility(View.GONE);
+        }
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
@@ -6452,17 +6560,7 @@ public class FragmentChat extends BaseFragment
         searchHash = new SearchHash();
 
         btnHashLayoutClose = rootView.findViewById(R.id.ac_btn_hash_close);
-        btnHashLayoutClose.setOnClickListener(v -> {
-
-            ll_navigateHash.setVisibility(View.GONE);
-            mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
-            if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
-                layoutMute.setVisibility(View.VISIBLE);
-            } else {
-                if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
-            }
-
-        });
+        btnHashLayoutClose.setOnClickListener(v -> goneSearchBox(v));
 
         btnUpHash.setOnClickListener(view -> searchHash.upHash());
 
@@ -6473,64 +6571,56 @@ public class FragmentChat extends BaseFragment
      * manage need showSpamBar for user or no
      */
     private void showSpamBar() {
-        /**
-         * use handler for run async
-         */
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-                    return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
-                });
-                RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-                });
-                if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                    if (phoneNumber == null) {
-                        if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
-                            initSpamBarLayout(realmRegisteredInfo);
-                            vgSpamUser.setVisibility(View.VISIBLE);
-                        }
-                    }
+        RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
+        });
+        RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+        });
+        if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
+            if (phoneNumber == null) {
+                if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
+                    initSpamBarLayout(realmRegisteredInfo);
+                    vgSpamUser.setVisibility(View.VISIBLE);
+                }
+            }
 
-                    if (realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                        if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+            if (realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
+                if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
 
-                            if (realmRegisteredInfo.isBlockUser()) {
-                                initSpamBarLayout(realmRegisteredInfo);
-                                blockUser = true;
-                                txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-                                vgSpamUser.setVisibility(View.VISIBLE);
-                            } else {
-                                if (vgSpamUser != null) {
-                                    vgSpamUser.setVisibility(View.GONE);
-                                }
-                            }
-                        }
-                    }
-
-                    if (realmContacts != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                        if (realmContacts.isBlockUser()) {
-                            if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
-                                initSpamBarLayout(realmRegisteredInfo);
-                                blockUser = true;
-                                txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-                                vgSpamUser.setVisibility(View.VISIBLE);
-                            } else {
-                                initSpamBarLayout(realmRegisteredInfo);
-                                blockUser = true;
-                                txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-                                vgSpamUser.setVisibility(View.VISIBLE);
-                            }
-                        } else {
-                            if (vgSpamUser != null) {
-                                vgSpamUser.setVisibility(View.GONE);
-                            }
+                    if (realmRegisteredInfo.isBlockUser()) {
+                        initSpamBarLayout(realmRegisteredInfo);
+                        blockUser = true;
+                        txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    } else {
+                        if (vgSpamUser != null) {
+                            vgSpamUser.setVisibility(View.GONE);
                         }
                     }
                 }
             }
-        });
+
+            if (realmContacts != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
+                if (realmContacts.isBlockUser()) {
+                    if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+                        initSpamBarLayout(realmRegisteredInfo);
+                        blockUser = true;
+                        txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    } else {
+                        initSpamBarLayout(realmRegisteredInfo);
+                        blockUser = true;
+                        txtSpamUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (vgSpamUser != null) {
+                        vgSpamUser.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -6542,20 +6632,21 @@ public class FragmentChat extends BaseFragment
         txtSpamClose = rootView.findViewById(R.id.chat_txt_close);
         txtSpamClose.setOnClickListener(view -> {
             vgSpamUser.setVisibility(View.GONE);
-            new Thread(() -> {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(realm1 -> {
-                        if (registeredInfo != null) {
-                            RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfo.getId()).findFirst();
+            if (registeredInfo != null) {
+                long registeredInfoID = registeredInfo.getId();
+                new Thread(() -> {
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        realm.executeTransaction(realm1 -> {
+                            RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfoID).findFirst();
                             if (registeredInfo2 != null) {
                                 registeredInfo2.setDoNotshowSpamBar(true);
                             }
-                        }
 
+                        });
                     });
-                });
 
-            }).start();
+                }).start();
+            }
         });
 
         txtSpamUser.setOnClickListener(new View.OnClickListener() {
@@ -6625,6 +6716,11 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
+        edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH|EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        edtSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
+            return true;
+        });
         edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         final AppCompatTextView textSend = viewBottomSheetForward.findViewById(R.id.txtSend);
         textSend.setVisibility(View.GONE);
@@ -6637,6 +6733,7 @@ public class FragmentChat extends BaseFragment
         bottomSheetDialogForward = new BottomSheetDialog(getActivity(), R.style.BaseBottomSheetDialog);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
+        mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         fastItemAdapterForward.getItemFilter().withFilterPredicate((IItemAdapter.Predicate<ItemBottomSheetForward>) (item, constraint) -> item.structBottomSheetForward.getDisplayName().toLowerCase().contains(String.valueOf(constraint)));
 
@@ -7042,23 +7139,23 @@ public class FragmentChat extends BaseFragment
         //});
 
         final RippleView rippleClose = rootView.findViewById(R.id.chl_btn_close_ripple_search_message);
-        rippleClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (edtSearchMessage.getText().toString().length() == 0) {
-
-                    goneSearchBox(view);
-
-                } else {
-                    // deSelectMessage(selectedPosition);
-                    edtSearchMessage.setText("");
-                    btnHashLayoutClose.performClick();
-                }
+        rippleClose.setOnClickListener(view -> {
+            if (edtSearchMessage.getText().toString().length() == 0) {
+                goneSearchBox(view);
+            } else {
+                // deSelectMessage(selectedPosition);
+                edtSearchMessage.setText("");
+                goneSearchHashFooter();
             }
         });
 
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
+        edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH|EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        edtSearchMessage.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
+            return true;
+        });
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -7073,9 +7170,8 @@ public class FragmentChat extends BaseFragment
                         FragmentChat.hashListener.complete(true, charSequence.toString(), "");
                     }
                 } else {
-                    btnHashLayoutClose.performClick();
+                    goneSearchHashFooter();
                 }
-
                 //mAdapter.filter(charSequence);
                 //
                 //new Handler().postDelayed(new Runnable() {
@@ -7111,12 +7207,26 @@ public class FragmentChat extends BaseFragment
 
     private void goneSearchBox(View view) {
 
-        edtSearchMessage.setText("");
-        ll_Search.setVisibility(View.GONE);
-        layoutToolbar.setVisibility(View.VISIBLE);
-        btnHashLayoutClose.performClick();
+        if (edtSearchMessage != null) {
+            edtSearchMessage.setText("");
+            ll_Search.setVisibility(View.GONE);
+            layoutToolbar.setVisibility(View.VISIBLE);
+        }
+        goneSearchHashFooter();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+    }
+
+    private void goneSearchHashFooter() {
+
+        mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
+            layoutMute.setVisibility(View.VISIBLE);
+        } else {
+            if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
+        }
+        ll_navigateHash.setVisibility(View.GONE);
 
     }
 
@@ -7358,8 +7468,9 @@ public class FragmentChat extends BaseFragment
         realmAttachment.setSize(finalFileSize);
         realmAttachment.setName(finalFileName);
         realmAttachment.setDuration(finalDuration);
-
-        roomMessage.setAttachment(realmAttachment);
+        if (messageType != CONTACT) {
+            roomMessage.setAttachment(realmAttachment);
+        }
 
         roomMessage.setUserId(senderID);
         roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
@@ -7432,7 +7543,7 @@ public class FragmentChat extends BaseFragment
         new Thread(() -> {
             DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    RealmRoom room = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                     if (room != null) {
                         room.setDeleted(false);
                     }
@@ -7442,18 +7553,15 @@ public class FragmentChat extends BaseFragment
         }).start();
 
 
-        if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
-            if (finalMessageType != CONTACT) {
-            } else {
-                ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
-                messageUtil.contact(structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getFirstName(),
-                        structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getLastName(),
-                        structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getPhones().first().getString());
-                if (isReply()) {
-                    messageUtil.replyMessage(replyMessageId);
-                }
-                messageUtil.sendMessage(Long.toString(messageId));
+        if (finalMessageType == CONTACT) {
+            ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
+            messageUtil.contact(structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getFirstName(),
+                    structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getLastName(),
+                    structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getPhones().first().getString());
+            if (isReply()) {
+                messageUtil.replyMessage(replyMessageId);
             }
+            messageUtil.sendMessage(Long.toString(messageId));
         }
 
         if (isReply()) {
@@ -7562,7 +7670,7 @@ public class FragmentChat extends BaseFragment
         if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
             final LinearLayout ll_Forward = rootView.findViewById(R.id.ac_ll_forward);
             int multiForwardSize = multiForwardList.size();
-            if (hasForward || multiForwardSize > 0) {
+            if ((hasForward || multiForwardSize > 0) && mForwardMessages != null) {
 
                 for (int i = 0; i < mForwardMessages.size(); i++) {
                     if (hasForward) {
@@ -7601,7 +7709,7 @@ public class FragmentChat extends BaseFragment
 
                 sendButtonVisibility(true);
 
-                int _count = mForwardMessages.size();
+                int _count = mForwardMessages != null ? mForwardMessages.size() : 0;
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = rootView.findViewById(R.id.cslhf_txt_message);
@@ -7820,10 +7928,18 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER:
-                        if (!addTop) {
-                            mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        if (messageInfo.getAttachment().getName() != null && messageInfo.getAttachment().isAnimatedSticker()) {
+                            if (!addTop) {
+                                mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         } else {
-                            mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            if (!addTop) {
+                                mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                     case VOICE:

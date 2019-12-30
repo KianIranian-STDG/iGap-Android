@@ -237,7 +237,7 @@ public class FragmentContactsProfile extends BaseFragment {
             binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
         }
 
-        binding.toolbarTxtUsernameExpanded.setText(viewModel.username.get());
+        /*binding.toolbarTxtUsernameExpanded.setText(viewModel.username.get());*/
 
         binding.toolbarFabChat.setOnClickListener(v -> {
             viewModel.onClickGoToChat();

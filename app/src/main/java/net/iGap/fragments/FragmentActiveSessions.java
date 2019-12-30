@@ -59,13 +59,10 @@ import java.util.List;
  */
 public class FragmentActiveSessions extends BaseFragment {
 
-    private FastAdapter fastAdapter;
     private RecyclerView rcvContent;
     private List<StructSessions> structItems = new ArrayList<>();
-    private List<IItem> items = new ArrayList<>();
     private ProgressBar prgWaiting;
     private FastItemAdapter fastItemAdapter;
-    private boolean isClearAdapter = true;
     private List<StructSessions> list = new ArrayList<>();
 
     public FragmentActiveSessions() {
@@ -84,6 +81,7 @@ public class FragmentActiveSessions extends BaseFragment {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(getString(R.string.Active_Sessions))
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
@@ -108,66 +106,54 @@ public class FragmentActiveSessions extends BaseFragment {
         rcvContent.setItemAnimator(new DefaultItemAnimator());
         rcvContent.setAdapter(fastItemAdapter);
 
-        G.onUserSessionGetActiveList = new OnUserSessionGetActiveList() {
-            @Override
-            public void onUserSessionGetActiveList(final List<ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session> session) {
+        G.onUserSessionGetActiveList = session -> G.handler.post(() -> {
 
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+            for (int i = 0; i < session.size(); i++) {
 
-                        for (int i = 0; i < session.size(); i++) {
+                StructSessions item = new StructSessions();
+                item.setSessionId(session.get(i).getSessionId());
+                item.setName(session.get(i).getAppName());
+                item.setAppId(session.get(i).getAppId());
+                item.setBuildVersion(session.get(i).getAppBuildVersion());
+                item.setAppVersion(session.get(i).getAppVersion());
+                item.setPlatform(session.get(i).getPlatform());
+                item.setPlatformVersion(session.get(i).getPlatformVersion());
+                item.setDevice(session.get(i).getDevice());
+                item.setDeviceName(session.get(i).getDeviceName());
+                item.setLanguage(session.get(i).getLanguage());
+                item.setCountry(session.get(i).getCountry());
+                item.setCurrent(session.get(i).getCurrent());
+                item.setCreateTime(session.get(i).getCreateTime());
+                item.setActiveTime(session.get(i).getActiveTime());
+                item.setIp(session.get(i).getIp());
 
-                            StructSessions item = new StructSessions();
-                            item.setSessionId(session.get(i).getSessionId());
-                            item.setName(session.get(i).getAppName());
-                            item.setAppId(session.get(i).getAppId());
-                            item.setBuildVersion(session.get(i).getAppBuildVersion());
-                            item.setAppVersion(session.get(i).getAppVersion());
-                            item.setPlatform(session.get(i).getPlatform());
-                            item.setPlatformVersion(session.get(i).getPlatformVersion());
-                            item.setDevice(session.get(i).getDevice());
-                            item.setDeviceName(session.get(i).getDeviceName());
-                            item.setLanguage(session.get(i).getLanguage());
-                            item.setCountry(session.get(i).getCountry());
-                            item.setCurrent(session.get(i).getCurrent());
-                            item.setCreateTime(session.get(i).getCreateTime());
-                            item.setActiveTime(session.get(i).getActiveTime());
-                            item.setIp(session.get(i).getIp());
+                if (item.isCurrent()) {
+                    structItems.add(0, item);
+                } else {
+                    structItems.add(item);
+                }
 
-                            if (item.isCurrent()) {
-                                structItems.add(0, item);
-                            } else {
-                                structItems.add(item);
-                            }
-
-                            list.add(item);
-                        }
-
-                        itemAdapter();
-                    }
-                });
+                list.add(item);
             }
-        };
+
+            itemAdapter();
+        });
         new RequestUserSessionGetActiveList().userSessionGetActiveList();
 
         G.onUserSessionTerminate = new OnUserSessionTerminate() {
 
             @Override
             public void onUserSessionTerminate(final Long messageId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
 
-                        for (int i = 0; i < list.size(); i++) {
-                            if (list.get(i).getSessionId() == messageId) {
-                                int j = fastItemAdapter.getPosition(list.get(i).getSessionId());
-                                if (j >= 0) {
-                                    fastItemAdapter.remove(j);
-                                    list.remove(i);
-                                }
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).getSessionId() == messageId) {
+                            int j = fastItemAdapter.getPosition(list.get(i).getSessionId());
+                            if (j >= 0) {
+                                fastItemAdapter.remove(j);
+                                list.remove(i);
                             }
                         }
                     }
@@ -176,73 +162,64 @@ public class FragmentActiveSessions extends BaseFragment {
 
             @Override
             public void onTimeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                G.handler.post(() -> {
 
-                        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
 
-                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-                    }
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
                 });
             }
 
             @Override
             public void onError() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
-                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-                    }
+                G.handler.post(() -> {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    prgWaiting.setVisibility(View.GONE);
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
                 });
             }
         };
 
         fastItemAdapter.withSelectable(true);
-        fastItemAdapter.withOnClickListener(new OnClickListener() {
-            @Override
-            public boolean onClick(final View v, IAdapter adapter, final IItem item, final int position) {
+        fastItemAdapter.withOnClickListener((v, adapter, item, position) -> {
 
-                if (item instanceof AdapterActiveSessions) {
-                    if (((AdapterActiveSessions) item).getItem().isCurrent()) {
+            if (item instanceof AdapterActiveSessions) {
+                if (((AdapterActiveSessions) item).getItem().isCurrent()) {
 
-                    } else {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                prgWaiting.setVisibility(View.VISIBLE);
-                                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
-                            }
-                        }).show();
-                    }
                 } else {
-                    final int size = list.size();
-                    if (size > 1) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_all_title).content(R.string.active_session_all_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            prgWaiting.setVisibility(View.VISIBLE);
+                            G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
+                        }
+                    }).show();
+                }
+            } else {
+                final int size = list.size();
+                if (size > 1) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_all_title).content(R.string.active_session_all_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                v.setVisibility(View.GONE); // click on AdapterActiveSessionsHeader
+                            v.setVisibility(View.GONE); // click on AdapterActiveSessionsHeader
 
-                                for (int i = 0; i < size; i++) {
-                                    if (!list.get(i).isCurrent()) {
-                                        new RequestUserSessionTerminate().userSessionTerminate(list.get(i).getSessionId());
-                                    }
+                            for (int i = 0; i < size; i++) {
+                                if (!list.get(i).isCurrent()) {
+                                    new RequestUserSessionTerminate().userSessionTerminate(list.get(i).getSessionId());
                                 }
                             }
-                        }).show();
-                    }
+                        }
+                    }).show();
                 }
-                return false;
             }
+            return false;
         });
     }
 
-    public void itemAdapter() {
+    private void itemAdapter() {
         boolean b = false;
 
         for (StructSessions s : structItems) {
@@ -259,5 +236,12 @@ public class FragmentActiveSessions extends BaseFragment {
         }
         rcvContent.addItemDecoration(new DividerItemDecoration(rcvContent.getContext(), LinearLayoutManager.VERTICAL), /*fastItemAdapter.getAdapterItemCount() > 2 ? 2 :*/ 0);
         prgWaiting.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        G.onUserSessionGetActiveList = null;
+        G.onUserSessionTerminate = null;
     }
 }

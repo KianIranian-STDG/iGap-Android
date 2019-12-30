@@ -72,6 +72,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.recovery_Password))
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)

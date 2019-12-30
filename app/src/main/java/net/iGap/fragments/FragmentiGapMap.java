@@ -706,6 +706,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.igap_nearby))
                 .setLeftIcon(R.string.back_icon)
@@ -1348,11 +1349,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
 
                 showProgress(false);
-
+                isSendRequestGeoCoordinate = false;
             }
         }, 2000);
-
-        isSendRequestGeoCoordinate = false;
     }
 
     private void showProgress(final boolean show) {
@@ -1378,7 +1377,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     public void statusCheck() {
-        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager manager = (LocationManager) G.fragmentActivity.getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 

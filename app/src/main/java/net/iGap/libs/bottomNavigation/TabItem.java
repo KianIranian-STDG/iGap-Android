@@ -11,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import net.iGap.AccountManager;
 import net.iGap.G;
@@ -235,17 +237,18 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         /*textView.setSelected(isActive);*/
         /*imageView.setSelected(isActive);*/
         if (!haveAvatarImage) {
+            ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), new Theme().getTheme(getContext()));
             if (isDarkTheme) {
                 if (active) {
-                    imageView.setImageResource(darkSelectedIcon);
+                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), darkSelectedIcon, wrapper.getTheme()));
                 } else {
-                    imageView.setImageResource(darkUnSelectedIcon);
+                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), darkUnSelectedIcon, wrapper.getTheme()));
                 }
             } else {
                 if (active) {
-                    imageView.setImageResource(selectedIcon);
+                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), selectedIcon, wrapper.getTheme()));
                 } else {
-                    imageView.setImageResource(unSelectedIcon);
+                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), unSelectedIcon, wrapper.getTheme()));
                 }
             }
         }

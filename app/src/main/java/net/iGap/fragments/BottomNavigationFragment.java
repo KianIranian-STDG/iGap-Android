@@ -241,7 +241,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
         if (fragment instanceof FragmentMain) {
             if (enable) {
-                ((FragmentMain) fragment).checkHasSharedData();
+                ((FragmentMain) fragment).checkHasSharedData(true);
             } else {
                 ((FragmentMain) fragment).revertToolbarFromForwardMode();
             }

@@ -161,6 +161,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
                     .setLogoShown(true)
+                    .setLifecycleOwner(getViewLifecycleOwner())
                     .setLeftIcon(R.string.edit_icon)
                     .setRightIcons(R.string.add_icon_without_circle_font)
                     .setFragmentActivity(getActivity())
@@ -170,6 +171,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         } else {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
+                    .setLifecycleOwner(getViewLifecycleOwner())
                     .setLogoShown(true)
                     .setLeftIcon(R.string.back_icon)
                     .setRightIcons(R.string.add_icon_without_circle_font)

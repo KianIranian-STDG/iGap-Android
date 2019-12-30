@@ -38,10 +38,22 @@ public class ResendMessage implements IResendMessage {
         this.mMessages = messages;
         this.mListener = listener;
         this.mSelectedMessageID = selectedMessageID;
+        boolean hasTextForCopy = checkHasMessageForCopy(messages);
         if (!((Activity) context).isFinishing()) {
-            AppUtils.buildResendDialog(context, messages.size(), this).show();
+            AppUtils.buildResendDialog(context, messages.size() , hasTextForCopy, this).show();
         }
 
+    }
+
+    private boolean checkHasMessageForCopy(List<StructMessageInfo> messages) {
+        for (StructMessageInfo message : messages){
+            if (message.realmRoomMessage == null) continue;
+            String msgText = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessage() : message.realmRoomMessage.getMessage();
+            if (msgText != null && !msgText.isEmpty()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<StructMessageInfo> getMessages() {
@@ -154,5 +166,10 @@ public class ResendMessage implements IResendMessage {
     @Override
     public void resendAllMessages() {
         resend(true);
+    }
+
+    @Override
+    public void copyMessage() {
+        mListener.copyMessage();
     }
 }

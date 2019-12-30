@@ -252,7 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
-                android:background="?attr/iGapBottomSheetBackground"
+                android:background="?attr/iGapTopRoundButtonPrimary"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -273,7 +273,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:layoutDirection="locale"
-                android:background="?attr/iGapBottomSheetBackground"
+                android:background="?attr/iGapTopRoundButtonPrimary"
                 android:visibility="gone">
 
                 <TextView
@@ -345,6 +345,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp44"
                         android:layoutDirection="ltr"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:visibility="gone">
 
                         <TextView
@@ -452,7 +454,7 @@
                     android:paddingRight="@dimen/dp8"
                     android:visibility="gone">
 
-                    <net.iGap.module.MEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/chl_edt_search_message"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -460,6 +462,7 @@
                         android:background="@null"
                         android:hint="@string/search"
                         android:padding="@dimen/dp8"
+                        android:lines="1"
                         android:singleLine="true"
                         android:imeOptions="actionSearch"
                         android:textColor="@color/white"

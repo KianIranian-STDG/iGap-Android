@@ -63,11 +63,10 @@ import net.iGap.kuknos.view.KuknosLoginFrag;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.view.NewsMainFrag;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentResult;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
+import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,12 +74,9 @@ import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
-import io.realm.Realm;
-
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
-import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -134,7 +130,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();
                 break;
             case IVANDQR:
-                scanBarCode(activity);
+                UserScoreViewModel.scanBarCode(activity);
                 break;
             case IVANDLIST:
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentIVandActivities.newInstance()).setReplace(false).load();
@@ -188,16 +184,16 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
                 break;
             case WALLET_MENU:/** tested **/
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                        String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                        if (!userInfo.isWalletRegister()) {
-                            new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
-                        } else {
-                            boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
-                            activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
-                        }
-                    });
+                DbManager.getInstance().doRealmTask(realm -> {
+                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
+                    if (!userInfo.isWalletRegister()) {
+                        new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
+                    } else {
+                        boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
+                        activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
+                    }
+                });
                 break;
             case NEARBY_MENU:/** tested **/
                 try {
@@ -325,7 +321,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 else {
                     PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("id",discoveryField.value);
+                    bundle.putString("id", discoveryField.value);
                     popularMoreChannelFragment.setArguments(bundle);
                     new HelperFragment(activity.getSupportFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
                 }
@@ -385,9 +381,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private static void actionPage(String value, FragmentActivity activity, boolean haveNext) {
-        DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(Integer.valueOf(value));
-        discoveryFragment.setNeedToCrawl(haveNext);
-        new HelperFragment(activity.getSupportFragmentManager(), discoveryFragment).setReplace(false).load(false);
+        try {// this is because in some times not set correct value in server when change or add new item
+            DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(Integer.valueOf(value));
+            discoveryFragment.setNeedToCrawl(haveNext);
+            new HelperFragment(activity.getSupportFragmentManager(), discoveryFragment).setReplace(false).load(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void dialPhoneNumber(Context context, String phoneNumber, FragmentActivity activity) {

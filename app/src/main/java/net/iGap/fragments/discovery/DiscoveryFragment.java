@@ -107,6 +107,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         if (page != 0) {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
+                    .setLifecycleOwner(getViewLifecycleOwner())
                     .setLogoShown(true)
                     .setLeftIcon(R.string.back_icon)
                     .setListener(this);
@@ -114,6 +115,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         } else {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
+                    .setLifecycleOwner(getViewLifecycleOwner())
                     //.setLeftIcon(R.string.flag_icon)
                     // .setRightSmallAvatarShown(true)
                     .setLogoShown(true)
@@ -324,7 +326,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         Gson gson = builder.create();
         SharedPreferences pref = G.context.getSharedPreferences("DiscoveryPages", Context.MODE_PRIVATE);
         String json = pref.getString("page0", "");
-        String title = pref.getString("title", "");
+        //String title = pref.getString("title", "");
         if (json != null && !json.equals("")) {
             try {
                 ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>() {
@@ -334,7 +336,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                         return;
                     }
                 }
-                setAdapterData(discoveryArrayList, title);
+                setAdapterData(discoveryArrayList, "");
             } catch (Exception e) {
                 e.printStackTrace();
             }

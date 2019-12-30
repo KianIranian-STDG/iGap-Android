@@ -84,6 +84,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.check_icon, R.string.retry_icon)
                 .setLogoShown(true)

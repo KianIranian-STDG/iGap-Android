@@ -189,6 +189,19 @@
                     app:layout_constraintTop_toBottomOf="@id/channelTypeTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.showUsername}"
+                    android:text="@{viewModel.channelUsername}"
+                    android:padding="@dimen/dp8"
+                    android:onClick="@{()->viewModel.usernameClicked()}"
+                    android:textColor="?attr/iGapTitleTextColor"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/channelType"
+                    android:id="@+id/channelUsername"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/signedMessageTxt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -200,7 +213,7 @@
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/channelType" />
+                    app:layout_constraintTop_toBottomOf="@id/channelUsername" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/signedMessageDescription"

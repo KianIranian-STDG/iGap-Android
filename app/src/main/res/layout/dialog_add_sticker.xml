@@ -1,32 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?rootBackgroundColor"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/add_sticker_toolbar"
+    <View
+        android:id="@+id/lineViewTop"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="@dimen/dp4"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp8"
+        android:background="?attr/iGapBottomSheetHeaderLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".34" />
+
+    <TextView
+        android:id="@+id/tv_stickerDialog_groupName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:paddingStart="@dimen/dp16"
+        android:paddingTop="@dimen/dp8"
+        android:paddingEnd="@dimen/dp16"
+        android:paddingBottom="@dimen/dp4"
+        android:textColor="?attr/iGapTitleTextColor"
+        android:textSize="@dimen/largeTextSize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineViewTop" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_stickerDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/toolbar_height"
-        android:orientation="horizontal" />
+        android:layout_marginTop="@dimen/dp4"
+        android:clipToPadding="false"
+        android:minHeight="@dimen/dp300"
+        android:paddingBottom="60dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_stickerDialog_groupName"
+        app:spanCount="5" />
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/iv_stickerDialog_preview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:animateLayoutChanges="true"
+        android:background="#8B000000"
+        android:padding="@dimen/dp60"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <net.iGap.adapter.items.cells.AnimatedStickerCell
+        android:id="@+id/iv_stickerDialog_lottiePreview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:animateLayoutChanges="true"
+        android:background="#8B000000"
+        android:padding="@dimen/dp60"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rv_stickerDialog"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ProgressBar
+        android:id="@+id/fl_stickerDialog_progressContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_stickerDialog"
+        app:layout_constraintEnd_toEndOf="@+id/rv_stickerDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_stickerDialog_groupName" />
+
+    <TextView
+        android:id="@+id/tv_stickerDialog_add"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="@dimen/dp48"
+        android:background="?attr/iGapButtonColor"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/largeTextSize"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvAddStickerDialog"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <ProgressBar
+        android:id="@+id/pb_stickerDialog_addOrRemove"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginLeft="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp4"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_stickerDialog"
+        app:layout_constraintStart_toStartOf="@+id/tv_stickerDialog_add" />
 
-        <ProgressBar
-            android:id="@+id/progress_stricker"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
-            android:layout_centerInParent="true" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

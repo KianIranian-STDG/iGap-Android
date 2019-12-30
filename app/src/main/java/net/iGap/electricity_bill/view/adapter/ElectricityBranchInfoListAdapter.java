@@ -129,10 +129,15 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
                     break;
                 case 8:
                     title.setText("نوع مشترک");
-                    if (mdata.getData().getCustomerType().equals("1"))
-                        desc.setText("حقیقی");
-                    else
-                        desc.setText("حقوقی");
+                    if (mdata.getData().getCustomerType() != null){
+                        if (mdata.getData().getCustomerType().equals("1")) {
+                            desc.setText("حقیقی");
+                        }else {
+                            desc.setText("حقوقی");
+                        }
+                    }else {
+                        desc.setText("");
+                    }
                     break;
                 case 9:
                     title.setText("نام مشترک");

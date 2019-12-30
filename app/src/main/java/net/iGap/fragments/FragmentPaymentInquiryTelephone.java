@@ -49,6 +49,7 @@ public class FragmentPaymentInquiryTelephone extends BaseFragment {
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.bills_inquiry_telecom))
                 .setLeftIcon(R.string.back_icon)

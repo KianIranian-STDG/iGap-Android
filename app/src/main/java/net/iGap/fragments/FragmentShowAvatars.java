@@ -11,8 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,17 +19,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -43,11 +42,9 @@ import net.iGap.interfaces.OnGroupAvatarDelete;
 import net.iGap.interfaces.OnUserAvatarDelete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
-import net.iGap.module.TouchImageView;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoFileDownload;
@@ -192,6 +189,7 @@ public class FragmentShowAvatars extends BaseFragment {
             if (getContext() == null) return;
 
             List<String> items = new ArrayList<>();
+            items.add(getString(R.string.save_to_gallery));
 
             switch (from) {
                 case setting:
@@ -200,41 +198,31 @@ public class FragmentShowAvatars extends BaseFragment {
                 case group:
                     if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
                         items.add(getString(R.string.array_Delete_photo));
-                    } else {
-                        items.add(getString(R.string.save_to_gallery));
                     }
                     break;
                 case channel:
                     if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
                         items.add(getString(R.string.array_Delete_photo));
-                    } else {
-                        items.add(getString(R.string.save_to_gallery));
                     }
                     break;
-                case chat:
-                    items.add(getString(R.string.save_to_gallery));
-                    break;
             }
-            new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
-                @Override
-                public void onClick(int position) {
-                    if (items.get(position).equals(getString(R.string.save_to_gallery))) {
-                        saveToGallery();
-                    } else if (items.get(position).equals(getString(array_Delete_photo))) {
-                        switch (from) {
-                            case setting:
-                                deletePhotoSetting();
-                                break;
-                            case group:
-                                deletePhotoGroup();
-                                break;
-                            case channel:
-                                deletePhotoChannel();
-                                break;
-                            case chat:
-                                deletePhotoChat();
-                                break;
-                        }
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                if (items.get(position).equals(getString(R.string.save_to_gallery))) {
+                    saveToGallery();
+                } else if (items.get(position).equals(getString(array_Delete_photo))) {
+                    switch (from) {
+                        case setting:
+                            deletePhotoSetting();
+                            break;
+                        case group:
+                            deletePhotoGroup();
+                            break;
+                        case channel:
+                            deletePhotoChannel();
+                            break;
+                        case chat:
+                            deletePhotoChat();
+                            break;
                     }
                 }
             }).show();
@@ -312,7 +300,6 @@ public class FragmentShowAvatars extends BaseFragment {
                     avatarListSize = element.size();
 
                     if (avatarListSize > 0) {
-                        mAdapter.clearBitmaps();
                         mAdapter = new AdapterViewPager();
                         viewPager.setAdapter(mAdapter);
                         txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarListSize);
@@ -419,6 +406,9 @@ public class FragmentShowAvatars extends BaseFragment {
                 if (file.exists()) {
                     HelperSaveFile.savePicToGallery(media, true);
                 }
+            } else {
+                if (getContext() != null)
+                    Toast.makeText(getContext(), R.string.file_not_download_yet, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -552,27 +542,14 @@ public class FragmentShowAvatars extends BaseFragment {
     }
 
     private class AdapterViewPager extends PagerAdapter {
-        Bitmap[] bitmaps;
-        final Object mutex;
 
         public AdapterViewPager() {
-            bitmaps = new Bitmap[avatarList.size()];
-            mutex = new Object();
+
         }
 
         @Override
         public int getCount() {
             return avatarList.size();
-        }
-
-        public void clearBitmaps() {
-            synchronized (mutex) {
-                for (Bitmap bitmap : bitmaps) {
-                    if (bitmap != null && !bitmap.isRecycled()) {
-                        bitmap.recycle();
-                    }
-                }
-            }
         }
 
         @Override
@@ -586,7 +563,8 @@ public class FragmentShowAvatars extends BaseFragment {
             LayoutInflater inflater = LayoutInflater.from(container.getContext());
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
 
-            final TouchImageView touchImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            zoomableImageView.setZoomable(false);
             final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
             imgPlay.setVisibility(View.GONE);
 
@@ -598,7 +576,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
             if (HelperDownloadFile.getInstance().isDownLoading(ra.getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
-                startDownload(position, progress, touchImageView);
+                startDownload(position, progress, zoomableImageView);
             } else {
                 progress.withDrawable(R.drawable.ic_download, true);
             }
@@ -607,13 +585,14 @@ public class FragmentShowAvatars extends BaseFragment {
 
             File file = new File(path);
             if (file.exists()) {
-                loadFileToImageView(touchImageView, file, position);
+                loadImage(zoomableImageView, path);
                 progress.setVisibility(View.GONE);
+                zoomableImageView.setZoomable(true);
             } else {
                 path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
                 file = new File(path);
                 if (file.exists()) {
-                    loadFileToImageView(touchImageView, file, position);
+                    loadImage(zoomableImageView, path);
                 } else {
                     // if thumpnail not exist download it
                     ProtoFileDownload.FileDownload.Selector selector = null;
@@ -627,24 +606,13 @@ public class FragmentShowAvatars extends BaseFragment {
                         fileSize = ra.getLargeThumbnail().getSize();
                     }
 
-                    final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_TEMP, true);
-
                     if (selector != null && fileSize > 0) {
                         HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(final String path, int progress) {
 
                                 if (progress == 100) {
-
-                                    G.currentActivity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (touchImageView != null) {
-                                                loadFileToImageView(touchImageView, new File(path), position);
-                                            }
-
-                                        }
-                                    });
+                                    G.currentActivity.runOnUiThread(() -> loadImage(zoomableImageView, path));
                                 }
                             }
 
@@ -657,37 +625,27 @@ public class FragmentShowAvatars extends BaseFragment {
                 }
             }
 
-            progress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            progress.setOnClickListener(view -> {
 
-                    String _cashId = avatarList.get(position).getFile().getCacheId();
+                String _cashId = avatarList.get(position).getFile().getCacheId();
 
-                    if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
-                        HelperDownloadFile.getInstance().stopDownLoad(_cashId);
-                    } else {
-                        progress.withDrawable(R.drawable.ic_cancel, true);
-                        startDownload(position, progress, touchImageView);
-                    }
+                if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
+                    HelperDownloadFile.getInstance().stopDownLoad(_cashId);
+                } else {
+                    progress.withDrawable(R.drawable.ic_cancel, true);
+                    startDownload(position, progress, zoomableImageView);
                 }
             });
 
-            touchImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isShowToolbar) {
-                        toolbarShowImage.animate().setDuration(150).alpha(0F).start();
-                        //  ltImageName.setVisibility(View.GONE);
-                        // ltImageName.animate().setDuration(150).alpha(0F).start();
-                        toolbarShowImage.setVisibility(View.GONE);
-                        isShowToolbar = false;
-                    } else {
-                        toolbarShowImage.animate().setDuration(150).alpha(1F).start();
-                        toolbarShowImage.setVisibility(View.VISIBLE);
-                        //  ltImageName.animate().setDuration(150).alpha(1F).start();
-                        //  ltImageName.setVisibility(View.VISIBLE);
-                        isShowToolbar = true;
-                    }
+            zoomableImageView.setOnClickListener(view -> {
+                if (isShowToolbar) {
+                    toolbarShowImage.animate().setDuration(150).alpha(0F).start();
+                    toolbarShowImage.setVisibility(View.GONE);
+                    isShowToolbar = false;
+                } else {
+                    toolbarShowImage.animate().setDuration(150).alpha(1F).start();
+                    toolbarShowImage.setVisibility(View.VISIBLE);
+                    isShowToolbar = true;
                 }
             });
 
@@ -695,55 +653,28 @@ public class FragmentShowAvatars extends BaseFragment {
             return layout;
         }
 
-        private void loadFileToImageView(ImageView imageView, File file, int pos) {
-            synchronized (mutex) {
-                if (imageView == null)
-                    return;
-
-                if (bitmaps[pos] != null && !bitmaps[pos].isRecycled()) {
-                    bitmaps[pos].recycle();
-                    bitmaps[pos] = null;
-                }
-
-                Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                if (myBitmap == null) {
-                    return;
-                }
-
-                bitmaps[pos] = myBitmap;
-
-                imageView.setImageBitmap(myBitmap);
-            }
+        private void loadImage(PhotoView img, String path) {
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), img);
         }
 
-        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView) {
+        private void startDownload(int position, final MessageProgress progress, final PhotoView zoomableImageView) {
             final RealmAttachment ra = avatarList.get(position).getFile();
             final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
-            progress.withOnProgress(new OnProgress() {
-                @Override
-                public void onProgressFinished() {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(0);
-                            progress.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            });
+            progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
+                progress.withProgress(0);
+                progress.setVisibility(View.GONE);
+                zoomableImageView.setZoomable(true);
+            }));
 
 
             HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progres) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(progres);
-                            if (progres == 100) {
-                                loadFileToImageView(touchImageView, new File(path), position);
-                            }
+                    G.currentActivity.runOnUiThread(() -> {
+                        progress.withProgress(progres);
+                        if (progres == 100) {
+                            loadImage(zoomableImageView, path);
                         }
                     });
 
@@ -752,12 +683,9 @@ public class FragmentShowAvatars extends BaseFragment {
                 @Override
                 public void OnError(String token) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(0);
-                            progress.withDrawable(R.drawable.ic_download, true);
-                        }
+                    G.currentActivity.runOnUiThread(() -> {
+                        progress.withProgress(0);
+                        progress.withDrawable(R.drawable.ic_download, true);
                     });
                 }
             });
@@ -765,13 +693,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            synchronized (mutex) {
-                if (bitmaps[position] != null && !bitmaps[position].isRecycled()) {
-                    bitmaps[position].recycle();
-                    bitmaps[position] = null;
-                }
-                container.removeView((View) object);
-            }
+            container.removeView((View) object);
         }
     }
 }

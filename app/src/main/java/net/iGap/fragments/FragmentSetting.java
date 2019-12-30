@@ -81,6 +81,7 @@ public class FragmentSetting extends BaseFragment {
 
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.more_icon)
                 .setLogoShown(true)

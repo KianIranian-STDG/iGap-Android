@@ -60,6 +60,7 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
                     @Override

@@ -230,10 +230,13 @@ public class HelperNotification {
                     .setChannelId(CHANNEL_ID)
                     .setContentTitle(mHeader)
                     .setContentText(mContent)
-                    .setSubText(accountUser.getName())
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .setStyle(getBigStyle())
                     .setContentIntent(pi);
+
+            if (AccountManager.getInstance().getUserAccountList().size() > 2) {
+                builder.setSubText(accountUser.getName());
+            }
 
             //maybe time not set , this if not work and time of notify will set .
             if (mTime != 0) {

@@ -56,6 +56,7 @@ public class StructMessageInfo implements Parcelable {
 
     public String songArtist;
     public long songLength;
+    private String TAG = " abbasiAnimation";
 
 
     public void setSongArtist(String songArtist) {
@@ -70,7 +71,7 @@ public class StructMessageInfo implements Parcelable {
         if (this.realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
             return MyType.SendType.send;
         } else {
-           return MyType.SendType.recvive;
+            return MyType.SendType.recvive;
         }
     }
 
@@ -139,7 +140,7 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public RealmAdditional getAdditional() {
-        if (realmRoomMessage.getRealmAdditional() != null){
+        if (realmRoomMessage.getRealmAdditional() != null) {
             return realmRoomMessage.getRealmAdditional();
         } else if (realmRoomMessage.getForwardMessage() != null && realmRoomMessage.getForwardMessage().getRealmAdditional() != null) {
             return realmRoomMessage.getForwardMessage().getRealmAdditional();
@@ -188,9 +189,9 @@ public class StructMessageInfo implements Parcelable {
                     }
                     setAttachment(realm.copyFromRealm(realmAttachment));
                     abstractMessage.onProgressFinish(holder, messageType);
-                    Log.d("bagi" ,"onProgressFinish: " + realmAttachment.getLocalFilePath());
+                    Log.d("bagi", "onProgressFinish: " + realmAttachment.getLocalFilePath());
 
-                    if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
+                    if (realmAttachment.isFileExistsOnLocalAndIsImage()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
                     } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
@@ -200,6 +201,7 @@ public class StructMessageInfo implements Parcelable {
                         }
                     }
 
+                    changeLog(changeSet != null ? changeSet.getChangedFields() : new String[0], identifier);
                     //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
                 }
 
@@ -209,10 +211,16 @@ public class StructMessageInfo implements Parcelable {
     }
 
     private void removeAttachmentChangeListener() {
-        if (liverRealmAttachment != null && realmAttachmentRealmChangeListener!= null) {
+        if (liverRealmAttachment != null && realmAttachmentRealmChangeListener != null) {
             liverRealmAttachment.removeChangeListener(realmAttachmentRealmChangeListener);
             liverRealmAttachment = null;
             realmAttachmentRealmChangeListener = null;
+        }
+    }
+
+    private void changeLog(String[] strings, long identifier) {
+        for (String string : strings) {
+            Log.i(TAG, "changeLog: " + string + " id -> " + identifier);
         }
     }
 
@@ -220,8 +228,19 @@ public class StructMessageInfo implements Parcelable {
         if (realmRoomMessage.getChannelExtra() != null) {
             return realmRoomMessage.getChannelExtra();
         } else {
+            //Todo: maybe use this code for instead create thread and to Db work in it (bagi check it :D)
+            /*DbManager.getInstance().doRealmTransactionLowPriorityAsync(new DbManager.RealmTransaction() {
+                @Override
+                public void doTransaction(Realm realm) {
+                    RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                    RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                    if (newMessage != null && channelExtra != null) {
+                        newMessage.setChannelExtra(channelExtra);
+                    }
+                }
+            });*/
             new Thread(() -> {
-                    DbManager.getInstance().doRealmTask(realm -> {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(realm1 -> {
                         RealmRoomMessage newMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
                         RealmChannelExtra channelExtra = realm1.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
