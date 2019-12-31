@@ -116,7 +116,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private ConstraintLayout root;
     private TextView selectedItemCountTv;
     private RecyclerView multiSelectRv;
-    /*private SelectedItemAdapter selectedItemAdapter;*/
+    private SelectedItemAdapter multiSelectAdapter;
     private View selectedItemView;
 
     public static FragmentMain newInstance(MainType mainType) {
@@ -160,10 +160,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         selectedItemView = view.findViewById(R.id.amr_layout_selected_root);
 
         multiSelectRv.setLayoutManager(new LinearLayoutManager(multiSelectRv.getContext(), RecyclerView.HORIZONTAL, false));
-        /*if (selectedItemAdapter == null) {
-            selectedItemAdapter = new SelectedItemAdapter();
-        }*/
-        multiSelectRv.setAdapter(new SelectedItemAdapter()/*selectedItemAdapter*/);
+
+        if (multiSelectAdapter == null) multiSelectAdapter = new SelectedItemAdapter();
+        multiSelectRv.setAdapter(multiSelectAdapter);
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -206,10 +205,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 return;
             }
 
-            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
+            multiSelectAdapter.setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
 
             RealmRoom finalItem = item;
-            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setCallBack(action -> {
+            multiSelectAdapter.setCallBack(action -> {
                 switch (action) {
                     case 0:
                         pinToTop(finalItem.getId(), finalItem.isPinned());
@@ -245,7 +244,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
 
             refreshChatList(position, false);
-            Log.wtf(this.getClass().getName(), "count item: " + multiSelectRv.getAdapter().getItemCount());
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
@@ -269,10 +267,21 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         //check is available forward,shared message
         setForwardMessage(true);
         checkHasSharedData(true);
+        checkMultiSelectState();
 
         //just check at first time page loaded
         notifyChatRoomsList();
 
+    }
+
+    private void checkMultiSelectState() {
+        if (isChatMultiSelectEnable) {
+            enableMultiSelect();
+            selectedItemCountTv.setVisibility(View.VISIBLE);
+            multiSelectRv.setVisibility(View.VISIBLE);
+            multiSelectAdapter.notifyDataSetChanged();
+            selectedItemCountTv.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
+        }
     }
 
     private void markAsRead() {
