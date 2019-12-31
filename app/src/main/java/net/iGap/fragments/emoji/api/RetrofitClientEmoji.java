@@ -1,5 +1,7 @@
 package net.iGap.fragments.emoji.api;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -10,6 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /*
@@ -21,6 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
+
+// TODO: 12/31/19 must add this class to retrofit factory
 public class RetrofitClientEmoji {
 
     private static Retrofit retrofit = null;
@@ -30,8 +35,9 @@ public class RetrofitClientEmoji {
         String s = "Bearer " + EncryptKeySticker.enccriptData();
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
+            @NonNull
             @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
+            public Response intercept(@NonNull Interceptor.Chain chain) throws IOException {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
@@ -54,6 +60,7 @@ public class RetrofitClientEmoji {
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(client)
                     .build();
         }
