@@ -73,7 +73,6 @@ public class HelperSaveFile {
 
                 switch (folderType) {
                     case download:
-                        Log.wtf(HelperSaveFile.class.getName(),"download directory: "+ Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
                         if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
                         }
