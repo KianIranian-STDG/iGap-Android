@@ -630,17 +630,45 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
                 mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, mMessage.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
             }
+        } else {
+             FrameLayout forwardContainer = mHolder.getItemContainer().findViewById(R.id.messageForwardContainer);
+
+            if (forwardContainer == null) {
+                forwardContainer = new FrameLayout(holder.itemView.getContext());
+                forwardContainer.setId(R.id.messageForwardContainer);
+
+                if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                    mHolder.getItemContainer().addView(forwardContainer, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+                } else {
+                    mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+                }
+
+                forwardContainer.addView(mHolder.getChannelForwardIv(), LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
+                forwardContainer.setVisibility(View.GONE);
+            }
+
+            if (type == ProtoGlobal.Room.Type.CHANNEL) {
+                forwardContainer.setVisibility(View.VISIBLE);
+                mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                        messageClickListener.onForwardClick(structMessage);
+                });
+            }
+
+            if (type == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                forwardContainer.setVisibility(View.VISIBLE);
+                mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                        messageClickListener.onForwardFromCloudClick(structMessage);
+                });
+            }
         }
 
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            mHolder.getForwardContainer().setVisibility(View.VISIBLE);
-            mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                if (!FragmentChat.isInSelectionMode && mMessage != null &&
-                        !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
-                        !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
-                    messageClickListener.onForwardClick(structMessage);
-            });
-        }
+
 
         /**
          * set message time

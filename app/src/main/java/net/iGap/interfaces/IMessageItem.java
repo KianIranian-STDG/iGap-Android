@@ -34,6 +34,8 @@ public interface IMessageItem {
 
     void onForwardClick(StructMessageInfo message);
 
+    void onForwardFromCloudClick(StructMessageInfo message);
+
     void onDownloadAllEqualCashId(String token, String messageId);
 
     void onItemShowingMessageId(StructMessageInfo messageInfo);

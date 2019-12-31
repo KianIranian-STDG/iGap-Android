@@ -2791,7 +2791,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 getMessages();
-                manageForwardedMessage();
+                manageForwardedMessage(false);
             }
         });
 
@@ -2993,7 +2993,7 @@ public class FragmentChat extends BaseFragment
                 clearDraftRequest();
 
                 if (hasForward) {
-                    manageForwardedMessage();
+                    manageForwardedMessage(false);
 
                     if (edtChat.getText().length() == 0) {
                         return;
@@ -4951,10 +4951,28 @@ public class FragmentChat extends BaseFragment
             mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
         }
 
-        initAttachForward();
+        initAttachForward(false);
         itemAdapterBottomSheetForward();
 
         //new HelperFragment().removeAll(true);
+    }
+
+    @Override
+    public void onForwardFromCloudClick(StructMessageInfo message) {
+        if (message == null) {
+            mForwardMessages = getMessageStructFromSelectedItems();
+            if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
+                mAdapter.deselect();
+                if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
+                ll_AppBarSelected.setVisibility(View.GONE);
+                clearReplyView();
+            }
+        } else {
+            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+        }
+
+        initAttachForward(true);
+        itemAdapterBottomSheetForward();
     }
 
     @Override
@@ -6708,7 +6726,7 @@ public class FragmentChat extends BaseFragment
      */
 
 
-    private void initAttachForward() {
+    private void initAttachForward(boolean isMessage) {
         canClearForwardList = true;
         multiForwardList = new ArrayList<>();
         viewBottomSheetForward = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet_forward, null);
@@ -6771,7 +6789,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 canClearForwardList = false;
-                forwardToChatRoom(mListForwardNotExict);
+                forwardToChatRoom(mListForwardNotExict,isMessage);
                 prgWaiting.setVisibility(View.VISIBLE);
                 viewBottomSheetForward.setEnabled(false);
             }
@@ -7666,7 +7684,7 @@ public class FragmentChat extends BaseFragment
     /**
      * do forward actions if any message forward to this room
      */
-    private void manageForwardedMessage() {
+    private void manageForwardedMessage(boolean isMessage) {
         if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
             final LinearLayout ll_Forward = rootView.findViewById(R.id.ac_ll_forward);
             int multiForwardSize = multiForwardList.size();
@@ -7674,10 +7692,10 @@ public class FragmentChat extends BaseFragment
 
                 for (int i = 0; i < mForwardMessages.size(); i++) {
                     if (hasForward) {
-                        sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true, i);
+                        sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true, i,false);
                     } else {
                         for (int k = 0; k < multiForwardSize; k++) {
-                            sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false, (i + k));
+                            sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false, (i + k),isMessage);
                         }
                     }
                 }
@@ -7736,7 +7754,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward, int k) {
+    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward, int k,boolean isMessage) {
 
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -7758,7 +7776,7 @@ public class FragmentChat extends BaseFragment
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRoomMessage.makeForwardMessage(realm, mRoomId, messageId, messageInfo.realmRoomMessage.getMessageId());
+                            RealmRoomMessage.makeForwardMessage(realm, mRoomId, messageId, messageInfo.realmRoomMessage,isMessage);
                         }
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
@@ -8784,7 +8802,7 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    private void forwardToChatRoom(final ArrayList<StructBottomSheetForward> forwardList) {
+    private void forwardToChatRoom(final ArrayList<StructBottomSheetForward> forwardList,boolean isMessage) {
 
         if (forwardList != null && forwardList.size() > 0) {
 
@@ -8807,7 +8825,7 @@ public class FragmentChat extends BaseFragment
                                     bottomSheetDialogForward.dismiss();
                                     hideProgress();
                                     forwardList.clear();
-                                    manageForwardedMessage();
+                                    manageForwardedMessage(isMessage);
                                 }
                             });
                         }
@@ -8829,7 +8847,7 @@ public class FragmentChat extends BaseFragment
 
 
         } else {
-            manageForwardedMessage();
+            manageForwardedMessage(isMessage);
             bottomSheetDialogForward.dismiss();
             hideProgress();
         }

@@ -156,7 +156,7 @@ public class RealmRoomMessage extends RealmObject {
                     equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
                     equalTo(RealmRoomMessageFields.DELETED, false).
                     equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
-                    contains(RealmRoomMessageFields.LINK_INFO , HelperUrl.linkType.webLink.toString()).
+                    contains(RealmRoomMessageFields.LINK_INFO, HelperUrl.linkType.webLink.toString()).
                     findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
         } else {
             //TODO [Saeed Mozaffari] [2017-10-28 9:59 AM] - Can Write Better Code?
@@ -503,7 +503,8 @@ public class RealmRoomMessage extends RealmObject {
 
     public static boolean isEmojiInText(long messageId) {
         return DbManager.getInstance().doRealmTask(realm -> {
-            boolean hasEmoji = true;RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+            boolean hasEmoji = true;
+            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
             if (realmRoomMessage != null && realmRoomMessage.getMessage() != null) {
                 if (EmojiUtils.emojisCount(realmRoomMessage.getMessage()) <= 0) {
                     hasEmoji = false;
@@ -1112,24 +1113,33 @@ public class RealmRoomMessage extends RealmObject {
         return roomMessage;
     }
 
-    public static void makeForwardMessage(Realm realm, long roomId, long messageId, long forwardedMessageId) {
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardedMessageId).findFirst();
-        if (roomMessage != null) {
-            RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
-            if (roomMessage.getForwardMessage() != null) {
-                forwardedMessage.setForwardMessage(roomMessage.getForwardMessage());
-                forwardedMessage.setHasMessageLink(roomMessage.getForwardMessage().getHasMessageLink());
-            } else {
-                forwardedMessage.setForwardMessage(roomMessage);
-                forwardedMessage.setHasMessageLink(roomMessage.getHasMessageLink());
-            }
+    public static void makeForwardMessage(Realm realm, long roomId, long messageId, RealmRoomMessage message, boolean isMessage) {
+        if (isMessage && message.getForwardMessage() == null) {
+            message.setMessageId(messageId);
+            message.setCreateTime(TimeUtils.currentLocalTime());
+            message.setRoomId(roomId);
+            message.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+            message.setUserId(AccountManager.getInstance().getCurrentUser().getId());
+            realm.copyToRealmOrUpdate(message);
+        } else {
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
+            if (roomMessage != null) {
+                RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
+                if (roomMessage.getForwardMessage() != null) {
+                    forwardedMessage.setForwardMessage(roomMessage.getForwardMessage());
+                    forwardedMessage.setHasMessageLink(roomMessage.getForwardMessage().getHasMessageLink());
+                } else {
+                    forwardedMessage.setForwardMessage(roomMessage);
+                    forwardedMessage.setHasMessageLink(roomMessage.getHasMessageLink());
+                }
 
-            forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
-            forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-            forwardedMessage.setRoomId(roomId);
-            forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-            forwardedMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
-            forwardedMessage.setShowMessage(true);
+                forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
+                forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                forwardedMessage.setRoomId(roomId);
+                forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                forwardedMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
+                forwardedMessage.setShowMessage(true);
+            }
         }
     }
 

@@ -57,7 +57,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private LinearLayout viewContainer;
     private LinearLayout voteUpContainer;
     private LinearLayout voteDownContainer;
-    private FrameLayout forwardContainer;
+
     private AppCompatImageView channelForwardIv;
 
     public NewChatItemHolder(@NonNull View itemView) {
@@ -69,7 +69,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         itemContainer = new LinearLayout(itemView.getContext());
 
         channelForwardIv = new AppCompatImageView(itemView.getContext());
-        forwardContainer = new FrameLayout(itemView.getContext());
 
         voteContainer = new LinearLayout(itemView.getContext());
         voteContainer.setId(R.id.ll_chatItem_vote);
@@ -169,9 +168,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         /*channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);*/
 
-        forwardContainer.addView(channelForwardIv, LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
-        forwardContainer.setVisibility(View.GONE);
-
         set.constrainWidth(signatureTv.getId(), ConstraintSet.MATCH_CONSTRAINT);
         set.constrainHeight(signatureTv.getId(), LayoutCreator.dp(20));
 
@@ -245,7 +241,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         set.applyTo(chatBloke);
         itemContainer.addView(chatBloke, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-        itemContainer.addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
 
         ((ViewGroup) itemView).addView(itemContainer);
 
@@ -386,10 +381,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public FontIconTextView getEyeIconTv() {
         return eyeIconTv;
-    }
-
-    public FrameLayout getForwardContainer() {
-        return forwardContainer;
     }
 
     public ImageView getChannelForwardIv() {
