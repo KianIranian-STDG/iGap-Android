@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -43,6 +44,8 @@ import net.iGap.module.StatusBarUtil;
 import java.io.File;
 import java.io.IOException;
 
+import io.realm.Realm;
+
 import static net.iGap.G.updateResources;
 
 
@@ -50,6 +53,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
     public AvatarHandler avatarHandler;
     public boolean isOnGetPermission = false;
+    private static int ActivityCountInApp = 0;
     protected boolean canSetUserStatus = true;
     BroadcastReceiver myBroadcast = new BroadcastReceiver() {
         //When Event is published, onReceive method is called
@@ -75,6 +79,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        ActivityCountInApp++;
         /*Log.wtf("ActivityEnhanced","onCreate start");
         Log.wtf("ActivityEnhanced","setThemeSetting start");*/
         setThemeSetting();
@@ -83,7 +88,9 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
         if (G.ISRealmOK) {
-            DbManager.getInstance().openUiRealm();
+            if (ActivityCountInApp == 1 || Realm.getLocalInstanceCount(AccountManager.getInstance().getCurrentUser().getRealmConfiguration()) == 0) {
+                DbManager.getInstance().openUiRealm();
+            }
             /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
             /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
@@ -240,8 +247,11 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ActivityCountInApp--;
         if (G.ISRealmOK) {
-            DbManager.getInstance().closeUiRealm();
+            if (ActivityCountInApp == 0) {
+                DbManager.getInstance().closeUiRealm();
+            }
             unregisterReceiver(myBroadcast);
         }
     }

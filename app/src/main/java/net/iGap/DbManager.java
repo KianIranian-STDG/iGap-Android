@@ -52,11 +52,6 @@ public class DbManager {
         }
     }
 
-    public void changeRealmConfiguration() {
-        this.uiRealm = null;
-        this.uiRealm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
-    }
-
     public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask) {
         if (Looper.myLooper() == Looper.getMainLooper() && getUiRealm() != null && !getUiRealm().isClosed()) {
             return realmTask.doTask(getUiRealm());

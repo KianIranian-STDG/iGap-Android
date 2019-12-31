@@ -50,7 +50,7 @@ public class AccountHelper {
     }
 
     private void baseAfter(){
-        DbManager.getInstance().changeRealmConfiguration();
+        DbManager.getInstance().openUiRealm();
         WebSocketClient.getInstance().connect(true);
     }
 

@@ -13,14 +13,13 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.realm.RealmUserInfo;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends ActivityEnhanced {
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (G.ISRealmOK) {
-            DbManager.getInstance().openUiRealm();
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
@@ -58,11 +57,5 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        DbManager.getInstance().closeUiRealm();
     }
 }
