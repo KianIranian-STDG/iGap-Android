@@ -126,7 +126,7 @@ public class AccountManager {
 
     public void addAccount(AccountUser accountUser) {
         if (accountUser.getDbName() == null) {
-            accountUser.setDbName(userAccountList.get(0).getRealmConfiguration().getRealmFileName()/*getDbName()*/);
+            accountUser.setDbName(getDbName());
             accountUser.setRealmConfiguration(userAccountList.get(0).getRealmConfiguration());
         }
         userAccountList.add(userAccountList.size(), accountUser);
@@ -173,8 +173,8 @@ public class AccountManager {
                 userAccountList.remove(accountUser);
                 clearSomeStaticValue();
                 currentUser = userAccountList.size() - 1;
-//                userAccountList.get(0).setDbName(getDbName());
-//                userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
+                userAccountList.get(0).setDbName(getDbName());
+                userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
                 setCurrentUserInSharedPreferences();
                 setUserAccountListInSharedPreferences();
                 return userAccountList.get(currentUser).isAssigned();

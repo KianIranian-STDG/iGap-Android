@@ -46,6 +46,8 @@ public class DbManager {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must close realm in ui thread.");
         }
+        Log.wtf("bagi" , "LocalOpenRealmBeforeClose=" + Realm.getLocalInstanceCount(uiRealm.getConfiguration()) + "");
+
         if (uiRealm != null) {
             uiRealm.removeAllChangeListeners();
             uiRealm.close();
