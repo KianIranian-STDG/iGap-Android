@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import net.iGap.emojiKeyboard.dataLayer.EmojiViewDataLayer;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 
@@ -22,6 +23,7 @@ public class KeyboardView extends FrameLayout {
     private EmojiView emojiView;
     private int currentMode;
     private Listener listener;
+    private EmojiViewDataLayer emojiViewDataLayer;
 
     private int keyboardHeight;
     private int keyboardHeightLand;
@@ -30,6 +32,7 @@ public class KeyboardView extends FrameLayout {
         super(context);
         this.listener = listener;
         currentMode = mode;
+
     }
 
     @Override
@@ -41,8 +44,11 @@ public class KeyboardView extends FrameLayout {
 
     public void setCurrentMode(int mode, int contentView) {
         if (mode == MODE_EMOJI) {
+
             if (emojiView == null)
                 createEmojiView();
+
+            emojiViewDataLayer.updateSticker();
 
             emojiView.setContentView(contentView);
 
@@ -57,6 +63,8 @@ public class KeyboardView extends FrameLayout {
 
     private void createEmojiView() {
         if (emojiView != null) return;
+
+        emojiViewDataLayer = new EmojiViewDataLayer();
 
         emojiView = new EmojiView(getContext(), true, true);
         emojiView.setListener(new EmojiView.Listener() {

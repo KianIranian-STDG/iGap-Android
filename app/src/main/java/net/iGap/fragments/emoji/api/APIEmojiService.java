@@ -6,6 +6,7 @@ import net.iGap.fragments.emoji.struct.StructCategoryResult;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -47,4 +48,10 @@ public interface APIEmojiService {
 
     @GET("/stickers/{id}")
     Call<StructEachSticker> getSticker(@Path("id") String groupId);
+
+    @GET("/stickers/favorite")
+    Single<StructSticker> getMyStickerPack();
+
+
+
 }

@@ -3,6 +3,7 @@ package net.iGap.repository.sticker;
 import android.util.Log;
 
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -13,12 +14,15 @@ import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
+import net.iGap.helper.rx.AaSingleObserver;
 import net.iGap.realm.RealmStickers;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.RealmResults;
@@ -222,4 +226,21 @@ public class StickerRepository {
         removeStickerChangeListener();
     }
 
+    public void putOrUpdateMyStickerPackToDb() {
+        apiService.getMyStickerPack()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new AaSingleObserver<StructSticker>() {
+                    @Override
+                    public void onSuccess(StructSticker structSticker) {
+                        RealmStickers.updateStickers(structSticker.getData(), () -> {
+                            if (FragmentChat.onUpdateSticker != null)
+                                FragmentChat.onUpdateSticker.update();
+                        });
+
+                        Log.i(TAG, "onSuccess: " + structSticker.getData().size());
+                    }
+                });
+
+    }
 }

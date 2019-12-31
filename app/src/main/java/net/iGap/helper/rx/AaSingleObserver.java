@@ -1,19 +1,18 @@
 package net.iGap.helper.rx;
 
 
-import android.widget.Toast;
-
-import net.iGap.G;
+import android.util.Log;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class AaSingleObserver<T> extends AaObserver implements SingleObserver<T> {
+public abstract class AaSingleObserver<T> implements SingleObserver<T> {
 
+    private CompositeDisposable compositeDisposable;
 
-    public AaSingleObserver(CompositeDisposable compositeDisposable) {
-        super(compositeDisposable);
+    public AaSingleObserver() {
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -26,8 +25,6 @@ public abstract class AaSingleObserver<T> extends AaObserver implements SingleOb
 //        EventBus.getDefault().post(new AaException(ExceptionMessageFactory.getMessage(e)));
 
         // TODO: 12/31/19  just for test
-        Toast.makeText(G.context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        Log.e(getClass().getName(), "onError: " + e);
     }
-
-
 }
