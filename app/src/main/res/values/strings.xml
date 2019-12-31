@@ -2251,6 +2251,7 @@ Want to get it?</string>
     <string name="kuknos_Entry_RTSeedKey_str">Retrieve With Seed Key</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
+    <string name="kuknos_buyAsset">Buy Asset</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

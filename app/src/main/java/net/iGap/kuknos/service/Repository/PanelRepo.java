@@ -5,6 +5,7 @@ import android.util.Log;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.model.KuknosSendM;
+import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
@@ -49,6 +50,10 @@ public class PanelRepo {
 
     public void getSpecificAssets(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
         kuknosAPIRepository.getSpecificAssets(assetCode, handShakeCallback, apiResponse);
+    }
+
+    public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<IgapPayment>> apiResponse) {
+        kuknosAPIRepository.buyAsset(userRepo.getAccountID(), assetCode, assetAmount, totalPrice, description, handShakeCallback, apiResponse);
     }
 
     public boolean isPinSet() {

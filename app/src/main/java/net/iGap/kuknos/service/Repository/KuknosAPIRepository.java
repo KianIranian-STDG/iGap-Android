@@ -8,6 +8,7 @@ import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
+import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
@@ -121,5 +122,9 @@ class KuknosAPIRepository {
                 .initAPI(apiService.buyOffer(new KuknosSDKRepo().manageOffer(accountSeed, sourceCode, sourceIssuer,
                         counterCode, counterIssuer, amount, price))
                         , handShakeCallback, apiResponse);*/
+    }
+
+    void buyAsset(String publicKey, String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<IgapPayment>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<IgapPayment>>().initAPI(apiService.buyAsset(publicKey, assetCode, assetAmount, totalPrice, description), handShakeCallback, apiResponse);
     }
 }

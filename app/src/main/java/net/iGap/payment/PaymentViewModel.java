@@ -159,7 +159,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
     }
 
     public void setPaymentResult(Payment payment) {
-        if (payment.getStatus().equals("SUCCESS")) {
+        if (payment.getStatus().equals("SUCCESS") || payment.getStatus().equals("PAID")) {
             checkOrderStatus(payment.getOrderId());
         } else {
             showRetryView.set(View.GONE);

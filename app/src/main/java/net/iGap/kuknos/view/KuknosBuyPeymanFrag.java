@@ -7,16 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
@@ -76,6 +79,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         onError();
         onProgress();
         entryListener();
+        goToPaymentListener();
     }
 
 
@@ -157,4 +161,19 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         });
     }
 
+    private void goToPaymentListener() {
+        kuknosBuyPeymanVM.getGoToPaymentPage().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String token) {
+                if (getActivity() != null && token != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.kuknos_buyAsset), token, result -> {
+                        if (getActivity() != null && result.isSuccess()) {
+                            Toast.makeText(getContext(), "Payment Done. ", Toast.LENGTH_LONG).show();
+                            getActivity().onBackPressed();
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

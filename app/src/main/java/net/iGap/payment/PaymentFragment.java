@@ -24,6 +24,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -129,7 +130,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
     }
 
     public void setPaymentResult(Payment paymentModel) {
-        Log.wtf(this.getClass().getName(), "setPaymentResult");
+        Log.d("amini", "setPaymentResult " + new Gson().toJson(paymentModel));
         paymentViewModel.setPaymentResult(paymentModel);
     }
 

@@ -13,6 +13,7 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
@@ -26,6 +27,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     // 0 : nothing 1: connecting to server 2: connecting to bank
     private MutableLiveData<Integer> progressState;
     private MutableLiveData<Boolean> sumState;
+    private MutableLiveData<String> goToPaymentPage;
     //go to bank
     private MutableLiveData<Boolean> nextPage;
     private int PMNprice = -1;
@@ -40,6 +42,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         sumState.setValue(false);
         nextPage = new MutableLiveData<>();
         nextPage.setValue(false);
+        goToPaymentPage = new MutableLiveData<>();
     }
 
     public void onSubmitBtn() {
@@ -84,7 +87,19 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private void sendDataServer() {
         progressState.setValue(1);
-        // TODO: send data to server
+        panelRepo.buyAsset("PMN", amount.get(), "" + (Integer.parseInt(amount.get()) * PMNprice), "", this, new ResponseCallback<KuknosResponseModel<IgapPayment>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<IgapPayment> data) {
+                goToPaymentPage.setValue(data.getData().getToken());
+                progressState.setValue(0);
+            }
+
+            @Override
+            public void onError(ErrorModel errorM) {
+                error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
+            }
+        });
+        /*// TODO: send data to server
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -94,7 +109,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                 //error
                 //error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
             }
-        }, 1000);
+        }, 1000);*/
     }
 
     private void connectingToBank() {
@@ -171,5 +186,9 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     public void setProgressState(MutableLiveData<Integer> progressState) {
         this.progressState = progressState;
+    }
+
+    public MutableLiveData<String> getGoToPaymentPage() {
+        return goToPaymentPage;
     }
 }

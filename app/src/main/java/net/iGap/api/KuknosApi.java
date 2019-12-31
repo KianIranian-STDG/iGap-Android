@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
@@ -129,6 +130,23 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("buy-offer")
     Call<KuknosResponseModel<SubmitTransactionResponse>> buyOffer(@Field("xdr") String XDR);
+
+    /**
+     * this api make a request for payment and charge the account.
+     * @param publicKey
+     * @param assetCode
+     * @param assetAmount
+     * @param totalPrice
+     * @param description
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("payment-request")
+    Call<KuknosResponseModel<IgapPayment>> buyAsset(@Field("public_key") String publicKey,
+                                                    @Field("asset_code") String assetCode,
+                                                    @Field("asset_count") String assetAmount,
+                                                    @Field("amount") String totalPrice,
+                                                    @Field("description") String description);
 
     /*@FormUrlEncoded
     @POST("activate-account")
