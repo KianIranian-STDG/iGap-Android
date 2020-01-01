@@ -550,18 +550,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             items.add(getString(R.string.sync_contact));
             items.add(getString(R.string.mark_as_several));
 
-            new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
-                @Override
-                public void onClick(int position) {
-                    if (position == 0) {
-                        ContactUtils.syncContacts();
-                    } else {
-                        if (!isMultiSelect) {
-
-                            setMultiSelectState(isMultiSelect);
-
-                        }
-                    }
+            new BottomSheetFragment().setData(items, -1, position -> {
+                if (position == 0) {
+                    if (isMultiSelect) setMultiSelectState(true);
+                    ContactUtils.syncContacts();
+                } else {
+                    if (!isMultiSelect) setMultiSelectState(false);
                 }
             }).show(getFragmentManager(), "contactToolbar");
         }
