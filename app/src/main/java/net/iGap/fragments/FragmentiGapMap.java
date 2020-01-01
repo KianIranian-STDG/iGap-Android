@@ -788,8 +788,8 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             /**
              * Start With This Point
              */
-            GeoPoint startPoint = new GeoPoint(35.689197, 51.388974);
-            mapController.setCenter(startPoint);
+            /*GeoPoint startPoint = new GeoPoint(35.689197, 51.388974);
+            mapController.setCenter(startPoint);*/
 
             /**
              * Use From Following Code For Custom Url Tile Server
