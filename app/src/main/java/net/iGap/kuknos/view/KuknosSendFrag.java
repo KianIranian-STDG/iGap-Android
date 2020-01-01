@@ -148,8 +148,11 @@ public class KuknosSendFrag extends BaseFragment {
     private void onTransfer() {
         kuknosSignupInfoVM.getPayResult().observe(getViewLifecycleOwner(), errorM -> {
             DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle))
-                    .setMessage(getResources().getString(errorM.getResID()));
+            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle));
+            if (errorM.getResID()==0)
+                defaultRoundDialog.setMessage(errorM.getMessage());
+            else
+                defaultRoundDialog.setMessage(getResources().getString(errorM.getResID()));
             if (!errorM.getState()) {
                 // success
                 defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
