@@ -395,6 +395,7 @@
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
                 android:checked="@={viewModel.isDarkMode}"
+                android:clickable="false"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_mode"
                 app:layout_constraintEnd_toEndOf="@id/fup_btn_dark_mode"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_dark_mode" />

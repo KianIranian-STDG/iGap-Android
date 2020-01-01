@@ -61,7 +61,7 @@ import static net.iGap.fragments.FragmentChat.listPathString;
 
 public class ChatAttachmentPopup {
 
-    private final long POPUP_ANIMATION_DURATION = 260;
+    private final long POPUP_ANIMATION_DURATION = 170;
     private final String TAG = "ChatAttachmentPopup";
 
     public boolean isShowing = false;
