@@ -91,6 +91,9 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
             } else if (errorM.getState() && errorM.getMessage().equals("1")) {
                 showDialog(errorM.getResID());
             }
+            else {
+                showDialog(errorM.getMessage());
+            }
         });
     }
 
@@ -98,6 +101,16 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
         defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
         defaultRoundDialog.setMessage(getResources().getString(messageResource));
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
+
+        });
+        defaultRoundDialog.show();
+    }
+
+    private void showDialog(String message) {
+        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
+        defaultRoundDialog.setMessage(message);
         defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
 
         });

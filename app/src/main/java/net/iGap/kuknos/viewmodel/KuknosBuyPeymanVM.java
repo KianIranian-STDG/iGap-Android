@@ -96,7 +96,8 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
             @Override
             public void onError(ErrorModel errorM) {
-                error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
+                progressState.setValue(0);
+                error.setValue(new ErrorM(true, "wrong pin", errorM.getMessage(), R.string.kuknos_buyP_failS));
             }
         });
         /*// TODO: send data to server

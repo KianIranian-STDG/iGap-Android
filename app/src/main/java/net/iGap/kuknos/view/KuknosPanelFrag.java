@@ -24,10 +24,10 @@ import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
@@ -40,7 +40,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KuknosPanelFrag extends BaseFragment {
+public class KuknosPanelFrag extends BaseAPIViewFrag {
 
     private FragmentKuknosPanelBinding binding;
     private KuknosPanelVM kuknosPanelVM;
@@ -54,6 +54,7 @@ public class KuknosPanelFrag extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         kuknosPanelVM = ViewModelProviders.of(this).get(KuknosPanelVM.class);
+        this.viewModel = kuknosPanelVM;
     }
 
     @Nullable
@@ -81,7 +82,7 @@ public class KuknosPanelFrag extends BaseFragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
+//                        popBackStackFragment();
                         ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                     }
                 })
@@ -133,6 +134,13 @@ public class KuknosPanelFrag extends BaseFragment {
         Log.d("amini", "onClick: secret data  " + kuknosPanelVM.getPrivateKeyData());
     }
 
+    @Override
+    public boolean onBackPressed() {
+//        popBackStackFragment();
+        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+        return true;
+    }
+
     private void initialSettingBS() {
         List<String> items = new ArrayList<>();
 //        items.add(getString(R.string.kuknos_setting_changePin));
@@ -159,8 +167,7 @@ public class KuknosPanelFrag extends BaseFragment {
                             fragment = KuknosViewRecoveryEPFrag.newInstance();
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         }
-                    }
-                    else {
+                    } else {
                         fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosShowRecoveryKeySFrag.newInstance();
@@ -238,8 +245,7 @@ public class KuknosPanelFrag extends BaseFragment {
                         b.putString("balanceClientInfo", kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()));
                         fragment.setArguments(b);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getContext(), "Can NOT send this token.", Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -314,7 +320,7 @@ public class KuknosPanelFrag extends BaseFragment {
 
     private void writeSeedKey() {
         PermissionHelper permissionHelper = new PermissionHelper(getActivity(), this);
-        if (!permissionHelper.grantReadAndRightStoragePermission()){
+        if (!permissionHelper.grantReadAndRightStoragePermission()) {
             return;
         }
         if (!isExternalStorageReadable()) {
