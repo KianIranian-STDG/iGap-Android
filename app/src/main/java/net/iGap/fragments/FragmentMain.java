@@ -904,16 +904,19 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private List<MultiSelectStruct> setMultiSelectAdapterItem(RealmRoom realmRoom, boolean first) {
         List<MultiSelectStruct> items = new ArrayList<>();
+        boolean isHasChannelInList = false;
 
         if (realmRoom.isValid() && G.fragmentActivity != null) {
-            if (first) {
-                String role = null;
-                if (realmRoom.getType() == GROUP) {
-                    role = realmRoom.getGroupRoom().getRole().toString();
-                } else if (realmRoom.getType() == CHANNEL) {
-                    role = realmRoom.getChannelRoom().getRole().toString();
-                }
 
+            String role = null;
+            if (realmRoom.getType() == GROUP) {
+                role = realmRoom.getGroupRoom().getRole().toString();
+            } else if (realmRoom.getType() == CHANNEL) {
+                role = realmRoom.getChannelRoom().getRole().toString();
+                isHasChannelInList = true ;
+            }
+
+            if (first) {
                 if (!G.fragmentActivity.isFinishing()) {
                     long peerId = realmRoom.getChatRoom() != null ? realmRoom.getChatRoom().getPeerId() : 0;
                     boolean isCloud = peerId > 0 && peerId == AccountManager.getInstance().getCurrentUser().getId();
@@ -962,6 +965,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 items.add(new MultiSelectStruct(7, R.string.delete));
             }
 
+            if (isHasChannelInList){
+                items.remove(new MultiSelectStruct(6, R.string.clear_history));
+            }
         }
         return items;
     }
