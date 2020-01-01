@@ -422,8 +422,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         if (roomType == ProtoGlobal.Room.Type.CHANNEL)
             rippleDeleteSelected.setVisibility(View.GONE);
-        else
-            rippleCloseAppBarSelected.setVisibility(View.GONE);
 
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
