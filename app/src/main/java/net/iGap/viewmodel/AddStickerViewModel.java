@@ -30,8 +30,13 @@ public class AddStickerViewModel extends BaseViewModel {
                 }
 
                 @Override
-                public void onError(ErrorModel error) {
+                public void onError(String error) {
                     clickResult.onResult(stickerGroup);
+                }
+
+                @Override
+                public void onFailed() {
+
                 }
             });
         } else {
@@ -43,8 +48,13 @@ public class AddStickerViewModel extends BaseViewModel {
                 }
 
                 @Override
-                public void onError(ErrorModel error) {
+                public void onError(String error) {
                     clickResult.onResult(stickerGroup);
+                }
+
+                @Override
+                public void onFailed() {
+
                 }
             });
         }

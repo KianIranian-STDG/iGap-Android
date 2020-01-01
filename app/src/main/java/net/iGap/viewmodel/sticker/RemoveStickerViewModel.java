@@ -31,7 +31,12 @@ public class RemoveStickerViewModel extends BaseViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onFailed() {
 
             }
         });
