@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -53,7 +52,15 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String errorM) {
+                balance.set("0.0");
+                currency.set("currency");
+                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
                 balance.set("0.0");
                 currency.set("currency");
                 error.setValue(new ErrorM(true, "Fail to get data", "0", 0));

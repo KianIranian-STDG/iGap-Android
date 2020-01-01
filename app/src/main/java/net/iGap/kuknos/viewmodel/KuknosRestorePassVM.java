@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -77,26 +76,16 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 progressState.setValue(false);
             }
+
+            @Override
+            public void onFailed() {
+                progressState.setValue(false);
+            }
+
         });
-        /*userRepo.getUserInfo(userRepo.getAccountID(), new ApiResponse<KuknosInfoM>() {
-            @Override
-            public void onResponse(KuknosInfoM kuknosInfoM) {
-                nextPage.setValue(1);
-            }
-
-            @Override
-            public void onFailed(String error) {
-                nextPage.setValue(2);
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
-            }
-        });*/
     }
 
     // setter and getter

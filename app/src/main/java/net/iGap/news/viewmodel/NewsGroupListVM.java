@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.news.repository.MainRepo;
+import net.iGap.news.repository.api.NewsAPIRepository;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsGroup;
 
@@ -15,30 +14,33 @@ public class NewsGroupListVM extends BaseAPIViewModel {
     private MutableLiveData<NewsGroup> mGroups;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
-    private MainRepo repo;
+    private NewsAPIRepository repo;
 
     public NewsGroupListVM() {
         mGroups = new MutableLiveData<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
-        repo = new MainRepo();
+        repo = new NewsAPIRepository();
     }
 
     public void getData() {
-        repo.getNewsGroups(this, new ResponseCallback<NewsGroup>() {
+        progressState.setValue(true);
+        repo.getNewsGroup(this, new ResponseCallback<NewsGroup>() {
             @Override
             public void onSuccess(NewsGroup data) {
+                progressState.setValue(false);
                 mGroups.setValue(data);
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String e) {
+                progressState.setValue(false);
                 error.setValue(new NewsError(true, "", "", R.string.news_serverError));
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                progressState.setValue(false);
             }
         });
     }

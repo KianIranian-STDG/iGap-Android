@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
@@ -34,7 +33,12 @@ public class KuknosWHistoryVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
                 progressState.setValue(false);
             }
         });

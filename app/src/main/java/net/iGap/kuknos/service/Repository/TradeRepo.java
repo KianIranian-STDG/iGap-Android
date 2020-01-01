@@ -1,14 +1,11 @@
 package net.iGap.kuknos.service.Repository;
 
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
-import org.stellar.sdk.responses.OfferResponse;
-import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
 public class TradeRepo {
@@ -27,7 +24,7 @@ public class TradeRepo {
         kuknosAPIRepository.changeTrust(userRepo.getSeedKey(), code, issuer, handShakeCallback, apiResponse);
     }
 
-    public void getOffersList(ApiResponse<Page<OfferResponse>> apiResponse) {
+    /*public void getOffersList(ApiResponse<Page<OfferResponse>> apiResponse) {
         kuknosAPIRepository.getOffersList(userRepo.getAccountID(), apiResponse);
     }
 
@@ -38,7 +35,7 @@ public class TradeRepo {
     public void manangeOffer(String sourceCode, String sourceIssuer,
                              String counterCode, String counterIssuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
         kuknosAPIRepository.manageOffer(userRepo.getSeedKey(), sourceCode, sourceIssuer, counterCode, counterIssuer, apiResponse);
-    }
+    }*/
 
     public void manangeOffer(String sourceCode, String sourceIssuer, String counterCode,
                              String counterIssuer, String amount, String price,

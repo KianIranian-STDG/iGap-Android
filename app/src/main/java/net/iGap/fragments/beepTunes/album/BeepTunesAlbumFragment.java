@@ -36,7 +36,7 @@ import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
-public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarListener {
+public class BeepTunesAlbumFragment extends BaseAPIViewFrag<AlbumViewModel> implements ToolbarListener {
     private static final String TAG = "aabolfazlAlbumView";
     private static String PATH;
 
@@ -58,7 +58,6 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarLi
     private Album album;
     private PlayingSong playingSong;
 
-    private AlbumViewModel albumViewModel;
     private BeepTunesTrackAdapter trackAdapter;
     private BeepTunesAlbumAdapter albumAdapter;
 
@@ -80,8 +79,7 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_beeptunes_album, container, false);
-        albumViewModel = new AlbumViewModel();
-        viewModel = albumViewModel;
+        viewModel = new AlbumViewModel();
         trackAdapter = new BeepTunesTrackAdapter();
         albumAdapter = new BeepTunesAlbumAdapter();
         PATH = getContext().getFilesDir().getAbsolutePath() + "beepTunes";
@@ -96,16 +94,16 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarLi
         setUpAlbumInfo(album);
 
         progressBar.getIndeterminateDrawable().setColorFilter(getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
-        albumViewModel.getAlbumSong(album.getId());
-        albumViewModel.getArtistOtherAlbum(album.getArtists().get(0).getId());
+        viewModel.getAlbumSong(album.getId());
+        viewModel.getArtistOtherAlbum(album.getArtists().get(0).getId());
 
-        albumViewModel.getTrackMutableLiveData().observe(this, tracks -> {
+        viewModel.getTrackMutableLiveData().observe(this, tracks -> {
             trackAdapter.setTracks(tracks);
             otherAlbumTv.setVisibility(View.VISIBLE);
             otherAlbumRecyclerView.setVisibility(View.VISIBLE);
         });
 
-        albumViewModel.getAlbumMutableLiveData().observe(this, albums -> {
+        viewModel.getAlbumMutableLiveData().observe(this, albums -> {
             if (albums != null) {
                 albumAdapter.setAlbums(albums.getData());
             }
@@ -117,11 +115,11 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarLi
             if (!this.album.getId().equals(album.getId())) {
                 this.album = album;
                 setUpAlbumInfo(album);
-                albumViewModel.getAlbumSong(album.getId());
+                viewModel.getAlbumSong(album.getId());
             }
         });
 
-        albumViewModel.getLoadingProgressMutableLiveData().observe(this, visibility -> {
+        viewModel.getLoadingProgressMutableLiveData().observe(this, visibility -> {
             if (visibility != null && visibility) {
                 progressBar.setVisibility(View.VISIBLE);
                 statusTv.setVisibility(View.GONE);
@@ -138,7 +136,7 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarLi
         trackAdapter.setOnTrackAdapter(new OnTrackAdapter() {
             @Override
             public void onDownloadClick(Track track, BeepTunesTrackAdapter.OnSongProgress onSongProgress) {
-                albumViewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
+                viewModel.onDownloadClick(track, PATH, getFragmentManager(), sharedPreferences);
                 downloadingSongLiveData.observe(getViewLifecycleOwner(), onSongProgress::progress);
             }
 
@@ -156,7 +154,7 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarLi
             }
         });
 
-        albumViewModel.getDownloadStatusMutableLiveData().observe(getViewLifecycleOwner(), downloadSong -> {
+        viewModel.getDownloadStatusMutableLiveData().observe(getViewLifecycleOwner(), downloadSong -> {
             if (downloadSong != null)
                 downloadingSongLiveData.postValue(downloadSong);
         });
@@ -215,7 +213,7 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag implements ToolbarLi
     @Override
     public void onStart() {
         super.onStart();
-        albumViewModel.onStartFragment(this);
+        viewModel.onStartFragment(this);
     }
 
     @Override

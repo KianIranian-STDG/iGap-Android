@@ -19,21 +19,19 @@ public class PaymentRepository {
         return instance;
     }
 
-    public void clearRepository() {
+    void clearRepository() {
         instance = null;
     }
 
     private PaymentRepository() {
-        paymentApi = new RetrofitFactory().getPaymentRetrofit().create(PaymentApi.class);
+        paymentApi = new RetrofitFactory().getPaymentRetrofit();
     }
 
-    public void checkOrder(String orderToken, HandShakeCallback handShakeCallback, ResponseCallback<CheckOrderResponse> callBack) {
-
+    void checkOrder(String orderToken, HandShakeCallback handShakeCallback, ResponseCallback<CheckOrderResponse> callBack) {
         new ApiInitializer<CheckOrderResponse>().initAPI(paymentApi.requestCheckOrder(orderToken), handShakeCallback, callBack);
-
     }
 
-    public void checkOrderStatus(String orderId, HandShakeCallback handShakeCallback, ResponseCallback<CheckOrderStatusResponse> callback) {
+    void checkOrderStatus(String orderId, HandShakeCallback handShakeCallback, ResponseCallback<CheckOrderStatusResponse> callback) {
 
         new ApiInitializer<CheckOrderStatusResponse>().initAPI(paymentApi.requestCheckOrderStatus(orderId), handShakeCallback, callback);
 

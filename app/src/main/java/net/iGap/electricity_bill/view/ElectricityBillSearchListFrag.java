@@ -24,16 +24,16 @@ import net.iGap.electricity_bill.repository.model.CompanyList;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillSearchCompanySpinnerAdapter;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillSearchListAdapter;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillSearchListVM;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
 import java.util.List;
 
-public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
+public class ElectricityBillSearchListFrag extends BaseAPIViewFrag<ElectricityBillSearchListVM> {
 
     private FragmentElecSearchListBinding binding;
-    private ElectricityBillSearchListVM elecBillVM;
     private static final String TAG = "ElectricityBillSearchLi";
 
     public static ElectricityBillSearchListFrag newInstance() {
@@ -43,7 +43,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        elecBillVM = ViewModelProviders.of(this).get(ElectricityBillSearchListVM.class);
+        viewModel = ViewModelProviders.of(this).get(ElectricityBillSearchListVM.class);
     }
 
     @Nullable
@@ -51,9 +51,8 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_elec_search_list, container, false);
-        binding.setViewmodel(elecBillVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
-        this.viewModel = elecBillVM;
 
         return attachToSwipeBack(binding.getRoot());
 
@@ -83,7 +82,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
         binding.billCompanySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                elecBillVM.setCompanyPosition(position-1);
+                viewModel.setCompanyPosition(position - 1);
             }
 
             @Override
@@ -94,7 +93,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
 
         onDataChangedListener();
         resetEditTextLisener();
-        elecBillVM.getCompanyData();
+        viewModel.getCompanyData();
     }
 
     private void resetEditTextLisener() {
@@ -106,7 +105,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                elecBillVM.getBillSerialErrorEnable().set(false);
+                viewModel.getBillSerialErrorEnable().set(false);
             }
 
             @Override
@@ -117,17 +116,21 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
     }
 
     private void onDataChangedListener() {
-        elecBillVM.getmCompanyData().observe(getViewLifecycleOwner(), this::initSpinner);
-        elecBillVM.getmBranchData().observe(getViewLifecycleOwner(), this::initRecycler);
-        elecBillVM.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
+        viewModel.getmCompanyData().observe(getViewLifecycleOwner(), this::initSpinner);
+        viewModel.getmBranchData().observe(getViewLifecycleOwner(), this::initRecycler);
+        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
             if (errorModel.getMessage().equals("001")) {
                 Snackbar.make(binding.Container, getResources().getString(R.string.elecBill_error_company), Snackbar.LENGTH_LONG)
                         .setAction(R.string.elecBill_error_openCompanySpinner, v -> binding.billCompanySpinner.performClick()).show();
-            }
-            else {
+            } else {
                 Snackbar.make(binding.Container, errorModel.getMessage(), Snackbar.LENGTH_LONG)
                         .setAction(R.string.ok, v -> {
                         }).show();
+            }
+        });
+        viewModel.getShowRequestFailedError().observe(getViewLifecycleOwner(), errorMessageResId -> {
+            if (errorMessageResId != null) {
+                HelperError.showSnackMessage(getString(errorMessageResId), false);
             }
         });
     }
@@ -135,7 +138,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
     private void initRecycler(List<BranchData> bills) {
         ElectricityBillSearchListAdapter adapter = new ElectricityBillSearchListAdapter(getContext(), bills,
                 position -> new HelperFragment(getFragmentManager(),
-                        ElectricityBillPayFrag.newInstance(elecBillVM.getmBranchData().getValue().get(position).getBillID(), false))
+                        ElectricityBillPayFrag.newInstance(viewModel.getmBranchData().getValue().get(position).getBillID(), false))
                         .setReplace(false).load());
         binding.billRecycler.setAdapter(adapter);
     }

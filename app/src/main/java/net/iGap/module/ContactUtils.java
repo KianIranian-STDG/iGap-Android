@@ -317,19 +317,21 @@ public final class ContactUtils {
             HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
+
+                    final MaterialDialog[] dialog = new MaterialDialog[1];
+                    dialog[0] = new MaterialDialog.Builder(G.currentActivity)
+                            .title(R.string.sync_contact)
+                            .content(R.string.just_wait_en)
+                            .progress(false, 0, true)
+                            .show();
+
                     new Thread(() -> {
                         DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(realm1 -> {
 
                                 final RealmResults<RealmContacts> realmContacts = realm1.where(RealmContacts.class).findAll();
                                 final int contactsSize = realmContacts.size();
-                                final MaterialDialog[] dialog = new MaterialDialog[1];
-                                G.handler.post(() -> dialog[0] = new MaterialDialog.Builder(G.currentActivity)
-                                        .title(R.string.sync_contact)
-                                        .content(R.string.just_wait_en)
-                                        .progress(false, contactsSize, true)
-                                        .show());
-
+                                dialog[0].setMaxProgress(contactsSize);
                                 for (RealmContacts realmContacts1 : realmContacts) {
                                     addContactToPhoneBook(realmContacts1);
                                     if (dialog[0].isCancelled()) {

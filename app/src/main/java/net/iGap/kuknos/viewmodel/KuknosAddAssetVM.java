@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -48,7 +47,13 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String errorM) {
+                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
             }
@@ -67,10 +72,17 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String errorM) {
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressStateAdv.setValue(false);
             }
+
+            @Override
+            public void onFailed() {
+                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                progressStateAdv.setValue(false);
+            }
+
         });
     }
 
@@ -85,10 +97,17 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String errorM) {
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
             }
+
+            @Override
+            public void onFailed() {
+                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                progressState.setValue(false);
+            }
+
         });
     }
 

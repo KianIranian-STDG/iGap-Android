@@ -60,25 +60,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
             e.printStackTrace();
         }
         nextPage.setValue(true);
-        /*userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
-            @Override
-            public void onResponse(KuknosSubmitM kuknosSubmitM) {
-                if (kuknosSubmitM.getOk() == 1) {
-                    nextPage.setValue(true);
-                }
-            }
-
-            @Override
-            public void onFailed(String error) {
-                // TODO delete this
-                nextPage.setValue(true);
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
-            }
-        });*/
     }
 
     // setter and getter

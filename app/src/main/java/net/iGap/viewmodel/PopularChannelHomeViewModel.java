@@ -1,55 +1,80 @@
 package net.iGap.viewmodel;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.view.View;
 
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.R;
-import net.iGap.api.FavoriteChannelApi;
-import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.adapter.items.popularChannel.PopularChannelHomeAdapter;
+import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
-import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
-import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bannerslider.BannerSlider;
+import net.iGap.model.popularChannel.Category;
 import net.iGap.model.popularChannel.Channel;
+import net.iGap.model.popularChannel.GoToChannel;
 import net.iGap.model.popularChannel.ParentChannel;
 import net.iGap.model.popularChannel.Slide;
-import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.viewmodel.repository.PopularChannelRepository;
 
-public class PopularChannelHomeViewModel extends BaseViewModel {
-    private FavoriteChannelApi channelApi = ApiServiceProvider.getChannelApi();
+public class PopularChannelHomeViewModel extends BaseAPIViewModel {
+    private PopularChannelRepository repository;
+    private PopularChannelHomeAdapter.OnFavoriteChannelCallBack recyclerItemClick;
 
     private MutableLiveData<ParentChannel> firstPageMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> emptyViewMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<Category> goToMorePage = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> goToRoom = new SingleLiveEvent<>();
+    private SingleLiveEvent<GoToChannel> goToChannel = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> goToWebViewPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> openBrowser = new SingleLiveEvent<>();
 
+    public PopularChannelHomeViewModel() {
+        repository = PopularChannelRepository.getInstance();
+        recyclerItemClick = new PopularChannelHomeAdapter.OnFavoriteChannelCallBack() {
+            @Override
+            public void onCategoryClick(Category category) {
+                goToMorePage.setValue(category);
+            }
 
-    @Override
-    public void onCreateViewModel() {
-        super.onCreateViewModel();
-        BannerSlider.init(new SliderBannerImageLoadingService());
-    }
+            @Override
+            public void onChannelClick(Channel channel) {
+                goToChannel.setValue(new GoToChannel(channel.getSlug(),channel.getmType().equals(Channel.TYPE_PRIVATE)));
 
-    @Override
-    public void onStartFragment(BaseFragment fragment) {
+            }
+
+            @Override
+            public void onSlideClick(Slide slide) {
+                if (slide.getActionType() == 3) {
+                    goToRoom.setValue(slide.getmActionLink());
+                } else if (slide.getActionType() == 4) {
+                    openBrowser.setValue(slide.getmActionLink());
+                } else if (slide.getActionType() == 5) {
+                    goToWebViewPage.setValue(slide.getmActionLink());
+                } else if (slide.getActionType() == 12) {
+                    Category category = new Category();
+                    category.setId(slide.getmActionLink());
+                    goToMorePage.setValue(category);
+                }
+            }
+
+            @Override
+            public void onMoreClick(String moreId, String title) {
+                Category category = new Category();
+                category.setId(moreId);
+                category.setTitle(title);
+                goToMorePage.setValue(category);
+            }
+        };
         getFirstPage();
+        BannerSlider.init(new SliderBannerImageLoadingService());
     }
 
     public void getFirstPage() {
         progressMutableLiveData.postValue(true);
         emptyViewMutableLiveData.postValue(View.GONE);
-        new ApiInitializer<ParentChannel>().initAPI(channelApi.getFirstPage(), this, new ResponseCallback<ParentChannel>() {
+        repository.getFirstPage(this, new ResponseCallback<ParentChannel>() {
             @Override
             public void onSuccess(ParentChannel data) {
                 progressMutableLiveData.postValue(false);
@@ -58,52 +83,23 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
+                progressMutableLiveData.postValue(false);
+                emptyViewMutableLiveData.postValue(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailed() {
                 progressMutableLiveData.postValue(false);
                 emptyViewMutableLiveData.postValue(View.VISIBLE);
             }
         });
     }
 
-    public void onSlideClick(BaseFragment fragment, Slide slide) {
-        if (slide.getActionType() == 3) {
-            HelperUrl.checkUsernameAndGoToRoom(fragment.getActivity(), slide.getmActionLink(), HelperUrl.ChatEntry.chat);
-        } else if (slide.getActionType() == 4) {
-            SharedPreferences sharedPreferences = fragment.getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-            int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-            if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(slide.getmActionLink())) {
-                HelperUrl.openBrowser(slide.getmActionLink());
-            } else {
-                HelperUrl.openWithoutBrowser(slide.getmActionLink());
-            }
-        } else if (slide.getActionType() == 5) {
-            new HelperFragment(fragment.getActivity().getSupportFragmentManager(), FragmentWebView.newInstance(slide.getmActionLink(), false, null)).setReplace(false).load();
-        } else if (slide.getActionType() == 12) {
-            PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("id", slide.getmActionLink());
-            popularMoreChannelFragment.setArguments(bundle);
-            new HelperFragment(fragment.getFragmentManager(), popularMoreChannelFragment).setResourceContainer(R.id.popularChannel_container).setReplace(false).load();
-        }
-    }
-
-    public void onChannelClick(Channel channel, BaseFragment fragment) {
-        if (channel.getmType().equals(Channel.TYPE_PRIVATE))
-            HelperUrl.checkAndJoinToRoom(fragment.getActivity(), channel.getSlug());
-        if (channel.getmType().equals(Channel.TYPE_PUBLIC))
-            HelperUrl.checkUsernameAndGoToRoom(fragment.getActivity(), channel.getSlug(), HelperUrl.ChatEntry.chat);
-    }
-
-    public void onMoreClick(String moreId, String title, PopularChannelHomeFragment fragment) {
-        PopularMoreChannelFragment moreChannelFragment = new PopularMoreChannelFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("id", moreId);
-        bundle.putString("title", title);
-        moreChannelFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransition = fragment.getFragmentManager().beginTransaction();
-        fragmentTransition.replace(R.id.popularChannel_container, moreChannelFragment);
-        fragmentTransition.addToBackStack(null);
-        fragmentTransition.commit();
+    @Override
+    protected void onCleared() {
+        PopularChannelRepository.clearInstance();
+        super.onCleared();
     }
 
     public MutableLiveData<ParentChannel> getFirstPageMutableLiveData() {
@@ -116,5 +112,29 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
 
     public MutableLiveData<Integer> getEmptyViewMutableLiveData() {
         return emptyViewMutableLiveData;
+    }
+
+    public SingleLiveEvent<Category> getGoToMorePage() {
+        return goToMorePage;
+    }
+
+    public SingleLiveEvent<String> getGoToRoom() {
+        return goToRoom;
+    }
+
+    public SingleLiveEvent<GoToChannel> getGoToChannel() {
+        return goToChannel;
+    }
+
+    public SingleLiveEvent<String> getGoToWebViewPage() {
+        return goToWebViewPage;
+    }
+
+    public SingleLiveEvent<String> getOpenBrowser() {
+        return openBrowser;
+    }
+
+    public PopularChannelHomeAdapter.OnFavoriteChannelCallBack getRecyclerItemClick() {
+        return recyclerItemClick;
     }
 }

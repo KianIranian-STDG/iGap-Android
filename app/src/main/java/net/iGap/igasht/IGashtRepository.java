@@ -45,7 +45,7 @@ public class IGashtRepository {
     }
 
     private IGashtRepository() {
-        igashtApi = new RetrofitFactory().getIgashtRetrofit().create(IgashtApi.class);
+        igashtApi = new RetrofitFactory().getIgashtRetrofit();
         selectedServiceList = new ArrayList<>();
     }
 

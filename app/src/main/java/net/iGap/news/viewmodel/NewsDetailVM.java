@@ -73,6 +73,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
             error.setValue(new NewsError(true, "", "API Input is NOT valid.", 0));
             return;
         }
+        progressStateContext.setValue(true);
         repo.getNewsDetail(this.newsID, this, new ResponseCallback<NewsDetail>() {
             @Override
             public void onSuccess(NewsDetail newsDetail) {
@@ -103,54 +104,61 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 pageVisibility.set(View.GONE);
                 getNewsComment();
                 getRelatedNewsS();
+                progressStateContext.setValue(false);
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
-                error.setValue(new NewsError(true, "001", errorM.getMessage(), R.string.news_serverError));
+            public void onError(String e) {
+                progressStateContext.setValue(false);
+                error.setValue(new NewsError(true, "001", e, R.string.news_serverError));
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressStateContext.setValue(visibility);
+            public void onFailed() {
+                progressStateContext.setValue(false);
             }
         });
     }
 
     private void getNewsComment() {
+        progressStateComment.setValue(true);
         repo.getNewsComment(newsID, 1, 3, this, new ResponseCallback<List<NewsComment>>() {
             @Override
             public void onSuccess(List<NewsComment> data) {
+                progressStateComment.setValue(false);
                 comments.setValue(data);
             }
 
             @Override
-            public void onError(ErrorModel error) {
-
+            public void onError(String error) {
+                progressStateComment.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressStateComment.setValue(visibility);
+            public void onFailed() {
+                progressStateComment.setValue(false);
             }
         });
     }
 
     private void getRelatedNewsS() {
+        progressStateRelated.setValue(true);
         repo.getRelatedNews(newsID, this, new ResponseCallback<NewsList>() {
             @Override
             public void onSuccess(NewsList data) {
                 relatedNews.setValue(data);
+                progressStateRelated.setValue(false);
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 relatedNews.setValue(null);
+                progressStateRelated.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressStateRelated.setValue(visibility);
+            public void onFailed() {
+                progressStateRelated.setValue(false);
             }
         });
     }

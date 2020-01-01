@@ -27,9 +27,9 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.electricity_bill.view.ElectricityBillMainFrag;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
@@ -365,7 +365,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private static void sendRequestGetCharityPaymentToken(FragmentActivity activity, String charityId, int charityAmount) {
-        new ApiInitializer<MciPurchaseResponse>().initAPI(new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount), null, new ResponseCallback<MciPurchaseResponse>() {
+        new ApiInitializer<MciPurchaseResponse>().initAPI(new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount), new HandShakeCallback() {
+            @Override
+            public void onHandShake() {
+                if (activity instanceof ActivityMain) {
+                    ((ActivityMain) activity).checkGoogleUpdate();
+                }
+            }
+        }, new ResponseCallback<MciPurchaseResponse>() {
             @Override
             public void onSuccess(MciPurchaseResponse data) {
                 HelperUrl.closeDialogWaiting();
@@ -373,9 +380,15 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 HelperUrl.closeDialogWaiting();
-                HelperError.showSnackMessage(error.getMessage(), false);
+                HelperError.showSnackMessage(error, false);
+            }
+
+            @Override
+            public void onFailed() {
+                HelperUrl.closeDialogWaiting();
+                HelperError.showSnackMessage(activity.getString(R.string.connection_error), false);
             }
         });
     }

@@ -125,13 +125,20 @@ public class KuknosSendVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 if (error == null)
                     payResult.setValue(new ErrorM(true, "", "", R.string.kuknos_send_errorServer));
                 else
-                    payResult.setValue(new ErrorM(true, "", error.getMessage(), 0));
+                    payResult.setValue(new ErrorM(true, "", error, 0));
                 progressState.setValue(false);
             }
+
+            @Override
+            public void onFailed() {
+                payResult.setValue(new ErrorM(true, "", "", R.string.kuknos_send_errorServer));
+                progressState.setValue(false);
+            }
+
         });
     }
 

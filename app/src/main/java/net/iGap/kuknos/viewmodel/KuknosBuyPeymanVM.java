@@ -1,6 +1,5 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.databinding.ObservableField;
@@ -9,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -79,7 +77,12 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
+                progressState.setValue(0);
+            }
+
+            @Override
+            public void onFailed() {
                 progressState.setValue(0);
             }
         });
@@ -87,47 +90,28 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private void sendDataServer() {
         progressState.setValue(1);
-        panelRepo.buyAsset("PMN", amount.get(), "" + (Integer.parseInt(amount.get()) * PMNprice), "", this, new ResponseCallback<KuknosResponseModel<IgapPayment>>() {
-            @Override
-            public void onSuccess(KuknosResponseModel<IgapPayment> data) {
-                goToPaymentPage.setValue(data.getData().getToken());
-                progressState.setValue(0);
-            }
+        panelRepo.buyAsset("PMN", amount.get(), "" + (Integer.parseInt(amount.get()) * PMNprice),
+                "", this, new ResponseCallback<KuknosResponseModel<IgapPayment>>() {
+                    @Override
+                    public void onSuccess(KuknosResponseModel<IgapPayment> data) {
+                        goToPaymentPage.setValue(data.getData().getToken());
+                        progressState.setValue(0);
+                    }
 
-            @Override
-            public void onError(ErrorModel errorM) {
-                progressState.setValue(0);
-                error.setValue(new ErrorM(true, "wrong pin", errorM.getMessage(), R.string.kuknos_buyP_failS));
-            }
-        });
-        /*// TODO: send data to server
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //success
-                connectingToBank();
-                //error
-                //error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
-            }
-        }, 1000);*/
-    }
+                    @Override
+                    public void onError(String errorM) {
+                        progressState.setValue(0);
+                        error.setValue(new ErrorM(true, "wrong pin", errorM, R.string.kuknos_buyP_failS));
 
-    private void connectingToBank() {
-        progressState.setValue(2);
-        // TODO: send data to server
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progressState.setValue(0);
+                    }
 
-                //success
-                //nextPage.setValue(true);
-                //error
-                error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_buyP_failB));
-            }
-        }, 1000);
+                    @Override
+                    public void onFailed() {
+                        progressState.setValue(0);
+                        error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
+                    }
+
+                });
     }
 
     private boolean checkEntry() {

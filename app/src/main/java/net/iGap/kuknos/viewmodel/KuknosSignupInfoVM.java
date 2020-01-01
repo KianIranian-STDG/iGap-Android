@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
@@ -19,9 +18,9 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
     private KuknosSignupM kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-//    private MutableLiveData<Integer> checkUsernameState;
+    //    private MutableLiveData<Integer> checkUsernameState;
     private MutableLiveData<Boolean> progressSendDServerState;
-//    private ObservableField<String> username = new ObservableField<>();
+    //    private ObservableField<String> username = new ObservableField<>();
     private ObservableField<String> name = new ObservableField<>();
     private ObservableField<String> phoneNum = new ObservableField<>();
     private ObservableField<String> email = new ObservableField<>();
@@ -50,7 +49,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             return;
         }
 
-        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98","0"), email.get(), NID.get(), userRepo.getAccountID(), true);
+        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), true);
         sendDataToServer();
 
         // this part is for the older version with userID option
@@ -65,23 +64,29 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
     private void sendDataToServer() {
         progressSendDServerState.setValue(true);
         userRepo.registerUser(kuknosSignupM, this, new ResponseCallback<KuknosResponseModel>() {
-                @Override
-                public void onSuccess(KuknosResponseModel data) {
-                    nextPage.setValue(true);
-                    progressSendDServerState.setValue(false);
-                }
+            @Override
+            public void onSuccess(KuknosResponseModel data) {
+                nextPage.setValue(true);
+                progressSendDServerState.setValue(false);
+            }
 
-                @Override
-                public void onError(ErrorModel errorM) {
-                    error.setValue(new ErrorM(true, "", errorM.getName(), 0));
-                    progressSendDServerState.setValue(false);
-                }
-            });
+            @Override
+            public void onError(String errorM) {
+                error.setValue(new ErrorM(true, "", errorM, 0));
+                progressSendDServerState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
+                error.setValue(new ErrorM(true, "", "No connection to server", 0));
+                progressSendDServerState.setValue(false);
+            }
+        });
     }
 
     /*public void isUsernameValid(boolean isCallFromBTN) {
 
-        *//*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*//*
+     *//*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*//*
 
         if (username.get() == null) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));

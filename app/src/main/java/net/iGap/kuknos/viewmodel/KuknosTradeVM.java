@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
@@ -65,12 +64,21 @@ public class KuknosTradeVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
+            public void onError(String errorM) {
                 balance.set("0.0");
                 currency.set("currency");
                 error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
                 fetchProgressState.setValue(false);
             }
+
+            @Override
+            public void onFailed() {
+                balance.set("0.0");
+                currency.set("currency");
+                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
+                fetchProgressState.setValue(false);
+            }
+
         });
     }
 
@@ -86,7 +94,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
     }
 
     private void destSpinnerSelect(int position) {
-        this.destPosition=0;
+        this.destPosition = 0;
         ArrayList<KuknosBalance.Balance> Temp = new ArrayList<>(Objects.requireNonNull(kuknosOriginWalletsM.getValue()));
         Temp.remove(position);
         kuknosDestinationWalletsM.setValue(Temp);
@@ -100,7 +108,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
 
     private void sendDataServer() {
         sendProgressState.setValue(true);
-        double price = Double.valueOf(originAmount.get())/Double.valueOf(destAmount.get());
+        double price = Double.valueOf(originAmount.get()) / Double.valueOf(destAmount.get());
         Log.d("amini", "sendDataServer: " + price + " ");
         tradeRepo.manangeOffer(
                 kuknosOriginWalletsM.getValue().get(originPosition).getAsset().getType().equals("native") ? "PMN" : kuknosOriginWalletsM.getValue().get(originPosition).getAssetCode(),
@@ -109,18 +117,25 @@ public class KuknosTradeVM extends BaseAPIViewModel {
                 kuknosDestinationWalletsM.getValue().get(destPosition).getAssetIssuer(),
                 destAmount.get(), Double.toString(price), this,
                 new ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>>() {
-            @Override
-            public void onSuccess(KuknosResponseModel<SubmitTransactionResponse> data) {
-                error.setValue(new ErrorM(false, "success submission", "2", R.string.kuknos_trade_success));
-                sendProgressState.setValue(false);
-            }
+                    @Override
+                    public void onSuccess(KuknosResponseModel<SubmitTransactionResponse> data) {
+                        error.setValue(new ErrorM(false, "success submission", "2", R.string.kuknos_trade_success));
+                        sendProgressState.setValue(false);
+                    }
 
-            @Override
-            public void onError(ErrorModel errorM) {
-                error.setValue(new ErrorM(true, "fail during submission", errorM.getName(), R.string.kuknos_trade_fail));
-                sendProgressState.setValue(false);
-            }
-        });
+                    @Override
+                    public void onError(String errorM) {
+                        error.setValue(new ErrorM(true, "fail during submission", errorM, R.string.kuknos_trade_fail));
+                        sendProgressState.setValue(false);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        error.setValue(new ErrorM(true, "fail during submission", "2", R.string.kuknos_trade_fail));
+                        sendProgressState.setValue(false);
+                    }
+
+                });
     }
 
     private boolean checkEntry() {

@@ -18,13 +18,13 @@ import net.iGap.electricity_bill.repository.model.BranchData;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 import net.iGap.electricity_bill.view.adapter.ElectricityBranchInfoListAdapter;
 import net.iGap.electricity_bill.viewmodel.ElectricityBranchInfoListVM;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
-public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag {
+public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBranchInfoListVM> {
 
     private FragmentElecBranchInfoListBinding binding;
-    private ElectricityBranchInfoListVM elecBillVM;
     private ElectricityBranchInfoListAdapter adapter;
     private String billID;
     private static final String TAG = "ElectricityBranchInfoLi";
@@ -40,7 +40,7 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        elecBillVM = ViewModelProviders.of(this).get(ElectricityBranchInfoListVM.class);
+        viewModel = ViewModelProviders.of(this).get(ElectricityBranchInfoListVM.class);
     }
 
     @Nullable
@@ -48,9 +48,8 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_elec_branch_info_list, container, false);
-        binding.setViewmodel(elecBillVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
-        this.viewModel = elecBillVM;
 
         return attachToSwipeBack(binding.getRoot());
 
@@ -78,12 +77,17 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag {
 
         binding.billRecycler.setHasFixedSize(true);
         onDataChangedListener();
-        elecBillVM.setBillID(billID);
-        elecBillVM.getData();
+        viewModel.setBillID(billID);
+        viewModel.getData();
     }
 
     private void onDataChangedListener() {
-        elecBillVM.getmData().observe(getViewLifecycleOwner(), this::initRecycler);
+        viewModel.getmData().observe(getViewLifecycleOwner(), this::initRecycler);
+        viewModel.getShowRequestFailedError().observe(getViewLifecycleOwner(), errorMessageResId -> {
+            if (errorMessageResId != null) {
+                HelperError.showSnackMessage(getString(errorMessageResId), false);
+            }
+        });
     }
 
     private void initRecycler(ElectricityResponseModel<BranchData> data) {

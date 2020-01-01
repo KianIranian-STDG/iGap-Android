@@ -110,23 +110,6 @@ public class PaymentFragment extends BaseAPIViewFrag {
                 }
             }
         });
-
-        paymentViewModel.getNeedUpdateGooglePlay().observe(getViewLifecycleOwner(), isNeed -> {
-            if (getActivity() != null && isNeed != null && isNeed) {
-                try {
-                    if (getActivity() != null) {
-                        ProviderInstaller.installIfNeeded(getActivity().getApplicationContext());
-                    }
-                } catch (GooglePlayServicesRepairableException e) {
-                    // Prompt the user to install/update/enable Google Play services.
-                    GoogleApiAvailability.getInstance().showErrorNotification(getActivity(), e.getConnectionStatusCode());
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    // Indicates a non-recoverable error: let the user know.
-                    showDialogNeedGooglePlay();
-
-                }
-            }
-        });
     }
 
     public void setPaymentResult(Payment paymentModel) {
