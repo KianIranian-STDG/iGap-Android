@@ -5,14 +5,13 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.model.popularChannel.Advertisement;
 import net.iGap.model.popularChannel.Channel;
 import net.iGap.model.popularChannel.ChildChannel;
+import net.iGap.model.popularChannel.GoToChannel;
 import net.iGap.model.popularChannel.Slide;
+import net.iGap.viewmodel.repository.PopularChannelRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +26,10 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
     private MutableLiveData<String> showErrorMessage = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
-    private MutableLiveData<goToChannel> goToChannel = new MutableLiveData<>();
+    private MutableLiveData<GoToChannel> goToChannel = new MutableLiveData<>();
     private MutableLiveData<String> toolbarTitle = new MutableLiveData<>();
+
+    private PopularChannelRepository repository;
 
     private final int pageMax = 20;
     private int totalItemSize = 0;
@@ -42,6 +43,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
     public PopularMoreChannelViewModel(String id, String title) {
         this.id = id;
         this.title = title;
+        repository = PopularChannelRepository.getInstance();
         items = new ArrayList<>();
         if (id == null) {
             goBack.setValue(true);
@@ -54,7 +56,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         return goBack;
     }
 
-    public MutableLiveData<PopularMoreChannelViewModel.goToChannel> getGoToChannel() {
+    public MutableLiveData<GoToChannel> getGoToChannel() {
         return goToChannel;
     }
 
@@ -70,7 +72,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         isLoadMore = true;
         progressMutableLiveData.postValue(true);
         showRetryView.setValue(false);
-        new ApiInitializer<ChildChannel>().initAPI(ApiServiceProvider.getChannelApi().getChildChannel(id, pageMax * page, pageMax), this, new ResponseCallback<ChildChannel>() {
+        repository.getChildChannel(id, pageMax * page, pageMax, this, new ResponseCallback<ChildChannel>() {
             @Override
             public void onSuccess(ChildChannel data) {
                 Log.wtf(this.getClass().getName(), "onSuccess");
@@ -92,7 +94,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
                         scale = data.getInfo().getAdvertisement().getmScale();
                     }
                     totalItemSize = (int) data.getPagination().getTotalDocs();
-                    if (isRefresh){
+                    if (isRefresh) {
                         items.clear();
                     }
                     items.addAll(data.getChannels());
@@ -107,7 +109,17 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
+                isLoadMore = false;
+                progressMutableLiveData.postValue(false);
+                if (items.size() == 0) {
+                    showRetryView.setValue(true);
+                }
+            }
+
+            @Override
+            public void onFailed() {
+                isLoadMore = false;
                 progressMutableLiveData.postValue(false);
                 if (items.size() == 0) {
                     showRetryView.setValue(true);
@@ -130,12 +142,12 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
 
     public void onSlideClick(Slide slide) {
         if (slide.getActionType() == 3) {
-            goToChannel.setValue(new goToChannel(slide.getmActionLink(), false));
+            goToChannel.setValue(new GoToChannel(slide.getmActionLink(), false));
         }
     }
 
     public void onChannelClick(Channel channel) {
-        goToChannel.setValue(new goToChannel(channel.getSlug(), channel.getmType().equals(Channel.TYPE_PRIVATE)));
+        goToChannel.setValue(new GoToChannel(channel.getSlug(), channel.getmType().equals(Channel.TYPE_PRIVATE)));
     }
 
     public void loadMoreData() {
@@ -156,25 +168,11 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         return emptyViewMutableLiveData;
     }
 
-    public String getScale() {
-        return scale;
+    public MutableLiveData<Boolean> getShowRetryView() {
+        return showRetryView;
     }
 
-    public class goToChannel {
-        private String slug;
-        private boolean isPrivate;
-
-        goToChannel(String slug, boolean isPrivate) {
-            this.slug = slug;
-            this.isPrivate = isPrivate;
-        }
-
-        public String getSlug() {
-            return slug;
-        }
-
-        public boolean isPrivate() {
-            return isPrivate;
-        }
+    public String getScale() {
+        return scale;
     }
 }

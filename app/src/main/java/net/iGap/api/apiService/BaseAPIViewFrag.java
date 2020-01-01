@@ -9,9 +9,9 @@ import androidx.annotation.Nullable;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.BaseFragment;
 
-public abstract class BaseAPIViewFrag extends BaseFragment {
+public abstract class BaseAPIViewFrag<T extends BaseAPIViewModel> extends BaseFragment {
 
-    protected BaseAPIViewModel viewModel;
+    protected T viewModel;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

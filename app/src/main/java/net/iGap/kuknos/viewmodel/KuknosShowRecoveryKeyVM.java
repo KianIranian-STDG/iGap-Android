@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -58,7 +57,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
                 error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
                 e.printStackTrace();
             }
-            userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
+            /*userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
                 @Override
                 public void onResponse(KuknosSubmitM kuknosSubmitM) {
                     if (kuknosSubmitM.getOk() == 1) {
@@ -75,7 +74,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
                 public void setProgressIndicator(boolean visibility) {
                     progressState.setValue(visibility);
                 }
-            });
+            });*/
         }
     }
 

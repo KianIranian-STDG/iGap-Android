@@ -2,9 +2,9 @@ package net.iGap.news.repository.api;
 
 import net.iGap.api.NewsApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
@@ -15,23 +15,23 @@ import net.iGap.news.repository.model.NewsPN;
 import net.iGap.news.repository.model.NewsPublisher;
 import net.iGap.news.repository.model.NewsSubmitComment;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class NewsAPIRepository {
 
-    private NewsApi apiService = ApiServiceProvider.getNewsClient();
+    private NewsApi apiService = new RetrofitFactory().getNewsRetrofit();
 
     public void getMainPageNews(HandShakeCallback handShakeCallback, ResponseCallback<List<NewsFirstPage>> apiResponse) {
-
         new ApiInitializer<List<NewsFirstPage>>().initAPI(apiService.getMainPageNews(), handShakeCallback, apiResponse);
-
     }
 
     public void getNewsGroup(HandShakeCallback handShakeCallback, ResponseCallback<NewsGroup> apiResponse) {
         new ApiInitializer<NewsGroup>().initAPI(apiService.getNewsGroups(0, 0), handShakeCallback, apiResponse);
     }
 
-    public void getNewsList(NewsApiArg arg, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {
+    public void getNewsList(@NotNull NewsApiArg arg, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {
         switch (arg.getmType()) {
             case Latest:
                 getLatestNews(arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);

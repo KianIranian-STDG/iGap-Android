@@ -60,14 +60,14 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 secondaryLoaderVisiblity.set(View.GONE);
                 payButtonEnableState.set(true);
-                getMessageToUserText().setValue(error.getMessage());
+                getMessageToUserText().setValue(error);
             }
 
             @Override
-            public void onFailed(boolean handShakeError) {
+            public void onFailed() {
                 secondaryLoaderVisiblity.set(View.GONE);
                 payButtonEnableState.set(true);
                 getMessageToUser().setValue(R.string.server_do_not_response);

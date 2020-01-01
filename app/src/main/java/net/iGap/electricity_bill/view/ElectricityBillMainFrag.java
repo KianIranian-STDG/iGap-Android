@@ -29,12 +29,11 @@ import net.iGap.interfaces.ToolbarListener;
 
 import static net.iGap.activities.ActivityMain.electricityBillRequestCodeQrCode;
 
-public class ElectricityBillMainFrag extends BaseAPIViewFrag {
+public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMainVM> {
 
     public enum btnActions {MY_ELEC_BILLS, SEARCH_BILL, BRANCH_INFO, QR_SCAN}
 
     private FragmentElecBillMainBinding binding;
-    private ElectricityBillMainVM elecBillVM;
     private static final String TAG = "ElectricityBillMainFrag";
 
     public static ElectricityBillMainFrag newInstance() {
@@ -44,7 +43,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        elecBillVM = ViewModelProviders.of(this).get(ElectricityBillMainVM.class);
+        viewModel = ViewModelProviders.of(this).get(ElectricityBillMainVM.class);
     }
 
     @Nullable
@@ -52,10 +51,9 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_elec_bill_main, container, false);
-        binding.setViewmodel(elecBillVM);
+        binding.setViewmodel(viewModel);
         binding.setFragment(this);
         binding.setLifecycleOwner(this);
-        this.viewModel = elecBillVM;
 
         return attachToSwipeBack(binding.getRoot());
 
@@ -89,7 +87,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                elecBillVM.getBillIDErrorEnable().set(false);
+                viewModel.getBillIDErrorEnable().set(false);
             }
 
             @Override
@@ -98,10 +96,10 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
             }
         });
 
-        elecBillVM.getGoToBillDetailFrag().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getGoToBillDetailFrag().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                elecBillVM.getProgressVisibility().set(View.GONE);
-                new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(elecBillVM.getBillID().get(), elecBillVM.getBillPayID(), elecBillVM.getBillPrice(), false)).setReplace(false).load();
+                viewModel.getProgressVisibility().set(View.GONE);
+                new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(viewModel.getBillID().get(), viewModel.getBillPayID(), viewModel.getBillPrice(), false)).setReplace(false).load();
             }
         });
     }
@@ -171,7 +169,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
 
         if (requestCode == electricityBillRequestCodeQrCode) {
             IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
-            elecBillVM.setDataFromBarcodeScanner(result.getContents());
+            viewModel.setDataFromBarcodeScanner(result.getContents());
         }
 
     }

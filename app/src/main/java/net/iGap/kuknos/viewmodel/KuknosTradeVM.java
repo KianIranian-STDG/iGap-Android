@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -49,7 +48,7 @@ public class KuknosTradeVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+        /*panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
             @Override
             public void onResponse(AccountResponse accountResponse) {
                 ArrayList<AccountResponse.Balance> temp = new ArrayList<>(Arrays.asList(accountResponse.getBalances()));
@@ -68,7 +67,7 @@ public class KuknosTradeVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 fetchProgressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public void originSpinnerSelect(int position) {

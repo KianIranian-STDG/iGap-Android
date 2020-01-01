@@ -102,6 +102,18 @@
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintWidth_percent="0.1" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/retryIcon"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="@dimen/dp48"
+                    style="@style/myIconTextViewStyle"
+                    android:text="@string/retry_icon"
+                    android:visibility="@{viewmodel.showRetryView}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

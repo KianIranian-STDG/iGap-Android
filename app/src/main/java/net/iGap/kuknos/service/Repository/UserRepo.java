@@ -3,7 +3,6 @@ package net.iGap.kuknos.service.Repository;
 import android.util.Log;
 
 import net.iGap.DbManager;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.mnemonic.Wallet;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosInfoM;
@@ -27,17 +26,17 @@ public class UserRepo {
 
     // API
 
-    public void checkUser(String phoneNum, String nID, ApiResponse<KuknoscheckUserM> apiResponse) {
+    /*public void checkUser(String phoneNum, String nID, ApiResponse<KuknoscheckUserM> apiResponse) {
         kuknosAPIRepository.checkUser(phoneNum, nID, apiResponse);
-    }
+    }*/
 
-    public void getUserInfo(String publicKey, ApiResponse<KuknosInfoM> apiResponse) {
+    /*public void getUserInfo(String publicKey, ApiResponse<KuknosInfoM> apiResponse) {
         kuknosAPIRepository.getUserInfo(publicKey, apiResponse);
-    }
+    }*/
 
-    public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {
+    /*public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {
         kuknosAPIRepository.registerUser(token, publicKey, friendlyID, apiResponse);
-    }
+    }*/
 
     // generate key pair
 

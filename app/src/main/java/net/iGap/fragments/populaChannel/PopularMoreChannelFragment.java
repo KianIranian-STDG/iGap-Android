@@ -31,7 +31,7 @@ import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.viewmodel.PopularMoreChannelViewModel;
 
 
-public class PopularMoreChannelFragment extends BaseAPIViewFrag {
+public class PopularMoreChannelFragment extends BaseAPIViewFrag<PopularMoreChannelViewModel> {
 
     private View sliderCv;
     private TextView emptyTextView;
@@ -39,12 +39,10 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
     private SwipeRefreshLayout swipeRefreshLayout;
     private HelperToolbar helperToolbar;
 
-    private PopularMoreChannelViewModel popularMoreChannelViewModel;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        popularMoreChannelViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -57,7 +55,6 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
                 return (T) new PopularMoreChannelViewModel(id, title);
             }
         }).get(PopularMoreChannelViewModel.class);
-        viewModel = popularMoreChannelViewModel;
     }
 
     @NonNull
@@ -76,7 +73,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        popularMoreChannelViewModel.toolbarBackClick();
+                        viewModel.toolbarBackClick();
                     }
                 })
                 .setLogoShown(true)
@@ -94,40 +91,34 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
         recyclerView.setAdapter(new PopularMoreChannelAdapter(new PopularMoreChannelAdapter.OnMoreChannelCallBack() {
             @Override
             public void onChannelClick(Channel channel) {
-                popularMoreChannelViewModel.onChannelClick(channel);
+                viewModel.onChannelClick(channel);
             }
 
             @Override
             public void onLoadMore() {
-                popularMoreChannelViewModel.loadMoreData();
+                viewModel.loadMoreData();
             }
         }));
 
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener((GridLayoutManager) recyclerView.getLayoutManager()) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.wtf(this.getClass().getName(), "onLoadMore,page: " + page);
-                Log.wtf(this.getClass().getName(), "onLoadMore,totalItemsCount: " + totalItemsCount);
 
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.onSwipeRefresh());
 
-        swipeRefreshLayout.setOnRefreshListener(() -> popularMoreChannelViewModel.onSwipeRefresh());
+        view.findViewById(R.id.retryView).setOnClickListener(v -> viewModel.onSwipeRefresh());
 
-        popularMoreChannelViewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getActivity() != null && isGoBack != null && isGoBack) {
                 getActivity().onBackPressed();
             }
         });
 
-        popularMoreChannelViewModel.getToolbarTitle().observe(getViewLifecycleOwner(), toolbarTitle -> {
+        viewModel.getToolbarTitle().observe(getViewLifecycleOwner(), toolbarTitle -> {
             if (toolbarTitle != null) {
                 helperToolbar.setDefaultTitle(toolbarTitle);
             }
         });
 
-        popularMoreChannelViewModel.getShowAdvertisement().observe(getViewLifecycleOwner(), adv -> {
+        viewModel.getShowAdvertisement().observe(getViewLifecycleOwner(), adv -> {
             if (adv != null) {
                 sliderCv.setVisibility(View.VISIBLE);
                 String scale = adv.getmScale();
@@ -137,7 +128,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
                     slider.setLoopSlides(true);
                     slider.setInterval(adv.getmPlaybackTime());
                     slider.setOnSlideClickListener(position -> {
-                        popularMoreChannelViewModel.onSlideClick(adv.getSlides().get(position));
+                        viewModel.onSlideClick(adv.getSlides().get(position));
                     });
                 }, 200);
             } else {
@@ -145,7 +136,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
             }
         });
 
-        popularMoreChannelViewModel.getGoToChannel().observe(getViewLifecycleOwner(), data -> {
+        viewModel.getGoToChannel().observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
                 if (data.isPrivate()) {
                     HelperUrl.checkAndJoinToRoom(getActivity(), data.getSlug());
@@ -156,7 +147,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
         });
 
 
-        popularMoreChannelViewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
+        viewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
             Log.wtf(this.getClass().getName(), "getMoreChannelMutableLiveData");
             if (childChannel != null && recyclerView.getAdapter() instanceof PopularMoreChannelAdapter) {
                 Log.wtf(this.getClass().getName(), "getMoreChannelMutableLiveData");
@@ -164,14 +155,20 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
             }
         });
 
-        popularMoreChannelViewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
+        viewModel.getShowRetryView().observe(getViewLifecycleOwner(),isShow->{
+            if (isShow!=null){
+                view.findViewById(R.id.retryView).setVisibility(isShow ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
             if (progress != null && progress)
                 swipeRefreshLayout.setRefreshing(true);
             else
                 swipeRefreshLayout.setRefreshing(false);
         });
 
-        popularMoreChannelViewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), haveEmptyView -> {
+        viewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), haveEmptyView -> {
             if (haveEmptyView != null && haveEmptyView)
                 emptyTextView.setVisibility(View.VISIBLE);
             else
@@ -182,8 +179,8 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (popularMoreChannelViewModel.getScale()!= null) {
-            ((PopularChannelMoreSliderAdapter)slider.getAdapter()).setScale(popularMoreChannelViewModel.getScale());
+        if (viewModel.getScale()!= null) {
+            ((PopularChannelMoreSliderAdapter)slider.getAdapter()).setScale(viewModel.getScale());
         }
     }
 }
