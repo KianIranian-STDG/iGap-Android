@@ -157,7 +157,7 @@ import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.remove.StickersSettingFragment;
+import net.iGap.fragments.emoji.remove.StickerSettingFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
@@ -3328,7 +3328,7 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onStickerSettingClicked() {
                     if (getActivity() != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), StickersSettingFragment.newInstance(new ArrayList<>())).setReplace(false).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), new StickerSettingFragment()).setReplace(false).load();
                     }
                 }
 
@@ -6129,7 +6129,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), StickersSettingFragment.newInstance(recentStickerList)).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new StickerSettingFragment()).setReplace(false).load();
                         }
                     }
                 })
@@ -6200,7 +6200,7 @@ public class FragmentChat extends BaseFragment
 
             RealmStickersDetails stickersDetails = realm.where(RealmStickersDetails.class).equalTo(RealmStickersDetailsFields.ST_ID, structIGSticker.getId()).findFirst();
             if (stickersDetails != null && stickersDetails.isValid()) {
-                stickersDetails.setRecent(true);
+                stickersDetails.setRecent();
             }
 
         });

@@ -1812,7 +1812,7 @@ Want to get it?</string>
     <string name="purchase">Purchase</string>
     <string name="remaining_balance">Remaining balance</string>
     <string name="refound">money transferred to your wallet</string>
-    <string name="Recently_Sticker">Recently</string>
+    <string name="Recently_Sticker">Recently Sticker</string>
     <string name="Favorite_Sticker">Favorite</string>
     <string name="subscribers_title">Subscribers</string>
     <string name="invite_link_title">invite link</string>
@@ -2393,5 +2393,6 @@ Want to get it?</string>
     <string name="two_step_verficatiion_header">You have enabled Two-Step verification; so your account is protected with an additional password</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
+    <string name="delete_recently_sticker">Delete Recently Sticker</string>
 
 </resources>

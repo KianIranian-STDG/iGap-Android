@@ -111,11 +111,8 @@ public class RealmStickersDetails extends RealmObject {
         this.groupId = groupId;
     }
 
-    public void setRecent(boolean recent) {
-        if (recent)
-            setRecentTime(System.currentTimeMillis());
-        else
-            setRecentTime(0);
+    public void setRecent() {
+        setRecentTime(System.currentTimeMillis());
     }
 
     private void setRecentTime(long recentTime) {

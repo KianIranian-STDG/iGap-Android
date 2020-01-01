@@ -3,15 +3,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?iGapDividerLine">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_removeSticker"
+    <LinearLayout
+        android:id="@+id/ll_stickerSetting_toolBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_stickerSetting_toolBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_stickerSetting_clearRecent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp52"
+                android:layout_marginTop="8dp"
+                android:background="?rootBackgroundColor"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp14"
+                android:text="@string/delete_recently_sticker"
+                android:textColor="@color/red"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/pb_stickerSetting_clearRecent"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_stickerSetting_clearRecent"
+                app:layout_constraintEnd_toEndOf="@+id/tv_stickerSetting_clearRecent"
+                app:layout_constraintTop_toTopOf="@+id/tv_stickerSetting_clearRecent" />
+
+            <TextView
+                android:id="@+id/tv_stickerSetting_clearStorage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp52"
+                android:layout_marginTop="@dimen/dp8"
+                android:background="?rootBackgroundColor"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp14"
+                android:text="@string/st_title_Clear_Cache"
+                android:textColor="@color/red"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_stickerSetting_clearRecent" />
+
+            <TextView
+                android:id="@+id/tv_stickerSetting_clearStorageSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_stickerSetting_clearStorage"
+                app:layout_constraintEnd_toEndOf="@+id/tv_stickerSetting_clearStorage"
+                app:layout_constraintTop_toTopOf="@+id/tv_stickerSetting_clearStorage" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:paddingStart="@dimen/dp8"
+                android:paddingLeft="@dimen/dp8"
+                android:text="@string/Favorite_Sticker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_stickerSetting_clearStorage" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_removeSticker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp2"
+                android:layout_marginBottom="@dimen/dp8"
+                android:background="?rootBackgroundColor"
+                android:padding="@dimen/dp8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

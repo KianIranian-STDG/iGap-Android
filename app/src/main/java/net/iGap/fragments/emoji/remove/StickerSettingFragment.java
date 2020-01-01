@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +20,11 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
-public class RemoveStickerFragment extends BaseFragment {
+public class StickerSettingFragment extends BaseFragment {
 
     private RemoveStickerAdapter adapter;
     private RemoveStickerViewModel viewModel;
@@ -36,6 +41,22 @@ public class RemoveStickerFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_removeSticker);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_stickerSetting_toolBar);
+
+        HelperToolbar helperToolbar = HelperToolbar.create()
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle("تنظیمات استیکر")
+                // TODO: 1/1/20 add to resource
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                })
+                .setContext(getContext());
+
+        linearLayout.addView(helperToolbar.getView());
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -67,6 +88,28 @@ public class RemoveStickerFragment extends BaseFragment {
 
         viewModel.getRemoveStickerLiveData().observe(getViewLifecycleOwner(), removedItemPosition -> adapter.removeItem(removedItemPosition));
 
+        TextView removeRecentTv = view.findViewById(R.id.tv_stickerSetting_clearRecent);
+        removeRecentTv.setOnClickListener(v -> {
+            new MaterialDialog.Builder(getContext())
+                    .title(getResources().getString(R.string.remove_sticker))
+                    .content(getResources().getString(R.string.remove_sticker_text))
+                    .positiveText(getString(R.string.yes))
+                    .negativeText(getString(R.string.no))
+                    .onPositive((dialog, which) -> {
+                        viewModel.clearRecentSticker();
+                        dialog.dismiss();
+                    }).show();
+        });
+
+        ProgressBar progressBar = view.findViewById(R.id.pb_stickerSetting_clearRecent);
+        viewModel.getClearRecentStickerLiveData().observe(getViewLifecycleOwner(), progressBar::setVisibility);
+
+        TextView clearInternalStorage = view.findViewById(R.id.tv_stickerSetting_clearStorage);
+        clearInternalStorage.setOnClickListener(v -> viewModel.clearStickerFromInternalStorage());
+
+        TextView storageSize = view.findViewById(R.id.tv_stickerSetting_clearStorageSize);
+        viewModel.getStickerFileSizeLiveData().observe(getViewLifecycleOwner(), storageSize::setText);
+
     }
 
     private void openFragmentAddStickerToFavorite(StructIGStickerGroup stickerGroup) {
@@ -75,5 +118,11 @@ public class RemoveStickerFragment extends BaseFragment {
 
         if (getFragmentManager() != null)
             dialogFragment.show(getFragmentManager(), "dialogFragment");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.unsubscribe();
     }
 }

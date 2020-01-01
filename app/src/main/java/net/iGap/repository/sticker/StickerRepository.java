@@ -23,8 +23,10 @@ import net.iGap.realm.RealmStickersDetailsFields;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -221,6 +223,40 @@ public class StickerRepository implements ObserverView {
                         return structIGStickerGroups;
                     });
         });
+    }
+
+    public Flowable<Long> getIntervalFlowable() {
+        return Flowable.interval(2000, TimeUnit.MILLISECONDS);
+    }
+
+    public void clearRecentSticker(ResponseCallback<Boolean> callback) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(realm1 -> {
+                RealmResults<RealmStickersDetails> realmStickersDetails = realm1.where(RealmStickersDetails.class)
+                        .limit(13)
+                        .notEqualTo(RealmStickersDetailsFields.RECENT_TIME, 0)
+                        .findAll();
+
+                realmStickersDetails.setLong(RealmStickersDetailsFields.RECENT_TIME, 0);
+
+            }, () -> callback.onSuccess(true), error -> callback.onError(error.getMessage()));
+        });
+    }
+
+    public void clearStickerInternalStorage() {
+        File file;
+        try {
+            file = new File(G.downloadDirectoryPath);
+            clearFile(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearFile(@NotNull File fileTmp) {
+        for (File file : fileTmp.listFiles()) {
+            if (!file.isDirectory()) file.delete();
+        }
     }
 
     @Override
