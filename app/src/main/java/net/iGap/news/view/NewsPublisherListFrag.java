@@ -25,10 +25,9 @@ import net.iGap.news.viewmodel.NewsPublisherListVM;
 
 import java.util.List;
 
-public class NewsPublisherListFrag extends BaseAPIViewFrag {
+public class NewsPublisherListFrag extends BaseAPIViewFrag<NewsPublisherListVM> {
 
     private NewsPublisherlistFragBinding binding;
-    private NewsPublisherListVM newsVM;
 
 
     public static NewsPublisherListFrag newInstance() {
@@ -38,7 +37,7 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newsVM = ViewModelProviders.of(this).get(NewsPublisherListVM.class);
+        viewModel = ViewModelProviders.of(this).get(NewsPublisherListVM.class);
     }
 
     @Nullable
@@ -48,7 +47,6 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_publisherlist_frag, container, false);
 //        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
-        this.viewModel = newsVM;
 
         return binding.getRoot();
     }
@@ -74,7 +72,7 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
         binding.toolbar.addView(mHelperToolbar.getView());
 
         binding.pullToRefresh.setOnRefreshListener(() -> {
-            newsVM.getData();
+            viewModel.getData();
             binding.noItemInListError.setVisibility(View.GONE);
         });
 
@@ -83,7 +81,7 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rcGroup.setLayoutManager(layoutManager);
 
-        newsVM.getData();
+        viewModel.getData();
         onErrorObserver();
         onDataChanged();
         onProgress();
@@ -91,7 +89,7 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
 
 
     private void onErrorObserver() {
-        newsVM.getError().observe(getViewLifecycleOwner(), newsError -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), newsError -> {
             if (newsError.getState()) {
                 //show the related text
                 binding.noItemInListError.setVisibility(View.VISIBLE);
@@ -104,11 +102,11 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
     }
 
     private void onProgress() {
-        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
-        newsVM.getmData().observe(getViewLifecycleOwner(), this::initMainRecycler);
+        viewModel.getmData().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
     private void initMainRecycler(List<NewsPublisher> data) {

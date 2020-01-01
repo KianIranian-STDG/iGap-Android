@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -40,7 +39,7 @@ public class KuknosAddAssetVM extends ViewModel {
     }
 
     public void getAccountDataFromServer() {
-        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+        /*panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
             @Override
             public void onResponse(AccountResponse accountResponse) {
                 accountPageMutableLiveData.setValue(accountResponse);
@@ -55,11 +54,11 @@ public class KuknosAddAssetVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public void getAssetDataFromServer() {
-        tradeRepo.getAssets(new ApiResponse<Page<AssetResponse>>() {
+        /*tradeRepo.getAssets(new ApiResponse<Page<AssetResponse>>() {
             @Override
             public void onResponse(Page<AssetResponse> assetResponsePage) {
                 assetPageMutableLiveData.setValue(assetResponsePage);
@@ -76,13 +75,13 @@ public class KuknosAddAssetVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressStateAdv.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public void addAsset(int position) {
         AssetResponse temp = assetPageMutableLiveData.getValue().getRecords().get(position);
         Log.d("amini", "addAsset: " + temp.getAssetCode() + " " + temp.getAssetIssuer());
-        tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), new ApiResponse<SubmitTransactionResponse>() {
+        /*tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), new ApiResponse<SubmitTransactionResponse>() {
             @Override
             public void onResponse(SubmitTransactionResponse submitTransactionResponse) {
                 getAccountDataFromServer();
@@ -97,7 +96,7 @@ public class KuknosAddAssetVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public void onSubmit() {

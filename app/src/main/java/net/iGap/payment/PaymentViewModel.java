@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +35,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private ObservableDouble paymentRRN = new ObservableDouble();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> needUpdateGooglePlay = new MutableLiveData<>();
 
     private String token;
     private String orderId;
@@ -132,10 +130,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
         return goToWebPage;
     }
 
-    public MutableLiveData<Boolean> getNeedUpdateGooglePlay() {
-        return needUpdateGooglePlay;
-    }
-
     @Override
     protected void onCleared() {
         super.onCleared();
@@ -199,13 +193,13 @@ public class PaymentViewModel extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 onErrorHandler(error);
             }
 
             @Override
-            public void onFailed(boolean handShakeError) {
-                onFailedHandler(handShakeError);
+            public void onFailed() {
+                onFailedHandler();
             }
         });
     }
@@ -242,13 +236,13 @@ public class PaymentViewModel extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 onErrorHandler(error);
             }
 
             @Override
-            public void onFailed(boolean handShakeError) {
-                onFailedHandler(handShakeError);
+            public void onFailed() {
+                onFailedHandler();
             }
         });
     }
@@ -257,15 +251,15 @@ public class PaymentViewModel extends BaseAPIViewModel {
         goBack.setValue(paymentResult);
     }
 
-    private void onErrorHandler(@NotNull ErrorModel error) {
+    private void onErrorHandler(@NotNull String error) {
         showLoadingView.set(View.GONE);
         showPaymentStatus.set(View.VISIBLE);
-        paymentStatus.set(error.getMessage());
+        paymentStatus.set(error);
         paymentStateIcon.set(R.string.error_icon);
         paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
     }
 
-    private void onFailedHandler(boolean isNeedUpdateGooglePlay) {
+    private void onFailedHandler() {
         showLoadingView.set(View.GONE);
         paymentStateIcon.set(R.string.error_icon);
         paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
@@ -273,6 +267,5 @@ public class PaymentViewModel extends BaseAPIViewModel {
         paymentStatus.set("error");
         closeButtonColor.set(R.color.red);
         showRetryView.set(View.VISIBLE);
-        needUpdateGooglePlay.setValue(isNeedUpdateGooglePlay);
     }
 }

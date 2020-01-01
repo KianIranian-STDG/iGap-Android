@@ -3,7 +3,6 @@ package net.iGap.kuknos.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 
@@ -31,7 +30,7 @@ public class KuknosWHistoryVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        panelRepo.getUserHistory(new ApiResponse<Page<OperationResponse>>() {
+        /*panelRepo.getUserHistory(new ApiResponse<Page<OperationResponse>>() {
             @Override
             public void onResponse(Page<OperationResponse> operationResponsePage) {
                 listMutableLiveData.setValue(operationResponsePage);
@@ -46,7 +45,7 @@ public class KuknosWHistoryVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
     public MutableLiveData<Page<OperationResponse>> getListMutableLiveData() {

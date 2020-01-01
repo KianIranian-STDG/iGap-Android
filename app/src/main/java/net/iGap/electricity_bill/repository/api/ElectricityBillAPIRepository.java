@@ -2,9 +2,9 @@ package net.iGap.electricity_bill.repository.api;
 
 import net.iGap.api.ElecBillApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BillRegister;
 import net.iGap.electricity_bill.repository.model.BranchData;
@@ -18,9 +18,10 @@ import net.iGap.electricity_bill.repository.model.SaleBill;
 
 public class ElectricityBillAPIRepository {
 
-    private ElecBillApi apiService = ApiServiceProvider.getElecBillClient();
+    private ElecBillApi apiService =  new RetrofitFactory().getElecBillRetrofit();
     private ElectricityBillRealmRepo realmRepo = new ElectricityBillRealmRepo();
     private String phone = null;
+
     public ElectricityBillAPIRepository() {
         if (realmRepo.getUserNum().startsWith("98")) {
             phone = realmRepo.getUserNum().replaceFirst("98", "0");

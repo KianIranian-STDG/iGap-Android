@@ -18,17 +18,14 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentResult;
 import net.iGap.viewmodel.FragmentPaymentChargeViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class FragmentPaymentCharge extends BaseAPIViewFrag {
+public class FragmentPaymentCharge extends BaseAPIViewFrag<FragmentPaymentChargeViewModel> {
 
-    private FragmentPaymentChargeViewModel paymentChargeViewModel;
     private FragmentPaymentChargeBinding binding;
 
     public static FragmentPaymentCharge newInstance() {
@@ -38,14 +35,13 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        paymentChargeViewModel = ViewModelProviders.of(this).get(FragmentPaymentChargeViewModel.class);
-        viewModel = paymentChargeViewModel;
+        viewModel = ViewModelProviders.of(this).get(FragmentPaymentChargeViewModel.class);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment_charge, container, false);
-        binding.setViewModel(paymentChargeViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
     }
@@ -72,7 +68,7 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag {
         binding.fpcSpinnerOperator.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getTextArray(R.array.phone_operator))));
         binding.fpcSpinnerOperator.setSelection(0);
 
-        paymentChargeViewModel.getOnOpereatorChange().observe(getViewLifecycleOwner(), listResId -> {
+        viewModel.getOnOpereatorChange().observe(getViewLifecycleOwner(), listResId -> {
             if (getContext() != null) {
                 if (listResId != null) {
                     binding.fpcSpinnerChargeType.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getTextArray(listResId))));
@@ -81,7 +77,7 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag {
             }
         });
 
-        paymentChargeViewModel.getOnPriceChange().observe(getViewLifecycleOwner(), listResId -> {
+        viewModel.getOnPriceChange().observe(getViewLifecycleOwner(), listResId -> {
             if (getContext() != null) {
                 if (listResId != null) {
                     binding.fpcSpinnerPrice.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getTextArray(listResId))));
@@ -90,13 +86,13 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag {
             }
         });
 
-        paymentChargeViewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (isGoBack != null && isGoBack) {
                 goBack();
             }
         });
 
-        paymentChargeViewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
+        viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.mci_topup_payment_title), token, result -> {
                     if (result.isSuccess()) {
@@ -106,19 +102,19 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag {
             }
         });
 
-        paymentChargeViewModel.getHideKeyWord().observe(getViewLifecycleOwner(), isHideKeyword -> {
+        viewModel.getHideKeyWord().observe(getViewLifecycleOwner(), isHideKeyword -> {
             if (isHideKeyword != null && isHideKeyword) {
                 hideKeyboard();
             }
         });
 
-        paymentChargeViewModel.getShowError().observe(getViewLifecycleOwner(), errorMessageRes -> {
+        viewModel.getShowError().observe(getViewLifecycleOwner(), errorMessageRes -> {
             if (errorMessageRes != null) {
                 HelperError.showSnackMessage(getString(errorMessageRes), false);
             }
         });
 
-        paymentChargeViewModel.getShowMciPaymentError().observe(getViewLifecycleOwner(), errorModel -> {
+        viewModel.getShowMciPaymentError().observe(getViewLifecycleOwner(), errorModel -> {
             if (errorModel != null) {
                 HelperError.showSnackMessage(errorModel.getMessage(), false);
             }
