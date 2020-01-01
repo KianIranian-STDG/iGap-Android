@@ -34,9 +34,11 @@ import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.collection.ArrayMap;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -631,7 +633,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, mMessage.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
             }
         } else {
-             FrameLayout forwardContainer = mHolder.getItemContainer().findViewById(R.id.messageForwardContainer);
+            FrameLayout forwardContainer = mHolder.getItemContainer().findViewById(R.id.messageForwardContainer);
+            ContextThemeWrapper wrapper = new ContextThemeWrapper(holder.itemView.getContext(), Theme.getInstance().getTheme(holder.itemView.getContext()));
 
             if (forwardContainer == null) {
                 forwardContainer = new FrameLayout(holder.itemView.getContext());
@@ -648,6 +651,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             if (type == ProtoGlobal.Room.Type.CHANNEL) {
+                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_channel_forward_light, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
                     if (!FragmentChat.isInSelectionMode && mMessage != null &&
@@ -658,6 +662,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             if (type == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
                     if (!FragmentChat.isInSelectionMode && mMessage != null &&
@@ -667,7 +672,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
             }
         }
-
 
 
         /**
