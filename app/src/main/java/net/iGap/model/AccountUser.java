@@ -15,6 +15,7 @@ import java.io.File;
 import io.realm.CompactOnLaunchCallback;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.rx.RealmObservableFactory;
 
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
 
@@ -150,6 +151,7 @@ public class AccountUser {
         newConfig = new RealmConfiguration.Builder()
                 .name(dbName)
                 .encryptionKey(mKey)
+                .rxFactory(new RealmObservableFactory()) //rx java for change listener
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override
                     public boolean shouldCompact(long totalBytes, long usedBytes) {

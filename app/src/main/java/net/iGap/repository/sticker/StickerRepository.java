@@ -12,45 +12,39 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.helper.rx.AaSingleObserver;
+import net.iGap.interfaces.ObserverView;
 import net.iGap.realm.RealmStickers;
+import net.iGap.realm.RealmStickersDetails;
+import net.iGap.realm.RealmStickersDetailsFields;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StickerRepository {
+public class StickerRepository implements ObserverView {
 
     private APIEmojiService apiService;
     private String TAG = "abbasiSticker Repository";
-
-    public interface Listener {
-        void onAddSticker(StructIGStickerGroup stickerGroup, int pos);
-
-        void onDeletedSticker(StructIGStickerGroup stickerGroup, int pos);
-
-        void onUpdatedSticker(StructIGStickerGroup stickerGroup, int pos);
-
-        void dataChange();
-    }
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public StickerRepository() {
         apiService = ApiEmojiUtils.getAPIService();
     }
-
-    private RealmResults<RealmStickers> liveRealmStickers;
-    private OrderedRealmCollectionChangeListener<RealmResults<RealmStickers>> stickerChangeListener;
 
     public void getStickerListForStickerDialog(String groupId, ResponseCallback<StructIGStickerGroup> callback) {
 
@@ -179,60 +173,14 @@ public class StickerRepository {
         return RealmStickers.getMyStickers();
     }
 
-    public void addChangeListener(Listener listener) {
-        removeStickerChangeListener();
-
-        DbManager.getInstance().doRealmTask(realm -> {
-            liveRealmStickers = realm.where(RealmStickers.class).findAll();
-
-            stickerChangeListener = (realmStickers, changeSet) -> {
-                if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
-                    listener.dataChange();
-                    return;
-                }
-
-                OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
-                for (int i = deletions.length - 1; i >= 0; i--) {
-                    OrderedCollectionChangeSet.Range range = deletions[i];
-                    listener.onDeletedSticker(null, 0);
-                }
-
-                OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
-                for (OrderedCollectionChangeSet.Range range : insertions) {
-                    listener.onAddSticker(null, 0);
-                }
-
-
-                OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
-                for (OrderedCollectionChangeSet.Range range : modifications) {
-                    listener.onUpdatedSticker(null, 0);
-                }
-
-            };
-
-            liveRealmStickers.addChangeListener(stickerChangeListener);
-        });
-    }
-
-    private void removeStickerChangeListener() {
-        if (liveRealmStickers != null && stickerChangeListener != null) {
-            liveRealmStickers.removeChangeListener(stickerChangeListener);
-            liveRealmStickers = null;
-            stickerChangeListener = null;
-        }
-    }
-
-    public void onDestroy() {
-        removeStickerChangeListener();
-    }
-
     public void putOrUpdateMyStickerPackToDb() {
         apiService.getMyStickerPack()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new AaSingleObserver<StructSticker>() {
+                .subscribe(new AaSingleObserver<StructSticker>(compositeDisposable) {
                     @Override
                     public void onSuccess(StructSticker structSticker) {
+
                         RealmStickers.updateStickers(structSticker.getData(), () -> {
                             if (FragmentChat.onUpdateSticker != null)
                                 FragmentChat.onUpdateSticker.update();
@@ -241,6 +189,48 @@ public class StickerRepository {
                         Log.i(TAG, "onSuccess: " + structSticker.getData().size());
                     }
                 });
+    }
 
+    public Flowable<List<StructIGStickerGroup>> getStickerGroupWithRecentTabForEmojiView() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmStickers.class).findAllAsync()
+                    .asFlowable()
+                    .filter(RealmResults::isLoaded)
+                    .map(realmStickers -> {
+                        List<StructIGStickerGroup> structIGStickerGroups = new ArrayList<>();
+                        for (int i = 0; i < realmStickers.size(); i++) {
+                            StructIGStickerGroup stickerGroup = new StructIGStickerGroup().setValueWithRealmStickers(realmStickers.get(i));
+                            structIGStickerGroups.add(stickerGroup);
+                        }
+                        return structIGStickerGroups;
+                    }).map(structIGStickerGroups -> {
+                        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(StructIGStickerGroup.RECENT_GROUP);
+                        stickerGroup.setName("Recent");
+                        RealmResults<RealmStickersDetails> realmStickersDetails = realm.where(RealmStickersDetails.class)
+                                .limit(13)
+                                .notEqualTo(RealmStickersDetailsFields.RECENT_TIME, 0)
+                                .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
+                                .findAll();
+                        List<StructIGSticker> stickers = new ArrayList<>();
+                        for (int i = 0; i < realmStickersDetails.size(); i++) {
+                            stickers.add(new StructIGSticker().setValueWithRealm(realmStickersDetails.get(i)));
+                        }
+                        stickerGroup.setStickers(stickers);
+                        if (stickers.size() > 0)
+                            structIGStickerGroups.add(0, stickerGroup);
+                        return structIGStickerGroups;
+                    });
+        });
+    }
+
+    @Override
+    public void unsubscribe() {
+        Log.i(TAG, "repo unsubscribe: ");
+        if (compositeDisposable != null)
+            compositeDisposable.clear();
+    }
+
+    public CompositeDisposable getCompositeDisposable() {
+        return compositeDisposable;
     }
 }

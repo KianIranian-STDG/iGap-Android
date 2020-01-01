@@ -12,8 +12,8 @@ package net.iGap.response;
 
 import android.os.Looper;
 
-import net.iGap.DbManager;
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperConnectionState;
@@ -23,9 +23,9 @@ import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
-import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWalletGetAccessToken;
 
 public class UserLoginResponse extends MessageHandler {
@@ -123,6 +123,8 @@ public class UserLoginResponse extends MessageHandler {
                 realmUserInfo.setWalletRegister(builder.getWalletAgreementAccepted());
             }
         });
+
+        new StickerRepository().putOrUpdateMyStickerPackToDb();
 
     }
 

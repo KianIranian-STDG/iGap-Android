@@ -11,8 +11,8 @@ public abstract class AaSingleObserver<T> implements SingleObserver<T> {
 
     private CompositeDisposable compositeDisposable;
 
-    public AaSingleObserver() {
-        compositeDisposable = new CompositeDisposable();
+    public AaSingleObserver(CompositeDisposable compositeDisposable) {
+        this.compositeDisposable = compositeDisposable;
     }
 
     @Override

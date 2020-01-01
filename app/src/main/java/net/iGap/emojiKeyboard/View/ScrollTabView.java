@@ -83,7 +83,7 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
 
-        layoutParams = new LinearLayout.LayoutParams(LayoutCreator.dp(52), LayoutCreator.MATCH_PARENT);
+        layoutParams = new LinearLayout.LayoutParams(LayoutCreator.dp(44), LayoutCreator.MATCH_PARENT);
     }
 
     public void removeTabs() {
@@ -104,7 +104,6 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
     public void addStickerTab(StructIGStickerGroup sticker) {
         final int position = tabCount++;
         FrameLayout tab = new FrameLayout(getContext());
-        tab.setTag(sticker);
         tab.setFocusable(true);
         tab.setOnClickListener(v -> listener.onPageSelected(position));
         rootView.addView(tab, layoutParams);

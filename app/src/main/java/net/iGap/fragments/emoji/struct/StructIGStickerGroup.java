@@ -14,6 +14,8 @@ import static net.iGap.fragments.emoji.struct.StructIGSticker.ANIMATED_STICKER;
 import static net.iGap.fragments.emoji.struct.StructIGSticker.NORMAL_STICKER;
 
 public class StructIGStickerGroup {
+    public static final String RECENT_GROUP = "-1";
+
     private String groupId;
     private long createdAt;
     private long refId;
@@ -36,8 +38,13 @@ public class StructIGStickerGroup {
         this.groupId = groupId;
     }
 
-    public void setValueWithRealmStickers(RealmStickers realmStickersGroup) {
+    public StructIGStickerGroup() {
+
+    }
+
+    public StructIGStickerGroup setValueWithRealmStickers(RealmStickers realmStickersGroup) {
         if (realmStickersGroup != null && realmStickersGroup.isValid()) {
+            setGroupId(realmStickersGroup.getSt_id());
             setStickers(realmStickersGroup.getIGGroupStickers());
             setSort(realmStickersGroup.getSort());
             setRefId(realmStickersGroup.getRefId());
@@ -54,6 +61,7 @@ public class StructIGStickerGroup {
             setVip(realmStickersGroup.isVip());
             setInMySticker(true);
         }
+        return this;
     }
 
     public void setValueWithOldStruct(StructGroupSticker structGroupSticker) {

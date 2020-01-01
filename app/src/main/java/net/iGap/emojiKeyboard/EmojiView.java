@@ -7,7 +7,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,12 +16,13 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.emojiKeyboard.View.CubicBezierInterpolator;
@@ -31,16 +33,16 @@ import net.iGap.emojiKeyboard.sticker.StickerGroupAdapter;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.realm.RealmStickersDetails;
 import net.iGap.repository.sticker.StickerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.RealmResults;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 @SuppressLint("ViewConstructor")
-public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeListener, StickerRepository.Listener {
+public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeListener {
 
     public static final int EMOJI = 0;
     public static final int STICKER = 1;
@@ -75,21 +77,24 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private int stickerOffset;
     private AppCompatImageView addStickerIv;
     private ScrollTabView stickerTabView;
+    private AppCompatImageView emptyIv;
     private int stickersTabViewY;
+    private AppCompatTextView emptyTv;
+
+    private StickerRepository stickerRepository;
+    private int groupSize = -1;
 
     private int layoutHeight;
     private int layoutWidth;
 
     private Listener listener;
-    private String TAG = "abbasiEmoji";
+    private String TAG = "abbasiKeyboard";
 
     private Drawable stickerTabDrawable[];
 
     public void setListener(Listener listener) {
         this.listener = listener;
     }
-
-    private int backgroundColor = Color.parseColor("#FFFFFF");
 
     private boolean hasSticker;
     private boolean hasEmoji;
@@ -123,10 +128,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             stickerContainer = new FrameLayout(getContext());
 
+            stickerRepository = new StickerRepository();
+
             stickerGridView = new RecyclerView(getContext());
             stickerGridView.setLayoutManager(stickersLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             stickerGridView.setClipToPadding(false);
-            stickerGridView.setPadding(0, LayoutCreator.dpToPx(48), 0, LayoutCreator.dpToPx(50));
+            stickerGridView.setPadding(0, LayoutCreator.dpToPx(40), 0, LayoutCreator.dpToPx(40));
 
             stickerGridAdapter = new StickerGroupAdapter();
 
@@ -135,6 +142,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     checkBottomTabScroll(dy);
                     checkStickersTabY(recyclerView, dy);
+                    checkScroll();
                     super.onScrolled(recyclerView, dx, dy);
                 }
             });
@@ -155,22 +163,13 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerTabView.setListener(page -> {
 
                 stickerGridView.stopScroll();
-                stickersLayoutManager.scrollToPositionWithOffset(stickerGridAdapter.getPositionForGroup(stickerGridAdapter.getGroups().get(page)), 0);
+                stickersLayoutManager.scrollToPositionWithOffset(/*stickerGridAdapter.getPositionForGroup(stickerGridAdapter.getGroups().get(page))*/page, 0);
 
                 stickerTabView.onPageScrolled(page, page);
-
+                checkScroll();
+                checkStickersTabY(null, 0);
             });
 
-            RealmResults<RealmStickersDetails> realmStickersDetails = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmStickersDetails.class).sort("recentTime").findAll();
-            });
-
-            if (realmStickersDetails != null)
-                for (int i = 0; i < realmStickersDetails.size(); i++) {
-                    Log.i(TAG, "EmojiView: " + realmStickersDetails.get(i).getSt_id());
-                }
-
-            stickerTabView.addIconTab(stickerTabDrawable[0]);
 
             addStickerIv = new AppCompatImageView(getContext());
             addStickerIv.setImageDrawable(stickerTabDrawable[1]);
@@ -179,10 +178,15 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             addStickerIv.setOnClickListener(v -> listener.onAddStickerClicked());
 
             stickerContainer.addView(stickerGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
-            stickerContainer.addView(stickerTabView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 48, Gravity.TOP, 0, 0, 48, 0));
-            stickerContainer.addView(addStickerIv, LayoutCreator.createFrame(48, 48, Gravity.TOP | Gravity.RIGHT));
+            stickerContainer.addView(stickerTabView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 40, Gravity.TOP, 0, 0, 40, 0));
+            stickerContainer.addView(addStickerIv, LayoutCreator.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT));
             views.add(stickerContainer);
 
+            Disposable disposable = stickerRepository.getStickerGroupWithRecentTabForEmojiView()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::onStickerChanged);
+
+            stickerRepository.getCompositeDisposable().add(disposable);
         }
 
         stickerIv = new AppCompatImageView(getContext());
@@ -230,12 +234,13 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
         viewPager.addOnPageChangeListener(this);
 
+
         addView(viewPager, 0, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
     }
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setBackgroundColor(backgroundColor);
+        setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
     }
 
@@ -270,14 +275,26 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         viewPagerItemChanged(contentView);
     }
 
+    private void checkScroll() {
+        int firstVisibleItem = stickersLayoutManager.findFirstVisibleItemPosition();
+        if (firstVisibleItem == RecyclerView.NO_POSITION) {
+            return;
+        }
+        if (stickerGridView == null) {
+            return;
+        }
+        int firstTab = 0;
+        stickerTabView.onPageScrolled(firstVisibleItem, firstTab);
+    }
+
     private void setToSticker() {
         if (hasSticker)
-            viewPager.setCurrentItem(1, true);
+            viewPager.setCurrentItem(STICKER, true);
     }
 
     private void setToEmoji() {
         if (hasSticker)
-            viewPager.setCurrentItem(0, true);
+            viewPager.setCurrentItem(EMOJI, true);
     }
 
     @Override
@@ -301,7 +318,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     public void onPageScrollStateChanged(int state) {
 
     }
-
 
     private void checkBottomTabScroll(float dy) {
         lastBottomScrollY += dy;
@@ -338,7 +354,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         bottomTabContainerAnimation.start();
     }
 
-
     private void viewPagerItemChanged(int position) {
         if (position == EMOJI) {
             stickerIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
@@ -352,24 +367,66 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         currentPage = position;
     }
 
-    @Override
-    public void onAddSticker(StructIGStickerGroup stickerGroup, int position) {
+    public void onStickerChanged(List<StructIGStickerGroup> structIGStickerGroups) {
 
+        if (structIGStickerGroups.size() != groupSize) {
+            stickerTabView.removeTabs();
+
+            boolean hasRecent = false;
+            if (structIGStickerGroups.size() > 0 && structIGStickerGroups.get(0).getGroupId().equals(StructIGStickerGroup.RECENT_GROUP)) {
+                stickerTabView.addIconTab(stickerTabDrawable[0]);
+                hasRecent = true;
+            }
+
+            for (int i = hasRecent ? 1 : 0; i < structIGStickerGroups.size(); i++) {
+                stickerTabView.addStickerTab(structIGStickerGroups.get(i));
+            }
+        }
+        groupSize = structIGStickerGroups.size();
+        stickerGridAdapter.setGroups(structIGStickerGroups);
+
+        checkStickerEmptyView(groupSize);
+    }
+
+    private void checkStickerEmptyView(int groupSize) {
+        if (groupSize == 0) {
+            emptyIv = new AppCompatImageView(getContext());
+            emptyIv.setImageDrawable(getResources().getDrawable(R.drawable.empty_chat));
+            emptyIv.setOnClickListener(v -> listener.onAddStickerClicked());
+            stickerContainer.addView(emptyIv, LayoutCreator.createFrame(120, 120, Gravity.CENTER, 0, 0, 0, 50));
+
+            emptyTv = new AppCompatTextView(getContext());
+            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+            emptyTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
+            emptyTv.setLines(1);
+            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setMaxLines(1);
+            emptyTv.setSingleLine(true);
+            emptyTv.setEllipsize(TextUtils.TruncateAt.END);
+            emptyTv.setGravity(Gravity.CENTER);
+            emptyTv.setText("شما تاکنون هیچ استیکری اضافه نکرده اید! برای افزودن کلیک کنید.");
+            emptyTv.setOnClickListener(v -> listener.onAddStickerClicked());
+            stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 35, 0, 0));
+
+            stickerTabView.setVisibility(GONE);
+            addStickerIv.setVisibility(GONE);
+        } else if (emptyIv != null && emptyTv != null) {
+            stickerContainer.removeView(emptyIv);
+            emptyIv = null;
+            stickerContainer.removeView(emptyTv);
+            emptyTv = null;
+
+            stickerTabView.setVisibility(VISIBLE);
+            addStickerIv.setVisibility(VISIBLE);
+        }
     }
 
     @Override
-    public void onDeletedSticker(StructIGStickerGroup stickerGroup, int position) {
-
-    }
-
-    @Override
-    public void onUpdatedSticker(StructIGStickerGroup stickerGroup, int position) {
-
-    }
-
-    @Override
-    public void dataChange() {
-        Log.i(TAG, "dataChange: ");
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (stickerRepository != null)
+            stickerRepository.unsubscribe();
     }
 
     public interface Listener {

@@ -2,13 +2,12 @@ package net.iGap.emojiKeyboard;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import net.iGap.emojiKeyboard.dataLayer.EmojiViewDataLayer;
+import net.iGap.Theme;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 
@@ -23,7 +22,6 @@ public class KeyboardView extends FrameLayout {
     private EmojiView emojiView;
     private int currentMode;
     private Listener listener;
-    private EmojiViewDataLayer emojiViewDataLayer;
 
     private int keyboardHeight;
     private int keyboardHeightLand;
@@ -48,8 +46,6 @@ public class KeyboardView extends FrameLayout {
             if (emojiView == null)
                 createEmojiView();
 
-            emojiViewDataLayer.updateSticker();
-
             emojiView.setContentView(contentView);
 
         } else if (mode == MODE_KEYBOARD) {
@@ -63,8 +59,6 @@ public class KeyboardView extends FrameLayout {
 
     private void createEmojiView() {
         if (emojiView != null) return;
-
-        emojiViewDataLayer = new EmojiViewDataLayer();
 
         emojiView = new EmojiView(getContext(), true, true);
         emojiView.setListener(new EmojiView.Listener() {
@@ -95,7 +89,7 @@ public class KeyboardView extends FrameLayout {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setBackgroundColor(Color.parseColor("#FFFFFF"));
+        setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
     }
 

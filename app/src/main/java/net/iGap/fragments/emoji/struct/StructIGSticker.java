@@ -1,5 +1,7 @@
 package net.iGap.fragments.emoji.struct;
 
+import net.iGap.realm.RealmStickersDetails;
+
 import java.io.File;
 
 public class StructIGSticker {
@@ -88,5 +90,19 @@ public class StructIGSticker {
 
     public boolean hasFileOnLocal() {
         return new File(path).exists() && new File(path).canRead();
+    }
+
+    public StructIGSticker setValueWithRealm(RealmStickersDetails realmStickersDetails) {
+        if (realmStickersDetails != null && realmStickersDetails.isValid()) {
+            setId(realmStickersDetails.getSt_id());
+            setName(realmStickersDetails.getName());
+            setPath(realmStickersDetails.getUri());
+            setGroupId(realmStickersDetails.getGroupId());
+            setToken(realmStickersDetails.getToken());
+            setFileName(realmStickersDetails.getFileName());
+            setFileSize((int) realmStickersDetails.getFileSize());
+            return this;
+        }
+        return null;
     }
 }
