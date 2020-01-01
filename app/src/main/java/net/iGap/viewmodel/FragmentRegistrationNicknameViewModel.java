@@ -171,13 +171,15 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                                 @Override
                                 public void onError(ErrorWithWaitTime error) {// if error is not null set reagent request is have error
                                     if (error != null) {
-                                        prgVisibility.set(View.GONE);
                                         if (error.getMajorCode() == 10177 && error.getMinorCode() == 2) {
                                             HelperError.showSnackMessage(G.context.getString(R.string.referral_error_yourself), false);
+                                        } else {
+                                            HelperError.showSnackMessage(G.context.getString(R.string.error), false);
                                         }
                                     } else {
-                                        prgVisibility.set(View.GONE);
+                                        HelperError.showSnackMessage(G.context.getString(R.string.error), false);
                                     }
+                                    prgVisibility.set(View.GONE);
                                 }
                             });
                 } else {
