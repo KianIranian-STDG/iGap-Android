@@ -3,11 +3,11 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +23,7 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.adapter.AdapterGalleryVideo;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -51,6 +52,7 @@ public class FragmentGallery extends BaseFragment {
     private GalleryFragmentListener mGalleryListener;
     private GalleryMode mGalleryMode;
     private boolean isReturnResultDirectly;
+    private boolean isMusicSortedByDate = true;
 
     public FragmentGallery() {
     }
@@ -64,14 +66,14 @@ public class FragmentGallery extends BaseFragment {
         return fragment;
     }
 
-    public static FragmentGallery newInstance(GalleryMode mode,boolean isReturnResultDirectly , String folder, String id, GalleryFragmentListener listener) {
+    public static FragmentGallery newInstance(GalleryMode mode, boolean isReturnResultDirectly, String folder, String id, GalleryFragmentListener listener) {
         FragmentGallery fragment = new FragmentGallery();
         fragment.mFolderName = folder;
         fragment.mFolderId = id;
         fragment.mGalleryMode = mode;
         fragment.mGalleryListener = listener;
         fragment.isSubFolder = true;
-        fragment.isReturnResultDirectly =isReturnResultDirectly;
+        fragment.isReturnResultDirectly = isReturnResultDirectly;
         return fragment;
     }
 
@@ -122,11 +124,26 @@ public class FragmentGallery extends BaseFragment {
                             openAndroidOsGallery();
                         }
                     }
+
+                    @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
+                            showSortDialog();
+                        } else {
+                            if (getContext() != null)
+                                Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 });
 
-        if (!isReturnResultDirectly){
-            mHelperToolbar.setRightIcons(isSubFolder ? R.string.edit_icon : R.string.more_icon);
+        if (!isReturnResultDirectly) {
+            if (mGalleryMode == GalleryMode.MUSIC) {
+                mHelperToolbar.setRightIcons(R.string.more_icon, R.string.sort_icon);
+            } else {
+                mHelperToolbar.setRightIcons(isSubFolder ? R.string.edit_icon : R.string.more_icon);
+            }
         }
+
 
         lytToolbar.addView(mHelperToolbar.getView());
     }
@@ -200,7 +217,7 @@ public class FragmentGallery extends BaseFragment {
                 }
                 mGalleryListener.onVideoPickerResult(videos);
                 popBackStackFragment();
-                if (getActivity() instanceof ActivityMain){
+                if (getActivity() instanceof ActivityMain) {
                     ((ActivityMain) getActivity()).goneDetailFrameInTabletMode();
                 }
             }
@@ -296,6 +313,8 @@ public class FragmentGallery extends BaseFragment {
 
     private void setupGalleryWithMusicAdapter(View view, RecyclerView rvGallery) {
 
+        view.findViewById(R.id.loading).setVisibility(View.VISIBLE);
+
         mGalleryMusicAdapter = new AdapterGalleryMusic();
         rvGallery.setAdapter(mGalleryMusicAdapter);
         mGalleryMusicAdapter.setListener(new GalleryItemListener() {
@@ -314,7 +333,7 @@ public class FragmentGallery extends BaseFragment {
             }
         });
 
-        FileManager.getDeviceMusics(getContext(), result ->  {
+        FileManager.getDeviceMusics(getContext(), isMusicSortedByDate, result -> {
             if (getActivity() == null) return;
             getActivity().runOnUiThread(() -> {
                 mGalleryMusicAdapter.setMusicsItem(result);
@@ -376,7 +395,7 @@ public class FragmentGallery extends BaseFragment {
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
 
-        if (!isReturnResultDirectly){
+        if (!isReturnResultDirectly) {
 
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
             fragmentEditImage.setIsReOpenChatAttachment(false);
@@ -402,8 +421,8 @@ public class FragmentGallery extends BaseFragment {
                 popBackStackFragment();
                 popBackStackFragment();
             });
-        }else {
-            if (mGalleryListener != null){
+        } else {
+            if (mGalleryListener != null) {
                 mGalleryListener.onGalleryResult(path);
             }
         }
@@ -457,10 +476,39 @@ public class FragmentGallery extends BaseFragment {
         }
     }
 
+    private void showSortDialog() {
+        if (getContext() == null) return;
+
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.date));
+        items.add(getString(R.string.name));
+
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            switch (position) {
+                case 0:
+                    if (!isMusicSortedByDate) {
+                        isMusicSortedByDate = true;
+                        mGalleryMusicAdapter.setMusicsItem(new ArrayList<>());
+                        initRecyclerView(requireView());
+                    }
+                    break;
+
+                case 1:
+                    if (isMusicSortedByDate) {
+                        isMusicSortedByDate = false;
+                        mGalleryMusicAdapter.setMusicsItem(new ArrayList<>());
+                        initRecyclerView(requireView());
+                    }
+                    break;
+            }
+        }).show();
+    }
+
     public interface GalleryFragmentListener {
         void openOsGallery();
 
-        default void onGalleryResult(String path){}
+        default void onGalleryResult(String path) {
+        }
 
         default void onVideoPickerResult(List<String> videos) {
         }
