@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,7 @@ import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.fragments.FragmentActivation;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegister;
@@ -27,6 +30,8 @@ import net.iGap.fragments.WelcomeFragment;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.viewmodel.RegistrationViewModel;
+
+import static net.iGap.G.context;
 
 public class ActivityRegistration extends ActivityEnhanced {
 
@@ -38,7 +43,12 @@ public class ActivityRegistration extends ActivityEnhanced {
     public void onCreate(Bundle savedInstanceState) {
         isOnGetPermission = true;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registeration);
+        NotifyFrameLayout notifyFrameLayout = new NotifyFrameLayout(context);
+        setContentView(notifyFrameLayout);
+        notifyFrameLayout.setListener(this::onScreenSizeChanged);
+
+        View frameLayout = LayoutInflater.from(this).inflate(R.layout.activity_registeration, notifyFrameLayout, false);
+        notifyFrameLayout.addView(frameLayout);
 
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull

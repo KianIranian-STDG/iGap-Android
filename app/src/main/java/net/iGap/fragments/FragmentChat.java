@@ -698,13 +698,7 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        notifyFrameLayout = new NotifyFrameLayout(context) {
-            @Override
-            protected void onAttachedToWindow() {
-                super.onAttachedToWindow();
-                Log.i(TAG, "onAttachedToWindow: " + notifyFrameLayout.getKeyboardHeight());
-            }
-        };
+        notifyFrameLayout = new NotifyFrameLayout(context);
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 

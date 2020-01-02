@@ -16,10 +16,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -27,14 +26,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import net.iGap.DbManager;
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.UserStatusController;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.model.PassCode;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
@@ -130,10 +130,33 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
             }*/
 
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+                Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
+            }
         }
 
         /*Log.wtf("ActivityEnhanced","onCreate end");*/
 
+    }
+
+    public void onScreenSizeChanged(int height, boolean land) {
+        SharedPreferences emojiSharedPreferences = getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
+
+        boolean keyboardVisible = height > 0;
+
+        if (height > LayoutCreator.dp(50) && keyboardVisible) {
+            if (land) {
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, height).apply();
+                Log.i("abbasiKeyboard", "onScreenSizeChanged: set SHP value -> " + height + " in land");
+            } else {
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, height).apply();
+                Log.i("abbasiKeyboard", "onScreenSizeChanged: set SHP value -> " + height + " in portrait");
+            }
+        }
     }
 
     private void setThemeSetting() {
@@ -248,7 +271,8 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        AndroidUtils.checkDisplaySize(this, newConfig);
         super.onConfigurationChanged(newConfig);
         updateResources(this);
     }
