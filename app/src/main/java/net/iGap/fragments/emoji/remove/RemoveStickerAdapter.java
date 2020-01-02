@@ -20,10 +20,11 @@ import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveStickerAdapter extends RecyclerView.Adapter {
-    private List<StructIGStickerGroup> stickerGroups;
+    private List<StructIGStickerGroup> stickerGroups = new ArrayList<>();
     private RemoveStickerDialogListener listener;
 
     void updateAdapter(List<StructIGStickerGroup> data) {

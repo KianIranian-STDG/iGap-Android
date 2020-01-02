@@ -405,7 +405,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emptyTv.setSingleLine(true);
             emptyTv.setEllipsize(TextUtils.TruncateAt.END);
             emptyTv.setGravity(Gravity.CENTER);
-            emptyTv.setText("شما تاکنون هیچ استیکری اضافه نکرده اید! برای افزودن کلیک کنید.");
+            emptyTv.setText(getContext().getResources().getString(R.string.empty_sticker));
             emptyTv.setOnClickListener(v -> listener.onAddStickerClicked());
             stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 35, 0, 0));
 

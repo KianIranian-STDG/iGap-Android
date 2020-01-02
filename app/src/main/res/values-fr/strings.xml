@@ -1560,7 +1560,7 @@
     <string name="remaining_balance">Solde restant</string>
     <string name="refound">Document corrigeant le montant du dépôt dans le portefeuille</string>
     <string name="Recently_Sticker">récemment</string>
-    <string name="Favorite_Sticker">favoris</string>
+    <string name="Favorite_Sticker">Mes autocollants</string>
     <string name="item_selected">sélectionné</string>
     <string name="terms_and_condition">j\'accepte %s</string>
     <string name="terms_and_condition_clickable">les règlements</string>
@@ -2060,4 +2060,5 @@
     <string name="need_browser">Nécessite un navigateur à utiliser.</string>
     <string name="delete_recently_sticker">Supprimer récemment l\'autocollant</string>
     <string name="sticker_setting">Réglage de l\'autocollant</string>
+    <string name="empty_sticker">Vous n\'avez pas encore ajouté d\'autocollants!</string>
 </resources>

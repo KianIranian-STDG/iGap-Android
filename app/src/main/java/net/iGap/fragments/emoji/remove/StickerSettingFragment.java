@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -110,6 +111,19 @@ public class StickerSettingFragment extends BaseFragment {
         TextView storageSize = view.findViewById(R.id.tv_stickerSetting_clearStorageSize);
         viewModel.getStickerFileSizeLiveData().observe(getViewLifecycleOwner(), storageSize::setText);
 
+        ImageView emptyIv = view.findViewById(R.id.iv_stickerSetting_empty);
+        TextView emptyTv = view.findViewById(R.id.tv_stickerSetting_empty);
+        TextView headerTv = view.findViewById(R.id.tv_stickerSetting_header);
+
+        viewModel.getEmptyRecentStickerLiveData().observe(getViewLifecycleOwner(), visibility -> {
+            emptyIv.setVisibility(visibility);
+            emptyTv.setVisibility(visibility);
+        });
+
+        viewModel.getRecyclerVisibilityRecentStickerLiveData().observe(getViewLifecycleOwner(), visibility -> {
+            recyclerView.setVisibility(visibility);
+            headerTv.setVisibility(visibility);
+        });
     }
 
     private void openFragmentAddStickerToFavorite(StructIGStickerGroup stickerGroup) {

@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -225,8 +224,19 @@ public class StickerRepository implements ObserverView {
         });
     }
 
-    public Flowable<Long> getIntervalFlowable() {
-        return Flowable.interval(2000, TimeUnit.MILLISECONDS);
+    public Flowable<List<StructIGStickerGroup>> getMySticker() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmStickers.class).findAll().asFlowable()
+                    .filter(RealmResults::isLoaded)
+                    .map(realmStickers -> {
+                        List<StructIGStickerGroup> stickerGroups = new ArrayList<>();
+                        for (int i = 0; i < realmStickers.size(); i++) {
+                            StructIGStickerGroup group = new StructIGStickerGroup().setValueWithRealmStickers(realmStickers.get(i));
+                            stickerGroups.add(group);
+                        }
+                        return stickerGroups;
+                    });
+        });
     }
 
     public void clearRecentSticker(ResponseCallback<Boolean> callback) {

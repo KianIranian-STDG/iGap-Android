@@ -15,7 +15,9 @@ import net.iGap.viewmodel.BaseViewModel;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -26,6 +28,8 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
 
     private MutableLiveData<Integer> removeStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> clearRecentStickerLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> emptyRecentStickerLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> recyclerVisibilityRecentStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<String> stickerFileSizeLiveData = new MutableLiveData<>();
 
     public RemoveStickerViewModel() {
@@ -37,6 +41,37 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
 
     public List<StructIGStickerGroup> getFavoriteStickers() {
         return repository.getMyStickers();
+    }
+
+    @Override
+    public void subscribe() {
+        addFileObserver();
+        addStickerObserver();
+    }
+
+    private void addStickerObserver() {
+        Disposable disposable = repository.getMySticker()
+                .map(List::size)
+                .subscribe(this::checkStickerSize);
+        compositeDisposable.add(disposable);
+    }
+
+    private void addFileObserver() {
+        Disposable disposable = Flowable.interval(2000, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .subscribe(integer -> stickerFileSizeLiveData.postValue(getStickerFolderSize()));
+        compositeDisposable.add(disposable);
+    }
+
+    private void checkStickerSize(int size) {
+        if (size > 0) {
+            recyclerVisibilityRecentStickerLiveData.postValue(View.VISIBLE);
+            emptyRecentStickerLiveData.postValue(View.GONE);
+        } else {
+            recyclerVisibilityRecentStickerLiveData.postValue(View.GONE);
+            emptyRecentStickerLiveData.postValue(View.VISIBLE);
+        }
     }
 
     public void removeStickerFromFavorite(String groupId, int adapterPosition) {
@@ -51,27 +86,6 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
 
             }
         });
-    }
-
-    @Override
-    public void subscribe() {
-        Disposable disposable = repository.getIntervalFlowable()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.newThread())
-                .subscribe(integer -> stickerFileSizeLiveData.postValue(getStickerFolderSize()));
-        compositeDisposable.add(disposable);
-    }
-
-    public MutableLiveData<Integer> getRemoveStickerLiveData() {
-        return removeStickerLiveData;
-    }
-
-    public MutableLiveData<Integer> getClearRecentStickerLiveData() {
-        return clearRecentStickerLiveData;
-    }
-
-    public MutableLiveData<String> getStickerFileSizeLiveData() {
-        return stickerFileSizeLiveData;
     }
 
     public void clearRecentSticker() {
@@ -118,11 +132,32 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
         return size;
     }
 
+    public MutableLiveData<Integer> getRemoveStickerLiveData() {
+        return removeStickerLiveData;
+    }
+
+    public MutableLiveData<Integer> getClearRecentStickerLiveData() {
+        return clearRecentStickerLiveData;
+    }
+
+    public MutableLiveData<String> getStickerFileSizeLiveData() {
+        return stickerFileSizeLiveData;
+    }
+
+    public MutableLiveData<Integer> getEmptyRecentStickerLiveData() {
+        return emptyRecentStickerLiveData;
+    }
+
+    public MutableLiveData<Integer> getRecyclerVisibilityRecentStickerLiveData() {
+        return recyclerVisibilityRecentStickerLiveData;
+    }
+
     @Override
     public void unsubscribe() {
         if (compositeDisposable != null) {
             compositeDisposable.clear();
             compositeDisposable = null;
+            repository.unsubscribe();
         }
     }
 }

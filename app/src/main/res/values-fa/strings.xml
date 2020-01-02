@@ -1780,7 +1780,7 @@
     <string name="remaining_balance">موجودی باقیمانده</string>
     <string name="refound">سند اصلاح واریز  مبلغ به کیف پول</string>
     <string name="Recently_Sticker">به تازگی</string>
-    <string name="Favorite_Sticker">مورد علاقه</string>
+    <string name="Favorite_Sticker">استیکر های من</string>
     <string name="item_selected"> مورد انتخاب شده</string>
 
     <string name="terms_and_condition">%s را می پذیرم</string>
@@ -2331,4 +2331,5 @@
     <string name="need_browser">برای استفاده نیاز به مرورگر است.</string>
     <string name="delete_recently_sticker">پاک کردن استیکر های اخیر</string>
     <string name="sticker_setting">تنظیمات استیکر</string>
+    <string name="empty_sticker">شما تاکنون هیچ استیکری اضافه نکرده‌اید!</string>
 </resources>

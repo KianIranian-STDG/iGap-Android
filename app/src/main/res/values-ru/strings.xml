@@ -1560,7 +1560,7 @@
     <string name="remaining_balance">Остаточный  баланс</string>
     <string name="refound">Документ, исправляющий сумму депозита на кошелек</string>
     <string name="Recently_Sticker">Недавно</string>
-    <string name="Favorite_Sticker">Любимый Стикер</string>
+    <string name="Favorite_Sticker">Мои наклейки</string>
     <string name="item_selected">Выбранный элемент</string>
     <string name="terms_and_condition">Я принимаю%s</string>
     <string name="terms_and_condition_clickable">Условия использования</string>
@@ -1836,5 +1836,6 @@
     <string name="need_browser">Требуется браузер для использования.</string>
     <string name="delete_recently_sticker">Удалить недавно стикер</string>
     <string name="sticker_setting">Настройка стикера</string>
+    <string name="empty_sticker">Вы еще не добавили наклейки!</string>
 
 </resources>

@@ -2743,7 +2743,7 @@
     <string name="remaining_balance">الرصيد المتبقي</string>
     <string name="refound">تحويل الأموال إلى محفظتك</string>
     <string name="Recently_Sticker">مؤخرا</string>
-    <string name="Favorite_Sticker">مفضل</string>
+    <string name="Favorite_Sticker">ملصقاتي</string>
     <string name="new_channel_hint">يمكنك تقديم وصف اختياري لقناتك.</string>
     <string name="new_group_hint">يمكنك تقديم وصف اختياري لمجموعتك.</string>
     <string name="permanent_link">وصلة دائمة</string>
@@ -3067,4 +3067,5 @@
     <string name="need_browser">يتطلب متصفح للاستخدام.</string>
     <string name="delete_recently_sticker">حذف ملصق مؤخرا</string>
     <string name="sticker_setting">إعداد الملصقات</string>
+    <string name="empty_sticker">لم تقم بإضافة أي ملصقات بعد!</string>
 </resources>
