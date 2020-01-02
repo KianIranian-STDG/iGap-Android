@@ -45,7 +45,7 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
     private Paint paint;
 
     private int scrollOffset = LayoutCreator.dp(52);
-    private int rectRound = LayoutCreator.dp(1);
+    private int rectRound = LayoutCreator.dp(2);
 
     private String TAG = "abbasiEmoji";
 
@@ -83,7 +83,7 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
 
-        layoutParams = new LinearLayout.LayoutParams(LayoutCreator.dp(44), LayoutCreator.MATCH_PARENT);
+        layoutParams = new LinearLayout.LayoutParams(LayoutCreator.dp(40), LayoutCreator.MATCH_PARENT);
     }
 
     public void removeTabs() {
