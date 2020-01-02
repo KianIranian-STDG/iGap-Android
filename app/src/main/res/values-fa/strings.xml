@@ -2329,5 +2329,6 @@
     <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
     <string name="need_browser">برای استفاده نیاز به مرورگر است.</string>
-    <string name="delete_recently_sticker">پاک کزدن استیکر های اخیر</string>
+    <string name="delete_recently_sticker">پاک کردن استیکر های اخیر</string>
+    <string name="sticker_setting">تنظیمات استیکر</string>
 </resources>

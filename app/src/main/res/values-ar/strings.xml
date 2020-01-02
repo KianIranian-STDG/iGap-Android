@@ -3066,4 +3066,5 @@
     <string name="map_registration_enable">تمكين الرؤية القريبة</string>
     <string name="need_browser">يتطلب متصفح للاستخدام.</string>
     <string name="delete_recently_sticker">حذف ملصق مؤخرا</string>
+    <string name="sticker_setting">إعداد الملصقات</string>
 </resources>

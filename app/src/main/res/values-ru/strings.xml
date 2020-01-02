@@ -1835,5 +1835,6 @@
     <string name="map_registration_enable">Включить видимость поблизости</string>
     <string name="need_browser">Требуется браузер для использования.</string>
     <string name="delete_recently_sticker">Удалить недавно стикер</string>
+    <string name="sticker_setting">Настройка стикера</string>
 
 </resources>

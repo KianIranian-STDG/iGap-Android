@@ -90,7 +90,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private Listener listener;
     private String TAG = "abbasiKeyboard";
 
-    private Drawable stickerTabDrawable[];
+    private Drawable[] stickerTabDrawable;
 
     public void setListener(Listener listener) {
         this.listener = listener;
@@ -222,7 +222,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         bottomContainer.setBackgroundColor(Color.parseColor("#E0E0E0"));
         bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
 
-        addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM));
+        addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 48, Gravity.BOTTOM));
 
         pagerAdapter = new ViewPagerAdapter(views);
 

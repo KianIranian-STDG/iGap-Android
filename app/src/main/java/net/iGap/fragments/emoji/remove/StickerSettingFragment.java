@@ -45,8 +45,8 @@ public class StickerSettingFragment extends BaseFragment {
 
         HelperToolbar helperToolbar = HelperToolbar.create()
                 .setLeftIcon(R.string.back_icon)
-                .setDefaultTitle("تنظیمات استیکر")
-                // TODO: 1/1/20 add to resource
+                .setLogoShown(true)
+                .setDefaultTitle(getResources().getString(R.string.sticker_setting))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

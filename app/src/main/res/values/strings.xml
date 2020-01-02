@@ -2394,5 +2394,6 @@ Want to get it?</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
     <string name="delete_recently_sticker">Delete Recently Sticker</string>
+    <string name="sticker_setting">Sticker setting</string>
 
 </resources>
