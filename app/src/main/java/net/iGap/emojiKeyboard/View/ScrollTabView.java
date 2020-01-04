@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -19,16 +20,15 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.bumptech.glide.Glide;
 
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 
-public class ScrollTabView extends HorizontalScrollView implements EventListener {
+public class ScrollTabView extends HorizontalScrollView {
 
 
-    private LinearLayout.LayoutParams layoutParams;
+    private LinearLayout.LayoutParams defaultTabLayoutParams;
+    private LinearLayout.LayoutParams defaultExpandLayoutParams;
     private LinearLayout rootView;
     private Listener listener;
 
@@ -41,6 +41,7 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
     private int indicatorColor;
     private int indicatorHeight;
     private int lastScrollX = 0;
+    private boolean shouldExpand;
 
     private Paint paint;
 
@@ -48,15 +49,6 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
     private int rectRound = LayoutCreator.dp(2);
 
     private String TAG = "abbasiEmoji";
-
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.STICKER_DOWNLOAD) {
-            String filePath = (String) message[0];
-            String fileToken = (String) message[1];
-
-        }
-    }
 
     public interface Listener {
         void onPageSelected(int page);
@@ -83,7 +75,19 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
 
-        layoutParams = new LinearLayout.LayoutParams(LayoutCreator.dp(40), LayoutCreator.MATCH_PARENT);
+        defaultExpandLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1.0F);
+        defaultTabLayoutParams = new LinearLayout.LayoutParams(LayoutCreator.dp(40), LayoutCreator.MATCH_PARENT);
+    }
+
+    public void updateTabStyles() {
+        for (int i = 0; i < tabCount; i++) {
+            View v = rootView.getChildAt(i);
+            if (shouldExpand) {
+                v.setLayoutParams(defaultExpandLayoutParams);
+            } else {
+                v.setLayoutParams(defaultTabLayoutParams);
+            }
+        }
     }
 
     public void removeTabs() {
@@ -106,7 +110,7 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
         FrameLayout tab = new FrameLayout(getContext());
         tab.setFocusable(true);
         tab.setOnClickListener(v -> listener.onPageSelected(position));
-        rootView.addView(tab, layoutParams);
+        rootView.addView(tab);
         tab.setSelected(position == currentPosition);
 
         AppCompatImageView imageView;
@@ -149,7 +153,7 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
         imageView.setImageDrawable(drawable);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setOnClickListener(v -> listener.onPageSelected(position));
-        rootView.addView(imageView, layoutParams);
+        rootView.addView(imageView);
         imageView.setSelected(position == currentPosition);
     }
 
@@ -244,15 +248,8 @@ public class ScrollTabView extends HorizontalScrollView implements EventListener
         invalidate();
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, this);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        EventManager.getInstance().removeEventListener(EventManager.STICKER_DOWNLOAD, this);
+    public void setShouldExpand(boolean value) {
+        shouldExpand = value;
+        requestLayout();
     }
 }

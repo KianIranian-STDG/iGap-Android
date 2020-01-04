@@ -64,7 +64,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private RecyclerView emojiGridView;
     private EmojiAdapter emojiAdapter;
     private GridLayoutManager emojiLayoutManager;
-    private ScrollTabView emojiTapView;
+    private ScrollTabView emojiTopView;
     private Drawable[] emojiTabDrawables;
 
     private FrameLayout stickerContainer;
@@ -107,11 +107,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             emojiAdapter = new EmojiAdapter();
 
-            emojiTapView = new ScrollTabView(getContext());
-            emojiTapView.setIndicatorHeight(LayoutCreator.dp(1.5f));
-            emojiTapView.setIndicatorColor(Theme.getInstance().getAccentColor(getContext()));
-            emojiTapView.setBackgroundColor(Color.parseColor("#E0E0E0"));
-            emojiTapView.setListener(page -> {
+            emojiTopView = new ScrollTabView(getContext());
+            emojiTopView.setIndicatorHeight(LayoutCreator.dp(1.5f));
+            emojiTopView.setIndicatorColor(Theme.getInstance().getAccentColor(getContext()));
+            emojiTopView.setBackgroundColor(Color.parseColor("#E0E0E0"));
+            emojiTopView.setShouldExpand(true);
+            emojiTopView.setListener(page -> {
 
             });
 
@@ -129,15 +130,16 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             };
 
             for (Drawable emojiTabDrawable : emojiTabDrawables) {
-                emojiTapView.addIconTab(emojiTabDrawable);
+                emojiTopView.addIconTab(emojiTabDrawable);
             }
+            emojiTopView.updateTabStyles();
 
             emojiGridView = new RecyclerView(getContext());
             emojiGridView.setAdapter(emojiAdapter);
             emojiGridView.setLayoutManager(emojiLayoutManager = new GridLayoutManager(context, 20));
             views.add(emojiContainer);
 
-            emojiContainer.addView(emojiTapView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 35, Gravity.TOP));
+            emojiContainer.addView(emojiTopView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 35, Gravity.TOP));
         }
 
         if (hasSticker) {
@@ -397,6 +399,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                 stickerTabView.addStickerTab(structIGStickerGroups.get(i));
             }
         }
+        stickerTabView.updateTabStyles();
+
         groupSize = structIGStickerGroups.size();
         stickerGridAdapter.setGroups(structIGStickerGroups);
 

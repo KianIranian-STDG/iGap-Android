@@ -46,7 +46,7 @@ public class KeyboardView extends FrameLayout {
             if (emojiView == null)
                 createEmojiView();
 
-            emojiView.setContentView(contentView);
+            emojiView.setContentView(EmojiView.EMOJI);
 
         } else if (mode == MODE_KEYBOARD) {
 
