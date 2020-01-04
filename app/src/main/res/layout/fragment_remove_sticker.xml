@@ -73,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
+                android:textColor="?iGapTitleTextColor"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_stickerSetting_clearStorage"
                 app:layout_constraintEnd_toEndOf="@+id/tv_stickerSetting_clearStorage"
                 app:layout_constraintTop_toTopOf="@+id/tv_stickerSetting_clearStorage" />
@@ -85,6 +86,7 @@
                 android:paddingStart="@dimen/dp8"
                 android:paddingLeft="@dimen/dp8"
                 android:text="@string/Favorite_Sticker"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/smallTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
