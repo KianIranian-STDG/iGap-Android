@@ -47,9 +47,11 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_video_trime);
 
-        txtDetail = (TextView) findViewById(R.id.stfaq_txt_detail);
-        txtTime = (TextView) findViewById(R.id.stfaq_txt_time);
-        txtSize = (TextView) findViewById(R.id.stfaq_txt_size);
+        txtDetail = findViewById(R.id.stfaq_txt_detail);
+        txtTime = findViewById(R.id.stfaq_txt_time);
+        txtSize = findViewById(R.id.stfaq_txt_size);
+        View btnBack = findViewById(R.id.pu_ripple_back);
+        btnBack.setOnClickListener(v -> onBackPressed());
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
@@ -63,8 +65,8 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
         setInfo(path);
 
-        K4LVideoTrimmer videoTrimmer = (K4LVideoTrimmer) findViewById(R.id.timeLine);
-        progressBar = (ProgressBar) findViewById(R.id.fvt_progress);
+        K4LVideoTrimmer videoTrimmer = findViewById(R.id.timeLine);
+        progressBar = findViewById(R.id.fvt_progress);
         if (videoTrimmer != null) {
             videoTrimmer.setVideoURI(Uri.parse(path));
             videoTrimmer.setMaxDuration(duration);
