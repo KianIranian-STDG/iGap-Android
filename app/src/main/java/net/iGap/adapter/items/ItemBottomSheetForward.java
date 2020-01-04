@@ -72,7 +72,7 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
         } else {
             structBottomSheetForward.setChecked(true);
             viewHolder.checkBoxSelect.setChecked(true);
-            viewHolder.imgSrc.setBorderColor(new Theme().getButtonColor(viewHolder.imgSrc.getContext()));
+            viewHolder.imgSrc.setBorderColor(new Theme().getAccentColor(viewHolder.imgSrc.getContext()));
         }
         FragmentChat.onForwardBottomSheet.path(structBottomSheetForward);
     }

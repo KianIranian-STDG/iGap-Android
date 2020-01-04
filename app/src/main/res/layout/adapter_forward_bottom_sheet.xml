@@ -39,7 +39,7 @@
         android:layout_gravity="center"
         android:clickable="false"
         app:animDuration="200"
-        app:checkedColor="?attr/iGapButtonColor"
+        app:checkedColor="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/imageView_forward_bottomSheet"
         app:layout_constraintRight_toRightOf="@id/imageView_forward_bottomSheet"
         app:lineColor="#fff"
