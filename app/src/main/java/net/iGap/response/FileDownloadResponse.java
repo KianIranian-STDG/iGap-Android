@@ -126,25 +126,26 @@ public class FileDownloadResponse extends MessageHandler {
 
             if (fileStruct.onStickerDownload != null)
                 fileStruct.onStickerDownload.onError(fileStruct, majorCode, minorCode);
-        }
+        } else {
 
-        RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
-        type = identityFileDownload.typeDownload;
-        RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
+            RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
+            type = identityFileDownload.typeDownload;
+            RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
 
-        if (type == RequestFileDownload.TypeDownload.FILE) {
-            if (G.onFileDownloadResponse != null) {
-                G.onFileDownloadResponse.onError(majorCode, minorCode, identityFileDownload.cacheId, identityFileDownload.selector);
-            }
-        } else if (type == RequestFileDownload.TypeDownload.AVATAR) {
-            if (G.onFileDownloaded != null) {
-                G.onFileDownloaded.onError(majorCode, identity);
-            }
-        } else if (type == RequestFileDownload.TypeDownload.STICKER || type == RequestFileDownload.TypeDownload.STICKER_DETAIL) {
-            if (G.onStickerDownloaded != null) {
-                G.onStickerDownloaded.onError(majorCode, identity);
-            }
+            if (type == RequestFileDownload.TypeDownload.FILE) {
+                if (G.onFileDownloadResponse != null) {
+                    G.onFileDownloadResponse.onError(majorCode, minorCode, identityFileDownload.cacheId, identityFileDownload.selector);
+                }
+            } else if (type == RequestFileDownload.TypeDownload.AVATAR) {
+                if (G.onFileDownloaded != null) {
+                    G.onFileDownloaded.onError(majorCode, identity);
+                }
+            } else if (type == RequestFileDownload.TypeDownload.STICKER || type == RequestFileDownload.TypeDownload.STICKER_DETAIL) {
+                if (G.onStickerDownloaded != null) {
+                    G.onStickerDownloaded.onError(majorCode, identity);
+                }
 
+            }
         }
     }
 }
