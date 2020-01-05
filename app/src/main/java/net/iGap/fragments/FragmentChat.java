@@ -5456,6 +5456,8 @@ public class FragmentChat extends BaseFragment
                 }
             }
         }
+
+        if (!isNotJoin && mAdapter != null && mAdapter.getSelections().size() > 0) mAdapter.deselect();
     }
 
     /**

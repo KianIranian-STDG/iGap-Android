@@ -12,14 +12,15 @@ package net.iGap.adapter.items;
 
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hanks.library.AnimateCheckBox;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.AccountManager;
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -55,7 +56,7 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
 
         viewHolder.checkBoxSelect.setChecked(structBottomSheetForward.isChecked());
 
-        viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
+        viewHolder.checkBoxSelect.setUnCheckColor(ContextCompat.getColor(viewHolder.checkBoxSelect.getContext(), R.color.transparent));
 
         viewHolder.checkBoxSelect.setOnClickListener(v -> OnClick(viewHolder));
 
@@ -67,9 +68,11 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
         if (structBottomSheetForward.isChecked()) {
             structBottomSheetForward.setChecked(false);
             viewHolder.checkBoxSelect.setChecked(false);
+            viewHolder.imgSrc.setBorderColor(ContextCompat.getColor(viewHolder.imgSrc.getContext(), R.color.transparent));
         } else {
             structBottomSheetForward.setChecked(true);
             viewHolder.checkBoxSelect.setChecked(true);
+            viewHolder.imgSrc.setBorderColor(new Theme().getAccentColor(viewHolder.imgSrc.getContext()));
         }
         FragmentChat.onForwardBottomSheet.path(structBottomSheetForward);
     }

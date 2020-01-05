@@ -1,21 +1,22 @@
 package net.iGap.fragments;
 
-import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -170,27 +171,43 @@ public class DataStorageFragment extends BaseFragment {
                 txtMap.setText(data[5]);
                 txtOtherFiles.setText(data[6]);
 
-                final CompoundButton.OnCheckedChangeListener onCacheCheckedChanged = (buttonView, isChecked) -> {
-                    if (buttonView.getId() == R.id.all) {
-                        checkBoxPhoto.setChecked(isChecked);
-                        checkBoxVideo.setChecked(isChecked);
-                        checkBoxDocument.setChecked(isChecked);
-                        checkBoxAudio.setChecked(isChecked);
-                        checkBoxMap.setChecked(isChecked);
-                        checkBoxOtherFiles.setChecked(isChecked);
-                    } else {
-                        boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
-                        checkBoxAll.setChecked(state);
-                    }
-                };
+                checkBoxAll.setOnClickListener(v -> {
+                    boolean tmp = ((AppCompatCheckBox) v).isChecked();
+                    checkBoxPhoto.setChecked(tmp);
+                    checkBoxVideo.setChecked(tmp);
+                    checkBoxDocument.setChecked(tmp);
+                    checkBoxAudio.setChecked(tmp);
+                    checkBoxMap.setChecked(tmp);
+                    checkBoxOtherFiles.setChecked(tmp);
+                });
 
-                checkBoxAll.setOnCheckedChangeListener(onCacheCheckedChanged);
-                checkBoxPhoto.setOnCheckedChangeListener(onCacheCheckedChanged);
-                checkBoxVideo.setOnCheckedChangeListener(onCacheCheckedChanged);
-                checkBoxDocument.setOnCheckedChangeListener(onCacheCheckedChanged);
-                checkBoxAudio.setOnCheckedChangeListener(onCacheCheckedChanged);
-                checkBoxMap.setOnCheckedChangeListener(onCacheCheckedChanged);
-                checkBoxOtherFiles.setOnCheckedChangeListener(onCacheCheckedChanged);
+                checkBoxAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+                });
+                checkBoxPhoto.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
+                    checkBoxAll.setChecked(state);
+                });
+                checkBoxVideo.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
+                    checkBoxAll.setChecked(state);
+                });
+                checkBoxDocument.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
+                    checkBoxAll.setChecked(state);
+                });
+                checkBoxAudio.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
+                    checkBoxAll.setChecked(state);
+                });
+                checkBoxMap.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
+                    checkBoxAll.setChecked(state);
+                });
+                checkBoxOtherFiles.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
+                    checkBoxAll.setChecked(state);
+                });
 
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -222,7 +239,7 @@ public class DataStorageFragment extends BaseFragment {
                 txtTitle.setText(R.string.clean_up_chat_rooms);
 
                 TextView iconTitle = dialogView.findViewById(R.id.iconDialogTitle);
-                iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext() , R.font.font_icon_old));
+                iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext(), R.font.font_icon_old));
                 iconTitle.setText(R.string.md_clean_up);
 
                 TextView txtContent = dialogView.findViewById(R.id.txtDialogContent);

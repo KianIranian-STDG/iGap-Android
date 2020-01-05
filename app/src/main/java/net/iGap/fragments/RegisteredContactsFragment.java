@@ -371,10 +371,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
                         new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
                     }
-                    setPageShowingMode(mPageMode);
-                    isMultiSelect = false;
-                    isLongClick = false;
-                    selectedList.clear();
+                    setMultiSelectState(true);
                 }
             }).negativeText(R.string.B_cancel).show();
 
@@ -429,7 +426,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             mLayoutMultiSelected.setVisibility(View.GONE);
 
         } else if (mode == 4) {//edit mode
-            Log.wtf(this.getClass().getName(), "setPageShowingMode 4");
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
             btnAddSecretChat.setVisibility(View.GONE);
@@ -438,7 +434,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             btnAddNewContact.setVisibility(View.GONE);
             btnDialNumber.setVisibility(View.GONE);
             mLayoutMultiSelected.setVisibility(View.VISIBLE);
-            Log.wtf(this.getClass().getName(), "setPageShowingMode 4");
         }
     }
 
