@@ -37,6 +37,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.emojiKeyboard.emoji.DispatchQueue;
 import net.iGap.helper.HelperLog;
 import net.iGap.proto.ProtoGlobal;
 
@@ -53,6 +54,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class AndroidUtils {
     private AndroidUtils() throws InstantiationException {
@@ -727,6 +730,43 @@ public final class AndroidUtils {
         } catch (Exception e) {
             Log.e("abbasiKeyboard", "checkDisplaySize: ", e);
         }
+    }
+
+    public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
+    public static Pattern pattern = Pattern.compile("[\\-0-9]+");
+
+    public static Integer parseInt(CharSequence value) {
+        if (value == null) {
+            return 0;
+        }
+        int val = 0;
+        try {
+            Matcher matcher = pattern.matcher(value);
+            if (matcher.find()) {
+                String num = matcher.group(0);
+                val = Integer.parseInt(num);
+            }
+        } catch (Exception ignore) {
+
+        }
+        return val;
+    }
+
+    public static Long parseLong(String value) {
+        if (value == null) {
+            return 0L;
+        }
+        long val = 0L;
+        try {
+            Matcher matcher = pattern.matcher(value);
+            if (matcher.find()) {
+                String num = matcher.group(0);
+                val = Long.parseLong(num);
+            }
+        } catch (Exception ignore) {
+
+        }
+        return val;
     }
 
 
