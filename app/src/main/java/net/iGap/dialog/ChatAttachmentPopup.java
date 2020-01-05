@@ -35,6 +35,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
+import net.iGap.adapter.items.AdapterPopupOpenGallery;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
@@ -62,6 +63,7 @@ import static net.iGap.fragments.FragmentChat.listPathString;
 public class ChatAttachmentPopup {
 
     private final long POPUP_ANIMATION_DURATION = 170;
+    private final int MAX_COUNT_OF_IMAGE = 100;
     private final String TAG = "ChatAttachmentPopup";
 
     public boolean isShowing = false;
@@ -418,7 +420,6 @@ public class ChatAttachmentPopup {
 
         rcvBottomSheet = view.findViewById(R.id.rcvContent);
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(mFrgActivity, 1, GridLayoutManager.HORIZONTAL, false));
-        rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
 
         //disable and enable camera when user scroll on recycler view
@@ -648,10 +649,9 @@ public class ChatAttachmentPopup {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
+
                                 addItemToRecycler(new AdapterCamera("", onClickCamera).withIdentifier(99));
-                                for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                                    addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
-                                }
+                                loadItemsToRecycler();
                                 isPermissionCamera = true;
                             }
                         });
@@ -670,6 +670,18 @@ public class ChatAttachmentPopup {
             }
         } else {
             loadImageGallery();
+        }
+    }
+
+    private void loadItemsToRecycler() {
+        for (int i = FragmentEditImage.itemGalleryList.size() - 1; i >= 0; i--) {
+            addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
+        }
+        if (FragmentEditImage.itemGalleryList.size() >= MAX_COUNT_OF_IMAGE) {
+            addItemToRecycler(new AdapterPopupOpenGallery(() -> {
+                dismiss();
+                openPhotoGallery();
+            }).withIdentifier(0));
         }
     }
 
@@ -708,12 +720,7 @@ public class ChatAttachmentPopup {
 
     private void loadImageGallery() {
 
-        G.handler.post(() -> {
-            for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
-            }
-        });
-
+        loadItemsToRecycler();
         showPopup();
 
     }
@@ -721,26 +728,23 @@ public class ChatAttachmentPopup {
     /**
      * get images for show in bottom sheet
      */
-    public ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
+    private ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
         ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
         Uri uri;
         Cursor cursor;
-        int column_index_data = 0, column_index_folder_name;
-        String absolutePathOfImage = null;
+        int column_index_data;
+        String absolutePathOfImage;
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
                 MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.ImageColumns.DATE_TAKEN
         };
 
-        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN);
+        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
 
         if (cursor != null) {
             column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
-            column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
 
             while (cursor.moveToNext()) {
                 absolutePathOfImage = cursor.getString(column_index_data);
@@ -750,6 +754,7 @@ public class ChatAttachmentPopup {
                 item.setPath(absolutePathOfImage);
                 item.isSelected = true;
                 listOfAllImages.add(0, item);
+                if (listOfAllImages.size() >= MAX_COUNT_OF_IMAGE) break;
             }
             cursor.close();
         }
