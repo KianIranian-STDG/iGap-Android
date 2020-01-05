@@ -8,17 +8,18 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -28,14 +29,18 @@ import net.iGap.Theme;
 import net.iGap.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.emojiKeyboard.View.ScrollTabView;
 import net.iGap.emojiKeyboard.adapter.EmojiAdapter;
+import net.iGap.emojiKeyboard.adapter.EmojiGridAdapter;
 import net.iGap.emojiKeyboard.adapter.ViewPagerAdapter;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.emojiKeyboard.sticker.StickerGroupAdapter;
+import net.iGap.emojiKeyboard.struct.StructIGEmojiGroup;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.repository.sticker.StickerRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -62,10 +67,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
     private FrameLayout emojiContainer;
     private RecyclerView emojiGridView;
-    private EmojiAdapter emojiAdapter;
-    private GridLayoutManager emojiLayoutManager;
+    private EmojiGridAdapter emojiGridAdapter;
+    private LinearLayoutManager emojiLayoutManager;
     private ScrollTabView emojiTopView;
     private Drawable[] emojiTabDrawables;
+    private int emojiTabViewY;
+
 
     private FrameLayout stickerContainer;
     private RecyclerView stickerGridView;
@@ -102,10 +109,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         hasEmoji = needEmoji;
         hasSticker = needSticker;
 
+        Log.i(TAG, "EmojiView: ");
+
         if (hasEmoji) {
             emojiContainer = new FrameLayout(getContext());
 
-            emojiAdapter = new EmojiAdapter();
+            emojiGridAdapter = new EmojiGridAdapter();
 
             emojiTopView = new ScrollTabView(getContext());
             emojiTopView.setIndicatorHeight(LayoutCreator.dp(1.5f));
@@ -115,7 +124,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emojiTopView.setListener(page -> {
 
             });
-
 
             emojiTabDrawables = new Drawable[]{
                     getResources().getDrawable(R.drawable.ic_emoji_history),
@@ -129,17 +137,63 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                     getResources().getDrawable(R.drawable.ic_emoji_flags),
             };
 
+
+            int packCount = EmojiManager.getInstance().getCategoryManager().getCategorySize();
+
+            List<StructIGEmojiGroup> structIGEmojiGroups = new ArrayList<>();
+
+            for (int i = 0; i < packCount; i++) {
+
+                StructIGEmojiGroup structIGEmojiGroup = new StructIGEmojiGroup();
+                structIGEmojiGroup.setCategoryName(EmojiManager.getInstance().getCategoryManager().getEmojiCategory()[i].getName());
+                if (EmojiManager.getInstance().getCategoryManager().getEmojiCategory()[i].hasColored())
+                    for (int j = 0; j < EmojiManager.getInstance().getCategoryManager().getEmojiCategory()[i].getColoredEmojiSize(); j++)
+                        structIGEmojiGroup.setStrings(Arrays.asList(EmojiManager.getInstance().getCategoryManager().getEmojiCategory()[i].getColoredEmojies()));
+                else
+                    for (int j = 0; j < EmojiManager.getInstance().getCategoryManager().getEmojiCategory()[i].getCategorySize(); j++)
+                        structIGEmojiGroup.setStrings(Arrays.asList(EmojiManager.getInstance().getCategoryManager().getEmojiCategory()[i].getEmojies()));
+
+                structIGEmojiGroups.add(structIGEmojiGroup);
+            }
+
+            emojiGridAdapter.setStructIGEmojiGroups(structIGEmojiGroups);
+
+            emojiGridAdapter.setListener(new EmojiAdapter.Listener() {
+                @Override
+                public void onClick(String emojiCode) {
+                    Toast.makeText(getContext(), emojiCode, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public boolean onLongClick(String emojiCode) {
+                    return false;
+                }
+            });
+
             for (Drawable emojiTabDrawable : emojiTabDrawables) {
                 emojiTopView.addIconTab(emojiTabDrawable);
             }
             emojiTopView.updateTabStyles();
 
             emojiGridView = new RecyclerView(getContext());
-            emojiGridView.setAdapter(emojiAdapter);
-            emojiGridView.setLayoutManager(emojiLayoutManager = new GridLayoutManager(context, 20));
-            views.add(emojiContainer);
+            emojiGridView.setAdapter(emojiGridAdapter);
+            emojiGridView.setLayoutManager(emojiLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+            emojiGridView.setClipToPadding(false);
+            emojiGridView.setPadding(0, LayoutCreator.dpToPx(40), 0, LayoutCreator.dpToPx(40));
 
+            emojiGridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    checkBottomTabScroll(dy);
+                    checkEmojiTabY(recyclerView, dy);
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+            });
+
+            emojiContainer.addView(emojiGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP));
             emojiContainer.addView(emojiTopView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 35, Gravity.TOP));
+
+            views.add(emojiContainer);
         }
 
         if (hasSticker) {
@@ -285,6 +339,30 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         }
         stickerTabView.setTranslationY(Math.max(-LayoutCreator.dp(48), stickersTabViewY));
         addStickerIv.setTranslationY(Math.max(-LayoutCreator.dp(48), stickersTabViewY));
+    }
+
+    private void checkEmojiTabY(View list, int dy) {
+        if (list == null) {
+            emojiTopView.setTranslationY(stickersTabViewY = 0);
+            return;
+        }
+        if (list.getVisibility() != VISIBLE) {
+            return;
+        }
+
+        if (dy > 0 && emojiGridView != null && emojiGridView.getVisibility() == VISIBLE) {
+            RecyclerView.ViewHolder holder = emojiGridView.findViewHolderForAdapterPosition(0);
+            if (holder != null && holder.itemView.getTop() >= emojiGridView.getPaddingTop()) {
+                return;
+            }
+        }
+        emojiTabViewY -= dy;
+        if (emojiTabViewY > 0) {
+            emojiTabViewY = 0;
+        } else if (emojiTabViewY < -LayoutCreator.dp(48 * 6)) {
+            emojiTabViewY = -LayoutCreator.dp(48 * 6);
+        }
+        emojiTopView.setTranslationY(Math.max(-LayoutCreator.dp(48), emojiTabViewY));
     }
 
     public void setContentView(int contentView) {
