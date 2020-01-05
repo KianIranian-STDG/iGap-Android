@@ -17,6 +17,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.request.RequestOptions;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -85,7 +89,12 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 //            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+        Glide.with(holder.image.getContext()).load(suitablePath(localPath))
+                .apply(new RequestOptions()
+                        .fitCenter()
+                        .format(DecodeFormat.PREFER_ARGB_8888))
+                .into(holder.image);
+        /*G.imageLoader.displayImage(suitablePath(localPath), holder.image);*/
     }
 
     @Override
