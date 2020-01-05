@@ -2329,4 +2329,12 @@
     <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
     <string name="need_browser">برای استفاده نیاز به مرورگر است.</string>
+    <string name="kuknos_SignupInfo_errorNIDFormatInvalid">ساختار کد ملی اشتباه است.</string>
+    <string name="kuknos_SignupInfo_errorNameEmptyInvalid">نام نمیتواند خالی باشد.</string>
+    <string name="kuknos_SignupInfo_errorNameLengthInvalid">طول نام کوتاه است.</string>
+    <string name="kuknos_buyAsset">خرید دارایی</string>
+    <string name="kuknos_buyP_MaxAmount">شما از حداکثر تعداد خرید این دارایی فراتر رفته اید.</string>
+    <string name="kuknos_buyP_btn_server3">دریافت داده...</string>
+    <string name="kuknos_login_email_str">ایمیل</string>
+    <string name="kuknos_login_name_str">نام</string>
 </resources>
