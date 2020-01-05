@@ -10,6 +10,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
@@ -18,6 +19,7 @@ import java.text.DecimalFormat;
 public class KuknosPanelVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosBalance> kuknosWalletsM;
+    private KuknosAsset asset = null;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Integer> openPage;
@@ -26,6 +28,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
     private int position = 0;
+    private boolean inRialMode = false;
 
     public KuknosPanelVM() {
         //TODO clear Hard Code
@@ -69,6 +72,26 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         });
     }
 
+    private void getAssetData(String assetCode){
+        asset = null;
+        panelRepo.getAssetData(assetCode, this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
+                asset = data.getData();
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+    }
+
     public boolean isPinSet() {
         return panelRepo.isPinSet();
     }
@@ -87,6 +110,30 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
         currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));
+        getAssetData(currency.get());
+    }
+
+    private void calculateToRial() {
+        if (asset == null || asset.getAssets().size()==0)
+            return;
+        KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        balance.set(HelperCalander.isPersianUnicode ?
+                HelperCalander.convertToUnicodeFarsiNumber(
+                        df.format(Double.valueOf(temp.getBalance())*Double.valueOf(asset.getAssets().get(0).getSellRate()))) :
+                (df.format(Double.valueOf(temp.getBalance())*Double.valueOf(asset.getAssets().get(0).getSellRate()))));
+        currency.set("Rial");
+    }
+
+    public void togglePrice() {
+        if (inRialMode) {
+            spinnerSelect(position);
+            inRialMode = false;
+        }
+        else {
+            calculateToRial();
+            inRialMode = true;
+        }
     }
 
     public void receiveW() {

@@ -30,14 +30,18 @@ public class PanelRepo {
     }
 
     public String getUserInfo() {
-        return "\nSeed Key is: " + userRepo.getSeedKey()
-                + "\nPublic Key is: " + userRepo.getAccountID()
+        return /*"\nSeed Key is: " + userRepo.getSeedKey()
+                + */"\nPublic Key is: " + userRepo.getAccountID()
                 + "\nPIN is: " + userRepo.getPIN()
                 + "\nmnemonic is: " + userRepo.getMnemonic();
     }
 
     public void getAccountInfo(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBalance>> apiResponse) {
         kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), handShakeCallback, apiResponse);
+    }
+
+    public void getAssetData(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
+        kuknosAPIRepository.getAssetData(assetCode, handShakeCallback, apiResponse);
     }
 
     public void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
