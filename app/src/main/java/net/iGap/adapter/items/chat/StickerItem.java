@@ -17,13 +17,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -60,7 +53,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.itemView.setTag(structMessage.getAttachment().getToken());
+        holder.image.setTag(structMessage.getAttachment().getToken());
         super.bindView(holder, payloads);
 
         holder.getChatBloke().setBackgroundResource(0);
@@ -83,12 +76,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
         String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
         if (new File(path).exists()) {
-            Glide.with(holder.image.getContext()).load(suitablePath(path))
-                    .apply(new RequestOptions()
-                            .fitCenter()
-                            .format(DecodeFormat.PREFER_ARGB_8888))
-                    .into(holder.image);
-            /*G.imageLoader.displayImage(suitablePath(path), holder.image);*/
+            G.imageLoader.displayImage(suitablePath(path), holder.image);
         } else {
             EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
                 if (id == EventManager.STICKER_DOWNLOAD) {
@@ -96,14 +84,9 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
                     String filePath = (String) message[0];
                     String fileToken = (String) message[1];
 
-                    if (holder.itemView.getTag().equals(fileToken)) {
+                    if (holder.image.getTag().equals(fileToken)) {
                         G.handler.post(() -> {
-                            Glide.with(holder.image.getContext()).load(suitablePath(filePath))
-                                    .apply(new RequestOptions()
-                                            .fitCenter()
-                                            .format(DecodeFormat.PREFER_ARGB_8888))
-                                    .into(holder.image);
-                            /*G.imageLoader.displayImage(suitablePath(filePath), holder.image);*/
+                            G.imageLoader.displayImage(suitablePath(filePath), holder.image);
                         });
                     }
                 }
