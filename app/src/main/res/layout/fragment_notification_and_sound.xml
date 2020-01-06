@@ -365,7 +365,7 @@
                     android:layout_width="@dimen/toggles_width"
                     android:layout_height="@dimen/toggles_height"
                     android:layout_margin="@dimen/dp16"
-                    android:checked="@{FragmentNotificationAndSoundViewModel.isMessagePreViewGroup}"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isGroupPreView}"
                     android:gravity="end"
                     android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMessagePreViewGroup(checked)}"
                     android:textOff=""
