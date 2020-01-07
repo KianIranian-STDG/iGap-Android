@@ -5,10 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.emojiKeyboard.emoji.view.EmojiImageView;
 import net.iGap.helper.LayoutCreator;
 
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.EmojiViewHol
     @NonNull
     @Override
     public EmojiViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        AppCompatImageView imageView = new AppCompatImageView(parent.getContext());
-        imageView.setLayoutParams(LayoutCreator.createFrame(35, 35, Gravity.CENTER, 3, 1.5f, 3, 1.5f));
+        EmojiImageView imageView = new EmojiImageView(parent.getContext());
+        imageView.setLayoutParams(LayoutCreator.createFrame(35, 35, Gravity.CENTER, 1.5f, 1.5f, 1.5f, 1.5f));
         return new EmojiViewHolder(imageView);
     }
 
@@ -49,12 +49,12 @@ public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.EmojiViewHol
         return strings.size();
     }
 
-    public class EmojiViewHolder extends RecyclerView.ViewHolder {
-        private AppCompatImageView imageView;
+    class EmojiViewHolder extends RecyclerView.ViewHolder {
+        private EmojiImageView imageView;
 
-        public EmojiViewHolder(@NonNull View itemView) {
+        EmojiViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = (AppCompatImageView) itemView;
+            imageView = (EmojiImageView) itemView;
         }
     }
 

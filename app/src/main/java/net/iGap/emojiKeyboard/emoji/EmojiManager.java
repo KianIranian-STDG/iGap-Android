@@ -15,11 +15,11 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.DynamicDrawableSpan;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import net.iGap.G;
+import net.iGap.eventbus.EventManager;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
@@ -52,9 +52,7 @@ public class EmojiManager {
     private Paint placeholderPaint;
     private boolean recentEmojiLoaded;
 
-    private Runnable invalidateUiRunnable = () -> {
-        Toast.makeText(G.context, "load", Toast.LENGTH_SHORT).show();
-    };
+    private Runnable invalidateRunnable = () -> EventManager.getInstance().postEvent(EventManager.EMOJI_LOADED);
 
     public static EmojiManager getInstance() {
         if (instance == null) {
@@ -86,17 +84,17 @@ public class EmojiManager {
     }
 
     public class EmojiDrawable extends Drawable {
-        private DrawableInfo info;
+        private DrawableInfo drawableInfo;
         private boolean fullSize = false;
         private Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
         private Rect rect = new Rect();
 
-        EmojiDrawable(DrawableInfo i) {
-            info = i;
+        EmojiDrawable(DrawableInfo drawableInfo) {
+            this.drawableInfo = drawableInfo;
         }
 
         public DrawableInfo getDrawableInfo() {
-            return info;
+            return drawableInfo;
         }
 
         Rect getDrawRect() {
@@ -111,14 +109,14 @@ public class EmojiManager {
 
         @Override
         public void draw(@NonNull Canvas canvas) {
-            if (bitmaps[info.categoryIndex][info.emojiIndexInCategory] == null) {
-                if (loadingEmoji[info.categoryIndex][info.emojiIndexInCategory]) {
+            if (bitmaps[drawableInfo.categoryIndex][drawableInfo.emojiCategoryIndex] == null) {
+                if (loadingEmoji[drawableInfo.categoryIndex][drawableInfo.emojiCategoryIndex]) {
                     return;
                 }
-                loadingEmoji[info.categoryIndex][info.emojiIndexInCategory] = true;
+                loadingEmoji[drawableInfo.categoryIndex][drawableInfo.emojiCategoryIndex] = true;
                 AndroidUtils.globalQueue.postRunnable(() -> {
-                    loadEmoji(info.categoryIndex, info.emojiIndexInCategory);
-                    loadingEmoji[info.categoryIndex][info.emojiIndexInCategory] = false;
+                    loadEmoji(drawableInfo.categoryIndex, drawableInfo.emojiCategoryIndex);
+                    loadingEmoji[drawableInfo.categoryIndex][drawableInfo.emojiCategoryIndex] = false;
                 });
                 canvas.drawRect(getBounds(), placeholderPaint);
                 return;
@@ -128,7 +126,7 @@ public class EmojiManager {
             if (fullSize) b = getDrawRect();
             else b = getBounds();
 
-            canvas.drawBitmap(bitmaps[info.categoryIndex][info.emojiIndexInCategory], null, b, paint);
+            canvas.drawBitmap(bitmaps[drawableInfo.categoryIndex][drawableInfo.emojiCategoryIndex], null, b, paint);
         }
 
         @Override
@@ -381,8 +379,8 @@ public class EmojiManager {
 
             final Bitmap finalBitmap = bitmap;
             bitmaps[page][page2] = finalBitmap;
-            G.cancelRunOnUiThread(invalidateUiRunnable);
-            G.runOnUiThread(invalidateUiRunnable);
+            G.cancelRunOnUiThread(invalidateRunnable);
+            G.runOnUiThread(invalidateRunnable);
         } catch (Throwable x) {
             Log.e(TAG, "Error loading emoji ", x);
         }
@@ -541,8 +539,20 @@ public class EmojiManager {
         preferences.edit().putString("color", stringBuilder.toString()).apply();
     }
 
-    public static SharedPreferences getGlobalEmojiSettings() {
+    private SharedPreferences getGlobalEmojiSettings() {
         return G.context.getSharedPreferences(SHP_SETTING.EMOJI, Context.MODE_PRIVATE);
+    }
+
+
+    public boolean isValidEmoji(CharSequence code) {
+        DrawableInfo info = drawableInfoMap.get(code);
+        if (info == null) {// TODO: 1/7/20
+//            CharSequence newCode = EmojiData.emojiAliasMap.get(code);
+//            if (newCode != null) {
+//                drawableInfo = drawableInfoMap.get(newCode);
+//            }
+        }
+        return info != null;
     }
 
     private EmojiManager() {

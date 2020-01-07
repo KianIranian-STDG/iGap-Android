@@ -2,12 +2,12 @@ package net.iGap.emojiKeyboard.emoji;
 
 public class DrawableInfo {
     byte categoryIndex;
-    short emojiIndexInCategory;
+    short emojiCategoryIndex;
     int emojiIndex;
 
-    DrawableInfo(byte categoryIndex, short emojiIndexInCategory, int emojiIndex) {
+    DrawableInfo(byte categoryIndex, short emojiCategoryIndex, int emojiIndex) {
         this.categoryIndex = categoryIndex;
-        this.emojiIndexInCategory = emojiIndexInCategory;
+        this.emojiCategoryIndex = emojiCategoryIndex;
         this.emojiIndex = emojiIndex;
     }
 }
