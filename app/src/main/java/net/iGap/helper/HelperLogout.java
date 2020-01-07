@@ -61,7 +61,7 @@ public final class HelperLogout {
     }
 
     public boolean logoutAllUser() {
-        boolean tmp = logoutUser(AccountManager.getInstance().getCurrentUser());
+        boolean tmp = new AccountHelper().logoutAccount();
         if (tmp) {
             return logoutAllUser();
         } else {

@@ -51,6 +51,8 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     private KeyguardManager keyguardManager;
     private FingerprintHandler helper;
 
+    private MaterialDialog fingerPrintDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +125,10 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
         viewModel.getShowDialogFingerPrint().observe(this, cryptoObject -> {
             if (cryptoObject != null) {
-                MaterialDialog dialog = new MaterialDialog.Builder(this).title(R.string.FingerPrint).customView(R.layout.dialog_finger_print, true).onNegative(new MaterialDialog.SingleButtonCallback() {
+                if (fingerPrintDialog != null && fingerPrintDialog.isShowing()) {
+                    fingerPrintDialog.dismiss();
+                }
+                fingerPrintDialog = new MaterialDialog.Builder(this).title(R.string.FingerPrint).customView(R.layout.dialog_finger_print, true).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -132,21 +137,21 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                     }
                 }).negativeText(R.string.B_cancel).build();
 
-                View viewDialog = dialog.getView();
+                View viewDialog = fingerPrintDialog.getView();
 
                 AppCompatTextView iconFingerPrint = viewDialog.findViewById(R.id.iconDialogTitle);
                 AppCompatTextView textFingerPrint = viewDialog.findViewById(R.id.txtDialogTitle);
-                dialog.show();
+                fingerPrintDialog.show();
                 helper = new FingerprintHandler(this, new FingerPrint() {
                     @Override
                     public void success() {
                         viewModel.passwordCorrect();
-                        dialog.dismiss();
+                        fingerPrintDialog.dismiss();
                     }
 
                     @Override
                     public void error() {
-                        if (dialog.isShowing()) {
+                        if (fingerPrintDialog.isShowing()) {
                             if (iconFingerPrint != null && textFingerPrint != null) {
                                 iconFingerPrint.setTextColor(getResources().getColor(R.color.red));
                                 textFingerPrint.setTextColor(getResources().getColor(R.color.red));
