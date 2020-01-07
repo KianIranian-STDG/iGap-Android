@@ -156,6 +156,7 @@ import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.OnUpdateSticker;
+import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
@@ -302,6 +303,7 @@ import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmStickersDetailsFields;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelPinMessage;
 import net.iGap.request.RequestChannelUpdateDraft;
@@ -343,6 +345,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import io.reactivex.disposables.Disposable;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
@@ -560,7 +563,7 @@ public class FragmentChat extends BaseFragment
     private ArrayList<Long> bothDeleteMessageId;
     private ViewGroup layoutMute;
     private String report = "";
-    private View rootView;
+    private FrameLayout rootView;
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
@@ -642,6 +645,12 @@ public class FragmentChat extends BaseFragment
     private boolean keyboardViewVisible;
     private int currentKeyboardViewContent;
 
+    private StickerRepository stickerRepository;
+    private RecyclerView suggestedRecyclerView;
+    private SuggestedStickerAdapter suggestedAdapter;
+    private FrameLayout suggestedLayout;
+    private String lastChar;
+
     /**
      * get images for show in bottom sheet
      */
@@ -705,7 +714,7 @@ public class FragmentChat extends BaseFragment
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
-        rootView = inflater.inflate(R.layout.activity_chat, container, false);
+        rootView = (FrameLayout) inflater.inflate(R.layout.activity_chat, container, false);
 
         notifyFrameLayout.addView(rootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
@@ -1165,6 +1174,10 @@ public class FragmentChat extends BaseFragment
         FragmentEditImage.textImageList.clear();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();
+
+        if (stickerRepository != null) {
+            stickerRepository.unsubscribe();
+        }
     }
 
     @Override
@@ -2301,8 +2314,7 @@ public class FragmentChat extends BaseFragment
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
             } else if (keyboardView != null && keyboardViewVisible) {
-                keyboardView.setVisibility(View.GONE);
-                keyboardViewVisible = false;
+                hideKeyboardView();
             } else if (ll_Search != null && ll_Search.isShown()) {
                 goneSearchBox(edtSearchMessage);
             } else if (ll_navigateHash != null && ll_navigateHash.isShown()) {
@@ -2632,7 +2644,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View view) {
                 ll_attach_text.setVisibility(View.GONE);
                 edtChat.setFilters(new InputFilter[]{});
-                edtChat.setText(edtChat.getText());
+                edtChat.setText(EmojiManager.getInstance().replaceEmoji(edtChat.getText(), edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
                 edtChat.setSelection(edtChat.getText().length());
 
                 if (edtChat.getText().length() == 0) {
@@ -3021,6 +3033,11 @@ public class FragmentChat extends BaseFragment
                     resetAndGetFromEnd();
                 }
 
+                if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
+                    suggestedLayout.setVisibility(View.GONE);
+                    lastChar = null;
+                }
+
                 if (isShowLayoutUnreadMessage) {
                     removeLayoutUnreadMessage();
                 }
@@ -3130,7 +3147,7 @@ public class FragmentChat extends BaseFragment
                 Collections.sort(itemList);
 
                 for (StructBottomSheet item : itemList) {
-                    edtChat.setText(item.getText());
+                    edtChat.setText(EmojiManager.getInstance().replaceEmoji(item.getText(), edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
                     listPathString.add(item.getPath());
                     latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
                     ll_attach_text.setVisibility(View.VISIBLE);
@@ -3261,16 +3278,19 @@ public class FragmentChat extends BaseFragment
                     }
                 }
 
+                if (edtChat.getText() != null && !EmojiManager.getInstance().isValidEmoji(edtChat.getText()) && suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
+                    suggestedLayout.setVisibility(View.GONE);
+                    lastChar = null;
+                }
 
             }
         });
-
     }
 
     private void onScreenSizeChanged(int height, boolean land) {
         keyboardVisible = height > 0;
 
-        if (height > LayoutCreator.dp(50) && keyboardVisible) {
+        if (height > LayoutCreator.dp(72) && keyboardVisible) {
             if (land) {
                 keyboardHeightLand = height;
                 if (emojiSharedPreferences != null)
@@ -3301,6 +3321,11 @@ public class FragmentChat extends BaseFragment
 ////                    onWindowSizeChanged();
 //                }
             }
+        }
+
+        if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
+            layoutParams.bottomMargin = keyboardHeight + LayoutCreator.dp(60);
         }
     }
 
@@ -3354,18 +3379,29 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onEmojiSelected(String unicode) {
                     int i = edtChat.getSelectionEnd();
-                    if (i < 0) {
-                        i = 0;
-                    }
+
+                    if (i < 0) i = 0;
+
                     try {
-                        CharSequence localCharSequence = EmojiManager.getInstance().replaceEmoji(unicode, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false);
+                        CharSequence sequence = EmojiManager.getInstance().replaceEmoji(unicode, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false);
                         if (edtChat.getText() != null)
-                            edtChat.setText(edtChat.getText().insert(i, localCharSequence));
-                        int j = i + localCharSequence.length();
+                            edtChat.setText(edtChat.getText().insert(i, sequence));
+                        int j = i + sequence.length();
                         edtChat.setSelection(j, j);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
+
+                    if (EmojiManager.getInstance().isValidEmoji(unicode) && edtChat.getText().toString().equals(unicode)) {
+                        getStickerByEmoji(unicode);
+                    } else if (edtChat.getText() != null && !edtChat.getText().toString().equals("")) {
+                        if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
+                            suggestedLayout.setVisibility(View.GONE);
+                            lastChar = null;
+                        }
+                    }
+
                 }
 
             }, KeyboardView.MODE_KEYBOARD);
@@ -3440,6 +3476,59 @@ public class FragmentChat extends BaseFragment
                 keyboardVisible = true;
             }
         }
+    }
+
+    private void getStickerByEmoji(String unicode) {
+        if (lastChar == null) {
+            lastChar = unicode;
+
+            if (suggestedLayout == null && getContext() != null) {
+                stickerRepository = new StickerRepository();
+                suggestedAdapter = new SuggestedStickerAdapter();
+
+                suggestedLayout = new FrameLayout(getContext());
+
+                suggestedRecyclerView = new RecyclerView(getContext());
+
+                suggestedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+                suggestedRecyclerView.setAdapter(suggestedAdapter);
+                suggestedRecyclerView.setClipToPadding(false);
+                suggestedRecyclerView.setPadding(LayoutCreator.dp(2), LayoutCreator.dp(3), LayoutCreator.dp(8), LayoutCreator.dp(2));
+                suggestedAdapter.setListener(structIGSticker -> {
+                    sendStickerAsMessage(structIGSticker);
+                    lastChar = null;
+                    edtChat.setText("");
+                    suggestedLayout.setVisibility(View.GONE);
+                    stickerRepository.getCompositeDisposable().dispose();
+                    if (suggestedRecyclerView.getLayoutManager() != null && suggestedRecyclerView.getLayoutManager().getItemCount() > 3)
+                        suggestedRecyclerView.getLayoutManager().scrollToPosition(0);
+                });
+
+                suggestedLayout.addView(suggestedRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+                rootView.addView(suggestedLayout, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 6, 8, 6, keyboardViewVisible ? LayoutCreator.pxToDp(keyboardHeight) + 60 : 60));
+            }
+
+            suggestedRecyclerView.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.shape_suggested_sticker), rootView.getContext(), R.attr.iGapEditTxtColor));
+
+            Disposable disposable = stickerRepository
+                    .getStickerByEmoji(lastChar)
+                    .subscribe(structIGStickers -> {
+                        suggestedAdapter.setIgStickers(structIGStickers);
+                        suggestedLayout.setVisibility(View.VISIBLE);
+                    });
+
+            stickerRepository.getCompositeDisposable().add(disposable);
+        }
+    }
+
+
+    private void hideKeyboardView() {
+        if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
+            layoutParams.bottomMargin = LayoutCreator.dp(60);
+        }
+        keyboardViewVisible = false;
+        keyboardView.setVisibility(View.GONE);
     }
 
     private Runnable openKeyboardRunnable = new Runnable() {
@@ -4746,7 +4835,7 @@ public class FragmentChat extends BaseFragment
                 // edit message
                 // put message text to EditText
                 if (message.realmRoomMessage.getMessage() != null && !message.realmRoomMessage.getMessage().isEmpty()) {
-                    edtChat.setText(message.realmRoomMessage.getMessage());
+                    edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.realmRoomMessage.getMessage(), edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
                     edtChat.setSelection(edtChat.getText().toString().length());
                     // put message object to edtChat's tag to obtain it later and
                     // found is user trying to edit a message
@@ -6546,7 +6635,7 @@ public class FragmentChat extends BaseFragment
             RealmRoomDraft draft = realmRoom.getDraft();
             if (draft != null && draft.getMessage().length() > 0) {
                 hasDraft = true;
-                edtChat.setText(draft.getMessage());
+                edtChat.setText(EmojiManager.getInstance().replaceEmoji(draft.getMessage(), edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
                 edtChat.setSelection(edtChat.getText().toString().length());
             }
         }
@@ -6594,7 +6683,7 @@ public class FragmentChat extends BaseFragment
                     boolean isAllowToClearChatEditText = true;
                     for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
 
-                        edtChat.setText(sharedData.message);
+                        edtChat.setText(EmojiManager.getInstance().replaceEmoji(sharedData.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
 
                         switch (sharedData.fileType) {
                             case message:
@@ -8999,7 +9088,7 @@ public class FragmentChat extends BaseFragment
             if (botAction == 0) {
                 if (!isChatReadOnly) {
                     if (edtChat != null)
-                        edtChat.setText(message.toString());
+                        edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.toString(), edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
                     imvSendButton.performClick();
                 }
             } else {
@@ -9429,7 +9518,7 @@ public class FragmentChat extends BaseFragment
 
                     //if (!path.toLowerCase().endsWith(".gif")) {
                     String localPathNew = attachFile.saveGalleryPicToLocal(items.path);
-                    edtChat.setText(items.getText());
+                    edtChat.setText(EmojiManager.getInstance().replaceEmoji(items.getText(), edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
                     sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
                     //}
                 }

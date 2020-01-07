@@ -224,6 +224,26 @@ public class StickerRepository implements ObserverView {
         });
     }
 
+    public Flowable<List<StructIGSticker>> getStickerByEmoji(String unicode) {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmStickersDetails.class)
+                    .equalTo(RealmStickersDetailsFields.NAME, unicode)
+                    .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
+                    .findAll()
+                    .asFlowable()
+                    .filter(RealmResults::isLoaded)
+                    .map(realmStickers -> {
+                        List<StructIGSticker> stickers = new ArrayList<>();
+                        for (int i = 0; i < realmStickers.size(); i++) {
+                            StructIGSticker sticker = new StructIGSticker().setValueWithRealm(realmStickers.get(i));
+                            stickers.add(sticker);
+                        }
+                        Log.i(TAG, "getStickerByEmoji: " + stickers.size());
+                        return stickers;
+                    });
+        });
+    }
+
     public Flowable<List<StructIGStickerGroup>> getMySticker() {
         return DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmStickers.class).findAll().asFlowable()
@@ -272,7 +292,7 @@ public class StickerRepository implements ObserverView {
     @Override
     public void unsubscribe() {
         Log.i(TAG, "repo unsubscribe: ");
-        if (compositeDisposable != null)
+        if (compositeDisposable != null && !compositeDisposable.isDisposed())
             compositeDisposable.clear();
     }
 
