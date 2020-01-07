@@ -1,21 +1,31 @@
 package net.iGap.kuknos.view;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -28,6 +38,8 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosSignupInfoVM;
+
+import org.jetbrains.annotations.NotNull;
 
 public class KuknosSignupInfoFrag extends BaseFragment {
 
@@ -89,12 +101,55 @@ public class KuknosSignupInfoFrag extends BaseFragment {
             popBackStackFragment();
         }*/
 
+        String t = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
+        SpannableString ss = new SpannableString(t);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NotNull View textView) {
+                kuknosSignupInfoVM.getTermsAndCond();
+            }
+
+            @Override
+            public void updateDrawState(@NotNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+        ss.setSpan(clickableSpan, t.indexOf(getString(R.string.terms_and_condition_clickable)), t.indexOf(getString(R.string.terms_and_condition_clickable)) + getString(R.string.terms_and_condition_clickable).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        binding.termsAndConditionText.setText(ss);
+        binding.termsAndConditionText.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.termsAndConditionText.setHighlightColor(Color.TRANSPARENT);
+
         onError();
         onGoNextPage();
+        onTermsDownload();
         onCheckUsernameState();
         onCheckUsernameETFocus();
         onEmailTextChange();
         progressSubmitVisibility();
+    }
+
+    private void onTermsDownload() {
+        kuknosSignupInfoVM.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s != null)
+                    showDialogTermAndCondition(s);
+            }
+        });
+    }
+
+    private void showDialogTermAndCondition(String message) {
+        if (getActivity() != null) {
+            Dialog dialogTermsAndCondition = new Dialog(getActivity());
+            dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
+            AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
+            termsText.setText(message);
+            dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
+            dialogTermsAndCondition.show();
+        }
     }
 
     private void saveRegisterInfo() {
@@ -124,6 +179,12 @@ public class KuknosSignupInfoFrag extends BaseFragment {
                     case "3":
                         binding.fragKuknosSINIDHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSINID.requestFocus();
+                        break;
+                    case "4":
+                        Snackbar.make(binding.pageContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG)
+                                .setAction(R.string.ok, v -> {
+
+                                }).show();
                         break;
                     default:
                         Snackbar.make(binding.pageContainer, errorM.getMessage(), Snackbar.LENGTH_LONG)

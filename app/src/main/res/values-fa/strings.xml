@@ -2112,6 +2112,7 @@
     <string name="kuknos_trade_zeroOriginAmount">میزان فروش نباید صفر باشد.</string>
     <string name="kuknos_trade_emptyDestAmount">میزان خرید نباید خالی باشد.</string>
     <string name="kuknos_trade_zeroDestAmount">میزان خرید نباید صفر باشد.</string>
+    <string name="kuknos_SignupInfo_errorTermAndCondition">در صورت تمایل به ادامه، لطفا قوانین و مقررات را قبول کنید.</string>
     <string name="kuknos_trade_fail">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_trade_success">درخواست مبادله با موفقیت در سیستم ثبت شد.</string>
     <string name="kuknos_trade_sell">فروش</string>

@@ -2,9 +2,11 @@ package net.iGap.kuknos.viewmodel;
 
 import android.util.Log;
 
+import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
@@ -14,6 +16,7 @@ import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
 
@@ -31,6 +34,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private int PMNprice = -1;
     private int maxAmount = 1000000;
     private PanelRepo panelRepo = new PanelRepo();
+    private MutableLiveData<String> TandCAgree;
 
     public KuknosBuyPeymanVM() {
         error = new MutableLiveData<>();
@@ -41,6 +45,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         nextPage = new MutableLiveData<>();
         nextPage.setValue(false);
         goToPaymentPage = new MutableLiveData<>();
+        TandCAgree = new MutableLiveData<>();
     }
 
     public void onSubmitBtn() {
@@ -131,6 +136,25 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             return true;
         }
         return false;
+    }
+
+    public void getTermsAndCond() {
+        if (!G.isSecure)
+            return;
+        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
+            @Override
+            public void onInfo(String body) {
+                if (body != null) {
+                    TandCAgree.setValue(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                }
+                TandCAgree.setValue("error");
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                TandCAgree.setValue("error");
+            }
+        });
     }
 
     public MutableLiveData<ErrorM> getError() {

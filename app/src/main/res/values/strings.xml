@@ -2065,6 +2065,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorUsernameInvalid">This username is not available.</string>
     <string name="kuknos_SignupInfo_ValidUsername">Good to go</string>
     <string name="kuknos_SignupInfo_errorEmailInvalid">Email Format is incorrect.</string>
+    <string name="kuknos_SignupInfo_errorTermAndCondition">If you would like to continue, please accept terms and conditions</string>
     <string name="kuknos_SignupInfo_errorNameEmptyInvalid">Name can not be empty.</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>

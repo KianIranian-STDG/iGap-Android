@@ -1,8 +1,10 @@
 package net.iGap.kuknos.viewmodel;
 
+import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
@@ -10,6 +12,7 @@ import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.request.RequestInfoPage;
 
 import java.util.Objects;
 
@@ -27,6 +30,8 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
     private ObservableField<String> NID = new ObservableField<>();
     private boolean usernameIsValid = false;
     private UserRepo userRepo = new UserRepo();
+    private MutableLiveData<String> TandCAgree;
+    private boolean termsAndConditionIsChecked = false;
 
     public KuknosSignupInfoVM() {
 
@@ -41,6 +46,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 //        checkUsernameState.setValue(-1);
         progressSendDServerState = new MutableLiveData<>();
         progressSendDServerState.setValue(false);
+        TandCAgree = new MutableLiveData<>(null);
     }
 
     public void onSubmitBtn() {
@@ -138,6 +144,11 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             error.setValue(new ErrorM(true, "Invalid NID Length", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
             return false;
         }
+        //Terms and Condition
+        if (!termsAndConditionIsChecked) {
+            error.setValue(new ErrorM(true, "Invalid NID Length", "4", R.string.kuknos_SignupInfo_errorTermAndCondition));
+            return false;
+        }
         return true;
     }
 
@@ -164,7 +175,37 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         checkUsernameState.setValue(-1);
     }*/
 
+    public void getTermsAndCond() {
+
+        if (TandCAgree.getValue() != null && !TandCAgree.getValue().equals("error")) {
+            TandCAgree.postValue(TandCAgree.getValue());
+            return;
+        }
+        if (!G.isSecure) {
+            TandCAgree.postValue("error");
+            return;
+        }
+        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
+            @Override
+            public void onInfo(String body) {
+                if (body != null)
+                    TandCAgree.postValue(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                else
+                    TandCAgree.postValue("error");
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                TandCAgree.postValue("error");
+            }
+        });
+    }
+
     //Setter and Getter
+
+    public void termsOnCheckChange(boolean isChecked) {
+        termsAndConditionIsChecked = isChecked;
+    }
 
     public KuknosSignupM getKuknosSignupM() {
         return kuknosSignupM;
@@ -234,4 +275,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         return NID;
     }
 
+    public MutableLiveData<String> getTandCAgree() {
+        return TandCAgree;
+    }
 }

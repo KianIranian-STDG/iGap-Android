@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM" />
@@ -14,21 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- TODO clean min height-->
-
         <LinearLayout
             android:id="@+id/fragKuknosBuyPToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/sky_blue"
             android:minHeight="48dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
         </LinearLayout>
-
 
         <ScrollView
             android:layout_width="match_parent"
