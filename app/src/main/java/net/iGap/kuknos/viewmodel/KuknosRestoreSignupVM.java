@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.R;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosSignupM;
 
 public class KuknosRestoreSignupVM extends ViewModel {
 

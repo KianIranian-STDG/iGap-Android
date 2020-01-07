@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSendM;

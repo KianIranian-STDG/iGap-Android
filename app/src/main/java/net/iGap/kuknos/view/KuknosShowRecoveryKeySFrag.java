@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -19,7 +18,6 @@ import net.iGap.databinding.FragmentKuknosShowRecoveryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeySVM;
 
 public class KuknosShowRecoveryKeySFrag extends BaseFragment {

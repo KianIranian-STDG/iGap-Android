@@ -72,7 +72,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         });
     }
 
-    private void getAssetData(String assetCode){
+    private void getAssetData(String assetCode) {
         asset = null;
         panelRepo.getAssetData(assetCode, this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
@@ -114,14 +114,14 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     private void calculateToRial() {
-        if (asset == null || asset.getAssets().size()==0)
+        if (asset == null || asset.getAssets().size() == 0)
             return;
         KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
         DecimalFormat df = new DecimalFormat("#,##0.00");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(
-                        df.format(Double.valueOf(temp.getBalance())*Double.valueOf(asset.getAssets().get(0).getSellRate()))) :
-                (df.format(Double.valueOf(temp.getBalance())*Double.valueOf(asset.getAssets().get(0).getSellRate()))));
+                        df.format(Double.valueOf(temp.getBalance()) * Double.valueOf(asset.getAssets().get(0).getSellRate()))) :
+                (df.format(Double.valueOf(temp.getBalance()) * Double.valueOf(asset.getAssets().get(0).getSellRate()))));
         currency.set("Rial");
     }
 
@@ -129,8 +129,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         if (inRialMode) {
             spinnerSelect(position);
             inRialMode = false;
-        }
-        else {
+        } else {
             calculateToRial();
             inRialMode = true;
         }

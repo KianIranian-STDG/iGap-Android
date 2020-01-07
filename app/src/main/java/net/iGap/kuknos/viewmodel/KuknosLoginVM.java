@@ -80,16 +80,16 @@ public class KuknosLoginVM extends ViewModel {
         return error;
     }
 
+    public void setError(MutableLiveData<ErrorM> error) {
+        this.error = error;
+    }
+
     public MutableLiveData<Boolean> getNextPage() {
         return nextPage;
     }
 
     public void setNextPage(MutableLiveData<Boolean> nextPage) {
         this.nextPage = nextPage;
-    }
-
-    public void setError(MutableLiveData<ErrorM> error) {
-        this.error = error;
     }
 
     public ObservableField<String> getID() {

@@ -17,10 +17,6 @@ public class KuknosTradeHistoryVM extends ViewModel {
     private TradeRepo tradeRepo = new TradeRepo();
     private API mode;
 
-    public enum API {
-        OFFERS_LIST, TRADES_LIST
-    }
-
     public KuknosTradeHistoryVM() {
         listMutableLiveData = new MutableLiveData<>();
         errorM = new MutableLiveData<>();
@@ -92,5 +88,9 @@ public class KuknosTradeHistoryVM extends ViewModel {
 
     public void setMode(API mode) {
         this.mode = mode;
+    }
+
+    public enum API {
+        OFFERS_LIST, TRADES_LIST
     }
 }

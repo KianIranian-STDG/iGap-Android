@@ -120,8 +120,7 @@ public class KuknosTradeFrag extends BaseFragment {
                 binding.fragKuknosTranExchangeHolder.requestFocus();
             } else if (errorM.getMessage().equals("2")) {
                 showDialog(errorM.getState(), errorM.getResID());
-            }
-            else {
+            } else {
                 showDialog(errorM.getMessage());
             }
         });

@@ -90,8 +90,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
                 binding.fragKuknosBuyPAmountHolder.requestFocus();
             } else if (errorM.getState() && errorM.getMessage().equals("1")) {
                 showDialog(errorM.getResID());
-            }
-            else {
+            } else {
                 showDialog(errorM.getMessage());
             }
         });

@@ -1,7 +1,5 @@
 package net.iGap.kuknos.view;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +12,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRecoveryKeyBinding;
@@ -26,8 +22,6 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {

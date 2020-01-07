@@ -149,7 +149,7 @@ public class KuknosSendFrag extends BaseFragment {
         kuknosSignupInfoVM.getPayResult().observe(getViewLifecycleOwner(), errorM -> {
             DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
             defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle));
-            if (errorM.getResID()==0)
+            if (errorM.getResID() == 0)
                 defaultRoundDialog.setMessage(errorM.getMessage());
             else
                 defaultRoundDialog.setMessage(getResources().getString(errorM.getResID()));
