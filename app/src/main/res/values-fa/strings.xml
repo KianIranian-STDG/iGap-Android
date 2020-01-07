@@ -2332,4 +2332,13 @@
     <string name="delete_recently_sticker">پاک کردن استیکر های اخیر</string>
     <string name="sticker_setting">تنظیمات استیکر</string>
     <string name="empty_sticker">شما تاکنون هیچ استیکری اضافه نکرده‌اید!</string>
+
+    <string name="emoji_category_activity">شکلک ها و افراد</string>
+    <string name="emoji_category_animal">حیوانات و طبیعت</string>
+    <string name="emoji_category_Flags">پرچم ها</string>
+    <string name="emoji_category_food">غذا و نوشیدنی</string>
+    <string name="emoji_category_object">اشیا</string>
+    <string name="emoji_category_smileys">شکلک ها و افراد</string>
+    <string name="emoji_category_symbols">نماد ها</string>
+    <string name="emoji_category_travel">مسافرت و اماکن</string>
 </resources>

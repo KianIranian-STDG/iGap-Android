@@ -4,7 +4,7 @@ public abstract class EmojiCategory {
     public String[] emojies;
     public String[] coloredEmojies;
 
-    public abstract String getName();
+    public abstract int getName();
 
     public abstract String[] getEmojies();
 

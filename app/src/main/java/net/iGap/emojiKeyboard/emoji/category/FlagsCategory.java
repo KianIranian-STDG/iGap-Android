@@ -1,10 +1,12 @@
 package net.iGap.emojiKeyboard.emoji.category;
 
+import net.iGap.R;
+
 public class FlagsCategory extends EmojiCategory {
 
     @Override
-    public String getName() {
-        return "Flags Category";
+    public int getName() {
+        return R.string.emoji_category_Flags;
     }
 
     @Override

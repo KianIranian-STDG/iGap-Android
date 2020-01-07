@@ -1,17 +1,19 @@
 package net.iGap.emojiKeyboard.View;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
+import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.emojiKeyboard.adapter.EmojiAdapter;
 import net.iGap.emojiKeyboard.struct.StructIGEmojiGroup;
 import net.iGap.helper.LayoutCreator;
@@ -31,12 +33,12 @@ public class EmojiGridView extends FrameLayout implements EmojiAdapter.Listener 
         boolean isRtl = G.isAppRtl;
 
         emojiGroupNameTv = new AppCompatTextView(getContext());
+        emojiGroupNameTv.setTextColor(Theme.getInstance().getSubTitleColor(getContext()));
         emojiGroupNameTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        emojiGroupNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         emojiGroupNameTv.setLines(1);
         emojiGroupNameTv.setMaxLines(1);
         emojiGroupNameTv.setSingleLine(true);
-        emojiGroupNameTv.setEllipsize(TextUtils.TruncateAt.END);
-        emojiGroupNameTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
 
         addView(emojiGroupNameTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 12, 4, isRtl ? 12 : 0, 0));
 
@@ -44,7 +46,7 @@ public class EmojiGridView extends FrameLayout implements EmojiAdapter.Listener 
         adapter.setListener(this);
 
         RecyclerView recyclerView = new RecyclerView(getContext());
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 8, RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 10, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         recyclerView.setClipToPadding(false);
 

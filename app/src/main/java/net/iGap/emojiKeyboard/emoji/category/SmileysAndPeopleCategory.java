@@ -1,10 +1,12 @@
 package net.iGap.emojiKeyboard.emoji.category;
 
+import net.iGap.R;
+
 public class SmileysAndPeopleCategory extends EmojiCategory {
 
     @Override
-    public String getName() {
-        return "Smileys And People";
+    public int getName() {
+        return R.string.emoji_category_smileys;
     }
 
     @Override

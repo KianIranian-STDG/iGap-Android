@@ -1,9 +1,11 @@
 package net.iGap.emojiKeyboard.emoji.category;
 
+import net.iGap.R;
+
 public class FoodAndDrinkCategory extends EmojiCategory {
     @Override
-    public String getName() {
-        return "Food And Drink";
+    public int getName() {
+        return R.string.emoji_category_food;
     }
 
     @Override

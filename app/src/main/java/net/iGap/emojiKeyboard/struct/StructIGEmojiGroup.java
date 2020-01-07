@@ -1,21 +1,24 @@
 package net.iGap.emojiKeyboard.struct;
 
+import androidx.annotation.IdRes;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class StructIGEmojiGroup {
-    private String categoryName;
+    @IdRes
+    private int categoryName;
     private List<String> strings = new ArrayList<>();
 
     public void setStrings(List<String> strings) {
         this.strings = strings;
     }
 
-    public String getCategoryName() {
+    public int getCategoryName() {
         return categoryName;
     }
 
-    public void setCategoryName(String categoryName) {
+    public void setCategoryName(int categoryName) {
         this.categoryName = categoryName;
     }
 

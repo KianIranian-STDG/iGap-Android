@@ -2061,4 +2061,12 @@
     <string name="delete_recently_sticker">Supprimer récemment l\'autocollant</string>
     <string name="sticker_setting">Réglage de l\'autocollant</string>
     <string name="empty_sticker">Vous n\'avez pas encore ajouté d\'autocollants!</string>
+    <string name="emoji_category_activity">Activity</string>
+    <string name="emoji_category_animal">Animals And Nature</string>
+    <string name="emoji_category_Flags">Flags Category</string>
+    <string name="emoji_category_food">Food And Drink</string>
+    <string name="emoji_category_object">Objects</string>
+    <string name="emoji_category_smileys">Smileys And People</string>
+    <string name="emoji_category_symbols">Symbols</string>
+    <string name="emoji_category_travel">Travel And Place</string>
 </resources>

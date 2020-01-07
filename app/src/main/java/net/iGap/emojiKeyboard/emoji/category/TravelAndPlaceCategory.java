@@ -1,10 +1,12 @@
 package net.iGap.emojiKeyboard.emoji.category;
 
+import net.iGap.R;
+
 public class TravelAndPlaceCategory extends EmojiCategory {
 
     @Override
-    public String getName() {
-        return "Travel And Place";
+    public int getName() {
+        return R.string.emoji_category_travel;
     }
 
     @Override

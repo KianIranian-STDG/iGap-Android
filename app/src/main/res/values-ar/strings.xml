@@ -3068,4 +3068,12 @@
     <string name="delete_recently_sticker">حذف ملصق مؤخرا</string>
     <string name="sticker_setting">إعداد الملصقات</string>
     <string name="empty_sticker">لم تقم بإضافة أي ملصقات بعد!</string>
+    <string name="emoji_category_activity">Activity</string>
+    <string name="emoji_category_animal">Animals And Nature</string>
+    <string name="emoji_category_Flags">Flags Category</string>
+    <string name="emoji_category_food">Food And Drink</string>
+    <string name="emoji_category_object">Objects</string>
+    <string name="emoji_category_smileys">Smileys And People</string>
+    <string name="emoji_category_symbols">Symbols</string>
+    <string name="emoji_category_travel">Travel And Place</string>
 </resources>

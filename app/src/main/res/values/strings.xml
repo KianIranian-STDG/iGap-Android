@@ -2396,5 +2396,13 @@ Want to get it?</string>
     <string name="delete_recently_sticker">Delete Recently Sticker</string>
     <string name="sticker_setting">Sticker setting</string>
     <string name="empty_sticker">You haven\'t added any stickers yet!</string>
+    <string name="emoji_category_activity">Activity</string>
+    <string name="emoji_category_animal">Animals And Nature</string>
+    <string name="emoji_category_Flags">Flags Category</string>
+    <string name="emoji_category_food">Food And Drink</string>
+    <string name="emoji_category_object">Objects</string>
+    <string name="emoji_category_smileys">Smileys And People</string>
+    <string name="emoji_category_symbols">Symbols</string>
+    <string name="emoji_category_travel">Travel And Place</string>
 
 </resources>

@@ -1,10 +1,12 @@
 package net.iGap.emojiKeyboard.emoji.category;
 
+import net.iGap.R;
+
 public class AnimalsAndNatureCategory extends EmojiCategory {
 
     @Override
-    public String getName() {
-        return "Animals And Nature";
+    public int getName() {
+        return R.string.emoji_category_animal;
     }
 
     @Override

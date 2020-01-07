@@ -31,6 +31,7 @@ public class EmojiImageView extends AppCompatImageView implements EventListener 
     public EmojiImageView(Context context) {
         super(context);
         setScaleType(ImageView.ScaleType.CENTER);
+        setPadding(LayoutCreator.dp(2), LayoutCreator.dp(2), LayoutCreator.dp(2), LayoutCreator.dp(2));
     }
 
     @Override

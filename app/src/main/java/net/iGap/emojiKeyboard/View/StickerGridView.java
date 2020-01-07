@@ -1,4 +1,4 @@
-package net.iGap.emojiKeyboard.sticker;
+package net.iGap.emojiKeyboard.View;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -35,9 +35,9 @@ public class StickerGridView extends FrameLayout implements StickerAdapter.AddSt
         boolean isRtl = G.isAppRtl;
 
         stickerNameTv = new AppCompatTextView(getContext());
-        stickerNameTv.setTextColor(new Theme().getTitleTextColor(getContext()));
+        stickerNameTv.setTextColor(new Theme().getSubTitleColor(getContext()));
         stickerNameTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        stickerNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+        stickerNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         stickerNameTv.setLines(1);
         stickerNameTv.setMaxLines(1);
         stickerNameTv.setSingleLine(true);
