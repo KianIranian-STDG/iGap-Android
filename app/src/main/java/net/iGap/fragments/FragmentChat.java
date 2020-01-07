@@ -3033,10 +3033,12 @@ public class FragmentChat extends BaseFragment
                     resetAndGetFromEnd();
                 }
 
-                if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
-                    suggestedLayout.setVisibility(View.GONE);
+                if (suggestedLayout != null) {
+                    if (suggestedLayout.getVisibility() == View.VISIBLE)
+                        suggestedLayout.setVisibility(View.GONE);
                     lastChar = null;
                 }
+
 
                 if (isShowLayoutUnreadMessage) {
                     removeLayoutUnreadMessage();
@@ -3478,6 +3480,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+
     private void getStickerByEmoji(String unicode) {
         if (lastChar == null) {
             lastChar = unicode;
@@ -3499,13 +3502,13 @@ public class FragmentChat extends BaseFragment
                     lastChar = null;
                     edtChat.setText("");
                     suggestedLayout.setVisibility(View.GONE);
+                    suggestedAdapter.clearData();
+                    suggestedRecyclerView.scrollToPosition(0);
                     stickerRepository.getCompositeDisposable().dispose();
-                    if (suggestedRecyclerView.getLayoutManager() != null && suggestedRecyclerView.getLayoutManager().getItemCount() > 3)
-                        suggestedRecyclerView.getLayoutManager().scrollToPosition(0);
                 });
 
                 suggestedLayout.addView(suggestedRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
-                rootView.addView(suggestedLayout, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 6, 8, 6, keyboardViewVisible ? LayoutCreator.pxToDp(keyboardHeight) + 60 : 60));
+                rootView.addView(suggestedLayout, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, 6, 8, 6, keyboardViewVisible ? LayoutCreator.pxToDp(keyboardHeight) + 60 : 60));
             }
 
             suggestedRecyclerView.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.shape_suggested_sticker), rootView.getContext(), R.attr.iGapEditTxtColor));
@@ -3514,7 +3517,8 @@ public class FragmentChat extends BaseFragment
                     .getStickerByEmoji(lastChar)
                     .subscribe(structIGStickers -> {
                         suggestedAdapter.setIgStickers(structIGStickers);
-                        suggestedLayout.setVisibility(View.VISIBLE);
+                        if (structIGStickers.size() > 0)
+                            suggestedLayout.setVisibility(View.VISIBLE);
                     });
 
             stickerRepository.getCompositeDisposable().add(disposable);

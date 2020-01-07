@@ -77,6 +77,11 @@ public class SuggestedStickerAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void clearData() {
+        igStickers.clear();
+        notifyDataSetChanged();
+    }
+
     public class NormalViewHolder extends RecyclerView.ViewHolder {
         ImageView normalStickerCell;
 
