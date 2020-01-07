@@ -24,7 +24,6 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -339,32 +338,11 @@ public class EmojiManager {
 
     private void loadEmoji(final byte page, final short page2) {
         try {
-            float scale;
             int imageResize = 1;
             if (AndroidUtils.density <= 1.0f) {
-                scale = 2.0f;
                 imageResize = 2;
-            } else if (AndroidUtils.density <= 1.5f) {
-                scale = 2.0f;
-            } else if (AndroidUtils.density <= 2.0f) {
-                scale = 2.0f;
-            } else {
-                scale = 2.0f;
             }
 
-            String imageName;
-            File imageFile;
-
-            try {
-                for (int a = 13; a < 16; a++) {
-                    imageName = String.format(Locale.US, "v%d_emoji%.01fx_%d.png", a, scale, page);
-                    imageFile = G.context.getFileStreamPath(imageName);
-                    if (imageFile.exists())
-                        imageFile.delete();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             Bitmap bitmap = null;
             try {
                 InputStream is = G.context.getAssets().open("emoji/" + String.format(Locale.US, "%d_%d.png", page, page2));
