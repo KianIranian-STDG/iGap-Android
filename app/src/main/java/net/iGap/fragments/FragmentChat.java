@@ -39,6 +39,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -150,6 +151,7 @@ import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.emojiKeyboard.EmojiView;
 import net.iGap.emojiKeyboard.KeyboardView;
 import net.iGap.emojiKeyboard.NotifyFrameLayout;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
@@ -323,6 +325,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.view.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -445,7 +448,7 @@ public class FragmentChat extends BaseFragment
     private AppCompatEditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
     private SharedPreferences emojiSharedPreferences;
-    private net.iGap.module.EmojiEditTextE edtChat;
+    private EventEditText edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
@@ -715,6 +718,8 @@ public class FragmentChat extends BaseFragment
          * */
 
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
+        edtChat.setGravity(Gravity.CENTER_VERTICAL | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT));
+
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
         edtChat.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_edittext), edtChat.getContext(), R.attr.iGapEditTxtColor));
 
@@ -3328,8 +3333,10 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public void onBackSpace() {
-                    Toast.makeText(getContext(), "back press clicked", Toast.LENGTH_SHORT).show();
-
+                    if (edtChat.length() == 0) {
+                        return;
+                    }
+                    edtChat.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
                 }
 
                 @Override
@@ -3341,6 +3348,23 @@ public class FragmentChat extends BaseFragment
                 public void onAddStickerClicked() {
                     if (getActivity() != null) {
                         new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                    }
+                }
+
+                @Override
+                public void onEmojiSelected(String unicode) {
+                    int i = edtChat.getSelectionEnd();
+                    if (i < 0) {
+                        i = 0;
+                    }
+                    try {
+                        CharSequence localCharSequence = EmojiManager.getInstance().replaceEmoji(unicode, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false);
+                        if (edtChat.getText() != null)
+                            edtChat.setText(edtChat.getText().insert(i, localCharSequence));
+                        int j = i + localCharSequence.length();
+                        edtChat.setSelection(j, j);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 

@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -161,7 +160,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emojiGridAdapter.setListener(new EmojiAdapter.Listener() {
                 @Override
                 public void onClick(String emojiCode) {
-                    Toast.makeText(getContext(), emojiCode, Toast.LENGTH_SHORT).show();
+                    if (listener != null)
+                        listener.onEmojiSelected(emojiCode);
                 }
 
                 @Override
@@ -535,5 +535,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         void onStickerSettingClick();
 
         void onAddStickerClicked();
+
+        void onEmojiSelected(String unicode);
     }
 }

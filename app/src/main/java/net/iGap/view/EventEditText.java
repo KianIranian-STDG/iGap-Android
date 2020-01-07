@@ -1,16 +1,13 @@
-package net.iGap.module;
+package net.iGap.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 
-import com.vanniktech.emoji.EmojiEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 
-@Deprecated
-public class EmojiEditTextE extends EmojiEditText {
+public class EventEditText extends AppCompatEditText {
 
     private Listener listener;
 
@@ -22,18 +19,12 @@ public class EmojiEditTextE extends EmojiEditText {
         void onInternalTouchEvent(MotionEvent event);
     }
 
-    public EmojiEditTextE(Context context) {
+    public EventEditText(Context context) {
         super(context);
     }
 
-    public EmojiEditTextE(Context context, AttributeSet attrs) {
+    public EventEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    @Override
-    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
-        return super.onCreateInputConnection(outAttrs);
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -82,6 +82,11 @@ public class KeyboardView extends FrameLayout {
                 listener.onAddStickerClicked();
             }
 
+            @Override
+            public void onEmojiSelected(String unicode) {
+                listener.onEmojiSelected(unicode);
+            }
+
         });
 
         addView(emojiView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
@@ -104,6 +109,7 @@ public class KeyboardView extends FrameLayout {
 
         void onAddStickerClicked();
 
+        void onEmojiSelected(String unicode);
     }
 
     public void setKeyboardHeight(int keyboardHeightLand, int keyboardHeight) {
