@@ -4569,6 +4569,7 @@ public class FragmentChat extends BaseFragment
 
                             }
                         });
+                        mAdapter.notifyItemChanged(pos);
                     }
                     onDownloadAllEqualCashId(cacheId, message.realmRoomMessage.getMessageId() + "");
                 }
@@ -4620,6 +4621,7 @@ public class FragmentChat extends BaseFragment
                         });
                     }
                     onDownloadAllEqualCashId(cacheId, message.realmRoomMessage.getMessageId() + "");
+                    mAdapter.notifyItemChanged(pos);
                 }
             } else if (items.get(position).equals(getString(R.string.saveToDownload_item_dialog))) {
                 String filename;
@@ -4672,6 +4674,7 @@ public class FragmentChat extends BaseFragment
                     }
 
                     onDownloadAllEqualCashId(cacheId, message.realmRoomMessage.getMessageId() + "");
+                    mAdapter.notifyItemChanged(pos);
                 }
             } else if (items.get(position).equals(getString(R.string.report))) {
                 long messageId;
