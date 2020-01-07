@@ -32,6 +32,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -248,6 +249,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         viewModel.goToChatRoom.observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null && isGo) {
                 ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+            }
+        });
+
+        viewModel.showErrorMessage.observe(getViewLifecycleOwner(), errorMessageResId -> {
+            if (errorMessageResId != null) {
+                HelperError.showSnackMessage(getString(errorMessageResId), false);
             }
         });
 
