@@ -640,7 +640,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 forwardContainer = new FrameLayout(holder.itemView.getContext());
                 forwardContainer.setId(R.id.messageForwardContainer);
 
-                if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
                     mHolder.getItemContainer().addView(forwardContainer, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
                 } else {
                     mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));

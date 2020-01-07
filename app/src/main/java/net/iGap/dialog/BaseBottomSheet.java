@@ -57,4 +57,12 @@ public abstract class BaseBottomSheet extends BottomSheetDialogFragment {
         });
         return dialog;
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
+        //when need to saveInstance add some bundle : Link below
+        //https://stackoverflow.com/questions/7575921/illegalstateexception-can-not-perform-this-action-after-onsaveinstancestate-wit
+        //super.onSaveInstanceState(outState);
+    }
 }

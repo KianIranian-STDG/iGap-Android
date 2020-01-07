@@ -188,28 +188,28 @@ public class FragmentShowAvatars extends BaseFragment {
 
             if (getContext() == null) return;
 
-            List<String> items = new ArrayList<>();
-            items.add(getString(R.string.save_to_gallery));
+            List<Integer> items = new ArrayList<>();
+            items.add(R.string.save_to_gallery);
 
             switch (from) {
                 case setting:
-                    items.add(getString(R.string.array_Delete_photo));
+                    items.add(R.string.array_Delete_photo);
                     break;
                 case group:
                     if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
-                        items.add(getString(R.string.array_Delete_photo));
+                        items.add(R.string.array_Delete_photo);
                     }
                     break;
                 case channel:
                     if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
-                        items.add(getString(R.string.array_Delete_photo));
+                        items.add(R.string.array_Delete_photo);
                     }
                     break;
             }
-            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-                if (items.get(position).equals(getString(R.string.save_to_gallery))) {
+            new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
+                if (items.get(position) == R.string.save_to_gallery) {
                     saveToGallery();
-                } else if (items.get(position).equals(getString(array_Delete_photo))) {
+                } else if (items.get(position) == array_Delete_photo) {
                     switch (from) {
                         case setting:
                             deletePhotoSetting();

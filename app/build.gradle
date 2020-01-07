@@ -224,7 +224,7 @@ dependencies {
     implementation('com.github.KianIranian-STDG:Compress:2.1.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
-    implementation('com.github.KianIranian-STDG:VideoTrimmer:1.1.1') {
+    implementation('com.github.KianIranian-STDG:VideoTrimmer:1.1.3') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'

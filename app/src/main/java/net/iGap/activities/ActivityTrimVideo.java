@@ -68,6 +68,13 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
         K4LVideoTrimmer videoTrimmer = findViewById(R.id.timeLine);
         progressBar = findViewById(R.id.fvt_progress);
         if (videoTrimmer != null) {
+
+            Uri uri = Uri.parse(path);
+            if (uri == null) {
+                onBackPressed();
+                return;
+            }
+
             videoTrimmer.setVideoURI(Uri.parse(path));
             videoTrimmer.setMaxDuration(duration);
             videoTrimmer.setOnTrimVideoListener(this);
@@ -144,7 +151,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onError(String message) {
-
+        onBackPressed();
     }
 
     private String getRealPathFromURI(Uri contentURI) {

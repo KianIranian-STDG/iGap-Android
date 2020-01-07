@@ -1381,7 +1381,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            visibleViewAttention(getString(R.string.turn_on_gps_explain), true);
+            visibleViewAttention(G.fragmentActivity.getString(R.string.turn_on_gps_explain), true);
 
         } else {// GPS is on
             isGpsOn = true;
@@ -1393,7 +1393,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
             } else {
-                visibleViewAttention(getString(R.string.Visible_Status_text), false);
+                visibleViewAttention(G.fragmentActivity.getString(R.string.Visible_Status_text), false);
             }
 
         }

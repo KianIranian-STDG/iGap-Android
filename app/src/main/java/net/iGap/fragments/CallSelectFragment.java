@@ -87,7 +87,7 @@ public class CallSelectFragment extends BaseBottomSheet {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_select_call_action, container);
+        return inflater.inflate(R.layout.fragment_select_call_action, container);
     }
 
     @Override

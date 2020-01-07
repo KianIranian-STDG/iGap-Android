@@ -845,11 +845,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                 .onNegative((dialog, which) -> dialog.dismiss())
                                 .positiveText(R.string.startUpdate)
                                 .onPositive((dialog, which) -> {
-                                    String url = "http://d.igap.net/update";
-                                    Intent i = new Intent(Intent.ACTION_VIEW);
-                                    i.setData(Uri.parse(url));
-                                    startActivity(i);
-                                    dialog.dismiss();
+                                    try {
+                                        String url = "http://d.igap.net/update";
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(url));
+                                        startActivity(i);
+                                        dialog.dismiss();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getActivity(), R.string.need_browser, Toast.LENGTH_SHORT).show();
+                                    }
                                 })
                                 .show();
                     }
@@ -972,7 +977,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private boolean checkHasChannelInSelectedItems() {
-        for (Room room : mSelectedRoomList) if (room != null && room.getType() == CHANNEL) return true;
+        for (Room room : mSelectedRoomList)
+            if (room != null && room.getType() == CHANNEL) return true;
         return false;
     }
 

@@ -83,9 +83,4 @@ public class BottomSheetFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        //No call for super(). Bug on API Level > 11.
-//        super.onSaveInstanceState(outState);
-    }
 }
