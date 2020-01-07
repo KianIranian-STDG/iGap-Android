@@ -1,18 +1,19 @@
 package net.iGap.kuknos.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosInfoM;
-import net.iGap.kuknos.service.model.KuknosPassM;
+import net.iGap.kuknos.service.model.KuknosSignupM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 
-public class KuknosRestorePassVM extends ViewModel {
+public class KuknosRestorePassVM extends BaseAPIViewModel {
 
-    private MutableLiveData<KuknosPassM> kuknosPassM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Integer> nextPage;
     private MutableLiveData<Boolean> progressState;
@@ -24,10 +25,9 @@ public class KuknosRestorePassVM extends ViewModel {
     private String PIN4;
     private boolean completePin = false;
     private String keyPhrase;
-    private String token;
+    private KuknosSignupM kuknosSignupM;
 
     public KuknosRestorePassVM() {
-        kuknosPassM = new MutableLiveData<>();
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
         nextPage.setValue(0);
@@ -57,22 +57,35 @@ public class KuknosRestorePassVM extends ViewModel {
     }
 
     private void checkUserInfo() {
-        /*userRepo.getUserInfo(userRepo.getAccountID(), new ApiResponse<KuknosInfoM>() {
+        progressState.setValue(true);
+        userRepo.getUserStatus(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
             @Override
-            public void onResponse(KuknosInfoM kuknosInfoM) {
-                nextPage.setValue(1);
+            public void onSuccess(KuknosResponseModel<KuknosUserInfo> data) {
+                switch (data.getData().getStatus()) {
+                    case "CREATED":
+                    case "ACTIVATED":
+                        kuknosSignupM = new KuknosSignupM();
+                        kuknosSignupM.setRegistered(true);
+                        nextPage.setValue(1);
+                        break;
+                    case "NOT_CREATED":
+                        nextPage.setValue(2);
+                        break;
+                }
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String error) {
-                nextPage.setValue(2);
+            public void onError(String error) {
+                progressState.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                progressState.setValue(false);
             }
-        });*/
+
+        });
     }
 
     // setter and getter
@@ -109,24 +122,12 @@ public class KuknosRestorePassVM extends ViewModel {
         this.PIN4 = PIN4;
     }
 
-    public MutableLiveData<KuknosPassM> getKuknosPassM() {
-        return kuknosPassM;
-    }
-
-    public void setKuknosPassM(MutableLiveData<KuknosPassM> kuknosPassM) {
-        this.kuknosPassM = kuknosPassM;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
 
     public void setError(MutableLiveData<ErrorM> error) {
         this.error = error;
-    }
-
-    public boolean isCompletePin() {
-        return completePin;
     }
 
     public void setCompletePin(boolean completePin) {
@@ -146,7 +147,6 @@ public class KuknosRestorePassVM extends ViewModel {
     }
 
     public void setToken(String token) {
-        this.token = token;
     }
 
     public MutableLiveData<Boolean> getProgressState() {
@@ -164,4 +164,9 @@ public class KuknosRestorePassVM extends ViewModel {
     public void setNextPage(MutableLiveData<Integer> nextPage) {
         this.nextPage = nextPage;
     }
+
+    public KuknosSignupM getKuknosSignupM() {
+        return kuknosSignupM;
+    }
+
 }

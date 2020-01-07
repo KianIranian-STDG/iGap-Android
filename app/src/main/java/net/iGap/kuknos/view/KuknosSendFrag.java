@@ -1,6 +1,5 @@
 package net.iGap.kuknos.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -28,7 +26,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosSendVM;
 
 import java.io.IOException;
@@ -37,11 +34,9 @@ public class KuknosSendFrag extends BaseFragment {
 
     private FragmentKuknosSendBinding binding;
     private KuknosSendVM kuknosSignupInfoVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosSendFrag newInstance() {
-        KuknosSendFrag kuknosLoginFrag = new KuknosSendFrag();
-        return kuknosLoginFrag;
+        return new KuknosSendFrag();
     }
 
     @Override
@@ -71,7 +66,7 @@ public class KuknosSendFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -97,29 +92,26 @@ public class KuknosSendFrag extends BaseFragment {
     }
 
     private void openQrScanner() {
-        kuknosSignupInfoVM.getOpenQrScanner().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    try {
-                        HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
-                            @Override
-                            public void Allow() throws IllegalStateException {
-                                IntentIntegrator integrator = new IntentIntegrator(getActivity());
-                                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                                integrator.setRequestCode(ActivityMain.kuknosRequestCodeQrCode);
-                                integrator.setBeepEnabled(false);
-                                integrator.setPrompt("");
-                                integrator.initiateScan();
-                            }
+        kuknosSignupInfoVM.getOpenQrScanner().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                try {
+                    HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
+                        @Override
+                        public void Allow() throws IllegalStateException {
+                            IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                            integrator.setRequestCode(ActivityMain.kuknosRequestCodeQrCode);
+                            integrator.setBeepEnabled(false);
+                            integrator.setPrompt("");
+                            integrator.initiateScan();
+                        }
 
-                            @Override
-                            public void deny() {
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        @Override
+                        public void deny() {
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -131,68 +123,64 @@ public class KuknosSendFrag extends BaseFragment {
 
     private void onError() {
 
-        kuknosSignupInfoVM.getErrorM().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true) {
-                    if (errorM.getMessage().equals("0")) {
+        kuknosSignupInfoVM.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState()) {
+                switch (errorM.getMessage()) {
+                    case "0":
                         //Wallet ID Problem
                         binding.fragKuknosSWalletAddressHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSWalletAddressHolder.requestFocus();
-                    } else if (errorM.getMessage().equals("1")) {
+                        break;
+                    case "1":
                         //Amount enough
                         binding.fragKuknosSAmountHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSAmountHolder.requestFocus();
-                    } else if (errorM.getMessage().equals("2")) {
+                        break;
+                    case "2":
                         //server related errors
 
-                    }
+                        break;
                 }
             }
         });
     }
 
     private void onTransfer() {
-        kuknosSignupInfoVM.getPayResult().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-                defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle))
-                        .setMessage(getResources().getString(errorM.getResID()));
-                if (errorM.getState() == false) {
-                    // success
-                    defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //close frag
-                            popBackStackFragment();
-                        }
-                    });
-                } else {
-                    // error
-                    defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), null);
-                }
-                defaultRoundDialog.show();
+        kuknosSignupInfoVM.getPayResult().observe(getViewLifecycleOwner(), errorM -> {
+            DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle));
+            if (errorM.getResID() == 0)
+                defaultRoundDialog.setMessage(errorM.getMessage());
+            else
+                defaultRoundDialog.setMessage(getResources().getString(errorM.getResID()));
+            if (!errorM.getState()) {
+                // success
+                defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
+                    //close frag
+                    popBackStackFragment();
+                });
+            } else {
+                // error
+                defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), null);
             }
+            defaultRoundDialog.show();
         });
     }
 
     private void progressSubmitVisibility() {
-        kuknosSignupInfoVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.fragKuknosSSubmit.setText(getString(R.string.kuknos_send_connectingServer));
-                    binding.fragKuknosSAmountET.setEnabled(false);
-                    binding.fragKuknosSWalletAddressET.setEnabled(false);
-                    binding.fragKuknosSTextET.setEnabled(false);
-                    binding.fragKuknosSProgressV.setVisibility(View.VISIBLE);
-                } else {
-                    binding.fragKuknosSSubmit.setText(getString(R.string.kuknos_send_sendBtn));
-                    binding.fragKuknosSAmountET.setEnabled(true);
-                    binding.fragKuknosSWalletAddressET.setEnabled(true);
-                    binding.fragKuknosSTextET.setEnabled(true);
-                    binding.fragKuknosSProgressV.setVisibility(View.GONE);
-                }
+        kuknosSignupInfoVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                binding.fragKuknosSSubmit.setText(getString(R.string.kuknos_send_connectingServer));
+                binding.fragKuknosSAmountET.setEnabled(false);
+                binding.fragKuknosSWalletAddressET.setEnabled(false);
+                binding.fragKuknosSTextET.setEnabled(false);
+                binding.fragKuknosSProgressV.setVisibility(View.VISIBLE);
+            } else {
+                binding.fragKuknosSSubmit.setText(getString(R.string.kuknos_send_sendBtn));
+                binding.fragKuknosSAmountET.setEnabled(true);
+                binding.fragKuknosSWalletAddressET.setEnabled(true);
+                binding.fragKuknosSTextET.setEnabled(true);
+                binding.fragKuknosSProgressV.setVisibility(View.GONE);
             }
         });
     }

@@ -4,15 +4,18 @@ import android.text.TextUtils;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosInfoM;
+import net.iGap.kuknos.service.model.KuknosSignupM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 
-public class KuknosRestoreVM extends ViewModel {
+public class KuknosRestoreVM extends BaseAPIViewModel {
 
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Integer> nextPage;
@@ -20,7 +23,7 @@ public class KuknosRestoreVM extends ViewModel {
     private ObservableField<String> keys = new ObservableField<>();
     private MutableLiveData<Boolean> pinCheck;
     private UserRepo userRepo = new UserRepo();
-    private String token;
+    private KuknosSignupM kuknosSignupM;
 
     public KuknosRestoreVM() {
         nextPage = new MutableLiveData<>();
@@ -28,7 +31,7 @@ public class KuknosRestoreVM extends ViewModel {
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         progressState.setValue(false);
-        pinCheck = new MutableLiveData<>();
+        pinCheck = new MutableLiveData<>(false);
     }
 
     public void onNext() {
@@ -57,22 +60,35 @@ public class KuknosRestoreVM extends ViewModel {
     }
 
     private void checkUserInfo() {
-        /*userRepo.getUserInfo(userRepo.getAccountID(), new ApiResponse<KuknosInfoM>() {
+        progressState.setValue(true);
+        userRepo.getUserStatus(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
             @Override
-            public void onResponse(KuknosInfoM kuknosInfoM) {
-                nextPage.setValue(2);
+            public void onSuccess(KuknosResponseModel<KuknosUserInfo> data) {
+                switch (data.getData().getStatus()) {
+                    case "CREATED":
+                    case "ACTIVATED":
+                        kuknosSignupM = new KuknosSignupM();
+                        kuknosSignupM.setRegistered(true);
+                        nextPage.setValue(2);
+                        break;
+                    case "NOT_CREATED":
+                        nextPage.setValue(3);
+                        break;
+                }
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String error) {
-                nextPage.setValue(3);
+            public void onError(String error) {
+                progressState.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                progressState.setValue(false);
             }
-        });*/
+
+        });
     }
 
     //Setter and Getter
@@ -105,12 +121,7 @@ public class KuknosRestoreVM extends ViewModel {
         return pinCheck;
     }
 
-    public void setPinCheck(MutableLiveData<Boolean> pinCheck) {
-        this.pinCheck = pinCheck;
-    }
-
     public void setToken(String token) {
-        this.token = token;
     }
 
     public MutableLiveData<Integer> getNextPage() {
@@ -120,4 +131,17 @@ public class KuknosRestoreVM extends ViewModel {
     public void setNextPage(MutableLiveData<Integer> nextPage) {
         this.nextPage = nextPage;
     }
+
+    public UserRepo getUserRepo() {
+        return userRepo;
+    }
+
+    public void setUserRepo(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    public KuknosSignupM getKuknosSignupM() {
+        return kuknosSignupM;
+    }
+
 }

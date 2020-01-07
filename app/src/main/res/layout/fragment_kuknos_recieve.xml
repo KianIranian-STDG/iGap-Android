@@ -14,13 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- TODO clean min height-->
-
         <LinearLayout
             android:id="@+id/fragKuknosRcToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/sky_blue"
             android:minHeight="48dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +47,7 @@
                     android:layout_marginTop="50dp"
                     android:justificationMode="inter_word"
                     android:text="@string/kuknos_recieve_title"
-                    android:textColor="?rootBackgroundColor"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +86,7 @@
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:text="@string/kuknos_recieve_walletID"
-                    android:textColor="?rootBackgroundColor"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -104,7 +101,7 @@
                     android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:text="@={viewmodel.clientKey}"
-                    android:textColor="?rootBackgroundColor"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"

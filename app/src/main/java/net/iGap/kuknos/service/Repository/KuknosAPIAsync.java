@@ -128,7 +128,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         }
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {
@@ -238,7 +238,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         Asset asset = new AssetTypeCreditAlphaNum4(code, issuer);
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {
@@ -311,7 +311,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         Asset counterAsset = new AssetTypeCreditAlphaNum4(counterCode, counterIssuer);
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {

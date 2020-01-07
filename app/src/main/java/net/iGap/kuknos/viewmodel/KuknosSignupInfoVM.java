@@ -1,62 +1,98 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.os.Handler;
-
+import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.request.RequestInfoPage;
 
-public class KuknosSignupInfoVM extends ViewModel {
+import java.util.Objects;
 
-    private MutableLiveData<KuknosSignupM> kuknosSignupM;
+public class KuknosSignupInfoVM extends BaseAPIViewModel {
+
+    private KuknosSignupM kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-    private MutableLiveData<Integer> checkUsernameState;
+    //    private MutableLiveData<Integer> checkUsernameState;
     private MutableLiveData<Boolean> progressSendDServerState;
-    private ObservableField<String> username = new ObservableField<>();
+    //    private ObservableField<String> username = new ObservableField<>();
     private ObservableField<String> name = new ObservableField<>();
-    private ObservableField<String> family = new ObservableField<>();
+    private ObservableField<String> phoneNum = new ObservableField<>();
     private ObservableField<String> email = new ObservableField<>();
+    private ObservableField<String> NID = new ObservableField<>();
     private boolean usernameIsValid = false;
-    private String token;
     private UserRepo userRepo = new UserRepo();
+    private MutableLiveData<String> TandCAgree;
+    private boolean termsAndConditionIsChecked = false;
 
     public KuknosSignupInfoVM() {
 
+        UserRepo userRepo = new UserRepo();
         name.set(userRepo.getUserFirstName());
-        family.set(userRepo.getUserLastName());
+        phoneNum.set(userRepo.getUserNum());
         email.set(userRepo.getUserEmail());
 
-        kuknosSignupM = new MutableLiveData<>();
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
-        checkUsernameState = new MutableLiveData<>();
-        checkUsernameState.setValue(-1);
+//        checkUsernameState = new MutableLiveData<>();
+//        checkUsernameState.setValue(-1);
         progressSendDServerState = new MutableLiveData<>();
         progressSendDServerState.setValue(false);
+        TandCAgree = new MutableLiveData<>(null);
     }
 
     public void onSubmitBtn() {
 
-        if (!checkEmail()) {
+        if (!checkEntryData()) {
             return;
         }
-        if (usernameIsValid) {
+
+        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), true);
+        sendDataToServer();
+
+        // this part is for the older version with userID option
+        /*if (usernameIsValid) {
             nextPage.setValue(true);
             return;
         }
-        isUsernameValid(true);
+        isUsernameValid(true);*/
 
     }
 
-    public void isUsernameValid(boolean isCallFromBTN) {
+    private void sendDataToServer() {
+        progressSendDServerState.setValue(true);
+        userRepo.registerUser(kuknosSignupM, this, new ResponseCallback<KuknosResponseModel>() {
+            @Override
+            public void onSuccess(KuknosResponseModel data) {
+                nextPage.setValue(true);
+                progressSendDServerState.setValue(false);
+            }
 
-        /*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*/
+            @Override
+            public void onError(String errorM) {
+                error.setValue(new ErrorM(true, "", errorM, 0));
+                progressSendDServerState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
+                error.setValue(new ErrorM(true, "", "No connection to server", 0));
+                progressSendDServerState.setValue(false);
+            }
+        });
+    }
+
+    /*public void isUsernameValid(boolean isCallFromBTN) {
+
+     *//*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*//*
 
         if (username.get() == null) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
@@ -66,23 +102,57 @@ public class KuknosSignupInfoVM extends ViewModel {
             // TODO: fetch data from server for valid username
             checkUsernameServer(isCallFromBTN);
         }
+    }*/
+
+    private boolean checkEntryData() {
+        // name
+        if (name.get() == null) {
+            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
+            return false;
+        }
+        if (Objects.requireNonNull(name.get()).isEmpty()) {
+            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
+            return false;
+        }
+        if (name.get().length() < 3) {
+            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameLengthInvalid));
+            return false;
+        }
+        // NID
+        if (NID.get() == null) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            return false;
+        }
+        if (Objects.requireNonNull(NID.get()).isEmpty()) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            return false;
+        }
+        if (NID.get().length() != 10) {
+            error.setValue(new ErrorM(true, "Invalid NID Length", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            return false;
+        }
+        // email
+        if (email.get() == null) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            return false;
+        }
+        if (Objects.requireNonNull(email.get()).isEmpty()) {
+            error.setValue(new ErrorM(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            return false;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.get()).matches()) {
+            error.setValue(new ErrorM(true, "Invalid NID Length", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            return false;
+        }
+        //Terms and Condition
+        if (!termsAndConditionIsChecked) {
+            error.setValue(new ErrorM(true, "Invalid NID Length", "4", R.string.kuknos_SignupInfo_errorTermAndCondition));
+            return false;
+        }
+        return true;
     }
 
-    private boolean checkEmail() {
-        if (email.get() != null) {
-            if (!email.get().isEmpty()) {
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.get()).matches()) {
-                    error.setValue(new ErrorM(true, "Invalid Email Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
-                    return false;
-                } else
-                    return true;
-            } else
-                return true;
-        } else
-            return true;
-    }
-
-    public void checkUsernameServer(boolean isCallFromBTN) {
+    /*public void checkUsernameServer(boolean isCallFromBTN) {
         checkUsernameState.setValue(0);
         // TODO check from server for avalibility
         Handler handler = new Handler();
@@ -99,21 +169,46 @@ public class KuknosSignupInfoVM extends ViewModel {
 //                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
             }
         }, 1000);
-    }
+    }*/
 
-    public void cancelUsernameServer() {
+    /*public void cancelUsernameServer() {
         checkUsernameState.setValue(-1);
-        // TODO cancel current API checking
+    }*/
+
+    public void getTermsAndCond() {
+
+        if (TandCAgree.getValue() != null && !TandCAgree.getValue().equals("error")) {
+            TandCAgree.postValue(TandCAgree.getValue());
+            return;
+        }
+        if (!G.isSecure) {
+            TandCAgree.postValue("error");
+            return;
+        }
+        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
+            @Override
+            public void onInfo(String body) {
+                if (body != null)
+                    TandCAgree.postValue(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                else
+                    TandCAgree.postValue("error");
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                TandCAgree.postValue("error");
+            }
+        });
     }
 
     //Setter and Getter
 
-    public MutableLiveData<KuknosSignupM> getKuknosSignupM() {
-        return kuknosSignupM;
+    public void termsOnCheckChange(boolean isChecked) {
+        termsAndConditionIsChecked = isChecked;
     }
 
-    public void setKuknosSignupM(MutableLiveData<KuknosSignupM> kuknosSignupM) {
-        this.kuknosSignupM = kuknosSignupM;
+    public KuknosSignupM getKuknosSignupM() {
+        return kuknosSignupM;
     }
 
     public MutableLiveData<ErrorM> getError() {
@@ -132,37 +227,29 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public MutableLiveData<Integer> getCheckUsernameState() {
+    /*public MutableLiveData<Integer> getCheckUsernameState() {
         return checkUsernameState;
     }
 
     public void setCheckUsernameState(MutableLiveData<Integer> checkUsernameState) {
         this.checkUsernameState = checkUsernameState;
-    }
+    }*/
 
     public MutableLiveData<Boolean> getProgressSendDServerState() {
         return progressSendDServerState;
-    }
-
-    public void setProgressSendDServerState(MutableLiveData<Boolean> progressSendDServerState) {
-        this.progressSendDServerState = progressSendDServerState;
-    }
-
-    public boolean isUsernameIsValid() {
-        return usernameIsValid;
     }
 
     public void setUsernameIsValid(boolean usernameIsValid) {
         this.usernameIsValid = usernameIsValid;
     }
 
-    public ObservableField<String> getUsername() {
+    /*public ObservableField<String> getUsername() {
         return username;
     }
 
     public void setUsername(ObservableField<String> username) {
         this.username = username;
-    }
+    }*/
 
     public ObservableField<String> getName() {
         return name;
@@ -170,14 +257,6 @@ public class KuknosSignupInfoVM extends ViewModel {
 
     public void setName(ObservableField<String> name) {
         this.name = name;
-    }
-
-    public ObservableField<String> getFamily() {
-        return family;
-    }
-
-    public void setFamily(ObservableField<String> family) {
-        this.family = family;
     }
 
     public ObservableField<String> getEmail() {
@@ -188,5 +267,15 @@ public class KuknosSignupInfoVM extends ViewModel {
         this.email = email;
     }
 
+    public ObservableField<String> getPhoneNum() {
+        return phoneNum;
+    }
 
+    public ObservableField<String> getNID() {
+        return NID;
+    }
+
+    public MutableLiveData<String> getTandCAgree() {
+        return TandCAgree;
+    }
 }

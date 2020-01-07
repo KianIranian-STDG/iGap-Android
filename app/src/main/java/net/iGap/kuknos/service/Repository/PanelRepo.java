@@ -1,11 +1,16 @@
 package net.iGap.kuknos.service.Repository;
 
-import net.iGap.kuknos.service.model.KuknosSendM;
+import android.util.Log;
 
-import org.stellar.sdk.responses.AccountResponse;
-import org.stellar.sdk.responses.Page;
-import org.stellar.sdk.responses.SubmitTransactionResponse;
-import org.stellar.sdk.responses.operations.OperationResponse;
+import net.iGap.api.apiService.HandShakeCallback;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.kuknos.service.model.KuknosSendM;
+import net.iGap.kuknos.service.model.Parsian.IgapPayment;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 public class PanelRepo {
 
@@ -13,26 +18,51 @@ public class PanelRepo {
     private KuknosAPIRepository kuknosAPIRepository = new KuknosAPIRepository();
 
     public PanelRepo() {
+        Log.d("amini", "PanelRepo: " + userRepo.getAccountID() + "\n" + userRepo.getMnemonic() + "\n" + userRepo.getSeedKey() + "\n" + userRepo.getPIN());
+        /*userRepo.setPIN("0000");
+        userRepo.setSeedKey("SAQO3N7T5GBDBFV5LEOPDR4NWMSCU6PMKVGXUXC6JJAGJTUXSHN5A4IX");
+        userRepo.setMnemonic("mesh february noise come loud own hand quiz cabin torch assault bundle");
+        try {
+            userRepo.generateKeyPairWithMnemonicAndPIN();
+        } catch (WalletException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public String getUserInfo() {
-        return "\nSeed Key is: " + userRepo.getSeedKey()
-                + "\nPublic Key is: " + userRepo.getAccountID()
+        return /*"\nSeed Key is: " + userRepo.getSeedKey()
+                + */"\nPublic Key is: " + userRepo.getAccountID()
                 + "\nPIN is: " + userRepo.getPIN()
                 + "\nmnemonic is: " + userRepo.getMnemonic();
     }
 
-    /*public void getAccountInfo(ApiResponse<AccountResponse> apiResponse) {
-        kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), apiResponse);
-    }*/
+    public void getAccountInfo(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBalance>> apiResponse) {
+        kuknosAPIRepository.getUserAccount(userRepo.getAccountID(), handShakeCallback, apiResponse);
+    }
 
-    /*public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
-        kuknosAPIRepository.paymentUser(model, apiResponse);
-    }*/
+    public void getAssetData(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
+        kuknosAPIRepository.getAssetData(assetCode, handShakeCallback, apiResponse);
+    }
 
-    /*public void getUserHistory(ApiResponse<Page<OperationResponse>> apiResponse) {
-        kuknosAPIRepository.getUserHistory(userRepo.getAccountID(), apiResponse);
-    }*/
+    public void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+        kuknosAPIRepository.paymentUser(model, handShakeCallback, apiResponse);
+    }
+
+    public void getUserHistory(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
+        kuknosAPIRepository.getUserHistory(userRepo.getAccountID(), handShakeCallback, apiResponse);
+    }
+
+    public void getSpecificAssets(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
+        kuknosAPIRepository.getSpecificAssets(assetCode, handShakeCallback, apiResponse);
+    }
+
+    public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<IgapPayment>> apiResponse) {
+        kuknosAPIRepository.buyAsset(userRepo.getAccountID(), assetCode, assetAmount, totalPrice, description, handShakeCallback, apiResponse);
+    }
+
+    public boolean isPinSet() {
+        return userRepo.getPIN() != null && userRepo.getPIN().length() == 4;
+    }
 
     public UserRepo getUserRepo() {
         return userRepo;

@@ -16,13 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- TODO clean min height-->
-
         <LinearLayout
             android:id="@+id/fragKuknosPToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/sky_blue"
             android:minHeight="48dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,11 +48,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:minHeight="38dp"
+                    android:background="?attr/iGapSpinnerShape"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.9" />
-                <!--android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"-->
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosPBalance"
@@ -87,6 +84,7 @@
                     android:layout_height="0dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/score_background_drawable"
+                    android:onClick="@{()->viewmodel.togglePrice()}"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -117,6 +115,7 @@
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp28"
                     android:textStyle="bold"
+                    android:onClick="@{()->viewmodel.togglePrice()}"
                     app:layout_constraintBottom_toTopOf="@id/fragKuknosPCurrency"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
@@ -130,6 +129,7 @@
                     android:gravity="center"
                     android:text="@{viewmodel.currency}"
                     android:textColor="?iGapTitleTextColor"
+                    android:onClick="@{()->viewmodel.togglePrice()}"
                     app:layout_constraintBottom_toBottomOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"

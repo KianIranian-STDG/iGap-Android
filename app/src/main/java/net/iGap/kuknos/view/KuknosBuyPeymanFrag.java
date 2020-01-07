@@ -1,6 +1,5 @@
 package net.iGap.kuknos.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,20 +19,18 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
 
 public class KuknosBuyPeymanFrag extends BaseFragment {
 
     private FragmentKuknosBuyPeymanBinding binding;
     private KuknosBuyPeymanVM kuknosBuyPeymanVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosBuyPeymanFrag newInstance() {
-        KuknosBuyPeymanFrag kuknosLoginFrag = new KuknosBuyPeymanFrag();
-        return kuknosLoginFrag;
+        return new KuknosBuyPeymanFrag();
     }
 
     @Override
@@ -59,7 +57,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -74,24 +72,26 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosBuyPToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        kuknosBuyPeymanVM.getAssetValue();
+
         onSumVisibility();
         onBankPage();
         onError();
         onProgress();
         entryListener();
+        goToPaymentListener();
     }
 
 
     private void onError() {
-        kuknosBuyPeymanVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true && errorM.getMessage().equals("0")) {
-                    binding.fragKuknosBuyPAmountHolder.setError(getResources().getString(errorM.getResID()));
-                    binding.fragKuknosBuyPAmountHolder.requestFocus();
-                } else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
-                    showDialog(errorM.getResID());
-                }
+        kuknosBuyPeymanVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState() && errorM.getMessage().equals("0")) {
+                binding.fragKuknosBuyPAmountHolder.setError(getResources().getString(errorM.getResID()));
+                binding.fragKuknosBuyPAmountHolder.requestFocus();
+            } else if (errorM.getState() && errorM.getMessage().equals("1")) {
+                showDialog(errorM.getResID());
+            } else {
+                showDialog(errorM.getMessage());
             }
         });
     }
@@ -100,42 +100,46 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
         defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
         defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
 
-            }
+        });
+        defaultRoundDialog.show();
+    }
+
+    private void showDialog(String message) {
+        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
+        defaultRoundDialog.setMessage(message);
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
+
         });
         defaultRoundDialog.show();
     }
 
     private void onProgress() {
-        kuknosBuyPeymanVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                if (integer == 0) {
-                    binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
-                    binding.fragKuknosBuyPAmount.setEnabled(true);
-                    binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
-                } else if (integer == 1) {
-                    binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
-                    binding.fragKuknosBuyPAmount.setEnabled(false);
-                    binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server));
-                } else if (integer == 2) {
-                    binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server2));
-                }
+        kuknosBuyPeymanVM.getProgressState().observe(getViewLifecycleOwner(), integer -> {
+            if (integer == 0) {
+                binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
+                binding.fragKuknosBuyPAmount.setEnabled(true);
+                binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
+            } else if (integer == 1) {
+                binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
+                binding.fragKuknosBuyPAmount.setEnabled(false);
+                binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server));
+            } else if (integer == 2) {
+                binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server2));
+            } else if (integer == 3) {
+                binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server3));
             }
         });
     }
 
     private void onSumVisibility() {
-        kuknosBuyPeymanVM.getSumState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean)
-                    binding.fragKuknosBuyPSumGroup.setVisibility(View.VISIBLE);
-                else
-                    binding.fragKuknosBuyPSumGroup.setVisibility(View.GONE);
-            }
+        kuknosBuyPeymanVM.getSumState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean)
+                binding.fragKuknosBuyPSumGroup.setVisibility(View.VISIBLE);
+            else
+                binding.fragKuknosBuyPSumGroup.setVisibility(View.GONE);
         });
     }
 
@@ -162,14 +166,26 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void onBankPage() {
-        kuknosBuyPeymanVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    // go to Bank
-                }
+        kuknosBuyPeymanVM.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                // go to Bank
             }
         });
     }
 
+    private void goToPaymentListener() {
+        kuknosBuyPeymanVM.getGoToPaymentPage().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String token) {
+                if (getActivity() != null && token != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.kuknos_buyAsset), token, result -> {
+                        if (getActivity() != null && result.isSuccess()) {
+                            Toast.makeText(getContext(), "Payment Done. ", Toast.LENGTH_LONG).show();
+                            getActivity().onBackPressed();
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

@@ -13,22 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.UserRepo;
-
-import org.stellar.sdk.responses.Page;
-import org.stellar.sdk.responses.operations.CreateAccountOperationResponse;
-import org.stellar.sdk.responses.operations.OperationResponse;
-import org.stellar.sdk.responses.operations.PaymentOperationResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosCreateAccountOpResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosPaymentOpResponse;
 
 import java.text.DecimalFormat;
 
 public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAdapter.ViewHolder> {
 
-    private Page<OperationResponse> kuknosWHistoryMS;
+    private KuknosOperationResponse kuknosWHistoryMS;
     private Context context;
     private UserRepo userRepo = new UserRepo();
     private String accountID;
 
-    public WalletHistoryRAdapter(Page<OperationResponse> kuknosWHistoryMS, Context context) {
+    public WalletHistoryRAdapter(KuknosOperationResponse kuknosWHistoryMS, Context context) {
         this.kuknosWHistoryMS = kuknosWHistoryMS;
         this.context = context;
         accountID = userRepo.getAccountID();
@@ -43,16 +41,17 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        if (kuknosWHistoryMS.getRecords().get(i) instanceof PaymentOperationResponse) {
-            viewHolder.initView((PaymentOperationResponse) kuknosWHistoryMS.getRecords().get(i));
+        viewHolder.initView(kuknosWHistoryMS.getOperations().get(i));
+        /*if (kuknosWHistoryMS.getOperations().get(i) instanceof KuknosPaymentOpResponse) {
+            viewHolder.initView(kuknosWHistoryMS.getOperations().get(i));
         } else {
-            viewHolder.initViewCreateAccount((CreateAccountOperationResponse) kuknosWHistoryMS.getRecords().get(i));
-        }
+            viewHolder.initViewCreateAccount((KuknosCreateAccountOpResponse) kuknosWHistoryMS.getOperations().get(i));
+        }*/
     }
 
     @Override
     public int getItemCount() {
-        return kuknosWHistoryMS.getRecords().size();
+        return kuknosWHistoryMS.getOperations().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,7 +73,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
 
         }
 
-        public void initView(PaymentOperationResponse model) {
+        public void initView(KuknosPaymentOpResponse model) {
             String[] temp = model.getCreatedAt().split("T");
             date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[0]) : temp[0]);
             time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0, 5)) : temp[1].substring(0, 5));
@@ -93,7 +92,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
             }
         }
 
-        public void initViewCreateAccount(CreateAccountOperationResponse model) {
+        public void initViewCreateAccount(KuknosCreateAccountOpResponse model) {
             String[] temp = model.getCreatedAt().split("T");
             date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[0]) : temp[0]);
             time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0, 5)) : temp[1].substring(0, 5));

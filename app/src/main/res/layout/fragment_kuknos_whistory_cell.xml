@@ -30,7 +30,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/kuknos_wHistoryCell_icon"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp20"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

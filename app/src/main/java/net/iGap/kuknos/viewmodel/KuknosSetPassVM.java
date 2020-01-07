@@ -5,11 +5,9 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosPassM;
 
 public class KuknosSetPassVM extends ViewModel {
 
-    private MutableLiveData<KuknosPassM> kuknosPassM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private String PIN;
@@ -20,16 +18,9 @@ public class KuknosSetPassVM extends ViewModel {
     private boolean completePin = false;
 
     public KuknosSetPassVM() {
-        if (kuknosPassM == null) {
-            kuknosPassM = new MutableLiveData<KuknosPassM>();
-        }
-        if (error == null) {
-            error = new MutableLiveData<ErrorM>();
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<Boolean>();
-            nextPage.setValue(false);
-        }
+        error = new MutableLiveData<>();
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
     }
 
     public void onSubmitBtn() {
@@ -75,14 +66,6 @@ public class KuknosSetPassVM extends ViewModel {
         this.PIN4 = PIN4;
     }
 
-    public MutableLiveData<KuknosPassM> getKuknosPassM() {
-        return kuknosPassM;
-    }
-
-    public void setKuknosPassM(MutableLiveData<KuknosPassM> kuknosPassM) {
-        this.kuknosPassM = kuknosPassM;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
@@ -97,10 +80,6 @@ public class KuknosSetPassVM extends ViewModel {
 
     public void setNextPage(MutableLiveData<Boolean> nextPage) {
         this.nextPage = nextPage;
-    }
-
-    public boolean isCompletePin() {
-        return completePin;
     }
 
     public void setCompletePin(boolean completePin) {

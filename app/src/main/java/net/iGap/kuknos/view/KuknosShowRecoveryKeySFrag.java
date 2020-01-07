@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -19,18 +18,15 @@ import net.iGap.databinding.FragmentKuknosShowRecoveryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeySVM;
 
 public class KuknosShowRecoveryKeySFrag extends BaseFragment {
 
     private FragmentKuknosShowRecoveryBinding binding;
     private KuknosShowRecoveryKeySVM kuknosShowRecoveryKeyVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosShowRecoveryKeySFrag newInstance() {
-        KuknosShowRecoveryKeySFrag kuknosRestoreFrag = new KuknosShowRecoveryKeySFrag();
-        return kuknosRestoreFrag;
+        return new KuknosShowRecoveryKeySFrag();
     }
 
     @Override
@@ -56,7 +52,7 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -76,32 +72,21 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
     }
 
     private void onErrorObserver() {
-        kuknosShowRecoveryKeyVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true) {
-                    if (errorM.getMessage().equals("1")) {
-                        Snackbar snackbar = Snackbar.make(binding.fragKuknosSRContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                        snackbar.show();
-                    }
+        kuknosShowRecoveryKeyVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState()) {
+                if (errorM.getMessage().equals("1")) {
+                    Snackbar snackbar = Snackbar.make(binding.fragKuknosSRContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
+                    snackbar.show();
                 }
             }
         });
     }
 
     private void onNextObserver() {
-        kuknosShowRecoveryKeyVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    popBackStackFragment();
-                }
+        kuknosShowRecoveryKeyVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage) {
+                popBackStackFragment();
             }
         });
     }

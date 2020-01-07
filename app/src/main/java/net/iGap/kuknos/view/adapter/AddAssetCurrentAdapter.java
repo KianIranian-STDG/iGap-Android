@@ -10,18 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-
-import org.stellar.sdk.responses.AccountResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddAssetCurrentAdapter extends RecyclerView.Adapter<AddAssetCurrentAdapter.ViewHolder> {
 
-    private ArrayList<AccountResponse.Balance> mdata;
+    private ArrayList<KuknosBalance.Balance> mdata;
     private Context context;
 
-    public AddAssetCurrentAdapter(List<AccountResponse.Balance> data, Context context) {
+    public AddAssetCurrentAdapter(List<KuknosBalance.Balance> data, Context context) {
         if (this.mdata == null)
             this.mdata = new ArrayList<>();
         this.mdata.addAll(data);
@@ -56,7 +55,7 @@ public class AddAssetCurrentAdapter extends RecyclerView.Adapter<AddAssetCurrent
 
         }
 
-        public void initView(AccountResponse.Balance model) {
+        public void initView(KuknosBalance.Balance model) {
             title.setText(model.getAsset().getType().equals("native") ? "PMN" : model.getAssetCode());
         }
     }

@@ -4,20 +4,22 @@ public class KuknosSignupM {
 
     private String username;
     private String name;
-    private String family;
+    private String phoneNum;
     private String email;
+    private String NID;
     private String pinCode;
     private String keyString;
+    private boolean isRegistered = false;
 
     public KuknosSignupM() {
     }
 
-    public KuknosSignupM(String username, String name, String family, String email, String pinCode, String keyString) {
-        this.username = username;
+    public KuknosSignupM(String name, String phoneNum, String email, String NID, String keyString, boolean isRegistered) {
         this.name = name;
-        this.family = family;
+        this.phoneNum = phoneNum;
         this.email = email;
-        this.pinCode = pinCode;
+        this.NID = NID;
+        this.isRegistered = isRegistered;
         this.keyString = keyString;
     }
 
@@ -35,14 +37,6 @@ public class KuknosSignupM {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getFamily() {
-        return family;
-    }
-
-    public void setFamily(String family) {
-        this.family = family;
     }
 
     public String getEmail() {
@@ -67,5 +61,29 @@ public class KuknosSignupM {
 
     public void setKeyString(String keyString) {
         this.keyString = keyString;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public String getNID() {
+        return NID;
+    }
+
+    public void setNID(String NID) {
+        this.NID = NID;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 }

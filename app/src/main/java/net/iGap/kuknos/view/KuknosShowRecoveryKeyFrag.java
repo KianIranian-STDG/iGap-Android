@@ -1,7 +1,5 @@
 package net.iGap.kuknos.view;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -25,18 +22,15 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
     private FragmentKuknosRecoveryKeyBinding binding;
     private KuknosShowRecoveryKeyVM kuknosShowRecoveryKeyVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosShowRecoveryKeyFrag newInstance() {
-        KuknosShowRecoveryKeyFrag kuknosRestoreFrag = new KuknosShowRecoveryKeyFrag();
-        return kuknosRestoreFrag;
+        return new KuknosShowRecoveryKeyFrag();
     }
 
     @Override
@@ -64,7 +58,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
         kuknosShowRecoveryKeyVM.initMnemonic();
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -82,74 +76,53 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         onErrorObserver();
         onNextObserver();
         progressState();
-        getCachedData();
-    }
-
-    private void getCachedData() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        kuknosShowRecoveryKeyVM.setToken(sharedpreferences.getString("Token", ""));
-        kuknosShowRecoveryKeyVM.setUsername(sharedpreferences.getString("Username", ""));
     }
 
     private void onErrorObserver() {
-        kuknosShowRecoveryKeyVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true) {
-                    Snackbar snackbar = Snackbar.make(binding.fragKuknosRKSContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackbar.dismiss();
-                        }
-                    });
-                    snackbar.show();
-                    binding.fragKuknosIdSubmit.setEnabled(false);
-                }
+        kuknosShowRecoveryKeyVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState()) {
+                Snackbar snackbar = Snackbar.make(binding.fragKuknosRKSContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
+                snackbar.show();
+                binding.fragKuknosIdSubmit.setEnabled(false);
             }
         });
     }
 
     private void onNextObserver() {
-        kuknosShowRecoveryKeyVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment;
-                    if (kuknosShowRecoveryKeyVM.getPinCheck().get()) {
-                        fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosSetPassFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                    } else {
-                        fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosPanelFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
+        kuknosShowRecoveryKeyVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment;
+                if (kuknosShowRecoveryKeyVM.getPinCheck().get()) {
+                    fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosSetPassFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                } else {
+                    fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosSignupInfoFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }
 
     private void progressState() {
-        kuknosShowRecoveryKeyVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_str));
-                    binding.fragKuknosIdSubmit.setEnabled(false);
-                    binding.fragKuknosRKSProgressV.setVisibility(View.VISIBLE);
-                } else {
-                    binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_RecoverySK_Btn));
-                    binding.fragKuknosIdSubmit.setEnabled(true);
-                    binding.fragKuknosRKSProgressV.setVisibility(View.GONE);
-                }
+        kuknosShowRecoveryKeyVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_str));
+                binding.fragKuknosIdSubmit.setEnabled(false);
+                binding.fragKuknosRKSProgressV.setVisibility(View.VISIBLE);
+            } else {
+                binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_RecoverySK_Btn));
+                binding.fragKuknosIdSubmit.setEnabled(true);
+                binding.fragKuknosRKSProgressV.setVisibility(View.GONE);
             }
         });
     }

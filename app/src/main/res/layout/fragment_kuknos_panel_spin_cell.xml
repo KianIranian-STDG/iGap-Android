@@ -4,7 +4,6 @@
     android:id="@+id/fragKuknosPconstraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?rootBackgroundColor"
     android:minHeight="38dp">
 
     <LinearLayout
@@ -42,7 +41,7 @@
             android:minWidth="30dp"
             android:minHeight="30dp"
             android:text="test"
-            android:textColor="?iGapSubtitleTextColor"
+            android:textColor="@color/black"
             android:textSize="@dimen/dp12" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

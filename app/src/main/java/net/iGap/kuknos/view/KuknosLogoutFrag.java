@@ -1,6 +1,7 @@
 package net.iGap.kuknos.view;
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +16,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
@@ -25,18 +25,15 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosLogoutVM;
 
 public class KuknosLogoutFrag extends BaseFragment {
 
     private FragmentKuknosLogoutBinding binding;
     private KuknosLogoutVM kuknoslogoutVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosLogoutFrag newInstance() {
-        KuknosLogoutFrag kuknosLoginFrag = new KuknosLogoutFrag();
-        return kuknosLoginFrag;
+        return new KuknosLogoutFrag();
     }
 
     @Override
@@ -63,7 +60,7 @@ public class KuknosLogoutFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -86,15 +83,12 @@ public class KuknosLogoutFrag extends BaseFragment {
 
 
     private void onError() {
-        kuknoslogoutVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true && errorM.getMessage().equals("0")) {
-                    binding.fragKuknosLogoutPassHolder.setError(getResources().getString(errorM.getResID()));
-                    binding.fragKuknosLogoutPassHolder.requestFocus();
-                } else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
-                    showDialog(errorM.getResID());
-                }
+        kuknoslogoutVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState() && errorM.getMessage().equals("0")) {
+                binding.fragKuknosLogoutPassHolder.setError(getResources().getString(errorM.getResID()));
+                binding.fragKuknosLogoutPassHolder.requestFocus();
+            } else if (errorM.getState() && errorM.getMessage().equals("1")) {
+                showDialog(errorM.getResID());
             }
         });
     }
@@ -103,27 +97,22 @@ public class KuknosLogoutFrag extends BaseFragment {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
         defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
         defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
 
-            }
         });
         defaultRoundDialog.show();
     }
 
     private void onProgress() {
-        kuknoslogoutVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    binding.fragKuknosLogoutProgressV.setVisibility(View.VISIBLE);
-                    binding.fragKuknosLogoutPass.setEnabled(false);
-                    binding.fragKuknosLogoutSubmit.setText(getResources().getText(R.string.kuknos_logout_load));
-                } else {
-                    binding.fragKuknosLogoutProgressV.setVisibility(View.GONE);
-                    binding.fragKuknosLogoutPass.setEnabled(true);
-                    binding.fragKuknosLogoutSubmit.setText(getResources().getText(R.string.kuknos_logout_btn));
-                }
+        kuknoslogoutVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                binding.fragKuknosLogoutProgressV.setVisibility(View.VISIBLE);
+                binding.fragKuknosLogoutPass.setEnabled(false);
+                binding.fragKuknosLogoutSubmit.setText(getResources().getText(R.string.kuknos_logout_load));
+            } else {
+                binding.fragKuknosLogoutProgressV.setVisibility(View.GONE);
+                binding.fragKuknosLogoutPass.setEnabled(true);
+                binding.fragKuknosLogoutSubmit.setText(getResources().getText(R.string.kuknos_logout_btn));
             }
         });
     }
@@ -148,23 +137,27 @@ public class KuknosLogoutFrag extends BaseFragment {
     }
 
     private void onNextPage() {
-        kuknoslogoutVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == true) {
-                    popBackStackFragment();
-                    popBackStackFragment();
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosLoginFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosLoginFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        kuknoslogoutVM.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                updateRegisterInfo();
+                popBackStackFragment();
+                popBackStackFragment();
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosEntryOptionFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosEntryOptionFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }
 
+    private void updateRegisterInfo() {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("RegisterInfo", null);
+        editor.apply();
+    }
 }

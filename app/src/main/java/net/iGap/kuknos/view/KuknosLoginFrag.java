@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -27,7 +26,6 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosLoginVM;
 
 
@@ -35,12 +33,10 @@ public class KuknosLoginFrag extends BaseFragment {
 
     private FragmentKuknosLoginBinding binding;
     private KuknosLoginVM kuknosLoginVM;
-    private HelperToolbar mHelperToolbar;
 
 
     public static KuknosLoginFrag newInstance() {
-        KuknosLoginFrag kuknosLoginFrag = new KuknosLoginFrag();
-        return kuknosLoginFrag;
+        return new KuknosLoginFrag();
     }
 
     @Override
@@ -66,7 +62,7 @@ public class KuknosLoginFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -104,25 +100,22 @@ public class KuknosLoginFrag extends BaseFragment {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("Token", kuknosLoginVM.getKuknoscheckUserM().getToken());
-        editor.commit();
+        editor.apply();
     }
 
     private void onErrorObserver() {
 
-        kuknosLoginVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true) {
-                    //TODO clear Log
-                    if (errorM.getMessage().equals("0")) {
-                        binding.fragKuknosIdUserIDHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosIdUserID.requestFocus();
-                        binding.fragKuknosIdUserID.setEnabled(true);
-                    } else if (errorM.getMessage().equals("1")) {
-                        Snackbar snackbar = Snackbar.make(binding.fragKuknosLoginContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
-                        snackbar.show();
-                    }
+        kuknosLoginVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState()) {
+                //TODO clear Log
+                if (errorM.getMessage().equals("0")) {
+                    binding.fragKuknosIdUserIDHolder.setError("" + getString(errorM.getResID()));
+                    binding.fragKuknosIdUserID.requestFocus();
+                    binding.fragKuknosIdUserID.setEnabled(true);
+                } else if (errorM.getMessage().equals("1")) {
+                    Snackbar snackbar = Snackbar.make(binding.fragKuknosLoginContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
+                    snackbar.show();
                 }
             }
         });
@@ -149,23 +142,20 @@ public class KuknosLoginFrag extends BaseFragment {
     }
 
     private void progressState() {
-        kuknosLoginVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                switch (integer) {
-                    case 0:
-                        binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_next));
-                        binding.fragKuknosIdSubmit.setEnabled(true);
-                        binding.fragKuknosIdUserID.setEnabled(false);
-                        binding.fragKuknosLProgressV.setVisibility(View.GONE);
-                        break;
-                    case 1:
-                        binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_str));
-                        binding.fragKuknosIdSubmit.setEnabled(false);
-                        binding.fragKuknosIdUserID.setEnabled(false);
-                        binding.fragKuknosLProgressV.setVisibility(View.VISIBLE);
-                        break;
-                }
+        kuknosLoginVM.getProgressState().observe(getViewLifecycleOwner(), integer -> {
+            switch (integer) {
+                case 0:
+                    binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_next));
+                    binding.fragKuknosIdSubmit.setEnabled(true);
+                    binding.fragKuknosIdUserID.setEnabled(false);
+                    binding.fragKuknosLProgressV.setVisibility(View.GONE);
+                    break;
+                case 1:
+                    binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_str));
+                    binding.fragKuknosIdSubmit.setEnabled(false);
+                    binding.fragKuknosIdUserID.setEnabled(false);
+                    binding.fragKuknosLProgressV.setVisibility(View.VISIBLE);
+                    break;
             }
         });
     }
