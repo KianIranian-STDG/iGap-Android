@@ -3515,10 +3515,10 @@ public class FragmentChat extends BaseFragment
 
             Disposable disposable = stickerRepository
                     .getStickerByEmoji(lastChar)
+                    .filter(structIGStickers -> structIGStickers.size() > 0)
                     .subscribe(structIGStickers -> {
                         suggestedAdapter.setIgStickers(structIGStickers);
-                        if (structIGStickers.size() > 0)
-                            suggestedLayout.setVisibility(View.VISIBLE);
+                        suggestedLayout.setVisibility(View.VISIBLE);
                     });
 
             stickerRepository.getCompositeDisposable().add(disposable);
