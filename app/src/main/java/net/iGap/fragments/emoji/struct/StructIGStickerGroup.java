@@ -4,7 +4,10 @@ import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.apiModels.StickerDataModel;
+import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
 import net.iGap.realm.RealmStickers;
+import net.iGap.repository.sticker.StickerRepository;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class StructIGStickerGroup {
     private String avatarName;
     private long price;
     private boolean isVip;
+    private boolean isNew;
     private int sort;
     private boolean approved;
     private long createdBy;
@@ -42,6 +46,33 @@ public class StructIGStickerGroup {
 
     }
 
+    public StructIGStickerGroup(StickerGroupDataModel dataModel) {
+        setGroupId(dataModel.getId());
+        setAvatarPath(StickerRepository.getInstance().getStickerPath(dataModel.getAvatarToken(), dataModel.getAvatarName()));
+        setSort(dataModel.getSort());
+        setRefId(dataModel.getRefId());
+        setPrice(dataModel.getPrice());
+        setName(dataModel.getName());
+        setCreatedBy(dataModel.getCreatedBy());
+        setCreatedAt(dataModel.getCreatedAt());
+        setAvatarToken(dataModel.getAvatarToken());
+        setAvatarSize(dataModel.getAvatarSize());
+        setAvatarName(dataModel.getAvatarName());
+        setVip(dataModel.getIsVip());
+        setStickers(setStickersWithDataModel(dataModel.getStickers()));
+        setFavorite(dataModel.isFavorite());
+        setNew(dataModel.getIsNew());
+    }
+
+    private List<StructIGSticker> setStickersWithDataModel(List<StickerDataModel> dataModels) {
+        List<StructIGSticker> stickers = new ArrayList<>();
+        for (int i = 0; i < dataModels.size(); i++) {
+            StructIGSticker sticker = new StructIGSticker(dataModels.get(i));
+            stickers.add(sticker);
+        }
+        return stickers;
+    }
+
     public StructIGStickerGroup setValueWithRealmStickers(RealmStickers realmStickersGroup) {
         if (realmStickersGroup != null && realmStickersGroup.isValid()) {
             setGroupId(realmStickersGroup.getSt_id());
@@ -51,8 +82,6 @@ public class StructIGStickerGroup {
             setPrice(realmStickersGroup.getPrice());
             setName(realmStickersGroup.getName());
             setFavorite(realmStickersGroup.isFavorite());
-            setCreatedBy(realmStickersGroup.getCreatedBy());
-            setCreatedAt(realmStickersGroup.getCreatedAt());
             setAvatarToken(realmStickersGroup.getAvatarToken());
             setAvatarSize(realmStickersGroup.getAvatarSize());
             setAvatarName(realmStickersGroup.getAvatarName());
@@ -209,6 +238,14 @@ public class StructIGStickerGroup {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    public boolean isNew() {
+        return isNew;
     }
 
     public List<StructIGSticker> getStickers() {

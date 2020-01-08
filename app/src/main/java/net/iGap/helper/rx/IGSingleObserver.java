@@ -7,11 +7,11 @@ import io.reactivex.SingleObserver;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class AaSingleObserver<T> implements SingleObserver<T> {
+public abstract class IGSingleObserver<T> implements SingleObserver<T> {
 
     private CompositeDisposable compositeDisposable;
 
-    public AaSingleObserver(CompositeDisposable compositeDisposable) {
+    public IGSingleObserver(CompositeDisposable compositeDisposable) {
         this.compositeDisposable = compositeDisposable;
     }
 

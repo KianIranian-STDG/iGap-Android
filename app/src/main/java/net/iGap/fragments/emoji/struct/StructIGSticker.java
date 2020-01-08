@@ -1,6 +1,8 @@
 package net.iGap.fragments.emoji.struct;
 
+import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.realm.RealmStickersDetails;
+import net.iGap.repository.sticker.StickerRepository;
 
 import java.io.File;
 
@@ -16,6 +18,20 @@ public class StructIGSticker {
     private String groupId;
     private String fileName;
     private int fileSize;
+
+    public StructIGSticker() {
+    }
+
+    public StructIGSticker(StickerDataModel stickerDataModel) {
+        setName(stickerDataModel.getName());
+        setFileName(stickerDataModel.getFileName());
+        setFileSize(stickerDataModel.getFileSize());
+        setGroupId(stickerDataModel.getGroupId());
+        setId(stickerDataModel.getId());
+        setPath(StickerRepository.getInstance().getStickerPath(stickerDataModel.getToken(), stickerDataModel.getName()));
+        setToken(stickerDataModel.getToken());
+    }
+
 
     public String getPath() {
         return path;

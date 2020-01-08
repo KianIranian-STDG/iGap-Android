@@ -22,7 +22,6 @@ import io.realm.RealmResults;
 public class RealmStickers extends RealmObject {
 
     private String st_id;
-    private long createdAt;
     private long refId;
     private String name;
     private String avatarToken;
@@ -33,11 +32,10 @@ public class RealmStickers extends RealmObject {
     private boolean isVip;
     private int sort;
     private boolean approved;
-    private long createdBy;
     private boolean isFavorite;
     private RealmList<RealmStickersDetails> realmStickersDetails;
 
-    public static RealmStickers put(Realm realm, long createdAt, String st_id, long refId, String name, String avatarToken, long avatarSize, String avatarName, long price, boolean isVip, int sort, boolean approved, long createdBy, List<StructItemSticker> stickers, boolean isFavorite) {
+    public static RealmStickers put(Realm realm, String st_id, long refId, String name, String avatarToken, long avatarSize, String avatarName, long price, boolean isVip, int sort, boolean approved, List<StructItemSticker> stickers, boolean isFavorite) {
 
         RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, st_id).findFirst();
 
@@ -45,7 +43,6 @@ public class RealmStickers extends RealmObject {
             realmStickers = realm.createObject(RealmStickers.class);
         }
 
-        realmStickers.setCreatedAt(createdAt);
         realmStickers.setSt_id(st_id);
         realmStickers.setRefId(refId);
         realmStickers.setName(name);
@@ -57,7 +54,6 @@ public class RealmStickers extends RealmObject {
         realmStickers.setVip(isVip);
         realmStickers.setSort(sort);
         realmStickers.setApproved(approved);
-        realmStickers.setCreatedBy(createdBy);
         realmStickers.setFavorite(isFavorite);
 
         RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
@@ -101,7 +97,6 @@ public class RealmStickers extends RealmObject {
             for (RealmStickers item : realmStickers) {
                 StructIGStickerGroup stickerGroup = new StructIGStickerGroup(item.getSt_id());
 
-                stickerGroup.setCreatedAt(item.getCreatedAt());
                 stickerGroup.setRefId(item.refId);
                 stickerGroup.setName(item.name);
                 stickerGroup.setAvatarToken(item.avatarToken);
@@ -111,7 +106,6 @@ public class RealmStickers extends RealmObject {
                 stickerGroup.setPrice(item.getPrice());
                 stickerGroup.setVip(item.isVip);
                 stickerGroup.setSort(item.sort);
-                stickerGroup.setCreatedBy(item.createdBy);
                 stickerGroup.setInMySticker(true);
 
                 List<StructIGSticker> stickerDetails = new ArrayList<>();
@@ -139,14 +133,6 @@ public class RealmStickers extends RealmObject {
 
     public static RealmStickers checkStickerExist(String groupId, Realm realm) {
         return realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
-    }
-
-    public long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getSt_id() {
@@ -237,14 +223,6 @@ public class RealmStickers extends RealmObject {
         this.approved = approved;
     }
 
-    public long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(long createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public RealmList<RealmStickersDetails> getRealmStickersDetails() {
         return realmStickersDetails;
     }
@@ -298,7 +276,7 @@ public class RealmStickers extends RealmObject {
                     }
 
                     for (StructGroupSticker item : mData) {
-                        RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false);
+                        RealmStickers.put(realm, item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getStickers(), false);
                     }
                 }
             }, onSuccess);

@@ -11,6 +11,7 @@ import net.iGap.api.KuknosApi;
 import net.iGap.api.MciApi;
 import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
+import net.iGap.api.StickerApi;
 
 import java.util.Collections;
 
@@ -19,6 +20,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitFactory {
@@ -133,5 +135,15 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(ElecBillApi.class);
+    }
+
+    public StickerApi getStickerRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.STICKER_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(StickerApi.class);
     }
 }
