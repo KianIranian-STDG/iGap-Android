@@ -32,7 +32,7 @@ public class StickerDialogViewModel extends BaseViewModel {
     private int fragmentMode = LIST;
 
     public StickerDialogViewModel(StructIGStickerGroup stickerGroup) {
-        repository = new StickerRepository();
+        repository = StickerRepository.getInstance();
         this.stickerGroup = stickerGroup;
     }
 

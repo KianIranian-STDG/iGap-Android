@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.repository.sticker.StickerRepository;
 
 public class AddStickerViewModel extends BaseViewModel {
@@ -13,7 +12,7 @@ public class AddStickerViewModel extends BaseViewModel {
     private MutableLiveData<StructGroupSticker> openStickerDetailLiveData = new MutableLiveData<>();
 
     public AddStickerViewModel() {
-        repository = new StickerRepository();
+        repository = StickerRepository.getInstance();
     }
 
     public void onItemCellClicked(StructGroupSticker stickerGroup) {

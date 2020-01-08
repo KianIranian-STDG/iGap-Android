@@ -124,7 +124,7 @@ public class UserLoginResponse extends MessageHandler {
             }
         });
 
-        new StickerRepository().putOrUpdateMyStickerPackToDb();
+        StickerRepository.getInstance().putOrUpdateMyStickerPackToDb();
 
     }
 

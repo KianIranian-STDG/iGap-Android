@@ -222,7 +222,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             stickerContainer = new FrameLayout(getContext());
 
-            stickerRepository = new StickerRepository();
+            stickerRepository = StickerRepository.getInstance();
 
             stickerGridView = new RecyclerView(getContext());
             stickerGridView.setLayoutManager(stickersLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));

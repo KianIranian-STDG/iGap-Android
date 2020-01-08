@@ -345,6 +345,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -646,6 +647,8 @@ public class FragmentChat extends BaseFragment
     private int currentKeyboardViewContent;
 
     private StickerRepository stickerRepository;
+    private CompositeDisposable compositeDisposable;
+    private Disposable disposable = null;
     private RecyclerView suggestedRecyclerView;
     private SuggestedStickerAdapter suggestedAdapter;
     private FrameLayout suggestedLayout;
@@ -1175,8 +1178,8 @@ public class FragmentChat extends BaseFragment
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
-        if (stickerRepository != null) {
-            stickerRepository.unsubscribe();
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
         }
     }
 
@@ -2745,7 +2748,8 @@ public class FragmentChat extends BaseFragment
                     try {
                         RealmRoomMessage message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage;
                         if (message_ != null && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            if (isRepley) replay((mAdapter.getItem(viewHolder.getAdapterPosition())).structMessage, false);
+                            if (isRepley)
+                                replay((mAdapter.getItem(viewHolder.getAdapterPosition())).structMessage, false);
                         }
                     } catch (Exception ignored) {
                     }
@@ -3488,8 +3492,9 @@ public class FragmentChat extends BaseFragment
             lastChar = unicode;
 
             if (suggestedLayout == null && getContext() != null) {
-                stickerRepository = new StickerRepository();
+                stickerRepository = StickerRepository.getInstance();
                 suggestedAdapter = new SuggestedStickerAdapter();
+                compositeDisposable = new CompositeDisposable();
 
                 suggestedLayout = new FrameLayout(getContext());
 
@@ -3506,7 +3511,8 @@ public class FragmentChat extends BaseFragment
                     suggestedLayout.setVisibility(View.GONE);
                     suggestedAdapter.clearData();
                     suggestedRecyclerView.scrollToPosition(0);
-                    stickerRepository.getCompositeDisposable().dispose();
+                    if (disposable != null && !disposable.isDisposed())
+                        disposable.dispose();
                 });
 
                 suggestedLayout.addView(suggestedRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
@@ -3515,7 +3521,7 @@ public class FragmentChat extends BaseFragment
 
             suggestedRecyclerView.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.shape_suggested_sticker), rootView.getContext(), R.attr.iGapEditTxtColor));
 
-            Disposable disposable = stickerRepository
+            disposable = stickerRepository
                     .getStickerByEmoji(lastChar)
                     .filter(structIGStickers -> structIGStickers.size() > 0)
                     .subscribe(structIGStickers -> {
@@ -3523,7 +3529,7 @@ public class FragmentChat extends BaseFragment
                         suggestedLayout.setVisibility(View.VISIBLE);
                     });
 
-            stickerRepository.getCompositeDisposable().add(disposable);
+            compositeDisposable.add(disposable);
         }
     }
 

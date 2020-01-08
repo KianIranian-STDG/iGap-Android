@@ -32,7 +32,7 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
     private MutableLiveData<String> stickerFileSizeLiveData = new MutableLiveData<>();
 
     public RemoveStickerViewModel() {
-        repository = new StickerRepository();
+        repository = StickerRepository.getInstance();
         compositeDisposable = new CompositeDisposable();
         stickerFileSizeLiveData.postValue(getStickerFolderSize());
         subscribe();

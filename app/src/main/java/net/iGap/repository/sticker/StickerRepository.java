@@ -59,7 +59,7 @@ public class StickerRepository implements ObserverView {
         return stickerRepository;
     }
 
-    public StickerRepository() {
+    private StickerRepository() {
         stickerApi = new RetrofitFactory().getStickerRetrofit();
         apiService = ApiEmojiUtils.getAPIService();
     }
