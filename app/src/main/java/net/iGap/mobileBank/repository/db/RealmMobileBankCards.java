@@ -18,6 +18,13 @@ public class RealmMobileBankCards extends RealmObject {
     public RealmMobileBankCards() {
     }
 
+    public RealmMobileBankCards(String cardNumber, String cardName, String expireDate, boolean isOrigin) {
+        this.cardNumber = cardNumber;
+        this.cardName = cardName;
+        this.expireDate = expireDate;
+        this.isOrigin = isOrigin;
+    }
+
     public static void putOrUpdate(String cardNumber, String cardName, String expireDate, boolean isOrigin) {
         DbManager.getInstance().doRealmTask(realm1 -> {
 

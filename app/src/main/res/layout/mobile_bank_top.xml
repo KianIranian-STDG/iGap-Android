@@ -16,12 +16,12 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp48"
         android:id="@+id/parsianIcon"
         android:layout_marginTop="@dimen/dp10"
         android:layout_marginBottom="@dimen/dp10"
         android:adjustViewBounds="true"
-        app:srcCompat="@mipmap/parsian"
+        app:srcCompat="@drawable/bank_logo_parsian"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/parsianName"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/parsianName"
         android:text="@string/parsian_bank"
-        android:textSize="@dimen/dp16"
+        android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_marginStart="@dimen/dp8"
