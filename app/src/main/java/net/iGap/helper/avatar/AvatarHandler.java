@@ -22,6 +22,7 @@ import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.OnAvatarAdd;
+import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDownload;
 import net.iGap.interfaces.OnFileDownloaded;
 import net.iGap.module.AndroidUtils;
@@ -33,6 +34,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestFileDownload;
+import net.iGap.request.RequestUserInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -275,6 +277,10 @@ public class AvatarHandler {
     }
 
     public void getAvatar(BaseParam baseParam) {
+        getAvatar(baseParam, false);
+    }
+
+    public void getAvatar(BaseParam baseParam, boolean requestUserInfo) {
 
         if (Looper.myLooper() != Looper.getMainLooper()) {
             G.handler.post(new Runnable() {
@@ -356,7 +362,7 @@ public class AvatarHandler {
             @Override
             public void run() {
                 DbManager.getInstance().doRealmTask(realm -> {
-                    getAvatarImage(baseParam, realm);
+                    getAvatarImage(baseParam, realm, requestUserInfo);
                 });
             }
         });
@@ -365,8 +371,19 @@ public class AvatarHandler {
     /**
      * check avatar in Realm and download if needed
      */
-    private void getAvatarImage(BaseParam baseParam, Realm _realm) {
+    private void getAvatarImage(BaseParam baseParam, Realm _realm, boolean requestUserInfo) {
         RealmAvatar realmAvatar = getLastAvatar(baseParam.avatarOwnerId, _realm);
+
+        if (realmAvatar == null && requestUserInfo && G.userLogin) {
+
+            new RequestUserInfo().userInfoWithCallBack(new OnComplete() {
+                @Override
+                public void complete(boolean result, String messageOne, String MessageTow) {
+                    getAvatar(baseParam, false);
+                }
+            }, baseParam.avatarOwnerId, "" + baseParam.avatarOwnerId);
+
+        }
 
         if (realmAvatar == null && baseParam instanceof ParamWithAvatarType && ((ParamWithAvatarType) baseParam).registeredUser != null) {
             insertRegisteredInfoToDB(((ParamWithAvatarType) baseParam).registeredUser, _realm);
