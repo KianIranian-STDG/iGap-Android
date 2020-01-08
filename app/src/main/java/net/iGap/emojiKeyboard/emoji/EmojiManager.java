@@ -35,8 +35,12 @@ public class EmojiManager {
 
     private static EmojiManager instance;
 
-    private final int MAX_RECENT_EMOJI_COUNT = 48;
-    final int EMOJI_CATEGORY_SIZE = 8;
+    private final int MAX_RECENT_EMOJI_COUNT = 40;
+    public final int EMOJI_CATEGORY_SIZE = 8;
+
+    private final int VERSION = 1;
+    private final String EMOJI_VERSION_KEY = "emoji_v" + VERSION;
+    private final String EMOJI_DEFAULT_KEY = "default_emoji";
 
     private HashMap<CharSequence, DrawableInfo> drawableInfoMap = new HashMap<>();
     private HashMap<String, Integer> emojiUseHistory = new HashMap<>();
@@ -336,7 +340,7 @@ public class EmojiManager {
         return emojiDrawable;
     }
 
-    private void loadEmoji(final byte page, final short page2) {
+    private void loadEmoji(final byte a, final short b) {
         try {
             int imageResize = 1;
             if (AndroidUtils.density <= 1.0f) {
@@ -345,7 +349,7 @@ public class EmojiManager {
 
             Bitmap bitmap = null;
             try {
-                InputStream is = G.context.getAssets().open("emoji/" + String.format(Locale.US, "%d_%d.png", page, page2));
+                InputStream is = G.context.getAssets().open("emoji/" + String.format(Locale.US, "%d_%d.png", a, b));
                 BitmapFactory.Options opts = new BitmapFactory.Options();
                 opts.inJustDecodeBounds = false;
                 opts.inSampleSize = imageResize;
@@ -356,7 +360,7 @@ public class EmojiManager {
             }
 
             final Bitmap finalBitmap = bitmap;
-            bitmaps[page][page2] = finalBitmap;
+            bitmaps[a][b] = finalBitmap;
             G.cancelRunOnUiThread(invalidateRunnable);
             G.runOnUiThread(invalidateRunnable);
         } catch (Throwable x) {
@@ -375,6 +379,7 @@ public class EmojiManager {
             recentEmoji.set(recentEmoji.size() - 1, code);
         }
         emojiUseHistory.put(code, ++count);
+        Log.i(TAG, "addRecentEmoji: " + code + " size " + code);
     }
 
     public void sortEmoji() {
@@ -401,6 +406,7 @@ public class EmojiManager {
         while (recentEmoji.size() > MAX_RECENT_EMOJI_COUNT) {
             recentEmoji.remove(recentEmoji.size() - 1);
         }
+        Log.i(TAG, "sortEmoji: " + recentEmoji.size());
     }
 
     public void saveRecentEmoji() {
@@ -414,12 +420,12 @@ public class EmojiManager {
             stringBuilder.append("=");
             stringBuilder.append(entry.getValue());
         }
-        preferences.edit().putString("emojis2", stringBuilder.toString()).apply();
+        preferences.edit().putString(EMOJI_VERSION_KEY, stringBuilder.toString()).apply();
     }
 
     public void clearRecentEmoji() {
         SharedPreferences preferences = getGlobalEmojiSettings();
-        preferences.edit().putBoolean("filled_default", true).apply();
+        preferences.edit().putBoolean(EMOJI_DEFAULT_KEY, true).apply();
         emojiUseHistory.clear();
         recentEmoji.clear();
         saveRecentEmoji();
@@ -427,6 +433,7 @@ public class EmojiManager {
 
     public void loadRecentEmoji() {
         if (recentEmojiLoaded) {
+            Log.i(TAG, "recentEmojiLoaded return ");
             return;
         }
         recentEmojiLoaded = true;
@@ -435,41 +442,16 @@ public class EmojiManager {
         String str;
         try {
             emojiUseHistory.clear();
-            if (preferences.contains("emojis")) {
-                str = preferences.getString("emojis", "");
-                if (str != null && str.length() > 0) {
-                    String[] args = str.split(",");
-                    for (String arg : args) {
-                        String[] args2 = arg.split("=");
-                        long value = AndroidUtils.parseLong(args2[0]);
-                        StringBuilder string = new StringBuilder();
-                        for (int a = 0; a < 4; a++) {
-                            char ch = (char) value;
-                            string.insert(0, ch);
-                            value >>= 16;
-                            if (value == 0) {
-                                break;
-                            }
-                        }
-                        if (string.length() > 0) {
-                            emojiUseHistory.put(string.toString(), AndroidUtils.parseInt(args2[1]));
-                        }
-                    }
-                }
-                preferences.edit().remove("emojis").apply();
-                saveRecentEmoji();
-            } else {
-                str = preferences.getString("emojis2", "");
-                if (str.length() > 0) {
-                    String[] args = str.split(",");
-                    for (String arg : args) {
-                        String[] args2 = arg.split("=");
-                        emojiUseHistory.put(args2[0], AndroidUtils.parseInt(args2[1]));
-                    }
+            str = preferences.getString(EMOJI_VERSION_KEY, "");
+            if (str != null && str.length() > 0) {
+                String[] args = str.split(",");
+                for (String arg : args) {
+                    String[] split = arg.split("=");
+                    emojiUseHistory.put(split[0], AndroidUtils.parseInt(split[1]));
                 }
             }
             if (emojiUseHistory.isEmpty()) {
-                if (!preferences.getBoolean("filled_default", false)) {
+                if (!preferences.getBoolean(EMOJI_DEFAULT_KEY, false)) {
                     String[] newRecent = new String[]{
                             "\uD83D\uDE02", "\uD83D\uDE18", "\u2764", "\uD83D\uDE0D", "\uD83D\uDE0A", "\uD83D\uDE01",
                             "\uD83D\uDC4D", "\u263A", "\uD83D\uDE14", "\uD83D\uDE04", "\uD83D\uDE2D", "\uD83D\uDC8B",
@@ -480,7 +462,8 @@ public class EmojiManager {
                     for (int i = 0; i < newRecent.length; i++) {
                         emojiUseHistory.put(newRecent[i], newRecent.length - i);
                     }
-                    preferences.edit().putBoolean("filled_default", true).apply();
+                    Log.i(TAG, "load default emoji");
+                    preferences.edit().putBoolean(EMOJI_DEFAULT_KEY, true).apply();
                     saveRecentEmoji();
                 }
             }
@@ -491,11 +474,11 @@ public class EmojiManager {
 
         try {
             str = preferences.getString("color", "");
-            if (str.length() > 0) {
+            if (str != null && str.length() > 0) {
                 String[] args = str.split(",");
                 for (String arg : args) {
-                    String[] args2 = arg.split("=");
-                    emojiColor.put(args2[0], args2[1]);
+                    String[] split = arg.split("=");
+                    emojiColor.put(split[0], split[1]);
                 }
             }
         } catch (Exception e) {
@@ -531,6 +514,10 @@ public class EmojiManager {
 //            }
         }
         return info != null;
+    }
+
+    public ArrayList<String> getRecentEmoji() {
+        return recentEmoji;
     }
 
     private EmojiManager() {

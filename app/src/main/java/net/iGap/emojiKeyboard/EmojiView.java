@@ -94,7 +94,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private int layoutWidth;
 
     private Listener listener;
-    private String TAG = "abbasiKeyboard";
+    private String TAG = "abbasiEmoji";
 
     public void setListener(Listener listener) {
         this.listener = listener;
@@ -155,11 +155,33 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                 structIGEmojiGroups.add(structIGEmojiGroup);
             }
 
+            EmojiManager.getInstance().loadRecentEmoji();
+            EmojiManager.getInstance().sortEmoji();
+
+            Log.i(TAG, "recent emoji size -> " + EmojiManager.getInstance().getRecentEmoji());
+
+            for (int i = 0; i < EmojiManager.getInstance().getRecentEmoji().size(); i++) {
+                Log.i(TAG, "recent: " + i + " -> " + EmojiManager.getInstance().getRecentEmoji().get(i));
+            }
+
             emojiGridAdapter.setStructIGEmojiGroups(structIGEmojiGroups);
 
             emojiGridAdapter.setListener(new EmojiAdapter.Listener() {
                 @Override
                 public void onClick(String emojiCode) {
+                    EmojiManager.getInstance().addRecentEmoji(emojiCode);
+                    EmojiManager.getInstance().saveRecentEmoji();
+
+                    EmojiManager.getInstance().loadRecentEmoji();
+                    EmojiManager.getInstance().sortEmoji();
+
+                    Log.i(TAG, "recent emoji size -> " + EmojiManager.getInstance().getRecentEmoji());
+
+                    for (int i = 0; i < EmojiManager.getInstance().getRecentEmoji().size(); i++) {
+                        Log.i(TAG, "recent: " + i + " -> " + EmojiManager.getInstance().getRecentEmoji().get(i));
+                    }
+
+
                     if (listener != null)
                         listener.onEmojiSelected(emojiCode);
                 }
