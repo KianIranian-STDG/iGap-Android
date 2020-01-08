@@ -30,9 +30,6 @@ import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FragmentLanguage extends BaseFragment {
 
     public static boolean languageChanged = false;
@@ -57,11 +54,7 @@ public class FragmentLanguage extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_language, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
-        if (getArguments() != null && getArguments().containsKey("canSwipeBack")) {
-            return binding.getRoot();
-        } else {
-            return attachToSwipeBack(binding.getRoot());
-        }
+        return binding.getRoot();
     }
 
     @Override
@@ -78,11 +71,7 @@ public class FragmentLanguage extends BaseFragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        if (getArguments() != null && getArguments().containsKey("canSwipeBack")) {
-                            FragmentLanguage.this.removeFromBaseFragment(FragmentLanguage.this);
-                        } else {
-                            popBackStackFragment();
-                        }
+                        popBackStackFragment();
                     }
                 }).getView());
 
