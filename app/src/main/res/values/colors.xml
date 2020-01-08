@@ -307,4 +307,6 @@
     <color name="grayTheme">#4e698a</color>
     <color name="greenThem">#b5e663</color>
     <color name="redTheme">#c82121</color>
+
+    <color name="parsian_primary">#AD7954</color>
 </resources>
