@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.interfaces.ObserverView;
 import net.iGap.module.FileUtils;
@@ -102,8 +101,13 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
             }
 
             @Override
-            public void onError(ErrorModel error) {
+            public void onError(String error) {
                 clearRecentStickerLiveData.postValue(View.GONE);
+            }
+
+            @Override
+            public void onFailed() {
+
             }
         });
     }
