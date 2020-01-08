@@ -12,10 +12,10 @@ package net.iGap.adapter.items.chat;
 
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -23,11 +23,11 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -106,7 +106,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
     }
 
     protected static class ViewHolder extends NewChatItemHolder implements IProgress, IThumbNailItem {
-        protected ReserveSpaceRoundedImageView image;
+        protected AppCompatImageView image;
         protected MessageProgress progress;
 
         public ViewHolder(View view) {
@@ -115,15 +115,10 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             FrameLayout frameLayout = new FrameLayout(getContext());
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            image = new ReserveSpaceRoundedImageView(getContext());
+            image = new AppCompatImageView(getContext());
             image.setId(R.id.thumbnail);
-            image.setScaleType(ImageView.ScaleType.FIT_XY);
-            image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
-            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            image.setLayoutParams(layout_758);
             getContentBloke().addView(frameLayout);
-            frameLayout.addView(image);
-            image.reserveSpace(180, 180, ProtoGlobal.Room.Type.CHAT);
+            frameLayout.addView(image, LayoutCreator.createFrame(200, 200, Gravity.CENTER));
 
             progress = getProgressBar(view.getContext(), 0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));

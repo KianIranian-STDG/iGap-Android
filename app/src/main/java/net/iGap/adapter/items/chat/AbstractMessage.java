@@ -1313,7 +1313,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (structMessage.getAttachment() != null) {
 
-            if (mHolder instanceof VideoWithTextItem.ViewHolder || mHolder instanceof ImageWithTextItem.ViewHolder || mHolder instanceof StickerItem.ViewHolder) {
+            if (mHolder instanceof VideoWithTextItem.ViewHolder || mHolder instanceof ImageWithTextItem.ViewHolder) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) ((IThumbNailItem) holder).getThumbNailImageView();
                 int _with = structMessage.getAttachment().getWidth();
                 int _hight = structMessage.getAttachment().getHeight();
