@@ -4,16 +4,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosPassM;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
 
 public class KuknosSetPassConfirmVM extends ViewModel {
 
-    private MutableLiveData<KuknosPassM> kuknosPassM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
@@ -25,22 +21,12 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private String PIN4;
     private boolean completePin = false;
     private UserRepo userRepo = new UserRepo();
-    private String token, username;
 
     public KuknosSetPassConfirmVM() {
-        if (kuknosPassM == null) {
-            kuknosPassM = new MutableLiveData<KuknosPassM>();
-        }
-        if (error == null) {
-            error = new MutableLiveData<ErrorM>();
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<Boolean>();
-            nextPage.setValue(false);
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-        }
+        error = new MutableLiveData<>();
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
+        progressState = new MutableLiveData<>();
     }
 
     public void onSubmitBtn() {
@@ -52,7 +38,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         }
     }
 
-    public void checkPIN() {
+    private void checkPIN() {
         if (PIN.equals(selectedPin)) {
             sendDataToServer();
         } else {
@@ -60,11 +46,11 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         }
     }
 
-    public void sendDataToServer() {
+    private void sendDataToServer() {
         registerUser();
     }
 
-    public void registerUser() {
+    private void registerUser() {
         progressState.setValue(true);
         userRepo.setPIN(PIN);
         try {
@@ -73,26 +59,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
             error.setValue(new ErrorM(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
-
-        userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
-            @Override
-            public void onResponse(KuknosSubmitM kuknosSubmitM) {
-                if (kuknosSubmitM.getOk() == 1) {
-                    nextPage.setValue(true);
-                }
-            }
-
-            @Override
-            public void onFailed(String error) {
-                // TODO delete this
-                nextPage.setValue(true);
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
-            }
-        });
+        nextPage.setValue(true);
     }
 
     // setter and getter
@@ -129,14 +96,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         this.PIN4 = PIN4;
     }
 
-    public MutableLiveData<KuknosPassM> getKuknosPassM() {
-        return kuknosPassM;
-    }
-
-    public void setKuknosPassM(MutableLiveData<KuknosPassM> kuknosPassM) {
-        this.kuknosPassM = kuknosPassM;
-    }
-
     public MutableLiveData<ErrorM> getError() {
         return error;
     }
@@ -153,10 +112,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public boolean isCompletePin() {
-        return completePin;
-    }
-
     public void setCompletePin(boolean completePin) {
         this.completePin = completePin;
     }
@@ -167,10 +122,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
 
     public void setPIN(String PIN) {
         this.PIN = PIN;
-    }
-
-    public String getSelectedPin() {
-        return selectedPin;
     }
 
     public void setSelectedPin(String selectedPin) {
@@ -186,10 +137,8 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     }
 
     public void setToken(String token) {
-        this.token = token;
     }
 
     public void setUsername(String username) {
-        this.username = username;
     }
 }

@@ -15,13 +15,14 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.helper.HelperError;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.webrtc.WebRTC;
 
-public class CallSelectFragment extends BottomSheetDialogFragment {
+public class CallSelectFragment extends BaseBottomSheet {
 
     private View voiceCall;
     private View videoCall;
@@ -86,11 +87,12 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_select_call_action, container);
+        return inflater.inflate(R.layout.fragment_select_call_action, container);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         voiceCall = view.findViewById(R.id.ll_callAction_voiceCall);
         videoCall = view.findViewById(R.id.ll_callAction_videoCall);
     }

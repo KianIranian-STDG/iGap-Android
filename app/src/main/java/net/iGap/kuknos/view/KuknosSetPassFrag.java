@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -27,18 +26,15 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosSetPassVM;
 
 public class KuknosSetPassFrag extends BaseFragment {
 
     private FragmentKuknosSetpasswordBinding binding;
     private KuknosSetPassVM kuknosSetPassVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosSetPassFrag newInstance() {
-        KuknosSetPassFrag kuknosLoginFrag = new KuknosSetPassFrag();
-        return kuknosLoginFrag;
+        return new KuknosSetPassFrag();
     }
 
 
@@ -66,7 +62,7 @@ public class KuknosSetPassFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -87,42 +83,31 @@ public class KuknosSetPassFrag extends BaseFragment {
     }
 
     private void onNext() {
-        kuknosSetPassVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosSetPassConfirmFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSetPassConfirmFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    Bundle bundle = new Bundle();
-                    bundle.putString("selectedPIN", kuknosSetPassVM.getPIN());
-                    fragment.setArguments(bundle);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        kuknosSetPassVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosSetPassConfirmFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosSetPassConfirmFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                Bundle bundle = new Bundle();
+                bundle.putString("selectedPIN", kuknosSetPassVM.getPIN());
+                fragment.setArguments(bundle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }
 
     private void onError() {
-        kuknosSetPassVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
-            @Override
-            public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getState() == true) {
-                    //TODO clear Log
-                    if (errorM.getMessage().equals("0")) {
-                        Snackbar snackbar = Snackbar.make(binding.fragKuknosSPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                        snackbar.show();
-                    }
+        kuknosSetPassVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+            if (errorM.getState()) {
+                //TODO clear Log
+                if (errorM.getMessage().equals("0")) {
+                    Snackbar snackbar = Snackbar.make(binding.fragKuknosSPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
+                    snackbar.show();
                 }
             }
         });

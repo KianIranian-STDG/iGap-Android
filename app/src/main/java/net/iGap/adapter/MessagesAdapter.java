@@ -179,7 +179,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     } else {
                         item.mMessage.setLinkInfo(HelperUrl.getLinkInfo(updatedText));
                     }
-                    item.mMessage.setHasMessageLink(item.mMessage.getLinkInfo().length() > 0);
+                    item.mMessage.setHasMessageLink(item.mMessage.getLinkInfo() != null && item.mMessage.getLinkInfo().length() > 0);
                     RealmRoomMessage.isEmojiInText(item.mMessage , item.mMessage.getMessage());
 
                     item.updateMessageText(updatedText);

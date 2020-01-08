@@ -3,7 +3,6 @@ package net.iGap.kuknos.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 
@@ -18,26 +17,16 @@ public class KuknosTradeHistoryVM extends ViewModel {
     private TradeRepo tradeRepo = new TradeRepo();
     private API mode;
 
-    public enum API {
-        OFFERS_LIST, TRADES_LIST
-    }
-
     public KuknosTradeHistoryVM() {
-        if (listMutableLiveData == null) {
-            listMutableLiveData = new MutableLiveData<>();
-        }
-        if (errorM == null) {
-            errorM = new MutableLiveData<>();
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(true);
-        }
+        listMutableLiveData = new MutableLiveData<>();
+        errorM = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(true);
     }
 
     public void getDataFromServer() {
         if (mode == API.OFFERS_LIST) {
-            tradeRepo.getOffersList(new ApiResponse<Page<OfferResponse>>() {
+            /*tradeRepo.getOffersList(new ApiResponse<Page<OfferResponse>>() {
                 @Override
                 public void onResponse(Page<OfferResponse> offerResponsePage) {
                     listMutableLiveData.setValue(offerResponsePage);
@@ -52,9 +41,9 @@ public class KuknosTradeHistoryVM extends ViewModel {
                 public void setProgressIndicator(boolean visibility) {
                     progressState.setValue(visibility);
                 }
-            });
+            });*/
         } else {
-            tradeRepo.getTradesList(new ApiResponse<Page<OfferResponse>>() {
+            /*tradeRepo.getTradesList(new ApiResponse<Page<OfferResponse>>() {
                 @Override
                 public void onResponse(Page<OfferResponse> offerResponsePage) {
                     listMutableLiveData.setValue(offerResponsePage);
@@ -69,7 +58,7 @@ public class KuknosTradeHistoryVM extends ViewModel {
                 public void setProgressIndicator(boolean visibility) {
                     progressState.setValue(visibility);
                 }
-            });
+            });*/
         }
     }
 
@@ -93,15 +82,15 @@ public class KuknosTradeHistoryVM extends ViewModel {
         return listMutableLiveData;
     }
 
-    public void setListMutableLiveData(MutableLiveData<Page<OfferResponse>> listMutableLiveData) {
-        this.listMutableLiveData = listMutableLiveData;
-    }
-
     public API getMode() {
         return mode;
     }
 
     public void setMode(API mode) {
         this.mode = mode;
+    }
+
+    public enum API {
+        OFFERS_LIST, TRADES_LIST
     }
 }

@@ -10,9 +10,11 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserIVandGetScore;
+import net.iGap.realm.RealmUserInfo;
 
 public class UserIVandGetScoreResponse extends MessageHandler {
 
@@ -31,7 +33,15 @@ public class UserIVandGetScoreResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder builder = (ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder) message;
-        ((OnUserIVandGetScore) identity).getScore(builder);
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo user = realm.where(RealmUserInfo.class).findFirst();
+            if (user != null) {
+                user.setIvandScore(builder.getScore());
+            }
+        });
+        if (identity instanceof OnUserIVandGetScore) {
+            ((OnUserIVandGetScore) identity).getScore(builder);
+        }
     }
 
     @Override

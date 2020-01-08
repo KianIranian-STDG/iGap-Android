@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
@@ -34,7 +35,7 @@ import net.iGap.viewmodel.sticker.StickerDialogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-public class StickerDialogFragment extends BottomSheetDialogFragment {
+public class StickerDialogFragment extends BaseBottomSheet {
     private StickerAdapter adapter;
     private StickerDialogViewModel viewModel;
     private StructIGStickerGroup stickerGroup;
@@ -78,17 +79,6 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-                FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-                BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                behavior.setPeekHeight(0);
-            }
-        });
 
         RecyclerView stickerRecyclerView = view.findViewById(R.id.rv_stickerDialog);
         progressBar = view.findViewById(R.id.fl_stickerDialog_progressContainer);
@@ -204,9 +194,4 @@ public class StickerDialogFragment extends BottomSheetDialogFragment {
         return R.style.BaseBottomSheetDialog;
     }
 
-    @NotNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
-    }
 }

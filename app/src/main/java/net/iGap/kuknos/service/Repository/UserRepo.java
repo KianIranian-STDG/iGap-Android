@@ -3,13 +3,14 @@ package net.iGap.kuknos.service.Repository;
 import android.util.Log;
 
 import net.iGap.DbManager;
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.HandShakeCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.mnemonic.Wallet;
 import net.iGap.kuknos.service.mnemonic.WalletException;
-import net.iGap.kuknos.service.model.KuknosInfoM;
+import net.iGap.kuknos.service.model.KuknosSignupM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 import net.iGap.kuknos.service.model.RealmKuknos;
-import net.iGap.kuknos.service.model.KuknosSubmitM;
-import net.iGap.kuknos.service.model.KuknoscheckUserM;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
 
@@ -25,18 +26,14 @@ public class UserRepo {
         updateUserInfo();
     }
 
-    // API
+    // API Call
 
-    public void checkUser(String phoneNum, String nID, ApiResponse<KuknoscheckUserM> apiResponse) {
-        kuknosAPIRepository.checkUser(phoneNum, nID, apiResponse);
+    public void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
+        kuknosAPIRepository.registerUser(info, handShakeCallback, apiResponse);
     }
 
-    public void getUserInfo(String publicKey, ApiResponse<KuknosInfoM> apiResponse) {
-        kuknosAPIRepository.getUserInfo(publicKey, apiResponse);
-    }
-
-    public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {
-        kuknosAPIRepository.registerUser(token, publicKey, friendlyID, apiResponse);
+    public void getUserStatus(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfo>> apiResponse) {
+        kuknosAPIRepository.getUserStatus(getAccountID(), handShakeCallback, apiResponse);
     }
 
     // generate key pair
@@ -72,6 +69,9 @@ public class UserRepo {
     public void generateKeyPairWithMnemonicAndPIN() throws WalletException {
         KeyPair pair = Wallet.createKeyPair(realmKuknos.getKuknosMnemonic().toCharArray(), realmKuknos.getKuknosPIN().toCharArray(), 0);
         RealmKuknos.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
+//        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosMnemonic());
+//        Log.d("amini", "generateKeyPairWithMnemonic: seed :" + new String(pair.getSecretSeed()));
+//        Log.d("amini", "generateKeyPairWithMnemonic: public :" + pair.getAccountId());
     }
 
     public void generateKeyPairWithSeed() {
@@ -124,10 +124,6 @@ public class UserRepo {
 
     public String getUserEmail() {
         return userInfo.getEmail();
-    }
-
-    public RealmKuknos getRealmKuknos() {
-        return realmKuknos;
     }
 
     // Realm and Data

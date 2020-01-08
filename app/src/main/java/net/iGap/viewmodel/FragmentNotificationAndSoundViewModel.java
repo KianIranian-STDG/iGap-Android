@@ -70,6 +70,7 @@ public class FragmentNotificationAndSoundViewModel {
     private String soundMessageGroupSelected = "";
     private int soundMessageWhich = 0;
     private int soundMessageGroupWhich = 0;
+    private MediaPlayer mediaPlayer;
 
 
     public FragmentNotificationAndSoundViewModel(FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding) {
@@ -756,13 +757,19 @@ public class FragmentNotificationAndSoundViewModel {
                 break;
         }
 
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+        }
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(G.fragmentActivity, musicId);
+        mediaPlayer = MediaPlayer.create(G.fragmentActivity, musicId);
         mediaPlayer.start();
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
-                mp.release();
+                mediaPlayer.release();
+                mediaPlayer = null;
             }
 
         });

@@ -18,16 +18,10 @@ public class KuknosTradeActiveVM extends ViewModel {
     private MutableLiveData<Boolean> progressState;
 
     public KuknosTradeActiveVM() {
-        if (listMutableLiveData == null) {
-            listMutableLiveData = new MutableLiveData<>();
-        }
-        if (errorM == null) {
-            errorM = new MutableLiveData<>();
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(true);
-        }
+        listMutableLiveData = new MutableLiveData<>();
+        errorM = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(true);
     }
 
     private void initModel() {
@@ -46,13 +40,10 @@ public class KuknosTradeActiveVM extends ViewModel {
         progressState.setValue(true);
         // TODO Hard code in here baby
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // hard code
-                initModel();
-                progressState.setValue(false);
-            }
+        handler.postDelayed(() -> {
+            // hard code
+            initModel();
+            progressState.setValue(false);
         }, 1000);
     }
 
@@ -72,11 +63,4 @@ public class KuknosTradeActiveVM extends ViewModel {
         this.progressState = progressState;
     }
 
-    public MutableLiveData<List<KuknosTradeHistoryM>> getListMutableLiveData() {
-        return listMutableLiveData;
-    }
-
-    public void setListMutableLiveData(MutableLiveData<List<KuknosTradeHistoryM>> listMutableLiveData) {
-        this.listMutableLiveData = listMutableLiveData;
-    }
 }

@@ -1151,7 +1151,7 @@
     <string name="transfer_amount_hint">veuillez choisir la somme à transférer</string>
     <string name="amount_in_rial">somme en Rial</string>
     <string name="pay">paiement</string>
-    <string name="transfer_to_dialog">transférer à</string>
+    <string name="transfer_to_dialog">transférer à:%s</string>
     <string name="am_money">argent</string>
     <string name="trace_number">code de suivi</string>
     <string name="amount_2">somme</string>
@@ -1701,7 +1701,7 @@
     <string name="str_frag_sync_contactWelcome">bienvenu sur iGap</string>
     <string name="str_frag_sync_skipBtn">commencer</string>
     <string name="str_frag_sync_error">la connexion au serveur n\'a pas été faite. Veuillez essayer de nouveau.</string>
-    <string name="money_request">demander faire le virement bancaire par la carte au </string>
+    <string name="money_request">demander faire le virement bancaire par la carte au %s</string>
     <string name="cardtocard_descriotion_error">la partie des explication ne doit pas être vide</string>
     <string name="cardtocard_amount_empty_error">la partie de la somme ne doit pas être vide</string>
     <string name="cardtocard_morethan_error">la somme limite pour faire le virement bancaire est 10 milles Rial</string>

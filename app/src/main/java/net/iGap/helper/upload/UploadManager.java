@@ -80,7 +80,11 @@ public class UploadManager {
             return;
         }
 
-        if (message.getForwardMessage() != null || message.getAttachment() == null || message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
+        if (message.getForwardMessage() != null ||
+                message.getAttachment() == null ||
+                message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER ||
+                message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT
+        ) {
             new ChatSendMessageUtil().build(roomType, message.getRoomId(), message);
             return;
         }
@@ -106,10 +110,17 @@ public class UploadManager {
                 public void onCompressFinish(String id, boolean compress) {
 
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
-                    if (compressFile.exists()) {
+                    if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {
                         compressFile.renameTo(CompletedCompressFile);
                         EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
 
+                        uploadMessageAndSend(roomType, message, ignoreCompress);
+                    } else {
+                        if (compressFile.exists()) {
+                            compressFile.delete();
+                        }
+
+                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
                         uploadMessageAndSend(roomType, message, true);
                     }
                 }
@@ -124,9 +135,8 @@ public class UploadManager {
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
-                !CompletedCompressFile.exists() &&
-                G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 &&
-                        compressTask == null)
+                !ignoreCompress &&
+                (compressTask == null || !CompletedCompressFile.exists()))
             return;
 
         Log.d("bagi", "after Compress");

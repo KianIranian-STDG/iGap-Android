@@ -88,7 +88,7 @@
         android:id="@+id/tv_stickerDialog_add"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp48"
-        android:background="?attr/iGapButtonColor"
+        android:background="?attr/iGapTopRoundButtonPrimary"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/largeTextSize"

@@ -23,6 +23,7 @@ import net.iGap.R;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.databinding.FragmentBottomSheetSelectImageBinding;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.BottomSheetListAdapter;
 import net.iGap.fragments.FragmentEditImage;
@@ -51,7 +52,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static io.fotoapparat.selector.LensPositionSelectorsKt.back;
 import static net.iGap.fragments.FragmentChat.getAllShownImagesPath;
 
-public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
+public class SelectImageBottomSheetDialog extends BaseBottomSheet {
 
     private List<String> itemList;
     private int range;
@@ -105,12 +106,6 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public int getTheme() {
         return R.style.BaseBottomSheetDialog;
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
     }
 
     private void initAttach() {

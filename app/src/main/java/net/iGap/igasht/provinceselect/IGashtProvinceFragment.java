@@ -22,22 +22,21 @@ import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationlist.IGashtLocationListFragment;
 import net.iGap.interfaces.ToolbarListener;
 
-public class IGashtProvinceFragment extends IGashtBaseView {
+public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewModel> {
+
     private FragmentIgashtProvinceBinding binding;
-    private IGashtProvinceViewModel iGashtProvinceViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iGashtProvinceViewModel = ViewModelProviders.of(this).get(IGashtProvinceViewModel.class);
-        viewModel = iGashtProvinceViewModel;
+        viewModel = ViewModelProviders.of(this).get(IGashtProvinceViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_province, container, false);
-        binding.setViewModel(iGashtProvinceViewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -75,9 +74,9 @@ public class IGashtProvinceFragment extends IGashtBaseView {
                     }*/
                 }).getView());
 
-        binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> iGashtProvinceViewModel.setSelectedLocation(position));
+        binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> viewModel.setSelectedLocation(position));
 
-        iGashtProvinceViewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), isGo -> {
+        viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null) {
                 if (isGo) {
                     ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -88,13 +87,13 @@ public class IGashtProvinceFragment extends IGashtBaseView {
             }
         });
 
-        iGashtProvinceViewModel.getProvinceListResult().observe(getViewLifecycleOwner(), data -> {
+        viewModel.getProvinceListResult().observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 binding.provinceSearchText.setAdapter(new ProvinceSuggestionListAdapter(getContext(), data));
             }
         });
 
-        iGashtProvinceViewModel.getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
+        viewModel.getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
             if (isClear != null && isClear) {
                 binding.provinceSearchText.requestFocus();
                 binding.provinceSearchText.setText("");

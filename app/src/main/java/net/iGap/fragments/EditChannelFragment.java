@@ -219,6 +219,12 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                 avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
         });
 
+        viewModel.showChangeUsername.observe(getViewLifecycleOwner(), username -> {
+            if (username != null) {
+                setUsername(username);
+            }
+        });
+
         setEmojiColor();
 
     }
@@ -369,24 +375,30 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     }
 
     private void convertToPublic() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getString(R.string.channel_title_convert_to_public)).content(G.fragmentActivity.getResources().getString(R.string.channel_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                dialog.dismiss();
-                setUsername();
-            }
-        }).negativeText(R.string.no).show();
+        if (getContext() != null) {
+            new MaterialDialog.Builder(getContext())
+                    .title(R.string.channel_title_convert_to_public)
+                    .content(R.string.channel_text_convert_to_public)
+                    .positiveText(R.string.yes)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                            setUsername("");
+                        }
+                    }).negativeText(R.string.no).show();
+        }
     }
 
-    private void setUsername() {
-        final LinearLayout layoutUserName = new LinearLayout(G.fragmentActivity);
+    private void setUsername(String username) {
+        final LinearLayout layoutUserName = new LinearLayout(getContext());
         layoutUserName.setOrientation(LinearLayout.VERTICAL);
 
-        final View viewUserName = new View(G.fragmentActivity);
+        final View viewUserName = new View(getContext());
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputUserName = new TextInputLayout(G.fragmentActivity);
-        final MEditText edtUserName = new MEditText(G.fragmentActivity);
+        final MEditText edtUserName = new MEditText(getContext());
         edtUserName.setHint(G.fragmentActivity.getResources().getString(R.string.channel_title_channel_set_username));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -395,28 +407,33 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         /*if (isPopup) {*/
-        edtUserName.setText(Config.IGAP_LINK_PREFIX);
+        edtUserName.setText(Config.IGAP_LINK_PREFIX + username);
         /*} else {
             edtUserName.setText(Config.IGAP_LINK_PREFIX + linkUsername);
         }*/
 
-        edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
+        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtUserName.setPadding(0, 8, 0, 8);
         edtUserName.setSingleLine(true);
         inputUserName.addView(edtUserName);
         inputUserName.addView(viewUserName, viewParams);
 
-        viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtUserName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
+            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(new Theme().getPrimaryColor(getContext())).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .title(R.string.st_username)
+                .positiveText(R.string.save)
+                .customView(layoutUserName, true)
+                .widgetColor(new Theme().getPrimaryColor(getContext()))
+                .negativeText(R.string.B_cancel)
+                .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -507,7 +524,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             @Override
             public void onChannelUpdateUsername(final long roomId, final String username) {
                 G.handler.post(() -> {
-                    viewModel.setPrivate(false);
+                    viewModel.setPrivate(false, username);
                     dialog.dismiss();
                     viewModel.linkUsername = username;
                     /*setTextChannelLik();*/
@@ -583,7 +600,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             public void onChannelRemoveUsername(final long roomId) {
                 G.handler.post(() -> {
                     RealmRoom.setPrivate(roomId, () -> {
-                        viewModel.setPrivate(true);
+                        viewModel.setPrivate(true, "");
                         if (viewModel.inviteLink == null || viewModel.inviteLink.isEmpty() || viewModel.inviteLink.equals("https://")) {
                             new RequestChannelRevokeLink().channelRevokeLink(roomId);
                         } else {

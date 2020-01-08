@@ -57,6 +57,7 @@
 
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
         <item name="iGapTimerPinter">@drawable/timer_position_dark</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_dark_style</item>
     </style>
 
     <style name="BaseTheme.baseLightTheme">
@@ -119,6 +120,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_default</item>
         <item name="iGapTimerPinter">@drawable/timer_position_light</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_normal_style</item>
     </style>
 
     <style name="BaseTheme.baseRedTheme">
@@ -179,6 +181,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_red</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_red</item>
         <item name="iGapTimerPinter">@drawable/timer_position_red</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_red_style</item>
     </style>
 
     <style name="BaseTheme.basePinkTheme">
@@ -238,6 +241,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_pink</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_pink</item>
         <item name="iGapTimerPinter">@drawable/timer_position_pink</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_pink_style</item>
     </style>
 
     <style name="BaseTheme.basePurpleTheme">
@@ -300,6 +304,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_purple</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_purple</item>
         <item name="iGapTimerPinter">@drawable/timer_position_purple</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_purple_style</item>
     </style>
 
     <style name="BaseTheme.baseBlueTheme">
@@ -359,6 +364,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_blue</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_blue</item>
         <item name="iGapTimerPinter">@drawable/timer_position_blue</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_blue_style</item>
     </style>
 
     <style name="BaseTheme.baseGreenTheme">
@@ -419,6 +425,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_green</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_green</item>
         <item name="iGapTimerPinter">@drawable/timer_position_green</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_green_style</item>
     </style>
 
     <style name="BaseTheme.baseAmberTheme">
@@ -479,6 +486,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_amber</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_amber</item>
         <item name="iGapTimerPinter">@drawable/timer_position_amber</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_amber_style</item>
     </style>
 
     <style name="BaseTheme.baseOrangeTheme">
@@ -543,6 +551,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_orange</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_orange</item>
         <item name="iGapTimerPinter">@drawable/timer_position_orange</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_orange_style</item>
     </style>
 
     <style name="BaseTheme.baseDarkGrayTheme">
@@ -605,6 +614,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_gray</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark_gray</item>
         <item name="iGapTimerPinter">@drawable/timer_position_dark_gray</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_gray_style</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

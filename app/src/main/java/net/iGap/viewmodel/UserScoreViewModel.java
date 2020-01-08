@@ -1,17 +1,26 @@
 package net.iGap.viewmodel;
 
+import android.app.Activity;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
+import net.iGap.DbManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoUserIVandGetScore;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
 
 import java.util.List;
 
+import io.realm.Realm;
+
 public class UserScoreViewModel extends ViewModel {
 
+    public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
     private MutableLiveData<List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore>> ivandScore = new MutableLiveData<>();
     private MutableLiveData<Integer> userRankPointer = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToScannerPage = new MutableLiveData<>();
@@ -19,9 +28,31 @@ public class UserScoreViewModel extends ViewModel {
     private MutableLiveData<String> userRank = new MutableLiveData<>();
     private MutableLiveData<String> totalRank = new MutableLiveData<>();
 
+    private RealmUserInfo userInfo;
+
     public UserScoreViewModel() {
         //Todo:move to repository
+        userInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
+
+        if (userInfo != null){
+            userInfo.addChangeListener(realmModel -> {
+                userInfo = (RealmUserInfo) realmModel;
+
+            });
+        }
         getUserIVandScore();
+    }
+
+
+    public static void scanBarCode(Activity activity) {
+        IntentIntegrator integrator = new IntentIntegrator(activity);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        integrator.setRequestCode(REQUEST_CODE_QR_IVAND_CODE);
+        integrator.setBeepEnabled(false);
+        integrator.setPrompt("");
+        integrator.initiateScan();
     }
 
     public MutableLiveData<String> getTotalRank() {

@@ -18,9 +18,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
 import net.iGap.databinding.NewsAddAccountBottomSheetDialogBinding;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.news.viewmodel.NewsAddCommentVM;
 
-public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
+public class NewsAddCommentBottomSheetFrag extends BaseBottomSheet {
 
     private NewsAddAccountBottomSheetDialogBinding binding;
     private NewsAddCommentVM addCommentVM;
@@ -122,12 +123,6 @@ public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
     @Override
     public int getTheme() {
         return R.style.BaseBottomSheetDialog;
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
     }
 
     interface CompleteListener {

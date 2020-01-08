@@ -30,10 +30,9 @@ import net.iGap.news.viewmodel.NewsGroupListVM;
 
 import java.util.Objects;
 
-public class NewsGroupListFrag extends BaseAPIViewFrag {
+public class NewsGroupListFrag extends BaseAPIViewFrag<NewsGroupListVM> {
 
     private NewsGrouplistFragBinding binding;
-    private NewsGroupListVM newsVM;
 
 
     public static NewsGroupListFrag newInstance() {
@@ -43,7 +42,7 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newsVM = ViewModelProviders.of(this).get(NewsGroupListVM.class);
+        viewModel = ViewModelProviders.of(this).get(NewsGroupListVM.class);
     }
 
     @Nullable
@@ -53,7 +52,6 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_grouplist_frag, container, false);
 //        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
-        this.viewModel = newsVM;
 
         return binding.getRoot();
     }
@@ -86,11 +84,11 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
         binding.rcGroup.setLayoutManager(layoutManager);
 
         binding.pullToRefresh.setOnRefreshListener(() -> {
-            newsVM.getData();
+            viewModel.getData();
             binding.noItemInListError.setVisibility(View.GONE);
         });
 
-        newsVM.getData();
+        viewModel.getData();
         onErrorObserver();
         onDataChanged();
         onProgress();
@@ -98,7 +96,7 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
 
 
     private void onErrorObserver() {
-        newsVM.getError().observe(getViewLifecycleOwner(), newsError -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), newsError -> {
             if (newsError.getState()) {
                 //show the related text
                 binding.noItemInListError.setVisibility(View.VISIBLE);
@@ -111,11 +109,11 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
     }
 
     private void onProgress() {
-        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
-        newsVM.getmGroups().observe(getViewLifecycleOwner(), this::initMainRecycler);
+        viewModel.getmGroups().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
     private void initMainRecycler(NewsGroup data) {

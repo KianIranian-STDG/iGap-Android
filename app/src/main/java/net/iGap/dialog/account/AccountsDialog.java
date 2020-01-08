@@ -21,11 +21,12 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.helper.avatar.AvatarHandler;
 
 import org.paygear.RaadApp;
 
-public class AccountsDialog extends BottomSheetDialogFragment {
+public class AccountsDialog extends BaseBottomSheet {
 
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
@@ -68,19 +69,8 @@ public class AccountsDialog extends BottomSheetDialogFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override
     public int getTheme() {
         return R.style.BaseBottomSheetDialog;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
-    }
 }

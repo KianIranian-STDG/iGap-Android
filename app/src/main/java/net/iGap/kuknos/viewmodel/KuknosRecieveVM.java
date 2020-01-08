@@ -14,7 +14,7 @@ public class KuknosRecieveVM extends ViewModel {
         initData();
     }
 
-    public void initData() {
+    private void initData() {
         clientKey.set(userRepo.getAccountID());
     }
 
@@ -24,7 +24,4 @@ public class KuknosRecieveVM extends ViewModel {
         return clientKey;
     }
 
-    public void setClientKey(ObservableField<String> clientKey) {
-        this.clientKey = clientKey;
-    }
 }

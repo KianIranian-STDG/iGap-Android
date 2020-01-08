@@ -4,7 +4,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/kuknos_dark_shade_green_spinner" />
+                    <solid android:color="?iGapButtonColor" />
                     <corners android:radius="10dp" />
                 </shape>
             </item>
@@ -17,7 +17,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/kuknos_dark_shade_green_spinner" />
+                    <solid android:color="?iGapButtonColor" />
                     <corners android:radius="10dp" />
                 </shape>
             </item>
@@ -30,15 +30,15 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/buttonColor" />
+                    <solid android:color="?iGapButtonColor" />
                     <corners android:radius="10dp" />
                 </shape>
             </item>
             <item>
-                <ripple android:color="@color/kuknos_dark_shade_green_spinner" tools:targetApi="LOLLIPOP">
+                <ripple android:color="?iGapLogoutButtonColor" tools:targetApi="LOLLIPOP">
                     <item android:id="@android:id/mask">
                         <shape android:shape="rectangle">
-                            <solid android:color="@color/buttonColor" />
+                            <solid android:color="?iGapButtonColor" />
                             <corners android:radius="10dp" />
                         </shape>
                     </item>

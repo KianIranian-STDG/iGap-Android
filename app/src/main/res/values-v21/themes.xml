@@ -21,6 +21,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapTimerPinter">@drawable/timer_position_dark</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme.baseLightTheme">
@@ -43,6 +44,7 @@
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapTimerPinter">@drawable/timer_position_light</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme.baseRedTheme">
@@ -65,6 +67,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapTimerPinter">@drawable/timer_position_red</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme.basePinkTheme">
@@ -87,6 +90,7 @@
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapTimerPinter">@drawable/timer_position_pink</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme.basePurpleTheme">
@@ -109,6 +113,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapTimerPinter">@drawable/timer_position_purple</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme.baseBlueTheme">
@@ -132,6 +137,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapTimerPinter">@drawable/timer_position_blue</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme.baseGreenTheme">
@@ -154,6 +160,7 @@
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapTimerPinter">@drawable/timer_position_green</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme.baseAmberTheme">
@@ -176,6 +183,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapTimerPinter">@drawable/timer_position_amber</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme.baseOrangeTheme">
@@ -198,6 +206,7 @@
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapTimerPinter">@drawable/timer_position_orange</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme.baseDarkGrayTheme">
@@ -220,6 +229,7 @@
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable</item>
         <item name="iGapTimerPinter">@drawable/timer_position_dark_gray</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_style</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

@@ -56,7 +56,7 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
             holder.currentUserView.setVisibility(View.INVISIBLE);
         }
         if (mAccountsList.get(position).isAssigned()) {
-            mAvatarHandler.getAvatar(new ParamWithAvatarType(holder.userAvatar, mAccountsList.get(position).getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+            mAvatarHandler.getAvatar(new ParamWithAvatarType(holder.userAvatar, mAccountsList.get(position).getId()).avatarType(AvatarHandler.AvatarType.USER).showMain(), true);
             holder.username.setText(mAccountsList.get(position).getName());
             holder.messageUnreadCount.setVisibility(View.VISIBLE);
             String t;

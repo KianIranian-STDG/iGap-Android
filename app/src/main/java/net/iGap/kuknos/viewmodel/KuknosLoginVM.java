@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknoscheckUserM;
@@ -21,7 +20,6 @@ public class KuknosLoginVM extends ViewModel {
     private ObservableField<String> ID = new ObservableField<>();
     private ObservableField<String> userNum = new ObservableField<>();
     private UserRepo userRepo = new UserRepo();
-    private boolean isRegisteredBefore = false;
 
     public KuknosLoginVM() {
         error = new MutableLiveData<>();
@@ -37,15 +35,12 @@ public class KuknosLoginVM extends ViewModel {
         } else if (ID.get().length() != 10) {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_login_error_invalid_str));
         } else {
-            if (isRegisteredBefore == true)
-                nextPage.setValue(true);
-            else
-                checkUser();
+            checkUser();
         }
     }
 
     private void checkUser() {
-        userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
+        /*userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
             @Override
             public void onResponse(KuknoscheckUserM kuknoscheckUserM) {
                 if (kuknoscheckUserM.getToken() != null) {
@@ -69,7 +64,7 @@ public class KuknosLoginVM extends ViewModel {
                 else
                     progressState.setValue(0);
             }
-        });
+        });*/
     }
 
     public boolean loginStatus() {
@@ -85,16 +80,16 @@ public class KuknosLoginVM extends ViewModel {
         return error;
     }
 
+    public void setError(MutableLiveData<ErrorM> error) {
+        this.error = error;
+    }
+
     public MutableLiveData<Boolean> getNextPage() {
         return nextPage;
     }
 
     public void setNextPage(MutableLiveData<Boolean> nextPage) {
         this.nextPage = nextPage;
-    }
-
-    public void setError(MutableLiveData<ErrorM> error) {
-        this.error = error;
     }
 
     public ObservableField<String> getID() {
@@ -109,10 +104,6 @@ public class KuknosLoginVM extends ViewModel {
         return userNum;
     }
 
-    public void setUserNum(ObservableField<String> userNum) {
-        this.userNum = userNum;
-    }
-
     public MutableLiveData<Integer> getProgressState() {
         return progressState;
     }
@@ -125,7 +116,4 @@ public class KuknosLoginVM extends ViewModel {
         return kuknoscheckUserM;
     }
 
-    public void setKuknoscheckUserM(KuknoscheckUserM kuknoscheckUserM) {
-        this.kuknoscheckUserM = kuknoscheckUserM;
-    }
 }

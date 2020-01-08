@@ -16,7 +16,7 @@ public class ImageLoadingService {
         if (picasso == null)
             if (Build.VERSION.SDK_INT < 22) {
                 picasso = new Picasso.Builder(imageView.getContext())
-                        .downloader(new OkHttp3Downloader(new RetrofitFactory().httpClient)).build();
+                        .downloader(new OkHttp3Downloader(new RetrofitFactory().getHttpClient())).build();
             } else {
                 picasso = new Picasso.Builder(imageView.getContext()).build();
             }

@@ -329,6 +329,7 @@ public final class AppUtils {
                 iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case SEEN:
+            case LISTENED:
                 iconTextView.setText(R.string.delivery_icon);
                 iconTextView.setTextColor(Theme.getInstance().getAccentColor(iconTextView.getContext()));
                 break;
@@ -573,7 +574,7 @@ public final class AppUtils {
         });
     }
 
-    public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {
+    public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, boolean hasTextForCopy, final IResendMessage listener) {
         List<String> items = new ArrayList<>();
         List<Integer> itemsId = new ArrayList<>();
         items.add(context.getString(R.string.resend_chat_message));
@@ -582,8 +583,14 @@ public final class AppUtils {
             items.add(String.format(context.getString(R.string.resend_all_messages), failedMessagesCount));
             itemsId.add(1);
         }
+
         items.add(context.getString(R.string.delete_item_dialog));
         itemsId.add(2);
+
+        if (hasTextForCopy) {
+            items.add(context.getString(R.string.copy_item_dialog));
+            itemsId.add(3);
+        }
 
         int[] newIds = new int[itemsId.size()];
         for (Integer integer : itemsId) {
@@ -602,6 +609,9 @@ public final class AppUtils {
                         break;
                     case 2:
                         listener.deleteMessage();
+                        break;
+                    case 3:
+                        listener.copyMessage();
                         break;
                 }
             }

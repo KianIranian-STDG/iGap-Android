@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import androidx.annotation.IdRes;
@@ -17,17 +16,17 @@ import androidx.databinding.DataBindingUtil;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
+import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.BottomSheetListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BottomSheetFragment extends BottomSheetDialogFragment {
+public class BottomSheetFragment extends BaseBottomSheet {
 
     private List<String> itemList;
     private int range;
@@ -80,34 +79,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-                FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-                BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                behavior.setPeekHeight(0);
-            }
-        });
-    }
-
-    @Override
     public int getTheme() {
         return R.style.BaseBottomSheetDialog;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), getTheme());
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        //No call for super(). Bug on API Level > 11.
-//        super.onSaveInstanceState(outState);
-    }
 }

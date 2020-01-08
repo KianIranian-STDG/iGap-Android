@@ -1326,7 +1326,7 @@ Want to get it?</string>
     <string name="transfer_amount_hint">Enter the transfer amount below</string>
     <string name="amount_in_rial">Amount in Rial</string>
     <string name="pay">Pay</string>
-    <string name="transfer_to_dialog">Transfer to :</string>
+    <string name="transfer_to_dialog">Transfer to :%s</string>
     <string name="am_money">money</string>
     <string name="trace_number">Trace Number</string>
     <string name="amount_2">amount :</string>
@@ -1946,7 +1946,7 @@ Want to get it?</string>
     <string name="igasht_total_ticket_price">Total Price: %d Rials</string>
     <string name="igasht_add_ticket_error">Please Add Ticket</string>
     <string name="igasht_buy_ticket_successful">Buy Ticket Successful</string>
-    <string name="money_request">Card To Card Request to:</string>
+    <string name="money_request">Card To Card Request to: %s</string>
     <string name="cardtocard_descriotion_error">Description can not be empty</string>
     <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
@@ -2032,16 +2032,18 @@ Want to get it?</string>
     <string name="prayerRoom_textView">Prayer room</string>
 
     <!-- kuknos -->
-    <string name="kuknos_login_messge_str">Please enter your ID number for registration.</string>
-    <string name="kuknos_login_id_str">ID Number</string>
-    <string name="kuknos_login_tel_str">Phone Number</string>
+    <string name="kuknos_login_messge_str">Please enter your info for registration.</string>
+    <string name="kuknos_login_id_str">ID Number *</string>
+    <string name="kuknos_login_tel_str">Phone Number *</string>
+    <string name="kuknos_login_name_str">Name</string>
+    <string name="kuknos_login_email_str">Email</string>
     <string name="kuknos_login_submit_str">Register</string>
     <string name="kuknos_login_error_empty_str">Enter your ID number</string>
     <string name="kuknos_login_error_invalid_str">Enter a Valid ID number</string>
     <string name="kuknos_login_error_server_str">Server Error: User already exists.</string>
     <string name="kuknos_login_progress_str">Checking...</string>
-    <string name="kuknos_Entry_NT_str">New Token Wallet</string>
-    <string name="kuknos_Entry_RT_str">Retrieve Token Wallet</string>
+    <string name="kuknos_Entry_NT_str">New Wallet</string>
+    <string name="kuknos_Entry_RT_str">Retrieve Wallet</string>
     <string name="kuknos_Entry_Message">Please select one of the below options:</string>
     <string name="kuknos_Restore_Title">Please enter your account recovery keys.</string>
     <string name="kuknos_Restore_Message">By using these words, you will be able to retrieve your account.</string>
@@ -2055,7 +2057,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_username">Username *</string>
     <string name="kuknos_SignupInfo_name">Name *</string>
     <string name="kuknos_SignupInfo_family">Family *</string>
-    <string name="kuknos_SignupInfo_email">Email Address</string>
+    <string name="kuknos_SignupInfo_email">Email Address *</string>
     <string name="kuknos_SignupInfo_submitBtn">Submit</string>
     <string name="kuknos_SignupInfo_checkUsername">checking....</string>
     <string name="kuknos_SignupInfo_submitConnecting">Saving...</string>
@@ -2063,6 +2065,10 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorUsernameInvalid">This username is not available.</string>
     <string name="kuknos_SignupInfo_ValidUsername">Good to go</string>
     <string name="kuknos_SignupInfo_errorEmailInvalid">Email Format is incorrect.</string>
+    <string name="kuknos_SignupInfo_errorTermAndCondition">If you would like to continue, please accept terms and conditions</string>
+    <string name="kuknos_SignupInfo_errorNameEmptyInvalid">Name can not be empty.</string>
+    <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
+    <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
@@ -2093,9 +2099,9 @@ Want to get it?</string>
     <string name="kuknos_recieve_copyBtn">Copy Wallet Address</string>
     <string name="kuknos_recieve_copyToast">Wallet Address copied in clipboard.</string>
     <string name="kuknos_send_title">Send Token</string>
-    <string name="kuknos_send_walletAddress">Wallet Address* :</string>
+    <string name="kuknos_send_walletAddress">Wallet Address*</string>
     <string name="kuknos_send_text">Memo ID or text</string>
-    <string name="kuknos_send_amount">Amount* :</string>
+    <string name="kuknos_send_amount">Amount*</string>
     <string name="kuknos_send_sendBtn">Send</string>
     <string name="kuknos_send_connectingServer">transferring...</string>
     <string name="kuknos_send_successServer">Transfer is successfully done.</string>
@@ -2144,7 +2150,7 @@ Want to get it?</string>
     <string name="kuknos_viewRecoveryEP_failTitle">Fail</string>
     <string name="kuknos_logout_title">Logout</string>
     <string name="kuknos_logout_message">Warning: loging out from your wallet will wipe the information from this machine.
-        To view your wallet, you will have to go through the restoration process again.</string>
+        To view your wallet, you will have to go through the restoration process again.\n(If you have not set pin code, just enter 0000)</string>
     <string name="kuknos_logout_pin">PIN</string>
     <string name="kuknos_logout_btn">Logout</string>
     <string name="kuknos_logout_load">Loging out...</string>
@@ -2155,6 +2161,7 @@ Want to get it?</string>
     <string name="kuknos_buyP_btn">Buy</string>
     <string name="kuknos_buyP_btn_server">Checking...</string>
     <string name="kuknos_buyP_btn_server2">Finilizing...</string>
+    <string name="kuknos_buyP_btn_server3">Fetching data...</string>
     <string name="kuknos_buyP_desc">PS:\n
         - Rest of the assets in kuknos is valuated by this Paymon\n
         - Since Paymon has been backed by gold (one unit of PMN is equal to 30 mg 24-karat gold)\n
@@ -2166,6 +2173,7 @@ Want to get it?</string>
     <string name="kuknos_buyP_zeroAmount">Number of PMN can NOT be zero.</string>
     <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
+    <string name="kuknos_buyP_MaxAmount">You are exceeding the maximum buyable value of this token.</string>
     <string name="kuknos_buyP_currency">IRR</string>
     <string name="kuknos_trade_origin">Selling*</string>
     <string name="kuknos_trade_dest">Buying*</string>
@@ -2244,6 +2252,7 @@ Want to get it?</string>
     <string name="kuknos_Entry_RTSeedKey_str">Retrieve With Seed Key</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
+    <string name="kuknos_buyAsset">Buy Asset</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

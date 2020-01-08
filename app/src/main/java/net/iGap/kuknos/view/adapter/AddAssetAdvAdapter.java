@@ -13,14 +13,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 
-import org.stellar.sdk.responses.AssetResponse;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class AddAssetAdvAdapter extends RecyclerView.Adapter<AddAssetAdvAdapter.ViewHolder> {
 
-    private ArrayList<AssetResponse> mdata;
+    private List<KuknosAsset.Asset> mdata;
     private Context context;
     private OnItemClickListener listener;
 
@@ -28,7 +27,7 @@ public class AddAssetAdvAdapter extends RecyclerView.Adapter<AddAssetAdvAdapter.
     private int itemWidth = 0;
     private DisplayMetrics metrics;
 
-    public AddAssetAdvAdapter(ArrayList<AssetResponse> data, Context context, DisplayMetrics metrics) {
+    public AddAssetAdvAdapter(List<KuknosAsset.Asset> data, Context context, DisplayMetrics metrics) {
         this.mdata = data;
         this.context = context;
         this.metrics = metrics;
@@ -89,14 +88,9 @@ public class AddAssetAdvAdapter extends RecyclerView.Adapter<AddAssetAdvAdapter.
         }
 
         public void initView(int position) {
-            title.setText(mdata.get(position).getAssetCode());
+            title.setText(mdata.get(position).getLabel());
             subTitle.setText(mdata.get(position).getAssetIssuer());
-            container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(position);
-                }
-            });
+            container.setOnClickListener(v -> listener.onItemClick(position));
             // TODO: 8/18/2019 load from api for adv
             /*desc.setText("");
             Picasso.get()

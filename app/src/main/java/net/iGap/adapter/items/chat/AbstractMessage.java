@@ -34,9 +34,11 @@ import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.collection.ArrayMap;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -630,15 +632,47 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
                 mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, mMessage.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
             }
+        } else {
+            FrameLayout forwardContainer = mHolder.getItemContainer().findViewById(R.id.messageForwardContainer);
+            ContextThemeWrapper wrapper = new ContextThemeWrapper(holder.itemView.getContext(), Theme.getInstance().getTheme(holder.itemView.getContext()));
+
+            if (forwardContainer == null) {
+                forwardContainer = new FrameLayout(holder.itemView.getContext());
+                forwardContainer.setId(R.id.messageForwardContainer);
+
+                if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                    mHolder.getItemContainer().addView(forwardContainer, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+                } else {
+                    mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+                }
+
+                forwardContainer.addView(mHolder.getChannelForwardIv(), LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
+                forwardContainer.setVisibility(View.GONE);
+            }
+
+            if (type == ProtoGlobal.Room.Type.CHANNEL) {
+                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_channel_forward_light, wrapper.getTheme()));
+                forwardContainer.setVisibility(View.VISIBLE);
+                mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                        messageClickListener.onForwardClick(structMessage);
+                });
+            }
+
+            if (type == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
+                forwardContainer.setVisibility(View.VISIBLE);
+                mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                        messageClickListener.onForwardFromCloudClick(structMessage);
+                });
+            }
         }
 
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            mHolder.getForwardContainer().setVisibility(View.VISIBLE);
-            mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                if (!FragmentChat.isInSelectionMode)
-                    messageClickListener.onForwardClick(structMessage);
-            });
-        }
 
         /**
          * set message time

@@ -19,16 +19,11 @@ public class KuknosLogoutVM extends ViewModel {
     private UserRepo userRepo = new UserRepo();
 
     public KuknosLogoutVM() {
-        if (error == null)
-            error = new MutableLiveData<>();
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(false);
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<>();
-            nextPage.setValue(false);
-        }
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(false);
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
     }
 
     public void onSubmitBtn() {
@@ -41,13 +36,10 @@ public class KuknosLogoutVM extends ViewModel {
         progressState.setValue(true);
         // TODO: send data to server
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                userRepo.deleteAccount();
-                progressState.setValue(false);
-                nextPage.setValue(true);
-            }
+        handler.postDelayed(() -> {
+            userRepo.deleteAccount();
+            progressState.setValue(false);
+            nextPage.setValue(true);
         }, 1000);
     }
 
@@ -66,10 +58,10 @@ public class KuknosLogoutVM extends ViewModel {
             error.setValue(new ErrorM(true, "wrong length pin", "0", R.string.kuknos_viewRecoveryEP_wrongPIN));
             return false;
         }
-        /*if (!PIN.get().equals(userRepo.getPIN())) {
+        if (userRepo.getPIN() != null && !userRepo.getPIN().equals("-1") && !PIN.get().equals(userRepo.getPIN())) {
             error.setValue(new ErrorM(true, "wrong length pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
             return false;
-        }*/
+        }
         return true;
     }
 

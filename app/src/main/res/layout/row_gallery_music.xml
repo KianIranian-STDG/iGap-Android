@@ -10,12 +10,12 @@
         android:id="@+id/play_bg"
         android:layout_width="@dimen/dp44"
         android:layout_height="@dimen/dp44"
-        android:background="@drawable/ic_music_cover_blue"
+        app:srcCompat="@drawable/ic_music_cover_blue"
         android:scaleType="centerCrop"
         android:layout_margin="@dimen/dp6"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="0dp"
@@ -26,7 +26,7 @@
         app:layout_constraintLeft_toLeftOf="@id/play_bg"
         app:layout_constraintRight_toRightOf="@id/play_bg"
         app:layout_constraintTop_toTopOf="@id/play_bg"
-        app:layout_constraintBottom_toBottomOf="@id/play_bg"/>
+        app:layout_constraintBottom_toBottomOf="@id/play_bg" />
 
     <TextView
         android:id="@+id/title"
@@ -39,7 +39,7 @@
         android:gravity="left"
         app:layout_constraintLeft_toRightOf="@id/play_bg"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/play_bg"/>
+        app:layout_constraintTop_toTopOf="@id/play_bg" />
 
     <TextView
         android:id="@+id/subtitle"
@@ -52,6 +52,6 @@
         app:layout_constraintRight_toRightOf="@id/title"
         app:layout_constraintLeft_toLeftOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="@id/play_bg"/>
+        app:layout_constraintBottom_toBottomOf="@id/play_bg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

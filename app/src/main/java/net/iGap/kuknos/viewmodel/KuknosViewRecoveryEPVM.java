@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 
 public class KuknosViewRecoveryEPVM extends ViewModel {
@@ -15,18 +16,14 @@ public class KuknosViewRecoveryEPVM extends ViewModel {
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Boolean> nextPage;
+    private UserRepo userRepo = new UserRepo();
 
     public KuknosViewRecoveryEPVM() {
-        if (error == null)
-            error = new MutableLiveData<>();
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(false);
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<>();
-            nextPage.setValue(false);
-        }
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(false);
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
     }
 
     public void onSubmitBtn() {
@@ -39,16 +36,13 @@ public class KuknosViewRecoveryEPVM extends ViewModel {
         progressState.setValue(true);
         // TODO: send data to server
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progressState.setValue(false);
+        handler.postDelayed(() -> {
+            progressState.setValue(false);
 
-                //success
-                nextPage.setValue(true);
-                //error
-                //error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
-            }
+            //success
+            nextPage.setValue(true);
+            //error
+            //error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
         }, 1000);
     }
 
@@ -65,6 +59,10 @@ public class KuknosViewRecoveryEPVM extends ViewModel {
         }
         if (PIN.get().length() != 4) {
             error.setValue(new ErrorM(true, "wrong length pin", "0", R.string.kuknos_viewRecoveryEP_wrongPIN));
+            return false;
+        }
+        if (!PIN.get().equals(userRepo.getPIN())) {
+            error.setValue(new ErrorM(true, "wrong length pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
             return false;
         }
         return true;

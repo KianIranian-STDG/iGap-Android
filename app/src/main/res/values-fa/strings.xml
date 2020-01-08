@@ -1288,7 +1288,7 @@
     <string name="transfer_amount_hint">مبلغ واریزی را وارد کنید</string>
     <string name="amount_in_rial">مبلغ به ریال:</string>
     <string name="pay">پرداخت</string>
-    <string name="transfer_to_dialog">انتقال به:</string>
+    <string name="transfer_to_dialog">انتقال به:%s</string>
     <string name="am_money">پول</string>
     <string name="trace_number">کد پیگیری</string>
     <string name="amount_2">مبلغ:</string>
@@ -1927,7 +1927,7 @@
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
     <string name="str_frag_sync_skipBtn">شروع</string>
     <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
-    <string name="money_request">درخواست کارت به کارت به:</string>
+    <string name="money_request">درخواست کارت به کارت به:%s</string>
     <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
     <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
     <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارت ۱۰ هزار ریال میباشد.</string>
@@ -2112,6 +2112,7 @@
     <string name="kuknos_trade_zeroOriginAmount">میزان فروش نباید صفر باشد.</string>
     <string name="kuknos_trade_emptyDestAmount">میزان خرید نباید خالی باشد.</string>
     <string name="kuknos_trade_zeroDestAmount">میزان خرید نباید صفر باشد.</string>
+    <string name="kuknos_SignupInfo_errorTermAndCondition">در صورت تمایل به ادامه، لطفا قوانین و مقررات را قبول کنید.</string>
     <string name="kuknos_trade_fail">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_trade_success">درخواست مبادله با موفقیت در سیستم ثبت شد.</string>
     <string name="kuknos_trade_sell">فروش</string>
@@ -2341,4 +2342,14 @@
     <string name="emoji_category_smileys">شکلک ها و افراد</string>
     <string name="emoji_category_symbols">نماد ها</string>
     <string name="emoji_category_travel">مسافرت و اماکن</string>
+
+    <string name="kuknos_SignupInfo_errorNIDFormatInvalid">ساختار کد ملی اشتباه است.</string>
+    <string name="kuknos_SignupInfo_errorNameEmptyInvalid">نام نمیتواند خالی باشد.</string>
+    <string name="kuknos_SignupInfo_errorNameLengthInvalid">طول نام کوتاه است.</string>
+    <string name="kuknos_buyAsset">خرید دارایی</string>
+    <string name="kuknos_buyP_MaxAmount">شما از حداکثر تعداد خرید این دارایی فراتر رفته اید.</string>
+    <string name="kuknos_buyP_btn_server3">دریافت داده...</string>
+    <string name="kuknos_login_email_str">ایمیل</string>
+    <string name="kuknos_login_name_str">نام</string>
+
 </resources>

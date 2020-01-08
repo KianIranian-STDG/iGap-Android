@@ -52,7 +52,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
         fragmentPrivacyAndSecurityBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_privacy_and_security, container, false);
         fragmentPrivacyAndSecurityBinding.setFragmentPrivacyAndSecurityViewModel(fragmentPrivacyAndSecurityViewModel);
         fragmentPrivacyAndSecurityBinding.setLifecycleOwner(this);
-        return attachToSwipeBack(fragmentPrivacyAndSecurityBinding.getRoot());
+        return fragmentPrivacyAndSecurityBinding.getRoot();
     }
 
     @Override

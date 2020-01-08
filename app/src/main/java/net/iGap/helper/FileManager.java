@@ -230,7 +230,7 @@ public class FileManager {
         }).start();
     }
 
-    public static void getDeviceMusics(Context context , FetchListener<List<GalleryMusicModel>> callback){
+    public static void getDeviceMusics(Context context , boolean sortByDate , FetchListener<List<GalleryMusicModel>> callback){
 
         new Thread(() -> {
 
@@ -247,12 +247,16 @@ public class FileManager {
                     MediaStore.Audio.Media.TITLE
             };
 
+            String sortType ;
+            if (sortByDate) sortType = MediaStore.Audio.Media.DATE_ADDED + " DESC";
+            else sortType = MediaStore.Audio.Media.TITLE + " ASC";
+
             Cursor cursor = context.getContentResolver().query(
                     uri,
                     projection,
                     null,
                     null,
-                    MediaStore.Audio.Media.DATE_ADDED + " DESC"
+                    sortType
             );
 
             if (cursor != null) {

@@ -120,12 +120,10 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     }
 
     private void openAccountsDialog() {
-        new AccountsDialog().setData(avatarHandler, new AccountDialogListener() {
-            @Override
-            public void onAccountClick(boolean isAssigned, long id) {
-
-            }
-        }).show(getActivity().getSupportFragmentManager(), "account");
+        if (getActivity() == null) return;
+        new AccountsDialog()
+                .setData(avatarHandler, (isAssigned, id) -> { })
+                .show(getActivity().getSupportFragmentManager(), "account");
 
     }
 
@@ -241,7 +239,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
         if (fragment instanceof FragmentMain) {
             if (enable) {
-                ((FragmentMain) fragment).checkHasSharedData();
+                ((FragmentMain) fragment).checkHasSharedData(true);
             } else {
                 ((FragmentMain) fragment).revertToolbarFromForwardMode();
             }

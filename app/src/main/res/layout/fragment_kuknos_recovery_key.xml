@@ -9,13 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- TODO clean min height-->
-
         <LinearLayout
             android:id="@+id/fragKuknosRKSToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/sky_blue"
             android:minHeight="48dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,8 +92,8 @@
                     android:padding="8dp"
                     android:scrollbars="vertical"
                     android:scrollHorizontally="false"
-                    android:text="@={viewmodel.mnemonic}"
-                    android:textColor="?rootBackgroundColor"
+                    android:text="@{viewmodel.mnemonic}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

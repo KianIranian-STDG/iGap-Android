@@ -36,9 +36,22 @@ public class RealmUserInfo extends RealmObject {
     private boolean isWalletRegister;
     private boolean isWalletActive;
     private boolean isMplActive;
+    private long walletAmount;
+    private long ivandScore;
+
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
+    }
+
+    public static long queryWalletAmount() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo user = realm.where(RealmUserInfo.class).findFirst();
+            if (user != null) {
+                return user.getWalletAmount();
+            }
+            return 0L;
+        });
     }
 
     public static RealmUserInfo putOrUpdate(Realm realm, long userId, String username, String phoneNumber, String token, String authorHash) {
@@ -388,5 +401,21 @@ public class RealmUserInfo extends RealmObject {
 
     public void setMplActive(boolean mplActive) {
         isMplActive = mplActive;
+    }
+
+    public long getWalletAmount() {
+        return walletAmount;
+    }
+
+    public void setWalletAmount(long walletAmount) {
+        this.walletAmount = walletAmount;
+    }
+
+    public long getIvandScore() {
+        return ivandScore;
+    }
+
+    public void setIvandScore(long ivandScore) {
+        this.ivandScore = ivandScore;
     }
 }

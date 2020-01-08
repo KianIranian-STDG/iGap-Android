@@ -1,5 +1,7 @@
 package net.iGap.kuknos.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +16,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.gson.Gson;
+
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosEntryOptionBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.viewmodel.KuknosEntryOptionVM;
 
 public class KuknosEntryOptionFrag extends BaseFragment {
@@ -28,8 +33,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     private KuknosEntryOptionVM kuknosEntryOptionVM;
 
     public static KuknosEntryOptionFrag newInstance() {
-        KuknosEntryOptionFrag kuknosLoginFrag = new KuknosEntryOptionFrag();
-        return kuknosLoginFrag;
+        return new KuknosEntryOptionFrag();
     }
 
     @Override
@@ -70,20 +74,40 @@ public class KuknosEntryOptionFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosEToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        if (kuknosEntryOptionVM.loginStatus() && isRegisteredSharesPref()) {
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+            if (fragment == null) {
+                fragment = KuknosPanelFrag.newInstance();
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            popBackStackFragment();
+        }
+
         onNewTObserver();
         onRestoreTObserver();
         onRestoreSeedObserver();
     }
 
+    private boolean isRegisteredSharesPref() {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        KuknosSignupM temp = new Gson().fromJson(sharedpreferences.getString("RegisterInfo", null), KuknosSignupM.class);
+        if (temp == null)
+            return false;
+        return temp.isRegistered();
+    }
+
     private void onNewTObserver() {
 
         kuknosEntryOptionVM.getGoNewTPage().observe(getViewLifecycleOwner(), nextPage -> {
-            if (nextPage == true) {
+            if (nextPage) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeyFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosSignupInfoFrag.newInstance();
+                    fragment = KuknosShowRecoveryKeyFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
@@ -95,7 +119,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     private void onRestoreTObserver() {
 
         kuknosEntryOptionVM.getGoRestoreTPage().observe(getViewLifecycleOwner(), nextPage -> {
-            if (nextPage == true) {
+            if (nextPage) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreFrag.class.getName());

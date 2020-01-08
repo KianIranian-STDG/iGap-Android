@@ -73,13 +73,10 @@ public class HelperSaveFile {
 
                 switch (folderType) {
                     case download:
-
-                        if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
-                            destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
-                        } else {
-                            destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads/" + fileName;
+                        if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
                         }
-
+                        destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
                         break;
                     case music:
 
@@ -143,6 +140,7 @@ public class HelperSaveFile {
                     Toast.makeText(G.currentActivity, successMessage, Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 Toast.makeText(G.currentActivity, R.string.file_can_not_save_to_selected_folder, Toast.LENGTH_SHORT).show();
             }
         }

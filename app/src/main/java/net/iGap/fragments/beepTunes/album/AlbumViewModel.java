@@ -12,15 +12,11 @@ import com.downloader.Progress;
 
 import net.iGap.DbManager;
 import net.iGap.api.BeepTunesApi;
-import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiServiceProvider;
-import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.beepTunes.downloadQuality.DownloadQualityFragment;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.interfaces.OnSongDownload;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.Track;
@@ -34,7 +30,7 @@ import java.util.List;
 public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private static final String TAG = "aabolfazlAlbum";
 
-    private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
+    private BeepTunesApi apiService = new RetrofitFactory().getBeepTunesRetrofit();
     private List<DownloadSong> downloadQueue = new ArrayList<>();
 
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
@@ -48,7 +44,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     }
 
     void getAlbumSong(long id) {
-        new ApiInitializer<AlbumTrack>().initAPI(apiService.getAlbumTrack(id), this, new ResponseCallback<AlbumTrack>() {
+        /*new ApiInitializer<AlbumTrack>().initAPI(apiService.getAlbumTrack(id), this, new ResponseCallback<AlbumTrack>() {
             @Override
             public void onSuccess(AlbumTrack data) {
                 trackMutableLiveData.postValue(data.getData());
@@ -63,12 +59,12 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
             public void setProgressIndicator(boolean visibility) {
                 LoadingProgressMutableLiveData.postValue(visibility);
             }
-        });
+        });*/
     }
 
     void getArtistOtherAlbum(long id) {
 
-        new ApiInitializer<Albums>().initAPI(apiService.getArtistAlbums(id), this, new ResponseCallback<Albums>() {
+        /*new ApiInitializer<Albums>().initAPI(apiService.getArtistAlbums(id), this, new ResponseCallback<Albums>() {
             @Override
             public void onSuccess(Albums data) {
                 albumMutableLiveData.postValue(data);
@@ -83,7 +79,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
             public void setProgressIndicator(boolean visibility) {
                 LoadingProgressMutableLiveData.postValue(visibility);
             }
-        });
+        });*/
 
     }
 

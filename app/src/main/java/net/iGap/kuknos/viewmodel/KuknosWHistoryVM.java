@@ -1,60 +1,51 @@
 package net.iGap.kuknos.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
-import org.stellar.sdk.responses.Page;
-import org.stellar.sdk.responses.operations.OperationResponse;
+public class KuknosWHistoryVM extends BaseAPIViewModel {
 
-public class KuknosWHistoryVM extends ViewModel {
-
-    private MutableLiveData<Page<OperationResponse>> listMutableLiveData;
+    private MutableLiveData<KuknosOperationResponse> listMutableLiveData;
     private MutableLiveData<ErrorM> errorM;
     private MutableLiveData<Boolean> progressState;
     private PanelRepo panelRepo = new PanelRepo();
 
     public KuknosWHistoryVM() {
-        if (listMutableLiveData == null) {
-            listMutableLiveData = new MutableLiveData<>();
-        }
-        if (errorM == null) {
-            errorM = new MutableLiveData<>();
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(true);
-        }
+        listMutableLiveData = new MutableLiveData<>();
+        errorM = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        progressState.setValue(true);
     }
 
     public void getDataFromServer() {
-        panelRepo.getUserHistory(new ApiResponse<Page<OperationResponse>>() {
+        progressState.setValue(true);
+        panelRepo.getUserHistory(this, new ResponseCallback<KuknosResponseModel<KuknosOperationResponse>>() {
             @Override
-            public void onResponse(Page<OperationResponse> operationResponsePage) {
-                listMutableLiveData.setValue(operationResponsePage);
+            public void onSuccess(KuknosResponseModel<KuknosOperationResponse> data) {
+                listMutableLiveData.setValue(data.getData());
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String error) {
-
+            public void onError(String error) {
+                progressState.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                progressState.setValue(false);
             }
         });
     }
 
-    public MutableLiveData<Page<OperationResponse>> getListMutableLiveData() {
+    public MutableLiveData<KuknosOperationResponse> getListMutableLiveData() {
         return listMutableLiveData;
-    }
-
-    public void setListMutableLiveData(MutableLiveData<Page<OperationResponse>> listMutableLiveData) {
-        this.listMutableLiveData = listMutableLiveData;
     }
 
     public MutableLiveData<ErrorM> getErrorM() {

@@ -2,22 +2,24 @@ package net.iGap.kuknos.viewmodel;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
 
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-
-import org.stellar.sdk.responses.AccountResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
 import java.text.DecimalFormat;
 
-public class KuknosPanelVM extends ViewModel {
+public class KuknosPanelVM extends BaseAPIViewModel {
 
-    private MutableLiveData<AccountResponse> kuknosWalletsM;
+    private MutableLiveData<KuknosBalance> kuknosWalletsM;
+    private KuknosAsset asset = null;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Integer> openPage;
@@ -26,62 +28,111 @@ public class KuknosPanelVM extends ViewModel {
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
     private int position = 0;
+    private boolean inRialMode = false;
 
     public KuknosPanelVM() {
         //TODO clear Hard Code
         balance.set("...");
         currency.set("PMN");
 
-        if (kuknosWalletsM == null) {
-            kuknosWalletsM = new MutableLiveData<>();
-            //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
-        }
-        if (error == null) {
-            error = new MutableLiveData<ErrorM>();
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<Boolean>();
-        }
-        if (openPage == null) {
-            openPage = new MutableLiveData<Integer>();
-            openPage.setValue(-1);
-        }
+        kuknosWalletsM = new MutableLiveData<>();
+        //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
+        error = new MutableLiveData<>();
+        progressState = new MutableLiveData<>();
+        openPage = new MutableLiveData<>();
+        openPage.setValue(-1);
     }
 
     public void getDataFromServer() {
-        panelRepo.getAccountInfo(new ApiResponse<AccountResponse>() {
+        progressState.setValue(true);
+        panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
-            public void onResponse(AccountResponse accountResponse) {
-                kuknosWalletsM.setValue(accountResponse);
+            public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
+                //todo fix it here
+                kuknosWalletsM.setValue(data.getData());
                 spinnerSelect(0);
+                progressState.setValue(false);
             }
 
             @Override
-            public void onFailed(String errorM) {
+            public void onError(String errorM) {
                 balance.set("0.0");
                 currency.set("currency");
                 error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                progressState.setValue(false);
             }
 
             @Override
-            public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+            public void onFailed() {
+                balance.set("0.0");
+                currency.set("currency");
+                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                progressState.setValue(false);
             }
         });
     }
 
+    private void getAssetData(String assetCode) {
+        asset = null;
+        panelRepo.getAssetData(assetCode, this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
+                asset = data.getData();
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+    }
+
+    public boolean isPinSet() {
+        return panelRepo.isPinSet();
+    }
+
     public String convertToJSON(int position) {
+        if (kuknosWalletsM.getValue() == null)
+            return "";
         Gson gson = new Gson();
-        return gson.toJson(kuknosWalletsM.getValue().getBalances()[position]);
+        return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
     }
 
     public void spinnerSelect(int position) {
         this.position = position;
-        AccountResponse.Balance temp = kuknosWalletsM.getValue().getBalances()[position];
+        KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
         DecimalFormat df = new DecimalFormat("#,##0.00");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
         currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));
+        getAssetData(currency.get());
+    }
+
+    private void calculateToRial() {
+        if (asset == null || asset.getAssets().size() == 0)
+            return;
+        KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        balance.set(HelperCalander.isPersianUnicode ?
+                HelperCalander.convertToUnicodeFarsiNumber(
+                        df.format(Double.valueOf(temp.getBalance()) * Double.valueOf(asset.getAssets().get(0).getSellRate()))) :
+                (df.format(Double.valueOf(temp.getBalance()) * Double.valueOf(asset.getAssets().get(0).getSellRate()))));
+        currency.set("Rial");
+    }
+
+    public void togglePrice() {
+        if (inRialMode) {
+            spinnerSelect(position);
+            inRialMode = false;
+        } else {
+            calculateToRial();
+            inRialMode = true;
+        }
     }
 
     public void receiveW() {
@@ -142,10 +193,6 @@ public class KuknosPanelVM extends ViewModel {
         return openPage;
     }
 
-    public void setOpenPage(MutableLiveData<Integer> openPage) {
-        this.openPage = openPage;
-    }
-
     public ObservableField<String> getBalance() {
         return balance;
     }
@@ -170,11 +217,8 @@ public class KuknosPanelVM extends ViewModel {
         this.position = position;
     }
 
-    public MutableLiveData<AccountResponse> getKuknosWalletsM() {
+    public MutableLiveData<KuknosBalance> getKuknosWalletsM() {
         return kuknosWalletsM;
     }
 
-    public void setKuknosWalletsM(MutableLiveData<AccountResponse> kuknosWalletsM) {
-        this.kuknosWalletsM = kuknosWalletsM;
-    }
 }

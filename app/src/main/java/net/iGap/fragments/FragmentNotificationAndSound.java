@@ -53,10 +53,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         fragmentNotificationAndSoundBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notification_and_sound, container, false);
-        return attachToSwipeBack(fragmentNotificationAndSoundBinding.getRoot());
+        return fragmentNotificationAndSoundBinding.getRoot();
     }
 
     @Override

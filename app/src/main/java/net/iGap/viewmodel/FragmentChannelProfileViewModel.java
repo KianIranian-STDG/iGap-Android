@@ -101,6 +101,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public MutableLiveData<GoToSharedMediaModel> goToSharedMediaPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLeaveChannel = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToChatRoom = new MutableLiveData<>();
+    public MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
 
     private ChannelChatRole role;
     public long roomId;
@@ -131,11 +132,13 @@ public class FragmentChannelProfileViewModel extends ViewModel
             @Override
             public void onError(int majorCode, int minorCode) {
                 showLoading.set(View.GONE);
+                showErrorMessage.postValue(R.string.error);
             }
 
             @Override
             public void onTimeOut() {
                 showLoading.set(View.GONE);
+                showErrorMessage.postValue(R.string.error);
             }
         };
 
@@ -221,7 +224,9 @@ public class FragmentChannelProfileViewModel extends ViewModel
     }
 
     public void onClickCircleImage() {
-        if (DbManager.getInstance().doRealmTask(realm -> { return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();}) != null) {
+        if (DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
+        }) != null) {
             goToShowAvatarPage.setValue(roomId);
         }
     }

@@ -2235,7 +2235,7 @@
     <string name="transfer_amount_hint">أدخل مبلغ الإيداع</string>
     <string name="amount_in_rial">المبلغ بالريال:</string>
     <string name="pay">دفع</string>
-    <string name="transfer_to_dialog">الانتقال إلى:</string>
+    <string name="transfer_to_dialog">الانتقال إلى:%s</string>
     <string name="am_money">نقود</string>
     <string name="trace_number">رمز التتبع</string>
     <string name="amount_2">مبشر:</string>
@@ -2892,7 +2892,7 @@
     <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
     <string name="str_frag_sync_skipBtn">البدء</string>
     <string name="str_frag_sync_error">هناك خطأ ما. حاول مرة اخرى.</string>
-    <string name="money_request">طلب بطاقة إلى بطاقة إلى:</string>
+    <string name="money_request">طلب بطاقة إلى بطاقة إلى:%s</string>
     <string name="cardtocard_descriotion_error">Description can not be empty</string>
     <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>

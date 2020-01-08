@@ -61,6 +61,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.realm.Case;
 import io.realm.Realm;
@@ -737,6 +739,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onBtnClearSearchClickListener(View view) {
+        cancelSearchTimer();
         if (getActivity() != null) {
             getActivity().onBackPressed();
         }
@@ -744,6 +747,54 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onSearchTextChangeListener(View view, String text) {
-        fillList(text);
+        if (text.trim().length() < 5) {
+            cancelSearchTimer();
+            fillList("");
+            preventRepeatSearch = "";
+            return;
+        }
+        startOrReStartSearchTimer();
+    }
+
+    private Timer mTimerSearch;
+    private TimerTask mTimerTaskSearch;
+    private byte mSearchCurrentTime = 0;
+
+    private void startOrReStartSearchTimer() {
+
+        mSearchCurrentTime = 0;
+        cancelSearchTimer();
+
+        if (mTimerSearch == null) {
+
+            mTimerTaskSearch = new TimerTask() {
+                @Override
+                public void run() {
+
+                    //search after 0.5 sec
+                    if (mSearchCurrentTime > 0) {
+                        String text = toolbar.getEditTextSearch().getText().toString().trim();
+                        G.handler.post(() -> fillList(text));
+                        cancelSearchTimer();
+                    } else {
+                        mSearchCurrentTime++;
+                    }
+                }
+            };
+
+            mTimerSearch = new Timer();
+            mTimerSearch.schedule(mTimerTaskSearch, 500, 5);
+        }
+    }
+
+    private void cancelSearchTimer() {
+
+        if (mTimerSearch != null) {
+            mSearchCurrentTime = 0;
+            mTimerSearch.cancel();
+            mTimerTaskSearch = null;
+            mTimerSearch = null;
+        }
+
     }
 }

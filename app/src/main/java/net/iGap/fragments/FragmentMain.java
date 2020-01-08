@@ -23,7 +23,6 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.AccountManager;
-import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -86,8 +85,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -119,7 +116,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private ConstraintLayout root;
     private TextView selectedItemCountTv;
     private RecyclerView multiSelectRv;
-    /*private SelectedItemAdapter selectedItemAdapter;*/
+    private SelectedItemAdapter multiSelectAdapter;
     private View selectedItemView;
 
     public static FragmentMain newInstance(MainType mainType) {
@@ -163,10 +160,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         selectedItemView = view.findViewById(R.id.amr_layout_selected_root);
 
         multiSelectRv.setLayoutManager(new LinearLayoutManager(multiSelectRv.getContext(), RecyclerView.HORIZONTAL, false));
-        /*if (selectedItemAdapter == null) {
-            selectedItemAdapter = new SelectedItemAdapter();
-        }*/
-        multiSelectRv.setAdapter(new SelectedItemAdapter()/*selectedItemAdapter*/);
+
+        if (multiSelectAdapter == null) multiSelectAdapter = new SelectedItemAdapter();
+        multiSelectRv.setAdapter(multiSelectAdapter);
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -209,10 +205,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 return;
             }
 
-            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
+            multiSelectAdapter.setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
 
             RealmRoom finalItem = item;
-            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setCallBack(action -> {
+            multiSelectAdapter.setCallBack(action -> {
                 switch (action) {
                     case 0:
                         pinToTop(finalItem.getId(), finalItem.isPinned());
@@ -248,7 +244,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
 
             refreshChatList(position, false);
-            Log.wtf(this.getClass().getName(), "count item: " + multiSelectRv.getAdapter().getItemCount());
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
@@ -271,11 +266,22 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         //check is available forward,shared message
         setForwardMessage(true);
-        checkHasSharedData();
+        checkHasSharedData(true);
+        checkMultiSelectState();
 
         //just check at first time page loaded
         notifyChatRoomsList();
 
+    }
+
+    private void checkMultiSelectState() {
+        if (isChatMultiSelectEnable) {
+            enableMultiSelect();
+            selectedItemCountTv.setVisibility(View.VISIBLE);
+            multiSelectRv.setVisibility(View.VISIBLE);
+            multiSelectAdapter.notifyDataSetChanged();
+            selectedItemCountTv.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
+        }
     }
 
     private void markAsRead() {
@@ -391,10 +397,14 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(new String[]{RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList, this::disableMultiSelect);
-            getChatLists();
-
         } else {
             pbLoading.setVisibility(View.GONE);
+        }
+
+        if (!ClientGetRoomListResponse.roomListFetched) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
         }
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -503,21 +513,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
     //***************************************************************************************************************************
-
-
-    private void getChatLists() {
-        if (!ClientGetRoomListResponse.roomListFetched) {
-            progressBar.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            },500);
-
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
-    }
 
     private void deleteChat(Room item, boolean exit) {
 
@@ -694,6 +689,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                Log.wtf(this.getClass().getName(), "onClientGetRoomList: hide progress");
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -792,8 +788,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         G.onClientGetRoomListResponse = null;
         G.onSetActionInRoom = null;
         G.onDateChanged = null;
@@ -849,11 +845,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                 .onNegative((dialog, which) -> dialog.dismiss())
                                 .positiveText(R.string.startUpdate)
                                 .onPositive((dialog, which) -> {
-                                    String url = "http://d.igap.net/update";
-                                    Intent i = new Intent(Intent.ACTION_VIEW);
-                                    i.setData(Uri.parse(url));
-                                    startActivity(i);
-                                    dialog.dismiss();
+                                    try {
+                                        String url = "http://d.igap.net/update";
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(url));
+                                        startActivity(i);
+                                        dialog.dismiss();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getActivity(), R.string.need_browser, Toast.LENGTH_SHORT).show();
+                                    }
                                 })
                                 .show();
                     }
@@ -897,7 +898,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getLeftButton().setVisibility(View.GONE);
-            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+            if (PassCode.getInstance().isPassCode())
+                mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mSelectedRoomList.clear();
             roomListAdapter.setMultiSelect(false);
             roomListAdapter.notifyDataSetChanged();
@@ -909,14 +911,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         List<MultiSelectStruct> items = new ArrayList<>();
 
         if (realmRoom.isValid() && G.fragmentActivity != null) {
-            if (first) {
-                String role = null;
-                if (realmRoom.getType() == GROUP) {
-                    role = realmRoom.getGroupRoom().getRole().toString();
-                } else if (realmRoom.getType() == CHANNEL) {
-                    role = realmRoom.getChannelRoom().getRole().toString();
-                }
 
+            boolean isHasChannelInList = checkHasChannelInSelectedItems();
+            String role = null;
+            if (realmRoom.getType() == GROUP) {
+                role = realmRoom.getGroupRoom().getRole().toString();
+            } else if (realmRoom.getType() == CHANNEL) {
+                role = realmRoom.getChannelRoom().getRole().toString();
+            }
+
+            if (first) {
                 if (!G.fragmentActivity.isFinishing()) {
                     long peerId = realmRoom.getChatRoom() != null ? realmRoom.getChatRoom().getPeerId() : 0;
                     boolean isCloud = peerId > 0 && peerId == AccountManager.getInstance().getCurrentUser().getId();
@@ -965,8 +969,17 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 items.add(new MultiSelectStruct(7, R.string.delete));
             }
 
+            if (isHasChannelInList) {
+                items.remove(new MultiSelectStruct(6, R.string.clear_history));
+            }
         }
         return items;
+    }
+
+    private boolean checkHasChannelInSelectedItems() {
+        for (Room room : mSelectedRoomList)
+            if (room != null && room.getType() == CHANNEL) return true;
+        return false;
     }
 
     public void revertToolbarFromForwardMode() {
@@ -976,7 +989,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         checkConnectionStateAndSetToolbarTitle();
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
-        if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+        if (PassCode.getInstance().isPassCode())
+            mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
     }
 
@@ -986,9 +1000,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         if (G.connectionState != null) {
             if (G.connectionState == ConnectionState.CONNECTING) {
                 mHelperToolbar.getTextViewLogo().setText(getString(R.string.connecting));
+                mHelperToolbar.changeDefaultTitle(getString(R.string.app_name));
                 mHelperToolbar.checkIGapFont();
             } else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                 mHelperToolbar.getTextViewLogo().setText(getString(R.string.waiting_for_network));
+                mHelperToolbar.changeDefaultTitle(getString(R.string.app_name));
                 mHelperToolbar.checkIGapFont();
             } else {
                 mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
@@ -1178,7 +1194,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-                if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                if (PassCode.getInstance().isPassCode())
+                    mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
             } else {
@@ -1188,14 +1205,15 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     }
 
-    public void checkHasSharedData() {
+    public void checkHasSharedData(boolean enable) {
 
-        if (!(G.isLandscape && G.twoPaneMode)) {
-            if (HelperGetDataFromOtherApp.hasSharedData) {
+        if (!(G.isLandscape && G.twoPaneMode) && HelperGetDataFromOtherApp.hasSharedData) {
+            if (enable) {
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-                if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                if (PassCode.getInstance().isPassCode())
+                    mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
             } else {

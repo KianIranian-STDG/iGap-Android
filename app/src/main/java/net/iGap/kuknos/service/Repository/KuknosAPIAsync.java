@@ -6,7 +6,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
 
 import org.stellar.sdk.Asset;
 import org.stellar.sdk.AssetTypeCreditAlphaNum4;
@@ -36,13 +35,13 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT, ASSETS, CHANGE_TRUST, OFFERS_LIST, TRADES_LIST, MANAGE_OFFER
     }
 
-    private ApiResponse<T> response;
+    /*private ApiResponse<T> response;*/
     private API apiEnum;
     private boolean successStatus = false;
     private static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org" /*"https://horizon-testnet.stellar.org"*/;
 
-    public KuknosAPIAsync(ApiResponse<T> response, API apiEnum) {
-        this.response = response;
+    public KuknosAPIAsync(/*ApiResponse<T> response,*/ API apiEnum) {
+        /*this.response = response;*/
         this.apiEnum = apiEnum;
     }
 
@@ -61,17 +60,17 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
     @Override
     protected void onPostExecute(T t) {
         onProgressUpdate(false);
-        if (successStatus)
+        /*if (successStatus)
             response.onResponse(t);
         else {
             response.onFailed((String) t);
-        }
+        }*/
         super.onPostExecute(t);
     }
 
     @Override
     protected void onProgressUpdate(Boolean... values) {
-        response.setProgressIndicator(values[0]);
+        /*response.setProgressIndicator(values[0]);*/
         super.onProgressUpdate(values);
     }
 
@@ -129,7 +128,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         }
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {
@@ -239,7 +238,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         Asset asset = new AssetTypeCreditAlphaNum4(code, issuer);
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {
@@ -312,7 +311,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         Asset counterAsset = new AssetTypeCreditAlphaNum4(counterCode, counterIssuer);
 
         // If there was no error, load up-to-date information on your account.
-        AccountResponse sourceAccount = null;
+        AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
         } catch (IOException e) {
