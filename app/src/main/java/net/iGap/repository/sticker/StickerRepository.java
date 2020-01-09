@@ -19,11 +19,11 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
-import net.iGap.helper.rx.IGSingleObserver;
 import net.iGap.interfaces.ObserverView;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmStickersDetailsFields;
+import net.iGap.rx.IGSingleObserver;
 
 import org.jetbrains.annotations.NotNull;
 

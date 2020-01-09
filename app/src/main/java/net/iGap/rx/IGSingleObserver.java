@@ -1,7 +1,7 @@
-package net.iGap.helper.rx;
+package net.iGap.rx;
 
 
-import android.util.Log;
+import net.iGap.eventbus.EventManager;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.CompositeDisposable;
@@ -23,8 +23,6 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
     @Override
     public void onError(Throwable e) {
 //        EventBus.getDefault().post(new AaException(ExceptionMessageFactory.getMessage(e)));
-
-        // TODO: 12/31/19  just for test
-        Log.e(getClass().getName(), "onError: " + e);
+        EventManager.getInstance().postEvent(EventManager.IG_ERROR, e);
     }
 }

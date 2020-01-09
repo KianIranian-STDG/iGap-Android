@@ -52,6 +52,7 @@ public class EventManager {
 
     public static final int STICKER_DOWNLOAD = 20;
     public static final int EMOJI_LOADED = 21;
+    public static final int IG_ERROR = 22;
 
 
     private static EventManager eventListenerInstance;
