@@ -15,14 +15,9 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
-import com.bumptech.glide.Glide;
-
-import net.iGap.adapter.items.cells.AnimatedStickerCell;
-import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.view.StickerView;
 
 public class ScrollTabView extends HorizontalScrollView {
 
@@ -113,16 +108,10 @@ public class ScrollTabView extends HorizontalScrollView {
         rootView.addView(tab);
         tab.setSelected(position == currentPosition);
 
-        AppCompatImageView imageView;
-        if (sticker.getAvatarType() == StructIGSticker.ANIMATED_STICKER) {
-            imageView = new AnimatedStickerCell(getContext());
-            ((AnimatedStickerCell) imageView).playAnimation(sticker.getAvatarPath());
-        } else {
-            imageView = new AppCompatImageView(getContext());
-            Glide.with(getContext()).load(sticker.getAvatarPath()).into(imageView);
-        }
+        StickerView stickerView = new StickerView(getContext());
+        stickerView.loadStickerGroup(sticker);
 
-        tab.addView(imageView, LayoutCreator.createFrame(30, 30, Gravity.CENTER));
+        tab.addView(stickerView, LayoutCreator.createFrame(30, 30, Gravity.CENTER));
 
     }
 
