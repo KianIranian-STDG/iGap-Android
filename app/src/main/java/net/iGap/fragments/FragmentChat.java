@@ -739,6 +739,8 @@ public class FragmentChat extends BaseFragment
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
 
+        EmojiManager.getInstance().loadRecentEmoji();
+
         return attachToSwipeBack(notifyFrameLayout);
     }
 

@@ -35,7 +35,7 @@ public class EmojiManager {
 
     private static EmojiManager instance;
 
-    private final int MAX_RECENT_EMOJI_COUNT = 40;
+    private final int MAX_RECENT_EMOJI_COUNT = 56;
     public final int EMOJI_CATEGORY_SIZE = 8;
 
     private final int VERSION = 1;
@@ -518,6 +518,10 @@ public class EmojiManager {
 
     public ArrayList<String> getRecentEmoji() {
         return recentEmoji;
+    }
+
+    public boolean isRecentEmojiLoaded() {
+        return recentEmojiLoaded;
     }
 
     private EmojiManager() {

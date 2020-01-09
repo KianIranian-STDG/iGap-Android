@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -108,9 +107,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         hasEmoji = needEmoji;
         hasSticker = needSticker;
 
-        Log.i(TAG, "EmojiView: ");
-
         if (hasEmoji) {
+
+            if (!EmojiManager.getInstance().isRecentEmojiLoaded()) {
+                EmojiManager.getInstance().loadRecentEmoji();
+            }
+
             emojiContainer = new FrameLayout(getContext());
 
             emojiGridAdapter = new EmojiGridAdapter();
@@ -155,32 +157,19 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                 structIGEmojiGroups.add(structIGEmojiGroup);
             }
 
-            EmojiManager.getInstance().loadRecentEmoji();
-            EmojiManager.getInstance().sortEmoji();
-
-            Log.i(TAG, "recent emoji size -> " + EmojiManager.getInstance().getRecentEmoji());
-
-            for (int i = 0; i < EmojiManager.getInstance().getRecentEmoji().size(); i++) {
-                Log.i(TAG, "recent: " + i + " -> " + EmojiManager.getInstance().getRecentEmoji().get(i));
-            }
+            StructIGEmojiGroup structIGEmojiGroup = new StructIGEmojiGroup();
+            structIGEmojiGroup.setCategoryName(R.string.recently);
+            structIGEmojiGroup.setStrings(EmojiManager.getInstance().getRecentEmoji());
+            structIGEmojiGroups.add(0, structIGEmojiGroup);
 
             emojiGridAdapter.setStructIGEmojiGroups(structIGEmojiGroups);
 
             emojiGridAdapter.setListener(new EmojiAdapter.Listener() {
                 @Override
                 public void onClick(String emojiCode) {
+                    showBottomTab(true);
                     EmojiManager.getInstance().addRecentEmoji(emojiCode);
                     EmojiManager.getInstance().saveRecentEmoji();
-
-                    EmojiManager.getInstance().loadRecentEmoji();
-                    EmojiManager.getInstance().sortEmoji();
-
-                    Log.i(TAG, "recent emoji size -> " + EmojiManager.getInstance().getRecentEmoji());
-
-                    for (int i = 0; i < EmojiManager.getInstance().getRecentEmoji().size(); i++) {
-                        Log.i(TAG, "recent: " + i + " -> " + EmojiManager.getInstance().getRecentEmoji().get(i));
-                    }
-
 
                     if (listener != null)
                         listener.onEmojiSelected(emojiCode);
@@ -476,10 +465,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
             emojiIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
             settingIv.setImageResource(R.drawable.ic_backspace);
+            checkEmojiTabY(null, 0);
         } else if (position == STICKER) {
             emojiIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
             stickerIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
             settingIv.setImageResource(R.drawable.ic_settings);
+            checkStickersTabY(null, 0);
         }
         currentPage = position;
     }

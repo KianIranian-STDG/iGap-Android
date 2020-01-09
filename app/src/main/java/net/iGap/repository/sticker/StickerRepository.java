@@ -8,6 +8,7 @@ import com.vanniktech.emoji.sticker.struct.StructSticker;
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
@@ -308,7 +309,7 @@ public class StickerRepository implements ObserverView {
                         return structIGStickerGroups;
                     }).map(structIGStickerGroups -> {
                         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(StructIGStickerGroup.RECENT_GROUP);
-                        stickerGroup.setName("Recent");
+                        stickerGroup.setName(G.context.getResources().getString(R.string.recently));
                         RealmResults<RealmStickersDetails> realmStickersDetails = realm.where(RealmStickersDetails.class)
                                 .limit(13)
                                 .notEqualTo(RealmStickersDetailsFields.RECENT_TIME, 0)
