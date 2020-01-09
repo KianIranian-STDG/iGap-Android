@@ -69,7 +69,7 @@ public class StickerView extends FrameLayout implements EventListener {
         }
 
         if (hasFileOnLocal()) {
-            if (type == StructIGSticker.ANIMATED_STICKER) {
+            if (type == StructIGSticker.ANIMATED_STICKER && stickerIv instanceof AnimatedStickerCell) {
                 ((AnimatedStickerCell) stickerIv).playAnimation(viewPath);
             } else {
                 Glide.with(getContext()).load(viewPath).into(stickerIv);
