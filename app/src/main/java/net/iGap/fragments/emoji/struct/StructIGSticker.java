@@ -17,7 +17,7 @@ public class StructIGSticker {
     private String token;
     private String groupId;
     private String fileName;
-    private int fileSize;
+    private long fileSize;
 
     public StructIGSticker() {
     }
@@ -96,11 +96,11 @@ public class StructIGSticker {
         this.fileName = fileName;
     }
 
-    public int getFileSize() {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(int fileSize) {
+    public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 

@@ -46,7 +46,7 @@ public class StickerGridView extends FrameLayout implements StickerAdapter.AddSt
 
         addView(stickerNameTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 12, 4, isRtl ? 12 : 0, 0));
 
-        adapter = new StickerAdapter();
+        adapter = new StickerAdapter(false);
         adapter.setListener(this);
 
         RecyclerView recyclerView = new RecyclerView(getContext());

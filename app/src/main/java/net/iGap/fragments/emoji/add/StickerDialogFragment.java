@@ -2,15 +2,12 @@ package net.iGap.fragments.emoji.add;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Dialog;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,9 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
 import net.iGap.Theme;
@@ -32,8 +26,6 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
 import net.iGap.viewmodel.sticker.StickerDialogViewModel;
-
-import org.jetbrains.annotations.NotNull;
 
 public class StickerDialogFragment extends BaseBottomSheet {
     private StickerAdapter adapter;
@@ -72,7 +64,7 @@ public class StickerDialogFragment extends BaseBottomSheet {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewModel = new StickerDialogViewModel(stickerGroup);
-        adapter = new StickerAdapter();
+        adapter = new StickerAdapter(true);
         return inflater.inflate(R.layout.dialog_add_sticker, container);
     }
 

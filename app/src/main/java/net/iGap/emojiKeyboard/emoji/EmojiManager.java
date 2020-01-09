@@ -306,7 +306,7 @@ public class EmojiManager {
         return s;
     }
 
-    private EmojiDrawable getEmojiDrawable(CharSequence code) {
+    public EmojiDrawable getEmojiDrawable(CharSequence code) {
         DrawableInfo drawableInfo = drawableInfoMap.get(code);
         if (drawableInfo == null) {
             // TODO: 1/5/20
@@ -327,6 +327,7 @@ public class EmojiManager {
     public EmojiDrawable getEmojiBigDrawable(String code) {
         EmojiDrawable emojiDrawable = getEmojiDrawable(code);
         if (emojiDrawable == null) {
+            // TODO: 1/9/20  
 //            CharSequence newCode = EmojiData.emojiAliasMap.get(code);
 //            if (newCode != null) {
 //                emojiDrawable = getEmojiDrawable(newCode);
