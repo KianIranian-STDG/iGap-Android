@@ -171,7 +171,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
                 break;
-            case VIRTUAL_MONEY:
+            case BLOCKCHAIN:
                 new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
                 break;
             case NEWS:
