@@ -1183,6 +1183,9 @@ public class FragmentChat extends BaseFragment
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
+
+        if (notifyFrameLayout != null)
+            notifyFrameLayout.setListener(null);
     }
 
     @Override
@@ -1244,6 +1247,10 @@ public class FragmentChat extends BaseFragment
 
         if (G.locationListener != null)
             G.locationListener = null;
+
+
+        if (notifyFrameLayout != null)
+            notifyFrameLayout.setListener(null);
 
     }
 

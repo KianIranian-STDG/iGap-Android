@@ -153,7 +153,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
         boolean keyboardVisible = height > 0;
 
-        if (height > LayoutCreator.dp(50) && keyboardVisible) {
+        if (height > LayoutCreator.dp(72) && keyboardVisible) {
             if (land) {
                 if (emojiSharedPreferences != null)
                     emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, height).apply();

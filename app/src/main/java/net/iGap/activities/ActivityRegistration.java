@@ -38,12 +38,13 @@ public class ActivityRegistration extends ActivityEnhanced {
     public static final String showProfile = "showProfile";
 
     private RegistrationViewModel viewModel;
+    private NotifyFrameLayout notifyFrameLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         isOnGetPermission = true;
         super.onCreate(savedInstanceState);
-        NotifyFrameLayout notifyFrameLayout = new NotifyFrameLayout(context);
+        notifyFrameLayout = new NotifyFrameLayout(context);
         setContentView(notifyFrameLayout);
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
@@ -199,5 +200,12 @@ public class ActivityRegistration extends ActivityEnhanced {
         for (int i = t; i > 0; i--) {
             getSupportFragmentManager().popBackStackImmediate();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (notifyFrameLayout != null)
+            notifyFrameLayout.setListener(null);
     }
 }

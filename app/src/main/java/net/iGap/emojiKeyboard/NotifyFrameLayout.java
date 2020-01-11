@@ -2,6 +2,7 @@ package net.iGap.emojiKeyboard;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -30,6 +31,7 @@ public class NotifyFrameLayout extends FrameLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         notifyHeightChanged();
+        Log.i("abbasiKeySize", "onLayout: ");
     }
 
 
@@ -52,6 +54,7 @@ public class NotifyFrameLayout extends FrameLayout {
                     listener.onSizeChanged(keyboardHeight, land);
                 }
             });
+            Log.i("abbasiKeySize", "notifyHeightChanged: " + keyboardHeight + " " + land);
         }
     }
 }
