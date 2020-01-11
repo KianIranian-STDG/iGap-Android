@@ -15,12 +15,12 @@ import net.iGap.view.StickerView;
 
 import java.util.List;
 
-public class GiftStickerPackageList extends RecyclerView.Adapter<GiftStickerPackageList.ViewHolder> {
+public class GiftStickerPackageListAdapter extends RecyclerView.Adapter<GiftStickerPackageListAdapter.ViewHolder> {
 
     private List<String> items;
     private BottomSheetItemClickCallback callback;
 
-    public GiftStickerPackageList(BottomSheetItemClickCallback callback) {
+    public GiftStickerPackageListAdapter(BottomSheetItemClickCallback callback) {
         this.callback = callback;
     }
 
@@ -41,6 +41,7 @@ public class GiftStickerPackageList extends RecyclerView.Adapter<GiftStickerPack
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.wtf(this.getClass().getName(), "onBindViewHolder: " + position);
         holder.itemView.setOnClickListener(v -> callback.onClick(holder.getAdapterPosition()));
+        holder.giftStickerPackageTitle.setText(items.get(position));
     }
 
     @Override

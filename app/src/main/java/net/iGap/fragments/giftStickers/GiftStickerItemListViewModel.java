@@ -1,5 +1,6 @@
 package net.iGap.fragments.giftStickers;
 
+import android.os.Handler;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
@@ -29,8 +30,13 @@ public class GiftStickerItemListViewModel extends BaseAPIViewModel {
         for (int i = 0; i < 6; i++) {
             giftStickerList.add(String.valueOf(i));
         }
-        isShowLoading.set(View.GONE);
-        loadData.setValue(giftStickerList);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isShowLoading.set(View.GONE);
+                loadData.setValue(giftStickerList);
+            }
+        },2000);
     }
 
     public void onCancelButtonClick(){

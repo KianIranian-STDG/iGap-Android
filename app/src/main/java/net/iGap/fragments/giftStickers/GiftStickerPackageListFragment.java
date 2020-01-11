@@ -40,7 +40,7 @@ public class GiftStickerPackageListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.giftStickerPackageList.setAdapter(new GiftStickerPackageList(position -> viewModel.onGiftStickerPackageClicked(position)));
+        binding.giftStickerPackageList.setAdapter(new GiftStickerPackageListAdapter(position -> viewModel.onGiftStickerPackageClicked(position)));
 
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && isGoBack != null && isGoBack) {
@@ -50,9 +50,9 @@ public class GiftStickerPackageListFragment extends Fragment {
 
         viewModel.getLoadData().observe(getViewLifecycleOwner(), giftStickerList -> {
             Log.wtf(this.getClass().getName(), "getLoadData");
-            if (binding.giftStickerPackageList.getAdapter() instanceof GiftStickerPackageList && giftStickerList != null) {
+            if (binding.giftStickerPackageList.getAdapter() instanceof GiftStickerPackageListAdapter && giftStickerList != null) {
                 Log.wtf(this.getClass().getName(), "getLoadData");
-                ((GiftStickerPackageList) binding.giftStickerPackageList.getAdapter()).setItems(giftStickerList);
+                ((GiftStickerPackageListAdapter) binding.giftStickerPackageList.getAdapter()).setItems(giftStickerList);
             }
         });
 

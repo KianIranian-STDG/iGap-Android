@@ -9,14 +9,14 @@
             type="net.iGap.fragments.giftStickers.GiftStickerPackageListViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/pageTitle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
             android:padding="@dimen/dp8"
@@ -32,9 +32,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/giftStickerPackageList"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/dp8"
+            android:layout_weight="1"
             android:minHeight="@dimen/dp48"
             android:paddingStart="@dimen/dp16"
             android:paddingEnd="@dimen/dp16"
@@ -45,42 +46,37 @@
             app:layout_constraintTop_toBottomOf="@id/pageTitle"
             app:spanCount="3" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancelButton"
-            style="@style/iGapButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp16"
-            android:onClick="@{()->viewModel.onCancelButtonClick()}"
-            android:text="@string/cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/pageTitle"
-            app:layout_constraintStart_toStartOf="@id/pageTitle"
-            app:layout_constraintTop_toBottomOf="@id/giftStickerPackageList"
-            app:layout_constraintWidth_percent=".5" />
-
         <ProgressBar
             android:id="@+id/loadingView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.isShowLoading}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp16"
+            android:visibility="@{viewModel.isShowLoading}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp16"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onRetryButtonClicked()}"
             android:text="@string/retry_icon"
-            android:visibility="@{viewModel.isShowRetryView}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="@{viewModel.isShowRetryView}" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancelButton"
+            style="@style/iGapButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp16"
+            android:onClick="@{()->viewModel.onCancelButtonClick()}"
+            android:text="@string/cancel" />
+
+    </LinearLayout>
 </layout>

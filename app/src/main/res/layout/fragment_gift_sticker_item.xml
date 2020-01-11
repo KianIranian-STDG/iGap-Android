@@ -9,32 +9,51 @@
             type="net.iGap.fragments.giftStickers.GiftStickerItemListViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/giftStickerItemList"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginBottom="@dimen/dp8"
+            android:layout_weight="1"
             android:paddingStart="@dimen/dp16"
             android:paddingEnd="@dimen/dp16"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/cancelButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".9"
             app:spanCount="2" />
+
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp16"
+            android:visibility="@{viewModel.isShowLoading}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp16"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{()->viewModel.onRetryButtonClicked()}"
+            android:text="@string/retry_icon"
+            android:visibility="@{viewModel.isShowRetryView}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/cancelButton"
             style="@style/iGapButton"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
             android:layout_marginBottom="@dimen/dp16"
             android:onClick="@{()->viewModel.onCancelButtonClick()}"
             android:text="@string/cancel"
@@ -44,28 +63,5 @@
             app:layout_constraintTop_toBottomOf="@id/giftStickerItemList"
             app:layout_constraintWidth_percent=".5" />
 
-        <ProgressBar
-            android:id="@+id/loadingView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.isShowLoading}"
-            app:layout_constraintBottom_toBottomOf="@id/giftStickerItemList"
-            app:layout_constraintEnd_toEndOf="@id/giftStickerItemList"
-            app:layout_constraintStart_toStartOf="@id/giftStickerItemList"
-            app:layout_constraintTop_toTopOf="@id/giftStickerItemList" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{()->viewModel.onRetryButtonClicked()}"
-            android:text="@string/retry_icon"
-            android:visibility="@{viewModel.isShowRetryView}"
-            app:layout_constraintBottom_toBottomOf="@id/giftStickerItemList"
-            app:layout_constraintEnd_toEndOf="@id/giftStickerItemList"
-            app:layout_constraintStart_toStartOf="@id/giftStickerItemList"
-            app:layout_constraintTop_toTopOf="@id/giftStickerItemList" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

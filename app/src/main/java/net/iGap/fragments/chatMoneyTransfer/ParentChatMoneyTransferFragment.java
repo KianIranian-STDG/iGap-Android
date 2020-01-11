@@ -176,7 +176,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
                 .commit();
     }
 
-    public void loadStickerPackagePage(){
+    public void loadStickerPackagePage() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerPackageListFragment)) {
@@ -186,7 +186,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadStickerPackageItemPage(){
+    public void loadStickerPackageItemPage() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemListFragment)) {
@@ -196,7 +196,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadStickerPackageItemDetailPage(){
+    public void loadStickerPackageItemDetailPage() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemDetailFragment)) {
