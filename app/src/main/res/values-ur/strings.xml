@@ -2104,4 +2104,11 @@
     <string name="map_registration_enable">Enable Nearby Visibility</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
+
+    <string name="parsian_bank">همراه بانک پارسیان</string>
+    <string name="temporary_password">رمز پویا</string>
+    <string name="sheba_number">شماره شبا</string>
+    <string name="transactions">تراکنش ها</string>
+    <string name="deposit">واریز</string>
+
 </resources>

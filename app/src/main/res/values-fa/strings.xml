@@ -711,6 +711,7 @@
     <string name="send_documents">ارسال اسناد و مدراک</string>
     <string name="charge">شارژ</string>
     <string name="transaction_history">تاریخچهٔ معاملات</string>
+    <string name="transactions">تراکنش ها</string>
     <string name="transfer_mony">انتقال پول</string>
     <string name="create_qr_code">ایجاد کد کیو آر</string>
     <string name="pay_via_qr_code">پرداخت از طریق کد کیو آر</string>
@@ -1628,6 +1629,7 @@
     <string name="cashable">قابل برداشت</string>
     <string name="not_cashable">غیر قابل برداشت</string>
     <string name="gift">هدیه</string>
+    <string name="deposit">واریز</string>
     <string name="withdraw">برداشت</string>
     <string name="cards">کارت‌ها</string>
     <string name="my_cards">کارت‌های من</string>
@@ -2339,4 +2341,6 @@
     <string name="kuknos_login_email_str">ایمیل</string>
     <string name="kuknos_login_name_str">نام</string>
     <string name="parsian_bank">همراه بانک پارسیان</string>
+    <string name="temporary_password">رمز پویا</string>
+    <string name="sheba_number">شماره شبا</string>
 </resources>
