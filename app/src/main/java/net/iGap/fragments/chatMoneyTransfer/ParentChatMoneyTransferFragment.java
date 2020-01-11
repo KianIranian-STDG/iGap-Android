@@ -1,26 +1,23 @@
 package net.iGap.fragments.chatMoneyTransfer;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
 import net.iGap.AccountManager;
 import net.iGap.R;
 import net.iGap.dialog.BaseBottomSheet;
+import net.iGap.fragments.giftStickers.EnterNationalCodeFragment;
+import net.iGap.fragments.giftStickers.GiftStickerItemDetailFragment;
+import net.iGap.fragments.giftStickers.GiftStickerItemListFragment;
+import net.iGap.fragments.giftStickers.GiftStickerPackageListFragment;
 import net.iGap.helper.HelperWallet;
 import net.iGap.proto.ProtoWalletPaymentInit;
 
@@ -34,6 +31,8 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
     private long roomId;
     private String userName;
     private long peerId;
+    private boolean isWalletActive;
+    private boolean isWalletRegister;
 
     private MoneyTransferAction transferAction;
 
@@ -45,6 +44,8 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
             userName = getArguments().getString("userName", "");
             roomId = getArguments().getLong("roomId", -1);
             peerId = getArguments().getLong("peerId", -1);
+            isWalletActive = getArguments().getBoolean("isWalletActive", false);
+            isWalletRegister = getArguments().getBoolean("isWalletRegister", false);
         } else {
             if (getActivity() != null) {
                 getActivity().onBackPressed();
@@ -76,7 +77,10 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
             fragment = new ChooseMoneyTransferActionFragment();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
-        Log.wtf(this.getClass().getName(), "load fragment");
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isWalletActive", isWalletActive);
+        bundle.putBoolean("isWalletRegister", isWalletRegister);
+        fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
@@ -108,6 +112,16 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
+    public void loadGiftSticker() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof EnterNationalCodeFragment)) {
+            fragment = new EnterNationalCodeFragment();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
     public void finishedCardToCard(String cardNum, String amountNum, String descriptionTv) {
         dismiss();
         transferAction.cardToCardClicked(cardNum, amountNum, descriptionTv);
@@ -124,8 +138,8 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         passwordFragment.setSelectedCard(selectedCard);
 
         Bundle bundle = new Bundle();
-        bundle.putString("userName",userName);
-        bundle.putLong("peerId",peerId);
+        bundle.putString("userName", userName);
+        bundle.putLong("peerId", peerId);
         passwordFragment.setArguments(bundle);
 
         getChildFragmentManager().beginTransaction()
@@ -160,6 +174,36 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
                 .replace(R.id.transferMoneyContainer, confirmPasswordFragment, "confirmPasswordFragment")
                 .addToBackStack(confirmPasswordFragment.getClass().getName())
                 .commit();
+    }
+
+    public void loadStickerPackagePage(){
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof GiftStickerPackageListFragment)) {
+            fragment = new GiftStickerPackageListFragment();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    public void loadStickerPackageItemPage(){
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof GiftStickerItemListFragment)) {
+            fragment = new GiftStickerItemListFragment();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    public void loadStickerPackageItemDetailPage(){
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof GiftStickerItemDetailFragment)) {
+            fragment = new GiftStickerItemDetailFragment();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
     public void dismissDialog() {
