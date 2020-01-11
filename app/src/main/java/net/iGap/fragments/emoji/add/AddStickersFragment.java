@@ -12,50 +12,31 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
-import com.vanniktech.emoji.sticker.struct.StructSticker;
-
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.emoji.api.APIEmojiService;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.struct.StickerCategory;
+import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.viewmodel.AddStickerViewModel;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class AddStickersFragment extends BaseFragment {
 
-    private APIEmojiService mAPIService;
     private AddStickerFragmentAdapter adapter;
+    private StructIGStickerCategory category;
     private AddStickerViewModel viewModel;
 
     private ProgressBar progressBar;
-    private int page = 0;
-    private int limit = 20;
-    private StickerCategory stickerCategory;
 
-    public static AddStickersFragment newInstance(String tabJson) {
+    public static AddStickersFragment newInstance(StructIGStickerCategory category) {
         AddStickersFragment addStickersFragment = new AddStickersFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("tab", tabJson);
-        addStickersFragment.setArguments(bundle);
+        addStickersFragment.category = category;
         return addStickersFragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewModel = new AddStickerViewModel();
+        viewModel = new AddStickerViewModel(category);
         adapter = new AddStickerFragmentAdapter();
         return inflater.inflate(R.layout.fragment_add_stickers, container, false);
     }
@@ -64,15 +45,9 @@ public class AddStickersFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null) {
-            Gson gson = new Gson();
-            stickerCategory = gson.fromJson(getArguments().getString("tab"), StickerCategory.class);
-        }
-
-        getDataStickers();
+        viewModel.subscribe();
 
         progressBar = view.findViewById(R.id.progress_stricker);
-        progressBar.setVisibility(View.VISIBLE);
 
         RecyclerView recyclerView = view.findViewById(R.id.rcvSettingPage);
         recyclerView.setAdapter(adapter);
@@ -83,11 +58,8 @@ public class AddStickersFragment extends BaseFragment {
 
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-                getDataStickers();
+            public void onLoadMore(int iPage, int totalItemsCount, RecyclerView view) {
+                viewModel.onPageEnded();
             }
         };
 
@@ -96,25 +68,26 @@ public class AddStickersFragment extends BaseFragment {
         adapter.setListener(new AddStickerFragmentAdapter.AddStickerAdapterListener() {
 
             @Override
-            public void onButtonClick(StructGroupSticker stickerGroup, AddStickerFragmentAdapter.ProgressStatus progressStatus) {
+            public void onButtonClick(StructIGStickerGroup stickerGroup, AddStickerFragmentAdapter.ProgressStatus progressStatus) {
                 viewModel.onItemButtonClicked(stickerGroup, sticker -> {
-                    if (sticker.getId().equals(stickerGroup.getId())) {
-                        progressStatus.setVisibility(sticker.getIsFavorite());
+                    if (sticker.getGroupId().equals(stickerGroup.getGroupId())) {
+                        progressStatus.setVisibility(sticker.isFavorite());
                     }
                 });
             }
 
             @Override
-            public void onCellClick(StructGroupSticker stickerGroup) {
+            public void onCellClick(StructIGStickerGroup stickerGroup) {
                 viewModel.onItemCellClicked(stickerGroup);
             }
         });
 
 
-        viewModel.getOpenStickerDetailLiveData().observe(getViewLifecycleOwner(), sticker -> {
-            openFragmentAddStickerToFavorite(sticker.getId());
-        });
+        viewModel.getOpenStickerDetailLiveData().observe(getViewLifecycleOwner(), sticker -> openFragmentAddStickerToFavorite(sticker.getGroupId()));
 
+        viewModel.getLoadMoreProgressLiveData().observe(getViewLifecycleOwner(), visibility -> progressBar.setVisibility(visibility));
+
+        viewModel.getStickerGroupLiveData().observe(getViewLifecycleOwner(), stickerGroup -> adapter.addData(stickerGroup));
     }
 
     private void openFragmentAddStickerToFavorite(String groupId) {
@@ -124,31 +97,5 @@ public class AddStickersFragment extends BaseFragment {
 
         if (getFragmentManager() != null)
             dialogFragment.show(getFragmentManager(), "dialogFragment");
-    }
-
-
-    private void getDataStickers() {
-
-        mAPIService = ApiEmojiUtils.getAPIService();
-
-        mAPIService.getCategoryStickers(stickerCategory.getId(), page * limit, limit).enqueue(new Callback<StructSticker>() {
-            @Override
-            public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
-                progressBar.setVisibility(View.GONE);
-                if (response.body() != null) {
-                    if (response.body().getOk() && response.body().getData().size() > 0) {
-                        List<StructGroupSticker> data = response.body().getData();
-                        adapter.addData(data);
-                        page++;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-
     }
 }

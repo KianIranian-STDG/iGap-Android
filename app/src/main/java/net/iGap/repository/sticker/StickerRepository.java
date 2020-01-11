@@ -91,6 +91,19 @@ public class StickerRepository implements ObserverView {
                 });
     }
 
+    public Single<List<StructIGStickerGroup>> getCategoryStickerGroups(String categoryId, int skip, int limit) {
+        return stickerApi.getCategoryStickers(categoryId, skip, limit)
+                .subscribeOn(Schedulers.newThread())
+                .map(dataModel -> {
+                    List<StructIGStickerGroup> groups = new ArrayList<>();
+                    for (int i = 0; i < dataModel.getData().size(); i++) {
+                        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(dataModel.getData().get(i));
+                        groups.add(stickerGroup);
+                    }
+                    return groups;
+                });
+    }
+
     public Single<List<StructIGStickerGroup>> getUserStickersGroup() {
         return stickerApi.getUserStickersGroup()
                 .subscribeOn(Schedulers.newThread())

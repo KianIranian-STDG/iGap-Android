@@ -18,20 +18,21 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.fragments.FragmentToolBarBack;
-import net.iGap.fragments.emoji.api.APIEmojiService;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.struct.StickerCategory;
-import net.iGap.fragments.emoji.struct.StructCategoryResult;
+import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
+import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.rx.IGSingleObserver;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 
 
 public class FragmentSettingAddStickers extends FragmentToolBarBack {
@@ -41,17 +42,10 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
     private SectionPagerAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
-    public FragmentSettingAddStickers() {
-
-    }
+    private CompositeDisposable compositeDisposable;
 
     public static FragmentSettingAddStickers newInstance() {
-
-        FragmentSettingAddStickers fragmentDetailStickers = new FragmentSettingAddStickers();
-        Bundle bundle = new Bundle();
-        fragmentDetailStickers.setArguments(bundle);
-        return fragmentDetailStickers;
+        return new FragmentSettingAddStickers();
     }
 
     @Override
@@ -65,12 +59,9 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         pBar = view.findViewById(R.id.pBar);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
 
-        emptyRecycle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCategories();
-            }
-        });
+        compositeDisposable = new CompositeDisposable();
+
+        emptyRecycle.setOnClickListener(v -> getCategories());
 
         titleTextView.setText(R.string.add_sticker);
 
@@ -78,7 +69,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         tabLayout.setSelectedTabIndicatorColor(new Theme().getAccentColor(getContext()));
         viewPager = view.findViewById(R.id.pager);
 
-        adapter = new SectionPagerAdapter(getActivity().getSupportFragmentManager(), new StickerCategory[0]);
+        adapter = new SectionPagerAdapter(getActivity().getSupportFragmentManager());
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -91,65 +82,34 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         emptyRecycle.setVisibility(View.GONE);
         pBar.setVisibility(View.VISIBLE);
 
-        APIEmojiService mAPIService = ApiEmojiUtils.getAPIService();
-        mAPIService.getCategories().enqueue(new Callback<StructCategoryResult>() {
-            @Override
-            public void onResponse(Call<StructCategoryResult> call, Response<StructCategoryResult> response) {
-                StructCategoryResult structCategoryResult = response.body();
-                if (structCategoryResult != null && structCategoryResult.isOk() &&
-                        structCategoryResult.getStickerCategories() != null) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (getActivity() == null || getActivity().isFinishing()) {
-                                return;
-                            }
+        StickerRepository.getInstance().getStickerCategory()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new IGSingleObserver<List<StructIGStickerCategory>>(compositeDisposable) {
+                    @Override
+                    public void onSuccess(List<StructIGStickerCategory> categories) {
 
-                            if (structCategoryResult.getStickerCategories().length > 3) {
-                                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-                            }
-
-                            pBar.setVisibility(View.GONE);
-
-
-                            StickerCategory[] tabs = structCategoryResult.getStickerCategories();
-
-                            if (G.selectedLanguage.equals("fa")) {
-                                tabs = reverseArray(tabs, tabs.length);
-                            }
-
-                            adapter.setData(tabs);
-                            adapter.notifyDataSetChanged();
-                            updateFontTabLayout();
-
-                            if (G.selectedLanguage.equals("fa")) {
-                                viewPager.setCurrentItem(tabs.length - 1);
-                            }
+                        if (categories.size() > 3) {
+                            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
                         }
-                    });
-                } else {
-                    emptyRecycle.setVisibility(View.VISIBLE);
-                    pBar.setVisibility(View.GONE);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<StructCategoryResult> call, Throwable t) {
-                emptyRecycle.setVisibility(View.VISIBLE);
-                pBar.setVisibility(View.GONE);
-            }
-        });
-    }
+                        if (G.selectedLanguage.equals("fa")) {
+                            Collections.reverse(categories);
+                            viewPager.setCurrentItem(categories.size() - 1);
+                        }
 
-    private StickerCategory[] reverseArray(StickerCategory[] old, int size) {
-        StickerCategory[] newArray = new StickerCategory[size];
-        int j = size;
-        for (int i = 0; i < size; i++) {
-            newArray[j - 1] = old[i];
-            j = j - 1;
-        }
+                        adapter.setData(categories);
+                        adapter.notifyDataSetChanged();
+                        updateFontTabLayout();
 
-        return newArray;
+                        pBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        pBar.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void updateFontTabLayout() {
@@ -168,31 +128,39 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
     }
 
     public class SectionPagerAdapter extends FragmentStatePagerAdapter {
-        private StickerCategory[] tabs;
+        private List<StructIGStickerCategory> categories = new ArrayList<>();
 
-        public SectionPagerAdapter(FragmentManager fm, StickerCategory[] tabs) {
+        public SectionPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.tabs = tabs;
         }
 
-        public void setData(StickerCategory[] tabs) {
-            this.tabs = tabs;
+        public void setData(List<StructIGStickerCategory> categories) {
+            this.categories = categories;
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
-            Gson gson = new Gson();
-            return AddStickersFragment.newInstance(gson.toJson(tabs[position]));
+            return AddStickersFragment.newInstance(categories.get(position));
         }
 
         @Override
         public int getCount() {
-            return tabs.length;
+            return categories.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return tabs[position].getName();
+            return categories.get(position).getName();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
         }
     }
 }

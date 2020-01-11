@@ -7,18 +7,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.cells.AddAnimatedStickerCell;
 import net.iGap.adapter.items.cells.AddNormalStickerCell;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
-import net.iGap.realm.RealmStickers;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
-    private List<StructGroupSticker> stickerGroups = new ArrayList<>();
+    private List<StructIGStickerGroup> stickerGroups = new ArrayList<>();
     private AddStickerAdapterListener listener;
 
     public void setListener(AddStickerAdapterListener listener) {
@@ -54,18 +52,18 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
 
-        StructGroupSticker item = stickerGroups.get(position);
+        StructIGStickerGroup item = stickerGroups.get(position);
 
-        item.setUri(HelperDownloadSticker.downloadStickerPath(item.getAvatarToken(), item.getAvatarName()));
-
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmStickers realmStickers = RealmStickers.checkStickerExist(item.getId(), realm);
-            if (realmStickers == null) {
-                item.setIsFavorite(false);
-            } else {
-                item.setIsFavorite(true);
-            }
-        });
+        item.setAvatarPath(HelperDownloadSticker.downloadStickerPath(item.getAvatarToken(), item.getAvatarName()));
+//
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            RealmStickers realmStickers = RealmStickers.checkStickerExist(item.getGroupId(), realm);
+//            if (realmStickers == null) {
+//                item.setIsFavorite(false);
+//            } else {
+//                item.setIsFavorite(true);
+//            }
+//        });
 
         if (holder instanceof MotionViewHolder) {
             MotionViewHolder motionViewHolder = (MotionViewHolder) holder;
@@ -89,7 +87,7 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
             return StructIGSticker.NORMAL_STICKER;
     }
 
-    void addData(List<StructGroupSticker> data) {
+    void addData(List<StructIGStickerGroup> data) {
         this.stickerGroups.addAll(data);
         notifyDataSetChanged();
     }
@@ -102,9 +100,9 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
             stickerCell = (AddNormalStickerCell) itemView;
         }
 
-        private void bindView(StructGroupSticker sticker) {
+        private void bindView(StructIGStickerGroup sticker) {
 
-            stickerCell.getButton().setMode(sticker.getIsFavorite() ? 0 : 1);
+            stickerCell.getButton().setMode(sticker.isFavorite() ? 0 : 1);
             stickerCell.getGroupNameTv().setText(sticker.getName());
 
             String size = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(sticker.getStickers().size())) : String.valueOf(sticker.getStickers().size());
@@ -120,8 +118,8 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
                 });
             });
 
-            if (new File(sticker.getUri()).exists()) {
-                Glide.with(itemView.getContext()).load(sticker.getUri()).into(stickerCell.getGroupAvatarIv());
+            if (new File(sticker.getAvatarPath()).exists()) {
+                Glide.with(itemView.getContext()).load(sticker.getAvatarPath()).into(stickerCell.getGroupAvatarIv());
             } else {
                 stickerCell.setEventListener((id, message) -> {
                     String filePath = (String) message[0];
@@ -133,7 +131,7 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
                     });
                 });
 
-                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(sticker.getId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getUri()));
+                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(sticker.getGroupId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getAvatarPath()));
             }
         }
     }
@@ -146,8 +144,8 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
             stickerCell = (AddAnimatedStickerCell) itemView;
         }
 
-        private void bindView(StructGroupSticker sticker) {
-            stickerCell.getButton().setMode(sticker.getIsFavorite() ? 0 : 1);
+        private void bindView(StructIGStickerGroup sticker) {
+            stickerCell.getButton().setMode(sticker.isFavorite() ? 0 : 1);
             stickerCell.getGroupNameTv().setText(sticker.getName());
 
             String size = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(sticker.getStickers().size())) : String.valueOf(sticker.getStickers().size());
@@ -163,9 +161,9 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
                 });
             });
 
-            if (new File(sticker.getUri()).exists()) {
+            if (new File(sticker.getAvatarPath()).exists()) {
                 try {
-                    stickerCell.getGroupAvatarIv().setAnimation(new FileInputStream(sticker.getUri()), sticker.getAvatarToken());
+                    stickerCell.getGroupAvatarIv().setAnimation(new FileInputStream(sticker.getAvatarPath()), sticker.getAvatarToken());
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -185,15 +183,15 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter {
                     });
                 });
 
-                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(sticker.getId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getUri()));
+                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(sticker.getGroupId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getAvatarPath()));
             }
         }
     }
 
     public interface AddStickerAdapterListener {
-        void onButtonClick(StructGroupSticker stickerGroup, ProgressStatus progressStatus);
+        void onButtonClick(StructIGStickerGroup stickerGroup, ProgressStatus progressStatus);
 
-        void onCellClick(StructGroupSticker stickerGroup);
+        void onCellClick(StructIGStickerGroup stickerGroup);
     }
 
     public interface ProgressStatus {

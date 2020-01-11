@@ -10,14 +10,18 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface StickerApi {
 
-    @GET("/category")
+    @GET("category/list")
     Single<StickerCategorisDataModel> getCategories();
 
     @GET("category/{categoryId}")
     Single<StickerCategoryGroupDataModel> getCategoryStickers(@Path("categoryId") String categoryId);
+
+    @GET("category/{categoryId}")
+    Single<StickerCategoryGroupDataModel> getCategoryStickers(@Path("categoryId") String categoryId, @Query("skip") int skip, @Query("limit") int limit);
 
     @GET("stickers/user-list")
     Single<StickerCategoryGroupDataModel> getUserStickersGroup();

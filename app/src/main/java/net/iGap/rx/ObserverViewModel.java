@@ -1,14 +1,12 @@
 package net.iGap.rx;
 
-import android.util.Log;
-
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ObserverViewModel extends BaseAPIViewModel implements EventListener {
+public abstract class ObserverViewModel extends BaseAPIViewModel implements EventListener {
     public CompositeDisposable compositeDisposable;
 
     public ObserverViewModel() {
@@ -19,6 +17,7 @@ public class ObserverViewModel extends BaseAPIViewModel implements EventListener
     @Override
     protected void onCleared() {
         super.onCleared();
+        unsubscribe();
         EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
@@ -26,8 +25,25 @@ public class ObserverViewModel extends BaseAPIViewModel implements EventListener
         }
     }
 
+    public void onResponseError(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
     @Override
     public void receivedMessage(int id, Object... message) {
-        Log.e(getClass().getName(), "receivedMessage: " + ((Throwable) message[0]).getMessage());
+        if (id == EventManager.IG_ERROR)
+            try {
+                onResponseError((Throwable) message[0]);
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+    public abstract void subscribe();
+
+    public void unsubscribe() {
+
     }
 }
