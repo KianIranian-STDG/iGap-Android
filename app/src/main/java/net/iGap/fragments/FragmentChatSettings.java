@@ -71,7 +71,7 @@ public class FragmentChatSettings extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat_settings, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
-        return attachToSwipeBack(binding.getRoot());
+        return binding.getRoot();
     }
 
     @Override

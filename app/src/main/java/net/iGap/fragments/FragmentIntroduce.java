@@ -75,11 +75,7 @@ public class FragmentIntroduce extends BaseFragment {
 
         viewModel.getGoToChangeLanguagePage().observe(getViewLifecycleOwner(), canSwipe -> {
             if (getActivity() instanceof ActivityRegistration && canSwipe != null) {
-                FragmentLanguage fragment = new FragmentLanguage();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("canSwipeBack", canSwipe);
-                fragment.setArguments(bundle);
-                ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
+                ((ActivityRegistration) getActivity()).loadFragment(new FragmentLanguage(), true);
             }
         });
 

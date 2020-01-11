@@ -509,6 +509,14 @@ public final class StartupActions {
                 Raad.language = selectedLanguage;
                 Raad.isFA = true;
                 break;
+
+            case "آذری":
+                selectedLanguage = "iw";
+                HelperCalander.isPersianUnicode = true;
+                G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
+                break;
         }
         Lingver.getInstance().setLocale(context, selectedLanguage);
     }
