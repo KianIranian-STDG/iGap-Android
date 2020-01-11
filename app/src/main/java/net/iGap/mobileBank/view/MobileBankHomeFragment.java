@@ -50,14 +50,15 @@ public class MobileBankHomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupViews(view);
+        setupViews();
     }
 
-    private void setupViews(View view) {
+    private void setupViews() {
         List<RealmMobileBankCards> cards = new ArrayList<>();
         cards.add(new RealmMobileBankCards("6221 6698 2154 4752" , "علیرضا نظری" , "02/99" , true));
         cards.add(new RealmMobileBankCards("6221 6698 3145 3456" , "حسین امینی" , "02/99" , true));
         cards.add(new RealmMobileBankCards("6221 6698 9254 6678" , "احسان زرقلمی" , "02/99" , true));
+        cards.add(null);
         binding.vpCards.setAdapter(new BankCardsAdapter(cards));
         binding.vpCards.setOffscreenPageLimit(cards.size() - 1);
 
