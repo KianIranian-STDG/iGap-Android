@@ -1834,5 +1834,8 @@
     <string name="delete_from_storage">Удалить из хранилища</string>
     <string name="map_registration_enable">Включить видимость поблизости</string>
     <string name="need_browser">Требуется браузер для использования.</string>
-
+    <string name="temporary_password">Временный пароль</string>
+    <string name="transactions">операции</string>
+    <string name="deposit">депозит</string>
+    <string name="sheba_number">SHEBA номер</string>
 </resources>

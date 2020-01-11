@@ -3065,4 +3065,8 @@
     <string name="delete_from_storage">حذف من التخزين</string>
     <string name="map_registration_enable">تمكين الرؤية القريبة</string>
     <string name="need_browser">يتطلب متصفح للاستخدام.</string>
+    <string name="temporary_password">كلمة مرور مؤقتة</string>
+    <string name="transactions">المعاملات</string>
+    <string name="deposit">الوديعة</string>
+    <string name="sheba_number">رقم شبا</string>
 </resources>
