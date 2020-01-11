@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="vm"
             type="net.iGap.mobileBank.viewmoedel.MobileBankHomeViewModel" />
@@ -29,6 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytTop"
+            android:layout_marginTop="@dimen/dp20"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginRight="@dimen/dp20" />
 
@@ -38,101 +40,142 @@
             android:layout_height="@dimen/dp200"
             android:paddingRight="@dimen/dp32"
             android:paddingLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp6"
+            android:layout_marginTop="@dimen/dp12"
             android:clipToPadding="false"
+            android:layoutDirection="ltr"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblCards" />
 
-        <TextView
-            android:id="@+id/lblCashout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapPrimaryIconTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:text="@string/withdraw"
+        <LinearLayout
+            android:id="@+id/lytIndicators"
+            android:layout_marginTop="@dimen/dp6"
             android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginStart="@dimen/dp16"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintEnd_toStartOf="@id/lblBalance"
-            app:layout_constraintStart_toStartOf="@id/lblCards"
-            app:layout_constraintTop_toBottomOf="@id/vpCards"
-            android:layout_marginTop="@dimen/dp12" />
-
-        <TextView
-            android:id="@+id/lblBalance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapPrimaryIconTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:text="@string/Inventory"
-            app:layout_constraintEnd_toStartOf="@id/lblDeposit"
-            app:layout_constraintStart_toEndOf="@id/lblCashout"
-            app:layout_constraintTop_toTopOf="@id/lblCashout" />
-
-        <TextView
-            android:id="@+id/lblDeposit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapPrimaryIconTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:text="@string/deposit"
             android:layout_marginRight="@dimen/dp16"
-            android:layout_marginEnd="@dimen/dp16"
-            app:layout_constraintEnd_toEndOf="@id/lblCards"
-            app:layout_constraintStart_toEndOf="@id/lblBalance"
-            app:layout_constraintTop_toTopOf="@id/lblCashout" />
+            android:padding="@dimen/dp4"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layoutDirection="ltr"
+            android:layout_height="@dimen/dp32"
+            app:layout_constraintStart_toStartOf="@id/vpCards"
+            app:layout_constraintEnd_toEndOf="@id/vpCards"
+            app:layout_constraintTop_toBottomOf="@id/vpCards" />
+        <!--
+
+                <TextView
+                    android:id="@+id/lblCashout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:text="@string/withdraw"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintEnd_toStartOf="@id/lblBalance"
+                    app:layout_constraintStart_toStartOf="@id/lblCards"
+                    app:layout_constraintTop_toBottomOf="@id/vpCards"
+                    android:layout_marginTop="@dimen/dp12" />
+
+                <TextView
+                    android:id="@+id/lblBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:text="@string/Inventory"
+                    app:layout_constraintEnd_toStartOf="@id/lblDeposit"
+                    app:layout_constraintStart_toEndOf="@id/lblCashout"
+                    app:layout_constraintTop_toTopOf="@id/lblCashout" />
+
+                <TextView
+                    android:id="@+id/lblDeposit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:text="@string/deposit"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="@id/lblCards"
+                    app:layout_constraintStart_toEndOf="@id/lblBalance"
+                    app:layout_constraintTop_toTopOf="@id/lblCashout" />
 
 
-        <TextView
-            android:id="@+id/tvCashout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            tools:text="11,548,000"
-            android:text="-"
-            android:layout_marginTop="@dimen/dp16"
-            app:layout_constraintStart_toStartOf="@id/lblCashout"
-            app:layout_constraintEnd_toEndOf="@id/lblCashout"
-            app:layout_constraintTop_toBottomOf="@id/lblCashout" />
+                <TextView
+                    android:id="@+id/tvCashout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    tools:text="11,548,000"
+                    android:text="-"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintStart_toStartOf="@id/lblCashout"
+                    app:layout_constraintEnd_toEndOf="@id/lblCashout"
+                    app:layout_constraintTop_toBottomOf="@id/lblCashout" />
 
-        <TextView
-            android:id="@+id/tvBalance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            tools:text="11,548,000"
-            android:text="-"
-            app:layout_constraintStart_toStartOf="@id/lblBalance"
-            app:layout_constraintEnd_toEndOf="@id/lblBalance"
-            app:layout_constraintTop_toTopOf="@id/tvCashout" />
+                <TextView
+                    android:id="@+id/tvBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    tools:text="11,548,000"
+                    android:text="-"
+                    app:layout_constraintStart_toStartOf="@id/lblBalance"
+                    app:layout_constraintEnd_toEndOf="@id/lblBalance"
+                    app:layout_constraintTop_toTopOf="@id/tvCashout" />
 
-        <TextView
-            android:id="@+id/tvDeposit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            tools:text="11,548,000"
-            android:text="-"
-            app:layout_constraintStart_toStartOf="@id/lblDeposit"
-            app:layout_constraintEnd_toEndOf="@id/lblDeposit"
-            app:layout_constraintTop_toTopOf="@id/tvCashout" />
+                <TextView
+                    android:id="@+id/tvDeposit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    tools:text="11,548,000"
+                    android:text="-"
+                    app:layout_constraintStart_toStartOf="@id/lblDeposit"
+                    app:layout_constraintEnd_toEndOf="@id/lblDeposit"
+                    app:layout_constraintTop_toTopOf="@id/tvCashout" />
+        -->
 
-        <com.google.android.material.button.MaterialButton
+        <LinearLayout
             android:id="@+id/btnMoneyTransfer"
             android:layout_width="0dp"
             android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:onClick="@{()-> vm.OnTransferMoneyClicked()}"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/lytIndicators"
             app:layout_constraintEnd_toStartOf="@id/btnTransactions"
             app:layout_constraintStart_toStartOf="@id/lblCards"
-            app:layout_constraintTop_toBottomOf="@id/tvCashout"
-            android:layout_marginTop="@dimen/dp32"
-            style="@style/iGapButton"
-            android:text="@string/transfer_mony"/>
+            app:layout_constraintBottom_toTopOf="@id/btnTemporaryPass"
+            android:layout_marginBottom="@dimen/dp16"
+            android:background="@drawable/shape_gray_round_stroke">
 
-        <com.google.android.material.button.MaterialButton
+            <TextView
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp28"
+                style="@style/myIconTextViewStyleGray"
+                android:text="@string/wallet_icon" />
+
+            <TextView
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapSubtitleTextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transfer_mony"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/dp6"
+                android:layout_marginRight="@dimen/dp6" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/btnTransactions"
             android:layout_width="0dp"
             android:layout_height="@dimen/toolbar_height"
@@ -141,22 +184,65 @@
             app:layout_constraintTop_toTopOf="@id/btnMoneyTransfer"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginStart="@dimen/dp16"
-            style="@style/iGapButton"
-            android:text="@string/transactions"/>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:onClick="@{()->vm.OnTransactionsClicked()}"
+            android:background="@drawable/shape_gray_round_stroke">
 
-        <com.google.android.material.button.MaterialButton
+            <TextView
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp28"
+                style="@style/myIconTextViewStyleGray"
+                android:text="@string/wallet_icon" />
+
+            <TextView
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapSubtitleTextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transactions"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/dp6"
+                android:layout_marginRight="@dimen/dp6" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/btnTemporaryPass"
             android:layout_width="0dp"
             android:layout_height="@dimen/toolbar_height"
             app:layout_constraintEnd_toStartOf="@id/btnTakeTurn"
             app:layout_constraintStart_toStartOf="@id/btnMoneyTransfer"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnMoneyTransfer"
             android:layout_marginTop="@dimen/dp16"
-            style="@style/iGapButton"
-            android:textSize="@dimen/smallTextSize"
-            android:text="@string/temporary_password"/>
+            android:layout_marginBottom="@dimen/dp16"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:onClick="@{()->vm.OnTemporaryPassClicked()}"
+            android:background="@drawable/shape_gray_round_stroke">
 
-        <com.google.android.material.button.MaterialButton
+            <TextView
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp28"
+                style="@style/myIconTextViewStyleGray"
+                android:text="@string/wallet_icon" />
+
+            <TextView
+                android:textSize="@dimen/smallTextSize"
+                android:textColor="?iGapSubtitleTextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/temporary_password"
+                android:singleLine="true"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/dp6"
+                android:layout_marginRight="@dimen/dp6" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/btnTakeTurn"
             android:layout_width="0dp"
             android:layout_height="@dimen/toolbar_height"
@@ -165,8 +251,28 @@
             app:layout_constraintTop_toTopOf="@id/btnTemporaryPass"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginStart="@dimen/dp16"
-            style="@style/iGapButton"
-            android:text="@string/take_turns"/>
+            android:gravity="center"
+            android:onClick="@{()->vm.OnShebaClicked()}"
+            android:background="@drawable/shape_gray_round_stroke">
+
+            <TextView
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp28"
+                style="@style/myIconTextViewStyleGray"
+                android:text="@string/wallet_icon" />
+
+            <TextView
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapSubtitleTextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sheba_number"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/dp6"
+                android:layout_marginRight="@dimen/dp6" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
