@@ -600,8 +600,6 @@ public class FragmentChat extends BaseFragment
     private ChatAttachmentPopup mAttachmentPopup;
     private int messageLentghCounter;
     private int oldMessageLentghCounter;
-    public static boolean isWalletActive = false;
-    public static boolean isWalletRegister = false;
 
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
@@ -671,13 +669,6 @@ public class FragmentChat extends BaseFragment
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
         G.locationListener = this;
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo userInfo = RealmUserInfo.getRealmUserInfo(realm);
-            if (userInfo != null) {
-                isWalletActive = userInfo.isWalletActive();
-                isWalletRegister = userInfo.isWalletRegister();
-            }
-        });
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
         ViewGroup chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
@@ -801,7 +792,7 @@ public class FragmentChat extends BaseFragment
             }
         }, Config.LOW_START_PAGE_TIME);
 
-        if (isWalletActive && isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+        if ((chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
         }
 
@@ -3110,7 +3101,7 @@ public class FragmentChat extends BaseFragment
         });
 
         sendMoney.setOnClickListener(view -> {
-            if (isWalletActive && isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+            if ((chatType == CHAT) && !isCloudRoom && !isBot) {
                 showSelectItem();
             } else {
                 showCardToCard();
@@ -9029,7 +9020,7 @@ public class FragmentChat extends BaseFragment
         }
 
 
-        if (isWalletActive && isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot && !RealmRoom.isNotificationServices(mRoomId)) {
+        if ((chatType == CHAT) && !isCloudRoom && !isBot && !RealmRoom.isNotificationServices(mRoomId)) {
             items.add(getString(R.string.SendMoney));
         } else {
             items.remove(getString(R.string.SendMoney));
