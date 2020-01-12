@@ -16,14 +16,10 @@ import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +29,8 @@ import io.realm.Realm;
 import static android.content.Context.MODE_PRIVATE;
 
 public class UploadManager {
+
+    //Todo: add clear instance for open memory(ehsan to bagvand)
     private static final UploadManager ourInstance = new UploadManager();
 
     public static UploadManager getInstance() {
