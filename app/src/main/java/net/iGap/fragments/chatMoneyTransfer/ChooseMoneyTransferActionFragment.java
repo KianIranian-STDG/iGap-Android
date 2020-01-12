@@ -1,7 +1,6 @@
 package net.iGap.fragments.chatMoneyTransfer;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import net.iGap.DbManager;
 import net.iGap.R;
+import net.iGap.realm.RealmUserInfo;
 
 public class ChooseMoneyTransferActionFragment extends Fragment {
 
-    private boolean isWalletActive;
-    private boolean isWalletRegister;
+    private boolean isWalletActive = false;
+    private boolean isWalletRegister = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            isWalletActive = getArguments().getBoolean("isWalletActive", false);
-            isWalletRegister = getArguments().getBoolean("isWalletRegister", false);
-        }
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo userInfo = RealmUserInfo.getRealmUserInfo(realm);
+            if (userInfo != null) {
+                isWalletActive = userInfo.isWalletActive();
+                isWalletRegister = userInfo.isWalletRegister();
+            }
+        });
     }
 
     @Nullable
@@ -42,11 +46,7 @@ public class ChooseMoneyTransferActionFragment extends Fragment {
             }
         });
 
-        if (isWalletActive && isWalletRegister) {
-            view.findViewById(R.id.transferMoney).setVisibility(View.VISIBLE);
-        } else {
-            view.findViewById(R.id.transferMoney).setVisibility(View.GONE);
-        }
+        view.findViewById(R.id.transferMoney).setVisibility(isWalletActive && isWalletRegister ? View.VISIBLE : View.GONE);
 
         view.findViewById(R.id.transferMoney).setOnClickListener(v -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
