@@ -166,7 +166,7 @@
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginStart="@dimen/dp16"
             style="@style/iGapButton"
-            android:text="@string/take_turns"/>
+            android:text=""/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,6 +6,13 @@ public class BankDateModel {
     private String year;
     private boolean isSelected;
 
+    public BankDateModel(String monthName, String monthNum, String year, boolean isSelected) {
+        this.monthName = monthName;
+        this.monthNum = monthNum;
+        this.year = year;
+        this.isSelected = isSelected;
+    }
+
     public String getMonthName() {
         return monthName;
     }
