@@ -3316,18 +3316,13 @@ public class FragmentChat extends BaseFragment
             int newHeight = land ? keyboardHeightLand : keyboardHeight;
 
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
-            if (/*!closeAnimationInProgress && */(layoutParams.width != AndroidUtils.displaySize.x || layoutParams.height != newHeight)/* && !stickersExpanded*/) {
+            if (layoutParams.width != AndroidUtils.displaySize.x || layoutParams.height != newHeight) {
                 layoutParams.width = AndroidUtils.displaySize.x;
                 layoutParams.height = newHeight;
 
                 Log.i(TAG, "onScreenSizeChanged: emoji popUp params layout -> " + newHeight);
 
                 keyboardView.setLayoutParams(layoutParams);
-//                if (notifyFrameLayout != null) {
-////                    emojiPadding = layoutParams.height;
-//                    notifyFrameLayout.requestLayout();
-////                    onWindowSizeChanged();
-//                }
             }
         }
 

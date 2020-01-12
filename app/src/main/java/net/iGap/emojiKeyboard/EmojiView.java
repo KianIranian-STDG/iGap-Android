@@ -136,7 +136,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emojiTopView = new ScrollTabView(getContext());
             emojiTopView.setIndicatorHeight(LayoutCreator.dp(1.5f));
             emojiTopView.setIndicatorColor(Theme.getInstance().getAccentColor(getContext()));
-            emojiTopView.setBackgroundColor(Color.parseColor("#E0E0E0"));
+            emojiTopView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
             emojiTopView.setShouldExpand(true);
             emojiTopView.setListener(page -> {
 
@@ -248,7 +248,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerTabView = new ScrollTabView(getContext());
             stickerTabView.setIndicatorHeight(LayoutCreator.dp(2.5f));
             stickerTabView.setIndicatorColor(Theme.getInstance().getAccentColor(getContext()));
-            stickerTabView.setBackgroundColor(Color.parseColor("#E0E0E0"));
+            stickerTabView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
             stickerTabView.setListener(page -> {
 
                 stickerGridView.stopScroll();
@@ -262,7 +262,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             addStickerIv = new AppCompatImageView(getContext());
             addStickerIv.setImageDrawable(stickerTabDrawable[1]);
-            addStickerIv.setBackgroundColor(Color.parseColor("#E0E0E0"));
+            addStickerIv.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
             addStickerIv.setScaleType(ImageView.ScaleType.CENTER);
             addStickerIv.setOnClickListener(v -> listener.onAddStickerClicked());
 
@@ -308,10 +308,10 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         bottomContainer.addView(emojiIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, emojiX, 0, 0, 0));
         bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
-        bottomContainer.setBackgroundColor(Color.parseColor("#E0E0E0"));
+        bottomContainer.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
 
-        addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 48, Gravity.BOTTOM));
+        addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 42, Gravity.BOTTOM));
 
         pagerAdapter = new ViewPagerAdapter(views);
 

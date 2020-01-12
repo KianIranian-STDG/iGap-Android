@@ -46,7 +46,7 @@ public class EmojiGridView extends FrameLayout implements EmojiAdapter.Listener 
         adapter.setListener(this);
 
         RecyclerView recyclerView = new RecyclerView(getContext());
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 10, RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), G.twoPaneMode ? 13 : 10, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         recyclerView.setClipToPadding(false);
 

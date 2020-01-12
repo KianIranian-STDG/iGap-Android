@@ -62,7 +62,7 @@ public class EmojiManager {
             instance = new EmojiManager();
 
             instance.drawImgSize = LayoutCreator.dp(20);
-            instance.bigImgSize = LayoutCreator.dp(G.twoPaneMode ? 40 : 34);
+            instance.bigImgSize = LayoutCreator.dp(G.twoPaneMode ? 36 : 34);
 
             for (int a = 0; a < instance.bitmaps.length; a++) {
                 instance.bitmaps[a] = new Bitmap[instance.getCategoryManager().getEmojiCategory()[a].getEmojies().length];
