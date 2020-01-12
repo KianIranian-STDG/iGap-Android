@@ -16,9 +16,24 @@
         style="@style/IGapRootViewStyle"
         tools:context=".mobileBank.view.MobileBankHomeFragment">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <include
             android:id="@+id/lytTop"
-            layout="@layout/mobile_bank_top" />
+            layout="@layout/mobile_bank_top"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
         <TextView
             android:id="@+id/lblCards"

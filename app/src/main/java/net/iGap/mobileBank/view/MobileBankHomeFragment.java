@@ -17,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.view.adapter.BankCardsAdapter;
 import net.iGap.mobileBank.viewmoedel.MobileBankHomeViewModel;
@@ -26,9 +29,8 @@ import net.iGap.viewmodel.FragmentCPayViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MobileBankHomeFragment extends Fragment {
+public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewModel> {
 
-    private MobileBankHomeViewModel viewModel;
     private FragmentMobileBankHomeBinding binding;
 
     public MobileBankHomeFragment() {
@@ -50,10 +52,29 @@ public class MobileBankHomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupViews();
+        setupToolbar();
+        setupViewPager();
     }
 
-    private void setupViews() {
+    private void setupToolbar() {
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setRoundBackground(false)
+                .setLeftIcon(R.string.back_icon)
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        binding.toolbar.addView(toolbar.getView());
+    }
+
+    private void setupViewPager() {
         List<RealmMobileBankCards> cards = new ArrayList<>();
         cards.add(new RealmMobileBankCards("6221 6698 2154 4752" , "علیرضا نظری" , "02/99" , true));
         cards.add(new RealmMobileBankCards("6221 6698 3145 3456" , "حسین امینی" , "02/99" , true));
