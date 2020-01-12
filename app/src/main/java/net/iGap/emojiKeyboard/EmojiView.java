@@ -117,6 +117,22 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             emojiGridAdapter = new EmojiGridAdapter();
 
+            emojiGridView = new RecyclerView(getContext());
+            emojiGridView.setAdapter(emojiGridAdapter);
+            emojiGridView.setLayoutManager(emojiLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+            emojiGridView.setClipToPadding(false);
+            emojiGridView.setPadding(0, LayoutCreator.dpToPx(40), 0, LayoutCreator.dpToPx(40));
+
+            emojiGridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    checkBottomTabScroll(dy);
+                    checkEmojiTabY(recyclerView, dy);
+                    checkScroll();
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+            });
+
             emojiTopView = new ScrollTabView(getContext());
             emojiTopView.setIndicatorHeight(LayoutCreator.dp(1.5f));
             emojiTopView.setIndicatorColor(Theme.getInstance().getAccentColor(getContext()));
@@ -124,6 +140,11 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emojiTopView.setShouldExpand(true);
             emojiTopView.setListener(page -> {
 
+                emojiGridView.stopScroll();
+                emojiLayoutManager.scrollToPositionWithOffset(/*stickerGridAdapter.getPositionForGroup(stickerGridAdapter.getGroups().get(page))*/page, 0);
+                checkScroll();
+                emojiTopView.onPageScrolled(page, page);
+                checkEmojiTabY(null, 0);
             });
 
             emojiTabDrawables = new Drawable[]{
@@ -185,21 +206,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                 emojiTopView.addIconTab(emojiTabDrawable);
             }
             emojiTopView.updateTabStyles();
-
-            emojiGridView = new RecyclerView(getContext());
-            emojiGridView.setAdapter(emojiGridAdapter);
-            emojiGridView.setLayoutManager(emojiLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-            emojiGridView.setClipToPadding(false);
-            emojiGridView.setPadding(0, LayoutCreator.dpToPx(40), 0, LayoutCreator.dpToPx(40));
-
-            emojiGridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    checkBottomTabScroll(dy);
-                    checkEmojiTabY(recyclerView, dy);
-                    super.onScrolled(recyclerView, dx, dy);
-                }
-            });
 
             emojiContainer.addView(emojiGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP));
             emojiContainer.addView(emojiTopView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 35, Gravity.TOP));
@@ -382,15 +388,27 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     }
 
     private void checkScroll() {
-        int firstVisibleItem = stickersLayoutManager.findFirstVisibleItemPosition();
-        if (firstVisibleItem == RecyclerView.NO_POSITION) {
-            return;
+        if (currentPage == EMOJI) {
+            int firstVisibleItem = emojiLayoutManager.findFirstVisibleItemPosition();
+            if (firstVisibleItem == RecyclerView.NO_POSITION) {
+                return;
+            }
+            if (emojiGridView == null) {
+                return;
+            }
+            int firstTab = 0;
+            emojiTopView.onPageScrolled(firstVisibleItem, firstTab);
+        } else if (currentPage == STICKER) {
+            int firstVisibleItem = stickersLayoutManager.findFirstVisibleItemPosition();
+            if (firstVisibleItem == RecyclerView.NO_POSITION) {
+                return;
+            }
+            if (stickerGridView == null) {
+                return;
+            }
+            int firstTab = 0;
+            stickerTabView.onPageScrolled(firstVisibleItem, firstTab);
         }
-        if (stickerGridView == null) {
-            return;
-        }
-        int firstTab = 0;
-        stickerTabView.onPageScrolled(firstVisibleItem, firstTab);
     }
 
     private void setToSticker() {

@@ -4834,7 +4834,7 @@ public class FragmentChat extends BaseFragment
             } else if (items.get(position).equals(getString(R.string.replay_item_dialog))) {
                 G.handler.postDelayed(() -> replay(message, false), 200);
             } else if (items.get(position).equals(getString(R.string.copy_item_dialog))) {
-                copyMessageToClipboard(message , true);
+                copyMessageToClipboard(message, true);
             } else if (items.get(position).equals(getString(R.string.share_item_dialog))) {
                 shearedDataToOtherProgram(message);
             } else if (items.get(position).equals(getString(R.string.share_link_item_dialog))) {
@@ -5046,7 +5046,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void copyMessageToClipboard(StructMessageInfo message , boolean isShowEmpty) {
+    private void copyMessageToClipboard(StructMessageInfo message, boolean isShowEmpty) {
         ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
         String _text = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessage() : message.realmRoomMessage.getMessage();
         if (_text != null && _text.length() > 0) {
@@ -5054,7 +5054,8 @@ public class FragmentChat extends BaseFragment
             clipboard.setPrimaryClip(clip);
             Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
         } else {
-            if (isShowEmpty) Toast.makeText(context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
+            if (isShowEmpty)
+                Toast.makeText(context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -5238,7 +5239,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void copyMessage() {
-                copyMessageToClipboard(message , false);
+                copyMessageToClipboard(message, false);
             }
         }, message.realmRoomMessage.getMessageId(), failedMessages);
     }
@@ -5815,7 +5816,8 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        if (!isNotJoin && mAdapter != null && mAdapter.getSelections().size() > 0) mAdapter.deselect();
+        if (!isNotJoin && mAdapter != null && mAdapter.getSelections().size() > 0)
+            mAdapter.deselect();
     }
 
     /**
@@ -7158,7 +7160,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 canClearForwardList = false;
-                forwardToChatRoom(mListForwardNotExict,isMessage);
+                forwardToChatRoom(mListForwardNotExict, isMessage);
                 prgWaiting.setVisibility(View.VISIBLE);
                 viewBottomSheetForward.setEnabled(false);
             }
@@ -8061,10 +8063,10 @@ public class FragmentChat extends BaseFragment
 
                 for (int i = 0; i < mForwardMessages.size(); i++) {
                     if (hasForward) {
-                        sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true, i,false);
+                        sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true, i, false);
                     } else {
                         for (int k = 0; k < multiForwardSize; k++) {
-                            sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false, (i + k),isMessage);
+                            sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false, (i + k), isMessage);
                         }
                     }
                 }
@@ -8123,7 +8125,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward, int k,boolean isMessage) {
+    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward, int k, boolean isMessage) {
 
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -8145,7 +8147,7 @@ public class FragmentChat extends BaseFragment
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRoomMessage.makeForwardMessage(realm, mRoomId, messageId, messageInfo.realmRoomMessage,isMessage);
+                            RealmRoomMessage.makeForwardMessage(realm, mRoomId, messageId, messageInfo.realmRoomMessage, isMessage);
                         }
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
@@ -9171,7 +9173,7 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    private void forwardToChatRoom(final ArrayList<StructBottomSheetForward> forwardList,boolean isMessage) {
+    private void forwardToChatRoom(final ArrayList<StructBottomSheetForward> forwardList, boolean isMessage) {
 
         if (forwardList != null && forwardList.size() > 0) {
 
