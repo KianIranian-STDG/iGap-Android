@@ -2340,7 +2340,7 @@
     <string name="kuknos_buyP_btn_server3">دریافت داده...</string>
     <string name="kuknos_login_email_str">ایمیل</string>
     <string name="kuknos_login_name_str">نام</string>
-    <string name="parsian_bank">همراه بانک پارسیان</string>
+    <string name="parsian_bank">پارسیان من</string>
     <string name="temporary_password">رمز پویا</string>
     <string name="sheba_number">شماره شبا</string>
 </resources>

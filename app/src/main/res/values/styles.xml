@@ -252,6 +252,10 @@
         <item name="backgroundTint">?iGapButtonColor</item>
     </style>
 
+    <style name="iGapButtonSecondary" parent="BaseIGapButtonStyle">
+        <item name="backgroundTint">?iGapSubtitleTextColor</item>
+    </style>
+
     <style name="iGapOutlinedButton" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textAllCaps">false</item>
         <item name="cornerRadius">@dimen/dp18</item>

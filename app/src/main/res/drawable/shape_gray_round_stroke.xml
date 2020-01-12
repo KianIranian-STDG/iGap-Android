@@ -3,12 +3,9 @@
     android:shape="rectangle"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <gradient
-        android:startColor="@color/gray_4c"
-        android:centerColor="@color/white"
-        android:endColor="@color/gray_4c"
-
-        android:angle="135"/>
+    <stroke
+        android:width="@dimen/dp2"
+        android:color="?iGapSubtitleTextColor"/>
 
     <corners
         android:radius="@dimen/dp10"/>
