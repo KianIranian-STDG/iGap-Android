@@ -1,6 +1,7 @@
 package net.iGap.mobileBank.view;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -68,12 +69,12 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
                         .setButtonsText(getString(R.string.ok) , getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
-                            public void onActiveButtonClicked() {
+                            public void onActiveButtonClicked(Dialog dialog) {
 
                             }
 
                             @Override
-                            public void onDeActiveButtonClicked() {
+                            public void onDeActiveButtonClicked(Dialog dialog) {
 
                             }
                         }).showSimpleMessage(getString(R.string.kuknos_buyP_MaxAmount));

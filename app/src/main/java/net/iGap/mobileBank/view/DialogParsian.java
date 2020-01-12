@@ -67,8 +67,14 @@ public class DialogParsian {
         mDeActiveButton.setVisibility(mDeActiveButtonText == null ? View.GONE : View.VISIBLE);
 
         mCloseButton.setOnClickListener(v -> mDialog.dismiss());
-        mActiveButton.setOnClickListener(v -> mListener.onActiveButtonClicked());
-        mDeActiveButton.setOnClickListener(v -> mListener.onDeActiveButtonClicked());
+        mActiveButton.setOnClickListener(v -> {
+            mDialog.dismiss();
+            mListener.onActiveButtonClicked(mDialog);
+        });
+        mDeActiveButton.setOnClickListener(v -> {
+            mDialog.dismiss();
+            mListener.onDeActiveButtonClicked(mDialog);
+        });
 
         if (mTitle != null) mTitleTextView.setText(mTitle);
         if (mActiveButtonText != null) mActiveButton.setText(mActiveButtonText);
@@ -98,8 +104,10 @@ public class DialogParsian {
 
     public interface ParsianDialogListener {
 
-        void onActiveButtonClicked();
+        default void onActiveButtonClicked(Dialog dialog){
+        }
 
-        void onDeActiveButtonClicked();
+        default void onDeActiveButtonClicked(Dialog dialog){
+        }
     }
 }
