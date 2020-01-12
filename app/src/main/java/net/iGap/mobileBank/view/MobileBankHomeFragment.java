@@ -54,6 +54,32 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
         super.onViewCreated(view, savedInstanceState);
         setupToolbar();
         setupViewPager();
+        setupListeners();
+    }
+
+    private void setupListeners() {
+
+        viewModel.onMoneyTransferListener.observe(getViewLifecycleOwner() , state -> {
+
+            if (state != null && state && getActivity() != null){
+                new DialogParsian()
+                        .setContext(getActivity())
+                        .setTitle("پیام سیستم")
+                        .setButtonsText(getString(R.string.ok) , getString(R.string.cancel))
+                        .setListener(new DialogParsian.ParsianDialogListener() {
+                            @Override
+                            public void onActiveButtonClicked() {
+
+                            }
+
+                            @Override
+                            public void onDeActiveButtonClicked() {
+
+                            }
+                        }).showSimpleMessage(getString(R.string.kuknos_buyP_MaxAmount));
+            }
+
+        });
     }
 
     private void setupToolbar() {
