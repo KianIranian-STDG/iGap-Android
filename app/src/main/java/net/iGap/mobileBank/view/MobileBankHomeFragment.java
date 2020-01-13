@@ -60,7 +60,7 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
 
     private void setupListeners() {
 
-        viewModel.onMoneyTransferListener.observe(getViewLifecycleOwner() , state -> {
+        viewModel.onTempPassListener.observe(getViewLifecycleOwner() , state -> {
 
             if (state != null && state && getActivity() != null){
                 new DialogParsian()
@@ -78,6 +78,28 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
 
                             }
                         }).showSimpleMessage(getString(R.string.kuknos_buyP_MaxAmount));
+            }
+
+        });
+
+        viewModel.onMoneyTransferListener.observe(getViewLifecycleOwner() , state -> {
+
+            if (state != null && state && getActivity() != null){
+                new DialogParsian()
+                        .setContext(getActivity())
+                        .setTitle(getString(R.string.transfer_mony))
+                        .setButtonsText(getString(R.string.ok) , getString(R.string.cancel))
+                        .setListener(new DialogParsian.ParsianDialogListener() {
+                            @Override
+                            public void onActiveButtonClicked(Dialog dialog) {
+
+                            }
+
+                            @Override
+                            public void onTransferMoneyTypeSelected(Dialog dialog, String type) {
+                                dialog.dismiss();
+                            }
+                        }).showMoneyTransferDialog();
             }
 
         });

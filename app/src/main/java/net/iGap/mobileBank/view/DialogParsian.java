@@ -2,19 +2,23 @@ package net.iGap.mobileBank.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.mobileBank.view.adapter.TransferMoneyTypeAdapter;
 
 public class DialogParsian {
 
@@ -22,7 +26,7 @@ public class DialogParsian {
     private Context mContext;
     private String mTitle;
     private String mActiveButtonText, mDeActiveButtonText;
-    private LinearLayout mContentLayout;
+    private FrameLayout mContentLayout;
     private Button mActiveButton, mDeActiveButton;
     private TextView mTitleTextView, mCloseButton;
     private ParsianDialogListener mListener;
@@ -52,7 +56,7 @@ public class DialogParsian {
 
         mDialog = new Dialog(mContext);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mDialog.setContentView(R.layout.view_base_parsian_dialog);
+        mDialog.setContentView(R.layout.view_bank_parsian_dialog);
         if (mDialog.getWindow() != null)
             mDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -67,10 +71,6 @@ public class DialogParsian {
         mDeActiveButton.setVisibility(mDeActiveButtonText == null ? View.GONE : View.VISIBLE);
 
         mCloseButton.setOnClickListener(v -> mDialog.dismiss());
-        mActiveButton.setOnClickListener(v -> {
-            mDialog.dismiss();
-            mListener.onActiveButtonClicked(mDialog);
-        });
         mDeActiveButton.setOnClickListener(v -> {
             mDialog.dismiss();
             mListener.onDeActiveButtonClicked(mDialog);
@@ -89,12 +89,33 @@ public class DialogParsian {
         Utils.setTextSize(tvMessage, R.dimen.standardTextSize);
         tvMessage.setTextColor(new Theme().getTitleTextColor(mContext));
         tvMessage.setTypeface(ResourcesCompat.getFont(mContext, R.font.main_font));
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        lp.setMargins(12, 12, 12, 12);
-        tvMessage.setLayoutParams(lp);
         tvMessage.setText(message);
 
-        mContentLayout.addView(tvMessage);
+        mActiveButton.setOnClickListener(v -> {
+            mDialog.dismiss();
+            mListener.onActiveButtonClicked(mDialog);
+        });
+
+        mContentLayout.addView(tvMessage, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 12f, 12f, 12f, 12f));
+        mDialog.show();
+    }
+
+    public void showMoneyTransferDialog() {
+        initDialog();
+
+        RecyclerView rvTransferTypes = new RecyclerView(mContext);
+        mContentLayout.addView(rvTransferTypes, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
+        rvTransferTypes.setNestedScrollingEnabled(false);
+        rvTransferTypes.setLayoutManager(new LinearLayoutManager(mContext));
+        TransferMoneyTypeAdapter adapter = new TransferMoneyTypeAdapter();
+        rvTransferTypes.setAdapter(adapter);
+        adapter.setTypes();
+        rvTransferTypes.hasFixedSize();
+
+        mActiveButton.setOnClickListener(v -> {
+            mListener.onTransferMoneyTypeSelected(mDialog, adapter.mSelectedType);
+        });
+
         mDialog.show();
     }
 
@@ -104,10 +125,13 @@ public class DialogParsian {
 
     public interface ParsianDialogListener {
 
-        default void onActiveButtonClicked(Dialog dialog){
+        default void onActiveButtonClicked(Dialog dialog) {
         }
 
-        default void onDeActiveButtonClicked(Dialog dialog){
+        default void onDeActiveButtonClicked(Dialog dialog) {
+        }
+
+        default void onTransferMoneyTypeSelected(Dialog dialog, String type) {
         }
     }
 }
