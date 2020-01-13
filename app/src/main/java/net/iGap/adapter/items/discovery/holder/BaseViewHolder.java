@@ -170,7 +170,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
-//                new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
+                break;
+            case BLOCKCHAIN:
+                new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();

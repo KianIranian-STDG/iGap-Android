@@ -35,6 +35,7 @@ public class FragmentLanguageViewModel extends ViewModel {
     private ObservableInt isFrance = new ObservableInt(View.GONE);
     private ObservableInt isRussian = new ObservableInt(View.GONE);
     private ObservableInt isKurdi = new ObservableInt(View.GONE);
+    private ObservableInt isAzeri = new ObservableInt(View.GONE);
     private SingleLiveEvent<String> refreshActivityForChangeLanguage = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
 
@@ -60,6 +61,9 @@ public class FragmentLanguageViewModel extends ViewModel {
                     break;
                 case "کوردی":
                     isKurdi.set(View.VISIBLE);
+                    break;
+                case "آذری":
+                    isAzeri.set(View.VISIBLE);
                     break;
             }
         }
@@ -87,6 +91,10 @@ public class FragmentLanguageViewModel extends ViewModel {
 
     public ObservableInt getIsKurdi() {
         return isKurdi;
+    }
+
+    public ObservableInt getIsAzeri() {
+        return isAzeri;
     }
 
     public SingleLiveEvent<String> getRefreshActivityForChangeLanguage() {
@@ -219,10 +227,32 @@ public class FragmentLanguageViewModel extends ViewModel {
         }
     }
 
+    //آذری - باکو لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+    public void onClickAzeri() {
+        if (!G.selectedLanguage.equals("iw")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "آذری").apply();
+            G.selectedLanguage = "iw";
+            HelperCalander.isPersianUnicode = true;
+            HelperCalander.isLanguagePersian = true;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = true;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("iw");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+            updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
     private void updateLocalDateTime() {
 
         switch (G.selectedLanguage) {
             case "fa":
+            case "iw": //azeri
             case "ur"://kurdi
                 sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 1).apply();//shamsi
                 break;

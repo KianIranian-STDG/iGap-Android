@@ -66,6 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        app:constraint_referenced_ids="transferMoneyTitle,transferMoneyIcon"
         app:layout_constraintBottom_toBottomOf="@id/transferMoneyTitle"
         app:layout_constraintEnd_toEndOf="@id/transferMoneyTitle"
         app:layout_constraintStart_toStartOf="@id/transferMoneyTitle"

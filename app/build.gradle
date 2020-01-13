@@ -30,7 +30,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 160
+        versionCode 162
         versionName "2.1.0"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
@@ -229,14 +229,14 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
-    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta16'
+    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain17'
+    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain17'
+    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain17'
+    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain17'
+    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain17'
+    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain17'
+    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain17'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta17'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'

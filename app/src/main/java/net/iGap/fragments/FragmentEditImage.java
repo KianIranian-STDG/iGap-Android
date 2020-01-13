@@ -244,10 +244,10 @@ public class FragmentEditImage extends BaseFragment {
             }
         });
 
-        isSoftKeyboardOpenOrNot(view);
+        /*isSoftKeyboardOpenOrNot(view);*/
     }
 
-    private void isSoftKeyboardOpenOrNot(final View view) {
+    /*private void isSoftKeyboardOpenOrNot(final View view) {
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -262,7 +262,7 @@ public class FragmentEditImage extends BaseFragment {
             }
         });
 
-    }
+    }*/
 
     private void messageBox(final View view) {
         if (textImageList.containsKey(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path)) {
