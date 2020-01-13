@@ -279,9 +279,29 @@ public final class MessageLoader {
         } else {
             Number minMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.FUTURE_MESSAGE_ID, 0).min(RealmRoomMessageFields.MESSAGE_ID);
             if (minMessageId != null) {
-                realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, (long) minMessageId).findFirst();
-                if (realmRoomMessage != null) {
-                    checkMessageId = realmRoomMessage.getFutureMessageId();
+                // add this for handle down gap is not set before up gap
+                Number upGap = realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                        .greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
+                        .notEqualTo(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, 0)
+                        .min(RealmRoomMessageFields.MESSAGE_ID);
+                if (upGap != null && upGap.longValue() < minMessageId.longValue()) {
+                    Number downGapMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, upGap.longValue()).max(RealmRoomMessageFields.MESSAGE_ID);
+                    if (downGapMessageId != null) {
+                        DbManager.getInstance().doRealmTransaction(new DbManager.RealmTransaction() {
+                            @Override
+                            public void doTransaction(Realm realm) {
+                                setGap(downGapMessageId.longValue(), DOWN, realm);
+                            }
+                        });
+                        checkMessageId = downGapMessageId.longValue();
+                        realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, downGapMessageId.longValue()).findFirst();
+                    }
+                } else {
+                    realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, (long) minMessageId).findFirst();
+                    if (realmRoomMessage != null) {
+                        checkMessageId = realmRoomMessage.getFutureMessageId();
+                    }
                 }
             }
         }
