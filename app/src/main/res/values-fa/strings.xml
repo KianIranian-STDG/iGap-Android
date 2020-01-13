@@ -2343,4 +2343,5 @@
     <string name="parsian_bank">پارسیان من</string>
     <string name="temporary_password">رمز پویا</string>
     <string name="sheba_number">شماره شبا</string>
+    <string name="get_temporary_password">دریافت رمز پویا</string>
 </resources>
