@@ -277,6 +277,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.3.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation("com.google.guava:guava:28.1-android")
+    implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'
 }
 
 configurations.all {
