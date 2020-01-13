@@ -1,44 +1,46 @@
 package net.iGap.mobileBank.view;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.PagerSnapHelper;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankHistoryBinding;
-import net.iGap.electricity_bill.view.ElectricityBillMainFrag;
-import net.iGap.electricity_bill.view.ElectricityBillPayFrag;
-import net.iGap.electricity_bill.viewmodel.ElectricityBillMainVM;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.view.adapter.AddAssetAdvAdapter;
-import net.iGap.mobileBank.repository.model.BankDateModel;
+import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.view.adapter.MobileBankDateAdapter;
+import net.iGap.mobileBank.view.adapter.MobileBankHistoryAdapter;
 import net.iGap.mobileBank.viewmoedel.CardHistoryViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
 
     private MobileBankHistoryBinding binding;
     private LinearSnapHelper snapHelper;
-    private static final String TAG = "CardHistoryFragment";
+
+    private int currentPage = 0;
+    private boolean isLastPage = false;
+    private int totalPage = 20;
+    private boolean isLoading = false;
+    private MobileBankHistoryAdapter adapter;
+
+    private static final String TAG = "Amini";
 
     public static CardHistoryFragment newInstance() {
         return new CardHistoryFragment();
@@ -95,7 +97,52 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
         snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(binding.timeRecycler);
 
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getContext());
+        layoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager2.setAutoMeasureEnabled(true);
+        binding.billsRecycler.setLayoutManager(layoutManager2);
+        binding.billsRecycler.setNestedScrollingEnabled(false);
+        adapter = new MobileBankHistoryAdapter(new ArrayList<>(), position -> {
+            // show detail in dialog
+        });
+        adapter.addLoading();
+        binding.billsRecycler.setAdapter(adapter);
+
+        binding.container.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                View view = binding.container.getChildAt(binding.container.getChildCount() - 1);
+                int diff = (view.getBottom() - (binding.container.getHeight() + binding.container.getScrollY()));
+                if (diff == 0) {
+                    isLoading = true;
+                    currentPage++;
+                    Log.d(TAG, "loadMoreItems: Load more Bitch!!!");
+                    viewModel.getAccountDataForMonth(null);
+                }
+            }
+        });
+
         onDateChangedListener();
+    }
+
+    private void initMainRecycler(List<BankHistoryModel> data) {
+
+//        if (currentPage != 0)
+        adapter.removeLoading();
+
+        if (data == null || data.size() == 0)
+            return;
+
+        Log.d(TAG, "initMainRecycler: in here we are");
+        adapter.addItems(data);
+
+        // check weather is last page or not
+        if (currentPage < totalPage) {
+            adapter.addLoading();
+        } else {
+            isLastPage = true;
+        }
+        isLoading = false;
     }
 
     private void onDateChangedListener() {
@@ -107,6 +154,8 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
             });
             binding.timeRecycler.setAdapter(adapter);
         });
+
+        viewModel.getBills().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
 }

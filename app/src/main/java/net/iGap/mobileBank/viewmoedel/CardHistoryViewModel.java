@@ -1,6 +1,6 @@
 package net.iGap.mobileBank.viewmoedel;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
-import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankDateModel;
+import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.module.CalendarShamsi;
 
 import java.text.ParseException;
@@ -26,7 +26,7 @@ public class CardHistoryViewModel extends BaseAPIViewModel {
     private ObservableField<String> income = new ObservableField<>("1,000,000,000");
     private ObservableField<String> withdraw = new ObservableField<>("1,000,000,000");
     private MutableLiveData<List<BankDateModel>> calender;
-    private MutableLiveData<BankCardModel> bills;
+    private MutableLiveData<List<BankHistoryModel>> bills;
 
     private ObservableInt progressVisibility = new ObservableInt(View.INVISIBLE);
     private MutableLiveData<ErrorModel> errorM;
@@ -77,8 +77,18 @@ public class CardHistoryViewModel extends BaseAPIViewModel {
         getAccountDataForMonth(data.get(2));
     }
 
-    private void getAccountDataForMonth(BankDateModel date) {
+    public void getAccountDataForMonth(BankDateModel date) {
         // set bills
+        Handler handler = new Handler();
+        handler.postDelayed(() -> createFakeData(), 2000);
+    }
+
+    private void createFakeData() {
+        List<BankHistoryModel> mdata = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            mdata.add(new BankHistoryModel("Payment", "+1,000,000,000", "2020/12/12 - 24:59"));
+        }
+        bills.setValue(mdata);
     }
 
     public ObservableField<String> getBalance() {
@@ -93,7 +103,7 @@ public class CardHistoryViewModel extends BaseAPIViewModel {
         return withdraw;
     }
 
-    public MutableLiveData<BankCardModel> getBills() {
+    public MutableLiveData<List<BankHistoryModel>> getBills() {
         return bills;
     }
 
