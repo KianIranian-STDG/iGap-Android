@@ -729,6 +729,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmMB = schema.create(RealmMobileBankCards.class.getSimpleName())
                     .addField("cardName", String.class)
                     .addField("cardNumber", String.class)
+                    .addField("bankName", String.class)
                     .addField("expireDate", String.class)
                     .addField("isOrigin", boolean.class,FieldAttribute.REQUIRED);
 

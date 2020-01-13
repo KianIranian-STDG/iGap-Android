@@ -12,20 +12,22 @@ public class RealmMobileBankCards extends RealmObject {
     @PrimaryKey
     private String cardNumber;
     private String cardName;
+    private String bankName ;
     private String expireDate;
     private boolean isOrigin;
 
     public RealmMobileBankCards() {
     }
 
-    public RealmMobileBankCards(String cardNumber, String cardName, String expireDate, boolean isOrigin) {
+    public RealmMobileBankCards(String cardNumber, String cardName, String bankName , String expireDate, boolean isOrigin) {
         this.cardNumber = cardNumber;
         this.cardName = cardName;
+        this.bankName = bankName;
         this.expireDate = expireDate;
         this.isOrigin = isOrigin;
     }
 
-    public static void putOrUpdate(String cardNumber, String cardName, String expireDate, boolean isOrigin) {
+    public static void putOrUpdate(String cardNumber, String cardName , String bankName, String expireDate, boolean isOrigin) {
         DbManager.getInstance().doRealmTask(realm1 -> {
 
             RealmMobileBankCards object = realm1.where(RealmMobileBankCards.class).equalTo(RealmMobileBankCardsFields.CARD_NUMBER, cardNumber).findFirst();
@@ -33,6 +35,7 @@ public class RealmMobileBankCards extends RealmObject {
 
             object.setCardName(cardName);
             object.setCardNumber(cardNumber);
+            object.setBankName(bankName);
             object.setExpireDate(expireDate);
             object.setOrigin(isOrigin);
 
@@ -83,5 +86,13 @@ public class RealmMobileBankCards extends RealmObject {
 
     public void setOrigin(boolean origin) {
         isOrigin = origin;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 }

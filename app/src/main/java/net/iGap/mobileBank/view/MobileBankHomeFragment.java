@@ -125,9 +125,9 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
 
     private void setupViewPager() {
         List<RealmMobileBankCards> cards = new ArrayList<>();
-        cards.add(new RealmMobileBankCards("6221 6698 2154 4752" , "علیرضا نظری" , "02/99" , true));
-        cards.add(new RealmMobileBankCards("6221 6698 3145 3456" , "حسین امینی" , "02/99" , true));
-        cards.add(new RealmMobileBankCards("6221 6698 9254 6678" , "احسان زرقلمی" , "02/99" , true));
+        cards.add(new RealmMobileBankCards("6221 6698 2154 4752" , "علیرضا نظری" , "بانک پارسیان", "02/99" , true));
+        cards.add(new RealmMobileBankCards("6221 6698 3145 3456" , "حسین امینی" , "بانک پارسیان", "02/99" , true));
+        cards.add(new RealmMobileBankCards("6221 6698 9254 6678" , "احسان زرقلمی" , "بانک پارسیان", "02/99" , true));
         cards.add(null);
         binding.vpCards.setAdapter(new BankCardsAdapter(cards));
         binding.vpCards.setOffscreenPageLimit(cards.size() - 1);
