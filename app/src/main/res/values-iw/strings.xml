@@ -190,7 +190,7 @@
     <string name="Login_with_QrCode">بارکد اسکنی ایله گیریش </string>
     <string name="MEMBER_ADDED">"اضافه ائدیلدی"</string>
     <string name="MEMBER_JOINED_BY_INVITE_LINK">"دعوته"</string>
-    <string name="MEMBER_KICKED">"خذف ائدیلدی"</string>
+    <string name="MEMBER_KICKED">"حذف ائدیلدی"</string>
     <string name="MEMBER_LEFT">"نی ترک ائتدی"</string>
     <string name="MISSED_SCREEN_SHARE">"قطع اولموش تماس"</string>
     <string name="MISSED_VIDEO_CALL">"قطع اولموش تصویری تماس"</string>
@@ -343,7 +343,7 @@
     <string name="app_version_change_log">تغییرلر لیستی </string>
     <string name="are_you_sure">سیز مطمئن سیز می؟</string>
     <string name="are_you_sure_clear_call_log">سئچیلن تماسلاری حذف ائتمکدن مطمئنسیز می؟ </string>
-    <string name="are_you_sure_clear_call_logs">بوتون تماسلاری خذف ائتمکدن مطمئن سیز می؟ </string>
+    <string name="are_you_sure_clear_call_logs">بوتون تماسلاری حذف ائتمکدن مطمئن سیز می؟ </string>
     <string name="are_you_sure_edit_contact">استنفاده چی نی ویرایش ائتمکدن مطمئنسیز می؟ </string>
     <string name="are_you_sure_request">اؤز درخواستیزی ثبت ائتمکدن مطمئنسیز می؟ </string>
     <string name="area_code">پیش شماره </string>
@@ -681,7 +681,7 @@
     <string name="default_sheba_number_message">بو شماره نی پیش فرض شبا شماره سی کیمی ذخیره ائتمک ایسته ییرسیز می؟ دقت ائدین! پیشفرضی سئچدیگینیز حالدا بوندان سونرا بوتون عادی برداشتلار اتوماتیک اولاراق پیشفرض شبا شماره سی ایله باش وئره جلکدیر. </string>
     <string name="default_theme_title">پیش فرض </string>
     <string name="default_view">پیش فرض حالتی </string>
-    <string name="delete">خذف</string>
+    <string name="delete">حذف</string>
     <string name="delete_account">استفاده چی حسابی نی سیلمک </string>
     <string name="delete_account_text">بو استفاده چی حسابنی حذف ائتمکدن مطمئن سیز می؟</string>
     <string name="delete_account_text1">سایر</string>
@@ -693,7 +693,7 @@
     <string name="delete_and_leave_channel">حذف و کانالدان چیخماق </string>
     <string name="delete_card">کارتی حذف ائتمک </string>
     <string name="delete_card_confirm">بو بانک کارت ینی حذف ائتمکدن مطمئن سیز می؟ </string>
-    <string name="delete_chat">دانیشیغی خذف ائتمک</string>
+    <string name="delete_chat">دانیشیغی حذف ائتمک</string>
     <string name="delete_chat_content">بو دانیشیغی سیلمکدن مطمئن سینیز می؟</string>
     <string name="delete_contact">مخاطبی حذف ائتمک</string>
     <string name="delete_from_cache">گیزلی حافظه دن حذف ائتمک</string>
@@ -1217,7 +1217,7 @@
     <string name="kuknos_setting_title">تنظیم لر</string>
     <string name="kuknos_setting_viewRecoveryP">بازیابی کلمه لر زنجیرینین نمایشی</string>
     <string name="kuknos_tradeDialogDelete_btn">بله </string>
-    <string name="kuknos_tradeDialogDelete_message">بو مبادله نی خذف ائتمکدن مطمئنسیز می؟ </string>
+    <string name="kuknos_tradeDialogDelete_message">بو مبادله نی حذف ائتمکدن مطمئنسیز می؟ </string>
     <string name="kuknos_tradeDialogDelete_title">مبادله نی حذف ائتمک</string>
     <string name="kuknos_tradePager_active">آچیق درخواستلار</string>
     <string name="kuknos_tradePager_history">سابقه </string>
@@ -1873,7 +1873,7 @@
     <string name="st_title_Clear_Cache">گیزلی حافظه نی سیلمک</string>
     <string name="st_title_Events">رویداد لار</string>
     <string name="st_title_Media">نئچه رسانه لی </string>
-    <string name="st_title_Privacy_Security">امنیت و حصوصی حریم</string>
+    <string name="st_title_Privacy_Security">امنیت و خصوصی حریم</string>
     <string name="st_title_general">عمومی تنظیم لر</string>
     <string name="st_title_groupNotification">گروه اعلان لاری</string>
     <string name="st_title_in_app_notification">پروگرام داخلی اعلان لار</string>
