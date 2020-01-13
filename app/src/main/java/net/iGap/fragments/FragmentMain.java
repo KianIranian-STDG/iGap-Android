@@ -55,6 +55,7 @@ import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.mobileBank.view.MobileBankLoginFragment;
 import net.iGap.model.MultiSelectStruct;
 import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
@@ -1040,7 +1041,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
             }
         } catch (Exception e) {
             e.getStackTrace();
