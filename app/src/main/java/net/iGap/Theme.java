@@ -222,6 +222,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapButtonColor);
     }
 
+    public int getButtonTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapButtonTextColor);
+    }
+
     public int getForwardFromTextColor(Context context) {
         return getColorFromAttr(context, R.attr.colorAccent);
     }

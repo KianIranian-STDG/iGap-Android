@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="net.iGap.mobileBank.viewmoedel.CardHistoryViewModel" />
+            type="net.iGap.mobileBank.viewmoedel.MobileBankCardHistoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -68,7 +68,6 @@
                         android:layout_marginRight="@dimen/dp32"
                         android:text="report"
                         android:textSize="@dimen/standardTextSize"
-                        android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

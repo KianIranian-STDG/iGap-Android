@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CardHistoryViewModel extends BaseAPIViewModel {
+public class MobileBankCardHistoryViewModel extends BaseAPIViewModel {
 
     private ObservableField<String> balance = new ObservableField<>("1,000,000,000");
     private ObservableField<String> income = new ObservableField<>("1,000,000,000");
@@ -33,7 +33,7 @@ public class CardHistoryViewModel extends BaseAPIViewModel {
 
     private static final String TAG = "CardHistoryViewModel";
 
-    public CardHistoryViewModel() {
+    public MobileBankCardHistoryViewModel() {
         calender = new MutableLiveData<>();
         bills = new MutableLiveData<>();
         errorM = new MutableLiveData<>();

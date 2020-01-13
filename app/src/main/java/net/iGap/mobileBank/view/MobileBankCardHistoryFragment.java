@@ -1,5 +1,6 @@
 package net.iGap.mobileBank.view;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankHistoryBinding;
 import net.iGap.helper.HelperToolbar;
@@ -24,12 +25,16 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.view.adapter.MobileBankDateAdapter;
 import net.iGap.mobileBank.view.adapter.MobileBankHistoryAdapter;
-import net.iGap.mobileBank.viewmoedel.CardHistoryViewModel;
+import net.iGap.mobileBank.viewmoedel.MobileBankCardHistoryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
+import ir.hamsaa.persiandatepicker.Listener;
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
+import ir.hamsaa.persiandatepicker.util.PersianCalendar;
+
+public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCardHistoryViewModel> {
 
     private MobileBankHistoryBinding binding;
     private LinearSnapHelper snapHelper;
@@ -42,14 +47,14 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
 
     private static final String TAG = "Amini";
 
-    public static CardHistoryFragment newInstance() {
-        return new CardHistoryFragment();
+    public static MobileBankCardHistoryFragment newInstance() {
+        return new MobileBankCardHistoryFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(CardHistoryViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(MobileBankCardHistoryViewModel.class);
     }
 
     @Nullable
@@ -90,6 +95,7 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
     private void initial() {
         viewModel.init();
 
+        // recycler view for date
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.timeRecycler.setHasFixedSize(true);
@@ -97,6 +103,7 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
         snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(binding.timeRecycler);
 
+        // recycler view for bills of month
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(getContext());
         layoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager2.setAutoMeasureEnabled(true);
@@ -108,6 +115,7 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
         adapter.addLoading();
         binding.billsRecycler.setAdapter(adapter);
 
+        // scroll listener for recycler view lazy loading
         binding.container.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -122,18 +130,50 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
             }
         });
 
+        // open page for reports
+        binding.reportBtn.setOnClickListener(v -> {
+            showDateSelectorDialog();
+        });
+
         onDateChangedListener();
+    }
+
+    private void showDateSelectorDialog() {
+        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "IRANSansMobile.ttf");
+        PersianCalendar initDate = new PersianCalendar();
+        PersianDatePickerDialog picker = new PersianDatePickerDialog(getContext())
+                .setMinYear(1300)
+                .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                .setTypeFace(typeface)
+                .setPositiveButtonResource(R.string.select)
+                .setNegativeButtonResource(R.string.cancel)
+                .setTodayButtonResource(R.string.today)
+                .setTodayButtonVisible(true)
+                .setInitDate(initDate)
+                .setTitleColor(new Theme().getButtonTextColor(getContext()))
+                .setActionTextColor(new Theme().getButtonTextColor(getContext()))
+                .setBackgroundColor(new Theme().getRootColor(getContext()))
+                .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                .setShowInBottomSheet(true)
+                .setListener(new Listener() {
+                    @Override
+                    public void onDateSelected(PersianCalendar persianCalendar) {
+                    }
+
+                    @Override
+                    public void onDismissed() {
+                    }
+                });
+        picker.show();
     }
 
     private void initMainRecycler(List<BankHistoryModel> data) {
 
-//        if (currentPage != 0)
         adapter.removeLoading();
 
         if (data == null || data.size() == 0)
             return;
 
-        Log.d(TAG, "initMainRecycler: in here we are");
         adapter.addItems(data);
 
         // check weather is last page or not
@@ -148,7 +188,6 @@ public class CardHistoryFragment extends BaseAPIViewFrag<CardHistoryViewModel> {
     private void onDateChangedListener() {
         viewModel.getCalender().observe(getViewLifecycleOwner(), bankDateModels -> {
             MobileBankDateAdapter adapter = new MobileBankDateAdapter(viewModel.getCalender().getValue(), position -> {
-                Toast.makeText(getContext(), "HI to ME.", Toast.LENGTH_SHORT).show();
                 int centerOfScreen = binding.timeRecycler.getWidth() / 2 - snapHelper.findSnapView(binding.timeRecycler.getLayoutManager()).getWidth() / 2;
                 ((LinearLayoutManager)binding.timeRecycler.getLayoutManager()).scrollToPositionWithOffset(position, centerOfScreen);
             });
