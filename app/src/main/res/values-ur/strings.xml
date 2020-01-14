@@ -2110,5 +2110,6 @@
     <string name="sheba_number">شماره شبا</string>
     <string name="transactions">تراکنش ها</string>
     <string name="deposit">واریز</string>
+    <string name="get_temporary_password">دریافت رمز پویا</string>
 
 </resources>

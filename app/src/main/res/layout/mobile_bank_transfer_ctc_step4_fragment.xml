@@ -11,6 +11,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        style="@style/IGapRootViewStyle"
         tools:context=".mobileBank.view.MobileBankTransferCtcStep4Fragment">
 
         <LinearLayout
@@ -32,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp10"
                 android:layout_marginRight="@dimen/dp10"
-                android:textSize="@dimen/largeTextSize"
+                android:textSize="@dimen/standardTextSize"
                 android:textColor="?iGapSubtitleTextColor"
                 android:text="@string/transfer_mony"
                 android:padding="@dimen/dp10"

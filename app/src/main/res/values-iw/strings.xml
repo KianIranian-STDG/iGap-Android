@@ -2121,4 +2121,5 @@
     <string name="zighade">ذیقعده</string>
     <string name="zihaje">ذیحجه</string>
     <string name="profile">پروفایل</string>
+    <string name="get_temporary_password">دریافت رمز پویا</string>
 </resources>
