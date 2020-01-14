@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public class TypeChartViewHolder extends RecyclerView.ViewHolder {
-    private HorizontalBarChart chart;
+    private BarChart chart;
 
     public TypeChartViewHolder(PollAdapter pollAdapter, @NonNull View itemView) {
         super(itemView);
@@ -51,7 +51,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setDrawGridBackground(false);
         chart.getDescription().setEnabled(false);
         chart.setDrawGridBackground(false);
-        chart.setTouchEnabled(false);
+        chart.setTouchEnabled(true);
         chart.setDoubleTapToZoomEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
@@ -97,7 +97,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         set1.setDrawValues(true);
         set1.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
         set1.setValueTextColor(new Theme().getTitleTextColor(chart.getContext()));
-        set1.setValueTextSize(ViewMaker.dpToPixel(4));
+        set1.setValueTextSize(ViewMaker.dpToPixel(3));
         set1.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -129,7 +129,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setFitBars(true);
 
 
-        //chart.setVisibleXRangeMaximum((float) totalWith / (maxSize * 7));
+        chart.setVisibleXRangeMaximum((float) totalWith / (maxSize * 6));
         chart.invalidate();
         chart.getData().notifyDataChanged();
 
