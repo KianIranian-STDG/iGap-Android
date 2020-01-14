@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        style="@style/IGapRootViewStyle"
         tools:context=".mobileBank.view.MobileBankTransferCtcStep3Fragment">
 
         <LinearLayout
@@ -68,12 +69,13 @@
 
                 <TextView
                     android:id="@+id/tvTempPass"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="?iGapPrimaryIconTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:text="@string/get_temporary_password"
                     android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="@id/edtPin"
                     app:layout_constraintStart_toStartOf="@id/edtPin"
                     app:layout_constraintTop_toBottomOf="@id/edtPin" />
 
@@ -138,10 +140,11 @@
                     android:background="@drawable/shape_gray_round_stroke"
                     android:maxLength="4" />
 
-                <CheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cbSave"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@id/edtPin"
                     android:button="@drawable/check_box_background"
                     app:layout_constraintStart_toStartOf="@id/edtPin"
                     app:layout_constraintTop_toBottomOf="@id/edtYear"

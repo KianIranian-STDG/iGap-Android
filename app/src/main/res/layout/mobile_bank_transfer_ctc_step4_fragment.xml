@@ -7,73 +7,81 @@
             type="net.iGap.mobileBank.viewmoedel.MobileBankTransferCtcStep4ViewModel" />
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="@style/IGapRootViewStyle"
         tools:context=".mobileBank.view.MobileBankTransferCtcStep4Fragment">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="horizontal" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/toolbar"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/toolbar_height"
-                android:orientation="horizontal" />
+                android:layout_height="wrap_content">
 
-            <include layout="@layout/mobile_bank_top" />
+                <include layout="@layout/mobile_bank_top" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginRight="@dimen/dp10"
-                android:textSize="@dimen/standardTextSize"
-                android:textColor="?iGapSubtitleTextColor"
-                android:text="@string/transfer_mony"
-                android:padding="@dimen/dp10"
-                android:layout_marginTop="@dimen/dp32" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvResult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp10" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:layout_margin="@dimen/dp14">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnShare"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
-                    android:layout_weight="1"
-                    android:text="@string/share_item_dialog"
-                    style="@style/iGapButton" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnBack"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
-                    android:layout_weight="1"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:text="@string/back"
-                    style="@style/iGapButtonSecondary" />
+                    android:layout_marginRight="@dimen/dp10"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:text="@string/transfer_mony"
+                    android:padding="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp32" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp10" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_margin="@dimen/dp14">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnShare"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp48"
+                        android:layout_weight="1"
+                        android:text="@string/share_item_dialog"
+                        style="@style/iGapButton" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBack"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp48"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/dp10"
+                        android:layout_marginStart="@dimen/dp10"
+                        android:text="@string/back"
+                        style="@style/iGapButtonSecondary" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
-    </ScrollView>
+    </LinearLayout>
 
 </layout>

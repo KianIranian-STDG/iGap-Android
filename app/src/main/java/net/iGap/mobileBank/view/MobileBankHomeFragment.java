@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
@@ -100,6 +101,16 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
                                 dialog.dismiss();
                             }
                         }).showMoneyTransferDialog();
+            }
+
+        });
+
+        viewModel.onTransactionListener.observe(getViewLifecycleOwner() , state -> {
+
+            if (state != null && state && getActivity() != null){
+                new HelperFragment(getActivity().getSupportFragmentManager() , new MobileBankCardHistoryFragment())
+                        .setReplace(false)
+                        .load();
             }
 
         });
