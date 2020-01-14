@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.mobileBank.viewmoedel.MobileBankTransferCTCStepOneViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/IGapRootViewStyle">
+
+        <LinearLayout
+            android:id="@+id/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/mobile_bank_top" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/dp36"
+                        android:id="@+id/title"
+                        android:text="This is Parsian Card to Card Service For All Iranian."
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:gravity="center"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fromTitle"
+                        android:text="Origin Card"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:gravity="center"
+                        android:background="@drawable/shape_round_gray"
+                        android:minHeight="@dimen/dp24"
+                        app:layout_constraintTop_toBottomOf="@+id/title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <include
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/originCard"
+                        app:layout_constraintTop_toBottomOf="@+id/fromTitle"
+                        layout="@layout/mobile_bank_card_entry_holder" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/dp36"
+                        android:id="@+id/originName"
+                        android:text="Card's Holder Name"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="bold"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:layout_marginStart="@dimen/dp4"
+                        android:layout_marginEnd="@dimen/dp4"
+                        android:gravity="center"
+                        app:layout_constraintTop_toBottomOf="@+id/originCard"
+                        app:layout_constraintStart_toEndOf="@+id/originBankLogo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/originBankLogo"
+                        app:srcCompat="@drawable/bank_logo_parsian"
+                        app:layout_constraintTop_toTopOf="@id/originName"
+                        app:layout_constraintBottom_toBottomOf="@+id/originName"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/originName"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintHeight_max="@dimen/dp48"
+                        app:layout_constraintWidth_max="@dimen/dp48" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toTitle"
+                        android:text="Destination Card"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:gravity="center"
+                        android:background="@drawable/shape_round_gray"
+                        android:minHeight="@dimen/dp24"
+                        app:layout_constraintTop_toBottomOf="@+id/originBankLogo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <include
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/destCard"
+                        app:layout_constraintTop_toBottomOf="@+id/toTitle"
+                        layout="@layout/mobile_bank_card_entry_holder" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/dp36"
+                        android:id="@+id/destName"
+                        android:text="Card's Holder Name"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="bold"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:layout_marginStart="@dimen/dp4"
+                        android:layout_marginEnd="@dimen/dp4"
+                        android:gravity="center"
+                        app:layout_constraintTop_toBottomOf="@+id/destCard"
+                        app:layout_constraintStart_toEndOf="@+id/destBankLogo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:id="@+id/destBankLogo"
+                        app:srcCompat="@drawable/bank_logo_parsian"
+                        app:layout_constraintTop_toTopOf="@id/destName"
+                        app:layout_constraintBottom_toBottomOf="@+id/destName"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/destName"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintHeight_max="@dimen/dp48"
+                        app:layout_constraintWidth_max="@dimen/dp48" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_round_gray"
+                        android:minHeight="@dimen/dp24"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@+id/amountTitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/amountTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/amountTitle"
+                        android:text="Amount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginLeft="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp4"
+                        android:layout_marginRight="@dimen/dp4"
+                        android:gravity="end|center_vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/destName"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/currency" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/currency"
+                        android:text="(Rial)"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="bold"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        android:gravity="start|center_vertical"
+                        app:layout_constraintTop_toTopOf="@+id/amountTitle"
+                        app:layout_constraintStart_toEndOf="@+id/amountTitle"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:digits="0123456789"
+                        android:gravity="center"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:text="10,000,000"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp20"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/amountTitle"
+                        app:layout_constraintWidth_percent="0.5" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/iGapButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/dp48"
+                        android:id="@+id/cancelBtn"
+                        android:text="Cancel"
+                        android:layout_marginTop="@dimen/dp32"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginLeft="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp8"
+                        android:layout_marginRight="@dimen/dp8"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/nextBtn"
+                        app:layout_constraintTop_toBottomOf="@+id/amount" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/iGapButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/dp48"
+                        android:id="@+id/nextBtn"
+                        android:text="Next"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        app:layout_constraintStart_toEndOf="@+id/cancelBtn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/cancelBtn"
+                        app:layout_constraintBottom_toBottomOf="@+id/cancelBtn"
+                        app:layout_constraintWidth_percent="0.6" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
