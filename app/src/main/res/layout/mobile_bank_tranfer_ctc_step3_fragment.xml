@@ -144,6 +144,7 @@
                     android:id="@+id/cbSave"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintEnd_toEndOf="@id/edtPin"
                     android:button="@drawable/check_box_background"
                     app:layout_constraintStart_toStartOf="@id/edtPin"

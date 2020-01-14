@@ -66,7 +66,7 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
             if (state != null && state && getActivity() != null){
                 new DialogParsian()
                         .setContext(getActivity())
-                        .setTitle("پیام سیستم")
+                        .setTitle(getString(R.string.message))
                         .setButtonsText(getString(R.string.ok) , getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
