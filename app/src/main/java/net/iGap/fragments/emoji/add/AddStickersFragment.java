@@ -33,11 +33,16 @@ public class AddStickersFragment extends BaseFragment {
         return addStickersFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new AddStickerViewModel(category);
+        adapter = new AddStickerFragmentAdapter();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewModel = new AddStickerViewModel(category);
-        adapter = new AddStickerFragmentAdapter();
         return inflater.inflate(R.layout.fragment_add_stickers, container, false);
     }
 
@@ -66,12 +71,11 @@ public class AddStickersFragment extends BaseFragment {
         recyclerView.addOnScrollListener(scrollListener);
 
         adapter.setListener(new AddStickerFragmentAdapter.AddStickerAdapterListener() {
-
             @Override
             public void onButtonClick(StructIGStickerGroup stickerGroup, AddStickerFragmentAdapter.ProgressStatus progressStatus) {
                 viewModel.onItemButtonClicked(stickerGroup, sticker -> {
                     if (sticker.getGroupId().equals(stickerGroup.getGroupId())) {
-                        progressStatus.setVisibility(sticker.isFavorite());
+                        progressStatus.setVisibility(sticker.isInUserList());
                     }
                 });
             }

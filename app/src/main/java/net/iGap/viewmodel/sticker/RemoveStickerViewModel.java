@@ -30,6 +30,7 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
     private MutableLiveData<Integer> emptyRecentStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> recyclerVisibilityRecentStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<String> stickerFileSizeLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<StructIGStickerGroup>> stickersLiveData = new MutableLiveData<>();
 
     public RemoveStickerViewModel() {
         repository = StickerRepository.getInstance();
@@ -38,14 +39,17 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
         subscribe();
     }
 
-    public List<StructIGStickerGroup> getFavoriteStickers() {
-        return repository.getMyStickers();
-    }
-
     @Override
     public void subscribe() {
         addFileObserver();
         addStickerObserver();
+        getUserSticker();
+    }
+
+    private void getUserSticker() {
+        Disposable disposable = repository.getUserStickersGroup()
+                .subscribe(structIGStickerGroups -> stickersLiveData.postValue(structIGStickerGroups));
+        compositeDisposable.add(disposable);
     }
 
     private void addStickerObserver() {
@@ -161,12 +165,15 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
         return recyclerVisibilityRecentStickerLiveData;
     }
 
+    public MutableLiveData<List<StructIGStickerGroup>> getStickersLiveData() {
+        return stickersLiveData;
+    }
+
     @Override
     public void unsubscribe() {
         if (compositeDisposable != null) {
-            compositeDisposable.clear();
+            compositeDisposable.dispose();
             compositeDisposable = null;
-            repository.unsubscribe();
         }
     }
 }

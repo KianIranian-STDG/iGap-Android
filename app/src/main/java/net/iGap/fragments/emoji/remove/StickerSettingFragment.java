@@ -62,7 +62,7 @@ public class StickerSettingFragment extends BaseFragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter.updateAdapter(viewModel.getFavoriteStickers());
+        viewModel.getStickersLiveData().observe(getViewLifecycleOwner(), structIGStickerGroups -> adapter.updateAdapter(structIGStickerGroups));
 
         adapter.setListener(new RemoveStickerAdapter.RemoveStickerDialogListener() {
             @Override

@@ -5,7 +5,6 @@ import android.util.Log;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
-import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -21,6 +20,8 @@ import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.interfaces.ObserverView;
+import net.iGap.realm.RealmStickerGroup;
+import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmStickersDetailsFields;
@@ -39,7 +40,6 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -63,6 +63,11 @@ public class StickerRepository implements ObserverView {
     private StickerRepository() {
         stickerApi = new RetrofitFactory().getStickerRetrofit();
         apiService = ApiEmojiUtils.getAPIService();
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            Log.i("abbasiNewSticker", "New Stickers: " + realm.where(RealmStickerGroup.class).findAll().size());
+        });
+
     }
 
     public Single<List<StructIGStickerCategory>> getStickerCategory() {
@@ -112,21 +117,49 @@ public class StickerRepository implements ObserverView {
                     for (int i = 0; i < dataModel.getData().size(); i++) {
                         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(dataModel.getData().get(i));
                         groups.add(stickerGroup);
+                        DbManager.getInstance().doRealmTask(realm -> {
+                            realm.executeTransactionAsync(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup), () -> Log.i("abbasiNewSticker", "insert group " + stickerGroup.getGroupId() + " to db successfully"));
+                        });
                     }
                     return groups;
                 });
     }
 
-    public Completable addStickerGroupToMyStickers(StructIGSticker structIGSticker) {
-        return stickerApi.addStickerGroupToMyStickers(structIGSticker.getGroupId())
+    public Completable addStickerGroupToMyStickers(StructIGStickerGroup stickerGroup) {
+        return stickerApi.addStickerGroupToMyStickers(stickerGroup.getGroupId())
                 .subscribeOn(Schedulers.newThread())
-                .flatMapCompletable(response -> {
-                    Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
-                    realm.executeTransaction(realm1 -> {
+                .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
 
-                    });
-                    return CompletableObserver::onComplete;
-                });
+                    RealmStickerGroup realmStickerGroup = realm
+                            .where(RealmStickerGroup.class)
+                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
+                            .findFirst();
+
+                    if (realmStickerGroup == null)
+                        DbManager.getInstance().doRealmTransaction(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup));
+
+                }));
+    }
+
+    public Completable removeStickerGroupFromMyStickers(StructIGStickerGroup stickerGroup) {
+        return stickerApi.removeStickerGroupFromMyStickers(stickerGroup.getGroupId())
+                .subscribeOn(Schedulers.newThread())
+                .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
+
+                    RealmStickerGroup realmStickerGroup = realm
+                            .where(RealmStickerGroup.class)
+                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
+                            .findFirst();
+
+                    if (realmStickerGroup != null) {
+                        try {
+                            DbManager.getInstance().doRealmTransaction(asyncRealm -> realmStickerGroup.deleteFromRealm());
+                            Log.i("abbasiNewSticker", "removeStickerGroupFromMyStickers: ");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }));
     }
 
     public Single<StructIGStickerGroup> getStickerGroup(String groupId) {
@@ -153,8 +186,7 @@ public class StickerRepository implements ObserverView {
 
     public Completable addStickerToFavorite(String stickerId) {
         return stickerApi.addStickerToFavorite(stickerId)
-                .subscribeOn(Schedulers.newThread())
-                .flatMapCompletable(o -> CompletableObserver::onComplete);
+                .subscribeOn(Schedulers.newThread());
     }
 
     public Completable getFavoriteSticker() {
@@ -192,7 +224,7 @@ public class StickerRepository implements ObserverView {
                             StructGroupSticker structGroupSticker = response.body().getData();
                             StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-                            stickerGroup.setValueWithOldStruct(structGroupSticker);
+//                            stickerGroup.setValueWithOldStruct(structGroupSticker);
 
                             G.handler.postDelayed(() -> callback.onSuccess(stickerGroup), 300);
                         }
@@ -286,10 +318,6 @@ public class StickerRepository implements ObserverView {
         }
     }
 
-    public List<StructIGStickerGroup> getMyStickers() {
-        return RealmStickers.getMyStickers();
-    }
-
     public void putOrUpdateMyStickerPackToDb() {
         apiService.getMyStickerPack()
                 .subscribeOn(Schedulers.newThread())
@@ -362,13 +390,12 @@ public class StickerRepository implements ObserverView {
 
     public Flowable<List<StructIGStickerGroup>> getMySticker() {
         return DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmStickers.class).findAll().asFlowable()
+            return realm.where(RealmStickerGroup.class).findAll().asFlowable()
                     .filter(RealmResults::isLoaded)
                     .map(realmStickers -> {
                         List<StructIGStickerGroup> stickerGroups = new ArrayList<>();
                         for (int i = 0; i < realmStickers.size(); i++) {
-                            StructIGStickerGroup group = new StructIGStickerGroup().setValueWithRealmStickers(realmStickers.get(i));
-                            stickerGroups.add(group);
+                            stickerGroups.add(new StructIGStickerGroup(realmStickers.get(i)));
                         }
                         return stickerGroups;
                     });

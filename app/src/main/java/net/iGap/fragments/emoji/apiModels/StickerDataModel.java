@@ -26,11 +26,13 @@ public class StickerDataModel {
     @Expose
     private String status;
     @Expose
-    private List<Object> tags;
+    private List<String> tags;
     @Expose
     private String token;
     @Expose
     private String updatedAt;
+    @Expose
+    private boolean isFavorite;
 
     public String getId() {
         return id;
@@ -104,11 +106,11 @@ public class StickerDataModel {
         this.status = status;
     }
 
-    public List<Object> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<Object> tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
@@ -128,4 +130,11 @@ public class StickerDataModel {
         this.updatedAt = updatedAt;
     }
 
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
 }

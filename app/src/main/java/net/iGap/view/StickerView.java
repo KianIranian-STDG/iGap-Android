@@ -122,7 +122,7 @@ public class StickerView extends FrameLayout implements EventListener {
                 String filePath = (String) message[0];
                 String fileToken = (String) message[1];
 
-                if (viewToken.equals(fileToken)) {
+                if (viewToken != null && viewToken.equals(fileToken)) {
                     if (viewType == StructIGSticker.ANIMATED_STICKER) {
                         ((AnimatedStickerCell) stickerIv).playAnimation(filePath);
                     } else if (filePath.equals(viewPath)) {

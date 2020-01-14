@@ -1,10 +1,12 @@
 package net.iGap.fragments.emoji.struct;
 
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
+import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmStickersDetails;
 import net.iGap.repository.sticker.StickerRepository;
 
 import java.io.File;
+import java.util.List;
 
 public class StructIGSticker {
     public static final int NORMAL_STICKER = 0;
@@ -18,6 +20,8 @@ public class StructIGSticker {
     private String groupId;
     private String fileName;
     private long fileSize;
+    private boolean isFavorite;
+    private List<String> tags;
 
     public StructIGSticker() {
     }
@@ -30,8 +34,21 @@ public class StructIGSticker {
         setId(stickerDataModel.getId());
         setPath(StickerRepository.getInstance().getStickerPath(stickerDataModel.getToken(), stickerDataModel.getName()));
         setToken(stickerDataModel.getToken());
+        setFavorite(stickerDataModel.isFavorite());
+        setTags(stickerDataModel.getTags());
     }
 
+    public StructIGSticker(RealmStickerItem stickerItem) {
+        setName(stickerItem.getName());
+        setFileName(stickerItem.getFileName());
+        setFileSize(stickerItem.getFileSize());
+        setGroupId(stickerItem.getGroupId());
+        setId(stickerItem.getId());
+        setPath(StickerRepository.getInstance().getStickerPath(stickerItem.getToken(), stickerItem.getName()));
+        setToken(stickerItem.getToken());
+        setFavorite(stickerItem.isFavorite());
+        setTags(stickerItem.getTags());
+    }
 
     public String getPath() {
         return path;
@@ -107,6 +124,23 @@ public class StructIGSticker {
     public boolean hasFileOnLocal() {
         return new File(path).exists() && new File(path).canRead();
     }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
 
     public StructIGSticker setValueWithRealm(RealmStickersDetails realmStickersDetails) {
         if (realmStickersDetails != null && realmStickersDetails.isValid()) {

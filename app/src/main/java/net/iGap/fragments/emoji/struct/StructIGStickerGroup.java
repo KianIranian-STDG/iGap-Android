@@ -1,11 +1,8 @@
 package net.iGap.fragments.emoji.struct;
 
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
-import com.vanniktech.emoji.sticker.struct.StructItemSticker;
-
-import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
+import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickers;
 import net.iGap.repository.sticker.StickerRepository;
 
@@ -20,23 +17,23 @@ public class StructIGStickerGroup {
     public static final String RECENT_GROUP = "-1";
 
     private String groupId;
-    private long createdAt;
-    private long refId;
-    private String name;
-    private String avatarToken;
-    private String avatarPath = "";
-    private long avatarSize;
     private String avatarName;
-    private long price;
+    private String avatarToken;
+    private String name;
+    private String avatarPath;
+    private String type;
+    private String categoryId;
     private boolean isVip;
     private boolean isNew;
-    private int sort;
     private boolean approved;
-    private long createdBy;
-    private boolean isFavorite;
+    private boolean isInUserList;
+    private boolean isReadonly;
+    private boolean isGiftable;
+    private long avatarSize;
+    private long price;
     private int avatarType;
-    private boolean inMySticker;
     private List<StructIGSticker> stickers;
+
 
     public StructIGStickerGroup(String groupId) {
         this.groupId = groupId;
@@ -49,19 +46,19 @@ public class StructIGStickerGroup {
     public StructIGStickerGroup(StickerGroupDataModel dataModel) {
         setGroupId(dataModel.getId());
         setAvatarPath(StickerRepository.getInstance().getStickerPath(dataModel.getAvatarToken(), dataModel.getAvatarName()));
-        setSort(dataModel.getSort());
-        setRefId(dataModel.getRefId());
         setPrice(dataModel.getPrice());
         setName(dataModel.getName());
-        setCreatedBy(dataModel.getCreatedBy());
-        setCreatedAt(dataModel.getCreatedAt());
         setAvatarToken(dataModel.getAvatarToken());
         setAvatarSize(dataModel.getAvatarSize());
         setAvatarName(dataModel.getAvatarName());
         setVip(dataModel.getIsVip());
         setStickers(setStickersWithDataModel(dataModel.getStickers()));
-        setFavorite(dataModel.isFavorite());
         setNew(dataModel.getIsNew());
+        setType(dataModel.getType());
+        setCategoryId(dataModel.getCategoryId());
+        setGiftable(dataModel.getIsGiftable());
+        setInUserList(dataModel.isInUserList());
+        setReadonly(dataModel.isReadonly());
     }
 
     private List<StructIGSticker> setStickersWithDataModel(List<StickerDataModel> dataModels) {
@@ -77,38 +74,27 @@ public class StructIGStickerGroup {
         if (realmStickersGroup != null && realmStickersGroup.isValid()) {
             setGroupId(realmStickersGroup.getSt_id());
             setStickers(realmStickersGroup.getIGGroupStickers());
-            setSort(realmStickersGroup.getSort());
-            setRefId(realmStickersGroup.getRefId());
             setPrice(realmStickersGroup.getPrice());
             setName(realmStickersGroup.getName());
-            setFavorite(realmStickersGroup.isFavorite());
+            setAvatarPath(StickerRepository.getInstance().getStickerPath(realmStickersGroup.getAvatarToken(), realmStickersGroup.getAvatarName()));
             setAvatarToken(realmStickersGroup.getAvatarToken());
             setAvatarSize(realmStickersGroup.getAvatarSize());
             setAvatarName(realmStickersGroup.getAvatarName());
             setApproved(realmStickersGroup.isApproved());
             setAvatarPath(realmStickersGroup.getUri());
             setVip(realmStickersGroup.isVip());
-            setInMySticker(true);
         }
         return this;
     }
 
-    public void setValueWithOldStruct(StructGroupSticker structGroupSticker) {
-        if (structGroupSticker != null) {
-            setSort(structGroupSticker.getSort());
-            setRefId(structGroupSticker.getRefId());
-            setPrice(structGroupSticker.getPrice());
-            setName(structGroupSticker.getName());
-            setFavorite(structGroupSticker.getIsFavorite());
-            setCreatedBy(structGroupSticker.getCreatedBy());
-            setCreatedAt(structGroupSticker.getCreatedAt());
-            setAvatarToken(structGroupSticker.getAvatarToken());
-            setAvatarSize(structGroupSticker.getAvatarSize());
-            setAvatarName(structGroupSticker.getAvatarName());
-            setAvatarPath(structGroupSticker.getUri());
-            setVip(structGroupSticker.getIsVip());
-            setStickersWithOldStruct(structGroupSticker.getStickers());
-            setInMySticker(false);
+    public StructIGStickerGroup(RealmStickerGroup realmStickersGroup) {
+        if (realmStickersGroup != null && realmStickersGroup.isValid()) {
+            setGroupId(realmStickersGroup.getId());
+            setStickers(realmStickersGroup.getIGGroupStickers());
+            setName(realmStickersGroup.getName());
+            setAvatarToken(realmStickersGroup.getAvatarToken());
+            setAvatarSize(realmStickersGroup.getAvatarSize());
+            setAvatarName(realmStickersGroup.getAvatarName());
         }
     }
 
@@ -118,22 +104,6 @@ public class StructIGStickerGroup {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
-    }
-
-    public long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public long getRefId() {
-        return refId;
-    }
-
-    public void setRefId(long refId) {
-        this.refId = refId;
     }
 
     public String getName() {
@@ -208,36 +178,12 @@ public class StructIGStickerGroup {
         isVip = vip;
     }
 
-    public int getSort() {
-        return sort;
-    }
-
-    public void setSort(int sort) {
-        this.sort = sort;
-    }
-
     public boolean isApproved() {
         return approved;
     }
 
     public void setApproved(boolean approved) {
         this.approved = approved;
-    }
-
-    public long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(long createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
     }
 
     public void setNew(boolean aNew) {
@@ -256,22 +202,6 @@ public class StructIGStickerGroup {
         this.stickers = stickers;
     }
 
-    private void setStickersWithOldStruct(List<StructItemSticker> stickers) {
-        List<StructIGSticker> stickers1 = new ArrayList<>();
-        for (int i = 0; i < stickers.size(); i++) {
-            StructIGSticker structIGSticker = new StructIGSticker();
-            structIGSticker.setToken(stickers.get(i).getToken());
-            structIGSticker.setPath(HelperDownloadSticker.downloadStickerPath(stickers.get(i).getToken(), stickers.get(i).getAvatarName()));
-            structIGSticker.setId(stickers.get(i).getId());
-            structIGSticker.setGroupId(stickers.get(i).getGroupId());
-            structIGSticker.setFileSize(stickers.get(i).getAvatarSize());
-            structIGSticker.setFileName(stickers.get(i).getAvatarName());
-            structIGSticker.setName(stickers.get(i).getName());
-            stickers1.add(structIGSticker);
-        }
-        this.stickers = stickers1;
-    }
-
     public boolean hasData() {
         return getStickers() != null && getStickers().size() > 0;
     }
@@ -284,11 +214,43 @@ public class StructIGStickerGroup {
         return new File(avatarPath).exists() && new File(avatarPath).canRead();
     }
 
-    public void setInMySticker(boolean inMySticker) {
-        this.inMySticker = inMySticker;
+    public boolean isInUserList() {
+        return isInUserList;
     }
 
-    public boolean isInMySticker() {
-        return inMySticker;
+    public boolean isReadonly() {
+        return isReadonly;
+    }
+
+    public void setReadonly(boolean readonly) {
+        isReadonly = readonly;
+    }
+
+    public void setInUserList(boolean inUserList) {
+        isInUserList = inUserList;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setGiftable(boolean giftable) {
+        isGiftable = giftable;
+    }
+
+    public boolean isGiftable() {
+        return isGiftable;
     }
 }

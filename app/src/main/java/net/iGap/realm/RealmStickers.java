@@ -97,7 +97,6 @@ public class RealmStickers extends RealmObject {
             for (RealmStickers item : realmStickers) {
                 StructIGStickerGroup stickerGroup = new StructIGStickerGroup(item.getSt_id());
 
-                stickerGroup.setRefId(item.refId);
                 stickerGroup.setName(item.name);
                 stickerGroup.setAvatarToken(item.avatarToken);
                 stickerGroup.setAvatarPath(HelperDownloadSticker.downloadStickerPath(item.avatarToken, item.avatarName));
@@ -105,9 +104,6 @@ public class RealmStickers extends RealmObject {
                 stickerGroup.setAvatarName(item.getAvatarName());
                 stickerGroup.setPrice(item.getPrice());
                 stickerGroup.setVip(item.isVip);
-                stickerGroup.setSort(item.sort);
-                stickerGroup.setInMySticker(true);
-
                 List<StructIGSticker> stickerDetails = new ArrayList<>();
 
                 for (RealmStickersDetails it : item.getRealmStickersDetails()) {

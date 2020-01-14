@@ -43,8 +43,10 @@ public class StickerGroupDataModel {
     private String type;
     @Expose
     private String updatedAt;
-
-    private boolean isFavorite;
+    @Expose
+    private boolean isInUserList;
+    @Expose
+    private boolean isReadonly;
 
     public String getId() {
         return id;
@@ -190,11 +192,19 @@ public class StickerGroupDataModel {
         this.updatedAt = updatedAt;
     }
 
-    public void setIsFavorite(boolean favorite) {
-        isFavorite = favorite;
+    public boolean isInUserList() {
+        return isInUserList;
     }
 
-    public boolean isFavorite() {
-        return isFavorite;
+    public void setInUserList(boolean inUserList) {
+        isInUserList = inUserList;
+    }
+
+    public boolean isReadonly() {
+        return isReadonly;
+    }
+
+    public void setReadonly(boolean readonly) {
+        isReadonly = readonly;
     }
 }

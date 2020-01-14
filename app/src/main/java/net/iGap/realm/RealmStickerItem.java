@@ -1,0 +1,111 @@
+package net.iGap.realm;
+
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
+public class RealmStickerItem extends RealmObject {
+    private String id;
+    private String fileName;
+    private String groupId;
+    private String name;
+    private String token;
+    private boolean isFavorite;
+    private long recentTime;
+    private int fileSize;
+    private RealmList<String> tags;
+
+    public static RealmStickerItem put(Realm realm, StructIGSticker structIGSticker) {
+        RealmStickerItem realmStickerItem = realm.where(RealmStickerItem.class).findFirst();
+
+        if (realmStickerItem == null)
+            realmStickerItem = realm.createObject(RealmStickerItem.class);
+
+        realmStickerItem.setId(structIGSticker.getId());
+        realmStickerItem.setFileName(structIGSticker.getFileName());
+        realmStickerItem.setGroupId(structIGSticker.getGroupId());
+        realmStickerItem.setName(structIGSticker.getName());
+        realmStickerItem.setToken(structIGSticker.getToken());
+        realmStickerItem.setFavorite(structIGSticker.isFavorite());
+
+        RealmList<String> tags = new RealmList<>();
+        tags.addAll(structIGSticker.getTags());
+        realmStickerItem.setTags(tags);
+
+        return realmStickerItem;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public void setRecentTime(long recentTime) {
+        this.recentTime = recentTime;
+    }
+
+    public void setFileSize(int fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public void setTags(RealmList<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public long getRecentTime() {
+        return recentTime;
+    }
+
+    public int getFileSize() {
+        return fileSize;
+    }
+
+    public RealmList<String> getTags() {
+        return tags;
+    }
+}

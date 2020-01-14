@@ -4,7 +4,6 @@ import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.repository.sticker.StickerRepository;
@@ -29,6 +28,7 @@ public class AddStickerViewModel extends ObserverViewModel {
     private PublishProcessor<Integer> pagination = PublishProcessor.create();
     private int page = 0;
     private int limit = 20;
+    private String TAG = "abbasiNewSticker";
 
     public AddStickerViewModel(StructIGStickerCategory category) {
         this.category = category;
@@ -59,42 +59,23 @@ public class AddStickerViewModel extends ObserverViewModel {
     }
 
     public void onItemButtonClicked(StructIGStickerGroup stickerGroup, OnClickResult clickResult) {
-        if (stickerGroup.isFavorite()) {
-            repository.removeStickerGroupFromFavorite(stickerGroup.getGroupId(), new ResponseCallback<Boolean>() {
-                @Override
-                public void onSuccess(Boolean data) {
-                    stickerGroup.setFavorite(false);
-                    clickResult.onResult(stickerGroup);
-                }
-
-                @Override
-                public void onError(String error) {
-                    clickResult.onResult(stickerGroup);
-                }
-
-                @Override
-                public void onFailed() {
-
-                }
-            });
+        if (stickerGroup.isInUserList()) {
+            Disposable disposable = repository.removeStickerGroupFromMyStickers(stickerGroup)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnComplete(() -> {
+                        stickerGroup.setInUserList(false);
+                        clickResult.onResult(stickerGroup);
+                    }).doOnError(throwable -> clickResult.onResult(stickerGroup)).subscribe();
+            compositeDisposable.add(disposable);
         } else {
-            repository.addStickerGroupToFavorite(stickerGroup.getGroupId(), new ResponseCallback<Boolean>() {
-                @Override
-                public void onSuccess(Boolean data) {
-                    stickerGroup.setFavorite(true);
-                    clickResult.onResult(stickerGroup);
-                }
+            Disposable disposable = repository.addStickerGroupToMyStickers(stickerGroup)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnComplete(() -> {
+                        stickerGroup.setInUserList(true);
+                        clickResult.onResult(stickerGroup);
+                    }).doOnError(throwable -> clickResult.onResult(stickerGroup)).subscribe();
 
-                @Override
-                public void onError(String error) {
-                    clickResult.onResult(stickerGroup);
-                }
-
-                @Override
-                public void onFailed() {
-
-                }
-            });
+            compositeDisposable.add(disposable);
         }
     }
 

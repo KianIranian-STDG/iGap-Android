@@ -390,13 +390,15 @@ public class G extends ApplicationContext {
 
     public static String getApiToken() {
         String result = "Bearer ";
-        result += DbManager.getInstance().doRealmTask(realm -> {
+        String tok;
+        result += tok = DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
                 return realmUserInfo.getAccessToken();
             }
             return null;
         });
+        Log.i("abbasiApiToken", "getApiToken: " + tok);
         return result;
     }
 

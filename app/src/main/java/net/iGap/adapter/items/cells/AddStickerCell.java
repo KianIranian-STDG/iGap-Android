@@ -11,32 +11,29 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.view.ProgressButton;
+import net.iGap.view.StickerView;
 
-public class AddNormalStickerCell extends FrameLayout {
+public class AddStickerCell extends FrameLayout {
 
-    private EventListener eventListener;
-
-    private AppCompatImageView groupAvatarIv;
+    private StickerView groupAvatarIv;
     private TextView groupNameTv;
     private TextView groupStickerCountTv;
     private ProgressButton button;
     private boolean isRtl = G.isAppRtl;
 
-    public AddNormalStickerCell(@NonNull Context context) {
+    public AddStickerCell(@NonNull Context context) {
         super(context);
         setWillNotDraw(false);
 
-        groupAvatarIv = new AppCompatImageView(getContext());
+        groupAvatarIv = new StickerView(getContext());
         addView(groupAvatarIv, LayoutCreator.createFrame(52, 52, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 16, 0, 16, 0));
 
         groupNameTv = new TextView(getContext());
@@ -79,26 +76,8 @@ public class AddNormalStickerCell extends FrameLayout {
         canvas.drawLine(isRtl ? 0 : LayoutCreator.dpToPx(62), getHeight() - 1, isRtl ? getWidth() - LayoutCreator.dpToPx(62) : getWidth() - getPaddingRight(), getHeight() - 1, paint);
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (eventListener != null)
-            EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, eventListener);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (eventListener != null)
-            EventManager.getInstance().removeEventListener(EventManager.STICKER_DOWNLOAD, eventListener);
-    }
-
-    public void setEventListener(EventListener eventListener) {
-        this.eventListener = eventListener;
-    }
-
-    public AppCompatImageView getGroupAvatarIv() {
-        return groupAvatarIv;
+    public void loadAvatar(StructIGStickerGroup stickerGroup) {
+        groupAvatarIv.loadStickerGroup(stickerGroup);
     }
 
     public TextView getGroupNameTv() {

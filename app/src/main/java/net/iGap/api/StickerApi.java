@@ -5,6 +5,7 @@ import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickersDataModel;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -23,14 +24,14 @@ public interface StickerApi {
     @GET("category/{categoryId}")
     Single<StickerCategoryGroupDataModel> getCategoryStickers(@Path("categoryId") String categoryId, @Query("skip") int skip, @Query("limit") int limit);
 
-    @GET("stickers/user-list")
+    @GET("user-list")
     Single<StickerCategoryGroupDataModel> getUserStickersGroup();
 
-    @POST("stickers/{groupId}/user-list")
-    Single<Object> addStickerGroupToMyStickers(@Path("groupId") String groupId);
+    @POST("{groupId}/user-list")
+    Completable addStickerGroupToMyStickers(@Path("groupId") String groupId);
 
-    @DELETE("stickers/{categoryId}/user-list")
-    Single<Object> romoveStickerGroupFromMyStickers(@Path("categoryId") String categoryId);
+    @DELETE("{groupId}/user-list")
+    Completable removeStickerGroupFromMyStickers(@Path("groupId") String groupId);
 
     @GET("{groupId}")
     Single<StickerGroupDataModel> getStickerGroupStickers(@Path("groupId") String groupId);
@@ -42,7 +43,7 @@ public interface StickerApi {
     Single<Object> addStickerToRecent(@Path("stickerId") String stickerId);
 
     @POST("favorite/{stickerId}")
-    Single<Object> addStickerToFavorite(@Path("stickerId") String stickerId);
+    Completable addStickerToFavorite(@Path("stickerId") String stickerId);
 
     @GET("favorite/list")
     Single<StickersDataModel> getFavoriteSticker();
