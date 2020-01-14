@@ -9,15 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
+import net.iGap.mobileBank.repository.model.TransferMoneyCtcResultModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransferMoneyResultAdapter extends RecyclerView.Adapter<TransferMoneyResultAdapter.ViewHolder> {
 
-    private List<TranferCtcResultModel> items = new ArrayList<>();
+    private List<TransferMoneyCtcResultModel> items = new ArrayList<>();
 
-    public void setItems(List<TranferCtcResultModel> items) {
+    public void setItems(List<TransferMoneyCtcResultModel> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -36,7 +38,7 @@ public class TransferMoneyResultAdapter extends RecyclerView.Adapter<TransferMon
         }
 
         holder.tvKey.setText(items.get(position).getKey());
-        holder.tvValue.setText(items.get(position).getValue());
+        holder.tvValue.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(items.get(position).getValue()) : items.get(position).getValue());
 
     }
 
@@ -59,33 +61,4 @@ public class TransferMoneyResultAdapter extends RecyclerView.Adapter<TransferMon
         }
     }
 
-    public class TranferCtcResultModel {
-
-        String key;
-        String value;
-
-        public TranferCtcResultModel(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public TranferCtcResultModel() {
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-    }
 }

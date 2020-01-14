@@ -54,7 +54,7 @@
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edtPin"
                     android:layout_width="@dimen/dp300"
-                    android:layout_height="@dimen/dp44"
+                    android:layout_height="@dimen/dp40"
                     android:background="@drawable/shape_gray_round_stroke"
                     android:gravity="center"
                     android:textSize="@dimen/standardTextSize"
