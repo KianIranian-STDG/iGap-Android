@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp36">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logo"
+        android:adjustViewBounds="true"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        app:srcCompat="@drawable/bank_logo_parsian"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:text="Parsian"
+        android:textSize="@dimen/smallTextSize"
+        android:layout_marginStart="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp4"
+        android:textColor="?iGapTitleTextColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/logo" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cardNumber"
+        android:text="6219-8610-2972-1940"
+        android:textSize="@dimen/smallTextSize"
+        android:layout_marginEnd="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:textColor="?iGapTitleTextColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
