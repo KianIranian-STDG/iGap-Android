@@ -1,28 +1,18 @@
 package net.iGap.rx;
 
-import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class ObserverViewModel extends BaseAPIViewModel implements EventListener {
-    public CompositeDisposable compositeDisposable;
+public abstract class ObserverViewModel implements EventListener {
+    public CompositeDisposable backgroundDisposable;
+    public CompositeDisposable mainThreadDisposable;
 
     public ObserverViewModel() {
-        compositeDisposable = new CompositeDisposable();
+        backgroundDisposable = new CompositeDisposable();
+        mainThreadDisposable = new CompositeDisposable();
         EventManager.getInstance().addEventListener(EventManager.IG_ERROR, this);
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        unsubscribe();
-        EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
-        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
-            compositeDisposable.dispose();
-            compositeDisposable = null;
-        }
     }
 
     public void onResponseError(Throwable throwable) {
@@ -43,7 +33,19 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
 
     public abstract void subscribe();
 
-    public void unsubscribe() {
+    public void onDestroyView() {
+        EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
+        if (mainThreadDisposable != null && !mainThreadDisposable.isDisposed()) {
+            mainThreadDisposable.dispose();
+            mainThreadDisposable = null;
+        }
+    }
 
+    public void unsubscribe() {
+        EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
+        if (backgroundDisposable != null && !backgroundDisposable.isDisposed()) {
+            backgroundDisposable.dispose();
+            backgroundDisposable = null;
+        }
     }
 }

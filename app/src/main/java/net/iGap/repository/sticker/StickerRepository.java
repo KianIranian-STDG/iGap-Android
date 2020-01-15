@@ -11,7 +11,6 @@ import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
@@ -31,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -117,12 +117,13 @@ public class StickerRepository implements ObserverView {
                     for (int i = 0; i < dataModel.getData().size(); i++) {
                         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(dataModel.getData().get(i));
                         groups.add(stickerGroup);
+
                         DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransactionAsync(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup), () -> Log.i("abbasiNewSticker", "insert group " + stickerGroup.getGroupId() + " to db successfully"));
+                            realm.executeTransactionAsync(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup));
                         });
                     }
                     return groups;
-                });
+                }).doOnSuccess(this::updateStickers);
     }
 
     public Completable addStickerGroupToMyStickers(StructIGStickerGroup stickerGroup) {
@@ -136,25 +137,24 @@ public class StickerRepository implements ObserverView {
                             .findFirst();
 
                     if (realmStickerGroup == null)
-                        DbManager.getInstance().doRealmTransaction(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup));
+                        realm.executeTransactionAsync(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup));
 
                 }));
     }
 
-    public Completable removeStickerGroupFromMyStickers(StructIGStickerGroup stickerGroup) {
-        return stickerApi.removeStickerGroupFromMyStickers(stickerGroup.getGroupId())
+    public Completable removeStickerGroupFromMyStickers(String groupId) {
+        return stickerApi.removeStickerGroupFromMyStickers(groupId)
                 .subscribeOn(Schedulers.newThread())
                 .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
 
                     RealmStickerGroup realmStickerGroup = realm
                             .where(RealmStickerGroup.class)
-                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
+                            .equalTo(RealmStickerGroupFields.ID, groupId)
                             .findFirst();
 
                     if (realmStickerGroup != null) {
                         try {
                             DbManager.getInstance().doRealmTransaction(asyncRealm -> realmStickerGroup.deleteFromRealm());
-                            Log.i("abbasiNewSticker", "removeStickerGroupFromMyStickers: ");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -193,6 +193,35 @@ public class StickerRepository implements ObserverView {
         return stickerApi.getFavoriteSticker()
                 .subscribeOn(Schedulers.newThread())
                 .flatMapCompletable(stickersDataModel -> CompletableObserver::onComplete);
+    }
+
+    private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(asyncRealm -> {
+                Log.i("abbasiNewSticker", "START UPDATE STICKER");
+                HashSet<String> hashedData = new HashSet<>();
+                ArrayList<RealmStickerGroup> itemToDelete = new ArrayList<>();
+                for (StructIGStickerGroup structGroupSticker : stickerGroup) {
+                    hashedData.add(structGroupSticker.getGroupId());
+                }
+
+                RealmResults<RealmStickerGroup> allStickers = asyncRealm.where(RealmStickerGroup.class).findAll();
+                for (RealmStickerGroup realmStickers : allStickers) {
+                    if (!hashedData.contains(realmStickers.getId())) {
+                        itemToDelete.add(realmStickers);
+                    }
+                }
+
+                for (RealmStickerGroup realmStickers : itemToDelete) {
+                    realmStickers.removeFromRealm();
+                }
+
+                for (StructIGStickerGroup updateStickers : stickerGroup) {
+                    RealmStickerGroup.put(asyncRealm, updateStickers);
+                }
+                Log.i("abbasiNewSticker", "FINISH STICKER UPDATE");
+            });
+        });
     }
 
     public void getStickerListForStickerDialog(String groupId, ResponseCallback<StructIGStickerGroup> callback) {
@@ -274,9 +303,6 @@ public class StickerRepository implements ObserverView {
 
                             getStickerFromServerAndInsetToDb(groupId);
 
-                            if (FragmentChat.onUpdateSticker != null)
-                                FragmentChat.onUpdateSticker.update();
-
                         });
 
                         callback.onSuccess(true);
@@ -302,7 +328,7 @@ public class StickerRepository implements ObserverView {
                                 RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm1);
                                 if (realmStickers != null)
                                     realmStickers.removeFromRealm();
-                            }, () -> FragmentChat.onUpdateSticker.update());
+                            });
                         });
 
                         callback.onSuccess(false);
@@ -327,8 +353,7 @@ public class StickerRepository implements ObserverView {
                     public void onSuccess(StructSticker structSticker) {
 
                         RealmStickers.updateStickers(structSticker.getData(), () -> {
-                            if (FragmentChat.onUpdateSticker != null)
-                                FragmentChat.onUpdateSticker.update();
+
                         });
 
                         Log.i(TAG, "onSuccess: " + structSticker.getData().size());
@@ -390,7 +415,8 @@ public class StickerRepository implements ObserverView {
 
     public Flowable<List<StructIGStickerGroup>> getMySticker() {
         return DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmStickerGroup.class).findAll().asFlowable()
+            return realm.where(RealmStickerGroup.class)
+                    .findAll().asFlowable()
                     .filter(RealmResults::isLoaded)
                     .map(realmStickers -> {
                         List<StructIGStickerGroup> stickerGroups = new ArrayList<>();

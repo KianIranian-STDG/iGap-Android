@@ -155,7 +155,6 @@ import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
-import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
@@ -413,7 +412,6 @@ public class FragmentChat extends BaseFragment
     public static long mRoomIdStatic = 0;
     public static long lastChatRoomId = 0;
     public static ArrayList<String> listPathString;
-    public static OnUpdateSticker onUpdateSticker;
     private static List<StructBottomSheet> contacts;
     private EmojiPopup emojiPopup;
     private boolean isPaused;
@@ -3221,23 +3219,6 @@ public class FragmentChat extends BaseFragment
                 onEmojiButtonClick();
             }
         });
-
-        onUpdateSticker = new OnUpdateSticker() {
-            @Override
-            public void update() {
-//                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
-//                if (data != null && emojiPopup != null) {
-//                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
-//                }
-            }
-
-            @Override
-            public void updateRecentlySticker(ArrayList<String> structAllStickers) {
-                if (structAllStickers != null) emojiPopup.onUpdateRecentSticker(structAllStickers);
-            }
-
-
-        };
 
         edtChat.addTextChangedListener(new TextWatcher() {
             @Override
@@ -6092,9 +6073,7 @@ public class FragmentChat extends BaseFragment
                                 if (response.body() != null) {
                                     if (response.body().getOk()) {
                                         RealmStickers.updateStickers(response.body().getData(), () -> {
-                                            if (onUpdateSticker != null && getActivity() != null && !getActivity().isFinishing()) {
-                                                onUpdateSticker.update();
-                                            }
+
                                         });
                                     }
                                 }

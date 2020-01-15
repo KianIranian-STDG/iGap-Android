@@ -95,6 +95,7 @@ public class StructIGStickerGroup {
             setAvatarToken(realmStickersGroup.getAvatarToken());
             setAvatarSize(realmStickersGroup.getAvatarSize());
             setAvatarName(realmStickersGroup.getAvatarName());
+            setAvatarPath(StickerRepository.getInstance().getStickerPath(realmStickersGroup.getAvatarToken(), realmStickersGroup.getAvatarName()));
         }
     }
 

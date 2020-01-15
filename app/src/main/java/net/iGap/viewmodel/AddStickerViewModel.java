@@ -49,7 +49,7 @@ public class AddStickerViewModel extends ObserverViewModel {
                     loadMoreProgressLiveData.postValue(View.GONE);
                 });
 
-        compositeDisposable.add(disposable);
+        backgroundDisposable.add(disposable);
 
         pagination.onNext(page);
     }
@@ -60,13 +60,13 @@ public class AddStickerViewModel extends ObserverViewModel {
 
     public void onItemButtonClicked(StructIGStickerGroup stickerGroup, OnClickResult clickResult) {
         if (stickerGroup.isInUserList()) {
-            Disposable disposable = repository.removeStickerGroupFromMyStickers(stickerGroup)
+            Disposable disposable = repository.removeStickerGroupFromMyStickers(stickerGroup.getGroupId())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnComplete(() -> {
                         stickerGroup.setInUserList(false);
                         clickResult.onResult(stickerGroup);
                     }).doOnError(throwable -> clickResult.onResult(stickerGroup)).subscribe();
-            compositeDisposable.add(disposable);
+            backgroundDisposable.add(disposable);
         } else {
             Disposable disposable = repository.addStickerGroupToMyStickers(stickerGroup)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -75,7 +75,7 @@ public class AddStickerViewModel extends ObserverViewModel {
                         clickResult.onResult(stickerGroup);
                     }).doOnError(throwable -> clickResult.onResult(stickerGroup)).subscribe();
 
-            compositeDisposable.add(disposable);
+            backgroundDisposable.add(disposable);
         }
     }
 

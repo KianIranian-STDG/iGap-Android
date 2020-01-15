@@ -70,7 +70,7 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter<RemoveStickerAdap
 
             stickerCell.loadAvatar(stickerGroup);
 
-            stickerCell.getButton().setOnClickListener(v -> listener.onRemoveStickerClick(stickerGroup, getAdapterPosition(), visibility -> {
+            stickerCell.getButton().setOnClickListener(v -> listener.onRemoveStickerClick(stickerGroup, visibility -> {
                 if (visibility)
                     stickerCell.getButton().changeProgressTo(View.VISIBLE);
             }));
@@ -83,7 +83,7 @@ public class RemoveStickerAdapter extends RecyclerView.Adapter<RemoveStickerAdap
     public interface RemoveStickerDialogListener {
         void onStickerClick(StructIGStickerGroup stickerGroup);
 
-        void onRemoveStickerClick(StructIGStickerGroup stickerGroup, int pos, ProgressStatus progressStatus);
+        void onRemoveStickerClick(StructIGStickerGroup stickerGroup, ProgressStatus progressStatus);
     }
 
     public interface ProgressStatus {

@@ -6,6 +6,7 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import io.realm.Realm;
@@ -24,7 +25,7 @@ public class RealmStickerGroup extends RealmObject {
     private RealmList<RealmStickerItem> stickerItems;
 
     public static RealmStickerGroup put(Realm realm, StructIGStickerGroup stickerGroup) {
-        RealmStickerGroup realmStickerGroup = realm.where(RealmStickerGroup.class).findFirst();
+        RealmStickerGroup realmStickerGroup = realm.where(RealmStickerGroup.class).equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId()).findFirst();
 
         if (realmStickerGroup == null) {
             realmStickerGroup = realm.createObject(RealmStickerGroup.class);
@@ -119,6 +120,20 @@ public class RealmStickerGroup extends RealmObject {
 
     public RealmList<RealmStickerItem> getStickerItems() {
         return stickerItems;
+    }
+
+    public void removeFromRealm() {
+        if (stickerItems != null) {
+            for (Iterator<RealmStickerItem> iterator = stickerItems.iterator(); iterator.hasNext(); ) {
+                RealmStickerItem stickersDetails = iterator.next();
+                if (stickersDetails != null) {
+                    iterator.remove();
+                    stickersDetails.deleteFromRealm();
+                }
+            }
+        }
+
+        deleteFromRealm();
     }
 
     public List<StructIGSticker> getIGGroupStickers() {

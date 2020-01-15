@@ -7,23 +7,20 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.interfaces.ObserverView;
 import net.iGap.module.FileUtils;
 import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.viewmodel.BaseViewModel;
+import net.iGap.rx.ObserverViewModel;
 
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class RemoveStickerViewModel extends BaseViewModel implements ObserverView {
+public class RemoveStickerViewModel extends ObserverViewModel {
     private StickerRepository repository;
-    private CompositeDisposable compositeDisposable;
 
     private MutableLiveData<Integer> removeStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> clearRecentStickerLiveData = new MutableLiveData<>();
@@ -34,7 +31,6 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
 
     public RemoveStickerViewModel() {
         repository = StickerRepository.getInstance();
-        compositeDisposable = new CompositeDisposable();
         stickerFileSizeLiveData.postValue(getStickerFolderSize());
         subscribe();
     }
@@ -43,28 +39,21 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
     public void subscribe() {
         addFileObserver();
         addStickerObserver();
-        getUserSticker();
-    }
-
-    private void getUserSticker() {
-        Disposable disposable = repository.getUserStickersGroup()
-                .subscribe(structIGStickerGroups -> stickersLiveData.postValue(structIGStickerGroups));
-        compositeDisposable.add(disposable);
     }
 
     private void addStickerObserver() {
         Disposable disposable = repository.getMySticker()
+                .doOnNext(structIGStickerGroups -> stickersLiveData.postValue(structIGStickerGroups))
                 .map(List::size)
                 .subscribe(this::checkStickerSize);
-        compositeDisposable.add(disposable);
+        backgroundDisposable.add(disposable);
     }
 
     private void addFileObserver() {
         Disposable disposable = Flowable.interval(2000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.newThread())
                 .subscribe(integer -> stickerFileSizeLiveData.postValue(getStickerFolderSize()));
-        compositeDisposable.add(disposable);
+        mainThreadDisposable.add(disposable);
     }
 
     private void checkStickerSize(int size) {
@@ -77,23 +66,12 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
         }
     }
 
-    public void removeStickerFromFavorite(String groupId, int adapterPosition) {
-        repository.removeStickerGroupFromFavorite(groupId, new ResponseCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean data) {
-                removeStickerLiveData.postValue(adapterPosition);
-            }
-
-            @Override
-            public void onError(String error) {
-
-            }
-
-            @Override
-            public void onFailed() {
-
-            }
-        });
+    public void removeStickerFromFavorite(String groupId) {
+        Disposable disposable = repository.removeStickerGroupFromMyStickers(groupId)
+                .doOnComplete(() -> {
+                } /*removeStickerLiveData.postValue(adapterPosition)*/)
+                .subscribe();
+        backgroundDisposable.add(disposable);
     }
 
     public void clearRecentSticker() {
@@ -167,13 +145,5 @@ public class RemoveStickerViewModel extends BaseViewModel implements ObserverVie
 
     public MutableLiveData<List<StructIGStickerGroup>> getStickersLiveData() {
         return stickersLiveData;
-    }
-
-    @Override
-    public void unsubscribe() {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-            compositeDisposable = null;
-        }
     }
 }

@@ -31,9 +31,14 @@ public class StickerSettingFragment extends BaseFragment {
     private RemoveStickerViewModel viewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         adapter = new RemoveStickerAdapter();
         viewModel = new RemoveStickerViewModel();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_remove_sticker, container, false);
     }
 
@@ -71,8 +76,8 @@ public class StickerSettingFragment extends BaseFragment {
             }
 
             @Override
-            public void onRemoveStickerClick(StructIGStickerGroup stickerGroup, int pos, RemoveStickerAdapter.ProgressStatus progressStatus) {
-                if (pos != -1 && getContext() != null) {
+            public void onRemoveStickerClick(StructIGStickerGroup stickerGroup, RemoveStickerAdapter.ProgressStatus progressStatus) {
+                if (getContext() != null) {
                     new MaterialDialog.Builder(getContext())
                             .title(getResources().getString(R.string.remove_sticker))
                             .content(getResources().getString(R.string.remove_sticker_text))
@@ -80,7 +85,7 @@ public class StickerSettingFragment extends BaseFragment {
                             .negativeText(getString(R.string.no))
                             .onPositive((dialog, which) -> {
                                 progressStatus.setVisibility(true);
-                                viewModel.removeStickerFromFavorite(adapter.getStickerGroup(pos).getGroupId(), pos);
+                                viewModel.removeStickerFromFavorite(stickerGroup.getGroupId());
                                 dialog.dismiss();
                             }).show();
                 }
@@ -91,15 +96,16 @@ public class StickerSettingFragment extends BaseFragment {
 
         TextView removeRecentTv = view.findViewById(R.id.tv_stickerSetting_clearRecent);
         removeRecentTv.setOnClickListener(v -> {
-            new MaterialDialog.Builder(getContext())
-                    .title(getResources().getString(R.string.remove_sticker))
-                    .content(getResources().getString(R.string.remove_sticker_text))
-                    .positiveText(getString(R.string.yes))
-                    .negativeText(getString(R.string.no))
-                    .onPositive((dialog, which) -> {
-                        viewModel.clearRecentSticker();
-                        dialog.dismiss();
-                    }).show();
+            if (getContext() != null)
+                new MaterialDialog.Builder(getContext())
+                        .title(getResources().getString(R.string.remove_sticker))
+                        .content(getResources().getString(R.string.remove_sticker_text))
+                        .positiveText(getString(R.string.yes))
+                        .negativeText(getString(R.string.no))
+                        .onPositive((dialog, which) -> {
+                            viewModel.clearRecentSticker();
+                            dialog.dismiss();
+                        }).show();
         });
 
         ProgressBar progressBar = view.findViewById(R.id.pb_stickerSetting_clearRecent);
@@ -138,5 +144,11 @@ public class StickerSettingFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         viewModel.unsubscribe();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.onDestroyView();
     }
 }
