@@ -90,7 +90,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
         // activate origin card input suggestion
         binding.originSpinner.setThreshold(1);
         binding.originSpinner.setOnItemClickListener((parent, view1, position, id) -> {
-            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getCardNum();
+            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getPan();
             String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(temp), String.class);
             binding.originCard.cardNumberField1.setText("");
             binding.originCard.cardNumberField2.setText("");
@@ -104,7 +104,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
         // activate destination card input suggestion
         binding.destSpinner.setThreshold(1);
         binding.destSpinner.setOnItemClickListener((parent, view1, position, id) -> {
-            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getCardNum();
+            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getPan();
             String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(temp), String.class);
             binding.destCard.cardNumberField1.setText("");
             binding.destCard.cardNumberField2.setText("");
@@ -117,7 +117,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
         });
 
         binding.suggestionSpinner.setOnItemClickListener((parent, view1, position, id) -> {
-            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getCardNum();
+            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getPan();
             String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(temp), String.class);
             binding.destCard.cardNumberField1.setText("");
             binding.destCard.cardNumberField2.setText("");

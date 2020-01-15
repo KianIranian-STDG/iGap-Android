@@ -17,5 +17,6 @@ class ApiStatic {
     static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
     static final String ELECTRICITY_BILL_URL = BASE_URL + "bill/" + VERSION + "api/";
+    static final String MOBILE_BANK = "http://192.168.10.46:3001/v1.0/";
 }
 
