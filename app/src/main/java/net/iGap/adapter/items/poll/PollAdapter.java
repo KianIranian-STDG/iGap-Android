@@ -130,10 +130,6 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ConstraintSet set = new ConstraintSet();
             set.clone((ConstraintLayout) viewHolder.itemView);
             set.setDimensionRatio(R.id.type1_card0, pollList.get(i).scale);
-            set.applyTo((ConstraintLayout) viewHolder.itemView);
-//            String[] scales = pollList.get(i).scale.split(":");
-//            float height = Resources.getSystem().getDisplayMetrics().widthPixels *1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-//            viewHolder.itemView.getLayoutParams().height = Math.round(height);
             ((BaseViewHolder) viewHolder).bindView(pollList.get(i));
         }
     }
