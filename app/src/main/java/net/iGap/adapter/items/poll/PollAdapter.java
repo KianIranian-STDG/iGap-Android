@@ -97,7 +97,6 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return this.pollList;
     }
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
