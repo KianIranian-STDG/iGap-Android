@@ -3,8 +3,14 @@ package net.iGap.mobileBank.viewmoedel;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.mobileBank.repository.model.BankCardModel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
 
@@ -18,12 +24,64 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
     private ObservableField<String> amountEntry = new ObservableField<>("");
     private ObservableField<String> originCardName = new ObservableField<>("Fetching data...");
     private ObservableField<String> destCardName = new ObservableField<>("Fetching data...");
+    private ObservableField<String> originCardNumSpinner = new ObservableField<>("");
+    private ObservableField<String> destCardNumSpinner = new ObservableField<>("");
+
+    private MutableLiveData<List<BankCardModel>> originCards;
+    private MutableLiveData<List<BankCardModel>> destCards;
+    private MutableLiveData<List<BankCardModel>> suggestCards;
 
     private Boolean completeOrigin = false;
     private Boolean completeDest = false;
     private String originCard = null;
     private String destCard = null;
     private String amount = null;
+
+    public MobileBankTransferCTCStepOneViewModel() {
+        originCards = new MutableLiveData<>();
+        destCards = new MutableLiveData<>();
+        suggestCards = new MutableLiveData<>();
+    }
+
+    public void getOriginCardsDB() {
+        List<BankCardModel> temp = new ArrayList<>();
+//        for (int i = 0; i < 3; i++) {
+        temp.add(new BankCardModel("Parsian", "6221061218688325"));
+        temp.add(new BankCardModel("Saman", "6219861029721940"));
+        temp.add(new BankCardModel("Sepah", "6274121172494304"));
+//        }
+        originCards.setValue(temp);
+    }
+
+    public void getDestCardsDB() {
+        List<BankCardModel> temp = new ArrayList<>();
+//        for (int i = 0; i < 3; i++) {
+        temp.add(new BankCardModel("Parsian", "6221061218688325"));
+        temp.add(new BankCardModel("Saman", "6219861029721940"));
+        temp.add(new BankCardModel("Sepah", "6274121172494304"));
+//        }
+        destCards.setValue(temp);
+    }
+
+    public void extractCardNum(String input) {
+        String output = "";
+        List<String> persianNumbers = Arrays.asList("۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹");
+        List<String> englishNumbers = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+        for (int i = 0; i < input.length(); i++) {
+            for (String numChar : persianNumbers) {
+                if (numChar.equals("" + input.charAt(i))) {
+                    output = output + englishNumbers.get(persianNumbers.indexOf(numChar));
+                    break;
+                }
+            }
+        }
+        output = output.replaceAll("[^0-9]", "");
+        if (output.length() == 16) {
+            List<BankCardModel> temp = new ArrayList<>();
+            temp.add(new BankCardModel("Suggestion", "6221061218688325"));
+            suggestCards.setValue(temp);
+        }
+    }
 
     private void getCardInfo(String cardNum, boolean isOrigin) {
         // api call
@@ -135,7 +193,8 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
 
     public void setOriginCard(String originCard) {
         this.originCard = originCard;
-        if (getCardBank(originCard)) {
+        originCardNumSpinner.set(originCard);
+        if (originCard.length() > 5 && getCardBank(originCard)) {
             originBankVisibility.set(View.VISIBLE);
         } else {
             originBankVisibility.set(View.INVISIBLE);
@@ -144,7 +203,8 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
 
     public void setDestCard(String destCard) {
         this.destCard = destCard;
-        if (getCardBank(destCard)) {
+        destCardNumSpinner.set(destCard);
+        if (destCard.length() > 5 && getCardBank(destCard)) {
             destBankVisibility.set(View.VISIBLE);
         } else {
             destBankVisibility.set(View.INVISIBLE);
@@ -186,5 +246,25 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
 
     public String getAmount() {
         return amount;
+    }
+
+    public MutableLiveData<List<BankCardModel>> getOriginCards() {
+        return originCards;
+    }
+
+    public MutableLiveData<List<BankCardModel>> getDestCards() {
+        return destCards;
+    }
+
+    public ObservableField<String> getOriginCardNumSpinner() {
+        return originCardNumSpinner;
+    }
+
+    public ObservableField<String> getDestCardNumSpinner() {
+        return destCardNumSpinner;
+    }
+
+    public MutableLiveData<List<BankCardModel>> getSuggestCards() {
+        return suggestCards;
     }
 }

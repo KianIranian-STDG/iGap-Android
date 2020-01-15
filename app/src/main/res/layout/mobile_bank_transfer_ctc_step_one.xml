@@ -75,9 +75,15 @@
                         app:layout_constraintTop_toBottomOf="@+id/title"
                         app:layout_constraintStart_toStartOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatSpinner
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/originSpinner"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:visibility="visible"
+                        android:text="@{viewModel.originCardNumSpinner}"
+                        android:inputType="numberDecimal"
                         app:layout_constraintStart_toStartOf="@+id/originCard"
                         app:layout_constraintEnd_toEndOf="@+id/originCard"
                         app:layout_constraintTop_toTopOf="@+id/originCard"
@@ -87,6 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/originCard"
+                        android:visibility="visible"
                         app:layout_constraintTop_toBottomOf="@+id/fromTitle"
                         layout="@layout/mobile_bank_card_entry_holder" />
 
@@ -145,6 +152,33 @@
                         android:gravity="center"
                         app:layout_constraintTop_toBottomOf="@+id/originCard"
                         app:layout_constraintStart_toStartOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/destSpinner"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:visibility="visible"
+                        android:text="@{viewModel.destCardNumSpinner}"
+                        android:inputType="numberDecimal"
+                        app:layout_constraintStart_toStartOf="@+id/destCard"
+                        app:layout_constraintEnd_toEndOf="@+id/destCard"
+                        app:layout_constraintTop_toTopOf="@+id/destCard"
+                        app:layout_constraintBottom_toBottomOf="@+id/destCard" />
+
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/suggestionSpinner"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:visibility="visible"
+                        android:inputType="numberDecimal"
+                        app:layout_constraintStart_toStartOf="@+id/destCard"
+                        app:layout_constraintEnd_toEndOf="@+id/destCard"
+                        app:layout_constraintTop_toTopOf="@+id/destCard"
+                        app:layout_constraintBottom_toBottomOf="@+id/destCard" />
 
                     <include
                         android:layout_width="match_parent"

@@ -1,8 +1,12 @@
 package net.iGap.mobileBank.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +19,23 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankTransferCtcStepOneBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.view.adapter.MobileBankSpinnerAdapter;
 import net.iGap.mobileBank.viewmoedel.MobileBankTransferCTCStepOneViewModel;
 
 import java.util.Locale;
 
 public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<MobileBankTransferCTCStepOneViewModel> {
 
-    MobileBankTransferCtcStepOneBinding binding;
+    private MobileBankTransferCtcStepOneBinding binding;
 
     private static final String TAG = "MobileBankTransferCTCSt";
 
@@ -74,9 +83,109 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
 
         binding.originCard.cardNumberField1.requestFocus();
 
+        initial();
+    }
+
+    private void initial() {
+        // activate origin card input suggestion
+        binding.originSpinner.setThreshold(1);
+        binding.originSpinner.setOnItemClickListener((parent, view1, position, id) -> {
+            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getCardNum();
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(temp), String.class);
+            binding.originCard.cardNumberField1.setText("");
+            binding.originCard.cardNumberField2.setText("");
+            binding.originCard.cardNumberField3.setText("");
+            binding.originCard.cardNumberField4.setText("");
+            binding.originCard.cardNumberField1.append(tempArray[0]);
+            binding.originCard.cardNumberField2.append(tempArray[1]);
+            binding.originCard.cardNumberField3.append(tempArray[2]);
+            binding.originCard.cardNumberField4.append(tempArray[3]);
+        });
+        // activate destination card input suggestion
+        binding.destSpinner.setThreshold(1);
+        binding.destSpinner.setOnItemClickListener((parent, view1, position, id) -> {
+            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getCardNum();
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(temp), String.class);
+            binding.destCard.cardNumberField1.setText("");
+            binding.destCard.cardNumberField2.setText("");
+            binding.destCard.cardNumberField3.setText("");
+            binding.destCard.cardNumberField4.setText("");
+            binding.destCard.cardNumberField1.append(tempArray[0]);
+            binding.destCard.cardNumberField2.append(tempArray[1]);
+            binding.destCard.cardNumberField3.append(tempArray[2]);
+            binding.destCard.cardNumberField4.append(tempArray[3]);
+        });
+
+        binding.suggestionSpinner.setOnItemClickListener((parent, view1, position, id) -> {
+            String temp = ((BankCardModel) parent.getItemAtPosition(position)).getCardNum();
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(temp), String.class);
+            binding.destCard.cardNumberField1.setText("");
+            binding.destCard.cardNumberField2.setText("");
+            binding.destCard.cardNumberField3.setText("");
+            binding.destCard.cardNumberField4.setText("");
+            binding.destCard.cardNumberField1.append(tempArray[0]);
+            binding.destCard.cardNumberField2.append(tempArray[1]);
+            binding.destCard.cardNumberField3.append(tempArray[2]);
+            binding.destCard.cardNumberField4.append(tempArray[3]);
+        });
+        /*if (outputCardNum!=null) {
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(outputCardNum), String.class);
+            binding.destCard.cardNumberField1.setText("");
+            binding.destCard.cardNumberField2.setText("");
+            binding.destCard.cardNumberField3.setText("");
+            binding.destCard.cardNumberField4.setText("");
+            binding.destCard.cardNumberField1.append(tempArray[0]);
+            binding.destCard.cardNumberField2.append(tempArray[1]);
+            binding.destCard.cardNumberField3.append(tempArray[2]);
+            binding.destCard.cardNumberField4.append(tempArray[3]);
+            binding.destSpinner.dismissDropDown();
+        }*/
+        // set text change listener for every input and managing it
         textInputManagerOrigin();
         textInputManagerDest();
         textInputManagerValue();
+        onDateChanged();
+        // check for clipboard instance
+        getClipboardData();
+        // start actions for getting data from db
+        viewModel.getOriginCardsDB();
+        viewModel.getDestCardsDB();
+    }
+
+    private void onClipboardDataChangeListener() {
+        ClipboardManager clipBoard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        clipBoard.addPrimaryClipChangedListener(() -> {
+            ClipData clipData = clipBoard.getPrimaryClip();
+            ClipData.Item item = clipData.getItemAt(0);
+            String text = item.getText().toString();
+            Log.d(TAG, "getClipboardData: " + text);
+            // Access your context here using YourActivityName.this
+        });
+    }
+
+    private void getClipboardData() {
+        ClipboardManager clipBoard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = clipBoard.getPrimaryClip();
+        ClipData.Item item = clipData.getItemAt(0);
+        String input = item.getText().toString();
+        viewModel.extractCardNum(input);
+    }
+
+
+    private void onDateChanged() {
+        viewModel.getOriginCards().observe(getViewLifecycleOwner(), bankCardModels -> {
+            MobileBankSpinnerAdapter adapter = new MobileBankSpinnerAdapter(getContext(), R.layout.mobile_bank_preview_spinner_item, bankCardModels);
+            binding.originSpinner.setAdapter(adapter);
+        });
+        viewModel.getDestCards().observe(getViewLifecycleOwner(), bankCardModels -> {
+            MobileBankSpinnerAdapter adapter = new MobileBankSpinnerAdapter(getContext(), R.layout.mobile_bank_preview_spinner_item, bankCardModels);
+            binding.destSpinner.setAdapter(adapter);
+        });
+        viewModel.getSuggestCards().observe(getViewLifecycleOwner(), bankCardModels -> {
+            MobileBankSpinnerAdapter adapter = new MobileBankSpinnerAdapter(getContext(), R.layout.mobile_bank_preview_spinner_item, bankCardModels);
+            binding.suggestionSpinner.setAdapter(adapter);
+            binding.suggestionSpinner.showDropDown();
+        });
     }
 
     private void textInputManagerValue() {
@@ -139,6 +248,8 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
                     binding.originCard.cardNumberField2.setEnabled(true);
                     binding.originCard.cardNumberField2.requestFocus();
                 }
+                viewModel.setOriginCard(s.toString());
+                binding.originSpinner.showDropDown();
             }
         });
 
@@ -166,13 +277,17 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 1) {
+                String cardNum = binding.originCard.cardNumberField1.getText().toString()
+                        + binding.originCard.cardNumberField2.getText().toString();
+                viewModel.setOriginCard(cardNum);
+                binding.originSpinner.showDropDown();
+                /*if (s.length() > 1) {
                     String cardNum = binding.originCard.cardNumberField1.getText().toString()
                             + binding.originCard.cardNumberField2.getText().toString();
                     viewModel.setOriginCard(cardNum);
                 } else {
                     viewModel.setOriginCard(null);
-                }
+                }*/
                 if (s.length() == 4) {
                     binding.originCard.cardNumberField3.setEnabled(true);
                     binding.originCard.cardNumberField3.requestFocus();
@@ -208,6 +323,11 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
                     binding.originCard.cardNumberField4.setEnabled(true);
                     binding.originCard.cardNumberField4.requestFocus();
                 }
+                String cardNum = binding.originCard.cardNumberField1.getText().toString()
+                        + binding.originCard.cardNumberField2.getText().toString()
+                        + binding.originCard.cardNumberField3.getText().toString();
+                viewModel.setOriginCard(cardNum);
+                binding.originSpinner.showDropDown();
             }
         });
 
@@ -238,14 +358,16 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
 
             @Override
             public void afterTextChanged(Editable s) {
+                String cardNum = binding.originCard.cardNumberField1.getText().toString()
+                        + binding.originCard.cardNumberField2.getText().toString()
+                        + binding.originCard.cardNumberField3.getText().toString()
+                        + binding.originCard.cardNumberField4.getText().toString();
                 if (s.length() == 4) {
                     // build the Pin Code
-                    String cardNum = binding.originCard.cardNumberField1.getText().toString()
-                            + binding.originCard.cardNumberField2.getText().toString()
-                            + binding.originCard.cardNumberField3.getText().toString()
-                            + binding.originCard.cardNumberField4.getText().toString();
                     viewModel.setCompleteOrigin(true, cardNum);
                 }
+                viewModel.setOriginCard(cardNum);
+                binding.originSpinner.showDropDown();
             }
         });
     }
@@ -269,6 +391,8 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
                     binding.destCard.cardNumberField2.setEnabled(true);
                     binding.destCard.cardNumberField2.requestFocus();
                 }
+                viewModel.setDestCard(s.toString());
+                binding.destSpinner.showDropDown();
             }
         });
 
@@ -296,13 +420,10 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 1) {
-                    String cardNum = binding.destCard.cardNumberField1.getText().toString()
-                            + binding.destCard.cardNumberField2.getText().toString();
-                    viewModel.setDestCard(cardNum);
-                } else {
-                    viewModel.setDestCard(null);
-                }
+                String cardNum = binding.destCard.cardNumberField1.getText().toString()
+                        + binding.destCard.cardNumberField2.getText().toString();
+                viewModel.setDestCard(cardNum);
+                binding.destSpinner.showDropDown();
                 if (s.length() == 4) {
                     binding.destCard.cardNumberField3.setEnabled(true);
                     binding.destCard.cardNumberField3.requestFocus();
@@ -338,6 +459,11 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
                     binding.destCard.cardNumberField4.setEnabled(true);
                     binding.destCard.cardNumberField4.requestFocus();
                 }
+                String cardNum = binding.destCard.cardNumberField1.getText().toString()
+                        + binding.destCard.cardNumberField2.getText().toString()
+                        + binding.destCard.cardNumberField3.getText().toString();
+                viewModel.setDestCard(cardNum);
+                binding.destSpinner.showDropDown();
             }
         });
 
@@ -368,13 +494,16 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
 
             @Override
             public void afterTextChanged(Editable s) {
+                String cardNum = binding.destCard.cardNumberField1.getText().toString()
+                        + binding.destCard.cardNumberField2.getText().toString()
+                        + binding.destCard.cardNumberField3.getText().toString()
+                        + binding.destCard.cardNumberField4.getText().toString();
+                viewModel.setDestCard(cardNum);
+                binding.destSpinner.showDropDown();
                 if (s.length() == 4) {
                     // build the Pin Code
-                    String cardNum = binding.destCard.cardNumberField1.getText().toString()
-                            + binding.destCard.cardNumberField2.getText().toString()
-                            + binding.destCard.cardNumberField3.getText().toString()
-                            + binding.destCard.cardNumberField4.getText().toString();
                     viewModel.setCompleteDest(true, cardNum);
+                    binding.destSpinner.dismissDropDown();
                 }
             }
         });
