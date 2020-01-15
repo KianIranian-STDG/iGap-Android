@@ -3,19 +3,17 @@ package net.iGap.mobileBank.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
@@ -26,12 +24,13 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.view.adapter.BankCardsAdapter;
 import net.iGap.mobileBank.viewmoedel.MobileBankHomeViewModel;
-import net.iGap.viewmodel.FragmentCPayViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewModel> {
+public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHomeViewModel> {
 
     private FragmentMobileBankHomeBinding binding;
 
@@ -39,8 +38,8 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_mobile_bank_home, container, false);
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mobile_bank_home, container, false);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setVm(viewModel);
         return binding.getRoot();
@@ -51,6 +50,7 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(MobileBankHomeViewModel.class);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -61,13 +61,13 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
 
     private void setupListeners() {
 
-        viewModel.onTempPassListener.observe(getViewLifecycleOwner() , state -> {
+        viewModel.onTempPassListener.observe(getViewLifecycleOwner(), state -> {
 
-            if (state != null && state && getActivity() != null){
+            if (state != null && state && getActivity() != null) {
                 new DialogParsian()
                         .setContext(getActivity())
                         .setTitle(getString(R.string.message))
-                        .setButtonsText(getString(R.string.ok) , getString(R.string.cancel))
+                        .setButtonsText(getString(R.string.ok), getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
                             public void onActiveButtonClicked(Dialog dialog) {
@@ -83,13 +83,13 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
 
         });
 
-        viewModel.onMoneyTransferListener.observe(getViewLifecycleOwner() , state -> {
+        viewModel.onMoneyTransferListener.observe(getViewLifecycleOwner(), state -> {
 
-            if (state != null && state && getActivity() != null){
+            if (state != null && state && getActivity() != null) {
                 new DialogParsian()
                         .setContext(getActivity())
                         .setTitle(getString(R.string.transfer_mony))
-                        .setButtonsText(getString(R.string.ok) , getString(R.string.cancel))
+                        .setButtonsText(getString(R.string.ok), getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
                             public void onActiveButtonClicked(Dialog dialog) {
@@ -105,10 +105,10 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
 
         });
 
-        viewModel.onTransactionListener.observe(getViewLifecycleOwner() , state -> {
+        viewModel.onTransactionListener.observe(getViewLifecycleOwner(), state -> {
 
-            if (state != null && state && getActivity() != null){
-                new HelperFragment(getActivity().getSupportFragmentManager() , new MobileBankCardHistoryFragment())
+            if (state != null && state && getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment())
                         .setReplace(false)
                         .load();
             }
@@ -136,9 +136,9 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
 
     private void setupViewPager() {
         List<RealmMobileBankCards> cards = new ArrayList<>();
-        cards.add(new RealmMobileBankCards("6221 6698 2154 4752" , "علیرضا نظری" , "بانک پارسیان", "02/99" , true));
-        cards.add(new RealmMobileBankCards("6221 6698 3145 3456" , "حسین امینی" , "بانک پارسیان", "02/99" , true));
-        cards.add(new RealmMobileBankCards("6221 6698 9254 6678" , "احسان زرقلمی" , "بانک پارسیان", "02/99" , true));
+        cards.add(new RealmMobileBankCards("6221 6698 2154 4752", "علیرضا نظری", "بانک پارسیان", "02/99", true));
+        cards.add(new RealmMobileBankCards("6221 6698 3145 3456", "حسین امینی", "بانک پارسیان", "02/99", true));
+        cards.add(new RealmMobileBankCards("6221 6698 9254 6678", "احسان زرقلمی", "بانک پارسیان", "02/99", true));
         cards.add(null);
         binding.vpCards.setAdapter(new BankCardsAdapter(cards));
         binding.vpCards.setOffscreenPageLimit(cards.size() - 1);
@@ -164,10 +164,10 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
     }
 
     private void createViewPagerIndicators(int size) {
-        for (int i=0 ; i < size ; i++){
+        for (int i = 0; i < size; i++) {
             ImageView iv = new ImageView(binding.lytIndicators.getContext());
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(28 , 28);
-            lp.setMargins(6 , 6 , 6 , 6 );
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(28, 28);
+            lp.setMargins(6, 6, 6, 6);
             iv.setLayoutParams(lp);
             iv.setBackgroundResource(R.drawable.indicator_slider);
             if (i == 0) iv.setSelected(true);
@@ -175,10 +175,10 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
         }
     }
 
-    private void setEnableIndicator(int position){
+    private void setEnableIndicator(int position) {
         int count = binding.lytIndicators.getChildCount();
         if (position > count) return;
-        for (int i=0 ; i < count ; i++){
+        for (int i = 0; i < count; i++) {
             binding.lytIndicators.getChildAt(i).setSelected(i == position);
         }
     }

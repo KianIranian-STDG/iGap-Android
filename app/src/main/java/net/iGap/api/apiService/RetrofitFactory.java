@@ -9,6 +9,7 @@ import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.KuknosApi;
 import net.iGap.api.MciApi;
+import net.iGap.api.MobileBankApi;
 import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
 
@@ -33,6 +34,28 @@ public class RetrofitFactory {
             builder.addInterceptor(httpLoggingInterceptor);
         }
         builder.addInterceptor(new IgapRetrofitInterceptor());
+
+        if (BuildConfig.DEBUG) {
+            httpClient = builder.build();
+        } else {
+            ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                    .tlsVersions(TlsVersion.TLS_1_2)
+                    .build();
+            httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
+        }
+        return httpClient;
+    }
+
+    public OkHttpClient getHttpClientForMobileBank() {
+        OkHttpClient httpClient;
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(httpLoggingInterceptor);
+        }
+        builder.addInterceptor(new MobileBankRetrofitInterceptor());
 
         if (BuildConfig.DEBUG) {
             httpClient = builder.build();
@@ -133,5 +156,14 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(ElecBillApi.class);
+    }
+
+    public MobileBankApi getMobileBankRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.MOBILE_BANK)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClientForMobileBank())
+                .build()
+                .create(MobileBankApi.class);
     }
 }
