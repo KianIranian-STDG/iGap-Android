@@ -21,6 +21,10 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
 
     private MobileBankRepository repository;
 
+    public MobileBankLoginViewModel() {
+        repository = new MobileBankRepository();
+    }
+
     public void onLoginClicked(String userName, String password) {
         if (userName.length() > 0) {
             if (password.length() > 0) {
