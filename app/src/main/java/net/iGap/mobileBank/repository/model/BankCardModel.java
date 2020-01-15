@@ -22,7 +22,7 @@ public class BankCardModel {
     private String pan;
     private String cardBankName;
 
-    public BankCardModel(String pan, String cardBankName) {
+    public BankCardModel(String cardBankName, String pan) {
         this.pan = pan;
         this.cardBankName = cardBankName;
     }

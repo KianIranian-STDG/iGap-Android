@@ -50,7 +50,7 @@ public class MobileBankSpinnerAdapter extends ArrayAdapter<BankCardModel> {
         ImageView bankLogo = layout.findViewById(R.id.logo);
 
         bankName.setText(cards.get(position).getCardBankName());
-        String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(cards.get(position).getCardNum()), String.class);
+        String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(cards.get(position).getPan()), String.class);
         cardNum.setText(tempArray[0] + "-" + tempArray[1] + "-" + tempArray[2] + "-" + tempArray[3]);
 
         return layout;
@@ -101,7 +101,7 @@ public class MobileBankSpinnerAdapter extends ArrayAdapter<BankCardModel> {
                 ArrayList<BankCardModel> matchValues = new ArrayList<>();
 
                 for (BankCardModel dataItem : dataListAllItems) {
-                    if (dataItem.getCardNum().toLowerCase().contains(searchStrLowerCase)) {
+                    if (dataItem.getPan().toLowerCase().contains(searchStrLowerCase)) {
                         matchValues.add(dataItem);
                     }
                 }
