@@ -186,6 +186,8 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
             binding.suggestionSpinner.setAdapter(adapter);
             binding.suggestionSpinner.showDropDown();
         });
+        viewModel.getOriginBankLogo().observe(getViewLifecycleOwner(), res -> binding.originBankLogo.setImageResource(res));
+        viewModel.getDestBankLogo().observe(getViewLifecycleOwner(), res -> binding.destBankLogo.setImageResource(res));
     }
 
     private void textInputManagerValue() {

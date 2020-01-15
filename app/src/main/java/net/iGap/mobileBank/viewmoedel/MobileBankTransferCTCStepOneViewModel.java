@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.util.ExtractBank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,9 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
     private ObservableField<Integer> originBankVisibility = new ObservableField<>(View.INVISIBLE);
     private ObservableField<Integer> destBankVisibility = new ObservableField<>(View.INVISIBLE);
     private ObservableField<Integer> amountTextVisibility = new ObservableField<>(View.INVISIBLE);
+
+    private MutableLiveData<Integer> originBankLogo;
+    private MutableLiveData<Integer> destBankLogo;
 
     private ObservableField<String> amountTranslate = new ObservableField<>("");
     private ObservableField<String> amountEntry = new ObservableField<>("");
@@ -41,25 +45,23 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
         originCards = new MutableLiveData<>();
         destCards = new MutableLiveData<>();
         suggestCards = new MutableLiveData<>();
+        originBankLogo = new MutableLiveData<>();
+        destBankLogo = new MutableLiveData<>();
     }
 
     public void getOriginCardsDB() {
         List<BankCardModel> temp = new ArrayList<>();
-//        for (int i = 0; i < 3; i++) {
         temp.add(new BankCardModel("Parsian", "6221061218688325"));
         temp.add(new BankCardModel("Saman", "6219861029721940"));
         temp.add(new BankCardModel("Sepah", "6274121172494304"));
-//        }
         originCards.setValue(temp);
     }
 
     public void getDestCardsDB() {
         List<BankCardModel> temp = new ArrayList<>();
-//        for (int i = 0; i < 3; i++) {
         temp.add(new BankCardModel("Parsian", "6221061218688325"));
         temp.add(new BankCardModel("Saman", "6219861029721940"));
         temp.add(new BankCardModel("Sepah", "6274121172494304"));
-//        }
         destCards.setValue(temp);
     }
 
@@ -78,7 +80,7 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
         output = output.replaceAll("[^0-9]", "");
         if (output.length() == 16) {
             List<BankCardModel> temp = new ArrayList<>();
-            temp.add(new BankCardModel("Suggestion", "6221061218688325"));
+            temp.add(new BankCardModel("Suggestion", output));
             suggestCards.setValue(temp);
         }
     }
@@ -87,9 +89,9 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
         // api call
     }
 
-    private boolean getCardBank(String cardNum) {
+    private int getCardBank(String cardNum) {
         // bank logo
-        return cardNum != null;
+        return new ExtractBank().bankLogo(cardNum);
     }
 
     private void translateValue() {
@@ -194,7 +196,8 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
     public void setOriginCard(String originCard) {
         this.originCard = originCard;
         originCardNumSpinner.set(originCard);
-        if (originCard.length() > 5 && getCardBank(originCard)) {
+        if (originCard.length() > 5) {
+            originBankLogo.setValue(getCardBank(originCard));
             originBankVisibility.set(View.VISIBLE);
         } else {
             originBankVisibility.set(View.INVISIBLE);
@@ -204,7 +207,8 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
     public void setDestCard(String destCard) {
         this.destCard = destCard;
         destCardNumSpinner.set(destCard);
-        if (destCard.length() > 5 && getCardBank(destCard)) {
+        if (destCard.length() > 5) {
+            destBankLogo.setValue(getCardBank(destCard));
             destBankVisibility.set(View.VISIBLE);
         } else {
             destBankVisibility.set(View.INVISIBLE);
@@ -266,5 +270,13 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
 
     public MutableLiveData<List<BankCardModel>> getSuggestCards() {
         return suggestCards;
+    }
+
+    public MutableLiveData<Integer> getOriginBankLogo() {
+        return originBankLogo;
+    }
+
+    public MutableLiveData<Integer> getDestBankLogo() {
+        return destBankLogo;
     }
 }
