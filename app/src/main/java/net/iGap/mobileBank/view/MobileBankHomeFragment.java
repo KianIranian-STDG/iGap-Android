@@ -3,29 +3,27 @@ package net.iGap.mobileBank.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.view.adapter.BankCardsAdapter;
 import net.iGap.mobileBank.viewmoedel.MobileBankHomeViewModel;
-import net.iGap.viewmodel.FragmentCPayViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +63,7 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
             if (state != null && state && getActivity() != null){
                 new DialogParsian()
                         .setContext(getActivity())
-                        .setTitle("پیام سیستم")
+                        .setTitle(getString(R.string.message))
                         .setButtonsText(getString(R.string.ok) , getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
@@ -100,6 +98,16 @@ public class MobileBankHomeFragment extends BaseAPIViewFrag<MobileBankHomeViewMo
                                 dialog.dismiss();
                             }
                         }).showMoneyTransferDialog();
+            }
+
+        });
+
+        viewModel.onTransactionListener.observe(getViewLifecycleOwner(), state -> {
+
+            if (state != null && state && getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment())
+                        .setReplace(false)
+                        .load();
             }
 
         });

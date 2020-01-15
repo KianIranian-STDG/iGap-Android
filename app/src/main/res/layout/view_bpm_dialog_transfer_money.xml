@@ -6,7 +6,10 @@
     android:minWidth="@dimen/dp300"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/dp2"
-    android:padding="@dimen/dp8"
+    android:paddingTop="@dimen/dp2"
+    android:paddingBottom="@dimen/dp2"
+    android:paddingRight="@dimen/dp14"
+    android:paddingLeft="@dimen/dp14"
     android:layoutDirection="ltr">
 
     <RadioButton
@@ -25,6 +28,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textSize="@dimen/standardTextSize"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingRight="@dimen/dp10"
         android:textColor="?iGapTitleTextColor"
         tools:text="حساب پارسیان" />
 

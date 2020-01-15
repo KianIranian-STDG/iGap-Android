@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankTranferCtcStep3FragmentBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.viewmoedel.MobileBankTransferCtcStep3ViewModel;
 
 public class MobileBankTransferCtcStep3Fragment extends BaseAPIViewFrag<MobileBankTransferCtcStep3ViewModel> {
@@ -36,5 +39,27 @@ public class MobileBankTransferCtcStep3Fragment extends BaseAPIViewFrag<MobileBa
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupToolbar();
+        binding.btnInquiry.setOnClickListener(v -> {
+            new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankTransferCtcStep4Fragment()).setReplace(false).load();
+        });
+    }
+
+    private void setupToolbar() {
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setRoundBackground(false)
+                .setLeftIcon(R.string.back_icon)
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+
+        binding.toolbar.addView(toolbar.getView());
     }
 }
