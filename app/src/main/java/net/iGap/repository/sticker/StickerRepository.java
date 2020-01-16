@@ -39,6 +39,7 @@ import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -131,50 +132,22 @@ public class StickerRepository implements ObserverView {
                 }).doOnSuccess(this::updateStickers);
     }
 
-    public Completable addStickerGroupToMyStickers(StructIGStickerGroup stickerGroup) {
-        return stickerApi.addStickerGroupToMyStickers(stickerGroup.getGroupId())
-                .subscribeOn(Schedulers.newThread())
-                .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
-
-                    RealmStickerGroup realmStickerGroup = realm
-                            .where(RealmStickerGroup.class)
-                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
-                            .findFirst();
-
-                    if (realmStickerGroup == null)
-                        realm.executeTransactionAsync(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup));
-
-                }));
+    private Completable addStickerGroupToMyStickersApiService(String groupId) {
+        return stickerApi.addStickerGroupToMyStickers(groupId).subscribeOn(Schedulers.newThread());
     }
 
-    public Completable removeStickerGroupFromMyStickers(String groupId) {
-        return stickerApi.removeStickerGroupFromMyStickers(groupId)
-                .subscribeOn(Schedulers.newThread())
-                .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
-
-                    RealmStickerGroup realmStickerGroup = realm
-                            .where(RealmStickerGroup.class)
-                            .equalTo(RealmStickerGroupFields.ID, groupId)
-                            .findFirst();
-
-                    if (realmStickerGroup != null) {
-                        try {
-                            DbManager.getInstance().doRealmTransaction(asyncRealm -> realmStickerGroup.deleteFromRealm());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }));
+    private Completable removeStickerGroupFromMyStickersApiService(String groupId) {
+        return stickerApi.removeStickerGroupFromMyStickers(groupId).subscribeOn(Schedulers.newThread());
     }
 
-    public Single<StructIGStickerGroup> getStickerGroup(String groupId) {
+    private Single<StructIGStickerGroup> getStickerGroupApiService(String groupId) {
         return stickerApi.getStickerGroupStickers(groupId)
                 .subscribeOn(Schedulers.newThread())
                 .map(StructIGStickerGroup::new);
     }
 
     public Single<List<StructIGSticker>> getStickerGroupStickers(String groupId) {
-        return getStickerGroup(groupId).map(StructIGStickerGroup::getStickers);
+        return getStickerGroupApiService(groupId).map(StructIGStickerGroup::getStickers);
     }
 
     public Completable getRecentSticker() {
@@ -189,21 +162,8 @@ public class StickerRepository implements ObserverView {
                 .flatMapCompletable(o -> CompletableObserver::onComplete);
     }
 
-    public Completable addStickerToFavorite(String stickerId) {
-        return stickerApi.addStickerToFavorite(stickerId)
-                .subscribeOn(Schedulers.newThread())
-                .doOnComplete(() -> {
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        RealmStickerItem stickerItem = realm.where(RealmStickerItem.class)
-                                .equalTo(RealmStickerItemFields.ID, stickerId)
-                                .equalTo(RealmStickerItemFields.IS_FAVORITE, false)
-                                .findFirst();
-
-                        if (stickerItem != null)
-                            realm.executeTransactionAsync(realm1 -> stickerItem.setFavorite(true));
-
-                    });
-                });
+    private Completable addStickerToFavoriteApiService(String stickerId) {
+        return stickerApi.addStickerToFavorite(stickerId).subscribeOn(Schedulers.newThread());
     }
 
     public Completable getFavoriteSticker() {
@@ -241,7 +201,7 @@ public class StickerRepository implements ObserverView {
         });
     }
 
-    public Single<StructIGStickerGroup> getStickerListForStickerDialog(String groupId) {
+    public Single<StructIGStickerGroup> getStickerGroup(String groupId) {
 
         RealmStickerGroup realmStickers = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmStickerGroup.class).equalTo(RealmStickerGroupFields.ID, groupId).findFirst();
@@ -251,7 +211,7 @@ public class StickerRepository implements ObserverView {
             StructIGStickerGroup stickerGroup = new StructIGStickerGroup(realmStickers);
             return Single.create(emitter -> emitter.onSuccess(stickerGroup));
         } else {
-            return getStickerGroup(groupId);
+            return getStickerGroupApiService(groupId);
         }
     }
 
@@ -498,5 +458,54 @@ public class StickerRepository implements ObserverView {
         Log.i(TAG, "createPathFile: " + G.downloadDirectoryPath + "/" + token + mimeType);
 
         return G.downloadDirectoryPath + "/" + token + mimeType;
+    }
+
+    public Completable addStickerToFavorite(String stickerId) {
+        return addStickerToFavoriteApiService(stickerId)
+                .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
+                    RealmStickerItem stickerItem = realm.where(RealmStickerItem.class)
+                            .equalTo(RealmStickerItemFields.ID, stickerId)
+                            .equalTo(RealmStickerItemFields.IS_FAVORITE, false)
+                            .findFirst();
+
+                    if (stickerItem != null)
+                        realm.executeTransactionAsync(realm1 -> stickerItem.setFavorite(true));
+
+                }));
+    }
+
+    public Single<StructIGStickerGroup> addStickerGroupToMyStickers(StructIGStickerGroup stickerGroup) {
+        return addStickerGroupToMyStickersApiService(stickerGroup.getGroupId())
+                .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
+                    RealmStickerGroup realmStickerGroup = realm
+                            .where(RealmStickerGroup.class)
+                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
+                            .findFirst();
+
+                    if (realmStickerGroup == null) {
+                        realm.executeTransactionAsync(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup));
+                        stickerGroup.setInUserList(true);
+                    }
+
+                })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
+    }
+
+    public Single<StructIGStickerGroup> removeStickerGroupFromMyStickers(StructIGStickerGroup stickerGroup) {
+        return removeStickerGroupFromMyStickersApiService(stickerGroup.getGroupId())
+                .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
+                    RealmStickerGroup realmStickerGroup = realm
+                            .where(RealmStickerGroup.class)
+                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
+                            .findFirst();
+
+                    if (realmStickerGroup != null) {
+                        try {
+                            DbManager.getInstance().doRealmTransaction(asyncRealm -> realmStickerGroup.deleteFromRealm());
+                            stickerGroup.setInUserList(false);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
     }
 }

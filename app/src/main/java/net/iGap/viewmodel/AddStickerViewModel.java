@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.rx.IGSingleObserver;
 import net.iGap.rx.ObserverViewModel;
 
 import java.util.ArrayList;
@@ -60,22 +61,35 @@ public class AddStickerViewModel extends ObserverViewModel {
 
     public void onItemButtonClicked(StructIGStickerGroup stickerGroup, OnClickResult clickResult) {
         if (stickerGroup.isInUserList()) {
-            Disposable disposable = repository.removeStickerGroupFromMyStickers(stickerGroup.getGroupId())
+            repository.removeStickerGroupFromMyStickers(stickerGroup)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnComplete(() -> {
-                        stickerGroup.setInUserList(false);
-                        clickResult.onResult(stickerGroup);
-                    }).doOnError(throwable -> clickResult.onResult(stickerGroup)).subscribe();
-            backgroundDisposable.add(disposable);
-        } else {
-            Disposable disposable = repository.addStickerGroupToMyStickers(stickerGroup)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnComplete(() -> {
-                        stickerGroup.setInUserList(true);
-                        clickResult.onResult(stickerGroup);
-                    }).doOnError(throwable -> clickResult.onResult(stickerGroup)).subscribe();
+                    .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
+                        @Override
+                        public void onSuccess(StructIGStickerGroup stickerGroup) {
+                            clickResult.onResult(stickerGroup);
+                        }
 
-            backgroundDisposable.add(disposable);
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            clickResult.onResult(stickerGroup);
+                        }
+                    });
+        } else {
+            repository.addStickerGroupToMyStickers(stickerGroup)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
+                        @Override
+                        public void onSuccess(StructIGStickerGroup stickerGroup) {
+                            clickResult.onResult(stickerGroup);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            clickResult.onResult(stickerGroup);
+                        }
+                    });
         }
     }
 

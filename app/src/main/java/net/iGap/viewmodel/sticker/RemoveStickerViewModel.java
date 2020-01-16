@@ -66,11 +66,8 @@ public class RemoveStickerViewModel extends ObserverViewModel {
         }
     }
 
-    public void removeStickerFromFavorite(String groupId) {
-        Disposable disposable = repository.removeStickerGroupFromMyStickers(groupId)
-                .doOnComplete(() -> {
-                })
-                .subscribe();
+    public void removeStickerFromMySticker(StructIGStickerGroup stickerGroup) {
+        Disposable disposable = repository.removeStickerGroupFromMyStickers(stickerGroup).subscribe();
         backgroundDisposable.add(disposable);
     }
 

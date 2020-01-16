@@ -1,6 +1,5 @@
 package net.iGap.viewmodel.sticker;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
@@ -11,7 +10,6 @@ import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 import net.iGap.rx.ObserverViewModel;
-import net.iGap.viewmodel.BaseCPayViewModel;
 
 public class StickerDialogViewModel extends ObserverViewModel {
     private static final String TAG = "abbasiSticker ViewModel";
@@ -40,9 +38,9 @@ public class StickerDialogViewModel extends ObserverViewModel {
     public void onAddOrRemoveStickerClicked() {
         if (fragmentMode == LIST) {
             if (stickerGroup.isInUserList()) {
-                removeStickerFromFavorite(stickerGroup.getGroupId());
+                removeStickerToMyStickers(stickerGroup);
             } else {
-                addStickerToFavorite(stickerGroup.getGroupId());
+                addStickerToMyStickers(stickerGroup);
             }
         } else if (fragmentMode == PREVIEW) {
             if (openPreviewViewLiveData.getValue() != null)
@@ -52,7 +50,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
 
     public void getSticker() {
         progressMutableLiveData.postValue(View.VISIBLE);
-        repository.getStickerListForStickerDialog(stickerGroup.getGroupId())
+        repository.getStickerGroup(stickerGroup.getGroupId())
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(mainThreadDisposable) {
                     @Override
                     public void onSuccess(StructIGStickerGroup stickerGroup) {
@@ -75,43 +73,40 @@ public class StickerDialogViewModel extends ObserverViewModel {
                 });
     }
 
-    public void addStickerToFavorite(String groupId) {
-        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
-        repository.addStickerGroupToFavorite(groupId, new BaseCPayViewModel<Boolean>() {
-            @Override
-            public void onSuccess(Boolean data) {
-                addOrRemoveProgressLiveData.postValue(View.GONE);
-//                stickerGroup.setInMySticker(data);
-                onStickerFavoriteChange(data);
-                Log.i(TAG, "on Success addStickerToFavorite with id -> " + stickerGroup.getGroupId());
-            }
+    private void addStickerToMyStickers(StructIGStickerGroup stickerGroup) {
+        repository.addStickerGroupToMyStickers(stickerGroup)
+                .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
+                    @Override
+                    public void onSuccess(StructIGStickerGroup stickerGroup) {
+                        addOrRemoveProgressLiveData.postValue(View.GONE);
+                        onStickerFavoriteChange(stickerGroup.isInUserList());
+                    }
 
-            @Override
-            public void onError(String error) {
-                addOrRemoveProgressLiveData.postValue(View.GONE);
-                closeDialogMutableLiveData.postValue(true);
-                Log.i(TAG, "on Error addStickerToFavorite with id -> " + stickerGroup.getGroupId() + " with error " + error);
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        addOrRemoveProgressLiveData.postValue(View.GONE);
+                        closeDialogMutableLiveData.postValue(true);
+                    }
+                });
     }
 
-    public void removeStickerFromFavorite(String groupId) {
-        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
-        repository.removeStickerGroupFromFavorite(groupId, new BaseCPayViewModel<Boolean>() {
-            @Override
-            public void onSuccess(Boolean data) {
-                addOrRemoveProgressLiveData.postValue(View.GONE);
-                closeDialogMutableLiveData.postValue(true);
-                Log.i(TAG, "on Success removeStickerFromFavorite with id -> " + stickerGroup.getGroupId());
-            }
+    private void removeStickerToMyStickers(StructIGStickerGroup stickerGroup) {
+        repository.removeStickerGroupFromMyStickers(stickerGroup)
+                .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
+                    @Override
+                    public void onSuccess(StructIGStickerGroup stickerGroup) {
+                        addOrRemoveProgressLiveData.postValue(View.GONE);
+                        closeDialogMutableLiveData.postValue(true);
+                    }
 
-            @Override
-            public void onError(String error) {
-                addOrRemoveProgressLiveData.postValue(View.GONE);
-                closeDialogMutableLiveData.postValue(true);
-                Log.i(TAG, "on Error addStickerToFavorite with id -> " + stickerGroup.getGroupId() + " and error -> " + error);
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        addOrRemoveProgressLiveData.postValue(View.GONE);
+                        closeDialogMutableLiveData.postValue(true);
+                    }
+                });
     }
 
     public void onStickerInListModeClick(StructIGSticker structIGSticker) {

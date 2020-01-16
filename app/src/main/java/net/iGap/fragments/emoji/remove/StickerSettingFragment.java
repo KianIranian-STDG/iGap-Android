@@ -85,7 +85,7 @@ public class StickerSettingFragment extends BaseFragment {
                             .negativeText(getString(R.string.no))
                             .onPositive((dialog, which) -> {
                                 progressStatus.setVisibility(true);
-                                viewModel.removeStickerFromFavorite(stickerGroup.getGroupId());
+                                viewModel.removeStickerFromMySticker(stickerGroup);
                                 dialog.dismiss();
                             }).show();
                 }

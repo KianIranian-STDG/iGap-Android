@@ -3,7 +3,6 @@ package net.iGap.fragments.emoji.struct;
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
 import net.iGap.realm.RealmStickerGroup;
-import net.iGap.realm.RealmStickers;
 import net.iGap.repository.sticker.StickerRepository;
 
 import java.io.File;
@@ -71,23 +70,6 @@ public class StructIGStickerGroup {
         return stickers;
     }
 
-    public StructIGStickerGroup setValueWithRealmStickers(RealmStickers realmStickersGroup) {
-        if (realmStickersGroup != null && realmStickersGroup.isValid()) {
-            setGroupId(realmStickersGroup.getSt_id());
-            setStickers(realmStickersGroup.getIGGroupStickers());
-            setPrice(realmStickersGroup.getPrice());
-            setName(realmStickersGroup.getName());
-            setAvatarPath(StickerRepository.getInstance().getStickerPath(realmStickersGroup.getAvatarToken(), realmStickersGroup.getAvatarName()));
-            setAvatarToken(realmStickersGroup.getAvatarToken());
-            setAvatarSize(realmStickersGroup.getAvatarSize());
-            setAvatarName(realmStickersGroup.getAvatarName());
-            setApproved(realmStickersGroup.isApproved());
-            setAvatarPath(realmStickersGroup.getUri());
-            setVip(realmStickersGroup.isVip());
-        }
-        return this;
-    }
-
     public StructIGStickerGroup(RealmStickerGroup realmStickersGroup) {
         if (realmStickersGroup != null && realmStickersGroup.isValid()) {
             setGroupId(realmStickersGroup.getId());
@@ -97,6 +79,7 @@ public class StructIGStickerGroup {
             setAvatarSize(realmStickersGroup.getAvatarSize());
             setAvatarName(realmStickersGroup.getAvatarName());
             setAvatarPath(StickerRepository.getInstance().getStickerPath(realmStickersGroup.getAvatarToken(), realmStickersGroup.getAvatarName()));
+            setInUserList(true);
         }
     }
 
