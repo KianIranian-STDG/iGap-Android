@@ -22,7 +22,7 @@ public class MobileBankApiInitializer<T> {
                 if (response.isSuccessful())
                     retrofitCallback.onSuccess(response.body());
                 else {
-                    if (response.code() == 400) {
+                    if (response.code() == 400) { //must be 401
                         expiredToken.onExpired();
                     } else {
                         try {

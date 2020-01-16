@@ -37,7 +37,7 @@ public class MobileBankRepository {
     }
 
     public String getAccessToken() {
-        return accessToken;
+        return "Bearer  " + accessToken;
     }
 
     public void setAccessToken(String token) {

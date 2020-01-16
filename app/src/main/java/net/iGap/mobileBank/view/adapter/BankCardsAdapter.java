@@ -22,6 +22,7 @@ public class BankCardsAdapter extends PagerAdapter {
 
     public BankCardsAdapter(List<RealmMobileBankCards> cards) {
         this.mCards = cards;
+        cards.add(null); // for add
     }
 
     @Override

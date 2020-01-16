@@ -59,4 +59,8 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
 
     public void OnShebaClicked() {
     }
+
+    public MutableLiveData<List<BankCardModel>> getCardsData() {
+        return cardsData;
+    }
 }

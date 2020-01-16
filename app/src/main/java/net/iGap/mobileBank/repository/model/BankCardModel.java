@@ -20,7 +20,8 @@ public class BankCardModel {
     private String issueDate;
     @SerializedName("pan")
     private String pan;
-    private String cardBankName;
+
+    transient private String cardBankName;
 
     public BankCardModel(String cardBankName, String pan) {
         this.pan = pan;

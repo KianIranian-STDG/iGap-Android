@@ -3,6 +3,7 @@ package net.iGap.mobileBank.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
+import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.view.adapter.BankCardsAdapter;
 import net.iGap.mobileBank.viewmoedel.MobileBankHomeViewModel;
 
@@ -28,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHomeViewModel> {
 
@@ -59,6 +63,10 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
     }
 
     private void setupListeners() {
+
+        viewModel.getCardsData().observe(getViewLifecycleOwner(), bankCardModels -> {
+            saveCardsTodb(bankCardModels);
+        });
 
         viewModel.onTempPassListener.observe(getViewLifecycleOwner(), state -> {
 
@@ -115,6 +123,10 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
         });
     }
 
+    private void saveCardsTodb(List<BankCardModel> bankCardModels) {
+        RealmMobileBankCards.putOrUpdate(bankCardModels, this::setupViewPager);
+    }
+
     private void setupToolbar() {
 
         HelperToolbar toolbar = HelperToolbar.create()
@@ -134,11 +146,8 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
     }
 
     private void setupViewPager() {
-        List<RealmMobileBankCards> cards = new ArrayList<>();
-        cards.add(new RealmMobileBankCards("6221 6698 2154 4752", "علیرضا نظری", "بانک پارسیان", "02/99", true));
-        cards.add(new RealmMobileBankCards("6221 6698 3145 3456", "حسین امینی", "بانک پارسیان", "02/99", true));
-        cards.add(new RealmMobileBankCards("6221 6698 9254 6678", "احسان زرقلمی", "بانک پارسیان", "02/99", true));
-        cards.add(null);
+
+        List<RealmMobileBankCards> cards = new ArrayList<>(RealmMobileBankCards.getCards());
         binding.vpCards.setAdapter(new BankCardsAdapter(cards));
         binding.vpCards.setOffscreenPageLimit(cards.size() - 1);
 
