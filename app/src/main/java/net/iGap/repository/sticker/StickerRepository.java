@@ -241,48 +241,18 @@ public class StickerRepository implements ObserverView {
         });
     }
 
-    public void getStickerListForStickerDialog(String groupId, ResponseCallback<StructIGStickerGroup> callback) {
+    public Single<StructIGStickerGroup> getStickerListForStickerDialog(String groupId) {
 
-        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
-
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-
-            if (realmStickers != null && realmStickers.isValid())
-                stickerGroup.setValueWithRealmStickers(realmStickers);
+        RealmStickerGroup realmStickers = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmStickerGroup.class).equalTo(RealmStickerGroupFields.ID, groupId).findFirst();
         });
 
-        if (stickerGroup.hasData()) {
-            callback.onSuccess(stickerGroup);
+        if (realmStickers != null && realmStickers.isValid()) {
+            StructIGStickerGroup stickerGroup = new StructIGStickerGroup(realmStickers);
+            return Single.create(emitter -> emitter.onSuccess(stickerGroup));
         } else {
-            getStickerFromServer(groupId, callback);
+            return getStickerGroup(groupId);
         }
-    }
-
-    private void getStickerFromServer(String groupId, ResponseCallback<StructIGStickerGroup> callback) {
-        if (apiService != null)
-            apiService.getSticker(groupId).enqueue(new Callback<StructEachSticker>() {
-                @Override
-                public void onResponse(@NotNull Call<StructEachSticker> call, @NotNull Response<StructEachSticker> response) {
-                    if (response.body() != null) {
-                        if (response.body().getOk() && response.body().getData() != null) {
-
-                            StructGroupSticker structGroupSticker = response.body().getData();
-                            StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
-
-//                            stickerGroup.setValueWithOldStruct(structGroupSticker);
-
-                            G.handler.postDelayed(() -> callback.onSuccess(stickerGroup), 300);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NotNull Call<StructEachSticker> call, @NotNull Throwable t) {
-                    Log.i(TAG, "get sticker from API SERVICE  with group id" + groupId + " with error " + t.getMessage());
-                    callback.onError(t.getMessage());
-                }
-            });
     }
 
     private void getStickerFromServerAndInsetToDb(String groupId) {
@@ -431,9 +401,9 @@ public class StickerRepository implements ObserverView {
 
                             boolean hasRecent = structIGStickerGroups.get(0).getGroupId().equals(StructIGStickerGroup.RECENT_GROUP);
 
-                            if (stickers.size() > 0) {
-                                structIGStickerGroups.add(hasRecent ? 1 : 0, favoriteStickerGroup);
-                            }
+//                            if (stickers.size() > 0) {
+//                                structIGStickerGroups.add(hasRecent ? 1 : 0, favoriteStickerGroup);
+//                            }
                         }
 
                         return structIGStickerGroups;

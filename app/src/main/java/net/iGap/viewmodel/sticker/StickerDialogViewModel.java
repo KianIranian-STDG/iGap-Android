@@ -9,10 +9,11 @@ import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.rx.IGSingleObserver;
+import net.iGap.rx.ObserverViewModel;
 import net.iGap.viewmodel.BaseCPayViewModel;
-import net.iGap.viewmodel.BaseViewModel;
 
-public class StickerDialogViewModel extends BaseViewModel {
+public class StickerDialogViewModel extends ObserverViewModel {
     private static final String TAG = "abbasiSticker ViewModel";
 
     private static final int LIST = 0;
@@ -38,11 +39,11 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     public void onAddOrRemoveStickerClicked() {
         if (fragmentMode == LIST) {
-//            if (stickerGroup.isInMySticker()) {
-//                removeStickerFromFavorite(stickerGroup.getGroupId());
-//            } else {
-//                addStickerToFavorite(stickerGroup.getGroupId());
-//            }
+            if (stickerGroup.isInUserList()) {
+                removeStickerFromFavorite(stickerGroup.getGroupId());
+            } else {
+                addStickerToFavorite(stickerGroup.getGroupId());
+            }
         } else if (fragmentMode == PREVIEW) {
             if (openPreviewViewLiveData.getValue() != null)
                 sendMessageLiveData.postValue(openPreviewViewLiveData.getValue());
@@ -51,29 +52,27 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     public void getSticker() {
         progressMutableLiveData.postValue(View.VISIBLE);
-        repository.getStickerListForStickerDialog(stickerGroup.getGroupId(), new BaseCPayViewModel<StructIGStickerGroup>() {
-            @Override
-            public void onSuccess(StructIGStickerGroup data) {
+        repository.getStickerListForStickerDialog(stickerGroup.getGroupId())
+                .subscribe(new IGSingleObserver<StructIGStickerGroup>(mainThreadDisposable) {
+                    @Override
+                    public void onSuccess(StructIGStickerGroup stickerGroup) {
+                        progressMutableLiveData.postValue(View.GONE);
 
-                progressMutableLiveData.postValue(View.GONE);
+                        if (StickerDialogViewModel.this.stickerGroup != null && !StickerDialogViewModel.this.stickerGroup.hasData()) {
+                            StickerDialogViewModel.this.stickerGroup = stickerGroup;
+                        }
 
-                if (stickerGroup != null && !stickerGroup.hasData()) {
-                    stickerGroup = data;
-                }
+                        stickersMutableLiveData.postValue(stickerGroup);
 
-                stickersMutableLiveData.postValue(stickerGroup);
+                        onStickerFavoriteChange(stickerGroup.isInUserList());
+                    }
 
-//                onStickerFavoriteChange(data.isInMySticker());
-
-                Log.i(TAG, "on Success getSticker with group id -> " + stickerGroup.getGroupId() + " and size -> " + stickerGroup.getStickers().size());
-            }
-
-            @Override
-            public void onError(String error) {
-                progressMutableLiveData.postValue(View.GONE);
-                Log.i(TAG, "on Error getSticker with group id -> " + stickerGroup.getGroupId());
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        progressMutableLiveData.postValue(View.GONE);
+                    }
+                });
     }
 
     public void addStickerToFavorite(String groupId) {
@@ -123,7 +122,7 @@ public class StickerDialogViewModel extends BaseViewModel {
     public void onPreviewImageClicked() {
         fragmentMode = LIST;
         openPreviewViewLiveData.postValue(null);
-//        onStickerFavoriteChange(stickerGroup.isInMySticker());
+        onStickerFavoriteChange(stickerGroup.isInUserList());
     }
 
     private void onStickerFavoriteChange(boolean favorite) {
@@ -156,5 +155,10 @@ public class StickerDialogViewModel extends BaseViewModel {
 
     public MutableLiveData<Integer> getAddOrRemoveProgressLiveData() {
         return addOrRemoveProgressLiveData;
+    }
+
+    @Override
+    public void subscribe() {
+
     }
 }

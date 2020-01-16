@@ -196,4 +196,15 @@ public class StickerDialogFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.unsubscribe();
+    }
 }
