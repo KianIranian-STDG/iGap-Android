@@ -14,7 +14,6 @@ public class MobileBankRetrofitInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
         Request request = original.newBuilder()
-                .header("Authorization", "")
                 .header("Content-Type", "application/json")
                 .method(original.method(), original.body())
                 .build();

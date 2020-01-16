@@ -166,4 +166,13 @@ public class RetrofitFactory {
                 .build()
                 .create(MobileBankApi.class);
     }
+
+    public MobileBankApi getMobileBankLoginRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.MOBILE_BANK)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(MobileBankApi.class);
+    }
 }

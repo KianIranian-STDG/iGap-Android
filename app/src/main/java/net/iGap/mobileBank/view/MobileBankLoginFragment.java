@@ -1,9 +1,14 @@
 package net.iGap.mobileBank.view;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +21,15 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.viewmoedel.MobileBankLoginViewModel;
+import net.iGap.module.SHP_SETTING;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLoginViewModel> {
 
+    private static final String PARSIAN_USERNAME = "parsian_username";
     private MobileBankLoginFragmentBinding binding;
+    private boolean isPasswordVisible;
 
     public static MobileBankLoginFragment newInstance() {
         return new MobileBankLoginFragment();
@@ -43,12 +53,53 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupToolbar();
+        setUsernameFromCache();
+        setupListeners();
+    }
 
-        viewModel.getGoToMainPage().observe(getViewLifecycleOwner(), goToMainPage -> {
-            if (getActivity() != null && goToMainPage != null && goToMainPage) {
+    private void setupListeners() {
+
+        binding.visiblePassword.setOnClickListener(v -> {
+            if (!isPasswordVisible){
+                binding.edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            }else {
+                binding.edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+            isPasswordVisible = !isPasswordVisible ;
+        });
+
+        viewModel.getOnLoginResponse().observe(getViewLifecycleOwner() , userName -> {
+            if (getActivity() != null && userName != null){
+
+                if (binding.edtUserName.getText() != null)
+                    saveUsernameToPref(binding.edtUserName.getText().toString());
+
+                Toast.makeText(getActivity(), userName + " خوش امدید " , Toast.LENGTH_SHORT).show();
+                new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
                 new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankHomeFragment()).setReplace(false).load();
             }
         });
+
+    }
+
+    private void setUsernameFromCache() {
+        String username = getUsernameFromPrefIfExists();
+        if (username != null){
+            binding.edtUserName.setText(username);
+        }
+    }
+
+    private void saveUsernameToPref(String username) {
+        if (getActivity() == null) return;
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences.edit().putString(PARSIAN_USERNAME , username).apply();
+
+    }
+
+    private String getUsernameFromPrefIfExists() {
+        if (getActivity() == null) return null;
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        return sharedPreferences.getString(PARSIAN_USERNAME , null);
     }
 
     private void setupToolbar() {
@@ -67,5 +118,10 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
                 });
 
         binding.toolbar.addView(toolbar.getView());
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return true;
     }
 }

@@ -19,13 +19,12 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     public SingleLiveEvent<Boolean> onTransactionListener = new SingleLiveEvent<>();
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
 
-    private MobileBankRepository repository;
     private List<BankCardModel> cards;
 
     public MobileBankHomeViewModel() {
         //add init repository
         showLoading.set(View.VISIBLE);
-        repository.getMobileBankCards(this, new ResponseCallback<BaseMobileBankResponse<List<BankCardModel>>>() {
+        MobileBankRepository.getInstance().getMobileBankCards(this, new ResponseCallback<BaseMobileBankResponse<List<BankCardModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankCardModel>> data) {
                 cards = data.getData();

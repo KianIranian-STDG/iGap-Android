@@ -15,22 +15,32 @@ import java.util.List;
 
 public class MobileBankRepository {
 
+    private static MobileBankRepository instance ;
     private MobileBankApi bankApi = new RetrofitFactory().getMobileBankRetrofit();
     private String accessToken;
 
+    private MobileBankRepository() {
+        //use instance
+    }
+
+    public static MobileBankRepository getInstance(){
+        if (instance == null) instance = new MobileBankRepository();
+        return instance;
+    }
+
     public void mobileBankLogin(String username, String password, HandShakeCallback callback, ResponseCallback<BaseMobileBankResponse<LoginResponse>> responseCallback) {
-        new ApiInitializer<BaseMobileBankResponse<LoginResponse>>().initAPI(bankApi.mobileBankLogin(username, password), callback, responseCallback);
+        new ApiInitializer<BaseMobileBankResponse<LoginResponse>>().initAPI(new RetrofitFactory().getMobileBankLoginRetrofit().mobileBankLogin(username, password), callback, responseCallback);
     }
 
     public void getMobileBankCards(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankCardModel>>> responseCallback) {
-        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankCardModel>>>().initAPI(bankApi.getUserCards(null, null, null, null), callback, responseCallback);
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankCardModel>>>().initAPI(bankApi.getUserCards(getAccessToken() ,null, null, null, null), callback, responseCallback);
     }
 
     public String getAccessToken() {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setAccessToken(String token) {
+        accessToken = token;
     }
 }
