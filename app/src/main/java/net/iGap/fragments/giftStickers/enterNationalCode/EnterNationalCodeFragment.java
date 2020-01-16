@@ -1,4 +1,4 @@
-package net.iGap.fragments.giftStickers;
+package net.iGap.fragments.giftStickers.enterNationalCode;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

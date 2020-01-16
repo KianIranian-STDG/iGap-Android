@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import net.iGap.AccountManager;
 import net.iGap.R;
 import net.iGap.dialog.BaseBottomSheet;
-import net.iGap.fragments.giftStickers.EnterNationalCodeFragment;
+import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragment;
 import net.iGap.fragments.giftStickers.GiftStickerItemDetailFragment;
 import net.iGap.fragments.giftStickers.GiftStickerItemListFragment;
 import net.iGap.fragments.giftStickers.GiftStickerPackageListFragment;

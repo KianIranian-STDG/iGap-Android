@@ -1,4 +1,4 @@
-package net.iGap.fragments.giftStickers;
+package net.iGap.fragments.giftStickers.buyStickerCompleted;
 
 import androidx.lifecycle.ViewModel;
 

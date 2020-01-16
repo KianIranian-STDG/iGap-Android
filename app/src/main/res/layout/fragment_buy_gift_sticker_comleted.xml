@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.fragments.giftStickers.BuyGiftStickerCompletedViewModel" />
+            type="net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
