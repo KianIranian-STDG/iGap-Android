@@ -287,7 +287,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
                 @Override
                 public void onGalleryResult(String path) {
-                    popBackStackFragment();
                     handleGalleryImageResult(path);
                 }
             });
@@ -328,6 +327,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
     @Override
     public void profileImageAdd(String path) {
+        popBackStackFragment();
         viewModel.uploadAvatar(path);
     }
 }
