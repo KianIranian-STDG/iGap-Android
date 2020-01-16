@@ -130,7 +130,7 @@ public interface KuknosApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("buy-offer")
+    @POST("manage-offer")
     Call<KuknosResponseModel<SubmitTransactionResponse>> buyOffer(@Field("xdr") String XDR);
 
     /**
