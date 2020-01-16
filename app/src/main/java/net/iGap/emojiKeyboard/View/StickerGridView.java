@@ -68,4 +68,10 @@ public class StickerGridView extends FrameLayout implements StickerAdapter.AddSt
         if (listener != null)
             listener.onStickerClick(structIGSticker);
     }
+
+    @Override
+    public void onStickerLongClick(StructIGSticker structIGSticker) {
+        if (listener != null)
+            listener.onStickerLongClick(structIGSticker);
+    }
 }

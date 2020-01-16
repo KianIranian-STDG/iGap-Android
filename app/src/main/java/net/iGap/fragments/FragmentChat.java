@@ -297,9 +297,9 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmRoomMessageLocation;
+import net.iGap.realm.RealmStickerItem;
+import net.iGap.realm.RealmStickerItemFields;
 import net.iGap.realm.RealmStickers;
-import net.iGap.realm.RealmStickersDetails;
-import net.iGap.realm.RealmStickersDetailsFields;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.sticker.StickerRepository;
@@ -6330,14 +6330,11 @@ public class FragmentChat extends BaseFragment
         })).start();
 
         DbManager.getInstance().doRealmTransaction(realm -> {
-
-            RealmStickersDetails stickersDetails = realm.where(RealmStickersDetails.class).equalTo(RealmStickersDetailsFields.ST_ID, structIGSticker.getId()).findFirst();
-            if (stickersDetails != null && stickersDetails.isValid()) {
-                stickersDetails.setRecent();
+            RealmStickerItem stickerItem = realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
+            if (stickerItem != null && stickerItem.isValid()) {
+                stickerItem.setRecent();
             }
-
         });
-
 
         StructMessageInfo sm = new StructMessageInfo(roomMessage);
 

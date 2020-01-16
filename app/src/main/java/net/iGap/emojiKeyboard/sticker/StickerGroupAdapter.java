@@ -55,6 +55,12 @@ public class StickerGroupAdapter extends RecyclerView.Adapter<StickerGroupAdapte
             listener.onStickerClick(structIGSticker);
     }
 
+    @Override
+    public void onStickerLongClick(StructIGSticker structIGSticker) {
+        if (listener != null)
+            listener.onStickerLongClick(structIGSticker);
+    }
+
     class StickerGroupViewHolder extends RecyclerView.ViewHolder {
         StickerGridView stickerGridView;
 

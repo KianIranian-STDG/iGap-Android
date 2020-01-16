@@ -65,15 +65,19 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
         public void bindView(StructIGSticker structIGSticker) {
             normalStickerCell.loadSticker(structIGSticker, needToShowEmoji);
 
-            normalStickerCell.setOnClickListener(v -> {
-                if (listener != null)
-                    listener.onStickerClick(structIGSticker);
+            normalStickerCell.setOnClickListener(v -> listener.onStickerClick(structIGSticker));
+
+            normalStickerCell.setOnLongClickListener(v -> {
+                listener.onStickerLongClick(structIGSticker);
+                return false;
             });
         }
     }
 
     public interface AddStickerDialogListener {
         void onStickerClick(StructIGSticker structIGSticker);
+
+        void onStickerLongClick(StructIGSticker structIGSticker);
     }
 }
 

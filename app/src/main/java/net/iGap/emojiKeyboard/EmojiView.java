@@ -32,6 +32,7 @@ import net.iGap.emojiKeyboard.adapter.ViewPagerAdapter;
 import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.emojiKeyboard.sticker.StickerGroupAdapter;
 import net.iGap.emojiKeyboard.struct.StructIGEmojiGroup;
+import net.iGap.fragments.emoji.add.StickerAdapter;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 @SuppressLint("ViewConstructor")
@@ -87,6 +89,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private Drawable[] stickerTabDrawable;
 
     private StickerRepository stickerRepository;
+    private CompositeDisposable compositeDisposable;
     private int groupSize = -1;
 
     private int layoutHeight;
@@ -218,6 +221,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerContainer = new FrameLayout(getContext());
 
             stickerRepository = StickerRepository.getInstance();
+            compositeDisposable = new CompositeDisposable();
 
             stickerGridView = new RecyclerView(getContext());
             stickerGridView.setLayoutManager(stickersLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
@@ -238,11 +242,22 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             stickerGridView.setAdapter(stickerGridAdapter);
 
-            stickerGridAdapter.setListener(structIGSticker -> listener.onStickerClick(structIGSticker));
+            stickerGridAdapter.setListener(new StickerAdapter.AddStickerDialogListener() {
+                @Override
+                public void onStickerClick(StructIGSticker structIGSticker) {
+                    listener.onStickerClick(structIGSticker);
+                }
+
+                @Override
+                public void onStickerLongClick(StructIGSticker structIGSticker) {
+                    stickerRepository.addStickerToFavorite(structIGSticker.getId()).subscribe();
+                }
+            });
 
             stickerTabDrawable = new Drawable[]{
                     getResources().getDrawable(R.drawable.ic_sticker_history),
-                    getResources().getDrawable(R.drawable.ic_add_sticker)
+                    getResources().getDrawable(R.drawable.ic_add_sticker),
+                    getResources().getDrawable(R.drawable.ic_favourite_sticker)
             };
 
             stickerTabView = new ScrollTabView(getContext());
@@ -275,7 +290,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onStickerChanged);
 
-            stickerRepository.getCompositeDisposable().add(disposable);
+            compositeDisposable.add(disposable);
         }
 
         stickerIv = new AppCompatImageView(getContext());
@@ -499,12 +514,19 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerTabView.removeTabs();
 
             boolean hasRecent = false;
+            boolean hasFavorite = false;
+
             if (structIGStickerGroups.size() > 0 && structIGStickerGroups.get(0).getGroupId().equals(StructIGStickerGroup.RECENT_GROUP)) {
                 stickerTabView.addIconTab(stickerTabDrawable[0]);
                 hasRecent = true;
             }
 
-            for (int i = hasRecent ? 1 : 0; i < structIGStickerGroups.size(); i++) {
+            if (structIGStickerGroups.size() > 1 && structIGStickerGroups.get(hasRecent ? 1 : 0).getGroupId().equals(StructIGStickerGroup.FAVORITE_GROUP)) {
+                stickerTabView.addIconTab(stickerTabDrawable[2]);
+                hasFavorite = true;
+            }
+
+            for (int i = hasRecent ? hasFavorite ? 2 : 1 : hasFavorite ? 1 : 0; i < structIGStickerGroups.size(); i++) {
                 stickerTabView.addStickerTab(structIGStickerGroups.get(i));
             }
         }
@@ -519,7 +541,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private void checkStickerEmptyView(int groupSize) {
         if (groupSize == 0) {
             emptyIv = new AppCompatImageView(getContext());
-            emptyIv.setImageDrawable(getResources().getDrawable(R.drawable.empty_chat));
+            emptyIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.empty_chat));
             emptyIv.setOnClickListener(v -> listener.onAddStickerClicked());
             stickerContainer.addView(emptyIv, LayoutCreator.createFrame(120, 120, Gravity.CENTER, 0, 0, 0, 50));
 
@@ -550,11 +572,9 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         }
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (stickerRepository != null)
-            stickerRepository.unsubscribe();
+    public void onDestroyParentFragment() {
+        if (compositeDisposable != null && !compositeDisposable.isDisposed())
+            compositeDisposable.dispose();
     }
 
     public interface Listener {

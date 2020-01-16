@@ -102,7 +102,17 @@ public class StickerDialogFragment extends BaseBottomSheet {
             addOrRemoveTv.setVisibility(View.VISIBLE);
         });
 
-        adapter.setListener(structIGSticker -> viewModel.onStickerInListModeClick(structIGSticker));
+        adapter.setListener(new StickerAdapter.AddStickerDialogListener() {
+            @Override
+            public void onStickerClick(StructIGSticker structIGSticker) {
+                viewModel.onStickerInListModeClick(structIGSticker);
+            }
+
+            @Override
+            public void onStickerLongClick(StructIGSticker structIGSticker) {
+
+            }
+        });
 
         viewModel.getOpenPreviewViewLiveData().observe(getViewLifecycleOwner(), structIGSticker -> {
             // TODO: 12/8/19  must create custom dialog for add just once view for handle stickers view type

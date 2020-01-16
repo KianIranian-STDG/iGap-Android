@@ -21,6 +21,8 @@ import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.interfaces.ObserverView;
 import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickerGroupFields;
+import net.iGap.realm.RealmStickerItem;
+import net.iGap.realm.RealmStickerItemFields;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmStickersDetailsFields;
@@ -47,6 +49,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StickerRepository implements ObserverView {
+    private static final int RECENT_STICKER_LIMIT = 13;
+    private static final int FAVORITE_STICKER_LIMIT = 15;
+
     private static StickerRepository stickerRepository;
     private StickerApi stickerApi;
 
@@ -65,7 +70,7 @@ public class StickerRepository implements ObserverView {
         apiService = ApiEmojiUtils.getAPIService();
 
         DbManager.getInstance().doRealmTask(realm -> {
-            Log.i("abbasiNewSticker", "New Stickers: " + realm.where(RealmStickerGroup.class).findAll().size());
+            Log.i("abbasiNewSticker", "New Stickers: " + realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.IS_FAVORITE, true).findAll().size());
         });
 
     }
@@ -186,7 +191,19 @@ public class StickerRepository implements ObserverView {
 
     public Completable addStickerToFavorite(String stickerId) {
         return stickerApi.addStickerToFavorite(stickerId)
-                .subscribeOn(Schedulers.newThread());
+                .subscribeOn(Schedulers.newThread())
+                .doOnComplete(() -> {
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        RealmStickerItem stickerItem = realm.where(RealmStickerItem.class)
+                                .equalTo(RealmStickerItemFields.ID, stickerId)
+                                .equalTo(RealmStickerItemFields.IS_FAVORITE, false)
+                                .findFirst();
+
+                        if (stickerItem != null)
+                            realm.executeTransactionAsync(realm1 -> stickerItem.setFavorite(true));
+
+                    });
+                });
     }
 
     public Completable getFavoriteSticker() {
@@ -363,31 +380,62 @@ public class StickerRepository implements ObserverView {
 
     public Flowable<List<StructIGStickerGroup>> getStickerGroupWithRecentTabForEmojiView() {
         return DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmStickers.class).findAllAsync()
-                    .asFlowable()
-                    .filter(RealmResults::isLoaded)
+            return realm.where(RealmStickerGroup.class).findAllAsync()
+                    .asFlowable().filter(RealmResults::isLoaded)
                     .map(realmStickers -> {
                         List<StructIGStickerGroup> structIGStickerGroups = new ArrayList<>();
                         for (int i = 0; i < realmStickers.size(); i++) {
-                            StructIGStickerGroup stickerGroup = new StructIGStickerGroup().setValueWithRealmStickers(realmStickers.get(i));
+                            StructIGStickerGroup stickerGroup = new StructIGStickerGroup(realmStickers.get(i));
                             structIGStickerGroups.add(stickerGroup);
                         }
                         return structIGStickerGroups;
                     }).map(structIGStickerGroups -> {
                         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(StructIGStickerGroup.RECENT_GROUP);
                         stickerGroup.setName(G.context.getResources().getString(R.string.recently));
-                        RealmResults<RealmStickersDetails> realmStickersDetails = realm.where(RealmStickersDetails.class)
-                                .limit(13)
+                        RealmResults<RealmStickerItem> realmStickersDetails = realm.where(RealmStickerItem.class)
+                                .limit(RECENT_STICKER_LIMIT)
                                 .notEqualTo(RealmStickersDetailsFields.RECENT_TIME, 0)
                                 .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
                                 .findAll();
                         List<StructIGSticker> stickers = new ArrayList<>();
                         for (int i = 0; i < realmStickersDetails.size(); i++) {
-                            stickers.add(new StructIGSticker().setValueWithRealm(realmStickersDetails.get(i)));
+                            RealmStickerItem stickerItem = realmStickersDetails.get(i);
+                            if (stickerItem != null) {
+                                stickers.add(new StructIGSticker(stickerItem));
+                            }
                         }
                         stickerGroup.setStickers(stickers);
-                        if (stickers.size() > 0)
+                        if (stickers.size() > 0) {
                             structIGStickerGroups.add(0, stickerGroup);
+                        }
+                        return structIGStickerGroups;
+                    }).map(structIGStickerGroups -> {
+                        StructIGStickerGroup favoriteStickerGroup = new StructIGStickerGroup(StructIGStickerGroup.FAVORITE_GROUP);
+                        favoriteStickerGroup.setName(G.context.getResources().getString(R.string.beeptunesـfavorite_song));
+                        RealmResults<RealmStickerItem> stickerItems = realm.where(RealmStickerItem.class)
+                                .limit(FAVORITE_STICKER_LIMIT)
+                                .equalTo(RealmStickerItemFields.IS_FAVORITE, true)
+                                .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
+                                .findAll();
+
+                        if (stickerItems != null) {
+                            List<StructIGSticker> stickers = new ArrayList<>();
+                            for (int i = 0; i < stickerItems.size(); i++) {
+                                RealmStickerItem stickerItem = stickerItems.get(i);
+                                if (stickerItem != null) {
+                                    stickers.add(new StructIGSticker(stickerItem));
+                                }
+                            }
+
+                            favoriteStickerGroup.setStickers(stickers);
+
+                            boolean hasRecent = structIGStickerGroups.get(0).getGroupId().equals(StructIGStickerGroup.RECENT_GROUP);
+
+                            if (stickers.size() > 0) {
+                                structIGStickerGroups.add(hasRecent ? 1 : 0, favoriteStickerGroup);
+                            }
+                        }
+
                         return structIGStickerGroups;
                     });
         });
@@ -431,12 +479,11 @@ public class StickerRepository implements ObserverView {
     public void clearRecentSticker(ResponseCallback<Boolean> callback) {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(realm1 -> {
-                RealmResults<RealmStickersDetails> realmStickersDetails = realm1.where(RealmStickersDetails.class)
-                        .limit(13)
-                        .notEqualTo(RealmStickersDetailsFields.RECENT_TIME, 0)
+                RealmResults<RealmStickerItem> realmStickersDetails = realm1.where(RealmStickerItem.class)
+                        .notEqualTo(RealmStickerItemFields.RECENT_TIME, 0)
                         .findAll();
 
-                realmStickersDetails.setLong(RealmStickersDetailsFields.RECENT_TIME, 0);
+                realmStickersDetails.setLong(RealmStickerItemFields.RECENT_TIME, 0);
 
             }, () -> callback.onSuccess(true), error -> callback.onError(error.getMessage()));
         });

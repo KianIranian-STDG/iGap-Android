@@ -69,7 +69,7 @@ public class RemoveStickerViewModel extends ObserverViewModel {
     public void removeStickerFromFavorite(String groupId) {
         Disposable disposable = repository.removeStickerGroupFromMyStickers(groupId)
                 .doOnComplete(() -> {
-                } /*removeStickerLiveData.postValue(adapterPosition)*/)
+                })
                 .subscribe();
         backgroundDisposable.add(disposable);
     }

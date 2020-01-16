@@ -15,6 +15,7 @@ import static net.iGap.fragments.emoji.struct.StructIGSticker.NORMAL_STICKER;
 
 public class StructIGStickerGroup {
     public static final String RECENT_GROUP = "-1";
+    public static final String FAVORITE_GROUP = "-2";
 
     private String groupId;
     private String avatarName;
