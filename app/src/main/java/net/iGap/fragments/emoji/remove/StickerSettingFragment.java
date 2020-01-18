@@ -2,15 +2,12 @@ package net.iGap.fragments.emoji.remove;
 
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,22 +33,9 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        adapter = new RemoveStickerAdapter();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_remove_sticker, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        RecyclerView recyclerView = view.findViewById(R.id.rv_removeSticker);
-        LinearLayout linearLayout = view.findViewById(R.id.ll_stickerSetting_toolBar);
+    public void setupViews() {
+        RecyclerView recyclerView = rootView.findViewById(R.id.rv_removeSticker);
+        LinearLayout linearLayout = rootView.findViewById(R.id.ll_stickerSetting_toolBar);
 
         HelperToolbar helperToolbar = HelperToolbar.create()
                 .setLeftIcon(R.string.back_icon)
@@ -60,8 +44,7 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null)
-                            getActivity().onBackPressed();
+                        finish();
                     }
                 })
                 .setContext(getContext());
@@ -98,32 +81,30 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
 
         viewModel.getRemoveStickerLiveData().observe(getViewLifecycleOwner(), removedItemPosition -> adapter.removeItem(removedItemPosition));
 
-        TextView removeRecentTv = view.findViewById(R.id.tv_stickerSetting_clearRecent);
-        removeRecentTv.setOnClickListener(v -> {
-            if (getContext() != null)
-                new MaterialDialog.Builder(getContext())
-                        .title(getResources().getString(R.string.remove_sticker))
-                        .content(getResources().getString(R.string.remove_sticker_text))
-                        .positiveText(getString(R.string.yes))
-                        .negativeText(getString(R.string.no))
-                        .onPositive((dialog, which) -> {
-                            viewModel.clearRecentSticker();
-                            dialog.dismiss();
-                        }).show();
-        });
+        TextView removeRecentTv = rootView.findViewById(R.id.tv_stickerSetting_clearRecent);
+        removeRecentTv.setOnClickListener(v -> onClearRecentStickerClicked());
 
-        ProgressBar progressBar = view.findViewById(R.id.pb_stickerSetting_clearRecent);
+        ProgressBar progressBar = rootView.findViewById(R.id.pb_stickerSetting_clearRecent);
         viewModel.getClearRecentStickerLiveData().observe(getViewLifecycleOwner(), progressBar::setVisibility);
 
-        TextView clearInternalStorage = view.findViewById(R.id.tv_stickerSetting_clearStorage);
+        TextView clearInternalStorage = rootView.findViewById(R.id.tv_stickerSetting_clearStorage);
         clearInternalStorage.setOnClickListener(v -> viewModel.clearStickerFromInternalStorage());
 
-        TextView storageSize = view.findViewById(R.id.tv_stickerSetting_clearStorageSize);
+        TextView storageSize = rootView.findViewById(R.id.tv_stickerSetting_clearStorageSize);
         viewModel.getStickerFileSizeLiveData().observe(getViewLifecycleOwner(), storageSize::setText);
 
-        ImageView emptyIv = view.findViewById(R.id.iv_stickerSetting_empty);
-        TextView emptyTv = view.findViewById(R.id.tv_stickerSetting_empty);
-        TextView headerTv = view.findViewById(R.id.tv_stickerSetting_header);
+        TextView clearFavoriteStickerTv = rootView.findViewById(R.id.tv_stickerSetting_clearFavorite);
+        clearFavoriteStickerTv.setOnClickListener(v -> onClearFavoriteStickerClicked());
+
+        ProgressBar clearFavoriteStickerPb = rootView.findViewById(R.id.pb_stickerSetting_clearFavorite);
+
+        TextView clearRecentEmojiTv = rootView.findViewById(R.id.tv_stickerSetting_clearEmoji);
+        clearRecentEmojiTv.setOnClickListener(v -> onClearRecentEmojiClicked());
+
+
+        ImageView emptyIv = rootView.findViewById(R.id.iv_stickerSetting_empty);
+        TextView emptyTv = rootView.findViewById(R.id.tv_stickerSetting_empty);
+        TextView headerTv = rootView.findViewById(R.id.tv_stickerSetting_header);
 
         viewModel.getEmptyRecentStickerLiveData().observe(getViewLifecycleOwner(), visibility -> {
             emptyIv.setVisibility(visibility);
@@ -134,6 +115,38 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
             recyclerView.setVisibility(visibility);
             headerTv.setVisibility(visibility);
         });
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.fragment_remove_sticker;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new RemoveStickerAdapter();
+    }
+
+    private void onClearFavoriteStickerClicked() {
+
+    }
+
+    private void onClearRecentStickerClicked() {
+        if (getContext() != null)
+            new MaterialDialog.Builder(getContext())
+                    .title(getResources().getString(R.string.remove_sticker))
+                    .content(getResources().getString(R.string.remove_sticker_text))
+                    .positiveText(getString(R.string.yes))
+                    .negativeText(getString(R.string.no))
+                    .onPositive((dialog, which) -> {
+                        viewModel.clearRecentSticker();
+                        dialog.dismiss();
+                    }).show();
+    }
+
+    private void onClearRecentEmojiClicked() {
+        viewModel.clearRecentEmoji();
     }
 
     private void openFragmentAddStickerToFavorite(StructIGStickerGroup stickerGroup) {

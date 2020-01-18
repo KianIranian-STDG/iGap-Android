@@ -2,12 +2,8 @@ package net.iGap.fragments.emoji.add;
 
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,25 +35,10 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel.setCategory(category);
-        adapter = new AddStickerFragmentAdapter();
-    }
+    public void setupViews() {
+        progressBar = rootView.findViewById(R.id.progress_stricker);
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_stickers, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        progressBar = view.findViewById(R.id.progress_stricker);
-
-        RecyclerView recyclerView = view.findViewById(R.id.rcvSettingPage);
+        RecyclerView recyclerView = rootView.findViewById(R.id.rcvSettingPage);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -95,6 +76,18 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
         viewModel.getLoadMoreProgressLiveData().observe(getViewLifecycleOwner(), visibility -> progressBar.setVisibility(visibility));
 
         viewModel.getStickerGroupLiveData().observe(getViewLifecycleOwner(), stickerGroup -> adapter.addData(stickerGroup));
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.fragment_add_stickers;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel.setCategory(category);
+        adapter = new AddStickerFragmentAdapter();
     }
 
     private void openFragmentAddStickerToFavorite(String groupId) {

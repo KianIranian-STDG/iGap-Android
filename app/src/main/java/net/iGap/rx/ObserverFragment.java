@@ -2,7 +2,9 @@ package net.iGap.rx;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,8 +15,17 @@ import net.iGap.eventbus.EventManager;
 
 public abstract class ObserverFragment<T extends ObserverViewModel> extends BaseAPIViewFrag<T> implements EventListener {
     protected T viewModel;
+    public ViewGroup rootView;
+
+    public abstract void setupViews();
+
+    public abstract int getLayoutRes();
 
     public abstract T getObserverViewModel();
+
+    public View getLayoutView() {
+        return null;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,10 +39,31 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
         super.onCreate(savedInstanceState);
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (rootView == null) {
+            if (getLayoutRes() != 0) {
+                rootView = (ViewGroup) inflater.inflate(getLayoutRes(), container, false);
+                setupViews();
+            } else if (getLayoutView() != null) {
+                rootView = (ViewGroup) getLayoutView();
+                setupViews();
+            } else
+                throw new NullPointerException("You must set View with getLayoutRes() for xml view and getLayoutView() for custom view method");
+        }
+        return rootView;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel.onFragmentViewCreated();
+    }
+
+    public void finish() {
+        if (getActivity() != null)
+            getActivity().onBackPressed();
     }
 
     @Override

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.FileUtils;
 import net.iGap.repository.sticker.StickerRepository;
@@ -88,6 +89,10 @@ public class RemoveStickerViewModel extends ObserverViewModel {
 
             }
         });
+    }
+
+    public void clearRecentEmoji() {
+        EmojiManager.getInstance().clearRecentEmoji();
     }
 
     public void clearStickerFromInternalStorage() {
