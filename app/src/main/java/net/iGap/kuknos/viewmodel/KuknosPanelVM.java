@@ -127,6 +127,8 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public void togglePrice() {
+        if (kuknosWalletsM.getValue() == null)
+            return;
         if (inRialMode) {
             spinnerSelect(position);
             inRialMode = false;

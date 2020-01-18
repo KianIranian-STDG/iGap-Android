@@ -6,6 +6,7 @@ import java.util.List;
 
 public class KuknosFeeModel {
 
+    @SerializedName("fees")
     private List<Fee> fees;
 
     public List<Fee> getFees() {
