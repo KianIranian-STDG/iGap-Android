@@ -19,6 +19,8 @@ import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.request.RequestInfoPage;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class KuknosBuyPeymanVM extends BaseAPIViewModel {
@@ -69,7 +71,9 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         }
         if (PMNprice == -1 || fees == null)
             return false;
-        Double sumTemp = Double.parseDouble(amount.get()) * PMNprice * (100 - fees.getDiscount()) / 100;
+        Double sumTemp = Double.parseDouble(amount.get()) * PMNprice * (100 - fees.getDiscount()) / 100 + fees.getFee() / 10000000 * PMNprice;
+        BigDecimal tmp = new BigDecimal(sumTemp).setScale(0, RoundingMode.UP);
+        sumTemp = Double.parseDouble(tmp.toString());
         DecimalFormat df = new DecimalFormat(",###");
         sum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(sumTemp)) : df.format(sumTemp));
         return true;
