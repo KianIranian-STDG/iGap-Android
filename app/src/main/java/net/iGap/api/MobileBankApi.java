@@ -16,8 +16,7 @@ public interface MobileBankApi {
 
     @POST("auth/login")
     @FormUrlEncoded
-    Call<BaseMobileBankResponse<LoginResponse>> mobileBankLogin(@Field("username") String username,
-                                                                @Field("password") String password);
+    Call<BaseMobileBankResponse<LoginResponse>> mobileBankLogin(@Field("authentication") String auth);
 
     @POST("card/get-cards")
     @FormUrlEncoded
