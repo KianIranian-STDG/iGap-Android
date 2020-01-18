@@ -297,7 +297,7 @@
                 <LinearLayout
                     android:id="@+id/btnTakeSheba"
                     android:layout_width="0dp"
-                    android:clickable="@{!vm.isCardsMode}"
+                    android:clickable="@{vm.isCardsMode}"
                     android:layout_height="@dimen/toolbar_height"
                     app:layout_constraintEnd_toEndOf="@id/btnTransactions"
                     app:layout_constraintStart_toEndOf="@id/btnTemporaryPass"
@@ -306,13 +306,13 @@
                     android:layout_marginStart="@dimen/dp16"
                     android:gravity="center"
                     android:onClick="@{()->vm.OnShebaClicked()}"
-                    android:background="@{vm.isCardsMode ? @drawable/shape_gray_round_stroke : @drawable/shape_round_stroke , default= @drawable/shape_gray_round_stroke}">
+                    android:background="@{vm.isCardsMode ? @drawable/shape_round_stroke : @drawable/shape_gray_round_stroke , default= @drawable/shape_round_stroke}">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/icSheba"
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapPrimaryIconTextColor"
                         android:fontFamily="@font/font_icon"
                         app:fontFamily="@font/font_icon"
                         android:layout_gravity="center"
@@ -322,7 +322,7 @@
                     <TextView
                         android:id="@+id/lblSheba"
                         android:textSize="@dimen/standardTextSize"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapPrimaryIconTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sheba_number"

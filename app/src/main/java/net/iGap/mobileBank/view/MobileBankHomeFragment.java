@@ -2,12 +2,15 @@ package net.iGap.mobileBank.view;
 
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
@@ -34,9 +38,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
 public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHomeViewModel> {
 
     private FragmentMobileBankHomeBinding binding;
+    private DialogParsian mDialogWait;
 
     public MobileBankHomeFragment() {
     }
@@ -67,26 +74,48 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
         viewModel.getCardsData().observe(getViewLifecycleOwner(), this::saveCardsTodb);
         viewModel.getAccountsData().observe(getViewLifecycleOwner(), this::setupAccounts);
 
-        viewModel.onTempPassListener.observe(getViewLifecycleOwner(), state -> {
+        viewModel.onShebaListener.observe(getViewLifecycleOwner(), state -> {
 
             if (state != null && state && getActivity() != null) {
+                mDialogWait = new DialogParsian()
+                        .setContext(getActivity())
+                        .setTitle(getString(R.string.please_wait))
+                        .setButtonsText(null, getString(R.string.cancel))
+                        .setListener(new DialogParsian.ParsianDialogListener() {
+                            @Override
+                            public void onDeActiveButtonClicked(Dialog dialog) {
+                                mDialogWait.dismiss();
+                            }
+                        });
+                mDialogWait.showLoaderDialog(false);
+            }
+
+        });
+
+        viewModel.getShebaListener().observe(getViewLifecycleOwner() , bankShebaModel -> {
+            mDialogWait.dismiss();
+            if (bankShebaModel != null){
                 new DialogParsian()
                         .setContext(getActivity())
-                        .setTitle(getString(R.string.message))
-                        .setButtonsText(getString(R.string.ok), getString(R.string.cancel))
+                        .setTitle(getString(R.string.please_wait) + "..")
+                        .setButtonsText(getString(R.string.copy), getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
                             public void onActiveButtonClicked(Dialog dialog) {
-
+                                if (getActivity() != null){
+                                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("Copied Sheba", bankShebaModel.getSheba());
+                                    clipboard.setPrimaryClip(clip);
+                                    Toast.makeText(getActivity(), R.string.copied, Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                             @Override
                             public void onDeActiveButtonClicked(Dialog dialog) {
-
+                                mDialogWait.dismiss();
                             }
-                        }).showSimpleMessage(getString(R.string.kuknos_buyP_MaxAmount));
+                        }).showSimpleMessage(getString(R.string.sheba_number) + ": " + bankShebaModel.getSheba());
             }
-
         });
 
         viewModel.onMoneyTransferListener.observe(getViewLifecycleOwner(), state -> {
@@ -111,6 +140,12 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
 
         });
 
+        viewModel.onShebaListener.observe(getViewLifecycleOwner() , state->{
+            if (state != null && state){
+                viewModel.getShebaNumber(getCurrentAccount());
+            }
+        });
+
         viewModel.onTransactionListener.observe(getViewLifecycleOwner(), state -> {
 
             if (state != null && state && getActivity() != null) {
@@ -130,16 +165,28 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                 if (isCardsEnable) {
                     binding.lblPassword.setTextColor(textStyleOn);
                     binding.icPassword.setTextColor(textStyleOn);
-                    binding.lblSheba.setTextColor(textStyleOff);
-                    binding.icSheba.setTextColor(textStyleOff);
+                    binding.lblSheba.setTextColor(textStyleOn);
+                    binding.icSheba.setTextColor(textStyleOn);
                 } else {
                     binding.lblPassword.setTextColor(textStyleOff);
                     binding.icPassword.setTextColor(textStyleOff);
-                    binding.lblSheba.setTextColor(textStyleOn);
-                    binding.icSheba.setTextColor(textStyleOn);
+                    binding.lblSheba.setTextColor(textStyleOff);
+                    binding.icSheba.setTextColor(textStyleOff);
                 }
             }
         });
+    }
+
+    private String getCurrentAccount() {
+        if (viewModel.cards != null && viewModel.cards.size() > 0){
+            int current = binding.vpCards.getCurrentItem();
+            if (current < viewModel.cards.size()){
+                return viewModel.cards.get(current).getPan();
+            }
+        }else {
+            Toast.makeText(getActivity(), R.string.no_item_selected, Toast.LENGTH_SHORT).show();
+        }
+        return null;
     }
 
     private void saveCardsTodb(List<BankCardModel> bankCardModels) {

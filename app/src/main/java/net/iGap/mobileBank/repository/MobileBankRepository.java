@@ -9,6 +9,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
@@ -39,6 +40,10 @@ public class MobileBankRepository {
 
     public void getMobileBankAccounts(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankAccountModel>>>().initAPI(bankApi.getUserDeposits(getAccessToken() , null), callback, responseCallback);
+    }
+
+    public void getShebaNumber(String pan ,MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<BankShebaModel>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<BankShebaModel>>().initAPI(bankApi.getShebaNumber(getAccessToken() , pan), callback, responseCallback);
     }
 
     public String getAccessToken() {

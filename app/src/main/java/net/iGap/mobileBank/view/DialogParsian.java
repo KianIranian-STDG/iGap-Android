@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -100,6 +101,15 @@ public class DialogParsian {
         mDialog.show();
     }
 
+    public void showLoaderDialog(boolean cancelable) {
+
+        initDialog();
+        ProgressBar progressBar = new ProgressBar(mContext);
+        mContentLayout.addView(progressBar, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 12f, 12f, 12f, 12f));
+        mDialog.setCancelable(cancelable);
+        mDialog.show();
+    }
+
     public void showMoneyTransferDialog() {
         initDialog();
 
@@ -117,6 +127,10 @@ public class DialogParsian {
         });
 
         mDialog.show();
+    }
+
+    public void dismiss(){
+        if (mDialog != null) mDialog.dismiss();
     }
 
     private View inflate(int layout) {

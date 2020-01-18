@@ -10,6 +10,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.module.SingleLiveEvent;
 
@@ -19,15 +20,17 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
 
     public SingleLiveEvent<Boolean> onMoneyTransferListener = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> onTempPassListener = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> onShebaListener = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> onTransactionListener = new SingleLiveEvent<>();
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
+    private MutableLiveData<BankShebaModel> shebaListener = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     public MutableLiveData<Boolean> onTabChangeListener = new MutableLiveData<>();
     public ObservableBoolean isCardsMode = new ObservableBoolean(true);
 
-    private List<BankCardModel> cards;
-    private List<BankAccountModel> accounts;
+    public List<BankCardModel> cards;
+    public List<BankAccountModel> accounts;
 
     public MobileBankHomeViewModel() {
         getCardsByApi();
@@ -86,6 +89,29 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
         });
     }
 
+    public void getShebaNumber(String cardNumber){
+        if (cardNumber == null){
+            shebaListener.postValue(null);
+            return;
+        }
+        MobileBankRepository.getInstance().getShebaNumber(cardNumber, this, new ResponseCallback<BaseMobileBankResponse<BankShebaModel>>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse<BankShebaModel> data) {
+                shebaListener.postValue(data.getData());
+            }
+
+            @Override
+            public void onError(String error) {
+                shebaListener.postValue(null);
+            }
+
+            @Override
+            public void onFailed() {
+                shebaListener.postValue(null);
+            }
+        });
+    }
+
     public void onRetryClicked(){
         if (cards == null) getCardsByApi();
         if (accounts == null) getDepositsByApi();
@@ -109,10 +135,15 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     }
 
     public void OnShebaClicked() {
+        onShebaListener.setValue(true);
     }
 
     public MutableLiveData<List<BankAccountModel>> getAccountsData() {
         return accountsData;
+    }
+
+    public MutableLiveData<BankShebaModel> getShebaListener() {
+        return shebaListener;
     }
 
     public MutableLiveData<List<BankCardModel>> getCardsData() {
