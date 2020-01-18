@@ -99,7 +99,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
                 // A memo allows you to add your own metadata to a transaction. It's
                 // optional and does not affect how Stellar treats the transaction.
                 .addMemo(Memo.text(memo))
-                .setOperationFee(1000)
+                .setOperationFee(50000)
                 // Wait a maximum of three minutes for the transaction
                 .setTimeout(60)
                 .build();
