@@ -31,9 +31,12 @@ public class AddStickerViewModel extends ObserverViewModel {
     private int limit = 20;
     private String TAG = "abbasiNewSticker";
 
-    public AddStickerViewModel(StructIGStickerCategory category) {
-        this.category = category;
+    public AddStickerViewModel() {
         repository = StickerRepository.getInstance();
+    }
+
+    public void setCategory(StructIGStickerCategory category) {
+        this.category = category;
     }
 
     @Override

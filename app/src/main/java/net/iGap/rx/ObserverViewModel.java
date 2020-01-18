@@ -1,11 +1,14 @@
 package net.iGap.rx;
 
+import android.util.Log;
+
+import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class ObserverViewModel implements EventListener {
+public abstract class ObserverViewModel extends BaseAPIViewModel implements EventListener {
     public CompositeDisposable backgroundDisposable;
     public CompositeDisposable mainThreadDisposable;
 
@@ -33,7 +36,11 @@ public abstract class ObserverViewModel implements EventListener {
 
     public abstract void subscribe();
 
+    public void onFragmentViewCreated() {
+    }
+
     public void onDestroyView() {
+        Log.i(getClass().getName(), "onDestroyView: ");
         EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
         if (mainThreadDisposable != null && !mainThreadDisposable.isDisposed()) {
             mainThreadDisposable.dispose();
@@ -41,11 +48,18 @@ public abstract class ObserverViewModel implements EventListener {
         }
     }
 
-    public void unsubscribe() {
+    public void onDestroy() {
+        Log.i(getClass().getName(), "onDestroy: ");
         EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
         if (backgroundDisposable != null && !backgroundDisposable.isDisposed()) {
             backgroundDisposable.dispose();
             backgroundDisposable = null;
         }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        onDestroy();
     }
 }

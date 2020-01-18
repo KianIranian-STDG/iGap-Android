@@ -32,7 +32,6 @@ public class RemoveStickerViewModel extends ObserverViewModel {
     public RemoveStickerViewModel() {
         repository = StickerRepository.getInstance();
         stickerFileSizeLiveData.postValue(getStickerFolderSize());
-        subscribe();
     }
 
     @Override

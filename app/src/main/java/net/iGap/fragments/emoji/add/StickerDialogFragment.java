@@ -205,6 +205,6 @@ public class StickerDialogFragment extends BaseBottomSheet {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewModel.unsubscribe();
+        viewModel.onDestroy();
     }
 }

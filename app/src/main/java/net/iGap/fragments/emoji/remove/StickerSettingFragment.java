@@ -12,29 +12,33 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.rx.ObserverFragment;
 import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
-public class StickerSettingFragment extends BaseFragment {
+public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewModel> {
 
     private RemoveStickerAdapter adapter;
-    private RemoveStickerViewModel viewModel;
+
+    @Override
+    public RemoveStickerViewModel getObserverViewModel() {
+        return ViewModelProviders.of(this).get(RemoveStickerViewModel.class);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new RemoveStickerAdapter();
-        viewModel = new RemoveStickerViewModel();
     }
 
     @Override
@@ -138,17 +142,5 @@ public class StickerSettingFragment extends BaseFragment {
 
         if (getFragmentManager() != null)
             dialogFragment.show(getFragmentManager(), "dialogFragment");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        viewModel.unsubscribe();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        viewModel.onDestroyView();
     }
 }

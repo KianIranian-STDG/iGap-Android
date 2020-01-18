@@ -24,4 +24,8 @@ public abstract class BaseAPIViewFrag<T extends BaseAPIViewModel> extends BaseFr
         });
 
     }
+
+    public void setViewModel(T viewModel) {
+        this.viewModel = viewModel;
+    }
 }

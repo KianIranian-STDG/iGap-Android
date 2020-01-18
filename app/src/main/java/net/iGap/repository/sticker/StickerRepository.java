@@ -118,15 +118,13 @@ public class StickerRepository implements ObserverView {
     public Single<List<StructIGStickerGroup>> getUserStickersGroup() {
         return stickerApi.getUserStickersGroup()
                 .subscribeOn(Schedulers.newThread())
+                .retry((integer, throwable) -> integer > 2)
+                .doOnError(Throwable::printStackTrace)
                 .map(dataModel -> {
                     List<StructIGStickerGroup> groups = new ArrayList<>();
                     for (int i = 0; i < dataModel.getData().size(); i++) {
                         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(dataModel.getData().get(i));
                         groups.add(stickerGroup);
-
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransactionAsync(asyncRealm -> RealmStickerGroup.put(asyncRealm, stickerGroup));
-                        });
                     }
                     return groups;
                 }).doOnSuccess(this::updateStickers);
@@ -359,7 +357,7 @@ public class StickerRepository implements ObserverView {
 
                             favoriteStickerGroup.setStickers(stickers);
 
-                            boolean hasRecent = structIGStickerGroups.get(0).getGroupId().equals(StructIGStickerGroup.RECENT_GROUP);
+//                            boolean hasRecent = structIGStickerGroups.get(0).getGroupId().equals(StructIGStickerGroup.RECENT_GROUP);
 
 //                            if (stickers.size() > 0) {
 //                                structIGStickerGroups.add(hasRecent ? 1 : 0, favoriteStickerGroup);

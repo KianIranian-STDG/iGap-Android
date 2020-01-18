@@ -9,21 +9,21 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
+import net.iGap.rx.ObserverFragment;
 import net.iGap.viewmodel.AddStickerViewModel;
 
-public class AddStickersFragment extends BaseFragment {
+public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
 
     private AddStickerFragmentAdapter adapter;
     private StructIGStickerCategory category;
-    private AddStickerViewModel viewModel;
 
     private ProgressBar progressBar;
 
@@ -34,9 +34,14 @@ public class AddStickersFragment extends BaseFragment {
     }
 
     @Override
+    public AddStickerViewModel getObserverViewModel() {
+        return ViewModelProviders.of(this).get(AddStickerViewModel.class);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new AddStickerViewModel(category);
+        viewModel.setCategory(category);
         adapter = new AddStickerFragmentAdapter();
     }
 
@@ -49,8 +54,6 @@ public class AddStickersFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        viewModel.subscribe();
 
         progressBar = view.findViewById(R.id.progress_stricker);
 
