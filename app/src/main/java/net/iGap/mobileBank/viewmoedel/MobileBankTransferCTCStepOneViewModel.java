@@ -91,7 +91,7 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
 
     private int getCardBank(String cardNum) {
         // bank logo
-        return new ExtractBank().bankLogo(cardNum);
+        return ExtractBank.bankLogo(cardNum);
     }
 
     private void translateValue() {

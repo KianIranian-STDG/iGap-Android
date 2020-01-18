@@ -2,6 +2,7 @@ package net.iGap.mobileBank.viewmoedel;
 
 import android.view.View;
 
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.ResponseCallback;
@@ -18,12 +19,17 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     public SingleLiveEvent<Boolean> onTempPassListener = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> onTransactionListener = new SingleLiveEvent<>();
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
+    private ObservableInt showRetry = new ObservableInt(View.GONE);
 
     private List<BankCardModel> cards;
 
     public MobileBankHomeViewModel() {
-        //add init repository
+        getCardsByApi();
+    }
+
+    private void getCardsByApi() {
         showLoading.set(View.VISIBLE);
+        showRetry.set(View.GONE);
         MobileBankRepository.getInstance().getMobileBankCards(this, new ResponseCallback<BaseMobileBankResponse<List<BankCardModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankCardModel>> data) {
@@ -36,13 +42,19 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
             public void onError(String error) {
                 showRequestErrorMessage.setValue(error);
                 showLoading.set(View.GONE);
+                showRetry.set(View.VISIBLE);
             }
 
             @Override
             public void onFailed() {
                 showLoading.set(View.GONE);
+                showRetry.set(View.VISIBLE);
             }
         });
+    }
+
+    public void onRetryClicked(){
+        getCardsByApi();
     }
 
     public void OnTransferMoneyClicked() {
@@ -62,5 +74,9 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
 
     public MutableLiveData<List<BankCardModel>> getCardsData() {
         return cardsData;
+    }
+
+    public ObservableInt getShowRetry() {
+        return showRetry;
     }
 }

@@ -67,6 +67,28 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lblCards" />
 
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.showLoading}"
+                    app:layout_constraintStart_toStartOf="@id/vpCards"
+                    app:layout_constraintEnd_toEndOf="@id/vpCards"
+                    app:layout_constraintTop_toTopOf="@id/vpCards"
+                    app:layout_constraintBottom_toBottomOf="@id/vpCards"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.showRetry , default=gone}"
+                    android:onClick="@{()-> vm.onRetryClicked()}"
+                    android:text="@string/retry_icon"
+                    style="@style/myIconTextViewStyleGray"
+                    android:textSize="@dimen/dp40"
+                    app:layout_constraintStart_toStartOf="@id/vpCards"
+                    app:layout_constraintEnd_toEndOf="@id/vpCards"
+                    app:layout_constraintTop_toTopOf="@id/vpCards"
+                    app:layout_constraintBottom_toBottomOf="@id/vpCards"/>
+
                 <LinearLayout
                     android:id="@+id/lytIndicators"
                     android:layout_marginTop="@dimen/dp6"

@@ -5,7 +5,9 @@ import net.iGap.R;
 public class ExtractBank {
 
     public int bankName(String cardNumber) {
-        if (cardNumber.startsWith("603799"))
+        if (cardNumber == null)
+            return R.string.empty_error_message;
+        else if (cardNumber.startsWith("603799"))
             return R.string.bank_melli;
         else if (cardNumber.startsWith("589210"))
             return R.string.bank_sepah;
@@ -55,8 +57,10 @@ public class ExtractBank {
             return R.string.empty_error_message;
     }
 
-    public int bankLogo(String cardNumber) {
-        if (cardNumber.startsWith("603799"))
+    public static int bankLogo(String cardNumber) {
+        if (cardNumber == null)
+            return R.drawable.bank_logo_default;
+        else if (cardNumber.startsWith("603799"))
             return R.drawable.bank_logo_melli;
         else if (cardNumber.startsWith("589210"))
             return R.drawable.bank_logo_sepah;

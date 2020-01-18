@@ -58,15 +58,12 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupToolbar();
-        setupViewPager();
         setupListeners();
     }
 
     private void setupListeners() {
 
-        viewModel.getCardsData().observe(getViewLifecycleOwner(), bankCardModels -> {
-            saveCardsTodb(bankCardModels);
-        });
+        viewModel.getCardsData().observe(getViewLifecycleOwner(), this::saveCardsTodb);
 
         viewModel.onTempPassListener.observe(getViewLifecycleOwner(), state -> {
 
