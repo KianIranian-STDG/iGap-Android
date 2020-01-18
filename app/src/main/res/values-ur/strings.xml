@@ -2111,5 +2111,6 @@
     <string name="transactions">تراکنش ها</string>
     <string name="deposit">واریز</string>
     <string name="get_temporary_password">دریافت رمز پویا</string>
+    <string name="accounts">حساب ها</string>
 
 </resources>

@@ -6,6 +6,10 @@
         <variable
             name="vm"
             type="net.iGap.mobileBank.viewmoedel.MobileBankHomeViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="android.content.Context" />
     </data>
 
     <LinearLayout android:orientation="vertical"
@@ -40,69 +44,146 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/lblCards"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/lytTabs"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    android:text="@string/cards"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lytTop"
-                    android:layout_marginTop="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp20"
-                    android:layout_marginRight="@dimen/dp20" />
+                    android:minHeight="@dimen/dp40"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/vpCards"
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:onClick="@{(isCards)-> vm.onTabsClick(true)}"
+                        android:layout_marginLeft="@dimen/dp6"
+                        android:layout_marginRight="@dimen/dp6">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="@dimen/standardTextSize"
+                            android:textColor="?iGapTitleTextColor"
+                            android:text="@string/cards"
+                            android:gravity="center" />
+
+                        <View
+                            android:id="@+id/indicatorCards"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp2"
+                            android:visibility="@{vm.isCardsMode ? View.VISIBLE : View.GONE}"
+                            android:background="?iGapPrimaryIconTextColor"
+                            android:layout_alignParentBottom="true" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:onClick="@{(isCards)-> vm.onTabsClick(false)}"
+                        android:layout_marginRight="@dimen/dp6"
+                        android:layout_marginLeft="@dimen/dp6">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="@dimen/standardTextSize"
+                            android:textColor="?iGapTitleTextColor"
+                            android:text="@string/accounts"
+                            android:gravity="center" />
+
+                        <View
+                            android:id="@+id/indicatorDeposits"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp2"
+                            android:visibility="@{vm.isCardsMode ? View.GONE : View.VISIBLE}"
+                            android:background="?iGapPrimaryIconTextColor"
+                            android:layout_alignParentBottom="true" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dp200"
-                    android:paddingRight="@dimen/dp32"
-                    android:paddingLeft="@dimen/dp32"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lytItems"
+                    android:layout_marginLeft="@dimen/dp6"
                     android:layout_marginTop="@dimen/dp12"
-                    android:clipToPadding="false"
-                    android:layoutDirection="ltr"
+                    android:layout_marginRight="@dimen/dp6"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lblCards" />
+                    app:layout_constraintTop_toBottomOf="@id/lytTabs">
 
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{vm.showLoading}"
-                    app:layout_constraintStart_toStartOf="@id/vpCards"
-                    app:layout_constraintEnd_toEndOf="@id/vpCards"
-                    app:layout_constraintTop_toTopOf="@id/vpCards"
-                    app:layout_constraintBottom_toBottomOf="@id/vpCards"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvAccounts"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp80"
+                        android:visibility="@{vm.isCardsMode ? View.GONE : View.VISIBLE}"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginBottom="@dimen/dp16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{vm.showRetry , default=gone}"
-                    android:onClick="@{()-> vm.onRetryClicked()}"
-                    android:text="@string/retry_icon"
-                    style="@style/myIconTextViewStyleGray"
-                    android:textSize="@dimen/dp40"
-                    app:layout_constraintStart_toStartOf="@id/vpCards"
-                    app:layout_constraintEnd_toEndOf="@id/vpCards"
-                    app:layout_constraintTop_toTopOf="@id/vpCards"
-                    app:layout_constraintBottom_toBottomOf="@id/vpCards"/>
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/vpCards"
+                        android:layout_width="0dp"
+                        android:visibility="@{vm.isCardsMode ? View.VISIBLE : View.GONE}"
+                        android:layout_height="@dimen/dp200"
+                        android:paddingRight="@dimen/dp32"
+                        android:paddingLeft="@dimen/dp32"
+                        android:layout_marginLeft="@dimen/dp6"
+                        android:layout_marginRight="@dimen/dp6"
+                        android:clipToPadding="false"
+                        android:layoutDirection="ltr"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/lytIndicators"
-                    android:layout_marginTop="@dimen/dp6"
-                    android:layout_marginLeft="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp16"
-                    android:padding="@dimen/dp4"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_width="0dp"
-                    android:layoutDirection="ltr"
-                    android:layout_height="@dimen/dp32"
-                    app:layout_constraintStart_toStartOf="@id/vpCards"
-                    app:layout_constraintEnd_toEndOf="@id/vpCards"
-                    app:layout_constraintTop_toBottomOf="@id/vpCards" />
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{vm.showLoading}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{vm.showRetry , default=gone}"
+                        android:onClick="@{()-> vm.onRetryClicked()}"
+                        android:text="@string/retry_icon"
+                        style="@style/myIconTextViewStyleGray"
+                        android:textSize="@dimen/dp40"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/lytIndicators"
+                        android:layout_marginTop="@dimen/dp6"
+                        android:padding="@dimen/dp4"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layoutDirection="ltr"
+                        android:layout_height="@dimen/dp32"
+                        android:visibility="@{vm.isCardsMode ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/vpCards" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/btnMoneyTransfer"
@@ -112,23 +193,23 @@
                     android:gravity="center"
                     android:onClick="@{()-> vm.OnTransferMoneyClicked()}"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:layout_constraintTop_toBottomOf="@id/lytIndicators"
+                    app:layout_constraintTop_toBottomOf="@id/lytItems"
                     app:layout_constraintEnd_toStartOf="@id/btnTransactions"
-                    app:layout_constraintStart_toStartOf="@id/lblCards"
+                    app:layout_constraintStart_toStartOf="@id/lytItems"
                     app:layout_constraintBottom_toTopOf="@id/btnTemporaryPass"
                     android:layout_marginBottom="@dimen/dp16"
                     android:layout_marginTop="@dimen/dp44"
-                    android:background="@drawable/shape_gray_round_stroke">
+                    android:background="@drawable/shape_round_stroke">
 
                     <TextView
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
-                        style="@style/myIconTextViewStyleGray"
+                        style="@style/primaryIconTextViewStyle"
                         android:text="@string/wallet_icon" />
 
                     <TextView
                         android:textSize="@dimen/standardTextSize"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapPrimaryIconTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/transfer_mony"
@@ -143,7 +224,7 @@
                     android:id="@+id/btnTransactions"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/toolbar_height"
-                    app:layout_constraintEnd_toEndOf="@id/lblCards"
+                    app:layout_constraintEnd_toEndOf="@id/lytItems"
                     app:layout_constraintStart_toEndOf="@id/btnMoneyTransfer"
                     app:layout_constraintTop_toTopOf="@id/btnMoneyTransfer"
                     android:layout_marginLeft="@dimen/dp16"
@@ -151,17 +232,17 @@
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:onClick="@{()->vm.OnTransactionsClicked()}"
-                    android:background="@drawable/shape_gray_round_stroke">
+                    android:background="@drawable/shape_round_stroke">
 
                     <TextView
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
-                        style="@style/myIconTextViewStyleGray"
+                        style="@style/primaryIconTextViewStyle"
                         android:text="@string/wallet_icon" />
 
                     <TextView
                         android:textSize="@dimen/standardTextSize"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapPrimaryIconTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/transactions"
@@ -176,7 +257,7 @@
                     android:id="@+id/btnTemporaryPass"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/toolbar_height"
-                    app:layout_constraintEnd_toStartOf="@id/btnTakeTurn"
+                    app:layout_constraintEnd_toStartOf="@id/btnTakeSheba"
                     app:layout_constraintStart_toStartOf="@id/btnMoneyTransfer"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnMoneyTransfer"
@@ -184,18 +265,25 @@
                     android:layout_marginBottom="@dimen/dp16"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:clickable="@{vm.isCardsMode}"
                     android:onClick="@{()->vm.OnTemporaryPassClicked()}"
-                    android:background="@drawable/shape_gray_round_stroke">
+                    android:background="@{vm.isCardsMode ? @drawable/shape_round_stroke : @drawable/shape_gray_round_stroke , default= @drawable/shape_round_stroke}">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/icPassword"
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
-                        style="@style/myIconTextViewStyleGray"
+                        android:textColor="?iGapPrimaryIconTextColor"
+                        android:fontFamily="@font/font_icon"
+                        app:fontFamily="@font/font_icon"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/dp22"
                         android:text="@string/wallet_icon" />
 
                     <TextView
+                        android:id="@+id/lblPassword"
                         android:textSize="@dimen/smallTextSize"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapPrimaryIconTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/temporary_password"
@@ -207,25 +295,32 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btnTakeTurn"
+                    android:id="@+id/btnTakeSheba"
                     android:layout_width="0dp"
+                    android:clickable="@{!vm.isCardsMode}"
                     android:layout_height="@dimen/toolbar_height"
-                    app:layout_constraintEnd_toEndOf="@id/lblCards"
+                    app:layout_constraintEnd_toEndOf="@id/btnTransactions"
                     app:layout_constraintStart_toEndOf="@id/btnTemporaryPass"
                     app:layout_constraintTop_toTopOf="@id/btnTemporaryPass"
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginStart="@dimen/dp16"
                     android:gravity="center"
                     android:onClick="@{()->vm.OnShebaClicked()}"
-                    android:background="@drawable/shape_gray_round_stroke">
+                    android:background="@{vm.isCardsMode ? @drawable/shape_gray_round_stroke : @drawable/shape_round_stroke , default= @drawable/shape_gray_round_stroke}">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/icSheba"
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
-                        style="@style/myIconTextViewStyleGray"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:fontFamily="@font/font_icon"
+                        app:fontFamily="@font/font_icon"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/dp22"
                         android:text="@string/wallet_icon" />
 
                     <TextView
+                        android:id="@+id/lblSheba"
                         android:textSize="@dimen/standardTextSize"
                         android:textColor="?iGapSubtitleTextColor"
                         android:layout_width="wrap_content"
