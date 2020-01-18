@@ -17,6 +17,7 @@ import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmStickerItemFields;
 import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmStickersDetailsFields;
+import net.iGap.rx.IGSingleObserver;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +31,7 @@ import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -92,11 +94,10 @@ public class StickerRepository {
                 });
     }
 
-    public Single<List<StructIGStickerGroup>> getUserStickersGroup() {
-        return stickerApi.getUserStickersGroup()
+    public void getUserStickersGroup() {
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        stickerApi.getUserStickersGroup()
                 .subscribeOn(Schedulers.newThread())
-                .retry((integer, throwable) -> integer > 2)
-                .doOnError(Throwable::printStackTrace)
                 .map(dataModel -> {
                     List<StructIGStickerGroup> groups = new ArrayList<>();
                     for (int i = 0; i < dataModel.getData().size(); i++) {
@@ -104,7 +105,22 @@ public class StickerRepository {
                         groups.add(stickerGroup);
                     }
                     return groups;
-                }).doOnSuccess(this::updateStickers);
+                })
+                .subscribe(new IGSingleObserver<List<StructIGStickerGroup>>(compositeDisposable) {
+                    @Override
+                    public void onSuccess(List<StructIGStickerGroup> structIGStickerGroups) {
+                        updateStickers(structIGStickerGroups);
+                        if (!compositeDisposable.isDisposed())
+                            compositeDisposable.dispose();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        if (!compositeDisposable.isDisposed())
+                            compositeDisposable.dispose();
+                    }
+                });
     }
 
     private Completable addStickerGroupToMyStickersApiService(String groupId) {

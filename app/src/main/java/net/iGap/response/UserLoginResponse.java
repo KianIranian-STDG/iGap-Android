@@ -124,8 +124,7 @@ public class UserLoginResponse extends MessageHandler {
             }
         });
 
-        StickerRepository.getInstance().getUserStickersGroup().subscribe();
-
+        StickerRepository.getInstance().getUserStickersGroup();
     }
 
     @Override
