@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
+import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
@@ -152,7 +153,8 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public void goToTrading() {
-        openPage.setValue(5);
+//        openPage.setValue(5);
+        error.setValue(new ErrorM(true, "", "1", R.string.kuknos_soon_error));
     }
 
     public void goTOBuyPMN() {

@@ -3,6 +3,7 @@ package net.iGap.api;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
@@ -13,6 +14,7 @@ import org.stellar.sdk.responses.SubmitTransactionResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface KuknosApi {
@@ -128,7 +130,7 @@ public interface KuknosApi {
      * @return
      */
     @FormUrlEncoded
-    @POST("buy-offer")
+    @POST("manage-offer")
     Call<KuknosResponseModel<SubmitTransactionResponse>> buyOffer(@Field("xdr") String XDR);
 
     /**
@@ -147,6 +149,14 @@ public interface KuknosApi {
                                                     @Field("asset_count") String assetAmount,
                                                     @Field("amount") String totalPrice,
                                                     @Field("description") String description);
+
+    /**
+     * this api make a request for Fees.
+     *
+     * @return
+     */
+    @GET("get-fees")
+    Call<KuknosResponseModel<KuknosFeeModel>> getFee();
 
     /*@FormUrlEncoded
     @POST("activate-account")
