@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -117,6 +118,26 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                         .load();
             }
 
+        });
+
+        int textStyleOn , textStyleOff ;
+        textStyleOff = Theme.getInstance().getSubTitleColor(binding.lblPassword.getContext());
+        textStyleOn = Theme.getInstance().getPrimaryTextIconColor(binding.lblPassword.getContext());
+
+        viewModel.onTabChangeListener.observe(getViewLifecycleOwner() , isCardsEnable -> {
+            if (isCardsEnable != null){
+                if (isCardsEnable){
+                    binding.lblPassword.setTextColor(textStyleOn);
+                    binding.icPassword.setTextColor(textStyleOn);
+                    binding.lblSheba.setTextColor(textStyleOff);
+                    binding.icSheba.setTextColor(textStyleOff);
+                }else {
+                    binding.lblPassword.setTextColor(textStyleOff);
+                    binding.icPassword.setTextColor(textStyleOff);
+                    binding.lblSheba.setTextColor(textStyleOn);
+                    binding.icSheba.setTextColor(textStyleOn);
+                }
+            }
         });
     }
 

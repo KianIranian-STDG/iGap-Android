@@ -2,9 +2,11 @@ package net.iGap.mobileBank.viewmoedel;
 
 import android.view.View;
 
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.R;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankCardModel;
@@ -20,6 +22,8 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     public SingleLiveEvent<Boolean> onTransactionListener = new SingleLiveEvent<>();
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
+    public MutableLiveData<Boolean> onTabChangeListener = new MutableLiveData<>();
+    public ObservableBoolean isCardsMode = new ObservableBoolean(true);
 
     private List<BankCardModel> cards;
 
@@ -57,6 +61,11 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
         getCardsByApi();
     }
 
+    public void onTabsClick(boolean isCards){
+        isCardsMode.set(isCards);
+        onTabChangeListener.setValue(isCards);
+    }
+
     public void OnTransferMoneyClicked() {
         onMoneyTransferListener.setValue(true);
     }
@@ -79,4 +88,5 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     public ObservableInt getShowRetry() {
         return showRetry;
     }
+
 }

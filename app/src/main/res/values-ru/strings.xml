@@ -1840,4 +1840,5 @@
     <string name="deposit">депозит</string>
     <string name="sheba_number">SHEBA номер</string>
     <string name="get_temporary_password">получить пароль POOYA</string>
+    <string name="accounts">Счета</string>
 </resources>

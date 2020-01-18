@@ -2344,4 +2344,5 @@
     <string name="temporary_password">رمز پویا</string>
     <string name="sheba_number">شماره شبا</string>
     <string name="get_temporary_password">دریافت رمز پویا</string>
+    <string name="accounts">حساب ها</string>
 </resources>
