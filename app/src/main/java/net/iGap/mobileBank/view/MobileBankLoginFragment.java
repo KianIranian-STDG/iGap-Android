@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -77,7 +76,7 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
 
                 //Toast.makeText(getActivity(), userName + " خوش امدید " , Toast.LENGTH_SHORT).show();
                 new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
-                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankHomeFragment()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment()).setReplace(false).load();
             }
         });
 

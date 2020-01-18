@@ -267,4 +267,7 @@
     <string name="valid_icon">\ue9a9</string>
     <string name="download_ic">\ue933</string>
     <string name="upload_ic">\ue99f</string>
+
+    <string name="bank_withdraw_ic">\ue9ad</string>
+    <string name="bank_income_ic">\ue9ac</string>
 </resources>

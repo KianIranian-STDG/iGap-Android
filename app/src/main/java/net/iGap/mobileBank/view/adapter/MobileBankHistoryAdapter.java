@@ -1,5 +1,7 @@
 package net.iGap.mobileBank.view.adapter;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
     private static final int loadType = 1;
     private List<BankHistoryModel> mdata;
     private OnItemClickListener clickListener;
+    private Context context;
 
     public MobileBankHistoryAdapter(List<BankHistoryModel> dates, OnItemClickListener clickListener) {
         this.mdata = dates;
@@ -32,6 +36,7 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
+        context = viewGroup.getContext();
         switch (viewType) {
             case historyType:
                 View singleVH = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mobile_bank_history_item, viewGroup, false);
@@ -106,7 +111,7 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title, value, date;
+        private TextView title, value, date, arrow, statusIcon;
         private CardView container;
 
         public ViewHolder(@NonNull View itemView) {
@@ -116,16 +121,29 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
             value = itemView.findViewById(R.id.amount);
             date = itemView.findViewById(R.id.time);
             container = itemView.findViewById(R.id.container);
+            arrow = itemView.findViewById(R.id.arrow);
+            statusIcon = itemView.findViewById(R.id.status_ic);
 
         }
 
         void initView(int position) {
-
-            title.setText(mdata.get(position).getTitle());
-            value.setText(mdata.get(position).getAmount());
+            Log.d("amini", "initView: " + position);
+            if (mdata.get(position).getTransferAmount() < 0) {
+                title.setText("برداشت");
+                statusIcon.setText(R.string.bank_withdraw_ic);
+                statusIcon.setTextColor(context.getResources().getColor(R.color.red));
+                value.setTextColor(context.getResources().getColor(R.color.red));
+            } else {
+                title.setText("واریز");
+                statusIcon.setText(R.string.bank_income_ic);
+                statusIcon.setTextColor(context.getResources().getColor(R.color.green));
+                value.setTextColor(context.getResources().getColor(R.color.red));
+            }
+            value.setText("" + mdata.get(position).getTransferAmount());
             date.setText(mdata.get(position).getDate());
             container.setOnClickListener(v -> clickListener.onClick(position));
-
+            if (HelperCalander.isPersianUnicode)
+                arrow.setRotation(90);
         }
     }
 

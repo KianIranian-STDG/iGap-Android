@@ -1,6 +1,7 @@
 package net.iGap.api;
 
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
@@ -26,4 +27,10 @@ public interface MobileBankApi {
                                                                    @Field("offset") Integer offset,
                                                                    @Field("pan") String pan);
 
+    @POST("deposit/get-statements")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<BankHistoryModel>>> getAccountHistory(@Header("Authorization") String token,
+                                                                           @Field("deposit_number") String depositNumber,
+                                                                           @Field("length") Integer length,
+                                                                           @Field("offset") Integer offset);
 }

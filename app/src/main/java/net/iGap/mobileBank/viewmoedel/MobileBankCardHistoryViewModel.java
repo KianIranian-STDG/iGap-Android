@@ -1,17 +1,18 @@
 package net.iGap.mobileBank.viewmoedel;
 
-import android.os.Handler;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
+import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankDateModel;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
+import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.module.CalendarShamsi;
 
 import java.text.ParseException;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MobileBankCardHistoryViewModel extends BaseAPIViewModel {
+public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
 
     private ObservableField<String> balance = new ObservableField<>("1,000,000,000");
     private ObservableField<String> income = new ObservableField<>("1,000,000,000");
@@ -79,16 +80,22 @@ public class MobileBankCardHistoryViewModel extends BaseAPIViewModel {
 
     public void getAccountDataForMonth(BankDateModel date) {
         // set bills
-        Handler handler = new Handler();
-        handler.postDelayed(() -> createFakeData(), 2000);
-    }
+        MobileBankRepository.getInstance().getAccountHistory("47000012780603", 0, this, new ResponseCallback<BaseMobileBankResponse<List<BankHistoryModel>>>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
+                bills.setValue(data.getData());
+            }
 
-    private void createFakeData() {
-        List<BankHistoryModel> mdata = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            mdata.add(new BankHistoryModel("Payment", "+1,000,000,000", "2020/12/12 - 24:59"));
-        }
-        bills.setValue(mdata);
+            @Override
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
     }
 
     public ObservableField<String> getBalance() {
