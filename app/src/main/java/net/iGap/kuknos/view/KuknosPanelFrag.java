@@ -63,7 +63,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_panel, container, false);
         binding.setViewmodel(kuknosPanelVM);
         binding.setLifecycleOwner(this);
-
+        isNeedResume = true;
         return binding.getRoot();
 
     }
@@ -134,8 +134,8 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
 
     @Override
     public void onResume() {
-        super.onResume();
         kuknosPanelVM.getDataFromServer();
+        super.onResume();
     }
 
     @Override

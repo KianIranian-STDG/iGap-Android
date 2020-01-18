@@ -12,8 +12,8 @@ import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 import org.stellar.sdk.KeyPair;
 
@@ -111,15 +111,15 @@ public class KuknosSendVM extends BaseAPIViewModel {
         kuknosSendM.setMemo((text.get() == null ? "" : text.get()));
 
         progressState.setValue(true);
-        panelRepo.paymentUser(kuknosSendM, this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
+        panelRepo.paymentUser(kuknosSendM, this, new ResponseCallback<KuknosResponseModel<KuknosHash>>() {
             @Override
-            public void onSuccess(KuknosResponseModel<KuknosTransactionResult> data) {
-                if (data.getData().isSuccess())
+            public void onSuccess(KuknosResponseModel<KuknosHash> data) {
+//                if (data.getData().isSuccess())
                     payResult.setValue(new ErrorM(false, "", "", R.string.kuknos_send_successServer));
-                else {
+                /*else {
                     //TransactionResult.TransactionResultResult.
                     data.getData().getExtras().getResultCodes().getTransactionResultCode();
-                }
+                }*/
                 progressState.setValue(false);
             }
 
