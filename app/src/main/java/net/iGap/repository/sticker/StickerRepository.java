@@ -2,31 +2,21 @@ package net.iGap.repository.sticker;
 
 import android.util.Log;
 
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
-import com.vanniktech.emoji.sticker.struct.StructSticker;
-
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.fragments.emoji.api.APIEmojiService;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.fragments.emoji.struct.StructStickerResult;
-import net.iGap.interfaces.ObserverView;
 import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmStickerItemFields;
-import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmStickersDetailsFields;
-import net.iGap.rx.IGSingleObserver;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,25 +30,18 @@ import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class StickerRepository implements ObserverView {
+public class StickerRepository {
     private static final int RECENT_STICKER_LIMIT = 13;
     private static final int FAVORITE_STICKER_LIMIT = 15;
 
     private static StickerRepository stickerRepository;
     private StickerApi stickerApi;
 
-    private APIEmojiService apiService;
-    private String TAG = "abbasiSticker Repository";
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private String TAG = "abbasiStickerRepository";
 
     public static StickerRepository getInstance() {
         if (stickerRepository == null)
@@ -68,12 +51,6 @@ public class StickerRepository implements ObserverView {
 
     private StickerRepository() {
         stickerApi = new RetrofitFactory().getStickerRetrofit();
-        apiService = ApiEmojiUtils.getAPIService();
-
-        DbManager.getInstance().doRealmTask(realm -> {
-            Log.i("abbasiNewSticker", "New Stickers: " + realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.IS_FAVORITE, true).findAll().size());
-        });
-
     }
 
     public Single<List<StructIGStickerCategory>> getStickerCategory() {
@@ -213,99 +190,6 @@ public class StickerRepository implements ObserverView {
         }
     }
 
-    private void getStickerFromServerAndInsetToDb(String groupId) {
-        if (apiService != null)
-            apiService.getSticker(groupId).enqueue(new Callback<StructEachSticker>() {
-                @Override
-                public void onResponse(@NotNull Call<StructEachSticker> call, @NotNull Response<StructEachSticker> response) {
-                    if (response.body() != null) {
-                        if (response.body().getOk() && response.body().getData() != null) {
-
-                            StructGroupSticker structGroupSticker = response.body().getData();
-
-                            DbManager.getInstance().doRealmTransaction(realm -> {
-                                RealmStickers.put(realm, structGroupSticker.getId(), structGroupSticker.getRefId(), structGroupSticker.getName(), structGroupSticker.getAvatarToken(), structGroupSticker.getAvatarSize(), structGroupSticker.getAvatarName(), structGroupSticker.getPrice(), structGroupSticker.getIsVip(), structGroupSticker.getSort(), structGroupSticker.getIsVip(), structGroupSticker.getStickers(), false);
-                            });
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NotNull Call<StructEachSticker> call, @NotNull Throwable t) {
-                    Log.i(TAG, "get sticker from API SERVICE  with group id" + groupId + " with error " + t.getMessage());
-                }
-            });
-    }
-
-    public void addStickerGroupToFavorite(String groupId, ResponseCallback<Boolean> callback) {
-        if (apiService != null)
-            apiService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
-                @Override
-                public void onResponse(@NotNull Call<StructStickerResult> call, @NotNull Response<StructStickerResult> response) {
-                    if (response.body() != null && response.body().isSuccess()) {
-
-                        DbManager.getInstance().doRealmTask(realm -> {
-
-                            getStickerFromServerAndInsetToDb(groupId);
-
-                        });
-
-                        callback.onSuccess(true);
-                    }
-                }
-
-                @Override
-                public void onFailure(@NotNull Call<StructStickerResult> call, @NotNull Throwable t) {
-                    callback.onError(t.getMessage());
-                    Log.i(TAG, "add sticker to category API SERVICE  with group id" + groupId + " with error " + t.getMessage());
-                }
-            });
-    }
-
-    public void removeStickerGroupFromFavorite(String groupId, ResponseCallback<Boolean> callback) {
-        if (apiService != null) {
-            apiService.removeSticker(groupId).enqueue(new Callback<StructStickerResult>() {
-                @Override
-                public void onResponse(@NotNull Call<StructStickerResult> call, @NotNull Response<StructStickerResult> response) {
-                    if (response.body() != null && response.body().isSuccess()) {
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransactionAsync(realm1 -> {
-                                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm1);
-                                if (realmStickers != null)
-                                    realmStickers.removeFromRealm();
-                            });
-                        });
-
-                        callback.onSuccess(false);
-                    }
-                }
-
-                @Override
-                public void onFailure(@NotNull Call<StructStickerResult> call, @NotNull Throwable t) {
-                    callback.onError(t.getMessage());
-                    Log.i(TAG, "remove sticker to category API SERVICE  with group id" + groupId + " with error " + t.getMessage());
-                }
-            });
-        }
-    }
-
-    public void putOrUpdateMyStickerPackToDb() {
-        apiService.getMyStickerPack()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new IGSingleObserver<StructSticker>(compositeDisposable) {
-                    @Override
-                    public void onSuccess(StructSticker structSticker) {
-
-                        RealmStickers.updateStickers(structSticker.getData(), () -> {
-
-                        });
-
-                        Log.i(TAG, "onSuccess: " + structSticker.getData().size());
-                    }
-                });
-    }
-
     public Flowable<List<StructIGStickerGroup>> getStickerGroupWithRecentTabForEmojiView() {
         return DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmStickerGroup.class).findAllAsync()
@@ -431,17 +315,6 @@ public class StickerRepository implements ObserverView {
         for (File file : fileTmp.listFiles()) {
             if (!file.isDirectory()) file.delete();
         }
-    }
-
-    @Override
-    public void unsubscribe() {
-        Log.i(TAG, "repo unsubscribe: ");
-        if (compositeDisposable != null && !compositeDisposable.isDisposed())
-            compositeDisposable.clear();
-    }
-
-    public CompositeDisposable getCompositeDisposable() {
-        return compositeDisposable;
     }
 
 
