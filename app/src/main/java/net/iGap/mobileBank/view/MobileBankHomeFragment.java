@@ -65,6 +65,7 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
     private void setupListeners() {
 
         viewModel.getCardsData().observe(getViewLifecycleOwner(), this::saveCardsTodb);
+        viewModel.getAccountsData().observe(getViewLifecycleOwner(), this::setupAccounts);
 
         viewModel.onTempPassListener.observe(getViewLifecycleOwner(), state -> {
 
@@ -136,7 +137,6 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                     binding.icPassword.setTextColor(textStyleOff);
                     binding.lblSheba.setTextColor(textStyleOn);
                     binding.icSheba.setTextColor(textStyleOn);
-                    setupAccounts();
                 }
             }
         });
@@ -164,19 +164,12 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
         binding.toolbar.addView(toolbar.getView());
     }
 
-    private void setupAccounts(){
+    private void setupAccounts(List<BankAccountModel> accountModels){
 
-        List<BankAccountModel> items = new ArrayList<>();
-
-        for (int i = 0 ; i<7 ; i++){
-            BankAccountModel model = new BankAccountModel();
-            model.setSelected(false);
-            model.setAccountNumber("800-15001234-5");
-            items.add(model);
-        }
+        if (accountModels == null) return;
 
         BankAccountAdapter adapter = new BankAccountAdapter();
-        adapter.setItems(items);
+        adapter.setItems(accountModels);
         binding.rvAccounts.setLayoutManager(new LinearLayoutManager(binding.rvAccounts.getContext() , LinearLayoutManager.HORIZONTAL , false));
         binding.rvAccounts.setAdapter(adapter);
     }

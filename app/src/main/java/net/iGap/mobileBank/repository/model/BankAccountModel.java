@@ -1,9 +1,16 @@
 package net.iGap.mobileBank.repository.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class BankAccountModel {
 
+    @SerializedName("deposit_number")
     private String accountNumber ;
-    private boolean isSelected ;
+
+    @SerializedName("deposit_title")
+    private String title ;
+
+    private transient boolean isSelected ;
 
     public String getAccountNumber() {
         return accountNumber;
@@ -19,5 +26,13 @@ public class BankAccountModel {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -1,6 +1,7 @@
 package net.iGap.mobileBank.viewmoedel;
 
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
@@ -72,6 +73,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
+                        Log.e("NazariToken" , data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
                         onLoginResponse.postValue(data.getData().getName());
                     }

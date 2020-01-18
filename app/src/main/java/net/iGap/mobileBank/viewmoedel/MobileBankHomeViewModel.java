@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
+import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.module.SingleLiveEvent;
@@ -20,14 +21,17 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     public SingleLiveEvent<Boolean> onTempPassListener = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> onTransactionListener = new SingleLiveEvent<>();
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
+    private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     public MutableLiveData<Boolean> onTabChangeListener = new MutableLiveData<>();
     public ObservableBoolean isCardsMode = new ObservableBoolean(true);
 
     private List<BankCardModel> cards;
+    private List<BankAccountModel> accounts;
 
     public MobileBankHomeViewModel() {
         getCardsByApi();
+        getDepositsByApi();
     }
 
     private void getCardsByApi() {
@@ -56,8 +60,35 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
         });
     }
 
+    private void getDepositsByApi() {
+        showLoading.set(View.VISIBLE);
+        showRetry.set(View.GONE);
+        MobileBankRepository.getInstance().getMobileBankAccounts(this, new ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse<List<BankAccountModel>> data) {
+                accounts = data.getData();
+                accountsData.postValue(data.getData());
+                showLoading.set(View.GONE);
+            }
+
+            @Override
+            public void onError(String error) {
+                showRequestErrorMessage.setValue(error);
+                showLoading.set(View.GONE);
+                showRetry.set(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailed() {
+                showLoading.set(View.GONE);
+                showRetry.set(View.VISIBLE);
+            }
+        });
+    }
+
     public void onRetryClicked(){
-        getCardsByApi();
+        if (cards == null) getCardsByApi();
+        if (accounts == null) getDepositsByApi();
     }
 
     public void onTabsClick(boolean isCards) {
@@ -78,6 +109,10 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     }
 
     public void OnShebaClicked() {
+    }
+
+    public MutableLiveData<List<BankAccountModel>> getAccountsData() {
+        return accountsData;
     }
 
     public MutableLiveData<List<BankCardModel>> getCardsData() {

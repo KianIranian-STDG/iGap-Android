@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.model.LoginResponse;
@@ -25,5 +26,10 @@ public interface MobileBankApi {
                                                                    @Field("length") Integer length,
                                                                    @Field("offset") Integer offset,
                                                                    @Field("pan") String pan);
+
+    @POST("deposit/get-deposits")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<BankAccountModel>>> getUserDeposits(@Header ("Authorization") String token ,
+                                                                      @Field("deposit_numbers") String depositNumber);
 
 }
