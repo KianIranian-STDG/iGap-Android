@@ -57,15 +57,16 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
         setupListeners();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setupListeners() {
 
-        binding.visiblePassword.setOnClickListener(v -> {
-            if (!isPasswordVisible){
+        binding.visiblePassword.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN){
                 binding.edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            }else {
+            }else if (event.getAction() == MotionEvent.ACTION_UP){
                 binding.edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
-            isPasswordVisible = !isPasswordVisible ;
+            return true;
         });
 
         viewModel.getOnLoginResponse().observe(getViewLifecycleOwner() , userName -> {
@@ -74,7 +75,7 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
                 if (binding.edtUserName.getText() != null)
                     saveUsernameToPref(binding.edtUserName.getText().toString());
 
-                Toast.makeText(getActivity(), userName + " خوش امدید " , Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), userName + " خوش امدید " , Toast.LENGTH_SHORT).show();
                 new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
                 new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankHomeFragment()).setReplace(false).load();
             }

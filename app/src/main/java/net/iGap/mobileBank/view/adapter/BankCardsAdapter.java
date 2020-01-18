@@ -11,8 +11,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
+import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.util.ExtractBank;
 
 import java.util.List;
 
@@ -22,7 +28,7 @@ public class BankCardsAdapter extends PagerAdapter {
 
     public BankCardsAdapter(List<RealmMobileBankCards> cards) {
         this.mCards = cards;
-        cards.add(null); // for add
+        //cards.add(null); // for add
     }
 
     @Override
@@ -55,7 +61,7 @@ public class BankCardsAdapter extends PagerAdapter {
             icAdd.setVisibility(View.GONE);
             lytRoot.setBackgroundResource(R.drawable.shape_card_background);
             tvName.setText(mCards.get(position).getCardName());
-            tvNumber.setText(mCards.get(position).getCardNumber());
+            tvNumber.setText(checkAndSetPersianNumberIfNeeded(mCards.get(position).getCardNumber()));
             ivLogo.setImageResource(getCardBankLogo(mCards.get(position).getCardNumber()));
 
         }else {
@@ -72,8 +78,19 @@ public class BankCardsAdapter extends PagerAdapter {
         return layout;
     }
 
+    private String checkAndSetPersianNumberIfNeeded(String cardNumber) {
+        String number = cardNumber;
+        if (HelperCalander.isPersianUnicode) number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+        try {
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
+            return tempArray[0] + " " + tempArray[1] + " " + tempArray[2] + " " + tempArray[3];
+        }catch (Exception e){
+            return number;
+        }
+    }
+
     private int getCardBankLogo(String cardNumber) {
-        return R.drawable.bank_logo_parsian;
+        return ExtractBank.bankLogo(cardNumber);
     }
 
     @Override
