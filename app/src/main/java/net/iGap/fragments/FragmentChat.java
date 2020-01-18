@@ -8457,14 +8457,11 @@ public class FragmentChat extends BaseFragment
 
                         final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
                         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                            //suggestion: may be could remove db query in constructor of StructMessageInfo and add query in load item in adapter with cache
                             structMessageInfos.add(new StructMessageInfo(realmRoomMessage));
                         }
 
-                        if (direction == UP) {
-                            switchAddItem(structMessageInfos, true);
-                        } else {
-                            switchAddItem(structMessageInfos, false);
-                        }
+                        switchAddItem(structMessageInfos, direction == UP);
 
                     }
 

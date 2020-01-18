@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="50dp"
@@ -7,13 +7,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/type7_card0"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
-        android:layout_weight="1"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/discovery_radius"
         app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/type7_card1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/type7_img0"
@@ -29,25 +32,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/md_tick"
-            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/white"
-            android:background="@color/tick_background_color"
-            android:textAppearance="@style/TextIconAppearance_toolbar" />
+            android:visibility="gone" />
     </androidx.cardview.widget.CardView>
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/type7_card1"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
-        android:layout_weight="1"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/discovery_radius"
         app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/type7_card2"
+        app:layout_constraintStart_toEndOf="@+id/type7_card0"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/type7_img1"
@@ -61,25 +66,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/md_tick"
-            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/white"
-            android:background="@color/tick_background_color"
-            android:textAppearance="@style/TextIconAppearance_toolbar" />
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/type7_card2"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
-        android:layout_weight="1"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/discovery_radius"
         app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/type7_card1"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/type7_img2"
@@ -93,15 +101,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/md_tick"
-            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/white"
-            android:background="@color/tick_background_color"
-            android:textAppearance="@style/TextIconAppearance_toolbar" />
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
