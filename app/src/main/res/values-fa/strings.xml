@@ -2035,7 +2035,7 @@
     <string name="kuknos_panelStr_setting">تنظیمات</string>
     <string name="kuknos_develop">در حال توسعه</string>
     <string name="kuknos_recieve_title">جهت دریافت اعتبار از افراد دیگر، شناسه کیف پول خود را برای آنها ارسال نمایید.</string>
-    <string name="kuknos_recieve_walletID">شناسه کیف پول شما: SDJUKILLBBBTGGGGYHRFFD</string>
+    <string name="kuknos_recieve_walletID">شناسه کیف پول شما: </string>
     <string name="kuknos_recieve_copyBtn">کپی کردن شناسه</string>
     <string name="kuknos_recieve_copyToast">شناسه کیف پول شما در حافظه کپی شد.</string>
     <string name="kuknos_send_title">ارسال اعتبار</string>
@@ -2344,4 +2344,5 @@
     <string name="temporary_password">رمز پویا</string>
     <string name="sheba_number">شماره شبا</string>
     <string name="get_temporary_password">دریافت رمز پویا</string>
+    <string name="kuknos_soon_error">مبادله توکن ها به زودی فعال میشود.</string>
 </resources>
