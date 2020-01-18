@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
@@ -22,7 +23,9 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
+import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.view.adapter.BankAccountAdapter;
 import net.iGap.mobileBank.view.adapter.BankCardsAdapter;
 import net.iGap.mobileBank.viewmoedel.MobileBankHomeViewModel;
 
@@ -133,6 +136,7 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                     binding.icPassword.setTextColor(textStyleOff);
                     binding.lblSheba.setTextColor(textStyleOn);
                     binding.icSheba.setTextColor(textStyleOn);
+                    setupAccounts();
                 }
             }
         });
@@ -158,6 +162,23 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                 });
 
         binding.toolbar.addView(toolbar.getView());
+    }
+
+    private void setupAccounts(){
+
+        List<BankAccountModel> items = new ArrayList<>();
+
+        for (int i = 0 ; i<7 ; i++){
+            BankAccountModel model = new BankAccountModel();
+            model.setSelected(false);
+            model.setAccountNumber("800-15001234-5");
+            items.add(model);
+        }
+
+        BankAccountAdapter adapter = new BankAccountAdapter();
+        adapter.setItems(items);
+        binding.rvAccounts.setLayoutManager(new LinearLayoutManager(binding.rvAccounts.getContext() , LinearLayoutManager.HORIZONTAL , false));
+        binding.rvAccounts.setAdapter(adapter);
     }
 
     private void setupViewPager() {
