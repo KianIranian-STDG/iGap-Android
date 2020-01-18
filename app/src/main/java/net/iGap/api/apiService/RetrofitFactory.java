@@ -11,6 +11,7 @@ import net.iGap.api.KuknosApi;
 import net.iGap.api.MciApi;
 import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
+import net.iGap.api.ShahkarApi;
 import net.iGap.api.StickerApi;
 
 import java.util.Collections;
@@ -145,5 +146,14 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(StickerApi.class);
+    }
+
+    public ShahkarApi getShahkarRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.SHAHKAR_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(ShahkarApi.class);
     }
 }

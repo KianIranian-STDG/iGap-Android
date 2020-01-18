@@ -33,22 +33,18 @@ public class GiftStickerPackageListAdapter extends RecyclerView.Adapter<GiftStic
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.wtf(this.getClass().getName(), "onCreateViewHolder");
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.gift_sticker_package_item_view, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.wtf(this.getClass().getName(), "onBindViewHolder: " + position);
         holder.itemView.setOnClickListener(v -> callback.onClick(holder.getAdapterPosition()));
         holder.giftStickerPackageTitle.setText(items.get(position));
     }
 
     @Override
     public int getItemCount() {
-        int tmp = items != null ? items.size() : 0;
-        Log.wtf(this.getClass().getName(), "getItemCount: " + tmp);
-        return tmp;
+        return items != null ? items.size() : 0;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

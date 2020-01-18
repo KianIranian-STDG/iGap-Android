@@ -15,6 +15,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEnterNationalCodeBinding;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
+import net.iGap.helper.HelperError;
 
 public class EnterNationalCodeFragment extends Fragment {
 
@@ -47,8 +48,20 @@ public class EnterNationalCodeFragment extends Fragment {
         });
 
         viewModel.getGoNextStep().observe(getViewLifecycleOwner(), isGo -> {
-            if (getParentFragment() instanceof ParentChatMoneyTransferFragment && isGo != null && isGo){
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment && isGo != null && isGo) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackagePage();
+            }
+        });
+
+        viewModel.getRequestError().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null) {
+                HelperError.showSnackMessage(errorMessage, false);
+            }
+        });
+
+        viewModel.getShowErrorMessageRequestFailed().observe(getViewLifecycleOwner(), errorMessageRes -> {
+            if (getContext() != null && errorMessageRes != null) {
+                HelperError.showSnackMessage(getString(errorMessageRes), false);
             }
         });
     }

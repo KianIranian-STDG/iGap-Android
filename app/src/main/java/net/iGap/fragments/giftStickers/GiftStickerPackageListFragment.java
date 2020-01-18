@@ -49,9 +49,7 @@ public class GiftStickerPackageListFragment extends Fragment {
         });
 
         viewModel.getLoadData().observe(getViewLifecycleOwner(), giftStickerList -> {
-            Log.wtf(this.getClass().getName(), "getLoadData");
             if (binding.giftStickerPackageList.getAdapter() instanceof GiftStickerPackageListAdapter && giftStickerList != null) {
-                Log.wtf(this.getClass().getName(), "getLoadData");
                 ((GiftStickerPackageListAdapter) binding.giftStickerPackageList.getAdapter()).setItems(giftStickerList);
             }
         });
