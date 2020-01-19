@@ -87,6 +87,7 @@
     <item name="rootRegisterContact" type="id" />
     <item name="animateCheckBoxContact" type="id" />
     <item name="sticker_layout" type="id" />
+    <item name="sticker_gif_card_layout" type="id" />
     <item name="animated_sticker_layout" type="id" />
 
 

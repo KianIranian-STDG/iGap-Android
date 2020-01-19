@@ -2353,5 +2353,8 @@
     <string name="kuknos_login_name_str">نام</string>
     <string name="gift_sticker_title">استیکر هدیه</string>
     <string name="national_code_not_match_with_phone_number_error">عدم همخوانی کد ملی با اطلاعات سیم کارت</string>
+    <string name="gift_sticker_visit">مشاهده</string>
+    <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
+    <string name="gift_cart_title">کارت هدیه</string>
 
 </resources>

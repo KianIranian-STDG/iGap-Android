@@ -2071,4 +2071,7 @@
     <string name="emoji_category_travel">Travel And Place</string>
     <string name="gift_sticker_title">Autocollant cadeau</string>
     <string name="national_code_not_match_with_phone_number_error">Incompatibilité du code national avec les informations de la carte SIM</string>
+    <string name="gift_sticker_visit">مشاهده</string>
+    <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
+    <string name="gift_cart_title">کارت هدیه</string>
 </resources>
