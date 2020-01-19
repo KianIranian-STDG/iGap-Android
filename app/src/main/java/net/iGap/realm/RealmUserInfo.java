@@ -38,6 +38,7 @@ public class RealmUserInfo extends RealmObject {
     private boolean isMplActive;
     private long walletAmount;
     private long ivandScore;
+    private String nationalCode;
 
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
@@ -417,5 +418,13 @@ public class RealmUserInfo extends RealmObject {
 
     public void setIvandScore(long ivandScore) {
         this.ivandScore = ivandScore;
+    }
+
+    public void setNationalCode(String nationalCode) {
+        this.nationalCode = nationalCode;
+    }
+
+    public String getNationalCode() {
+        return nationalCode;
     }
 }

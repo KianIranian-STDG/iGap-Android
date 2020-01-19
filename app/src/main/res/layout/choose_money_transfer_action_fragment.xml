@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/dp16">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/cardToCardIcon"
@@ -79,10 +80,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        app:constraint_referenced_ids="transferMoneyTitle,transferMoneyIcon"
         app:layout_constraintBottom_toBottomOf="@id/transferMoneyTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:constraint_referenced_ids="transferMoneyTitle,transferMoneyIcon"
         app:layout_constraintTop_toTopOf="@id/transferMoneyTitle" />
 
     <androidx.appcompat.widget.AppCompatTextView

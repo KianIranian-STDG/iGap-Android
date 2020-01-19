@@ -21,6 +21,7 @@ public class StructIGSticker {
     private String fileName;
     private long fileSize;
     private boolean isFavorite;
+    private long giftAmount;
     private List<String> tags;
 
     public StructIGSticker() {
@@ -36,6 +37,7 @@ public class StructIGSticker {
         setToken(stickerDataModel.getToken());
         setFavorite(stickerDataModel.isFavorite());
         setTags(stickerDataModel.getTags());
+        setGiftAmount(stickerDataModel.getGiftAmount());
     }
 
     public StructIGSticker(RealmStickerItem stickerItem) {
@@ -141,6 +143,13 @@ public class StructIGSticker {
         return isFavorite;
     }
 
+    public void setGiftAmount(long giftAmount) {
+        this.giftAmount = giftAmount;
+    }
+
+    public long getGiftAmount() {
+        return giftAmount;
+    }
 
     public StructIGSticker setValueWithRealm(RealmStickersDetails realmStickersDetails) {
         if (realmStickersDetails != null && realmStickersDetails.isValid()) {

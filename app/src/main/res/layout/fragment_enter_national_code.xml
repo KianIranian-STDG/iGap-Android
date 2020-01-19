@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeViewModel" />
@@ -17,15 +16,19 @@
             android:id="@+id/giftStickerTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:padding="@dimen/dp8"
             android:text="@string/gift_sticker_title"
             android:textColor="?attr/colorAccent"
             android:textSize="@dimen/largeTextSize"
-            app:layout_constraintBottom_toTopOf="@id/nationalCodeLayout"
+            app:layout_constraintBottom_toTopOf="@+id/nationalCodeLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintWidth_percent=".9" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -33,46 +36,68 @@
             style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:hint="@string/national_code"
             app:errorEnabled="@{viewModel.hasError}"
             app:errorText="@{viewModel.errorMessage}"
-            app:layout_constraintBottom_toTopOf="@id/loadingView"
-            app:layout_constraintEnd_toEndOf="@id/giftStickerTitle"
-            app:layout_constraintStart_toStartOf="@id/giftStickerTitle"
-            app:layout_constraintTop_toBottomOf="@id/giftStickerTitle">
+            app:layout_constraintBottom_toTopOf="@+id/checkBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/giftStickerTitle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nationalCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="10" />
+                android:maxLength="10"
+                android:text="@{viewModel.nationalCodeField}" />
         </com.google.android.material.textfield.TextInputLayout>
+
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:button="@drawable/check_box_background"
+            android:checked="@{viewModel.saveChecked}"
+            android:gravity="center_vertical"
+            android:text="@string/save"
+            app:layout_constraintBottom_toTopOf="@+id/loadingView"
+            app:layout_constraintEnd_toEndOf="@+id/nationalCodeLayout"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/nationalCodeLayout"
+            app:layout_constraintTop_toBottomOf="@+id/nationalCodeLayout" />
 
         <ProgressBar
             android:id="@+id/loadingView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:visibility="@{viewModel.showLoading}"
-            app:layout_constraintBottom_toTopOf="@id/inquiryButton"
+            app:layout_constraintBottom_toTopOf="@+id/inquiryButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nationalCodeLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/inquiryButton"
             style="@style/iGapButton"
-            android:layout_width="0dp"
+            android:layout_width="206dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginTop="8dp"
             android:enabled="@{viewModel.isEnabled}"
             android:onClick="@{()->viewModel.onInquiryButtonClick(nationalCode.getEditableText().toString())}"
             android:text="@string/inq_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loadingView"
+            app:layout_constraintTop_toBottomOf="@+id/loadingView"
             app:layout_constraintWidth_percent=".5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

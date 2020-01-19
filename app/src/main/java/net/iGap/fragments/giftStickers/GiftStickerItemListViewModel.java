@@ -1,55 +1,37 @@
 package net.iGap.fragments.giftStickers;
 
-import android.os.Handler;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GiftStickerItemListViewModel extends BaseAPIViewModel {
 
-    private ObservableInt isShowLoading = new ObservableInt(View.VISIBLE);
+    private ObservableInt isShowLoading = new ObservableInt(View.GONE);
     private ObservableInt isShowRetryView = new ObservableInt(View.GONE);
 
     private MutableLiveData<List<String>> loadData = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
     private SingleLiveEvent<String> goToBuyItemPage = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> goToShowDetailPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<StructIGSticker> goToShowDetailPage = new SingleLiveEvent<>();
 
-    private List<String> giftStickerList;
-
-    public GiftStickerItemListViewModel(){
-        isShowLoading.set(View.VISIBLE);
-        giftStickerList = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            giftStickerList.add(String.valueOf(i));
-        }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                isShowLoading.set(View.GONE);
-                loadData.setValue(giftStickerList);
-            }
-        },2000);
-    }
-
-    public void onCancelButtonClick(){
+    public void onCancelButtonClick() {
         goBack.setValue(true);
     }
 
-    public void onGiftStickerItemClicked(int position){
-        goToShowDetailPage.setValue(giftStickerList.get(position));
+    public void onGiftStickerItemClicked(StructIGSticker sticker) {
+        goToShowDetailPage.setValue(sticker);
     }
 
-    public void onRetryButtonClicked(){
+    public void onRetryButtonClicked() {
         isShowRetryView.set(View.GONE);
-        isShowLoading.set(View.VISIBLE);
+        isShowLoading.set(View.GONE);
     }
 
     public ObservableInt getIsShowLoading() {
@@ -72,7 +54,7 @@ public class GiftStickerItemListViewModel extends BaseAPIViewModel {
         return goToBuyItemPage;
     }
 
-    public SingleLiveEvent<String> getGoToShowDetailPage() {
+    public SingleLiveEvent<StructIGSticker> getGoToShowDetailPage() {
         return goToShowDetailPage;
     }
 }

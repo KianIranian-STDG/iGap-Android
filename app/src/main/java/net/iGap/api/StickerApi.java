@@ -1,5 +1,7 @@
 package net.iGap.api;
 
+import net.iGap.fragments.emoji.apiModels.Issue;
+import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategorisDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
@@ -8,6 +10,7 @@ import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -51,5 +54,11 @@ public interface StickerApi {
 
     @GET("gift/user-list")
     Single<UserGiftStickersDataModel> getUserGiftSticker();
+
+    @GET("gift/giftable-list")
+    Single<StickerCategoryGroupDataModel> getGiftableStickers();
+
+    @POST("gift/issue/{stickerId}")
+    Single<IssueDataModel> addIssue(@Path("stickerId") String stickerId, @Body Issue issue);
 
 }

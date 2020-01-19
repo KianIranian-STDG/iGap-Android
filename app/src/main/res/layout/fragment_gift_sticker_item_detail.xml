@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="net.iGap.fragments.giftStickers.GiftStickerItemDetailViewModel" />
+
+        <variable
+            name="stickerItem"
+            type="net.iGap.fragments.emoji.struct.StructIGSticker" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,10 +36,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
             android:padding="@dimen/dp8"
+            android:textSize="@dimen/dp20"
             app:layout_constraintBottom_toTopOf="@id/loadingView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/stickerView" />
+            app:layout_constraintTop_toBottomOf="@id/stickerView"
+            tools:text="@string/amount" />
 
         <ProgressBar
             android:id="@+id/loadingView"
@@ -57,7 +63,7 @@
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
             android:enabled="@{viewModel.isEnabledButton}"
-            android:onClick="@{()->viewModel.onPaymentButtonClicked()}"
+            android:onClick="@{()->viewModel.onPaymentButtonClicked(stickerItem)}"
             android:text="@string/payment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/cancelButton"

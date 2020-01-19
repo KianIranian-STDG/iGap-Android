@@ -14,10 +14,12 @@ import androidx.fragment.app.FragmentTransaction;
 import net.iGap.AccountManager;
 import net.iGap.R;
 import net.iGap.dialog.BaseBottomSheet;
-import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragment;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.GiftStickerItemDetailFragment;
 import net.iGap.fragments.giftStickers.GiftStickerItemListFragment;
 import net.iGap.fragments.giftStickers.GiftStickerPackageListFragment;
+import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragment;
 import net.iGap.helper.HelperWallet;
 import net.iGap.proto.ProtoWalletPaymentInit;
 
@@ -34,7 +36,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
     private boolean isWalletActive;
     private boolean isWalletRegister;
 
-    private MoneyTransferAction transferAction;
+    public Delegate delegate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,7 +126,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
 
     public void finishedCardToCard(String cardNum, String amountNum, String descriptionTv) {
         dismiss();
-        transferAction.cardToCardClicked(cardNum, amountNum, descriptionTv);
+        delegate.cardToCardClicked(cardNum, amountNum, descriptionTv);
 //                       cardToCardCallBack.onClick("6221-0612-1741-0739","10,000","سلام من ابوالفضلم بهممممممم پول بزن :)");
     }
 
@@ -186,21 +188,21 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadStickerPackageItemPage() {
+    public void loadStickerPackageItemPage(StructIGStickerGroup stickerGroup) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemListFragment)) {
-            fragment = new GiftStickerItemListFragment();
+            fragment = GiftStickerItemListFragment.getInstance(stickerGroup);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadStickerPackageItemDetailPage() {
+    public void loadStickerPackageItemDetailPage(StructIGSticker sticker) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemDetailFragment)) {
-            fragment = new GiftStickerItemDetailFragment();
+            fragment = GiftStickerItemDetailFragment.getInstance(sticker);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
@@ -210,12 +212,12 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         dismiss();
     }
 
-    public void setTransferAction(MoneyTransferAction transferAction) {
-        this.transferAction = transferAction;
+    public void setDelegate(Delegate delegate) {
+        this.delegate = delegate;
     }
 
-    public interface MoneyTransferAction {
-        void TransferAction();
+    public interface Delegate {
+        void onGiftStickerGetStartPayment(StructIGSticker structIGSticker, String paymentToke);
 
         void cardToCardClicked(String cardNum, String amountNum, String descriptionTv);
     }

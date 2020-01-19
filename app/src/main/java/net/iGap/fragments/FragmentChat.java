@@ -162,6 +162,7 @@ import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.remove.StickerSettingFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedBottomSheet;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -3605,9 +3606,57 @@ public class FragmentChat extends BaseFragment
                         bundle.putLong("roomId", mRoomId);
                         bundle.putLong("peerId", chatPeerId);
                         fragment.setArguments(bundle);
-                        fragment.setTransferAction(new ParentChatMoneyTransferFragment.MoneyTransferAction() {
+                        fragment.setDelegate(new ParentChatMoneyTransferFragment.Delegate() {
                             @Override
-                            public void TransferAction() {
+                            public void onGiftStickerGetStartPayment(StructIGSticker structIGSticker, String paymentToken) {
+
+                                if (paymentToken == null) {
+                                    Toast.makeText(getContext(), getString(R.string.wallet_error_server), Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        BuyGiftStickerCompletedBottomSheet bottomSheet = BuyGiftStickerCompletedBottomSheet.getInstance(structIGSticker);
+                                        bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
+                                            @Override
+                                            public void onNegativeButton(StructIGSticker structIGSticker) {
+                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                                            }
+
+                                            @Override
+                                            public void onPositiveButton(StructIGSticker structIGSticker) {
+                                                sendStickerAsMessage(structIGSticker);
+                                            }
+                                        });
+
+                                        bottomSheet.show(getActivity().getSupportFragmentManager(), null);
+                                    }
+                                }, 3000);
+
+                                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.cpay_title), paymentToken, result -> {
+                                    if (result.isSuccess()) {
+                                        Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
+
+                                        BuyGiftStickerCompletedBottomSheet bottomSheet = new BuyGiftStickerCompletedBottomSheet();
+                                        bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
+                                            @Override
+                                            public void onNegativeButton(StructIGSticker structIGSticker) {
+                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                                            }
+
+                                            @Override
+                                            public void onPositiveButton(StructIGSticker structIGSticker) {
+                                                sendStickerAsMessage(structIGSticker);
+                                            }
+                                        });
+
+                                        bottomSheet.show(getActivity().getSupportFragmentManager(), null);
+                                    } else {
+                                        Toast.makeText(getActivity(), getString(R.string.unsuccessful_payment), Toast.LENGTH_LONG).show();
+                                    }
+                                });
 
                             }
 

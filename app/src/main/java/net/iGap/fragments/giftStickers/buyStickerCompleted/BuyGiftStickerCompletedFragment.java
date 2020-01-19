@@ -13,8 +13,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentBuyGiftStickerComletedBinding;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 public class BuyGiftStickerCompletedFragment extends Fragment {
+    private StructIGSticker structIGSticker;
+    private BuyGiftStickerCompletedBottomSheet.Delegate delegate;
+
+    public static BuyGiftStickerCompletedFragment getInstance(StructIGSticker structIGSticker, BuyGiftStickerCompletedBottomSheet.Delegate delegate) {
+        BuyGiftStickerCompletedFragment completedFragment = new BuyGiftStickerCompletedFragment();
+        completedFragment.delegate = delegate;
+        completedFragment.structIGSticker = structIGSticker;
+        return completedFragment;
+    }
 
     private BuyGiftStickerCompletedViewModel viewModel;
     private FragmentBuyGiftStickerComletedBinding binding;
@@ -37,5 +47,24 @@ public class BuyGiftStickerCompletedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.stickerView.loadSticker(structIGSticker);
+
+        binding.negativeButton.setOnClickListener(v -> {
+            delegate.onNegativeButton(structIGSticker);
+            dismiss();
+        });
+
+        binding.positiveButton.setOnClickListener(v -> {
+            delegate.onPositiveButton(structIGSticker);
+            dismiss();
+        });
+
+    }
+
+    private void dismiss() {
+        if (getParentFragment() instanceof BuyGiftStickerCompletedBottomSheet) {
+            ((BuyGiftStickerCompletedBottomSheet) getParentFragment()).dismiss();
+        }
     }
 }

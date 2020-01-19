@@ -24,6 +24,8 @@ public class StickerDataModel {
     @Expose
     private long sort;
     @Expose
+    private long giftAmount;
+    @Expose
     private String status;
     @Expose
     private List<String> tags;
@@ -136,5 +138,13 @@ public class StickerDataModel {
 
     public boolean isFavorite() {
         return isFavorite;
+    }
+
+    public void setGiftAmount(long giftAmount) {
+        this.giftAmount = giftAmount;
+    }
+
+    public long getGiftAmount() {
+        return giftAmount;
     }
 }

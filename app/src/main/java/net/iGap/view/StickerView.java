@@ -60,6 +60,9 @@ public class StickerView extends FrameLayout implements EventListener {
         viewToken = token;
         viewType = type;
 
+        if (viewPath == null || viewToken == null)
+            return;
+
         if (stickerIv == null && type == StructIGSticker.ANIMATED_STICKER) {
             stickerIv = new AnimatedStickerCell(getContext());
             addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));

@@ -1,82 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="net.iGap.fragments.giftStickers.GiftStickerPackageListViewModel" />
-    </data>
-
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/pageTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:padding="@dimen/dp8"
+        android:text="@string/gift_sticker_title"
+        android:textColor="?attr/colorAccent"
+        android:textSize="@dimen/xlargeTextSize"
+        app:layout_constraintBottom_toTopOf="@id/giftStickerPackageList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintWidth_percent=".9" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/pageTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:padding="@dimen/dp8"
-            android:text="@string/gift_sticker_title"
-            android:textColor="?attr/colorAccent"
-            android:textSize="@dimen/xlargeTextSize"
-            app:layout_constraintBottom_toTopOf="@id/giftStickerPackageList"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintWidth_percent=".9" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/giftStickerPackageList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/dp8"
+        android:layout_weight="1"
+        android:minHeight="@dimen/dp48"
+        android:paddingStart="@dimen/dp16"
+        android:paddingEnd="@dimen/dp16"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/cancelButton"
+        app:layout_constraintEnd_toEndOf="@id/pageTitle"
+        app:layout_constraintStart_toStartOf="@id/pageTitle"
+        app:layout_constraintTop_toBottomOf="@id/pageTitle"
+        app:spanCount="3" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/giftStickerPackageList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/dp8"
-            android:layout_weight="1"
-            android:minHeight="@dimen/dp48"
-            android:paddingStart="@dimen/dp16"
-            android:paddingEnd="@dimen/dp16"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/cancelButton"
-            app:layout_constraintEnd_toEndOf="@id/pageTitle"
-            app:layout_constraintStart_toStartOf="@id/pageTitle"
-            app:layout_constraintTop_toBottomOf="@id/pageTitle"
-            app:spanCount="3" />
+    <ProgressBar
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp16" />
 
-        <ProgressBar
-            android:id="@+id/loadingView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp16"
-            android:layout_marginBottom="@dimen/dp16"
-            android:visibility="@{viewModel.isShowLoading}" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/retryView"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp16"
+        android:visibility="gone"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:text="@string/retry_icon" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp16"
-            android:layout_marginBottom="@dimen/dp16"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{()->viewModel.onRetryButtonClicked()}"
-            android:text="@string/retry_icon"
-            android:visibility="@{viewModel.isShowRetryView}" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancelButton"
+        style="@style/iGapOutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp16"
+        android:text="@string/cancel" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancelButton"
-            style="@style/iGapButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp32"
-            android:layout_marginEnd="@dimen/dp32"
-            android:layout_marginBottom="@dimen/dp16"
-            android:onClick="@{()->viewModel.onCancelButtonClick()}"
-            android:text="@string/cancel" />
-
-    </LinearLayout>
-</layout>
+</LinearLayout>

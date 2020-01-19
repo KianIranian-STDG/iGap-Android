@@ -32,8 +32,6 @@ public class StickerGroupDataModel {
     @Expose
     private long price;
     @Expose
-    private long refId;
-    @Expose
     private int sort;
     @Expose
     private String status;
@@ -142,14 +140,6 @@ public class StickerGroupDataModel {
 
     public void setPrice(long price) {
         this.price = price;
-    }
-
-    public long getRefId() {
-        return refId;
-    }
-
-    public void setRefId(long refId) {
-        this.refId = refId;
     }
 
     public int getSort() {

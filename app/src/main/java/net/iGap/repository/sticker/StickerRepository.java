@@ -8,6 +8,9 @@ import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.fragments.emoji.apiModels.Issue;
+import net.iGap.fragments.emoji.apiModels.IssueDataModel;
+import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
@@ -166,6 +169,14 @@ public class StickerRepository {
 
     private Single<UserGiftStickersDataModel> getUserGiftStickerApiService() {
         return stickerApi.getUserGiftSticker().subscribeOn(Schedulers.newThread());
+    }
+
+    private Single<StickerCategoryGroupDataModel> getGiftableStickersApi() {
+        return stickerApi.getGiftableStickers().subscribeOn(Schedulers.newThread());
+    }
+
+    private Single<IssueDataModel> addIssueApiService(String stickerId, Issue issue) {
+        return stickerApi.addIssue(stickerId, issue).subscribeOn(Schedulers.newThread());
     }
 
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
@@ -405,6 +416,19 @@ public class StickerRepository {
         return getUserGiftStickerApiService();
     }
 
+    public Single<List<StructIGStickerGroup>> getGiftableStickers() {
+        return getGiftableStickersApi()
+                .map(dataModel -> {
+                    List<StructIGStickerGroup> groups = new ArrayList<>();
+                    for (int i = 0; i < dataModel.getData().size(); i++) {
+                        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(dataModel.getData().get(i));
+                        groups.add(stickerGroup);
+                    }
+                    return groups;
+                });
+    }
 
-
+    public Single<IssueDataModel> addIssue(String stickerId, Issue issue) {
+        return addIssueApiService(stickerId, issue);
+    }
 }

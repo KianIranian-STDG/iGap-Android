@@ -14,8 +14,22 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.databinding.FragmentGiftStickerItemDetailBinding;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.helper.HelperCalander;
+
+import java.text.DecimalFormat;
 
 public class GiftStickerItemDetailFragment extends Fragment {
+    private StructIGSticker sticker;
+
+    private GiftStickerItemDetailFragment() {
+    }
+
+    public static GiftStickerItemDetailFragment getInstance(StructIGSticker structIGSticker) {
+        GiftStickerItemDetailFragment detailFragment = new GiftStickerItemDetailFragment();
+        detailFragment.sticker = structIGSticker;
+        return detailFragment;
+    }
 
     private GiftStickerItemDetailViewModel viewModel;
     private FragmentGiftStickerItemDetailBinding binding;
@@ -32,12 +46,30 @@ public class GiftStickerItemDetailFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gift_sticker_item_detail, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        binding.setStickerItem(sticker);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.stickerView.loadSticker(sticker);
+
+        DecimalFormat df = new DecimalFormat("#,###");
+        binding.stickerPrice.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(sticker.getGiftAmount()))) : df.format(Double.valueOf(sticker.getGiftAmount()))) + " " + getResources().getString(R.string.rial));
+
+        viewModel.getGetPaymentLiveData().observe(getViewLifecycleOwner(), token -> {
+
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).dismissDialog();
+            }
+
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).delegate.onGiftStickerGetStartPayment(sticker, token);
+            }
+
+        });
 
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && isGoBack != null && isGoBack) {

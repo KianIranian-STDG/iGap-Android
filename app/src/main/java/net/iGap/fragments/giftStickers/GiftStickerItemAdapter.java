@@ -8,23 +8,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.view.StickerView;
 
 import java.util.List;
 
 public class GiftStickerItemAdapter extends RecyclerView.Adapter<GiftStickerItemAdapter.ViewHolder> {
 
-    private List<String> items;
-    private BottomSheetItemClickCallback callback;
+    private List<StructIGSticker> items;
+    private Delegate delegate;
 
-    public GiftStickerItemAdapter(BottomSheetItemClickCallback callback){
-        this.callback = callback;
-    }
-
-    public void setItems(List<String> items) {
+    public GiftStickerItemAdapter(Delegate delegate, List<StructIGSticker> items) {
+        this.delegate = delegate;
         this.items = items;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -35,7 +31,7 @@ public class GiftStickerItemAdapter extends RecyclerView.Adapter<GiftStickerItem
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.itemView.setOnClickListener(v -> callback.onClick(holder.getAdapterPosition()));
+        holder.bindView(items.get(position));
     }
 
     @Override
@@ -49,8 +45,16 @@ public class GiftStickerItemAdapter extends RecyclerView.Adapter<GiftStickerItem
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             stickerView = itemView.findViewById(R.id.stickerItem);
         }
+
+        public void bindView(StructIGSticker structIGSticker) {
+            stickerView.loadSticker(structIGSticker, true);
+            itemView.setOnClickListener(v -> delegate.onItemClick(structIGSticker));
+        }
+    }
+
+    public interface Delegate {
+        void onItemClick(StructIGSticker structIGSticker);
     }
 }
