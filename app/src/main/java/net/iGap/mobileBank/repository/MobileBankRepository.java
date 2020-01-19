@@ -11,6 +11,7 @@ import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
+import net.iGap.mobileBank.repository.model.ChequeModel;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class MobileBankRepository {
     private static MobileBankRepository instance ;
     private MobileBankApi bankApi = new RetrofitFactory().getMobileBankRetrofit();
     private String accessToken;
+    private static String TOKEN_PREFIX = "Bearer  ";
 
     private MobileBankRepository() {
         //use instance
@@ -38,6 +40,10 @@ public class MobileBankRepository {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankCardModel>>>().initAPI(bankApi.getUserCards(getAccessToken() ,null, null, null, null), callback, responseCallback);
     }
 
+    public void getChequeList(String deposit , MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<ChequeModel>>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<ChequeModel>>>().initAPI(bankApi.getCheques(getAccessToken() , deposit), callback, responseCallback);
+    }
+
     public void getMobileBankAccounts(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankAccountModel>>>().initAPI(bankApi.getUserDeposits(getAccessToken() , null), callback, responseCallback);
     }
@@ -47,7 +53,7 @@ public class MobileBankRepository {
     }
 
     public String getAccessToken() {
-        return "Bearer  " + accessToken;
+        return TOKEN_PREFIX + accessToken;
     }
 
     public void setAccessToken(String token) {

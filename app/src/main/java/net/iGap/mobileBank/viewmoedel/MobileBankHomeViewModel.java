@@ -14,16 +14,11 @@ import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
-import net.iGap.module.SingleLiveEvent;
 
 import java.util.List;
 
 public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
 
-    public SingleLiveEvent<Boolean> onMoneyTransferListener = new SingleLiveEvent<>();
-    public SingleLiveEvent<Boolean> onTempPassListener = new SingleLiveEvent<>();
-    public SingleLiveEvent<Boolean> onShebaListener = new SingleLiveEvent<>();
-    public SingleLiveEvent<Boolean> onTransactionListener = new SingleLiveEvent<>();
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
     private MutableLiveData<BankShebaModel> shebaListener = new MutableLiveData<>();
@@ -124,22 +119,6 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     public void onTabsClick(boolean isCards) {
         isCardsMode.set(isCards);
         onTabChangeListener.setValue(isCards);
-    }
-
-    public void OnTransferMoneyClicked() {
-        onMoneyTransferListener.setValue(true);
-    }
-
-    public void OnTransactionsClicked() {
-        onTransactionListener.setValue(true);
-    }
-
-    public void OnTemporaryPassClicked() {
-        onTempPassListener.postValue(true);
-    }
-
-    public void OnShebaClicked() {
-        onShebaListener.setValue(true);
     }
 
     public MutableLiveData<List<BankAccountModel>> getAccountsData() {

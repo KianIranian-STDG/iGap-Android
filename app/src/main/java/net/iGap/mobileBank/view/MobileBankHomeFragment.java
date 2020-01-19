@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
@@ -76,36 +74,23 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
         viewModel.getCardsData().observe(getViewLifecycleOwner(), this::saveCardsTodb);
         viewModel.getAccountsData().observe(getViewLifecycleOwner(), this::setupAccounts);
 
-        viewModel.onShebaListener.observe(getViewLifecycleOwner(), state -> {
+        binding.btnTakeSheba.setOnClickListener(v -> onShebaClicked());
 
-            if (state != null && state && getActivity() != null) {
-                mDialogWait = new DialogParsian()
-                        .setContext(getActivity())
-                        .setTitle(getString(R.string.please_wait) + "..")
-                        .setButtonsText(null, getString(R.string.cancel))
-                        .setListener(new DialogParsian.ParsianDialogListener() {
-                            @Override
-                            public void onDeActiveButtonClicked(Dialog dialog) {
-                                mDialogWait.dismiss();
-                            }
-                        });
-                mDialogWait.showLoaderDialog(false);
-                viewModel.getShebaNumber(getCurrentAccount());
-            }
+        binding.btnMoneyTransfer.setOnClickListener(v -> onTransferMoneyClicked());
 
-        });
+        binding.btnTransactions.setOnClickListener(v -> onTransactionsClicked());
 
-        viewModel.getShebaListener().observe(getViewLifecycleOwner() , bankShebaModel -> {
+        viewModel.getShebaListener().observe(getViewLifecycleOwner(), bankShebaModel -> {
             mDialogWait.dismiss();
-            if (bankShebaModel != null){
+            if (bankShebaModel != null) {
                 new DialogParsian()
                         .setContext(getActivity())
                         .setTitle(getString(R.string.sheba_number))
-                        .setButtonsText(getString(R.string. copy_item_dialog), getString(R.string.cancel))
+                        .setButtonsText(getString(R.string.copy_item_dialog), getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
                             public void onActiveButtonClicked(Dialog dialog) {
-                                if (getActivity() != null){
+                                if (getActivity() != null) {
                                     ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
                                     ClipData clip = ClipData.newPlainText("Copied Sheba", bankShebaModel.getSheba());
                                     clipboard.setPrimaryClip(clip);
@@ -121,38 +106,6 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
             }
         });
 
-        viewModel.onMoneyTransferListener.observe(getViewLifecycleOwner(), state -> {
-
-            if (state != null && state && getActivity() != null) {
-                new DialogParsian()
-                        .setContext(getActivity())
-                        .setTitle(getString(R.string.transfer_mony))
-                        .setButtonsText(getString(R.string.ok), getString(R.string.cancel))
-                        .setListener(new DialogParsian.ParsianDialogListener() {
-                            @Override
-                            public void onActiveButtonClicked(Dialog dialog) {
-
-                            }
-
-                            @Override
-                            public void onTransferMoneyTypeSelected(Dialog dialog, String type) {
-                                dialog.dismiss();
-                            }
-                        }).showMoneyTransferDialog();
-            }
-
-        });
-
-        viewModel.onTransactionListener.observe(getViewLifecycleOwner(), state -> {
-
-            if (state != null && state && getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment())
-                        .setReplace(false)
-                        .load();
-            }
-
-        });
-
         int textStyleOn, textStyleOff;
         textStyleOff = Theme.getInstance().getSubTitleColor(binding.lblPassword.getContext());
         textStyleOn = Theme.getInstance().getPrimaryTextIconColor(binding.lblPassword.getContext());
@@ -162,25 +115,80 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                 if (isCardsEnable) {
                     binding.lblPassword.setTextColor(textStyleOn);
                     binding.icPassword.setTextColor(textStyleOn);
-                    binding.lblSheba.setTextColor(textStyleOn);
-                    binding.icSheba.setTextColor(textStyleOn);
+                    binding.lblCheque.setTextColor(textStyleOff);
+                    binding.icCheque.setTextColor(textStyleOff);
+                    binding.lblFacilities.setTextColor(textStyleOff);
+                    binding.icFacilities.setTextColor(textStyleOff);
                 } else {
                     binding.lblPassword.setTextColor(textStyleOff);
                     binding.icPassword.setTextColor(textStyleOff);
-                    binding.lblSheba.setTextColor(textStyleOff);
-                    binding.icSheba.setTextColor(textStyleOff);
+                    binding.lblCheque.setTextColor(textStyleOn);
+                    binding.icCheque.setTextColor(textStyleOn);
+                    binding.lblFacilities.setTextColor(textStyleOn);
+                    binding.icFacilities.setTextColor(textStyleOn);
                 }
             }
         });
     }
 
+    private void onTransferMoneyClicked() {
+
+        if (getActivity() != null) {
+            new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.transfer_mony))
+                    .setButtonsText(getString(R.string.ok), getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onActiveButtonClicked(Dialog dialog) {
+
+                        }
+
+                        @Override
+                        public void onTransferMoneyTypeSelected(Dialog dialog, String type) {
+                            dialog.dismiss();
+                        }
+                    }).showMoneyTransferDialog();
+        }
+
+    }
+
+    private void onTransactionsClicked() {
+
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment())
+                    .setReplace(false)
+                    .load();
+        }
+
+    }
+
+    private void onShebaClicked() {
+
+        if (getActivity() != null) {
+            mDialogWait = new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.please_wait) + "..")
+                    .setButtonsText(null, getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onDeActiveButtonClicked(Dialog dialog) {
+                            mDialogWait.dismiss();
+                        }
+                    });
+            mDialogWait.showLoaderDialog(false);
+            viewModel.getShebaNumber(getCurrentAccount());
+        }
+
+    }
+
     private String getCurrentAccount() {
-        if (viewModel.cards != null && viewModel.cards.size() > 0){
+        if (viewModel.cards != null && viewModel.cards.size() > 0) {
             int current = binding.vpCards.getCurrentItem();
-            if (current < viewModel.cards.size()){
+            if (current < viewModel.cards.size()) {
                 return viewModel.cards.get(current).getPan();
             }
-        }else {
+        } else {
             Toast.makeText(getActivity(), R.string.no_item_selected, Toast.LENGTH_SHORT).show();
         }
         return null;
@@ -208,13 +216,13 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
         binding.toolbar.addView(toolbar.getView());
     }
 
-    private void setupAccounts(List<BankAccountModel> accountModels){
+    private void setupAccounts(List<BankAccountModel> accountModels) {
 
         if (accountModels == null) return;
 
         BankAccountAdapter adapter = new BankAccountAdapter();
         adapter.setItems(accountModels);
-        binding.rvAccounts.setLayoutManager(new LinearLayoutManager(binding.rvAccounts.getContext() , LinearLayoutManager.HORIZONTAL , false));
+        binding.rvAccounts.setLayoutManager(new LinearLayoutManager(binding.rvAccounts.getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvAccounts.setAdapter(adapter);
     }
 

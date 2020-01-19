@@ -4,6 +4,7 @@ import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
+import net.iGap.mobileBank.repository.model.ChequeModel;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
 import java.util.List;
@@ -37,5 +38,10 @@ public interface MobileBankApi {
     @FormUrlEncoded
     Call<BaseMobileBankResponse<BankShebaModel>> getShebaNumber(@Header ("Authorization") String token ,
                                                                @Field("pan") String cardNumber);
+
+    @POST("cheque/get-cheque-book-list")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<ChequeModel>>> getCheques(@Header ("Authorization") String token ,
+                                                               @Field("deposit_number") String depositNumber);
 
 }

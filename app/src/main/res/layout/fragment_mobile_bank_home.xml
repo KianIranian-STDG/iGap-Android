@@ -188,10 +188,9 @@
                 <LinearLayout
                     android:id="@+id/btnMoneyTransfer"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/toolbar_height"
+                    android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:onClick="@{()-> vm.OnTransferMoneyClicked()}"
                     app:layout_constraintVertical_chainStyle="packed"
                     app:layout_constraintTop_toBottomOf="@id/lytItems"
                     app:layout_constraintEnd_toStartOf="@id/btnTransactions"
@@ -205,68 +204,103 @@
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
                         style="@style/primaryIconTextViewStyle"
+                        android:textSize="@dimen/standardTextSize"
                         android:text="@string/wallet_icon" />
 
                     <TextView
-                        android:textSize="@dimen/standardTextSize"
+                        android:textSize="@dimen/verySmallTextSize"
                         android:textColor="?iGapPrimaryIconTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/transfer_mony"
                         android:textStyle="bold"
                         android:singleLine="true"
-                        android:layout_marginLeft="@dimen/dp6"
-                        android:layout_marginRight="@dimen/dp6" />
+                        android:layout_marginLeft="@dimen/dp2"
+                        android:layout_marginRight="@dimen/dp2" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btnTransactions"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:layout_constraintEnd_toEndOf="@id/lytItems"
+                    android:layout_height="@dimen/dp48"
+                    app:layout_constraintEnd_toStartOf="@id/btnTakeSheba"
                     app:layout_constraintStart_toEndOf="@id/btnMoneyTransfer"
                     app:layout_constraintTop_toTopOf="@id/btnMoneyTransfer"
-                    android:layout_marginLeft="@dimen/dp16"
-                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:onClick="@{()->vm.OnTransactionsClicked()}"
                     android:background="@drawable/shape_round_stroke">
 
                     <TextView
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
                         style="@style/primaryIconTextViewStyle"
+                        android:textSize="@dimen/standardTextSize"
                         android:text="@string/wallet_icon" />
 
                     <TextView
-                        android:textSize="@dimen/standardTextSize"
+                        android:textSize="@dimen/smallTextSize"
                         android:textColor="?iGapPrimaryIconTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/transactions"
                         android:textStyle="bold"
                         android:singleLine="true"
-                        android:layout_marginLeft="@dimen/dp6"
-                        android:layout_marginRight="@dimen/dp6" />
+                        android:layout_marginLeft="@dimen/dp2"
+                        android:layout_marginRight="@dimen/dp2" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnTakeSheba"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    app:layout_constraintEnd_toEndOf="@id/lytItems"
+                    app:layout_constraintStart_toEndOf="@id/btnTransactions"
+                    app:layout_constraintTop_toTopOf="@id/btnMoneyTransfer"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:gravity="center"
+                    android:background="@drawable/shape_round_stroke">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/icSheba"
+                        android:layout_width="@dimen/dp28"
+                        android:layout_height="@dimen/dp28"
+                        android:textColor="?iGapPrimaryIconTextColor"
+                        android:fontFamily="@font/font_icon"
+                        app:fontFamily="@font/font_icon"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
+                        android:text="@string/wallet_icon" />
+
+                    <TextView
+                        android:id="@+id/lblSheba"
+                        android:textSize="@dimen/verySmallTextSize"
+                        android:textColor="?iGapPrimaryIconTextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sheba_number"
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:layout_marginLeft="@dimen/dp2"
+                        android:layout_marginRight="@dimen/dp2" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btnTemporaryPass"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:layout_constraintEnd_toStartOf="@id/btnTakeSheba"
+                    android:layout_height="@dimen/dp48"
+                    app:layout_constraintEnd_toStartOf="@id/btnCheque"
                     app:layout_constraintStart_toStartOf="@id/btnMoneyTransfer"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnMoneyTransfer"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginBottom="@dimen/dp16"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:clickable="@{vm.isCardsMode}"
-                    android:onClick="@{()->vm.OnTemporaryPassClicked()}"
                     android:background="@{vm.isCardsMode ? @drawable/shape_round_stroke : @drawable/shape_gray_round_stroke , default= @drawable/shape_round_stroke}">
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -276,60 +310,96 @@
                         android:textColor="?iGapPrimaryIconTextColor"
                         android:fontFamily="@font/font_icon"
                         app:fontFamily="@font/font_icon"
-                        android:layout_gravity="center"
-                        android:textSize="@dimen/dp22"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
                         android:text="@string/wallet_icon" />
 
                     <TextView
                         android:id="@+id/lblPassword"
-                        android:textSize="@dimen/smallTextSize"
+                        android:textSize="@dimen/verySmallTextSize"
                         android:textColor="?iGapPrimaryIconTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/temporary_password"
                         android:singleLine="true"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/btnCheque"
+                    android:layout_width="0dp"
+                    android:clickable="@{!vm.isCardsMode}"
+                    android:layout_height="@dimen/dp48"
+                    app:layout_constraintEnd_toStartOf="@id/btnFacilities"
+                    app:layout_constraintStart_toEndOf="@id/btnTemporaryPass"
+                    app:layout_constraintTop_toTopOf="@id/btnTemporaryPass"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:gravity="center"
+                    android:background="@{vm.isCardsMode ? @drawable/shape_gray_round_stroke : @drawable/shape_round_stroke , default= @drawable/shape_gray_round_stroke}">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/icCheque"
+                        android:layout_width="@dimen/dp28"
+                        android:layout_height="@dimen/dp28"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:fontFamily="@font/font_icon"
+                        app:fontFamily="@font/font_icon"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
+                        android:text="@string/wallet_icon" />
+
+                    <TextView
+                        android:id="@+id/lblCheque"
+                        android:textSize="@dimen/smallTextSize"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cheque"
                         android:textStyle="bold"
-                        android:layout_marginLeft="@dimen/dp6"
-                        android:layout_marginRight="@dimen/dp6" />
+                        android:singleLine="true"
+                        android:layout_marginLeft="@dimen/dp2"
+                        android:layout_marginRight="@dimen/dp2" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btnTakeSheba"
+                    android:id="@+id/btnFacilities"
                     android:layout_width="0dp"
-                    android:clickable="@{vm.isCardsMode}"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:layout_constraintEnd_toEndOf="@id/btnTransactions"
-                    app:layout_constraintStart_toEndOf="@id/btnTemporaryPass"
+                    android:clickable="@{!vm.isCardsMode}"
+                    android:layout_height="@dimen/dp48"
+                    app:layout_constraintEnd_toEndOf="@id/lytItems"
+                    app:layout_constraintStart_toEndOf="@id/btnCheque"
                     app:layout_constraintTop_toTopOf="@id/btnTemporaryPass"
-                    android:layout_marginLeft="@dimen/dp16"
-                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
                     android:gravity="center"
-                    android:onClick="@{()->vm.OnShebaClicked()}"
-                    android:background="@{vm.isCardsMode ? @drawable/shape_round_stroke : @drawable/shape_gray_round_stroke , default= @drawable/shape_round_stroke}">
+                    android:background="@{vm.isCardsMode ? @drawable/shape_gray_round_stroke : @drawable/shape_round_stroke , default= @drawable/shape_gray_round_stroke}">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/icSheba"
+                        android:id="@+id/icFacilities"
                         android:layout_width="@dimen/dp28"
                         android:layout_height="@dimen/dp28"
-                        android:textColor="?iGapPrimaryIconTextColor"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:fontFamily="@font/font_icon"
                         app:fontFamily="@font/font_icon"
-                        android:layout_gravity="center"
-                        android:textSize="@dimen/dp22"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
                         android:text="@string/wallet_icon" />
 
                     <TextView
-                        android:id="@+id/lblSheba"
-                        android:textSize="@dimen/standardTextSize"
-                        android:textColor="?iGapPrimaryIconTextColor"
+                        android:id="@+id/lblFacilities"
+                        android:textSize="@dimen/smallTextSize"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sheba_number"
+                        android:text="@string/facilities"
                         android:textStyle="bold"
                         android:singleLine="true"
-                        android:layout_marginLeft="@dimen/dp6"
-                        android:layout_marginRight="@dimen/dp6" />
+                        android:layout_marginLeft="@dimen/dp2"
+                        android:layout_marginRight="@dimen/dp2" />
 
                 </LinearLayout>
 

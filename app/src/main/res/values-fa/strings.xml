@@ -2346,4 +2346,6 @@
     <string name="get_temporary_password">دریافت رمز پویا</string>
     <string name="kuknos_soon_error">مبادله توکن ها به زودی فعال میشود.</string>
     <string name="accounts">حساب ها</string>
+    <string name="cheque">چک</string>
+    <string name="facilities">تسهیلات</string>
 </resources>
