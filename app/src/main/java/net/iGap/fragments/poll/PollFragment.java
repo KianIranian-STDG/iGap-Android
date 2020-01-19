@@ -160,9 +160,7 @@ public class PollFragment extends BaseFragment {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
                         setAdapterData(pollArrayList, title);
-
                         setRefreshing(false);
                     }
                 });

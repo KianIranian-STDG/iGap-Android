@@ -46,6 +46,7 @@ import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
+import net.iGap.fragments.poll.ChartFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
@@ -314,7 +315,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case NONE:
                 break;
             case POLL:
-                new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
+                ChartFragment fragment = new ChartFragment();
+                Bundle b = new Bundle();
+                b.putInt("pollId",Integer.valueOf(discoveryField.value));
+                fragment.setArguments(b);
+                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
+                /*new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();*/
                 break;
             case UNRECOGNIZED:
                 break;

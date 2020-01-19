@@ -46,9 +46,8 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.labels = null;
         this.barEntries = null;
     }
-
+/*
     public void addChatToEnd(String[] labels, ArrayList<BarEntry> barEntries, long sum) {
-
         //convert to percent
         for (int i = 0; i < barEntries.size(); i++) {
             barEntries.get(i).setY((barEntries.get(i).getY() * 100) / sum);
@@ -56,13 +55,12 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         this.labels = labels;
         this.barEntries = barEntries;
-    }
-
+    }*/
     public void notifyChangeData() {
         this.notifyDataSetChanged();
-        showChart();
+        /*showChart();*/
     }
-
+/*
     private void showChart() {
         ArrayList<String> labels = new ArrayList<>();
         ArrayList<BarEntry> barValue = new ArrayList<>();
@@ -95,15 +93,15 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public List<PollItem> getData() {
         return this.pollList;
-    }
+    }*/
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         switch (i) {
-            case -1:
-                return new TypeChartViewHolder(this, layoutInflater.inflate(R.layout.item_poll_chart, viewGroup, false));
+            /*case -1:
+                return new TypeChartViewHolder(this, layoutInflater.inflate(R.layout.item_poll_chart, viewGroup, false));*/
             case 1:
                 return new Type1ViewHolder(this, layoutInflater.inflate(R.layout.item_poll_1, viewGroup, false));
             case 2:
@@ -147,9 +145,9 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (pollList.size() == position) {
+        /*if (pollList.size() == position) {
             return -1;
-        }
+        }*/
 
         return pollList.get(position).model + 1;
     }

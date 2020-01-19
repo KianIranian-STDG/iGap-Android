@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.github.mikephil.charting.charts.BarChart xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/type8_chart0"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="30dp"
-    android:layout_marginTop="@dimen/discovery_margin"
-    android:layout_marginRight="@dimen/discovery_margin"
-    android:layout_marginLeft="@dimen/discovery_margin"
-    android:minHeight="@dimen/dp300" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/chart_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/sweep"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="30dp">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/type8_chart0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/discovery_margin"
+            android:layout_marginTop="@dimen/discovery_margin"
+            android:layout_marginRight="@dimen/discovery_margin"
+            android:layout_marginBottom="30dp"
+            android:minHeight="@dimen/dp300" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

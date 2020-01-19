@@ -1834,5 +1834,6 @@
     <string name="delete_from_storage">Удалить из хранилища</string>
     <string name="map_registration_enable">Включить видимость поблизости</string>
     <string name="need_browser">Требуется браузер для использования.</string>
+    <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
 
 </resources>
