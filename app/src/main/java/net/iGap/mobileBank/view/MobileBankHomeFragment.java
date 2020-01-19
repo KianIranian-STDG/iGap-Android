@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
 
     private FragmentMobileBankHomeBinding binding;
     private DialogParsian mDialogWait;
+    private static String TAG = "NazariSheba";
 
     public MobileBankHomeFragment() {
     }
@@ -79,7 +81,7 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
             if (state != null && state && getActivity() != null) {
                 mDialogWait = new DialogParsian()
                         .setContext(getActivity())
-                        .setTitle(getString(R.string.please_wait))
+                        .setTitle(getString(R.string.please_wait) + "..")
                         .setButtonsText(null, getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
@@ -88,6 +90,7 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                             }
                         });
                 mDialogWait.showLoaderDialog(false);
+                viewModel.getShebaNumber(getCurrentAccount());
             }
 
         });
@@ -97,8 +100,8 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
             if (bankShebaModel != null){
                 new DialogParsian()
                         .setContext(getActivity())
-                        .setTitle(getString(R.string.please_wait) + "..")
-                        .setButtonsText(getString(R.string.copy), getString(R.string.cancel))
+                        .setTitle(getString(R.string.sheba_number))
+                        .setButtonsText(getString(R.string. copy_item_dialog), getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
                             public void onActiveButtonClicked(Dialog dialog) {
@@ -138,12 +141,6 @@ public class MobileBankHomeFragment extends BaseMobileBankFragment<MobileBankHom
                         }).showMoneyTransferDialog();
             }
 
-        });
-
-        viewModel.onShebaListener.observe(getViewLifecycleOwner() , state->{
-            if (state != null && state){
-                viewModel.getShebaNumber(getCurrentAccount());
-            }
         });
 
         viewModel.onTransactionListener.observe(getViewLifecycleOwner(), state -> {

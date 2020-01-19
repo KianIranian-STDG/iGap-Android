@@ -105,7 +105,7 @@ public class DialogParsian {
 
         initDialog();
         ProgressBar progressBar = new ProgressBar(mContext);
-        mContentLayout.addView(progressBar, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 12f, 12f, 12f, 12f));
+        mContentLayout.addView(progressBar, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 12f, 2f, 12f, 2f));
         mDialog.setCancelable(cancelable);
         mDialog.show();
     }

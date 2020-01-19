@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.R;
 import net.iGap.api.apiService.ResponseCallback;
@@ -73,7 +74,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
-                        Log.e("NazariToken" , data.getData().getAccessToken());
+                        if (BuildConfig.DEBUG) Log.e("NazariToken" , data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
                         onLoginResponse.postValue(data.getData().getName());
                     }

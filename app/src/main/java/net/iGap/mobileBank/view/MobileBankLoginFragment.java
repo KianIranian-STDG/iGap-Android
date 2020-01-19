@@ -123,6 +123,6 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
 
     @Override
     public boolean onBackPressed() {
-        return true;
+        return false;
     }
 }

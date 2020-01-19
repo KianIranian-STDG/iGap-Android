@@ -1,11 +1,13 @@
 package net.iGap.mobileBank.viewmoedel;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.BuildConfig;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
@@ -90,6 +92,7 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
     }
 
     public void getShebaNumber(String cardNumber){
+        if (BuildConfig.DEBUG) Log.e("NazariSheba" , cardNumber);
         if (cardNumber == null){
             shebaListener.postValue(null);
             return;
@@ -98,6 +101,7 @@ public class MobileBankHomeViewModel extends BaseMobileBankViewModel {
             @Override
             public void onSuccess(BaseMobileBankResponse<BankShebaModel> data) {
                 shebaListener.postValue(data.getData());
+                if (BuildConfig.DEBUG) Log.e("NazariSheba" , data.getData().getSheba());
             }
 
             @Override
