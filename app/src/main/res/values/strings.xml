@@ -2403,5 +2403,5 @@ Want to get it?</string>
     <string name="two_step_verficatiion_header">You have enabled Two-Step verification; so your account is protected with an additional password</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
-
+    <string name="install_latest_version">Install the latest version to use this feature</string>
 </resources>

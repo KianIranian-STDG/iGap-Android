@@ -2338,5 +2338,6 @@
     <string name="kuknos_buyP_btn_server3">دریافت داده...</string>
     <string name="kuknos_login_email_str">ایمیل</string>
     <string name="kuknos_login_name_str">نام</string>
+    <string name="install_latest_version">برای استفاده از این ویژگی آخرین نسخه را نصب کنید</string>
     <string name="kuknos_soon_error">مبادله توکن ها به زودی فعال میشود.</string>
 </resources>
