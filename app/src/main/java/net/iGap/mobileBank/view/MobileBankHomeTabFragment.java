@@ -231,7 +231,11 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                         }
                     });
             mDialogWait.showLoaderDialog(false);
-            viewModel.getShebaNumber(getCurrentAccount());
+            if (mode == HomeTabMode.CARD){
+                viewModel.getShebaNumber(getCurrentAccount());
+            }else if(mode == HomeTabMode.DEPOSIT){
+                viewModel.getShebaNumberByDeposit(getCurrentAccount());
+            }
         }
 
     }

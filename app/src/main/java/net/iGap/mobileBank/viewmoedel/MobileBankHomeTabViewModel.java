@@ -3,7 +3,6 @@ package net.iGap.mobileBank.viewmoedel;
 import android.util.Log;
 import android.view.View;
 
-import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,9 +11,11 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.view.MobileBankHomeTabFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
@@ -23,9 +24,6 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
     private MutableLiveData<List<String>> shebaListener = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
-    public MutableLiveData<Boolean> onTabChangeListener = new MutableLiveData<>();
-    public ObservableBoolean isCardsMode = new ObservableBoolean(true);
-
     public List<BankCardModel> cards;
     public List<BankAccountModel> accounts;
     private MobileBankHomeTabFragment.HomeTabMode mMode;
@@ -113,13 +111,34 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
     public void onRetryClicked() {
         if (mMode == MobileBankHomeTabFragment.HomeTabMode.CARD) {
             getCardsByApi();
-        }else if (mMode == MobileBankHomeTabFragment.HomeTabMode.DEPOSIT) {
+        } else if (mMode == MobileBankHomeTabFragment.HomeTabMode.DEPOSIT) {
             getDepositsByApi();
-        }  }
+        }
+    }
 
-    public void onTabsClick(boolean isCards) {
-        isCardsMode.set(isCards);
-        onTabChangeListener.setValue(isCards);
+    public void getShebaNumberByDeposit(String deposit) {
+        if (deposit == null) {
+            shebaListener.postValue(null);
+            return;
+        }
+        MobileBankRepository.getInstance().getShebaNumberByDeposit(deposit, this, new ResponseCallback<BaseMobileBankResponse<BankShebaModel>>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse<BankShebaModel> data) {
+                List<String> shebaList = new ArrayList<>();
+                shebaList.add(data.getData().getSheba());
+                shebaListener.postValue(shebaList);
+            }
+
+            @Override
+            public void onError(String error) {
+                shebaListener.postValue(null);
+            }
+
+            @Override
+            public void onFailed() {
+                shebaListener.postValue(null);
+            }
+        });
     }
 
     public MutableLiveData<List<BankAccountModel>> getAccountsData() {
@@ -142,9 +161,9 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         mMode = mode;
         if (mode == MobileBankHomeTabFragment.HomeTabMode.CARD) {
             getCardsByApi();
-        }else if (mode == MobileBankHomeTabFragment.HomeTabMode.DEPOSIT) {
+        } else if (mode == MobileBankHomeTabFragment.HomeTabMode.DEPOSIT) {
             getDepositsByApi();
-        }else {
+        } else {
             showLoading.set(View.GONE);
             showRetry.set(View.GONE);
         }
