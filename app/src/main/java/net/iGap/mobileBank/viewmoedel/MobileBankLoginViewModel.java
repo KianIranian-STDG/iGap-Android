@@ -31,7 +31,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
 
     private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
     private ObservableBoolean isEnableButton = new ObservableBoolean(true);
-    private SingleLiveEvent<String> onLoginResponse = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> onLoginResponse = new SingleLiveEvent<>();
 
     private MobileBankRepository repository;
     private static final String TAG = "MobileBankLoginViewMode";
@@ -76,7 +76,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                         setLoaderState(false);
                         if (BuildConfig.DEBUG) Log.e("NazariToken" , data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
-                        onLoginResponse.postValue(data.getData().getName());
+                        onLoginResponse.postValue(true);
                     }
 
                     @Override
@@ -106,7 +106,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
         return isEnableButton;
     }
 
-    public SingleLiveEvent<String> getOnLoginResponse() {
+    public SingleLiveEvent<Boolean> getOnLoginResponse() {
         return onLoginResponse;
     }
 

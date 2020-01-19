@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.iGap.mobileBank.viewmoedel.MobileBankHomeTabViewModel" />
+    </data>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/IGapRootViewStyle"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".mobileBank.view.MobileBankHomeTabFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp6"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginRight="@dimen/dp6">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/vpCards"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp200"
+                    android:paddingRight="@dimen/dp32"
+                    android:paddingLeft="@dimen/dp32"
+                    android:layout_marginLeft="@dimen/dp6"
+                    android:layout_marginRight="@dimen/dp6"
+                    android:clipToPadding="false"
+                    android:layoutDirection="ltr"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.showLoading}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/retry_icon"
+                    style="@style/myIconTextViewStyleGray"
+                    android:textSize="@dimen/dp40"
+                    android:visibility="@{vm.showRetry}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/lytIndicators"
+                    android:layout_marginTop="@dimen/dp6"
+                    android:padding="@dimen/dp4"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layoutDirection="ltr"
+                    android:layout_height="@dimen/dp32"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/vpCards" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/rvItems"
+                android:layout_marginLeft="@dimen/dp6"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginRight="@dimen/dp6" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>

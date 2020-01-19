@@ -69,13 +69,12 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
             return true;
         });
 
-        viewModel.getOnLoginResponse().observe(getViewLifecycleOwner() , userName -> {
-            if (getActivity() != null && userName != null){
+        viewModel.getOnLoginResponse().observe(getViewLifecycleOwner() , state -> {
+            if (getActivity() != null && state != null ){
 
                 if (binding.edtUserName.getText() != null)
                     saveUsernameToPref(binding.edtUserName.getText().toString());
 
-                //Toast.makeText(getActivity(), userName + " خوش امدید " , Toast.LENGTH_SHORT).show();
                 new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
                 new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankHomeFragment()).setReplace(false).load();
             }
