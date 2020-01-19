@@ -4,6 +4,7 @@ import net.iGap.fragments.emoji.apiModels.StickerCategorisDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickersDataModel;
+import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -47,5 +48,8 @@ public interface StickerApi {
 
     @GET("favorite/list")
     Single<StickersDataModel> getFavoriteSticker();
+
+    @GET("gift/user-list")
+    Single<UserGiftStickersDataModel> getUserGiftSticker();
 
 }

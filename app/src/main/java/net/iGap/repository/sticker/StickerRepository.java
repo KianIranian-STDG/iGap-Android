@@ -8,6 +8,7 @@ import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
@@ -161,6 +162,10 @@ public class StickerRepository {
         return stickerApi.getFavoriteSticker()
                 .subscribeOn(Schedulers.newThread())
                 .flatMapCompletable(stickersDataModel -> CompletableObserver::onComplete);
+    }
+
+    private Single<UserGiftStickersDataModel> getUserGiftStickerApiService() {
+        return stickerApi.getUserGiftSticker().subscribeOn(Schedulers.newThread());
     }
 
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
@@ -395,4 +400,11 @@ public class StickerRepository {
                     }
                 })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
     }
+
+    public Single<UserGiftStickersDataModel> getUserGiftSticker() {
+        return getUserGiftStickerApiService();
+    }
+
+
+
 }
