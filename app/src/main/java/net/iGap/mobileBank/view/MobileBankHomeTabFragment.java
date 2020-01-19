@@ -68,7 +68,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         viewModel.setFragmentState(mode);
         disableViewPagerIfNeed();
         setupListener();
-        setupRecyclerItems();
+        if (mode == HomeTabMode.SERVICE) setupRecyclerItems();
     }
 
     private void setupRecyclerItems() {
@@ -128,6 +128,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
         items.add(new MobileBankHomeItemsModel(R.string.transfer_mony , R.string.financial_send_money_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.Inventory , R.string.coin_icon));
         items.add(new MobileBankHomeItemsModel(R.string.transactions , R.string.history_icon));
         items.add(new MobileBankHomeItemsModel(R.string.sheba_number , R.string.coin_icon));
         items.add(new MobileBankHomeItemsModel(R.string.temporary_password , R.string.lock_icon));
@@ -137,6 +138,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private List<MobileBankHomeItemsModel> getDepositRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
         items.add(new MobileBankHomeItemsModel(R.string.transfer_mony , R.string.financial_send_money_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.Inventory , R.string.coin_icon));
         items.add(new MobileBankHomeItemsModel(R.string.transactions , R.string.history_icon));
         items.add(new MobileBankHomeItemsModel(R.string.sheba_number , R.string.coin_icon));
         items.add(new MobileBankHomeItemsModel(R.string.cheque , R.string.wallet_icon));
@@ -235,13 +237,24 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     }
 
     private String getCurrentAccount() {
-        if (viewModel.cards != null && viewModel.cards.size() > 0) {
-            int current = binding.vpCards.getCurrentItem();
-            if (current < viewModel.cards.size()) {
-                return viewModel.cards.get(current).getPan();
+        if (mode == HomeTabMode.CARD) {
+            if (viewModel.cards != null && viewModel.cards.size() > 0) {
+                int current = binding.vpCards.getCurrentItem();
+                if (current < viewModel.cards.size()) {
+                    return viewModel.cards.get(current).getPan();
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.no_item_selected, Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(getActivity(), R.string.no_item_selected, Toast.LENGTH_SHORT).show();
+        }else if (mode == HomeTabMode.DEPOSIT) {
+            if (viewModel.accounts != null && viewModel.accounts.size() > 0) {
+                int current = binding.vpCards.getCurrentItem();
+                if (current < viewModel.accounts.size()) {
+                    return viewModel.accounts.get(current).getAccountNumber();
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.no_item_selected, Toast.LENGTH_SHORT).show();
+            }
         }
         return null;
     }
@@ -251,18 +264,20 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     }
 
     private void setupViewPagerDeposits(List<BankAccountModel> accountModels) {
-        if (accountModels == null) return;
+        if (accountModels == null || accountModels.size() == 0) return;
         binding.vpCards.setAdapter(new BankAccountsAdapter(accountModels));
         binding.vpCards.setOffscreenPageLimit(accountModels.size() - 1);
         initViewPager(accountModels.size());
+        setupRecyclerItems();
     }
 
     private void setupViewPagerCards() {
-
         List<RealmMobileBankCards> cards = new ArrayList<>(RealmMobileBankCards.getCards());
+        if (cards.size() == 0) return;
         binding.vpCards.setAdapter(new BankCardsAdapter(cards));
         binding.vpCards.setOffscreenPageLimit(cards.size() - 1);
         initViewPager(cards.size());
+        setupRecyclerItems();
     }
 
     private void initViewPager(int size) {

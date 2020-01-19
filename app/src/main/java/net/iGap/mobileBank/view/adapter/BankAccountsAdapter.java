@@ -61,7 +61,7 @@ public class BankAccountsAdapter extends PagerAdapter {
         if (mAccounts.get(position) != null){
 
             icAdd.setVisibility(View.GONE);
-            lytRoot.setBackgroundResource(R.drawable.shape_card_background);
+            lytRoot.setBackgroundResource(R.drawable.shape_card_background_brown);
             setTextSize(tvName , R.dimen.smallTextSize);
             tvName.setText(mAccounts.get(position).getTitle());
             tvNumber.setText(checkAndSetPersianNumberIfNeeded(mAccounts.get(position).getAccountNumber()));
