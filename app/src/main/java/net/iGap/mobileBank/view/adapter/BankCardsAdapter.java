@@ -83,7 +83,7 @@ public class BankCardsAdapter extends PagerAdapter {
         if (HelperCalander.isPersianUnicode) number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
         try {
             String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
-            return tempArray[0] + " " + tempArray[1] + " " + tempArray[2] + " " + tempArray[3];
+            return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
         }catch (Exception e){
             return number;
         }

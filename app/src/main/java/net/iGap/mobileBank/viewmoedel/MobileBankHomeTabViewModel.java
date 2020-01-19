@@ -12,7 +12,6 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
-import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.view.MobileBankHomeTabFragment;
 
@@ -22,7 +21,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
 
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
-    private MutableLiveData<BankShebaModel> shebaListener = new MutableLiveData<>();
+    private MutableLiveData<List<String>> shebaListener = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     public MutableLiveData<Boolean> onTabChangeListener = new MutableLiveData<>();
     public ObservableBoolean isCardsMode = new ObservableBoolean(true);
@@ -92,11 +91,11 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
             shebaListener.postValue(null);
             return;
         }
-        MobileBankRepository.getInstance().getShebaNumber(cardNumber, this, new ResponseCallback<BaseMobileBankResponse<BankShebaModel>>() {
+        MobileBankRepository.getInstance().getShebaNumber(cardNumber, this, new ResponseCallback<BaseMobileBankResponse<List<String>>>() {
             @Override
-            public void onSuccess(BaseMobileBankResponse<BankShebaModel> data) {
+            public void onSuccess(BaseMobileBankResponse<List<String>> data) {
                 shebaListener.postValue(data.getData());
-                if (BuildConfig.DEBUG) Log.e("NazariSheba", data.getData().getSheba());
+                if (BuildConfig.DEBUG) Log.e("NazariSheba", data.getData().get(0));
             }
 
             @Override
@@ -127,7 +126,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         return accountsData;
     }
 
-    public MutableLiveData<BankShebaModel> getShebaListener() {
+    public MutableLiveData<List<String>> getShebaListener() {
         return shebaListener;
     }
 

@@ -19,7 +19,10 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.mobileBank.view.adapter.ShebaNumbersAdapter;
 import net.iGap.mobileBank.view.adapter.TransferMoneyTypeAdapter;
+
+import java.util.List;
 
 public class DialogParsian {
 
@@ -98,6 +101,24 @@ public class DialogParsian {
         });
 
         mContentLayout.addView(tvMessage, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 12f, 12f, 12f, 12f));
+        mDialog.show();
+    }
+
+    public void showShebaDialog(List<String> numbers) {
+
+        initDialog();
+
+        RecyclerView rv = new RecyclerView(mContext);
+        rv.setNestedScrollingEnabled(false);
+        rv.setLayoutManager(new LinearLayoutManager(mContext));
+        rv.setAdapter(new ShebaNumbersAdapter(numbers));
+
+        mActiveButton.setOnClickListener(v -> {
+            mDialog.dismiss();
+            mListener.onActiveButtonClicked(mDialog);
+        });
+
+        mContentLayout.addView(rv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
         mDialog.show();
     }
 

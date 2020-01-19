@@ -2,7 +2,6 @@ package net.iGap.api;
 
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
-import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.model.ChequeModel;
 import net.iGap.mobileBank.repository.model.LoginResponse;
@@ -36,7 +35,7 @@ public interface MobileBankApi {
 
     @POST("card/convert-card-to-iban")
     @FormUrlEncoded
-    Call<BaseMobileBankResponse<BankShebaModel>> getShebaNumber(@Header ("Authorization") String token ,
+    Call<BaseMobileBankResponse<List<String>>> getShebaNumber(@Header ("Authorization") String token ,
                                                                @Field("pan") String cardNumber);
 
     @POST("cheque/get-cheque-book-list")

@@ -24,7 +24,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
-import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.MobileBankHomeItemsModel;
 import net.iGap.mobileBank.view.adapter.BankAccountsAdapter;
 import net.iGap.mobileBank.view.adapter.BankCardsAdapter;
@@ -168,29 +167,19 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         viewModel.getShebaListener().observe(getViewLifecycleOwner() , this::showShebaNumberResult);
     }
 
-    private void showShebaNumberResult(BankShebaModel bankShebaModel) {
+    private void showShebaNumberResult(List<String> bankShebaModel) {
         mDialogWait.dismiss();
-        if (bankShebaModel != null) {
+        if (bankShebaModel != null && bankShebaModel.size() > 0) {
             new DialogParsian()
                     .setContext(getActivity())
                     .setTitle(getString(R.string.sheba_number))
-                    .setButtonsText(getString(R.string.copy_item_dialog), getString(R.string.cancel))
+                    .setButtonsText(null, getString(R.string.cancel))
                     .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onActiveButtonClicked(Dialog dialog) {
-                            if (getActivity() != null) {
-                                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("Copied Sheba", bankShebaModel.getSheba());
-                                clipboard.setPrimaryClip(clip);
-                                Toast.makeText(getActivity(), R.string.copied, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
                         @Override
                         public void onDeActiveButtonClicked(Dialog dialog) {
                             mDialogWait.dismiss();
                         }
-                    }).showSimpleMessage(getString(R.string.sheba_number) + ": " + bankShebaModel.getSheba());
+                    }).showShebaDialog(bankShebaModel);
         }
     }
 
