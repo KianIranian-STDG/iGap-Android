@@ -40,7 +40,7 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventLis
 
     private void init(Context context) {
         setRepeatCount(LottieDrawable.INFINITE);
-        setRepeatMode(LottieDrawable.REVERSE);
+        setRepeatMode(LottieDrawable.RESTART);
     }
 
     public void setMessage(StructMessageInfo message) {
