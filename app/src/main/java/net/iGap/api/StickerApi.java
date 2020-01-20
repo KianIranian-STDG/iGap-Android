@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategorisDataModel;
@@ -11,7 +12,6 @@ import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -28,16 +28,16 @@ public interface StickerApi {
     @GET("category/{categoryId}")
     Single<StickerCategoryGroupDataModel> getCategoryStickers(@Path("categoryId") String categoryId, @Query("skip") int skip, @Query("limit") int limit);
 
-    @GET("user-list")
+    @GET("main/user-list")
     Single<StickerCategoryGroupDataModel> getUserStickersGroup();
 
-    @POST("{groupId}/user-list")
+    @POST("main/user-list{groupId}")
     Completable addStickerGroupToMyStickers(@Path("groupId") String groupId);
 
-    @DELETE("{groupId}/user-list")
-    Completable removeStickerGroupFromMyStickers(@Path("groupId") String groupId);
+    @POST("main/user-list/delete")
+    Completable removeStickerGroupFromMyStickers(@Body Ids ids);
 
-    @GET("{groupId}")
+    @GET("main/{groupId}")
     Single<StickerGroupDataModel> getStickerGroupStickers(@Path("groupId") String groupId);
 
     @GET("recently-used/list")

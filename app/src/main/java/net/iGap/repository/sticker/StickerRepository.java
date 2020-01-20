@@ -8,6 +8,7 @@ import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
@@ -132,7 +133,7 @@ public class StickerRepository {
     }
 
     private Completable removeStickerGroupFromMyStickersApiService(String groupId) {
-        return stickerApi.removeStickerGroupFromMyStickers(groupId).subscribeOn(Schedulers.newThread());
+        return stickerApi.removeStickerGroupFromMyStickers(new Ids(groupId)).subscribeOn(Schedulers.newThread());
     }
 
     private Single<StructIGStickerGroup> getStickerGroupApiService(String groupId) {
