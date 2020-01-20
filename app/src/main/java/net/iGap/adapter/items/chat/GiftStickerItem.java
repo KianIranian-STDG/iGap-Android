@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -26,6 +27,7 @@ import com.google.gson.JsonSyntaxException;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
@@ -56,6 +58,21 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
         super.bindView(holder, payloads);
 
         holder.getChatBloke().setBackgroundResource(0);
+        holder.image.setOnClickListener(v -> {
+
+            if (FragmentChat.isInSelectionMode) {
+                holder.itemView.performLongClick();
+            } else {
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    return;
+                }
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
+                } else {
+                    messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
+                }
+            }
+        });
 
         Gson gson = new Gson();
 
@@ -71,8 +88,9 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
         holder.progress.setVisibility(View.GONE);
     }
 
+    @NonNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NonNull View v) {
         return new ViewHolder(v);
     }
 
@@ -99,14 +117,15 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             image = new StickerView(getContext()) {
                 @Override
                 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                    super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+                    super.onMeasure(heightMeasureSpec, heightMeasureSpec);
                 }
             };
 
-            LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(Resources.getSystem().getDisplayMetrics().widthPixels, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(LayoutCreator.dp(250), LayoutCreator.dp(250));
             imageLayoutParams.gravity = Gravity.CENTER;
             image.setLayoutParams(imageLayoutParams);
             image.setId(R.id.thumbnail);
+            image.setPadding(LayoutCreator.dp(20), LayoutCreator.dp(20), LayoutCreator.dp(20), LayoutCreator.dp(20));
             contentOne.addView(image);
             getContentBloke().addView(contentOne);
 
@@ -131,8 +150,8 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             setTypeFace(addToArchiveBtn);
             addToArchiveBtn.setTextColor(getColor(R.color.white));
 
-            buttonLayouts.addView(addToArchiveBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 0, 5, 5, 0));
-            buttonLayouts.addView(visitBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 5, 5, 5, 0));
+            buttonLayouts.addView(addToArchiveBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 0, 6, 3, 4));
+            buttonLayouts.addView(visitBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 3, 6, 0, 4));
 
             visitBtn.setBackgroundResource(theme.getCardToCardButtonBackground(visitBtn.getContext()));
             addToArchiveBtn.setBackgroundResource(theme.getCardToCardButtonBackground(addToArchiveBtn.getContext()));
