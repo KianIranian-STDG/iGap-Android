@@ -187,7 +187,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private void onTransferMoneyClicked() {
 
-        if (getActivity() != null) {
+        if (getActivity() != null && mode == HomeTabMode.DEPOSIT) {
             new DialogParsian()
                     .setContext(getActivity())
                     .setTitle(getString(R.string.transfer_mony))

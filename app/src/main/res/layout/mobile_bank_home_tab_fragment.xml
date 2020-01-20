@@ -58,6 +58,7 @@
                     style="@style/myIconTextViewStyleGray"
                     android:textSize="@dimen/dp40"
                     android:visibility="@{vm.showRetry}"
+                    android:onClick="@{()->vm.onRetryClicked()}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -81,10 +82,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
+                android:minHeight="400dp"
                 android:id="@+id/rvItems"
                 android:layout_marginLeft="@dimen/dp6"
                 android:layout_marginTop="@dimen/dp12"
+                android:layout_marginBottom="@dimen/dp12"
                 android:layout_marginRight="@dimen/dp6" />
 
         </LinearLayout>
