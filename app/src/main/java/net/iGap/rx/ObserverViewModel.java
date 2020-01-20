@@ -19,7 +19,9 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     }
 
     public void onResponseError(Throwable throwable) {
+        Log.i("abbasiResponse", "onResponseError START ---------------------------------");
         throwable.printStackTrace();
+        Log.i("abbasiResponse", "onResponseError END ---------------------------------");
     }
 
     @Override

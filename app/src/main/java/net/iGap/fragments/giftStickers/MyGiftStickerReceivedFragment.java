@@ -38,6 +38,7 @@ public class MyGiftStickerReceivedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel.subscribe();
 
         binding.giftStickerList.setAdapter(new MyStickerListAdapter());
 
@@ -52,5 +53,17 @@ public class MyGiftStickerReceivedFragment extends Fragment {
                 HelperError.showSnackMessage(errorMessage, false);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.onDestroy();
     }
 }

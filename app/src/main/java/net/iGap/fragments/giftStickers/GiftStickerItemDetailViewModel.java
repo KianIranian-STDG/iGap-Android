@@ -17,7 +17,8 @@ import net.iGap.rx.ObserverViewModel;
 public class GiftStickerItemDetailViewModel extends ObserverViewModel {
 
     private ObservableBoolean isEnabledButton = new ObservableBoolean(true);
-    private ObservableInt isShowLoading = new ObservableInt(View.GONE);
+    private ObservableInt isShowLoading = new ObservableInt(View.INVISIBLE);
+    private ObservableInt isShowRetry = new ObservableInt(View.INVISIBLE);
     private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
     private StickerRepository stickerRepository = StickerRepository.getInstance();
     private MutableLiveData<String> getPaymentLiveData = new MutableLiveData<>();
@@ -30,7 +31,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
     public void onPaymentButtonClicked(StructIGSticker structIGSticker) {
         isShowLoading.set(View.VISIBLE);
         isEnabledButton.set(false);
-
+        // TODO: 1/20/20 clear hard code data
         stickerRepository.addIssue(structIGSticker.getId(), new Issue("4271241776", "09120423503", 1))
                 .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
                     @Override
@@ -43,12 +44,16 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        isShowLoading.set(View.VISIBLE);
+                        isShowLoading.set(View.INVISIBLE);
                         isEnabledButton.set(false);
+                        isShowRetry.set(View.VISIBLE);
                     }
                 });
+    }
 
-
+    public void onRetryIconClick(StructIGSticker structIGSticker) {
+        isShowRetry.set(View.INVISIBLE);
+        onPaymentButtonClicked(structIGSticker);
     }
 
     public void onCancelButtonClicked() {
@@ -65,6 +70,10 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
 
     public MutableLiveData<String> getGetPaymentLiveData() {
         return getPaymentLiveData;
+    }
+
+    public ObservableInt getIsShowRetry() {
+        return isShowRetry;
     }
 
     public SingleLiveEvent<Boolean> getGoBack() {

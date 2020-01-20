@@ -4,15 +4,16 @@ import android.view.View;
 
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.rx.IGSingleObserver;
+import net.iGap.rx.ObserverViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MyGiftStickerReceivedViewModel extends ViewModel {
+public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
 
     private MutableLiveData<List<String>> loadStickerList = new MutableLiveData<>();
     private SingleLiveEvent<String> showRequestErrorMessage = new SingleLiveEvent<>();
@@ -20,14 +21,26 @@ public class MyGiftStickerReceivedViewModel extends ViewModel {
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableInt showEmptyListMessage = new ObservableInt(View.GONE);
 
-    private StickerRepository repository;
-    private List<String> stickerList = new ArrayList<>();
+    private StickerRepository repository = StickerRepository.getInstance();
 
-    public MyGiftStickerReceivedViewModel(){
-        // send request get sticker list with repository
+    @Override
+    public void subscribe() {
+        repository.getUserGiftSticker()
+                .subscribe(new IGSingleObserver<UserGiftStickersDataModel>(mainThreadDisposable) {
+                    @Override
+                    public void onSuccess(UserGiftStickersDataModel userGiftStickersDataModel) {
+                        // TODO: 1/20/20 post
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+
+                    }
+                });
     }
 
-    public void onRetryButtonClick(){
+    public void onRetryButtonClick() {
         showRetryView.set(View.GONE);
         showLoading.set(View.VISIBLE);
     }

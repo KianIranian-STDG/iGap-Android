@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="net.iGap.fragments.giftStickers.GiftStickerItemDetailViewModel" />
@@ -86,6 +87,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/paymentButton"
             app:layout_constraintTop_toTopOf="@id/paymentButton" />
+
+        <TextView
+            android:id="@+id/retryView"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{()-> viewModel.onRetryIconClick(stickerItem)}"
+            android:text="@string/retry_icon"
+            android:visibility="@{viewModel.isShowRetry}"
+            app:layout_constraintBottom_toBottomOf="@+id/loadingView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/loadingView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
