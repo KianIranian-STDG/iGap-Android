@@ -52,7 +52,7 @@ public interface StickerApi {
     @GET("favorite/list")
     Single<StickersDataModel> getFavoriteSticker();
 
-    @GET("gift/user-list")
+    @GET("gift/created-list")
     Single<UserGiftStickersDataModel> getUserGiftSticker();
 
     @GET("gift/giftable-list")

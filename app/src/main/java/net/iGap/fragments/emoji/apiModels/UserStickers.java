@@ -22,6 +22,8 @@ public class UserStickers {
     private Long requestCount;
     @Expose
     private String updatedAt;
+    @Expose
+    private StickerDataModel sticker;
 
     public Long get_V() {
         return _V;
@@ -87,4 +89,11 @@ public class UserStickers {
         this.updatedAt = updatedAt;
     }
 
+    public StickerDataModel getSticker() {
+        return sticker;
+    }
+
+    public void setSticker(StickerDataModel sticker) {
+        this.sticker = sticker;
+    }
 }

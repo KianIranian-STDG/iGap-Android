@@ -13,6 +13,7 @@ import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
+import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
@@ -413,8 +414,18 @@ public class StickerRepository {
                 })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
     }
 
-    public Single<UserGiftStickersDataModel> getUserGiftSticker() {
-        return getUserGiftStickerApiService();
+    public Single<List<StructIGGiftSticker>> getUserGiftSticker() {
+        return getUserGiftStickerApiService()
+                .map(userGiftStickersDataModel -> {
+                    List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
+                    for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
+                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(new StructIGSticker(userGiftStickersDataModel.getData().get(i).getSticker()),
+                                userGiftStickersDataModel.getData().get(i).getCreation().getStatus());
+                        structIGGiftStickers.add(giftSticker);
+                    }
+                    return structIGGiftStickers;
+                });
+
     }
 
     public Single<List<StructIGStickerGroup>> getGiftableStickers() {

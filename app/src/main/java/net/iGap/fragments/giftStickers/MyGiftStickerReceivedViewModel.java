@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
+import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
@@ -26,16 +26,15 @@ public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
     @Override
     public void subscribe() {
         repository.getUserGiftSticker()
-                .subscribe(new IGSingleObserver<UserGiftStickersDataModel>(mainThreadDisposable) {
+                .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
                     @Override
-                    public void onSuccess(UserGiftStickersDataModel userGiftStickersDataModel) {
-                        // TODO: 1/20/20 post
+                    public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-
                     }
                 });
     }
