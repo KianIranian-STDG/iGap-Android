@@ -130,6 +130,7 @@ import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
 import net.iGap.adapter.items.chat.GifWithTextItem;
+import net.iGap.adapter.items.chat.GiftStickerItem;
 import net.iGap.adapter.items.chat.ImageWithTextItem;
 import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
@@ -6324,7 +6325,9 @@ public class FragmentChat extends BaseFragment
 
     private void sendStickerAsMessage(StructIGSticker structIGSticker) {
 
-        String additional = new Gson().toJson(new StructSendSticker(structIGSticker.getId(), structIGSticker.getName(), structIGSticker.getGroupId(), structIGSticker.getToken()));
+        boolean isGift = structIGSticker.getGiftAmount() != 0;
+
+        String additional = new Gson().toJson(structIGSticker);
         long identity = AppUtils.makeRandomId();
         int[] imageSize = AndroidUtils.getImageDimens(structIGSticker.getPath());
         RealmRoomMessage roomMessage = new RealmRoomMessage();
@@ -6338,7 +6341,7 @@ public class FragmentChat extends BaseFragment
 
         RealmAdditional realmAdditional = new RealmAdditional();
         realmAdditional.setId(AppUtils.makeRandomId());
-        realmAdditional.setAdditionalType(AdditionalType.STICKER);
+        realmAdditional.setAdditionalType(isGift ? AdditionalType.GIFT_STICKER : AdditionalType.STICKER);
         realmAdditional.setAdditionalData(additional);
 
         roomMessage.setRealmAdditional(realmAdditional);
@@ -6387,10 +6390,14 @@ public class FragmentChat extends BaseFragment
 
         StructMessageInfo sm = new StructMessageInfo(roomMessage);
 
-        if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
-            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
-        else
-            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+        if (isGift) {
+            mAdapter.add(new GiftStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+        } else {
+            if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
+                mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+            else
+                mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
+        }
 
         scrollToEnd();
 
@@ -8328,7 +8335,13 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER:
-                        if (messageInfo.getAttachment().getName() != null && messageInfo.getAttachment().isAnimatedSticker()) {
+                        if (messageInfo.getAdditional() != null && messageInfo.getAdditional().getAdditionalType() == AdditionalType.GIFT_STICKER) {
+                            if (!addTop) {
+                                mAdapter.add(new GiftStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new GiftStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
+                        } else if (messageInfo.getAttachment().getName() != null && messageInfo.getAttachment().isAnimatedSticker()) {
                             if (!addTop) {
                                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {

@@ -14,6 +14,7 @@ public abstract class AdditionalType {
     public static final int REQUEST_PHONE = 10;
     public static final int REQUEST_LOCATION = 11;
     public static final int CARD_TO_CARD_MESSAGE = 12;
+    public static final int GIFT_STICKER = 13;
 
 }
 
