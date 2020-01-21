@@ -226,8 +226,8 @@
     <string name="end_video_call_icon">\ue9a2</string>
     <string name="play_icon">\ue977</string>
     <string name="pause_icon">\ue973</string>
-    <string name="igap_en_icon">\ue95a</string>
-    <string name="igap_fa_icon">\ue95c</string>
+    <string name="igap_fa_icon">\ue95a</string>
+    <string name="igap_en_icon">\ue95c</string>
     <string name="attach_icon">\ue907</string>
     <string name="voice_not_downloaded_icon">å</string>
     <string name="music_icon">\ue963</string>
@@ -267,6 +267,18 @@
     <string name="valid_icon">\ue9a9</string>
     <string name="download_ic">\ue933</string>
     <string name="upload_ic">\ue99f</string>
+    <string name="cheque_icon">\ue9fa</string>
+    <string name="bank_facilities_icon">\ue9fb</string>
+    <string name="bank_service_icon">\ue9fc</string>
+    <string name="sheba_icon">\ue9fd</string>
+    <string name="new_seporde_icon">\uea21</string>
+    <string name="post_icon">\uea22</string>
+    <string name="pooya_password_icon">\uea23</string>
+    <string name="transfer_money_icon">\uea24</string>
+    <string name="take_turn_icon">\uea25</string>
+    <string name="transaction_icon">\uea26</string>
+    <string name="protect_icon">\uea27</string>
+    <string name="inventory_icon">\uea28</string>
 
     <string name="bank_withdraw_ic">\ue9ad</string>
     <string name="bank_income_ic">\ue9ac</string>

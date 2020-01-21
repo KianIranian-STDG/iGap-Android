@@ -112,7 +112,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 break;
 
             case R.string.cheque:
-
+                openChequeListPage(getCurrentAccount());
                 break;
 
             case R.string.facilities:
@@ -121,29 +121,35 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         }
     }
 
+    private void openChequeListPage(String deposit) {
+        if (getActivity() != null){
+            new HelperFragment(getActivity().getSupportFragmentManager() , MobileBankChequesListFragment.newInstance(deposit)).setReplace(false).load();
+        }
+    }
+
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.string.financial_send_money_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.string.coin_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.transactions, R.string.history_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.string.coin_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.string.lock_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony , R.string.transfer_money_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.Inventory , R.string.wallet_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.transactions , R.string.transaction_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.sheba_number , R.string.sheba_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.temporary_password , R.string.pooya_password_icon));
         return items;
     }
 
     private List<MobileBankHomeItemsModel> getDepositRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.string.financial_send_money_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.string.coin_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.transactions, R.string.history_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.string.coin_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.cheque, R.string.wallet_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony , R.string.transfer_money_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.Inventory , R.string.wallet_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.transactions , R.string.transaction_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.sheba_number , R.string.sheba_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.cheque , R.string.cheque_icon));
         return items;
     }
 
     private List<MobileBankHomeItemsModel> getServiceRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.facilities, R.string.wallet_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.facilities, R.string.bank_facilities_icon));
         return items;
     }
 
