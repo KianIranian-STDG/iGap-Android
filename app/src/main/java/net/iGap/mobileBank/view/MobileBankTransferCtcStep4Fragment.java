@@ -48,7 +48,7 @@ public class MobileBankTransferCtcStep4Fragment extends BaseAPIViewFrag<MobileBa
         setupToolbar();
         setupRecycler();
         binding.btnShare.setOnClickListener(v -> {
-            new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
+            //new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
 
         });
     }

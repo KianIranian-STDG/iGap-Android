@@ -2135,4 +2135,8 @@
     <string name="temporary_block">مسدود موقت :</string>
     <string name="permanent_block">مسدود دایم :</string>
     <string name="usable_count">قابل استفاده :</string>
+    <string name="parsian_bank">پارسیان من</string>
+    <string name="temporary_password">رمز پویا</string>
+    <string name="sheba_number">شماره شبا</string>
+    <string name="transactions">تراکنش ها</string>
 </resources>

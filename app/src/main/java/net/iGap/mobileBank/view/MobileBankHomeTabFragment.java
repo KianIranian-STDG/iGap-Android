@@ -205,8 +205,17 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                             dialog.dismiss();
                         }
                     }).showMoneyTransferDialog();
+        }else {
+            openTransferMoneyPage();
         }
 
+    }
+
+    private void openTransferMoneyPage() {
+        if (getActivity() == null) return;
+        new HelperFragment(getActivity().getSupportFragmentManager() , new MobileBankTransferCTCStepOneFragment())
+                .setReplace(false)
+                .load();
     }
 
     private void onTransactionsClicked() {

@@ -25,6 +25,7 @@ import com.google.common.collect.Iterables;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankTransferCtcStepOneBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankCardModel;
@@ -141,6 +142,15 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
             binding.destSpinner.dismissDropDown();
         }*/
         // set text change listener for every input and managing it
+
+        binding.nextBtn.setOnClickListener(v -> {
+            if (getActivity() != null){
+                new HelperFragment(getActivity().getSupportFragmentManager() ,new MobileBankTransferCtcStep3Fragment())
+                        .setReplace(false)
+                        .load();
+            }
+        });
+
         textInputManagerOrigin();
         textInputManagerDest();
         textInputManagerValue();
