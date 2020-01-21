@@ -212,7 +212,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private void onTransactionsClicked() {
 
         if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment())
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(getCurrentAccount() , mode == HomeTabMode.CARD))
                     .setReplace(false)
                     .load();
         }
