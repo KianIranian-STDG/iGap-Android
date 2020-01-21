@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -18,7 +19,10 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.mobileBank.view.adapter.ShebaNumbersAdapter;
 import net.iGap.mobileBank.view.adapter.TransferMoneyTypeAdapter;
+
+import java.util.List;
 
 public class DialogParsian {
 
@@ -100,6 +104,33 @@ public class DialogParsian {
         mDialog.show();
     }
 
+    public void showShebaDialog(List<String> numbers) {
+
+        initDialog();
+
+        RecyclerView rv = new RecyclerView(mContext);
+        rv.setNestedScrollingEnabled(false);
+        rv.setLayoutManager(new LinearLayoutManager(mContext));
+        rv.setAdapter(new ShebaNumbersAdapter(numbers));
+
+        mActiveButton.setOnClickListener(v -> {
+            mDialog.dismiss();
+            mListener.onActiveButtonClicked(mDialog);
+        });
+
+        mContentLayout.addView(rv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
+        mDialog.show();
+    }
+
+    public void showLoaderDialog(boolean cancelable) {
+
+        initDialog();
+        ProgressBar progressBar = new ProgressBar(mContext);
+        mContentLayout.addView(progressBar, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 12f, 2f, 12f, 2f));
+        mDialog.setCancelable(cancelable);
+        mDialog.show();
+    }
+
     public void showMoneyTransferDialog() {
         initDialog();
 
@@ -117,6 +148,10 @@ public class DialogParsian {
         });
 
         mDialog.show();
+    }
+
+    public void dismiss() {
+        if (mDialog != null) mDialog.dismiss();
     }
 
     private View inflate(int layout) {

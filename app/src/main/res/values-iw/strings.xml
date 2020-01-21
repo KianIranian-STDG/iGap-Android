@@ -2123,4 +2123,7 @@
     <string name="profile">پروفایل</string>
     <string name="get_temporary_password">دریافت رمز پویا</string>
     <string name="accounts">حساب ها</string>
+    <string name="cheque">چک</string>
+    <string name="facilities">تسهیلات</string>
+    <string name="services">خدمات</string>
 </resources>

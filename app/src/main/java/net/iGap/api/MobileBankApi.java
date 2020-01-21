@@ -1,8 +1,11 @@
 package net.iGap.api;
 
+import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
+import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
+import net.iGap.mobileBank.repository.model.ChequeModel;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
 import java.util.List;
@@ -26,6 +29,26 @@ public interface MobileBankApi {
                                                                    @Field("length") Integer length,
                                                                    @Field("offset") Integer offset,
                                                                    @Field("pan") String pan);
+
+    @POST("deposit/get-deposits")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<BankAccountModel>>> getUserDeposits(@Header("Authorization") String token,
+                                                                         @Field("deposit_numbers") String depositNumber);
+
+    @POST("card/convert-card-to-iban")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<String>>> getShebaNumber(@Header("Authorization") String token,
+                                                              @Field("pan") String cardNumber);
+
+    @POST("deposit/convert-deposit-to-iban")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<BankShebaModel>> getShebaNumberByDeposit(@Header("Authorization") String token,
+                                                                         @Field("deposit_number") String depositNumber);
+
+    @POST("cheque/get-cheque-book-list")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<ChequeModel>>> getCheques(@Header("Authorization") String token,
+                                                               @Field("deposit_number") String depositNumber);
 
     @POST("deposit/get-statements")
     @FormUrlEncoded

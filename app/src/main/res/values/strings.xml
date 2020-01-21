@@ -2410,5 +2410,8 @@ Want to get it?</string>
     <string name="sheba_number">SHEBA Number</string>
     <string name="get_temporary_password">Get POOYA Password</string>
     <string name="accounts">Accounts</string>
+    <string name="cheque">Cheque</string>
+    <string name="facilities">Facilities</string>
+    <string name="services">Services</string>
     <string name="mobileBankSorat">Bills List</string>
 </resources>

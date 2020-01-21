@@ -2065,4 +2065,7 @@
     <string name="sheba_number">SHEBA Nombre</string>
     <string name="get_temporary_password">obtenir le mot de passe POOYA</string>
     <string name="accounts">Comptes</string>
+    <string name="cheque">Vérifier</string>
+    <string name="facilities">Installations</string>
+    <string name="services">Service</string>
 </resources>

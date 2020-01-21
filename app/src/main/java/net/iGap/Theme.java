@@ -194,6 +194,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapDividerLine);
     }
 
+    public int getCardViewColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapCardViewColor);
+    }
+
     public int getPrimaryTextColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapPrimaryTextColor);
     }

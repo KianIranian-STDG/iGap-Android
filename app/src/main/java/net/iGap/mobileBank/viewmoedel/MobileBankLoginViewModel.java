@@ -1,6 +1,7 @@
 package net.iGap.mobileBank.viewmoedel;
 
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
@@ -8,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.R;
 import net.iGap.api.apiService.ResponseCallback;
@@ -29,7 +31,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
 
     private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
     private ObservableBoolean isEnableButton = new ObservableBoolean(true);
-    private SingleLiveEvent<String> onLoginResponse = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> onLoginResponse = new SingleLiveEvent<>();
 
     private MobileBankRepository repository;
     private static final String TAG = "MobileBankLoginViewMode";
@@ -72,8 +74,10 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
+                        if (BuildConfig.DEBUG)
+                            Log.e("NazariToken", data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
-                        onLoginResponse.postValue("");
+                        onLoginResponse.postValue(true);
                     }
 
                     @Override
@@ -103,7 +107,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
         return isEnableButton;
     }
 
-    public SingleLiveEvent<String> getOnLoginResponse() {
+    public SingleLiveEvent<Boolean> getOnLoginResponse() {
         return onLoginResponse;
     }
 

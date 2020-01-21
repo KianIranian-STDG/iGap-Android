@@ -11,28 +11,26 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
-import net.iGap.mobileBank.repository.util.ExtractBank;
+import net.iGap.mobileBank.repository.model.BankAccountModel;
 
 import java.util.List;
 
-public class BankCardsAdapter extends PagerAdapter {
+import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;
 
-    private List<RealmMobileBankCards> mCards;
+public class BankAccountsAdapter extends PagerAdapter {
 
-    public BankCardsAdapter(List<RealmMobileBankCards> cards) {
-        this.mCards = cards;
+    private List<BankAccountModel> mAccounts;
+
+    public BankAccountsAdapter(List<BankAccountModel> accounts) {
+        this.mAccounts = accounts;
         //cards.add(null); // for add
     }
 
     @Override
     public int getCount() {
-        return mCards.size();
+        return mAccounts.size();
     }
 
     @Override
@@ -45,9 +43,9 @@ public class BankCardsAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         View layout = LayoutInflater.from(container.getContext()).inflate(R.layout.view_bank_card, container, false);
-        TextView tvName, tvNumber , icAdd;
+        TextView tvName, tvNumber, icAdd;
         ImageView ivLogo;
-        ConstraintLayout lytRoot ;
+        ConstraintLayout lytRoot;
 
         tvName = layout.findViewById(R.id.tvName);
         tvNumber = layout.findViewById(R.id.tvNumber);
@@ -55,15 +53,16 @@ public class BankCardsAdapter extends PagerAdapter {
         icAdd = layout.findViewById(R.id.tvAdd);
         lytRoot = layout.findViewById(R.id.lytRoot);
 
-        if (mCards.get(position) != null){
+        if (mAccounts.get(position) != null) {
 
             icAdd.setVisibility(View.GONE);
-            lytRoot.setBackgroundResource(R.drawable.shape_card_background);
-            tvName.setText(mCards.get(position).getCardName());
-            tvNumber.setText(checkAndSetPersianNumberIfNeeded(mCards.get(position).getCardNumber()));
-            ivLogo.setImageResource(getCardBankLogo(mCards.get(position).getCardNumber()));
+            lytRoot.setBackgroundResource(R.drawable.shape_card_background_brown);
+            setTextSize(tvName, R.dimen.smallTextSize);
+            tvName.setText(mAccounts.get(position).getTitle());
+            tvNumber.setText(checkAndSetPersianNumberIfNeeded(mAccounts.get(position).getAccountNumber()));
+            ivLogo.setImageResource(R.drawable.bank_logo_parsian);
 
-        }else {
+        } else {
 
             icAdd.setVisibility(View.VISIBLE);
             lytRoot.setBackgroundResource(R.drawable.shape_gray_round_stroke_dash);
@@ -79,17 +78,9 @@ public class BankCardsAdapter extends PagerAdapter {
 
     private String checkAndSetPersianNumberIfNeeded(String cardNumber) {
         String number = cardNumber;
-        if (HelperCalander.isPersianUnicode) number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
-        try {
-            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
-            return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
-        }catch (Exception e){
-            return number;
-        }
-    }
-
-    private int getCardBankLogo(String cardNumber) {
-        return ExtractBank.bankLogo(cardNumber);
+        if (HelperCalander.isPersianUnicode)
+            number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+        return number;
     }
 
     @Override
