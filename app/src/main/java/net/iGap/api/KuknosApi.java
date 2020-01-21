@@ -4,6 +4,7 @@ import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
@@ -97,7 +98,7 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("transfer")
-    Call<KuknosResponseModel<KuknosTransactionResult>> payment(@Field("xdr") String XDR);
+    Call<KuknosResponseModel<KuknosHash>> payment(@Field("xdr") String XDR);
 
     /**
      * this api returns all of history of an account

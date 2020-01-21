@@ -3065,6 +3065,7 @@
     <string name="delete_from_storage">حذف من التخزين</string>
     <string name="map_registration_enable">تمكين الرؤية القريبة</string>
     <string name="need_browser">يتطلب متصفح للاستخدام.</string>
+    <string name="install_latest_version">قم بتثبيت أحدث إصدار لاستخدام هذه الميزة</string>
     <string name="temporary_password">كلمة مرور مؤقتة</string>
     <string name="parsian_bank">پارسیان من</string>
     <string name="transactions">المعاملات</string>

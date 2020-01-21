@@ -19,6 +19,8 @@ import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.request.RequestInfoPage;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class KuknosBuyPeymanVM extends BaseAPIViewModel {
@@ -36,6 +38,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private MutableLiveData<Boolean> nextPage;
     private int PMNprice = -1;
     private int maxAmount = 1000000;
+    Double sumTemp;
     private PanelRepo panelRepo = new PanelRepo();
     private MutableLiveData<String> TandCAgree;
     private KuknosFeeModel.Fee fees = null;
@@ -69,7 +72,9 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         }
         if (PMNprice == -1 || fees == null)
             return false;
-        Double sumTemp = Double.parseDouble(amount.get()) * PMNprice * (100 - fees.getDiscount()) / 100;
+        sumTemp = Double.parseDouble(amount.get()) * PMNprice * (100 - fees.getDiscount()) / 100 + fees.getFee() / 10000000 * PMNprice;
+        BigDecimal tmp = new BigDecimal(sumTemp).setScale(0, RoundingMode.UP);
+        sumTemp = Double.parseDouble(tmp.toString());
         DecimalFormat df = new DecimalFormat(",###");
         sum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(sumTemp)) : df.format(sumTemp));
         return true;
@@ -126,7 +131,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private void sendDataServer() {
         progressState.setValue(1);
-        panelRepo.buyAsset("PMN", amount.get(), "" + (Integer.parseInt(amount.get()) * PMNprice),
+        panelRepo.buyAsset("PMN", amount.get(), "" + (int) Math.round(sumTemp),
                 "", this, new ResponseCallback<KuknosResponseModel<IgapPayment>>() {
                     @Override
                     public void onSuccess(KuknosResponseModel<IgapPayment> data) {

@@ -41,7 +41,7 @@ public class AddAnimatedStickerCell extends FrameLayout {
 
         groupAvatarIv = new LottieAnimationView(getContext());
         groupAvatarIv.setRepeatCount(LottieDrawable.INFINITE);
-        groupAvatarIv.setRepeatMode(LottieDrawable.REVERSE);
+        groupAvatarIv.setRepeatMode(LottieDrawable.RESTART);
         groupAvatarIv.setFailureListener(result -> Log.e(getClass().getName(), "AddAnimatedStickerCell: ", result));
         addView(groupAvatarIv, LayoutCreator.createFrame(52, 52, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 16, 0, 16, 0));
 

@@ -11,6 +11,7 @@ import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
@@ -45,8 +46,8 @@ class KuknosAPIRepository {
         temp.execute(userID);
     }*/
 
-    void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
-        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, XDR -> new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
+    void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosHash>> apiResponse) {
+        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, XDR -> new ApiInitializer<KuknosResponseModel<KuknosHash>>()
                 .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse))
                 .execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()

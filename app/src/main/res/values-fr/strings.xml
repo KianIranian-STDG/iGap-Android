@@ -2058,6 +2058,7 @@
     <string name="delete_from_storage">Supprimer du stockage</string>
     <string name="map_registration_enable">Activer la visibilité à proximité</string>
     <string name="need_browser">Nécessite un navigateur à utiliser.</string>
+    <string name="install_latest_version">Installez la dernière version pour utiliser cette fonction</string>
     <string name="temporary_password">Mot de passe POOYA</string>
     <string name="parsian_bank">My Parsian</string>
     <string name="transactions">Transactions</string>

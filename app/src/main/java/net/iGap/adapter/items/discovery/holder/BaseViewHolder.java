@@ -30,6 +30,7 @@ import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.electricity_bill.view.ElectricityBillMainFrag;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -59,7 +60,6 @@ import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.kuknos.view.KuknosEntryOptionFrag;
-import net.iGap.mobileBank.view.MobileBankLoginFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.view.NewsMainFrag;
@@ -168,8 +168,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
                 break;
             case ELECTRIC_BILL_MENU:
-//                new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
-                new HelperFragment(activity.getSupportFragmentManager(), MobileBankLoginFragment.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
                 new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
@@ -363,7 +362,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     e.printStackTrace();
                 }
                 break;
-
+            default:
+                new MaterialDialog.Builder(activity).content(R.string.install_latest_version).positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss()).show();
+                break;
         }
     }
 
