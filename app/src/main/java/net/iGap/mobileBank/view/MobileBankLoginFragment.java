@@ -69,14 +69,15 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
         });
 
         viewModel.getOnLoginResponse().observe(getViewLifecycleOwner() , userName -> {
-            if (getActivity() != null && userName != null){
+            if (getActivity() != null) {
 
                 if (binding.edtUserName.getText() != null)
                     saveUsernameToPref(binding.edtUserName.getText().toString());
 
                 //Toast.makeText(getActivity(), userName + " خوش امدید " , Toast.LENGTH_SHORT).show();
                 new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
-                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(),
+                        MobileBankCardHistoryFragment.newInstance("47000012780603", false)).setReplace(false).load();
             }
         });
 
@@ -84,7 +85,7 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
 
     private void setUsernameFromCache() {
         String username = getUsernameFromPrefIfExists();
-        if (username != null){
+        if (username != null) {
             binding.edtUserName.setText(username);
         }
     }

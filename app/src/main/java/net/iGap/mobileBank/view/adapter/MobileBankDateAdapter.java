@@ -4,10 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,15 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.electricity_bill.repository.model.BillData;
-import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankDateModel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MobileBankDateAdapter extends RecyclerView.Adapter<MobileBankDateAdapter.ViewHolder> {
 
@@ -71,9 +63,11 @@ public class MobileBankDateAdapter extends RecyclerView.Adapter<MobileBankDateAd
 
         void initView(int position) {
 
-            year.setText(mdata.get(position).getYear().replace("13", ""));
+            year.setText(CompatibleUnicode(mdata.get(position).getYear().replace("13", "")));
             month.setText(mdata.get(position).getMonthName());
             container.setOnClickListener(v -> {
+                if (!mdata.get(position).isActive())
+                    return;
                 mdata.get(selectedPosition).setSelected(false);
                 notifyItemChanged(selectedPosition);
                 mdata.get(position).setSelected(true);
@@ -85,12 +79,20 @@ public class MobileBankDateAdapter extends RecyclerView.Adapter<MobileBankDateAd
                 container.setBackgroundResource(R.drawable.bank_date_selected);
                 year.setTextColor(context.getResources().getColor(R.color.white));
                 month.setTextColor(context.getResources().getColor(R.color.white));
-            }
-            else {
+            } else {
                 container.setBackgroundResource(0);
                 year.setTextColor(new Theme().getTitleTextColor(context));
                 month.setTextColor(new Theme().getTitleTextColor(context));
             }
+            if (mdata.get(position).isActive()) {
+
+            } else {
+
+            }
+        }
+
+        private String CompatibleUnicode(String entry) {
+            return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
         }
     }
 

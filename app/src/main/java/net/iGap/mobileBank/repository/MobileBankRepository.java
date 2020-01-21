@@ -37,8 +37,8 @@ public class MobileBankRepository {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankCardModel>>>().initAPI(bankApi.getUserCards(getAccessToken() ,null, null, null, null), callback, responseCallback);
     }
 
-    public void getAccountHistory(String depositNumber, Integer offset, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankHistoryModel>>> responseCallback) {
-        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankHistoryModel>>>().initAPI(bankApi.getAccountHistory(getAccessToken(), depositNumber, 20, offset), callback, responseCallback);
+    public void getAccountHistory(String depositNumber, Integer offset, String startDate, String endDate, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankHistoryModel>>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankHistoryModel>>>().initAPI(bankApi.getAccountHistory(getAccessToken(), depositNumber, 30, offset, startDate, endDate), callback, responseCallback);
     }
 
     public String getAccessToken() {

@@ -15,6 +15,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +87,11 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyDataSetChanged();
     }
 
+    public void removeAll() {
+        this.mdata.clear();
+        notifyDataSetChanged();
+    }
+
     public void addLoading() {
         mdata.add(null);
         notifyItemInserted(mdata.size() - 1);
@@ -137,13 +143,18 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
                 title.setText("واریز");
                 statusIcon.setText(R.string.bank_income_ic);
                 statusIcon.setTextColor(context.getResources().getColor(R.color.green));
-                value.setTextColor(context.getResources().getColor(R.color.red));
+                value.setTextColor(context.getResources().getColor(R.color.green));
             }
-            value.setText("" + mdata.get(position).getTransferAmount());
-            date.setText(mdata.get(position).getDate());
+            DecimalFormat df = new DecimalFormat(",###");
+            value.setText(CompatibleUnicode("" + df.format(mdata.get(position).getTransferAmount())) + " " + context.getString(R.string.rial));
+            date.setText(CompatibleUnicode(mdata.get(position).getDate()));
             container.setOnClickListener(v -> clickListener.onClick(position));
             if (HelperCalander.isPersianUnicode)
                 arrow.setRotation(90);
+        }
+
+        private String CompatibleUnicode(String entry) {
+            return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
         }
     }
 

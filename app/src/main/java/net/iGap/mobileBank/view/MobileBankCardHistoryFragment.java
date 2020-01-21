@@ -47,8 +47,13 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
 
     private static final String TAG = "Amini";
 
-    public static MobileBankCardHistoryFragment newInstance() {
-        return new MobileBankCardHistoryFragment();
+    public static MobileBankCardHistoryFragment newInstance(String accountNumber, boolean isCard) {
+        MobileBankCardHistoryFragment frag = new MobileBankCardHistoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("accountNum", accountNumber);
+        bundle.putBoolean("isCard", isCard);
+        frag.setArguments(bundle);
+        return frag;
     }
 
     @Override
@@ -93,6 +98,8 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
     }
 
     private void initial() {
+        viewModel.setDepositNumber(getArguments().getString("accountNum"));
+        viewModel.setCard(getArguments().getBoolean("isCard"));
         viewModel.init();
 
         // recycler view for date
@@ -112,8 +119,8 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
         adapter = new MobileBankHistoryAdapter(new ArrayList<>(), position -> {
             // show detail in dialog
         });
-        adapter.addLoading();
         binding.billsRecycler.setAdapter(adapter);
+        resetMainRecycler();
 
         // scroll listener for recycler view lazy loading
         binding.container.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -125,7 +132,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
                     isLoading = true;
                     currentPage++;
                     Log.d(TAG, "loadMoreItems: Load more Bitch!!!");
-                    viewModel.getAccountDataForMonth(null);
+                    viewModel.getAccountDataForMonth(currentPage * 30);
                 }
             }
         });
@@ -185,11 +192,24 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
         isLoading = false;
     }
 
+    private void resetMainRecycler() {
+
+        adapter.removeAll();
+        adapter.addLoading();
+        currentPage = 0;
+        isLastPage = false;
+
+    }
+
     private void onDateChangedListener() {
         viewModel.getCalender().observe(getViewLifecycleOwner(), bankDateModels -> {
             MobileBankDateAdapter adapter = new MobileBankDateAdapter(viewModel.getCalender().getValue(), position -> {
                 int centerOfScreen = binding.timeRecycler.getWidth() / 2 - snapHelper.findSnapView(binding.timeRecycler.getLayoutManager()).getWidth() / 2;
                 ((LinearLayoutManager)binding.timeRecycler.getLayoutManager()).scrollToPositionWithOffset(position, centerOfScreen);
+                // get data from server
+                viewModel.setDatePosition(position);
+                viewModel.getAccountDataForMonth(0);
+                resetMainRecycler();
             });
             binding.timeRecycler.setAdapter(adapter);
         });

@@ -73,7 +73,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
                         repository.setAccessToken(data.getData().getAccessToken());
-                        onLoginResponse.postValue(data.getData().getName());
+                        onLoginResponse.postValue("");
                     }
 
                     @Override

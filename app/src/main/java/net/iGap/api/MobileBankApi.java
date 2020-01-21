@@ -32,5 +32,7 @@ public interface MobileBankApi {
     Call<BaseMobileBankResponse<List<BankHistoryModel>>> getAccountHistory(@Header("Authorization") String token,
                                                                            @Field("deposit_number") String depositNumber,
                                                                            @Field("length") Integer length,
-                                                                           @Field("offset") Integer offset);
+                                                                           @Field("offset") Integer offset,
+                                                                           @Field("fromDate") String startDate,
+                                                                           @Field("toDate") String endDate);
 }

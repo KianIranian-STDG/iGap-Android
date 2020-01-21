@@ -48,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/transactionTitle"
-                        android:text="Transactions"
+                        android:text="@string/transactions"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="bold"
                         android:textColor="?iGapTitleTextColor"
@@ -66,7 +66,7 @@
                         android:minHeight="@dimen/dp32"
                         android:layout_marginEnd="@dimen/dp32"
                         android:layout_marginRight="@dimen/dp32"
-                        android:text="report"
+                        android:text="@string/financial_report"
                         android:textSize="@dimen/standardTextSize"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -80,6 +80,7 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/dp26"
                         android:textColor="?iGapSubtitleTextColor"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/reportBtn"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -94,6 +95,7 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/dp8"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/balanceTitle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -116,6 +118,7 @@
                         android:textSize="@dimen/standardTextSize"
                         android:textColor="?iGapSubtitleTextColor"
                         android:layout_marginTop="@dimen/dp26"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/timeRecycler"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
@@ -128,6 +131,7 @@
                         android:gravity="center"
                         android:textSize="@dimen/standardTextSize"
                         android:textColor="?iGapSubtitleTextColor"
+                        android:visibility="gone"
                         app:layout_constraintTop_toTopOf="@+id/incomeTitle"
                         app:layout_constraintStart_toEndOf="@+id/incomeTitle"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -142,6 +146,7 @@
                         android:textStyle="bold"
                         android:layout_marginTop="@dimen/dp8"
                         android:textColor="?iGapTitleTextColor"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/incomeTitle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
@@ -155,6 +160,7 @@
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="bold"
                         android:textColor="?iGapTitleTextColor"
+                        android:visibility="gone"
                         app:layout_constraintTop_toTopOf="@+id/incomeValue"
                         app:layout_constraintStart_toEndOf="@+id/incomeTitle"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -163,7 +169,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/billTitle"
-                        android:text="Bills"
+                        android:text="@string/mobileBankSorat"
                         android:gravity="start"
                         android:textSize="@dimen/standardTextSize"
                         android:layout_marginStart="@dimen/dp32"

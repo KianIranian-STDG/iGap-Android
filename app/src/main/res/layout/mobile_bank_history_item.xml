@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/status_ic"
                 android:text="@string/bank_withdraw_ic"
-                android:textSize="@dimen/dp40"
+                android:textSize="@dimen/dp36"
                 android:textColor="@color/black"
                 android:layout_marginStart="@dimen/dp16"
                 android:layout_marginLeft="@dimen/dp16"

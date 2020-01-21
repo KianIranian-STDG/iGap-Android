@@ -1,5 +1,6 @@
 package net.iGap.mobileBank.viewmoedel;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -13,11 +14,11 @@ import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankDateModel;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
+import net.iGap.mobileBank.repository.util.JalaliCalendar;
 import net.iGap.module.CalendarShamsi;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
     private ObservableInt progressVisibility = new ObservableInt(View.INVISIBLE);
     private MutableLiveData<ErrorModel> errorM;
 
+    private String depositNumber;
+    private boolean isCard;
+    private int datePosition = 2;
     private static final String TAG = "CardHistoryViewModel";
 
     public MobileBankCardHistoryViewModel() {
@@ -45,42 +49,98 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
     }
 
     private void getCurrentTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Long monthDiff = null;
-        try {
-            Date startM = sdf.parse("2020-01-01 00:00:00");
-            Date endM = sdf.parse("2020-02-01 00:00:00");
-            monthDiff = endM.getTime() - startM.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long timeNow = new Date().getTime();
-        String temp = HelperCalander.getPersianCalander(timeNow);
-        String[] timeParts = temp.split("/");
+        // go to first of the month
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        JalaliCalendar.YearMonthDate tempYMD = JalaliCalendar.gregorianToJalali(new JalaliCalendar.YearMonthDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)));
+        // find the Jalali date
+        JalaliCalendar jalaliCalendar = new JalaliCalendar(tempYMD.getYear(), tempYMD.getMonth(), 1);
+        // add this month to array
         List<BankDateModel> data = new ArrayList<>();
-        CalendarShamsi monthName = new CalendarShamsi(new Date(timeNow));
-        data.add(new BankDateModel(monthName.strMonth, timeParts[1], timeParts[0], true));
+        CalendarShamsi monthName = new CalendarShamsi(jalaliCalendar.getTime());
+        data.add(new BankDateModel(monthName.strMonth, jalaliCalendar, true, true));
         // add future;
         for (int i = 2; i >= 1; i--) {
-            String temp1 = HelperCalander.getPersianCalander((timeNow + monthDiff * i));
-            String[] timeParts1 = temp1.split("/");
-            monthName = new CalendarShamsi(new Date(timeNow + monthDiff * i));
-            data.add(2 - i, new BankDateModel(monthName.strMonth, timeParts1[1], timeParts1[0], false));
+            JalaliCalendar temp = new JalaliCalendar(tempYMD.getYear(), tempYMD.getMonth(), 1);
+            temp.add(Calendar.MONTH, i);
+            monthName = new CalendarShamsi(temp.getTime());
+            data.add(2 - i, new BankDateModel(monthName.strMonth, temp, false, false));
         }
         // add past
         for (int i = 1; i <= 12; i++) {
-            String temp1 = HelperCalander.getPersianCalander((timeNow - monthDiff * i));
-            String[] timeParts1 = temp1.split("/");
-            monthName = new CalendarShamsi(new Date(timeNow - monthDiff * i));
-            data.add(new BankDateModel(monthName.strMonth, timeParts1[1], timeParts1[0], false));
+            JalaliCalendar temp = new JalaliCalendar(tempYMD.getYear(), tempYMD.getMonth(), 1);
+            temp.add(Calendar.MONTH, -i);
+            monthName = new CalendarShamsi(temp.getTime());
+            data.add(new BankDateModel(monthName.strMonth, temp, false, true));
         }
-        calender.postValue(data);
-        getAccountDataForMonth(data.get(2));
+        calender.setValue(data);
+        getAccountDataForMonth(0);
     }
 
-    public void getAccountDataForMonth(BankDateModel date) {
+    /*private void getCurrentTime() {
+        getCurrentTime2();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Long monthDiff = null;
+        Long dayDiff = null;
+        try {
+            Date startM = sdf.parse("2020-01-01 00:00:00");
+            Date endM = sdf.parse("2020-01-30 00:00:00");
+            monthDiff = endM.getTime() - startM.getTime();
+
+            Date startD = sdf.parse("2020-01-01 00:00:00");
+            Date endD = sdf.parse("2020-01-01 23:59:59");
+            dayDiff = endD.getTime() - startD.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // get now time and set to 00:00:00
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 1);// for 6 hour
+        calendar.set(Calendar.MINUTE, 0);// for 0 min
+        calendar.set(Calendar.SECOND, 0);// for 0 sec
+        long timeNow = calendar.getTime().getTime();
+        String temp = HelperCalander.getPersianCalander(timeNow);
+        String[] timeParts = temp.split("/");
+        // reset to start of the month
+        timeNow = timeNow - (Integer.parseInt(timeParts[2]))*dayDiff;
+        temp = HelperCalander.getPersianCalander(timeNow);
+        timeParts = temp.split("/");
+        // add this month to array
+        List<BankDateModel> data = new ArrayList<>();
+        CalendarShamsi monthName = new CalendarShamsi(new Date(timeNow));
+        data.add(new BankDateModel(monthName.strMonth, timeParts[1], timeParts[0], new Date(timeNow), new Date(timeNow + monthDiff), true));
+        // add future;
+        for (int i = 2; i >= 1; i--) {
+            Long newMonth = timeNow + monthDiff * i;
+            String temp1 = HelperCalander.getPersianCalander(newMonth);
+            String[] timeParts1 = temp1.split("/");
+            monthName = new CalendarShamsi(new Date(newMonth));
+            data.add(2 - i, new BankDateModel(monthName.strMonth, timeParts1[1], timeParts1[0], new Date(newMonth), new Date(newMonth + monthDiff), false));
+        }
+        // add past
+        for (int i = 1; i <= 12; i++) {
+            Long newMonth = timeNow - monthDiff * i;
+            String temp1 = HelperCalander.getPersianCalander(newMonth);
+            String[] timeParts1 = temp1.split("/");
+            monthName = new CalendarShamsi(new Date(newMonth));
+            data.add(new BankDateModel(monthName.strMonth, timeParts1[1], timeParts1[0], new Date(newMonth), new Date(newMonth + monthDiff), false));
+        }
+        calender.postValue(data);
+        getAccountDataForMonth(null);
+    }*/
+
+    public void getAccountDataForMonth(int offset) {
+        Log.d(TAG, "getAccountDataForMonth: " + calender.getValue().get(datePosition).getStartMonth());
+        Log.d(TAG, "getAccountDataForMonth: " + calender.getValue().get(datePosition).getEndMonth());
+        if (offset == 0) {
+            bills.setValue(null);
+        }
         // set bills
-        MobileBankRepository.getInstance().getAccountHistory("47000012780603", 0, this, new ResponseCallback<BaseMobileBankResponse<List<BankHistoryModel>>>() {
+        MobileBankRepository.getInstance().getAccountHistory(depositNumber, offset,
+                calender.getValue().get(datePosition).getStartMonth(),
+                calender.getValue().get(datePosition).getEndMonth(),
+                this, new ResponseCallback<BaseMobileBankResponse<List<BankHistoryModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
                 bills.setValue(data.getData());
@@ -96,6 +156,10 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
 
             }
         });
+    }
+
+    private String CompatibleUnicode(String entry) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
     public ObservableField<String> getBalance() {
@@ -124,5 +188,21 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
 
     public MutableLiveData<List<BankDateModel>> getCalender() {
         return calender;
+    }
+
+    public int getDatePosition() {
+        return datePosition;
+    }
+
+    public void setDatePosition(int datePosition) {
+        this.datePosition = datePosition;
+    }
+
+    public void setDepositNumber(String depositNumber) {
+        this.depositNumber = depositNumber;
+    }
+
+    public void setCard(boolean card) {
+        isCard = card;
     }
 }
