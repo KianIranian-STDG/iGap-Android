@@ -38,6 +38,8 @@ public class MyGiftStickerBuyFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        viewModel.subscribe();
+
         binding.giftStickerList.setAdapter(new MyStickerListAdapter());
 
         viewModel.getLoadStickerList().observe(getViewLifecycleOwner(), stickerList -> {
@@ -51,5 +53,17 @@ public class MyGiftStickerBuyFragment extends Fragment {
                 HelperError.showSnackMessage(errorMessage, false);
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.onDestroyView();
     }
 }

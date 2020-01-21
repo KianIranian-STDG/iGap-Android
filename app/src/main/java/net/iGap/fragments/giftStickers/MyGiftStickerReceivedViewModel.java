@@ -15,33 +15,43 @@ import java.util.List;
 
 public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
 
-    private MutableLiveData<List<String>> loadStickerList = new MutableLiveData<>();
+    private MutableLiveData<List<StructIGGiftSticker>> loadStickerList = new MutableLiveData<>();
     private SingleLiveEvent<String> showRequestErrorMessage = new SingleLiveEvent<>();
     private ObservableInt showLoading = new ObservableInt(View.VISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableInt showEmptyListMessage = new ObservableInt(View.GONE);
 
-    private StickerRepository repository = StickerRepository.getInstance();
-
     @Override
     public void subscribe() {
-        repository.getUserGiftSticker()
+        showLoading.set(View.VISIBLE);
+        showEmptyListMessage.set(View.GONE);
+        StickerRepository.getInstance().getMyActivatedGiftSticker()
                 .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
                     @Override
                     public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
+                        loadStickerList.postValue(structIGGiftStickers);
 
+                        showLoading.set(View.GONE);
+
+                        if (structIGGiftStickers.size() == 0)
+                            showEmptyListMessage.set(View.VISIBLE);
+
+                        showRetryView.set(View.GONE);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
+
+                        showRetryView.set(View.VISIBLE);
+                        showLoading.set(View.GONE);
                     }
                 });
     }
 
     public void onRetryButtonClick() {
         showRetryView.set(View.GONE);
-        showLoading.set(View.VISIBLE);
+        subscribe();
     }
 
     public ObservableInt getShowLoading() {
@@ -56,7 +66,7 @@ public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
         return showEmptyListMessage;
     }
 
-    public MutableLiveData<List<String>> getLoadStickerList() {
+    public MutableLiveData<List<StructIGGiftSticker>> getLoadStickerList() {
         return loadStickerList;
     }
 

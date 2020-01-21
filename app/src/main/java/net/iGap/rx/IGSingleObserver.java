@@ -17,7 +17,8 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
 
     @Override
     public void onSubscribe(Disposable d) {
-        compositeDisposable.add(d);
+        if (compositeDisposable != null)
+            compositeDisposable.add(d);
     }
 
     @Override

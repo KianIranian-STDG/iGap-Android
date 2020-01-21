@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -90,6 +91,26 @@ public class GiftStickerMainFragment extends BaseFragment {
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (fragment == null) {
             fragment = new MyGiftStickerReceivedFragment();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    public void loadStickerPackagePage() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof GiftStickerPackageListFragment)) {
+            fragment = new GiftStickerPackageListFragment();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    public void loadStickerPackageItemPage(StructIGStickerGroup stickerGroup) {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof GiftStickerItemListFragment)) {
+            fragment = GiftStickerItemListFragment.getInstance(stickerGroup);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();

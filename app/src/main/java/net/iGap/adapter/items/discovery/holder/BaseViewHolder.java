@@ -59,8 +59,6 @@ import net.iGap.helper.HelperWallet;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
-import net.iGap.kuknos.view.KuknosEntryOptionFrag;
-import net.iGap.kuknos.view.KuknosLoginFrag;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.view.NewsMainFrag;

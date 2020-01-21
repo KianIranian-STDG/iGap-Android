@@ -151,6 +151,10 @@ public class StructIGSticker {
         return giftAmount;
     }
 
+    public boolean isGiftSticker() {
+        return giftAmount > 0;
+    }
+
     public StructIGSticker setValueWithRealm(RealmStickersDetails realmStickersDetails) {
         if (realmStickersDetails != null && realmStickersDetails.isValid()) {
             setId(realmStickersDetails.getSt_id());

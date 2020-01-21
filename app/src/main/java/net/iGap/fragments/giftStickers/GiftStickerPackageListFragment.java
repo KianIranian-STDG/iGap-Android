@@ -29,6 +29,8 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
         viewModel.getGoToPackageItemPage().observe(getViewLifecycleOwner(), giftStickerPackage -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && giftStickerPackage != null) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
+            } else if (getParentFragment() instanceof GiftStickerMainFragment) {
+                ((GiftStickerMainFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
             }
         });
 

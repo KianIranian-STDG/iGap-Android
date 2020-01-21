@@ -169,8 +169,12 @@ public class StickerRepository {
                 .flatMapCompletable(stickersDataModel -> CompletableObserver::onComplete);
     }
 
-    private Single<UserGiftStickersDataModel> getUserGiftStickerApiService() {
+    private Single<UserGiftStickersDataModel> getMyGiftStickerBuyApiService() {
         return stickerApi.getUserGiftSticker().subscribeOn(Schedulers.newThread());
+    }
+
+    private Single<UserGiftStickersDataModel> getMyActivatedGiftStickerApiService() {
+        return stickerApi.getMyActivatedGiftSticker().subscribeOn(Schedulers.newThread());
     }
 
     private Single<StickerCategoryGroupDataModel> getGiftableStickersApi() {
@@ -359,9 +363,6 @@ public class StickerRepository {
         if (index >= 0) {
             mimeType = extension.substring(index);
         }
-
-        Log.i(TAG, "createPathFile: " + G.downloadDirectoryPath + "/" + token + mimeType);
-
         return G.downloadDirectoryPath + "/" + token + mimeType;
     }
 
@@ -414,13 +415,25 @@ public class StickerRepository {
                 })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
     }
 
-    public Single<List<StructIGGiftSticker>> getUserGiftSticker() {
-        return getUserGiftStickerApiService()
+    public Single<List<StructIGGiftSticker>> getMyGiftStickerBuy() {
+        return getMyGiftStickerBuyApiService()
                 .map(userGiftStickersDataModel -> {
                     List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
                     for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
-                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(new StructIGSticker(userGiftStickersDataModel.getData().get(i).getSticker()),
-                                userGiftStickersDataModel.getData().get(i).getCreation().getStatus());
+                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
+                        structIGGiftStickers.add(giftSticker);
+                    }
+                    return structIGGiftStickers;
+                });
+
+    }
+
+    public Single<List<StructIGGiftSticker>> getMyActivatedGiftSticker() {
+        return getMyActivatedGiftStickerApiService()
+                .map(userGiftStickersDataModel -> {
+                    List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
+                    for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
+                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
                         structIGGiftStickers.add(giftSticker);
                     }
                     return structIGGiftStickers;

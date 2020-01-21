@@ -118,7 +118,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof EnterNationalCodeFragment)) {
-            fragment = new EnterNationalCodeFragment();
+            fragment = EnterNationalCodeFragment.getInstance();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();

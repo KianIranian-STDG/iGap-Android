@@ -272,7 +272,6 @@ import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
-import net.iGap.module.structs.StructSendSticker;
 import net.iGap.module.structs.StructWebView;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
@@ -331,7 +330,6 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.view.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.File;
@@ -3616,35 +3614,15 @@ public class FragmentChat extends BaseFragment
                                     return;
                                 }
 
-//                                G.handler.postDelayed(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        BuyGiftStickerCompletedBottomSheet bottomSheet = BuyGiftStickerCompletedBottomSheet.getInstance(structIGSticker);
-//                                        bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
-//                                            @Override
-//                                            public void onNegativeButton(StructIGSticker structIGSticker) {
-//                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
-//                                            }
-//
-//                                            @Override
-//                                            public void onPositiveButton(StructIGSticker structIGSticker) {
-//                                                sendStickerAsMessage(structIGSticker);
-//                                            }
-//                                        });
-//
-//                                        bottomSheet.show(getActivity().getSupportFragmentManager(), null);
-//                                    }
-//                                }, 3000);
-
-                                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.cpay_title), paymentToken, result -> {
+                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.cpay_title), paymentToken, result -> {
                                     if (result.isSuccess()) {
                                         Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
 
-                                        BuyGiftStickerCompletedBottomSheet bottomSheet = new BuyGiftStickerCompletedBottomSheet();
+                                        BuyGiftStickerCompletedBottomSheet bottomSheet = BuyGiftStickerCompletedBottomSheet.getInstance(structIGSticker);
                                         bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
                                             @Override
                                             public void onNegativeButton(StructIGSticker structIGSticker) {
-                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                                             }
 
                                             @Override
@@ -3653,7 +3631,7 @@ public class FragmentChat extends BaseFragment
                                             }
                                         });
 
-                                        bottomSheet.show(getActivity().getSupportFragmentManager(), null);
+                                        bottomSheet.show(FragmentChat.this.getActivity().getSupportFragmentManager(), null);
                                     } else {
                                         Toast.makeText(getActivity(), getString(R.string.unsuccessful_payment), Toast.LENGTH_LONG).show();
                                     }
@@ -4475,15 +4453,13 @@ public class FragmentChat extends BaseFragment
     }
 
     private void checkSticker(StructMessageInfo message) {
-
         try {
-            JSONObject jObject = new JSONObject(message.getAdditional().getAdditionalData());
-            String groupId = jObject.getString("groupId");
-            openFragmentAddStickerToFavorite(groupId);
+            StructIGSticker structIGSticker = new Gson().fromJson(message.getAdditional().getAdditionalData(), StructIGSticker.class);
+            if (!structIGSticker.isGiftSticker())
+                openFragmentAddStickerToFavorite(structIGSticker.getGroupId());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void openFragmentAddStickerToFavorite(String groupId) {
@@ -6158,7 +6134,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onItemSticker(StructItemSticker st) {
 
-                        String additional = new Gson().toJson(new StructSendSticker(st.getId(), st.getName(), st.getGroupId(), st.getToken()));
+                        String additional = new Gson().toJson(st);
                         long identity = AppUtils.makeRandomId();
                         int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
                         RealmRoomMessage roomMessage = new RealmRoomMessage();
@@ -6325,8 +6301,6 @@ public class FragmentChat extends BaseFragment
 
     private void sendStickerAsMessage(StructIGSticker structIGSticker) {
 
-        boolean isGift = structIGSticker.getGiftAmount() != 0;
-
         String additional = new Gson().toJson(structIGSticker);
         long identity = AppUtils.makeRandomId();
         int[] imageSize = AndroidUtils.getImageDimens(structIGSticker.getPath());
@@ -6341,7 +6315,7 @@ public class FragmentChat extends BaseFragment
 
         RealmAdditional realmAdditional = new RealmAdditional();
         realmAdditional.setId(AppUtils.makeRandomId());
-        realmAdditional.setAdditionalType(isGift ? AdditionalType.GIFT_STICKER : AdditionalType.STICKER);
+        realmAdditional.setAdditionalType(structIGSticker.isGiftSticker() ? AdditionalType.GIFT_STICKER : AdditionalType.STICKER);
         realmAdditional.setAdditionalData(additional);
 
         roomMessage.setRealmAdditional(realmAdditional);
@@ -6390,7 +6364,7 @@ public class FragmentChat extends BaseFragment
 
         StructMessageInfo sm = new StructMessageInfo(roomMessage);
 
-        if (isGift) {
+        if (structIGSticker.isGiftSticker()) {
             mAdapter.add(new GiftStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
         } else {
             if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)

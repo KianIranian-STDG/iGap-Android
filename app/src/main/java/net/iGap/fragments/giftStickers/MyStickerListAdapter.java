@@ -9,19 +9,19 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
+import net.iGap.helper.HelperCalander;
 import net.iGap.view.StickerView;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdapter.ViewHolder> {
 
-    private List<String> items;
+    private List<StructIGGiftSticker> items = new ArrayList<>();
 
-    public MyStickerListAdapter(){
-
-    }
-
-    public void setItems(List<String> items) {
+    public void setItems(List<StructIGGiftSticker> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -29,20 +29,20 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.my_gift_sticker_item,parent,false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.my_gift_sticker_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        holder.bindView(items.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return items != null ? items.size() : 0;
+        return items.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private StickerView stickerView;
         private AppCompatTextView giftStickerTitle;
@@ -51,11 +51,20 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             stickerView = itemView.findViewById(R.id.stickerView);
             giftStickerTitle = itemView.findViewById(R.id.giftStickerTitle);
             giftStickerPrice = itemView.findViewById(R.id.giftStickerPrice);
             giftStickerStatus = itemView.findViewById(R.id.giftStickerStatusView);
+        }
+
+        public void bindView(StructIGGiftSticker giftSticker) {
+            stickerView.loadSticker(giftSticker.getStructIGSticker());
+            giftStickerTitle.setText(giftSticker.getRrn());
+
+            DecimalFormat df = new DecimalFormat("#,###");
+            giftStickerPrice.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) : df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) + " " + itemView.getContext().getResources().getString(R.string.rial));
+
+            giftStickerStatus.setText(giftSticker.getStatus());
         }
     }
 }

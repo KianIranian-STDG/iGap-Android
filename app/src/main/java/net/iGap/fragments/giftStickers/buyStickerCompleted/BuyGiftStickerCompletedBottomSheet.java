@@ -15,8 +15,12 @@ import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 public class BuyGiftStickerCompletedBottomSheet extends BaseBottomSheet {
+
     private Delegate delegate;
     private StructIGSticker structIGSticker;
+
+    private BuyGiftStickerCompletedBottomSheet() {
+    }
 
     public static BuyGiftStickerCompletedBottomSheet getInstance(StructIGSticker structIGSticker) {
         BuyGiftStickerCompletedBottomSheet bottomSheet = new BuyGiftStickerCompletedBottomSheet();

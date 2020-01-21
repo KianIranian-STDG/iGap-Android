@@ -1,52 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <net.iGap.view.StickerView
         android:id="@+id/stickerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/dp8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintWidth_percent=".25"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.15" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/giftStickerTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:textStyle="bold"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="@dimen/dp2"
         android:textColor="?attr/iGapTitleTextColor"
-        android:padding="@dimen/dp8"
-        app:layout_constraintEnd_toStartOf="@id/giftStickerStatusView"
         app:layout_constraintBottom_toTopOf="@id/giftStickerPrice"
+        app:layout_constraintEnd_toStartOf="@id/giftStickerStatusView"
+        app:layout_constraintStart_toEndOf="@id/stickerView"
         app:layout_constraintTop_toTopOf="@id/stickerView"
-        app:layout_constraintStart_toEndOf="@id/stickerView"/>
+        tools:text="name" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/giftStickerPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
+        android:padding="@dimen/dp2"
         android:textColor="?attr/iGapSubtitleTextColor"
-        app:layout_constraintStart_toStartOf="@id/giftStickerTitle"
+        app:layout_constraintBottom_toBottomOf="@id/stickerView"
         app:layout_constraintEnd_toEndOf="@id/giftStickerTitle"
+        app:layout_constraintStart_toStartOf="@id/giftStickerTitle"
         app:layout_constraintTop_toBottomOf="@id/giftStickerTitle"
-        app:layout_constraintBottom_toBottomOf="@id/stickerView"/>
+        tools:text="amount" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/giftStickerStatusView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
+        android:textStyle="bold"
         android:layout_marginEnd="@dimen/dp8"
+        android:ellipsize="end"
         android:layout_marginRight="@dimen/dp8"
+        android:padding="@dimen/dp8"
+        app:layout_constraintBottom_toBottomOf="@id/stickerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/stickerView"
-        app:layout_constraintBottom_toBottomOf="@id/stickerView" />
+        tools:text="Active" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/iGapDividerLine"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

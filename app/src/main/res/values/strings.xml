@@ -2420,5 +2420,7 @@ Want to get it?</string>
     <string name="gift_sticker_visit">مشاهده</string>
     <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
     <string name="gift_cart_title">کارت هدیه</string>
+    <string name="my_gift_sticker">استیکرهای هدیه من</string>
+    <string name="my_recived_gift_sticker">استیکرهای هدیه دریافت شده</string>
 
 </resources>

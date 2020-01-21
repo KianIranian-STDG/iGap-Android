@@ -4,33 +4,53 @@ import android.view.View;
 
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.rx.IGSingleObserver;
+import net.iGap.rx.ObserverViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MyGiftStickerBuyViewModel extends ViewModel {
+public class MyGiftStickerBuyViewModel extends ObserverViewModel {
 
-    private MutableLiveData<List<String>> loadStickerList = new MutableLiveData<>();
+    private MutableLiveData<List<StructIGGiftSticker>> loadStickerList = new MutableLiveData<>();
     private SingleLiveEvent<String> showRequestErrorMessage = new SingleLiveEvent<>();
     private ObservableInt showLoading = new ObservableInt(View.VISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableInt showEmptyListMessage = new ObservableInt(View.GONE);
 
-    private StickerRepository repository;
-    private List<String> stickerList = new ArrayList<>();
+    @Override
+    public void subscribe() {
+        showLoading.set(View.VISIBLE);
+        showEmptyListMessage.set(View.GONE);
+        StickerRepository.getInstance().getMyGiftStickerBuy()
+                .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
+                    @Override
+                    public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
+                        loadStickerList.postValue(structIGGiftStickers);
+                        showLoading.set(View.GONE);
 
-    public MyGiftStickerBuyViewModel(){
-        //set request get sticker list
+                        if (structIGGiftStickers.size() == 0) {
+                            showEmptyListMessage.set(View.VISIBLE);
+                        }
 
+                        showRetryView.set(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        showLoading.set(View.GONE);
+                        showRetryView.set(View.VISIBLE);
+                    }
+                });
     }
 
-
-    public void onRetryButtonClick(){
-
+    public void onRetryButtonClick() {
+        showRetryView.set(View.GONE);
+        subscribe();
     }
 
     public ObservableInt getShowLoading() {
@@ -45,7 +65,7 @@ public class MyGiftStickerBuyViewModel extends ViewModel {
         return showEmptyListMessage;
     }
 
-    public MutableLiveData<List<String>> getLoadStickerList() {
+    public MutableLiveData<List<StructIGGiftSticker>> getLoadStickerList() {
         return loadStickerList;
     }
 

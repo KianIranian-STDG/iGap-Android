@@ -2,12 +2,9 @@
 package net.iGap.fragments.emoji.apiModels;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class UserStickers {
 
-    @SerializedName("__v")
-    private Long _V;
     @Expose
     private Activation activation;
     @Expose
@@ -24,13 +21,15 @@ public class UserStickers {
     private String updatedAt;
     @Expose
     private StickerDataModel sticker;
+    @Expose
+    private String rrn;
 
-    public Long get_V() {
-        return _V;
+    public void setRrn(String rrn) {
+        this.rrn = rrn;
     }
 
-    public void set_V(Long _V) {
-        this._V = _V;
+    public String getRrn() {
+        return rrn;
     }
 
     public Activation getActivation() {

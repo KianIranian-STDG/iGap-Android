@@ -29,6 +29,7 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
     private SingleLiveEvent<Boolean> goNextStep = new SingleLiveEvent<>();
 
     public EnterNationalCodeViewModel() {
+
         DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null && realmUserInfo.getNationalCode() != null && realmUserInfo.getNationalCode().length() == 10) {
@@ -61,7 +62,7 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
                     new ApiInitializer<CheckNationalCodeResponse>().initAPI(new RetrofitFactory().getShahkarRetrofit().checkNationalCode(nationalCode, phoneNumber), this, new ResponseCallback<CheckNationalCodeResponse>() {
                         @Override
                         public void onSuccess(CheckNationalCodeResponse data) {
-                            showLoading.set(View.GONE);
+                            showLoading.set(View.INVISIBLE);
                             if (data.isSuccess()) {
                                 goNextStep.setValue(true);
                             } else {
@@ -71,14 +72,14 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
 
                         @Override
                         public void onError(String error) {
-                            showLoading.set(View.GONE);
+                            showLoading.set(View.INVISIBLE);
                             requestError.setValue(error);
                         }
 
                         @Override
                         public void onFailed() {
                             showErrorMessageRequestFailed.setValue(R.string.connection_error);
-                            showLoading.set(View.GONE);
+                            showLoading.set(View.INVISIBLE);
                         }
                     });
                 } else {

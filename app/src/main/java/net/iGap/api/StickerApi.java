@@ -19,7 +19,7 @@ import retrofit2.http.Query;
 
 public interface StickerApi {
 
-    @GET("category/list")
+    @GET("category")
     Single<StickerCategorisDataModel> getCategories();
 
     @GET("category/{categoryId}")
@@ -28,13 +28,13 @@ public interface StickerApi {
     @GET("category/{categoryId}")
     Single<StickerCategoryGroupDataModel> getCategoryStickers(@Path("categoryId") String categoryId, @Query("skip") int skip, @Query("limit") int limit);
 
-    @GET("main/user-list")
+    @GET("user-list")
     Single<StickerCategoryGroupDataModel> getUserStickersGroup();
 
-    @POST("main/user-list{groupId}")
+    @POST("user-list/{groupId}")
     Completable addStickerGroupToMyStickers(@Path("groupId") String groupId);
 
-    @POST("main/user-list/delete")
+    @POST("user-list/delete")
     Completable removeStickerGroupFromMyStickers(@Body Ids ids);
 
     @GET("main/{groupId}")
@@ -54,6 +54,9 @@ public interface StickerApi {
 
     @GET("gift/created-list")
     Single<UserGiftStickersDataModel> getUserGiftSticker();
+
+    @GET("gift/activated-list")
+    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();
 
     @GET("gift/giftable-list")
     Single<StickerCategoryGroupDataModel> getGiftableStickers();

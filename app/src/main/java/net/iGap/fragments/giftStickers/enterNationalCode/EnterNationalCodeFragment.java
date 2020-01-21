@@ -15,12 +15,19 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEnterNationalCodeBinding;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
+import net.iGap.fragments.giftStickers.GiftStickerHomeFragment;
 import net.iGap.helper.HelperError;
 
 public class EnterNationalCodeFragment extends Fragment {
-
     private EnterNationalCodeViewModel viewModel;
-    private FragmentEnterNationalCodeBinding binding;
+
+    private EnterNationalCodeFragment() {
+    }
+
+    public static EnterNationalCodeFragment getInstance() {
+        EnterNationalCodeFragment fragment = new EnterNationalCodeFragment();
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +38,7 @@ public class EnterNationalCodeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_national_code, container, false);
+        FragmentEnterNationalCodeBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_national_code, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -50,6 +57,8 @@ public class EnterNationalCodeFragment extends Fragment {
         viewModel.getGoNextStep().observe(getViewLifecycleOwner(), isGo -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && isGo != null && isGo) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackagePage();
+            } else if (getParentFragment() instanceof GiftStickerHomeFragment && isGo != null && isGo) {
+                ((GiftStickerHomeFragment) getParentFragment()).loadStickerPackagePage();
             }
         });
 

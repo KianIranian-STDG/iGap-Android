@@ -27,7 +27,7 @@
         android:layout_marginStart="@dimen/dp32"
         android:layout_marginTop="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp32"
-        android:text="استیکرهای هدیه من" />
+        android:text="@string/my_gift_sticker" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/receivedGiftStickerPage"
@@ -37,6 +37,6 @@
         android:layout_marginStart="@dimen/dp32"
         android:layout_marginTop="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp32"
-        android:text="استیکرهای هدیه دریافت شده" />
+        android:text="@string/my_recived_gift_sticker" />
 
 </LinearLayout>

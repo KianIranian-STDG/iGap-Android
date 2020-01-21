@@ -77,7 +77,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
         Gson gson = new Gson();
 
         try {
-            StructIGSticker structIGSticker = gson.fromJson(mMessage.getRealmAdditional().getAdditionalData(), StructIGSticker.class);
+            StructIGSticker structIGSticker = gson.fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
             if (structIGSticker != null)
                 holder.image.loadSticker(structIGSticker);
         } catch (JsonSyntaxException e) {
@@ -125,7 +125,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             imageLayoutParams.gravity = Gravity.CENTER;
             image.setLayoutParams(imageLayoutParams);
             image.setId(R.id.thumbnail);
-            image.setPadding(LayoutCreator.dp(20), LayoutCreator.dp(20), LayoutCreator.dp(20), LayoutCreator.dp(20));
+            image.setPadding(LayoutCreator.dp(25), LayoutCreator.dp(20), LayoutCreator.dp(25), LayoutCreator.dp(20));
             contentOne.addView(image);
             getContentBloke().addView(contentOne);
 
