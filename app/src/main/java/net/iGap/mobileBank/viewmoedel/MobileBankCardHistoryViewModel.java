@@ -17,6 +17,7 @@ import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.util.JalaliCalendar;
 import net.iGap.module.CalendarShamsi;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,9 +25,9 @@ import java.util.List;
 
 public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
 
-    private ObservableField<String> balance = new ObservableField<>("1,000,000,000");
-    private ObservableField<String> income = new ObservableField<>("1,000,000,000");
-    private ObservableField<String> withdraw = new ObservableField<>("1,000,000,000");
+    private ObservableField<String> balance = new ObservableField<>("...");
+    private ObservableField<String> income = new ObservableField<>("...");
+    private ObservableField<String> withdraw = new ObservableField<>("...");
     private MutableLiveData<List<BankDateModel>> calender;
     private MutableLiveData<List<BankHistoryModel>> bills;
 
@@ -144,6 +145,9 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
                 bills.setValue(data.getData());
+                DecimalFormat df = new DecimalFormat(",###");
+                Log.d(TAG, "onSuccess: " + data.getData().get(data.getData().size() - 1).getBalance());
+                balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
             }
 
             @Override
@@ -158,7 +162,7 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
         });
     }
 
-    private String CompatibleUnicode(String entry) {
+    private String compatibleUnicode(String entry) {
         return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 

@@ -80,7 +80,6 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/dp26"
                         android:textColor="?iGapSubtitleTextColor"
-                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/reportBtn"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -95,7 +94,6 @@
                         android:gravity="center"
                         android:layout_marginTop="@dimen/dp8"
                         android:textStyle="bold"
-                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/balanceTitle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
