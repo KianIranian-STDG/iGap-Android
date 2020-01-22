@@ -1828,7 +1828,7 @@
     <string name="st_dark_theme">تیره زمینه لی </string>
     <string name="st_data_shams">پارسی تاریخ</string>
     <string name="st_des_bio">سیز اوزونوز باره ده مختصر بیر توضیح اوز پروفایلیزدا یازا بیلرسیز. ذکر ائتمک لازمدیر کی هر استفاده چی سیزین پروفایلیزدا بو متنی گوره جکدیر</string>
-    <string name="st_desc_delete">بو 1% پیغامی حذف ائتمکدن مطمئتسیز می؟ </string>
+    <string name="st_desc_delete">بو %1$s پیغامی حذف ائتمکدن مطمئتسیز می؟ </string>
     <string name="st_dialog_content_keepMedia">بولوتلو فضادا سیزین دسترسینیزده اولان و ذخیره ائتدیگینیز تصویرلر، ویدئولار و دیگر فایل لار بوش فضالار یاراتماق اوچون دستگاه دان سیلینیر. بوتون رسانه لر بولوتلو فضانین ذخیره ائتمه بخشینده ساخلانیلیر کی لازم اولان زمان اونلاری یئنیدن دانلود ائده بیله سینیز. </string>
     <string name="st_dialog_reset_all_notification">پروگرامین اعلانلارینین بوتون تنظیم لرینی ایلکین وضعیته قایتارماق ایسته ییرسینیز می؟ </string>
     <string name="st_dialog_reset_all_notification_no">خیر</string>
@@ -2120,6 +2120,7 @@
     <string name="zero_number">۰</string>
     <string name="zighade">ذیقعده</string>
     <string name="zihaje">ذیحجه</string>
+    <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="profile">پروفایل</string>
     <string name="install_latest_version">بو قیسمت دن ایستاده المه ائتمک تزه نسخه لازیمدیر</string>
     <string name="get_temporary_password">دریافت رمز پویا</string>
