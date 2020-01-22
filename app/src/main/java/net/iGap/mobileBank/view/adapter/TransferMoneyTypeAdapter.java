@@ -17,7 +17,7 @@ import java.util.List;
 public class TransferMoneyTypeAdapter extends RecyclerView.Adapter<TransferMoneyTypeAdapter.ViewHolder> {
 
     private List<TransferMoneyTypeModel> mTypes = new ArrayList<>();
-    private String[] types = {"کارت به کارت", "پایا", "ساتنا", "حساب پارسیان"};
+    private String[] types = {"پایا", "ساتنا", "عادی"};
     public String mSelectedType;
 
     public void setTypes() {

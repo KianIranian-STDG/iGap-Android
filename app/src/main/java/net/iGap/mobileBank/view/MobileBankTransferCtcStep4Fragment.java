@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankTransferCtcStep4FragmentBinding;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.TransferMoneyCtcResultModel;
@@ -48,7 +47,7 @@ public class MobileBankTransferCtcStep4Fragment extends BaseAPIViewFrag<MobileBa
         setupToolbar();
         setupRecycler();
         binding.btnShare.setOnClickListener(v -> {
-            new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
+            //new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
 
         });
     }

@@ -34,7 +34,6 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
     private SingleLiveEvent<Boolean> onLoginResponse = new SingleLiveEvent<>();
 
     private MobileBankRepository repository;
-    private static final String TAG = "MobileBankLoginViewMode";
 
     public MobileBankLoginViewModel() {
         repository = MobileBankRepository.getInstance();

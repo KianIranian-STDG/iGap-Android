@@ -99,6 +99,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
             @Override
             public void onError(String error) {
                 shebaListener.postValue(null);
+                showRequestErrorMessage.setValue(error);
             }
 
             @Override
@@ -131,6 +132,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
 
             @Override
             public void onError(String error) {
+                showRequestErrorMessage.setValue(error);
                 shebaListener.postValue(null);
             }
 
