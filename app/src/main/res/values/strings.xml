@@ -2421,7 +2421,12 @@ Want to get it?</string>
     <string name="mobile_bank_balance_cvv">CVV2:</string>
     <string name="mobile_bank_balance_expireDate">Expire Date: (year/month)</string>
     <string name="mobile_bank_balance_cardError">please enter your Parsian card number.</string>
+    <string name="mobile_bank_balance_cardLengthError">your card number must be 16 digits.</string>
     <string name="mobile_bank_balance_passwordError">please enter your password.</string>
+    <string name="mobile_bank_balance_passwordLengthError">your password must have at least 6 characters.</string>
     <string name="mobile_bank_balance_CVVError">please enter your CVV2 number.</string>
+    <string name="mobile_bank_balance_CVVLengthError">your CVV2 number must be at least 3 digits.</string>
     <string name="mobile_bank_balance_dateError">please enter your expire date.</string>
+    <string name="mobile_bank_balance_dateLengthError">please enter your expire date completely.</string>
+    <string name="mobile_bank_balance_message">Your card balance (%1$s) is %2$s.</string>
 </resources>

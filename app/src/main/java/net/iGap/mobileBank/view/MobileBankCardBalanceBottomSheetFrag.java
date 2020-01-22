@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+
 import net.iGap.R;
 import net.iGap.databinding.MobileBankCardBalanceBottomSheetDialogBinding;
 import net.iGap.dialog.BaseBottomSheet;
@@ -56,16 +59,18 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
     }
 
     private void onComplete() {
-        viewModel.getComplete().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getComplete().observe(getViewLifecycleOwner(), balance -> {
 
-            completeListener.onCompleted(aBoolean);
             this.dismiss();
+            completeListener.onCompleted(viewModel.getCardNumber(), balance);
 
         });
     }
 
     private void onTextChange() {
         binding.cardNumberET.addTextChangedListener(new TextWatcher() {
+            boolean isSettingText;
+            String cardNum;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.cardNumber.setErrorEnabled(false);
@@ -73,12 +78,30 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                cardNum = s.toString().replaceAll("-", "");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (isSettingText) return;
 
+                isSettingText = true;
+                String s1 = "";
+
+                String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(cardNum), String.class);
+                for (int i = 0; i < tempArray.length; i++) {
+                    if (i == tempArray.length - 1)
+                        s1 = s1 + tempArray[i];
+                    else
+                        s1 = s1 + tempArray[i] + "-";
+                }
+
+                binding.cardNumberET.setText(s1);
+                binding.cardNumberET.setSelection(binding.cardNumberET.length());
+
+                isSettingText = false;
+
+//                viewModel.setAmount(s.toString().replace(",", ""));
             }
         });
 
@@ -117,6 +140,8 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
         });
 
         binding.expireDateET.addTextChangedListener(new TextWatcher() {
+            boolean isSettingText;
+            String dateNum;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.expireDate.setErrorEnabled(false);
@@ -124,12 +149,28 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                dateNum = s.toString().replaceAll("/", "");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (isSettingText) return;
 
+                isSettingText = true;
+                String s1 = "";
+
+                String[] tempArray = Iterables.toArray(Splitter.fixedLength(2).split(dateNum), String.class);
+                for (int i = 0; i < tempArray.length; i++) {
+                    if (i == tempArray.length - 1)
+                        s1 = s1 + tempArray[i];
+                    else
+                        s1 = s1 + tempArray[i] + "/";
+                }
+
+                binding.expireDateET.setText(s1);
+                binding.expireDateET.setSelection(binding.expireDateET.length());
+
+                isSettingText = false;
             }
         });
     }
@@ -140,7 +181,7 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
     }
 
     interface CompleteListener {
-        void onCompleted(boolean result);
+        void onCompleted(String cardNumber, String balance);
     }
 
     public void setCompleteListener(CompleteListener completeListener) {

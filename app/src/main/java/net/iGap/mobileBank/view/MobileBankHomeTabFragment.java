@@ -120,7 +120,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 break;
 
             case R.string.Inventory:
-                openGetCardInfo();
+                if (mode == HomeTabMode.CARD)
+                    openGetCardInfo(getCurrentAccount());
+                else {
+                }
                 break;
         }
     }
@@ -326,14 +329,14 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         }
     }
 
-    private void openGetCardInfo() {
-        MobileBankCardBalanceBottomSheetFrag frag = MobileBankCardBalanceBottomSheetFrag.newInstance("");
-        frag.setCompleteListener(new MobileBankCardBalanceBottomSheetFrag.CompleteListener() {
-            @Override
-            public void onCompleted(boolean result) {
-
-            }
-        });
+    private void openGetCardInfo(String cardNumber) {
+        MobileBankCardBalanceBottomSheetFrag frag = MobileBankCardBalanceBottomSheetFrag.newInstance(cardNumber);
+        frag.setCompleteListener((cardNumber1, balance) ->
+                new DialogParsian()
+                        .setContext(getContext())
+                        .setTitle(getString(R.string.mobile_bank_balance_title))
+                        .setButtonsText(getString(R.string.ok), null)
+                        .showSimpleMessage(getString(R.string.mobile_bank_balance_message, cardNumber1, balance + " " + getString(R.string.rial))));
         frag.show(getFragmentManager(), "CardBalanceBottomSheet");
     }
 

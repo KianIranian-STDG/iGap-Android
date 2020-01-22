@@ -2,6 +2,7 @@ package net.iGap.api;
 
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.model.BankDateModel;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
@@ -58,4 +59,11 @@ public interface MobileBankApi {
                                                                            @Field("offset") Integer offset,
                                                                            @Field("fromDate") String startDate,
                                                                            @Field("toDate") String endDate);
+
+    @POST("card/get-card-balance")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<BankDateModel>> getCardBalance(@Header("Authorization") String token,
+                                                               @Field("pan") String cardNumber,
+                                                               @Field("auth_info") String cardData,
+                                                               @Field("deposit_number") String depositNumber);
 }

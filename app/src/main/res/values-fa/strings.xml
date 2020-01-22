@@ -2351,4 +2351,18 @@
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
     <string name="mobile_bank_sorathesab">صورت حساب</string>
+    <string name="mobile_bank_balance_CVVError">لطفا شماره CVV2 کارت خود را وارد کنید.</string>
+    <string name="mobile_bank_balance_cardError">لطفا شماره کارت خود را وارد کنید.</string>
+    <string name="mobile_bank_balance_cardNumber">"شماره کارت: "</string>
+    <string name="mobile_bank_balance_cvv">"شماره CVV2: "</string>
+    <string name="mobile_bank_balance_dateError">لطفا تاریخ انقضای کارت خود را وارد کنید.</string>
+    <string name="mobile_bank_balance_expireDate">تاریخ انقضا: (ماه/سال)</string>
+    <string name="mobile_bank_balance_pass">رمز کارت:</string>
+    <string name="mobile_bank_balance_passwordError">لطفا رمز کارت خود را وارد کنید.</string>
+    <string name="mobile_bank_balance_title">موجودی کارت بانکی</string>
+    <string name="mobile_bank_balance_CVVLengthError">شماره CVV2 کارت شما باید حداقل 3 عدد باشد.</string>
+    <string name="mobile_bank_balance_cardLengthError">شماره کارت شما باید  شامل 16 عدد باشد.</string>
+    <string name="mobile_bank_balance_dateLengthError">لطفا تاریخ انقضای کارت خود را به صورت کامل وارد کنید.</string>
+    <string name="mobile_bank_balance_passwordLengthError">رمز کارت شما باید حداقل 6 کاراکتر باشد.</string>
+    <string name="mobile_bank_balance_message">موجودی کارت (%1$s) شما %2$s است.</string>
 </resources>

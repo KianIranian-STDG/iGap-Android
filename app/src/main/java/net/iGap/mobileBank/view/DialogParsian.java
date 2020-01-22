@@ -97,7 +97,8 @@ public class DialogParsian {
 
         mActiveButton.setOnClickListener(v -> {
             mDialog.dismiss();
-            mListener.onActiveButtonClicked(mDialog);
+            if (mListener != null)
+                mListener.onActiveButtonClicked(mDialog);
         });
 
         mContentLayout.addView(tvMessage, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 12f, 12f, 12f, 12f));
