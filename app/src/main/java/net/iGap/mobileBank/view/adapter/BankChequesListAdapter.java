@@ -10,21 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.mobileBank.repository.model.ChequeModel;
+import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BankChequesListAdapter extends RecyclerView.Adapter<BankChequesListAdapter.ChequeListViewHolder> {
 
-    private List<ChequeModel> items = new ArrayList<>();
+    private List<BankChequeBookListModel> items = new ArrayList<>();
     private ChequeListListener listener;
 
     public void setListener(ChequeListListener listener) {
         this.listener = listener;
     }
 
-    public void setItems(List<ChequeModel> items) {
+    public void setItems(List<BankChequeBookListModel> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -65,7 +65,7 @@ public class BankChequesListAdapter extends RecyclerView.Adapter<BankChequesList
         }
 
         @SuppressLint("SetTextI18n")
-        public void bind(ChequeModel item) {
+        public void bind(BankChequeBookListModel item) {
 
             tvNumber.setText(getString(R.string.cheque_number) + item.getNumber());
             tvPageCount.setText(getString(R.string.page_count) + item.getPageCount());
@@ -84,6 +84,6 @@ public class BankChequesListAdapter extends RecyclerView.Adapter<BankChequesList
     }
 
     public interface ChequeListListener {
-        void onChequeClicked(ChequeModel chequeModel);
+        void onChequeClicked(BankChequeBookListModel chequeModel);
     }
 }

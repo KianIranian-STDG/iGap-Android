@@ -14,7 +14,7 @@ import net.iGap.R;
 import net.iGap.databinding.MobileBankChequesListFragmentBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.mobileBank.repository.model.ChequeModel;
+import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 import net.iGap.mobileBank.view.adapter.BankChequesListAdapter;
 import net.iGap.mobileBank.viewmoedel.MobileBankChequesListViewModel;
 
@@ -78,7 +78,7 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
         });
     }
 
-    private void setupRecyclerView(List<ChequeModel> chequeModels) {
+    private void setupRecyclerView(List<BankChequeBookListModel> chequeModels) {
         BankChequesListAdapter adapter = new BankChequesListAdapter();
         adapter.setListener(chequeModel -> {
         });

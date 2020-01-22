@@ -2,7 +2,7 @@ package net.iGap.mobileBank.repository.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ChequeModel {
+public class BankChequeBookListModel {
 
     @SerializedName("issue_date")
     private String issue_date;

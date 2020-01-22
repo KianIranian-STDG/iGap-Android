@@ -10,10 +10,11 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardBalance;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
+import net.iGap.mobileBank.repository.model.BankChequeSingle;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
-import net.iGap.mobileBank.repository.model.ChequeModel;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
 import java.util.List;
@@ -42,8 +43,12 @@ public class MobileBankRepository {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankCardModel>>>().initAPI(bankApi.getUserCards(getAccessToken() ,null, null, null, null), callback, responseCallback);
     }
 
-    public void getChequeList(String deposit, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<ChequeModel>>> responseCallback) {
-        new MobileBankApiInitializer<BaseMobileBankResponse<List<ChequeModel>>>().initAPI(bankApi.getCheques(getAccessToken(), deposit), callback, responseCallback);
+    public void getChequeBookList(String deposit, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankChequeBookListModel>>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankChequeBookListModel>>>().initAPI(bankApi.getChequesBookList(getAccessToken(), deposit), callback, responseCallback);
+    }
+
+    public void getChequeList(String depositNumber, String chequeBookNumber, Integer length, Integer offset, String chequeNumber, String status, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankChequeSingle>>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankChequeSingle>>>().initAPI(bankApi.getChequesList(getAccessToken(), depositNumber, chequeBookNumber, length, offset, chequeNumber, status), callback, responseCallback);
     }
 
     public void getMobileBankAccounts(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>> responseCallback) {

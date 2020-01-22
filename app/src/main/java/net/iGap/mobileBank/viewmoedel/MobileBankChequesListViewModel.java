@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
+import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
-import net.iGap.mobileBank.repository.model.ChequeModel;
 
 import java.util.List;
 
@@ -16,16 +16,16 @@ public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
 
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     private ObservableInt noItemVisibility = new ObservableInt(View.GONE);
-    private MutableLiveData<List<ChequeModel>> responseListener = new MutableLiveData<>();
-    public List<ChequeModel> cheques;
+    private MutableLiveData<List<BankChequeBookListModel>> responseListener = new MutableLiveData<>();
+    public List<BankChequeBookListModel> cheques;
     private String deposit;
 
     public void getCheques(String deposit) {
         this.deposit = deposit;
         setLoaderState(true);
-        MobileBankRepository.getInstance().getChequeList(deposit, this, new ResponseCallback<BaseMobileBankResponse<List<ChequeModel>>>() {
+        MobileBankRepository.getInstance().getChequeBookList(deposit, this, new ResponseCallback<BaseMobileBankResponse<List<BankChequeBookListModel>>>() {
             @Override
-            public void onSuccess(BaseMobileBankResponse<List<ChequeModel>> data) {
+            public void onSuccess(BaseMobileBankResponse<List<BankChequeBookListModel>> data) {
                 showLoading.set(View.GONE);
                 cheques = data.getData();
                 responseListener.postValue(cheques);
@@ -60,7 +60,7 @@ public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
         if (deposit != null) getCheques(deposit);
     }
 
-    public MutableLiveData<List<ChequeModel>> getResponseListener() {
+    public MutableLiveData<List<BankChequeBookListModel>> getResponseListener() {
         return responseListener;
     }
 
