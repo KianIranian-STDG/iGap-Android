@@ -44,6 +44,7 @@ import net.iGap.fragments.LocalContactFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.poll.PollFragment;
@@ -103,7 +104,8 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
-                actionPage(discoveryField.value, activity, haveNext);
+//                actionPage(discoveryField.value, activity, haveNext);
+                new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
                 break;
             case JOIN_LINK:
                 int index = discoveryField.value.lastIndexOf("/");
