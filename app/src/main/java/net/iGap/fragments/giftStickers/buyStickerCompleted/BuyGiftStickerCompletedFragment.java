@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.databinding.FragmentBuyGiftStickerComletedBinding;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
 
 public class BuyGiftStickerCompletedFragment extends Fragment {
     private StructIGSticker structIGSticker;
@@ -50,14 +51,31 @@ public class BuyGiftStickerCompletedFragment extends Fragment {
 
         binding.stickerView.loadSticker(structIGSticker);
 
+        if (delegate == null) {
+            binding.positiveButton.setText(R.string.my_gift_sticker);
+            binding.negativeButton.setText(R.string.my_recived_gift_sticker);
+        }
+
         binding.negativeButton.setOnClickListener(v -> {
-            delegate.onNegativeButton(structIGSticker);
-            dismiss();
+            if (delegate != null) {
+                delegate.onNegativeButton(structIGSticker);
+                dismiss();
+            } else {
+                if (getParentFragment() instanceof GiftStickerMainFragment){
+                    ((GiftStickerMainFragment) getParentFragment()).loadReceivedGiftStickerPage();
+                }
+            }
         });
 
         binding.positiveButton.setOnClickListener(v -> {
-            delegate.onPositiveButton(structIGSticker);
-            dismiss();
+            if (delegate != null) {
+                delegate.onPositiveButton(structIGSticker);
+                dismiss();
+            } else {
+                if (getParentFragment() instanceof GiftStickerMainFragment){
+                    ((GiftStickerMainFragment) getParentFragment()).loadBuyMySticker();
+                }
+            }
         });
 
     }

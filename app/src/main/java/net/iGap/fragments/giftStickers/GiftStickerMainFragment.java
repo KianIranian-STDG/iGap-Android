@@ -1,10 +1,12 @@
 package net.iGap.fragments.giftStickers;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +15,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -97,23 +102,56 @@ public class GiftStickerMainFragment extends BaseFragment {
     }
 
     public void loadStickerPackagePage() {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.giftStickerContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("showTitle", false);
         if (!(fragment instanceof GiftStickerPackageListFragment)) {
             fragment = new GiftStickerPackageListFragment();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
+        fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();
     }
 
     public void loadStickerPackageItemPage(StructIGStickerGroup stickerGroup) {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.giftStickerContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemListFragment)) {
             fragment = GiftStickerItemListFragment.getInstance(stickerGroup);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    public void loadStickerPackageItemDetailPage(StructIGSticker sticker) {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.giftStickerContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof GiftStickerItemDetailFragment)) {
+            fragment = GiftStickerItemDetailFragment.getInstance(sticker);
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    public void loadPaymentFragment(StructIGSticker structIGSticker, String paymentToke) {
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.gift_sticker_title), paymentToke, result -> {
+                Log.wtf(this.getClass().getName(), "result.isSuccess(): " + result.isSuccess());
+                if (result.isSuccess()) {
+                    Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
+                    Fragment fragment = getChildFragmentManager().findFragmentById(R.id.giftStickerContainer);
+                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                    if (!(fragment instanceof BuyGiftStickerCompletedFragment)) {
+                        fragment = BuyGiftStickerCompletedFragment.getInstance(structIGSticker, null);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.unsuccessful_payment), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public void setToolbarTitle(int titleRes) {

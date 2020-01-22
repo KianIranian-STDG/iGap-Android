@@ -59,14 +59,16 @@ public class GiftStickerItemListFragment extends Fragment {
             }
         });
 
-        viewModel.getGoToBuyItemPage().observe(getViewLifecycleOwner(), item -> {
+        /*viewModel.getGoToBuyItemPage().observe(getViewLifecycleOwner(), item -> {
 
-        });
+        });*/
 
 
         viewModel.getGoToShowDetailPage().observe(getViewLifecycleOwner(), giftStickerItem -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && giftStickerItem != null) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackageItemDetailPage(giftStickerItem);
+            }else if (getParentFragment() instanceof GiftStickerMainFragment && giftStickerItem != null){
+                ((GiftStickerMainFragment) getParentFragment()).loadStickerPackageItemDetailPage(giftStickerItem);
             }
         });
 

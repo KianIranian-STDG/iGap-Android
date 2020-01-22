@@ -2358,5 +2358,6 @@
     <string name="gift_cart_title">کارت هدیه</string>
     <string name="my_gift_sticker">استیکرهای هدیه من</string>
     <string name="my_recived_gift_sticker">استیکرهای هدیه دریافت شده</string>
+    <string name="expire_date">تاریخ انقضا</string>
 
 </resources>

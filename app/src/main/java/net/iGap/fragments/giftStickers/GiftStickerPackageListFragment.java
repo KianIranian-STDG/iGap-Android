@@ -1,5 +1,10 @@
 package net.iGap.fragments.giftStickers;
 
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +19,9 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
         RecyclerView recyclerView = rootView.findViewById(R.id.giftStickerPackageList);
         recyclerView.setAdapter(new GiftStickerPackageListAdapter(stickerGroup -> viewModel.onGiftStickerPackageClicked(stickerGroup)));
 
+        if (getArguments() != null) {
+            rootView.findViewById(R.id.pageTitle).setVisibility(getArguments().getBoolean("showTitle", true) ? View.VISIBLE : View.GONE);
+        }
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && isGoBack != null && isGoBack) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).dismissDialog();
@@ -39,6 +47,11 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
 
         viewModel.getIsShowLoadingLiveData().observe(getViewLifecycleOwner(), visibility -> rootView.findViewById(R.id.loadingView).setVisibility(visibility));
         viewModel.getIsShowRetryViewLiveData().observe(getViewLifecycleOwner(), visibility -> rootView.findViewById(R.id.retryView).setVisibility(visibility));
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

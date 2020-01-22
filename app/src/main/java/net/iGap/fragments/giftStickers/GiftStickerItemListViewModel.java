@@ -18,7 +18,7 @@ public class GiftStickerItemListViewModel extends BaseAPIViewModel {
 
     private MutableLiveData<List<String>> loadData = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> goToBuyItemPage = new SingleLiveEvent<>();
+    /*private SingleLiveEvent<String> goToBuyItemPage = new SingleLiveEvent<>();*/
     private SingleLiveEvent<StructIGSticker> goToShowDetailPage = new SingleLiveEvent<>();
 
     public void onCancelButtonClick() {
@@ -50,9 +50,9 @@ public class GiftStickerItemListViewModel extends BaseAPIViewModel {
         return goBack;
     }
 
-    public SingleLiveEvent<String> getGoToBuyItemPage() {
+    /*public SingleLiveEvent<String> getGoToBuyItemPage() {
         return goToBuyItemPage;
-    }
+    }*/
 
     public SingleLiveEvent<StructIGSticker> getGoToShowDetailPage() {
         return goToShowDetailPage;

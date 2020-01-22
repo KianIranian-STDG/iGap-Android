@@ -7,6 +7,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiInitializer;
@@ -40,10 +41,9 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
     }
 
     public void onInquiryButtonClick(String nationalCode) {
-        isEnabled.set(false);
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
-                String phoneNumber = /*AccountManager.getInstance().getCurrentUser().getPhoneNumber()*/ "989120423503";
+                String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
                 if (saveChecked.get()) {
                     DbManager.getInstance().doRealmTask(realm -> {
@@ -59,10 +59,12 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
                 if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
                     phoneNumber = "0" + phoneNumber.substring(2);
                     showLoading.set(View.VISIBLE);
+                    isEnabled.set(false);
                     new ApiInitializer<CheckNationalCodeResponse>().initAPI(new RetrofitFactory().getShahkarRetrofit().checkNationalCode(nationalCode, phoneNumber), this, new ResponseCallback<CheckNationalCodeResponse>() {
                         @Override
                         public void onSuccess(CheckNationalCodeResponse data) {
                             showLoading.set(View.INVISIBLE);
+                            isEnabled.set(true);
                             if (data.isSuccess()) {
                                 goNextStep.setValue(true);
                             } else {
@@ -73,6 +75,7 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
                         @Override
                         public void onError(String error) {
                             showLoading.set(View.INVISIBLE);
+                            isEnabled.set(true);
                             requestError.setValue(error);
                         }
 
@@ -80,6 +83,7 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
                         public void onFailed() {
                             showErrorMessageRequestFailed.setValue(R.string.connection_error);
                             showLoading.set(View.INVISIBLE);
+                            isEnabled.set(true);
                         }
                     });
                 } else {
@@ -88,12 +92,10 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
             } else {
                 hasError.set(true);
                 errorMessageNationalCode.set(R.string.elecBill_Entry_userIDLengthError);
-                isEnabled.set(true);
             }
         } else {
             hasError.set(true);
             errorMessageNationalCode.set(R.string.elecBill_Entry_userIDError);
-            isEnabled.set(true);
         }
     }
 

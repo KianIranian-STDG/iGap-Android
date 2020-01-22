@@ -11,7 +11,8 @@
         android:layout_marginStart="@dimen/dp32"
         android:layout_marginTop="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp32"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="?attr/iGapCardViewColor">
 
         <FrameLayout
             android:id="@+id/header"

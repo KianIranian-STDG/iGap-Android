@@ -3614,7 +3614,7 @@ public class FragmentChat extends BaseFragment
                                     return;
                                 }
 
-                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.cpay_title), paymentToken, result -> {
+                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.gift_sticker_title), paymentToken, result -> {
                                     if (result.isSuccess()) {
                                         Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
 

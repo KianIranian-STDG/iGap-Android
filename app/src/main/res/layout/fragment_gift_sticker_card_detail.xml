@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.fragments.giftStickers.giftCardDetail.GiftStickerCardDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp16"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/headerLine"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp2"
+            android:layout_gravity="center"
+            android:background="?attr/iGapBottomSheetHeaderLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cardNumberTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@string/card_number"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/headerLine" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cardNumberView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.copyValue(cardNumberView.getText())}"
+            android:padding="@dimen/dp8"
+            android:textColor="?attr/iGapSubtitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/cardNumberTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cvvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@string/cvv2"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/cardNumberView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cvvView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.copyValue(cvvView.getText())}"
+            android:padding="@dimen/dp8"
+            android:textColor="?attr/iGapSubtitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/cvvTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/internetPin2Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@string/internet_pin_2"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/cvvView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/internetPin2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.copyValue(internetPin2.getText())}"
+            android:padding="@dimen/dp8"
+            android:textColor="?attr/iGapSubtitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/internetPin2Title" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/expireTimeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@string/expire_date"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/internetPin2" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/expireTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.copyValue(expireTime.getText())}"
+            android:padding="@dimen/dp8"
+            android:textColor="?attr/iGapSubtitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintTop_toBottomOf="@id/expireTimeTitle" />
+
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/retryView"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{()->viewModel.onRetryViewClicked()}"
+            android:text="@string/retry_icon"
+            android:visibility="@{viewModel.showRetryView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
