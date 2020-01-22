@@ -5,10 +5,10 @@ public class Issue {
     private String tel_num;
     private int count;
 
-    public Issue(String national_code, String tel_num, int count) {
+    public Issue(String national_code, String tel_num) {
         this.national_code = national_code;
         this.tel_num = tel_num;
-        this.count = count;
+        this.count = 1;
     }
 
     public String getNational_code() {

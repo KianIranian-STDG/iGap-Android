@@ -3614,6 +3614,28 @@ public class FragmentChat extends BaseFragment
                                     return;
                                 }
 
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        BuyGiftStickerCompletedBottomSheet bottomSheet = BuyGiftStickerCompletedBottomSheet.getInstance(structIGSticker);
+                                        bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
+                                            @Override
+                                            public void onNegativeButton(StructIGSticker structIGSticker) {
+                                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                                            }
+
+                                            @Override
+                                            public void onPositiveButton(StructIGSticker structIGSticker) {
+                                                sendStickerAsMessage(structIGSticker);
+                                            }
+                                        });
+
+                                        bottomSheet.show(FragmentChat.this.getActivity().getSupportFragmentManager(), null);
+
+                                    }
+                                }, 3000);
+
                                 new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.gift_sticker_title), paymentToken, result -> {
                                     if (result.isSuccess()) {
                                         Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();

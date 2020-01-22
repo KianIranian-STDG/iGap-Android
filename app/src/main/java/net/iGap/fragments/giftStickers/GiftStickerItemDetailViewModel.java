@@ -32,7 +32,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
         isShowLoading.set(View.VISIBLE);
         isEnabledButton.set(false);
         // TODO: 1/20/20 clear hard code data
-        stickerRepository.addIssue(structIGSticker.getId(), new Issue("4271241776", "09120423503", 1))
+        stickerRepository.addIssue(structIGSticker.getId(), new Issue("4271241776", "09120423503"))
                 .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
                     @Override
                     public void onSuccess(IssueDataModel issueDataModel) {

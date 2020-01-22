@@ -57,7 +57,9 @@ public class GiftStickerItemDetailFragment extends Fragment {
         binding.stickerView.loadSticker(sticker);
 
         DecimalFormat df = new DecimalFormat("#,###");
-        binding.stickerPrice.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(sticker.getGiftAmount()))) : df.format(Double.valueOf(sticker.getGiftAmount()))) + " " + getResources().getString(R.string.rial));
+
+        String text = "شما استیکر " + (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(sticker.getGiftAmount()))) : df.format(Double.valueOf(sticker.getGiftAmount()))) + " " + getResources().getString(R.string.rial) + "ی را انتخاب کردید!";
+        binding.stickerPrice.setText(text);
 
         viewModel.getGetPaymentLiveData().observe(getViewLifecycleOwner(), token -> {
             if (token != null) {
