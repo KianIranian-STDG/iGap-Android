@@ -24,6 +24,12 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loadEnterNationalCodeForActivatePage();
+    }
+
+    @Override
+    public int getTheme() {
+        return R.style.BaseBottomSheetDialog;
     }
 
     public void loadEnterNationalCodeForActivatePage() {

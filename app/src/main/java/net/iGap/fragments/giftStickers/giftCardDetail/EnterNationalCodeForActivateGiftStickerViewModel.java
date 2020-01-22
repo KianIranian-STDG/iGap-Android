@@ -5,12 +5,16 @@ import android.view.View;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.fragments.giftStickers.enterNationalCode.CheckNationalCodeResponse;
 import net.iGap.module.SingleLiveEvent;
 
-public class EnterNationalCodeForActivateGiftStickerViewModel extends ViewModel {
+public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIViewModel {
 
     private ObservableBoolean hasError = new ObservableBoolean(false);
     private ObservableInt errorMessage = new ObservableInt(R.string.empty_error_message);
@@ -23,7 +27,33 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends ViewModel 
     public void onActiveButtonClicked(String nationalCode) {
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
+                new ApiInitializer<CheckNationalCodeResponse>().initAPI(new RetrofitFactory().getShahkarRetrofit().checkNationalCode(nationalCode, "09120423503"), this, new ResponseCallback<CheckNationalCodeResponse>() {
+                    @Override
+                    public void onSuccess(CheckNationalCodeResponse data) {
+                        isShowLoading.set(View.INVISIBLE);
+                        isEnable.set(true);
+                        if (data.isSuccess()) {
+                            goToNextStep.setValue("sss");
+                        } else {
+                            errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
+                        }
+                    }
 
+                    @Override
+                    public void onError(String error) {
+                        isShowLoading.set(View.INVISIBLE);
+                        isEnable.set(true);
+                        errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
+
+                        goToNextStep.setValue("sss");
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        isShowLoading.set(View.INVISIBLE);
+                        isEnable.set(true);
+                    }
+                });
             } else {
                 hasError.set(true);
                 errorMessage.set(R.string.elecBill_Entry_userIDLengthError);

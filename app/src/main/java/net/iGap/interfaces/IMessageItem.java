@@ -12,7 +12,7 @@ package net.iGap.interfaces;
 
 import android.view.View;
 
-import net.iGap.module.enums.SendingStep;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -49,4 +49,6 @@ public interface IMessageItem {
     void sendFromBot(Object realmRoomMessage);
 
     void onOpenLinkDialog(String url);
+
+    void onActiveGiftStickerClick(StructIGSticker structIGSticker);
 }

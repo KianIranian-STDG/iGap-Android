@@ -1846,6 +1846,7 @@
     <string name="emoji_category_symbols">Symbols</string>
     <string name="emoji_category_travel">Travel And Place</string>
     <string name="gift_sticker_title">Подарочная наклейка</string>
+    <string name="active_gift_sticker_title">Подарочная наклейка</string>
     <string name="national_code_not_match_with_phone_number_error">Национальный код несовместим с информацией SIM-карты</string>
     <string name="gift_sticker_visit">مشاهده</string>
     <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>

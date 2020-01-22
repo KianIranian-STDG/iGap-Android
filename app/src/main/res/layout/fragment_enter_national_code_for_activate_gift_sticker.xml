@@ -14,18 +14,37 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pageTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="@dimen/dp8"
+            android:text="@string/active_gift_sticker_title"
+            android:textColor="?attr/colorAccent"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintWidth_percent=".9" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nationalCodeLayout"
             style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginTop="16dp"
             android:hint="@string/national_code"
             app:errorEnabled="@{viewModel.hasError}"
             app:errorText="@{viewModel.errorMessage}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pageTitle"
             app:layout_constraintWidth_percent=".8">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -41,14 +60,20 @@
             android:id="@+id/descriptionView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:padding="@dimen/dp8"
-            android:textColor="?attr/iGapTitleTextColor"
-            app:layout_constraintEnd_toEndOf="@id/nationalCodeLayout"
-            app:layout_constraintStart_toStartOf="@id/nationalCodeLayout"
+            android:text="ابتدا برای فعالسازی کارت هدیه کد ملی خود را وارد کنید.توجه داشته باشید فعال سازی یکبار انجام شده و اطلاعات کارت برای شما ارسال میشود.\nلطفا در نگهداری اطلاعات کارت کوشا باشید."
+            android:textColor="?attr/iGapSubtitleTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nationalCodeLayout" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/materialButton2"
             style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -65,13 +90,14 @@
 
         <ProgressBar
             android:id="@+id/loadingView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
             android:visibility="@{viewModel.isShowLoading}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/materialButton2"
+            app:layout_constraintEnd_toStartOf="@+id/materialButton2"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/materialButton2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

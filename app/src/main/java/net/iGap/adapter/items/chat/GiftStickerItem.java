@@ -77,7 +77,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
         Gson gson = new Gson();
 
         try {
-            StructIGSticker structIGSticker = gson.fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
+            StructIGSticker structIGSticker = holder.structIGSticker = gson.fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
             if (structIGSticker != null)
                 holder.image.loadSticker(structIGSticker);
         } catch (JsonSyntaxException e) {
@@ -105,6 +105,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
         private AppCompatTextView cardNumber4;
         private AppCompatTextView cvv2Tv;
         private AppCompatTextView expireTimeTv;
+        private StructIGSticker structIGSticker;
 
 
         public ViewHolder(View view) {
@@ -220,6 +221,9 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             contentTwo.setVisibility(View.GONE);
 
             contentTwo.setBackgroundResource(theme.getCardToCardButtonBackground(contentTwo.getContext()));
+
+            visitBtn.setOnClickListener(v -> messageClickListener.onActiveGiftStickerClick(structIGSticker));
+
             getContentBloke().addView(contentTwo);
         }
 

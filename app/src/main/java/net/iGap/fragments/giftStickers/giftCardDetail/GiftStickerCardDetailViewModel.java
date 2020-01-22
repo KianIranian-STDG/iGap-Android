@@ -3,15 +3,15 @@ package net.iGap.fragments.giftStickers.giftCardDetail;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.rx.ObserverViewModel;
 
-public class GiftStickerCardDetailViewModel extends ViewModel {
+public class GiftStickerCardDetailViewModel extends ObserverViewModel {
 
     //Must be invisible for not change view size
-    private ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
-    private ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
+    private ObservableInt showMainView = new ObservableInt(View.VISIBLE);
+    private ObservableInt showLoadingView = new ObservableInt(View.INVISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private SingleLiveEvent<String> copyValue = new SingleLiveEvent<>();
 
@@ -19,6 +19,11 @@ public class GiftStickerCardDetailViewModel extends ViewModel {
 
     GiftStickerCardDetailViewModel(String cardId){
         this.cardId = cardId;
+    }
+
+    @Override
+    public void subscribe() {
+
     }
 
     public void onRetryViewClicked(){
@@ -45,4 +50,5 @@ public class GiftStickerCardDetailViewModel extends ViewModel {
     public SingleLiveEvent<String> getCopyValue() {
         return copyValue;
     }
+
 }

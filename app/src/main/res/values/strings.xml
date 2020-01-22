@@ -2416,6 +2416,7 @@ Want to get it?</string>
     <string name="emoji_category_symbols">Symbols</string>
     <string name="emoji_category_travel">Travel And Place</string>
     <string name="gift_sticker_title">Gift sticker</string>
+    <string name="active_gift_sticker_title">Active gift sticker</string>
     <string name="national_code_not_match_with_phone_number_error">National code inconsistency with SIM card information</string>
     <string name="gift_sticker_visit">مشاهده</string>
     <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>

@@ -3077,6 +3077,7 @@
     <string name="emoji_category_symbols">Symbols</string>
     <string name="emoji_category_travel">Travel And Place</string>
     <string name="gift_sticker_title">ملصق هدية</string>
+    <string name="active_gift_sticker_title">ملصق هدية</string>
     <string name="national_code_not_match_with_phone_number_error">عدم تناسق الكود الوطني مع معلومات بطاقة SIM</string>
     <string name="gift_sticker_visit">مشاهده</string>
     <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
