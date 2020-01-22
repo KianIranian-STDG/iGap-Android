@@ -27,14 +27,20 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
     }
 
     public void loadEnterNationalCodeForActivatePage() {
-
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (!(fragment instanceof EnterNationalCodeForActivateGiftStickerFragment)) {
+            fragment = new EnterNationalCodeForActivateGiftStickerFragment();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadGiftStickerCardDetailFragment() {
+    public void loadGiftStickerCardDetailFragment(String cardId) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
-        bundle.putString("cardId", "Abbasi :D");
+        bundle.putString("cardId", cardId);
         if (!(fragment instanceof GiftStickerCardDetailFragment)) {
             fragment = new GiftStickerCardDetailFragment();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
