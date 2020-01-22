@@ -16,17 +16,17 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 import net.iGap.mobileBank.view.adapter.BankChequesListAdapter;
-import net.iGap.mobileBank.viewmoedel.MobileBankChequesListViewModel;
+import net.iGap.mobileBank.viewmoedel.MobileBankChequesBookListViewModel;
 
 import java.util.List;
 
-public class MobileBankChequesListFragment extends BaseMobileBankFragment<MobileBankChequesListViewModel> {
+public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<MobileBankChequesBookListViewModel> {
 
     private MobileBankChequesListFragmentBinding binding;
     private String depositNumber;
 
-    public static MobileBankChequesListFragment newInstance(String deposit) {
-        MobileBankChequesListFragment fragment = new MobileBankChequesListFragment();
+    public static MobileBankChequesBookListFragment newInstance(String deposit) {
+        MobileBankChequesBookListFragment fragment = new MobileBankChequesBookListFragment();
         fragment.depositNumber = deposit;
         return fragment;
     }
@@ -42,7 +42,7 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(MobileBankChequesListViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(MobileBankChequesBookListViewModel.class);
     }
 
     @Override

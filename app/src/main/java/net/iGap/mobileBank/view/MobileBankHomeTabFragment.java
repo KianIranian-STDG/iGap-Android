@@ -130,7 +130,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private void openChequeListPage(String deposit) {
         if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankChequesListFragment.newInstance(deposit)).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankChequesBookListFragment.newInstance(deposit)).setReplace(false).load();
         }
     }
 

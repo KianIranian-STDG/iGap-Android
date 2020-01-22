@@ -12,7 +12,7 @@ import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 
 import java.util.List;
 
-public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
+public class MobileBankChequesBookListViewModel extends BaseMobileBankViewModel {
 
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     private ObservableInt noItemVisibility = new ObservableInt(View.GONE);
