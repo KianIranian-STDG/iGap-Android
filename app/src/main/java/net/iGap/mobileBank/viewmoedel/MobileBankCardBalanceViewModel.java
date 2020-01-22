@@ -11,7 +11,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankCardAuth;
-import net.iGap.mobileBank.repository.model.BankDateModel;
+import net.iGap.mobileBank.repository.model.BankCardBalance;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.util.RSACipher;
 
@@ -27,13 +27,13 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
 
     private MutableLiveData<String> complete = new MutableLiveData<>();
 
-    private ObservableField<String> cardNumber = new ObservableField<>("6221061052382498");
+    private ObservableField<String> cardNumber = new ObservableField<>("6221061090008774");
     private ObservableField<Integer> cardNumberError = new ObservableField<>(0);
-    private ObservableField<String> password = new ObservableField<>("65546545");
+    private ObservableField<String> password = new ObservableField<>("48777");
     private ObservableField<Integer> passwordError = new ObservableField<>(0);
-    private ObservableField<String> CVV = new ObservableField<>("123");
+    private ObservableField<String> CVV = new ObservableField<>("748");
     private ObservableField<Integer> CVVError = new ObservableField<>(0);
-    private ObservableField<String> date = new ObservableField<>("9909");
+    private ObservableField<String> date = new ObservableField<>("0109");
     private ObservableField<Integer> dateError = new ObservableField<>(0);
     private ObservableField<Integer> progress = new ObservableField<>(R.string.inquiry);
 
@@ -108,7 +108,7 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
     private void sendData() {
         progress.set(R.string.news_add_comment_load);
         String tempAuth = null;
-        BankCardAuth auth = new BankCardAuth(CVV.get(), date.get().replace("/", ""), password.get(), "EPAY", "");
+        BankCardAuth auth = new BankCardAuth(CVV.get(), date.get().replace("/", ""), password.get(), "EPAY", null);
         try {
             RSACipher cipher = new RSACipher();
             tempAuth = cipher.encrypt(new Gson().toJson(auth), RSACipher.stringToPublicKey(Config.PUBLIC_PARSIAN_KEY_CLIENT));
@@ -133,12 +133,14 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
             showRequestErrorMessage.setValue("Bad Encryption");
             return;
         }
-        // TODO: 1/22/2020 return model is not available must be changed and show the result;
-        MobileBankRepository.getInstance().getCardBalance(cardNumber.get().replace("-", ""), tempAuth, null, this, new ResponseCallback<BaseMobileBankResponse<BankDateModel>>() {
+
+        MobileBankRepository.getInstance().getCardBalance(cardNumber.get().replace("-", ""), tempAuth, null, this, new ResponseCallback<BaseMobileBankResponse<BankCardBalance>>() {
             @Override
-            public void onSuccess(BaseMobileBankResponse<BankDateModel> data) {
-                DecimalFormat df = new DecimalFormat(",###");
-                complete.setValue(compatibleUnicode(df.format(Double.parseDouble("20000"))));
+            public void onSuccess(BaseMobileBankResponse<BankCardBalance> data) {
+                if (data.getData().getAvailable() != null) {
+                    DecimalFormat df = new DecimalFormat(",###");
+                    complete.setValue(compatibleUnicode(df.format(Double.parseDouble(data.getData().getAvailable().getValue()))));
+                }
                 progress.set(R.string.inquiry);
             }
 
@@ -160,8 +162,9 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
     }
 
     public void onContinueBtnClick() {
-        if (!checkData())
-            return;
+        // TODO: 1/22/2020 must enable checks!!
+        /*if (!checkData())
+            return;*/
         sendData();
     }
 

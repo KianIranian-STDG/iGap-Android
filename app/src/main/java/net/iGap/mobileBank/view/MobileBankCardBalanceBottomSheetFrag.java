@@ -53,7 +53,8 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel.setCardNumber(getArguments().getString("cardNumber"));
+        // TODO: 1/22/2020 must enable this line
+//        viewModel.setCardNumber(getArguments().getString("cardNumber"));
         onComplete();
         onTextChange();
     }

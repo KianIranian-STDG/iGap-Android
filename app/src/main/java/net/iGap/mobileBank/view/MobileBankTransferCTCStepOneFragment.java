@@ -176,11 +176,12 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
     private void getClipboardData() {
         ClipboardManager clipBoard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = clipBoard.getPrimaryClip();
+        if (clipData == null)
+            return;
         ClipData.Item item = clipData.getItemAt(0);
         String input = item.getText().toString();
         viewModel.extractCardNum(input);
     }
-
 
     private void onDateChanged() {
         viewModel.getOriginCards().observe(getViewLifecycleOwner(), bankCardModels -> {
