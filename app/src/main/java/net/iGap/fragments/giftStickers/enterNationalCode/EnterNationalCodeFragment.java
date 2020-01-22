@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,8 +26,7 @@ public class EnterNationalCodeFragment extends Fragment {
     }
 
     public static EnterNationalCodeFragment getInstance() {
-        EnterNationalCodeFragment fragment = new EnterNationalCodeFragment();
-        return fragment;
+        return new EnterNationalCodeFragment();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class EnterNationalCodeFragment extends Fragment {
 
         viewModel.getShowErrorMessageRequestFailed().observe(getViewLifecycleOwner(), errorMessageRes -> {
             if (getContext() != null && errorMessageRes != null) {
-                HelperError.showSnackMessage(getString(errorMessageRes), false);
+                Toast.makeText(getContext(), getString(errorMessageRes), Toast.LENGTH_SHORT).show();
             }
         });
     }

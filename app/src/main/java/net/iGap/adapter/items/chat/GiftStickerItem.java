@@ -150,7 +150,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             setTypeFace(addToArchiveBtn);
             addToArchiveBtn.setTextColor(getColor(R.color.white));
 
-            buttonLayouts.addView(addToArchiveBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 0, 6, 3, 4));
+//            buttonLayouts.addView(addToArchiveBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 0, 6, 3, 4));
             buttonLayouts.addView(visitBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 3, 6, 0, 4));
 
             visitBtn.setBackgroundResource(theme.getCardToCardButtonBackground(visitBtn.getContext()));
