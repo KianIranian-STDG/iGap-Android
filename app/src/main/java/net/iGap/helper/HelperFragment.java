@@ -26,6 +26,7 @@ import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.FragmentShowMember;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
+import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
 import net.iGap.payment.PaymentCallBack;
 import net.iGap.payment.PaymentFragment;
 
@@ -337,6 +338,11 @@ public class HelperFragment {
         setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         replace = false;
         load();
+    }
+
+    public void loadGiftStickerCard() {
+        MainGiftStickerCardFragment fragment = new MainGiftStickerCardFragment();
+        fragment.show(fragmentManager, "gift sticker card");
     }
 
     private boolean isRelatedToChat(String fragmentName) {
