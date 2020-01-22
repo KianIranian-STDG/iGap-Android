@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="net.iGap.G" />
+
+        <variable
+            name="bottomSheetViewModel"
+            type="net.iGap.mobileBank.viewmoedel.MobileBankCardBalanceViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/lineViewTop"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/iGapBottomSheetHeaderLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".34" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:padding="@dimen/dp8"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="visible"
+            android:text="@string/mobile_bank_balance_title"
+            android:textColor="?attr/iGapTitleTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cardNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp16"
+            android:hint="@string/mobile_bank_balance_cardNumber"
+            android:textColorHint="?attr/iGapHintTextColor"
+            app:errorText="@{bottomSheetViewModel.cardNumberError}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/iGapEditTextStyle"
+                android:id="@+id/cardNumberET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp24"
+                android:paddingLeft="@dimen/dp24"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:inputType="numberDecimal"
+                android:digits="0123456789"
+                android:imeOptions="actionNext"
+                android:textColor="?attr/iGapTitleTextColor"
+                android:text="@={bottomSheetViewModel.cardNumber}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp16"
+            android:hint="@string/mobile_bank_balance_pass"
+            android:textColorHint="?attr/iGapHintTextColor"
+            app:errorText="@{bottomSheetViewModel.passwordError}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardNumber">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/passwordET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp24"
+                android:paddingLeft="@dimen/dp24"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:inputType="textPassword"
+                android:imeOptions="actionNext"
+                android:textColor="?attr/iGapTitleTextColor"
+                android:text="@={bottomSheetViewModel.password}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/CVV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp16"
+            android:hint="@string/mobile_bank_balance_cvv"
+            android:textColorHint="?attr/iGapHintTextColor"
+            app:errorText="@{bottomSheetViewModel.cVVError}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/CVV_ET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp24"
+                android:paddingLeft="@dimen/dp24"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:inputType="numberDecimal"
+                android:digits="0123456789"
+                android:imeOptions="actionNext"
+                android:textColor="?attr/iGapTitleTextColor"
+                android:maxLength="4"
+                android:text="@={bottomSheetViewModel.cVV}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/expireDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp48"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp16"
+            android:hint="@string/mobile_bank_balance_expireDate"
+            android:textColorHint="?attr/iGapHintTextColor"
+            app:errorText="@{bottomSheetViewModel.dateError}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/CVV">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/expireDateET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp24"
+                android:paddingLeft="@dimen/dp24"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:inputType="numberDecimal"
+                android:digits="0123456789"
+                android:imeOptions="actionDone"
+                android:textColor="?attr/iGapTitleTextColor"
+                android:text="@={bottomSheetViewModel.date}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginBottom="24dp"
+            android:onClick="@{()->bottomSheetViewModel.onContinueBtnClick()}"
+            android:text="@{bottomSheetViewModel.progress}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/expireDate"
+            app:layout_constraintWidth_percent=".5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

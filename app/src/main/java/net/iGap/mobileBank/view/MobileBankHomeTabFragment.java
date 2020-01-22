@@ -118,6 +118,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             case R.string.facilities:
 
                 break;
+
+            case R.string.Inventory:
+                openGetCardInfo();
+                break;
         }
     }
 
@@ -206,7 +210,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private void onTransactionsClicked() {
 
         if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankCardHistoryFragment())
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance("47000012780603", false))
                     .setReplace(false)
                     .load();
         }
@@ -320,6 +324,17 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         for (int i = 0; i < count; i++) {
             binding.lytIndicators.getChildAt(i).setSelected(i == position);
         }
+    }
+
+    private void openGetCardInfo() {
+        MobileBankCardBalanceBottomSheetFrag frag = MobileBankCardBalanceBottomSheetFrag.newInstance("");
+        frag.setCompleteListener(new MobileBankCardBalanceBottomSheetFrag.CompleteListener() {
+            @Override
+            public void onCompleted(boolean result) {
+
+            }
+        });
+        frag.show(getFragmentManager(), "CardBalanceBottomSheet");
     }
 
     public enum HomeTabMode {

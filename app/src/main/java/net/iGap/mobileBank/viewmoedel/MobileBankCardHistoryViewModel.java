@@ -145,9 +145,10 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
                 bills.setValue(data.getData());
-                DecimalFormat df = new DecimalFormat(",###");
-                Log.d(TAG, "onSuccess: " + data.getData().get(data.getData().size() - 1).getBalance());
-                balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
+                if (offset == 0) {
+                    DecimalFormat df = new DecimalFormat(",###");
+                    balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
+                }
             }
 
             @Override

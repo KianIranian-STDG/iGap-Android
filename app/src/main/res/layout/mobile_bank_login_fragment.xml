@@ -68,7 +68,7 @@
                     android:gravity="center"
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:singleLine="true"
                     android:text="53951931"
                     app:layout_constraintEnd_toEndOf="@id/ivLogo"

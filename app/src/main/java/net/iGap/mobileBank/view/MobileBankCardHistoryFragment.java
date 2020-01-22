@@ -1,6 +1,5 @@
 package net.iGap.mobileBank.view;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankHistoryBinding;
 import net.iGap.helper.HelperToolbar;
@@ -29,10 +27,6 @@ import net.iGap.mobileBank.viewmoedel.MobileBankCardHistoryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import ir.hamsaa.persiandatepicker.Listener;
-import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
-import ir.hamsaa.persiandatepicker.util.PersianCalendar;
 
 public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCardHistoryViewModel> {
 
@@ -146,7 +140,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
     }
 
     private void showDateSelectorDialog() {
-        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "IRANSansMobile.ttf");
+        /*Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "IRANSansMobile.ttf");
         PersianCalendar initDate = new PersianCalendar();
         PersianDatePickerDialog picker = new PersianDatePickerDialog(getContext())
                 .setMinYear(1300)
@@ -171,7 +165,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
                     public void onDismissed() {
                     }
                 });
-        picker.show();
+        picker.show();*/
     }
 
     private void initMainRecycler(List<BankHistoryModel> data) {
@@ -205,7 +199,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
         viewModel.getCalender().observe(getViewLifecycleOwner(), bankDateModels -> {
             MobileBankDateAdapter adapter = new MobileBankDateAdapter(viewModel.getCalender().getValue(), position -> {
                 int centerOfScreen = binding.timeRecycler.getWidth() / 2 - snapHelper.findSnapView(binding.timeRecycler.getLayoutManager()).getWidth() / 2;
-                ((LinearLayoutManager)binding.timeRecycler.getLayoutManager()).scrollToPositionWithOffset(position, centerOfScreen);
+                ((LinearLayoutManager) binding.timeRecycler.getLayoutManager()).scrollToPositionWithOffset(position, centerOfScreen);
                 // get data from server
                 viewModel.setDatePosition(position);
                 viewModel.getAccountDataForMonth(0);

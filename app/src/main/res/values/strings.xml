@@ -2414,5 +2414,14 @@ Want to get it?</string>
     <string name="cheque">Cheque</string>
     <string name="facilities">Facilities</string>
     <string name="services">Services</string>
-    <string name="mobileBankSorat">Bills List</string>
+    <string name="mobile_bank_sorathesab">Bills List</string>
+    <string name="mobile_bank_balance_cardNumber">Card Number: </string>
+    <string name="mobile_bank_balance_title">Bank Card Balance</string>
+    <string name="mobile_bank_balance_pass">password:</string>
+    <string name="mobile_bank_balance_cvv">CVV2:</string>
+    <string name="mobile_bank_balance_expireDate">Expire Date: (year/month)</string>
+    <string name="mobile_bank_balance_cardError">please enter your Parsian card number.</string>
+    <string name="mobile_bank_balance_passwordError">please enter your password.</string>
+    <string name="mobile_bank_balance_CVVError">please enter your CVV2 number.</string>
+    <string name="mobile_bank_balance_dateError">please enter your expire date.</string>
 </resources>
