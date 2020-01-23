@@ -1,4 +1,4 @@
-package net.iGap.mobileBank.viewmoedel;
+package net.iGap.mobileBank.viewmodel;
 
 
 import net.iGap.api.apiService.BaseAPIViewModel;

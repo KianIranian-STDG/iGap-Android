@@ -4,7 +4,7 @@
     <data>
         <variable
             name="vm"
-            type="net.iGap.mobileBank.viewmoedel.MobileBankTransferCtcStep4ViewModel" />
+            type="net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep4ViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

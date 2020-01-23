@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="net.iGap.mobileBank.viewmoedel.MobileBankChequesBookListViewModel" />
+            type="net.iGap.mobileBank.viewmodel.MobileBankChequesBookListViewModel" />
     </data>
 
 

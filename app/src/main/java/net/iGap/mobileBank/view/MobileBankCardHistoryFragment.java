@@ -23,7 +23,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.view.adapter.MobileBankDateAdapter;
 import net.iGap.mobileBank.view.adapter.MobileBankHistoryAdapter;
-import net.iGap.mobileBank.viewmoedel.MobileBankCardHistoryViewModel;
+import net.iGap.mobileBank.viewmodel.MobileBankCardHistoryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

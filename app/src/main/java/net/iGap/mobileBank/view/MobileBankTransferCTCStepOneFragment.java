@@ -30,7 +30,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.view.adapter.MobileBankSpinnerAdapter;
-import net.iGap.mobileBank.viewmoedel.MobileBankTransferCTCStepOneViewModel;
+import net.iGap.mobileBank.viewmodel.MobileBankTransferCTCStepOneViewModel;
 
 import java.util.Locale;
 

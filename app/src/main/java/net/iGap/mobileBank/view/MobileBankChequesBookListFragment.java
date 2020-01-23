@@ -11,18 +11,19 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
-import net.iGap.databinding.MobileBankChequesListFragmentBinding;
+import net.iGap.databinding.MobileBankChequesBookListFragmentBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
-import net.iGap.mobileBank.view.adapter.BankChequesListAdapter;
-import net.iGap.mobileBank.viewmoedel.MobileBankChequesBookListViewModel;
+import net.iGap.mobileBank.view.adapter.BankChequesBookListAdapter;
+import net.iGap.mobileBank.viewmodel.MobileBankChequesBookListViewModel;
 
 import java.util.List;
 
 public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<MobileBankChequesBookListViewModel> {
 
-    private MobileBankChequesListFragmentBinding binding;
+    private MobileBankChequesBookListFragmentBinding binding;
     private String depositNumber;
 
     public static MobileBankChequesBookListFragment newInstance(String deposit) {
@@ -33,7 +34,7 @@ public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<Mo
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_cheques_list_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_cheques_book_list_fragment, container, false);
         binding.setVm(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
@@ -79,8 +80,13 @@ public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<Mo
     }
 
     private void setupRecyclerView(List<BankChequeBookListModel> chequeModels) {
-        BankChequesListAdapter adapter = new BankChequesListAdapter();
+        BankChequesBookListAdapter adapter = new BankChequesBookListAdapter();
         adapter.setListener(chequeModel -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankChequesListFragment.newInstance(depositNumber, chequeModel.getNumber()))
+                        .setReplace(false)
+                        .load();
+            }
         });
         binding.rvCheque.setAdapter(adapter);
         adapter.setItems(chequeModels);

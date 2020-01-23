@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.mobileBank.viewmoedel.MobileBankLoginViewModel" />
+            type="net.iGap.mobileBank.viewmodel.MobileBankLoginViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

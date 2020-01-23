@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.mobileBank.viewmoedel.MobileBankTransferCTCStepOneViewModel" />
+            type="net.iGap.mobileBank.viewmodel.MobileBankTransferCTCStepOneViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

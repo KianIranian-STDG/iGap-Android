@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperError;
-import net.iGap.mobileBank.viewmoedel.BaseMobileBankViewModel;
+import net.iGap.mobileBank.viewmodel.BaseMobileBankViewModel;
 
 public abstract class BaseMobileBankFragment<T extends BaseMobileBankViewModel> extends BaseAPIViewFrag<T> {
 

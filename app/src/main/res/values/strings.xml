@@ -2438,4 +2438,7 @@ Want to get it?</string>
     <string name="mobile_bank_balance_dateError">please enter your expire date.</string>
     <string name="mobile_bank_balance_dateLengthError">please enter your expire date completely.</string>
     <string name="mobile_bank_balance_message">Your card balance (%1$s) is %2$s.</string>
+    <string name="mobile_bank_cheque_balance">Balance: %1$s </string>
+    <string name="mobile_bank_cheque_number">Cheque Number: %1$s</string>
+    <string name="mobile_bank_cheque_status">Status: %1$s</string>
 </resources>

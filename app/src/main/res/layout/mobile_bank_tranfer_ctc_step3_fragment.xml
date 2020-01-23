@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="net.iGap.mobileBank.viewmoedel.MobileBankTransferCtcStep3ViewModel" />
+            type="net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep3ViewModel" />
 
     </data>
 

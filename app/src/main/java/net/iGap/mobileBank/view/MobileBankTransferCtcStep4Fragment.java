@@ -18,7 +18,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.TransferMoneyCtcResultModel;
 import net.iGap.mobileBank.view.adapter.TransferMoneyResultAdapter;
-import net.iGap.mobileBank.viewmoedel.MobileBankTransferCtcStep4ViewModel;
+import net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep4ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

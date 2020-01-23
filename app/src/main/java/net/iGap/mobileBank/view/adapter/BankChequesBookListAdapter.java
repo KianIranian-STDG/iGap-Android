@@ -15,7 +15,7 @@ import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankChequesListAdapter extends RecyclerView.Adapter<BankChequesListAdapter.ChequeListViewHolder> {
+public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankChequesBookListAdapter.ChequeListViewHolder> {
 
     private List<BankChequeBookListModel> items = new ArrayList<>();
     private ChequeListListener listener;

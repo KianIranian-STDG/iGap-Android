@@ -19,7 +19,7 @@ import net.iGap.databinding.MobileBankLoginFragmentBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.mobileBank.viewmoedel.MobileBankLoginViewModel;
+import net.iGap.mobileBank.viewmodel.MobileBankLoginViewModel;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;

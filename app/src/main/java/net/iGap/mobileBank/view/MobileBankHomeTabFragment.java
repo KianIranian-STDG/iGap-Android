@@ -26,7 +26,7 @@ import net.iGap.mobileBank.repository.model.MobileBankHomeItemsModel;
 import net.iGap.mobileBank.view.adapter.BankAccountsAdapter;
 import net.iGap.mobileBank.view.adapter.BankCardsAdapter;
 import net.iGap.mobileBank.view.adapter.BankHomeItemAdapter;
-import net.iGap.mobileBank.viewmoedel.MobileBankHomeTabViewModel;
+import net.iGap.mobileBank.viewmodel.MobileBankHomeTabViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package net.iGap.mobileBank.viewmoedel;
+package net.iGap.mobileBank.viewmodel;
 
 import android.view.View;
 
