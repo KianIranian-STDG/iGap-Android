@@ -300,7 +300,7 @@
         <net.iGap.module.CustomTextViewMedium
             android:id="@+id/tv_bill_requestDate"
             android:layout_width="match_parent"
-            android:layout_height="29dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/pink"
             android:gravity="center"

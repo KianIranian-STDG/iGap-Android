@@ -10,7 +10,7 @@
     android:layout_marginBottom="@dimen/dp4"
     android:orientation="vertical"
     android:paddingBottom="@dimen/dp4"
-    app:cardBackgroundColor="#E6E5E1DC"
+    app:cardBackgroundColor="#9B80CE"
     app:cardCornerRadius="12dp"
     app:cardPreventCornerOverlap="false">
 
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="#db0ce6"
+                android:background="#9B80CE"
                 android:gravity="center"
                 android:paddingTop="@dimen/dp6"
                 android:paddingBottom="@dimen/dp6"
@@ -337,15 +337,14 @@
         <net.iGap.module.CustomTextViewMedium
             android:id="@+id/tv_topup_requestDate"
             android:layout_width="match_parent"
-            android:layout_height="29dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#db0ce6"
+            android:background="#9B80CE"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
             android:textColor="@color/white"
             android:textSize="@dimen/dp15" />
-
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -63,7 +63,26 @@ public class LogWalletTopup extends AbstractMessage<LogWalletTopup, LogWalletTop
             holder.amount.setText(String.valueOf(realmRoomMessageWalletTopup.getAmount()));
             holder.requesterNumber.setText(realmRoomMessageWalletTopup.getRequestMobileNumber());
             holder.chargerNumber.setText(realmRoomMessageWalletTopup.getChargeMobileNumber());
-            holder.topUpType.setText(String.valueOf(realmRoomMessageWalletTopup.getTopupType()));
+            switch (realmRoomMessageWalletTopup.getTopupType()) {
+                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_PREPAID_VALUE:
+                    holder.topUpType.setText(R.string.irancell);
+                    break;
+                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_WOW_VALUE:
+                    holder.topUpType.setText(R.string.irancell);
+                    break;
+                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_WIMAX_VALUE:
+                    holder.topUpType.setText(R.string.irancell);
+                    break;
+                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_POSTPAID_VALUE:
+                    holder.topUpType.setText(R.string.irancell);
+                    break;
+                case ProtoGlobal.RoomMessageWallet.Topup.Type.MCI_VALUE:
+                    holder.topUpType.setText(R.string.hamrahe_aval);
+                    break;
+                case ProtoGlobal.RoomMessageWallet.Topup.Type.RIGHTEL_VALUE:
+                    holder.topUpType.setText(R.string.ritel);
+                    break;
+            }
             holder.cardNumber.setText(realmRoomMessageWalletTopup.getCardNumber());
             holder.terminalNo.setText(String.valueOf(realmRoomMessageWalletTopup.getTerminalNo()));
             holder.rrn.setText(String.valueOf(realmRoomMessageWalletTopup.getRrn()));
