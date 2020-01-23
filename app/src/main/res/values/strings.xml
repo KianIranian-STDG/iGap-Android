@@ -2404,4 +2404,14 @@ Want to get it?</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
     <string name="install_latest_version">Install the latest version to use this feature</string>
+    <string name="order_id">Order id</string>
+    <string name="requester_mobile_number">Requester mobile number</string>
+    <string name="charger_mobile_number">Charger mobile number</string>
+    <string name="topUp_type">TopUp type</string>
+    <string name="terminal_No">Terminal No</string>
+    <string name="rrn">Reference No</string>
+    <string name="bill_id">Bill id</string>
+    <string name="topUp_title">To buy credit</string>
+    <string name="bill_title">Paying the bill</string>
+
 </resources>

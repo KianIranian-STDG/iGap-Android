@@ -1996,8 +1996,12 @@
     </array>
 
     <array name="onboard_descriptions">
-        <item>جانتای پارە، حسابێکی مەجازیت بۆ دروست دەکات کە بە ژمارە مۆبایلەوە پەیوەست دەبێت و ئیدی پێویست ناکات جانتای پارە، پارەی نەخت یان کارتی بانکی لەگەڵ خۆتدا ببەیت. </item>
-        <item>لە دووکانەکان، لە نێو تاکسی یان هەر شوێنێکی دیکەدا کە جانتای پارە بە کار دەهێنن، دەتوانیت لە دوگمەی سکەن کەڵک وەربگریت و کڕینێکی چیژبەخشت هەبێت.  </item>
+        <item>جانتای پارە، حسابێکی مەجازیت بۆ دروست دەکات کە بە ژمارە مۆبایلەوە پەیوەست دەبێت و ئیدی
+            پێویست ناکات جانتای پارە، پارەی نەخت یان کارتی بانکی لەگەڵ خۆتدا ببەیت.
+        </item>
+        <item>لە دووکانەکان، لە نێو تاکسی یان هەر شوێنێکی دیکەدا کە جانتای پارە بە کار دەهێنن،
+            دەتوانیت لە دوگمەی سکەن کەڵک وەربگریت و کڕینێکی چیژبەخشت هەبێت.
+        </item>
     </array>
 
     <string name="default_theme_title">پێش گریمانە</string>
@@ -2104,4 +2108,13 @@
     <string name="map_registration_enable">Enable Nearby Visibility</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
+    <string name="order_id">Order Id</string>
+    <string name="requester_mobile_number">Requester Mobile Number</string>
+    <string name="charger_mobile_number">Charger Mobile Number</string>
+    <string name="topUp_type">TopUp Type</string>
+    <string name="terminal_No">Terminal No</string>
+    <string name="rrn">Reference No</string>
+    <string name="bill_id">Bill Id</string>
+    <string name="topUp_title">خرید شارژ</string>
+    <string name="bill_title">پرداخت قبض</string>
 </resources>

@@ -3061,9 +3061,18 @@
     <string name="elecBill_success_pay">الدفع ناجح</string>
     <string name="add_new_account">أضف حساب جديد</string>
     <string name="profile">الشخصي</string>
-    <string name="login_exist_account_error">This account is login on this device</string>
+    <string name="login_exist_account_error">هذا الحساب هو تسجيل الدخول على هذا الجهاز</string>
     <string name="delete_from_storage">حذف من التخزين</string>
     <string name="map_registration_enable">تمكين الرؤية القريبة</string>
     <string name="need_browser">يتطلب متصفح للاستخدام.</string>
     <string name="install_latest_version">قم بتثبيت أحدث إصدار لاستخدام هذه الميزة</string>
+    <string name="order_id">معرف الدفع</string>
+    <string name="requester_mobile_number">رقم هاتف مقدم الطلب</string>
+    <string name="charger_mobile_number">رقم الجوال القابلة لإعادة الشحن</string>
+    <string name="topUp_type">نوع الفاتورة</string>
+    <string name="terminal_No">رقم المحطة</string>
+    <string name="rrn">الرقم المرجعي</string>
+    <string name="bill_id">معرف الفاتورة</string>
+    <string name="topUp_title">شراء الشحن</string>
+    <string name="bill_title">دفع الفاتورة</string>
 </resources>

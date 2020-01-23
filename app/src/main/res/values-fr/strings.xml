@@ -2059,4 +2059,13 @@
     <string name="map_registration_enable">Activer la visibilité à proximité</string>
     <string name="need_browser">Nécessite un navigateur à utiliser.</string>
     <string name="install_latest_version">Installez la dernière version pour utiliser cette fonction</string>
+    <string name="order_id">ID de paiement</string>
+    <string name="requester_mobile_number">Numéro de mobile du demandeur</string>
+    <string name="charger_mobile_number">Numéro de téléphone portable rechargeable</string>
+    <string name="topUp_type">Type de facture</string>
+    <string name="terminal_No">Numéro de terminal</string>
+    <string name="rrn">Numéro de référence</string>
+    <string name="bill_id">ID de facture</string>
+    <string name="topUp_title">Acheter en charge</string>
+    <string name="bill_title">Payer la facture</string>
 </resources>

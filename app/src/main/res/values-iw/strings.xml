@@ -2122,4 +2122,13 @@
     <string name="zihaje">ذیحجه</string>
     <string name="profile">پروفایل</string>
     <string name="install_latest_version">بو قیسمت دن ایستاده المه ائتمک تزه نسخه لازیمدیر</string>
+    <string name="order_id">Order Id</string>
+    <string name="requester_mobile_number">Requester Mobile Number</string>
+    <string name="charger_mobile_number">Charger Mobile Number</string>
+    <string name="topUp_type">TopUp Type</string>
+    <string name="terminal_No">Terminal No</string>
+    <string name="rrn">Reference No</string>
+    <string name="bill_id">Bill Id</string>
+    <string name="topUp_title">خرید شارژ</string>
+    <string name="bill_title">پرداخت قبض</string>
 </resources>
