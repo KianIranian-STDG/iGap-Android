@@ -25,7 +25,6 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessageWalletTopup;
 
 import org.jetbrains.annotations.NotNull;
