@@ -315,15 +315,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case NONE:
                 break;
             case POLL:
-                ChartFragment fragment = new ChartFragment();
+                new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
+                break;
+/*                ChartFragment fragment = new ChartFragment();
                 Bundle b = new Bundle();
-                b.putInt("pollId",Integer.valueOf(discoveryField.value));
+                b.putInt("pollId", Integer.valueOf(discoveryField.value));
                 fragment.setArguments(b);
-                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
-                /*new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();*/
-                break;
-            case UNRECOGNIZED:
-                break;
+                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();*/
             case FAVORITE_CHANNEL:
                 if (discoveryField.value.equals(""))
                     new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
@@ -334,7 +332,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     popularMoreChannelFragment.setArguments(bundle);
                     new HelperFragment(activity.getSupportFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
                 }
-
                 break;
             case FINANCIAL_HISTORY:
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();

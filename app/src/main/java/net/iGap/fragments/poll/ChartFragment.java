@@ -79,21 +79,17 @@ public class ChartFragment extends BaseFragment {
         ViewGroup viewGroup = view.findViewById(R.id.chart_toolbar);
         viewGroup.addView(mHelperToolbar.getView());
         pullToRefresh = view.findViewById(R.id.sweep);
-
         chart = view.findViewById(R.id.type8_chart0);
-
         chart.getAxisLeft().setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 return String.valueOf((int) Math.floor(value));
             }
         });
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
+
         chart.setMaxVisibleValueCount(100);
         chart.setPinchZoom(true);
         chart.setHighlightPerTapEnabled(false);
-
         chart.setDrawValueAboveBar(true);
         chart.setDrawBarShadow(false);
         chart.setDrawGridBackground(false);
@@ -130,12 +126,7 @@ public class ChartFragment extends BaseFragment {
 
         if (!isSend) {
             if (count < 3) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tryToUpdateOrFetchRecycleViewData(count + 1);
-                    }
-                }, 1000);
+                G.handler.postDelayed(() -> tryToUpdateOrFetchRecycleViewData(count + 1), 1000);
             } else {
                 setRefreshing(false);
             }
@@ -146,25 +137,17 @@ public class ChartFragment extends BaseFragment {
         return new RequestClientGetPoll().getPoll(pollId, new OnPollList() {
             @Override
             public void onPollListReady(ArrayList<PollItem> pollArrayList, String title) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pollList = pollArrayList;
-                        notifyChangeData();
-                        mHelperToolbar.setDefaultTitle(title);
-                        setRefreshing(false);
-                    }
+                G.handler.post(() -> {
+                    pollList = pollArrayList;
+                    notifyChangeData();
+                    mHelperToolbar.setDefaultTitle(title);
+                    setRefreshing(false);
                 });
             }
 
             @Override
             public void onError(int major, int minor) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setRefreshing(false);
-                    }
-                });
+                G.handler.post(() -> setRefreshing(false));
             }
         });
     }
