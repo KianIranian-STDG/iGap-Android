@@ -2123,5 +2123,13 @@
     <string name="temporary_block">مسدود موقت :</string>
     <string name="permanent_block">مسدود دایم :</string>
     <string name="usable_count">قابل استفاده :</string>
+    <string name="enter_loan_number">شماره وام را وارد کنید.</string>
+    <string name="loan_number">شماره وام: </string>
+    <string name="branch_name">نام شعبه:</string>
+    <string name="start_date">تاریخ شروع:</string>
+    <string name="end_date">تاریخ پایان:</string>
+    <string name="loan_count">تعداد اقساط:</string>
+    <string name="remained_loan">اقساط باقیمانده:</string>
+    <string name="state">وضعیت:</string>
 
 </resources>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="@dimen/dp8"
+    app:cardBackgroundColor="?iGapCardViewColor"
+    app:cardCornerRadius="@dimen/dp6"
+    app:cardElevation="@dimen/dp4"
+    android:minHeight="@dimen/dp80">
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp10"
+        android:background="?selectableItemBackground">
+
+        <TextView
+            android:id="@+id/tvLoanNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/loan_number"
+            android:textSize="@dimen/largeTextSize"
+            android:textColor="?iGapTitleTextColor" />
+
+        <TextView
+            android:id="@+id/tvAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:singleLine="true"
+            android:text="@string/amount_2"
+            android:textSize="@dimen/largeTextSize"
+            android:textColor="?iGapTitleTextColor" />
+
+        <TextView
+            android:id="@+id/tvBranch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="@string/branch_name"
+            android:textSize="@dimen/standardTextSize"
+            android:textColor="?iGapTitleTextColor" />
+
+        <TextView
+            android:id="@+id/tvState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="@string/state"
+            android:textSize="@dimen/standardTextSize"
+            android:textColor="?iGapTitleTextColor" />
+
+        <TextView
+            android:id="@+id/tvBeganDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="@string/start_date"
+            android:textSize="@dimen/standardTextSize"
+            android:textColor="?iGapTitleTextColor" />
+
+        <TextView
+            android:id="@+id/tvEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="@string/end_date"
+            android:textSize="@dimen/standardTextSize"
+            android:textColor="?iGapTitleTextColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp10"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/tvLoanCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/dp6"
+                android:layout_marginRight="@dimen/dp6"
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapTitleTextColor"
+                android:text="@string/loan_count" />
+
+            <TextView
+                android:id="@+id/tvRemained"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_weight="1"
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapTitleTextColor"
+                android:text="@string/remained_loan" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

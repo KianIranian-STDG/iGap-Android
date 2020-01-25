@@ -2,11 +2,13 @@ package net.iGap.mobileBank.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -105,6 +107,32 @@ public class DialogParsian {
         mDialog.show();
     }
 
+    public void showInputDialog(String hint) {
+
+        initDialog();
+
+        EditText etInput = new EditText(mContext);
+        Utils.setTextSize(etInput, R.dimen.standardTextSize);
+        etInput.setTypeface(ResourcesCompat.getFont(mContext, R.font.main_font));
+        etInput.setBackgroundResource(R.drawable.shape_round_gray);
+        etInput.setTextColor(Theme.getInstance().getTitleTextColor(mContext));
+        etInput.setHintTextColor(Theme.getInstance().getSubTitleColor(mContext));
+        etInput.setTypeface(ResourcesCompat.getFont(mContext, R.font.main_font));
+        etInput.setHint(hint);
+        etInput.setPadding(12, 0, 12, 0);
+        etInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etInput.setSingleLine();
+
+        mActiveButton.setOnClickListener(v -> {
+            mDialog.dismiss();
+            if (mListener != null)
+                mListener.onInputDialogListener(mDialog, etInput.getText().toString());
+        });
+
+        mContentLayout.addView(etInput, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 12f, 12f, 12f, 12f));
+        mDialog.show();
+    }
+
     public void showShebaDialog(List<String> numbers) {
 
         initDialog();
@@ -168,6 +196,9 @@ public class DialogParsian {
         }
 
         default void onTransferMoneyTypeSelected(Dialog dialog, String type) {
+        }
+
+        default void onInputDialogListener(Dialog dialog, String input) {
         }
     }
 }

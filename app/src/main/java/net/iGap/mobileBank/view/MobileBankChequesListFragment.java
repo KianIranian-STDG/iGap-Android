@@ -83,11 +83,8 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         binding.rcCheque.setLayoutManager(layoutManager);
 
-        adapter = new MobileBankChequeListAdapter(null, new MobileBankChequeListAdapter.OnItemClickListener() {
-            @Override
-            public void onBlock(int position) {
+        adapter = new MobileBankChequeListAdapter(null, position -> {
 
-            }
         });
         binding.rcCheque.setAdapter(adapter);
     }
@@ -98,6 +95,7 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
     }
 
     private void setupRecyclerView(List<BankChequeSingle> chequeModels) {
+        binding.pullToRefresh.setRefreshing(false);
         adapter.addItems(chequeModels);
     }
 }

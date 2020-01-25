@@ -15,6 +15,7 @@ import net.iGap.mobileBank.repository.model.BankChequeSingle;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
+import net.iGap.mobileBank.repository.model.LoanListModel;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
 import java.util.List;
@@ -49,6 +50,10 @@ public class MobileBankRepository {
 
     public void getChequeList(String depositNumber, String chequeBookNumber, Integer length, Integer offset, String chequeNumber, String status, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankChequeSingle>>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankChequeSingle>>>().initAPI(bankApi.getChequesList(getAccessToken(), depositNumber, chequeBookNumber, length, offset, chequeNumber, status), callback, responseCallback);
+    }
+
+    public void getLoanList(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<LoanListModel>>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<LoanListModel>>>().initAPI(bankApi.getLoansList(getAccessToken()), callback, responseCallback);
     }
 
     public void getMobileBankAccounts(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>> responseCallback) {
