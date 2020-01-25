@@ -8,9 +8,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.BuildConfig;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
+import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.view.MobileBankHomeTabFragment;
@@ -23,6 +25,8 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
     private MutableLiveData<List<String>> shebaListener = new MutableLiveData<>();
+    private MutableLiveData<String> balance = new MutableLiveData<>();
+    private MutableLiveData<String> OTPmessage = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     public List<BankCardModel> cards;
     public List<BankAccountModel> accounts;
@@ -79,6 +83,48 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
             public void onFailed() {
                 showLoading.set(View.GONE);
                 showRetry.set(View.VISIBLE);
+            }
+        });
+    }
+
+    public void getAccountBalance(String depositNumber) {
+        // set bills
+        MobileBankRepository.getInstance().getAccountHistory(depositNumber, 0,
+                null, null, this, new ResponseCallback<BaseMobileBankResponse<List<BankHistoryModel>>>() {
+                    @Override
+                    public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
+                        if (data.getData() != null && data.getData().size() != 0) {
+                            balance.setValue(data.getData().get(0).getBalance());
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                    }
+                });
+    }
+
+    public void getOTP(String cardNumber) {
+        MobileBankRepository.getInstance().getOTP(cardNumber, this, new ResponseCallback<ErrorModel>() {
+            @Override
+            public void onSuccess(ErrorModel data) {
+                OTPmessage.setValue(data.getMessage());
+            }
+
+            @Override
+            public void onError(String error) {
+                OTPmessage.setValue(error);
+            }
+
+            @Override
+            public void onFailed() {
+
             }
         });
     }
@@ -169,5 +215,13 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
             showLoading.set(View.GONE);
             showRetry.set(View.GONE);
         }
+    }
+
+    public MutableLiveData<String> getBalance() {
+        return balance;
+    }
+
+    public MutableLiveData<String> getOTPmessage() {
+        return OTPmessage;
     }
 }

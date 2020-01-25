@@ -1,11 +1,13 @@
 package net.iGap.api;
 
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardBalance;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 import net.iGap.mobileBank.repository.model.BankChequeSingle;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
+import net.iGap.mobileBank.repository.model.BankServiceLoanDetailModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.model.LoginResponse;
@@ -77,4 +79,18 @@ public interface MobileBankApi {
                                                                  @Field("pan") String cardNumber,
                                                                  @Field("auth_info") String cardData,
                                                                  @Field("deposit_number") String depositNumber);
+
+    @POST("loan/get-loan-detail")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<BankServiceLoanDetailModel>> getLoanDetail(@Header("Authorization") String token,
+                                                                           @Field("loan_number") String loanNumber,
+                                                                           @Field("has_detail") Boolean hasDetail,
+                                                                           @Field("offset") Integer offset,
+                                                                           @Field("length") Integer length);
+
+    @POST("parsian/otp")
+    @FormUrlEncoded
+    Call<ErrorModel> getOTP(@Field("cardNo") String cardNumber,
+                            @Field("mobile_number") String mobileNumber);
+
 }

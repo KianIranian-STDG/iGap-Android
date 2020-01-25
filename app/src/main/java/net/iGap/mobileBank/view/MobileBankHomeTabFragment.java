@@ -108,7 +108,8 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 break;
 
             case R.string.temporary_password:
-
+                if (mode == HomeTabMode.CARD)
+                    getOTP(getCurrentAccount());
                 break;
 
             case R.string.cheque:
@@ -116,13 +117,14 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 break;
 
             case R.string.facilities:
-
+                onLoanClicked();
                 break;
 
             case R.string.Inventory:
                 if (mode == HomeTabMode.CARD)
                     openGetCardInfo(getCurrentAccount());
                 else {
+                    getAcountBalance(getCurrentAccount());
                 }
                 break;
         }
@@ -176,6 +178,19 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         viewModel.getAccountsData().observe(getViewLifecycleOwner(), this::setupViewPagerDeposits);
 
         viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
+
+        viewModel.getBalance().observe(getViewLifecycleOwner(), balance -> showMessage(getString(R.string.mobile_bank_balance_title),
+                getString(R.string.mobile_bank_balance_message, getCurrentAccount(), balance + " " + getString(R.string.rial))));
+
+        viewModel.getBalance().observe(getViewLifecycleOwner(), message -> showMessage(getString(R.string.attention), message));
+    }
+
+    private void showMessage(String title, String message) {
+        new DialogParsian()
+                .setContext(getContext())
+                .setTitle(title)
+                .setButtonsText(getString(R.string.ok), null)
+                .showSimpleMessage(message);
     }
 
     private void showShebaNumberResult(List<String> bankShebaModel) {
@@ -192,6 +207,36 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                         }
                     }).showShebaDialog(bankShebaModel);
         }
+    }
+
+    private void showProgress() {
+        if (getActivity() != null) {
+            mDialogWait = new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.please_wait) + "..")
+                    .setButtonsText(null, getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onDeActiveButtonClicked(Dialog dialog) {
+                            mDialogWait.dismiss();
+                        }
+                    });
+            mDialogWait.showLoaderDialog(false);
+        }
+    }
+
+    private void getAcountBalance(String depositNumber) {
+        if (depositNumber == null)
+            return;
+        showProgress();
+        viewModel.getAccountBalance(depositNumber);
+    }
+
+    private void getOTP(String cardNumber) {
+        if (cardNumber == null)
+            return;
+        showProgress();
+        viewModel.getOTP(cardNumber);
     }
 
     private void onTransferMoneyClicked() {
@@ -229,6 +274,17 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
         if (getActivity() != null) {
             new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(getCurrentAccount(), mode == HomeTabMode.CARD))
+                    .setReplace(false)
+                    .load();
+        }
+
+    }
+
+    private void onLoanClicked() {
+
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(),
+                    MobileBankServiceLoanDetailFragment.newInstance("58000001529602"))
                     .setReplace(false)
                     .load();
         }

@@ -1,5 +1,6 @@
 package net.iGap.mobileBank.repository;
 
+import net.iGap.DbManager;
 import net.iGap.api.MobileBankApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.HandShakeCallback;
@@ -7,15 +8,18 @@ import net.iGap.api.apiService.MobileBankApiInitializer;
 import net.iGap.api.apiService.MobileBankExpiredTokenCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardBalance;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 import net.iGap.mobileBank.repository.model.BankChequeSingle;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
+import net.iGap.mobileBank.repository.model.BankServiceLoanDetailModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.repository.model.LoginResponse;
+import net.iGap.realm.RealmUserInfo;
 
 import java.util.List;
 
@@ -25,6 +29,7 @@ public class MobileBankRepository {
     private MobileBankApi bankApi = new RetrofitFactory().getMobileBankRetrofit();
     private String accessToken;
     private static String TOKEN_PREFIX = "Bearer  ";
+    RealmUserInfo userInfo;
 
     private MobileBankRepository() {
         //use instance
@@ -69,6 +74,17 @@ public class MobileBankRepository {
 
     public void getCardBalance(String cardNumber, String cardData, String depositNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<BankCardBalance>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<BankCardBalance>>().initAPI(bankApi.getCardBalance(getAccessToken(), cardNumber, cardData, depositNumber), callback, responseCallback);
+    }
+
+    public void getLoanDetail(String loanNumber, Integer offset, Integer length, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<BankServiceLoanDetailModel>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<BankServiceLoanDetailModel>>().initAPI(bankApi.getLoanDetail(getAccessToken(), loanNumber, true, offset, length), callback, responseCallback);
+    }
+
+    public void getOTP(String cardNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<ErrorModel> responseCallback) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            userInfo = realm.where(RealmUserInfo.class).findFirst();
+            new MobileBankApiInitializer<ErrorModel>().initAPI(new RetrofitFactory().getMobileBankOTPRetrofit().getOTP(cardNumber, userInfo.getUserInfo().getPhoneNumber()), callback, responseCallback);
+        });
     }
 
     public String getAccessToken() {

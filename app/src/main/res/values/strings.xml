@@ -2441,4 +2441,21 @@ Want to get it?</string>
     <string name="mobile_bank_cheque_balance">Balance: %1$s </string>
     <string name="mobile_bank_cheque_number">Cheque Number: %1$s</string>
     <string name="mobile_bank_cheque_status">Status: %1$s</string>
+    <string name="mobile_bank_load_detail_bankCode">Bank Code: %1$s</string>
+    <string name="mobile_bank_load_detail_customerCode">Customer Code: %1$s</string>
+    <string name="mobile_bank_load_detail_customerName">Customer Name: %1$s</string>
+    <string name="mobile_bank_load_detail_amount">Amount: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_discount">Discount: %1$s</string>
+    <string name="mobile_bank_load_detail_penalty">Penalty: %1$s</string>
+    <string name="mobile_bank_load_detail_MUCount">Matured Unpaid count: %1$s</string>
+    <string name="mobile_bank_load_detail_MUAmount">Matured Unpaid Amount: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paidCount">Paid count: %1$s</string>
+    <string name="mobile_bank_load_detail_paidAmount">Paid Amount: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_unpaidCount">Unpaid count: %1$s</string>
+    <string name="mobile_bank_load_detail_unpaidAmount">Unpaid Amount: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_payStatus">Pay State: %1$s</string>
+    <string name="mobile_bank_detail_cell_payAmount">Pay Amount: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_unpaidAmount">Unpaid Amount: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_penaltyAmount">Penalty Amount: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_paymentDate">Payment Date: %1$s</string>
 </resources>
