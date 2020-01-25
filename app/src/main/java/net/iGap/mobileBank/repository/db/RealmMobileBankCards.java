@@ -66,11 +66,16 @@ public class RealmMobileBankCards extends RealmObject {
         });
     }
 
-
     public static void delete(String cardNumber) {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmMobileBankCards object = realm.where(RealmMobileBankCards.class).equalTo(RealmMobileBankCardsFields.CARD_NUMBER, cardNumber).findFirst();
             if (object != null) object.deleteFromRealm();
+        });
+    }
+
+    public static void deleteAll() {
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.where(RealmMobileBankCards.class).findAll().deleteAllFromRealm();
         });
     }
 

@@ -117,7 +117,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 break;
 
             case R.string.facilities:
-                onLoanClicked();
+                onFacilitiesClick();
                 break;
 
             case R.string.Inventory:
@@ -127,6 +127,15 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                     getAcountBalance(getCurrentAccount());
                 }
                 break;
+        }
+    }
+
+    private void onFacilitiesClick() {
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankLoansFragment.newInstance())
+                    .setReplace(false)
+                    .load();
+
         }
     }
 

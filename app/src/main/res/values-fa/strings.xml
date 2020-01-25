@@ -2377,6 +2377,14 @@
     <string name="mobile_bank_cheque_balance">"مبلغ چک: %1$s "</string>
     <string name="mobile_bank_cheque_number">"شماره چک: %1$s "</string>
     <string name="mobile_bank_cheque_status">"وضعیت چک: %1$s "</string>
+    <string name="enter_loan_number">شماره وام را وارد کنید.</string>
+    <string name="loan_number">شماره وام: </string>
+    <string name="branch_name">نام شعبه:</string>
+    <string name="start_date">تاریخ شروع:</string>
+    <string name="end_date">تاریخ پایان:</string>
+    <string name="loan_count">تعداد اقساط:</string>
+    <string name="remained_loan">اقساط باقیمانده:</string>
+    <string name="state">وضعیت:</string>
     <string name="mobile_bank_detail_cell_payAmount">مبلغ پرداختی: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_payStatus">وضعیت پرداخت: %1$s</string>
     <string name="mobile_bank_detail_cell_paymentDate">تاریخ پرداخت: %1$s</string>

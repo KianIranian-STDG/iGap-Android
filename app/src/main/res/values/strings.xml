@@ -2441,6 +2441,14 @@ Want to get it?</string>
     <string name="mobile_bank_cheque_balance">Balance: %1$s </string>
     <string name="mobile_bank_cheque_number">Cheque Number: %1$s</string>
     <string name="mobile_bank_cheque_status">Status: %1$s</string>
+    <string name="enter_loan_number">Enter Loan Number.</string>
+    <string name="loan_number">Loan number: </string>
+    <string name="branch_name">Branch Name:</string>
+    <string name="start_date">Start date:</string>
+    <string name="end_date">End date:</string>
+    <string name="loan_count">Loan count:</string>
+    <string name="remained_loan">Remained count:</string>
+    <string name="state">State:</string>
     <string name="mobile_bank_load_detail_bankCode">Bank Code: %1$s</string>
     <string name="mobile_bank_load_detail_customerCode">Customer Code: %1$s</string>
     <string name="mobile_bank_load_detail_customerName">Customer Name: %1$s</string>

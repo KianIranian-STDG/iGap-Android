@@ -108,7 +108,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/transparent"
                         android:gravity="center"
-                        android:text="46441035"
+                        android:text="00147437"
                         android:inputType="textPassword"
                         android:paddingStart="@dimen/dp6"
                         android:paddingLeft="@dimen/dp6"
@@ -125,6 +125,7 @@
                         android:layout_marginRight="@dimen/dp4"
                         android:text="@string/eye_icon"
                         android:layout_weight="1.5"/>
+
                 </LinearLayout>
 
                 <ProgressBar

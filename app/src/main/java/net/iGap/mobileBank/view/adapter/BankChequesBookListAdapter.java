@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 
 import java.util.ArrayList;
@@ -67,19 +68,26 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
         @SuppressLint("SetTextI18n")
         public void bind(BankChequeBookListModel item) {
 
-            tvNumber.setText(getString(R.string.cheque_number) + item.getNumber());
-            tvPageCount.setText(getString(R.string.page_count) + item.getPageCount());
-            tvPass.setText(getString(R.string.pass_count) + item.getPageCount());
-            tvReject.setText(getString(R.string.reject_count) + item.getPageCount());
-            tvCached.setText(getString(R.string.cash_count) + item.getPageCount());
-            tvPBlocked.setText(getString(R.string.permanent_block) + item.getPermanentBlocked());
-            tvTBlocked.setText(getString(R.string.temporary_block) + item.getTemporaryBlock());
-            tvUsable.setText(getString(R.string.usable_count) + item.getUnusedCheque());
+            tvNumber.setText(getString(R.string.cheque_number) + checkNumbers(item.getNumber()));
+            tvPageCount.setText(getString(R.string.page_count) + checkNumbers(item.getPageCount() + ""));
+            tvPass.setText(getString(R.string.pass_count) + checkNumbers(item.getPassCheque() + ""));
+            tvReject.setText(getString(R.string.reject_count) + checkNumbers(item.getReject() + ""));
+            tvCached.setText(getString(R.string.cash_count) + checkNumbers(item.getPartialCash() + ""));
+            tvPBlocked.setText(getString(R.string.permanent_block) + checkNumbers(item.getPermanentBlocked() + ""));
+            tvTBlocked.setText(getString(R.string.temporary_block) + checkNumbers(item.getTemporaryBlock() + ""));
+            tvUsable.setText(getString(R.string.usable_count) + checkNumbers(item.getUnusedCheque() + ""));
 
         }
 
         private String getString(int id) {
             return tvNumber.getContext().getString(id);
+        }
+
+        private String checkNumbers(String text) {
+            if (HelperCalander.isPersianUnicode) {
+                return HelperCalander.convertToUnicodeFarsiNumber(text);
+            }
+            return text;
         }
     }
 

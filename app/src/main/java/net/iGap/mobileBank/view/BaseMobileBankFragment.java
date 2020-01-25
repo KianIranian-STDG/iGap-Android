@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.mobileBank.viewmodel.BaseMobileBankViewModel;
 
 public abstract class BaseMobileBankFragment<T extends BaseMobileBankViewModel> extends BaseAPIViewFrag<T> {
@@ -19,6 +20,11 @@ public abstract class BaseMobileBankFragment<T extends BaseMobileBankViewModel> 
         viewModel.getGoToLoginPage().observe(getViewLifecycleOwner(), goToLoginPage -> {
             if (goToLoginPage != null && goToLoginPage) {
                 // handel go to login page
+                if (getActivity() != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankLoginFragment.newInstance(true))
+                            .setReplace(false)
+                            .load();
+                }
             }
         });
 

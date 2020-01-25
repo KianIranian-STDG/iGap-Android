@@ -28,10 +28,12 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
 
     private static final String PARSIAN_USERNAME = "parsian_username";
     private MobileBankLoginFragmentBinding binding;
-    private boolean isPasswordVisible;
+    private boolean isOpenFloatble;
 
-    public static MobileBankLoginFragment newInstance() {
-        return new MobileBankLoginFragment();
+    public static MobileBankLoginFragment newInstance(boolean isOpenFloatble) {
+        MobileBankLoginFragment fragment = new MobileBankLoginFragment();
+        fragment.isOpenFloatble = isOpenFloatble;
+        return fragment;
     }
 
     @Override
@@ -73,6 +75,11 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
 
                 if (binding.edtUserName.getText() != null)
                     saveUsernameToPref(binding.edtUserName.getText().toString());
+
+                if (isOpenFloatble) {
+                    popBackStackFragment();
+                    return;
+                }
 
                 new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
                 new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankHomeFragment()).setReplace(false).load();

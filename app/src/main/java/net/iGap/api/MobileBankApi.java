@@ -10,6 +10,7 @@ import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.BankServiceLoanDetailModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
+import net.iGap.mobileBank.repository.model.LoanListModel;
 import net.iGap.mobileBank.repository.model.LoginResponse;
 
 import java.util.List;
@@ -79,6 +80,12 @@ public interface MobileBankApi {
                                                                  @Field("pan") String cardNumber,
                                                                  @Field("auth_info") String cardData,
                                                                  @Field("deposit_number") String depositNumber);
+
+    @POST("loan/get-loans")
+    Call<BaseMobileBankResponse<List<LoanListModel>>> getLoansList(@Header("Authorization") String token
+                                                                   /*@Field("branch_code") String branchCode,
+                                                                   @Field("cb_loan_number") String loanNumber,
+                                                                   @Field("currency") String currency*/);
 
     @POST("loan/get-loan-detail")
     @FormUrlEncoded
