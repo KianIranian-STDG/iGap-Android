@@ -7,6 +7,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiInitializer;
@@ -42,7 +43,7 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
     public void onInquiryButtonClick(String nationalCode) {
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
-                String phoneNumber = /*AccountManager.getInstance().getCurrentUser().getPhoneNumber()*/ "989120423503";
+                String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
                 if (saveChecked.get()) {
                     DbManager.getInstance().doRealmTask(realm -> {

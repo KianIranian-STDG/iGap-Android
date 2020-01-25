@@ -4,6 +4,7 @@ import android.view.View;
 
 import androidx.databinding.ObservableInt;
 
+import net.iGap.AccountManager;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
@@ -28,23 +29,29 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
     @Override
     public void subscribe() {
         showLoadingView.set(View.VISIBLE);
-        StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId())
-                .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
-                    @Override
-                    public void onSuccess(CardDetailDataModel cardDetailDataModel) {
-                        if (cardDetailDataModel != null)
-                            cardDetailLiveData.postValue(cardDetailDataModel);
-                        showMainView.set(View.VISIBLE);
-                        showLoadingView.set(View.GONE);
-                    }
+        String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        showLoadingView.set(View.GONE);
-                        showRetryView.set(View.VISIBLE);
-                    }
-                });
+        // TODO: 1/25/20 hard code
+        if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
+            phoneNumber = "0" + phoneNumber.substring(2);
+            StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId(), "4271241776", phoneNumber)
+                    .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
+                        @Override
+                        public void onSuccess(CardDetailDataModel cardDetailDataModel) {
+                            if (cardDetailDataModel != null)
+                                cardDetailLiveData.postValue(cardDetailDataModel);
+                            showMainView.set(View.VISIBLE);
+                            showLoadingView.set(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            showLoadingView.set(View.GONE);
+                            showRetryView.set(View.VISIBLE);
+                        }
+                    });
+        }
     }
 
     public void onRetryViewClicked() {

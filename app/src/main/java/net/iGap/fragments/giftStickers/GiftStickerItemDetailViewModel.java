@@ -6,7 +6,7 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.fragments.emoji.apiModels.Issue;
+import net.iGap.AccountManager;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
@@ -31,24 +31,29 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
     public void onPaymentButtonClicked(StructIGSticker structIGSticker) {
         isShowLoading.set(View.VISIBLE);
         isEnabledButton.set(false);
-        // TODO: 1/20/20 clear hard code data
-        stickerRepository.addIssue(structIGSticker.getId(), new Issue("4271241776", "09120423503"))
-                .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
-                    @Override
-                    public void onSuccess(IssueDataModel issueDataModel) {
-                        getPaymentLiveData.postValue(issueDataModel);
-                        isShowLoading.set(View.GONE);
-                        isEnabledButton.set(true);
-                    }
+        // TODO: 1/25/20 hard code
+        String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        isShowLoading.set(View.INVISIBLE);
-                        isEnabledButton.set(false);
-                        isShowRetry.set(View.VISIBLE);
-                    }
-                });
+        if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
+            phoneNumber = "0" + phoneNumber.substring(2);
+            stickerRepository.addIssue(structIGSticker.getId(), phoneNumber, "4271241776")
+                    .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
+                        @Override
+                        public void onSuccess(IssueDataModel issueDataModel) {
+                            getPaymentLiveData.postValue(issueDataModel);
+                            isShowLoading.set(View.GONE);
+                            isEnabledButton.set(true);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            isShowLoading.set(View.INVISIBLE);
+                            isEnabledButton.set(false);
+                            isShowRetry.set(View.VISIBLE);
+                        }
+                    });
+        }
     }
 
     public void onRetryIconClick(StructIGSticker structIGSticker) {

@@ -6,6 +6,7 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiInitializer;
@@ -40,33 +41,42 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
                 isShowLoading.set(View.VISIBLE);
-                new ApiInitializer<CheckNationalCodeResponse>().initAPI(new RetrofitFactory().getShahkarRetrofit().checkNationalCode(nationalCode, "09120423503"), this, new ResponseCallback<CheckNationalCodeResponse>() {
-                    @Override
-                    public void onSuccess(CheckNationalCodeResponse data) {
-                        isShowLoading.set(View.INVISIBLE);
-                        isEnable.set(true);
-                        if (data.isSuccess()) {
-                            goToNextStep.setValue(true);
-                        } else {
-                            errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
+
+                String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
+
+                if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
+                    phoneNumber = "0" + phoneNumber.substring(2);
+                    new ApiInitializer<CheckNationalCodeResponse>().initAPI(new RetrofitFactory().getShahkarRetrofit().checkNationalCode(nationalCode, phoneNumber), this, new ResponseCallback<CheckNationalCodeResponse>() {
+                        @Override
+                        public void onSuccess(CheckNationalCodeResponse data) {
+                            isShowLoading.set(View.INVISIBLE);
+                            isEnable.set(true);
+                            if (data.isSuccess()) {
+                                goToNextStep.setValue(true);
+                            } else {
+                                errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onError(String error) {
-                        isShowLoading.set(View.INVISIBLE);
-                        isEnable.set(true);
-                        errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
+                        @Override
+                        public void onError(String error) {
+                            isShowLoading.set(View.INVISIBLE);
+                            isEnable.set(true);
+                            errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
 
-                        goToNextStep.setValue(false);
-                    }
+                            goToNextStep.setValue(false);
+                        }
 
-                    @Override
-                    public void onFailed() {
-                        isShowLoading.set(View.INVISIBLE);
-                        isEnable.set(true);
-                    }
-                });
+                        @Override
+                        public void onFailed() {
+                            isShowLoading.set(View.INVISIBLE);
+                            isEnable.set(true);
+                        }
+                    });
+                } else {
+                    hasError.set(true);
+                    errorMessage.set(R.string.error);
+                }
             } else {
                 hasError.set(true);
                 errorMessage.set(R.string.elecBill_Entry_userIDLengthError);

@@ -14,7 +14,6 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
-import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.RsaDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
@@ -194,8 +193,12 @@ public class StickerRepository {
         return stickerApi.getGiftableStickers().subscribeOn(Schedulers.newThread());
     }
 
-    private Single<IssueDataModel> addIssueApiService(String stickerId, Issue issue) {
-        return stickerApi.addIssue(stickerId, issue).subscribeOn(Schedulers.newThread());
+    private Single<IssueDataModel> addIssueApiService(String stickerId, String phoneNumber, String nationalCode) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("national_code", nationalCode);
+        jsonObject.addProperty("tel_num", phoneNumber);
+        jsonObject.addProperty("count", 1);
+        return stickerApi.addIssue(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
     }
 
     private Single<CardStatusDataModel> getGiftCardStatusApiService(String giftStickerId) {
@@ -499,16 +502,16 @@ public class StickerRepository {
                 });
     }
 
-    public Single<IssueDataModel> addIssue(String stickerId, Issue issue) {
-        return addIssueApiService(stickerId, issue);
+    public Single<IssueDataModel> addIssue(String stickerId, String phoneNumber, String nationalCode) {
+        return addIssueApiService(stickerId, phoneNumber, nationalCode);
     }
 
     public Single<StructIGGiftSticker> getCardStatus(String giftCardId) {
         return getGiftCardStatusApiService(giftCardId).map(StructIGGiftSticker::new);
     }
 
-    public Single<CardDetailDataModel> getCardInfo(String stickerId) {
-        return getCardDataEncryptedDataApiService("09120423503", "4271241776", stickerId)
+    public Single<CardDetailDataModel> getCardInfo(String stickerId, String nationalCode, String mobileNumber) {
+        return getCardDataEncryptedDataApiService(mobileNumber, nationalCode, stickerId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(rsaDataModel -> {
                     CardDetailDataModel cardDetailDataModel = null;
