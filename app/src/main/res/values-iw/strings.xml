@@ -2131,4 +2131,6 @@
     <string name="bill_id">Bill Id</string>
     <string name="topUp_title">خرید شارژ</string>
     <string name="bill_title">پرداخت قبض</string>
+    <string name="topUp_message">topUp message</string>
+    <string name="bill_message">Bill message</string>
 </resources>

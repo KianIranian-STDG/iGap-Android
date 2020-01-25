@@ -2413,5 +2413,7 @@ Want to get it?</string>
     <string name="bill_id">Bill id</string>
     <string name="topUp_title">To buy credit</string>
     <string name="bill_title">Paying the bill</string>
+    <string name="topUp_message">Recharge purchase message</string>
+    <string name="bill_message">Bill payment message</string>
 
 </resources>

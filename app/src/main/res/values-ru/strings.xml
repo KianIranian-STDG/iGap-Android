@@ -1843,4 +1843,6 @@
     <string name="bill_id">ID счета</string>
     <string name="topUp_title">Купить зарядку</string>
     <string name="bill_title">Оплатить счет</string>
+    <string name="topUp_message">Пополнить сообщение о покупке</string>
+    <string name="bill_message">Сообщение об оплате счета</string>
 </resources>
