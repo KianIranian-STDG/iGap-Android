@@ -21,7 +21,7 @@ public abstract class BaseMobileBankFragment<T extends BaseMobileBankViewModel> 
             if (goToLoginPage != null && goToLoginPage) {
                 // handel go to login page
                 if (getActivity() != null) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankLoginFragment.newInstance())
+                    new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankLoginFragment.newInstance(true))
                             .setReplace(false)
                             .load();
                 }
