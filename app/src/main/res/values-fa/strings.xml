@@ -1785,7 +1785,7 @@
 
     <string name="terms_and_condition">%s را می پذیرم</string>
     <string name="terms_and_condition_clickable">قوانین و مقررات</string>
-    <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
+    <string name="charity_confirm">شما مبلغ %1$s ریال جهت کمک به خیریه %2$s در نظر گرفته اید.</string>
     <string name="new_channel_hint">شما می توانید توضیحات اختیاری برای کانال خود را ارائه دهید.</string>
     <string name="new_group_hint">شما می توانید یک توضیح اختیاری برای گروه خود ارائه دهید.</string>
     <string name="permanent_link">لینک دائمی</string>
@@ -1916,7 +1916,6 @@
     <string name="igasht_ticket_type_title">نوع بلیط را مشخص کنید</string>
     <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
     <string name="igasht_add_ticket_count_button_title">ثبت</string>
-    <string name="igasht_order_ticket_title">%s برای %d نفر</string>
     <string name="igasht_favorites_title">علاقه مندی ها</string>
     <string name="igasht_history_title">تاریخچه</string>
     <string name="igasht_total_ticket_price">مبلغ نهایی: %d ریال</string>
