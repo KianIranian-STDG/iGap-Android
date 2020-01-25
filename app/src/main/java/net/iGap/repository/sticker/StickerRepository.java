@@ -8,6 +8,7 @@ import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
@@ -21,7 +22,6 @@ import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmStickerItemFields;
-import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmStickersDetailsFields;
 import net.iGap.rx.IGSingleObserver;
 
@@ -185,6 +185,10 @@ public class StickerRepository {
         return stickerApi.addIssue(stickerId, issue).subscribeOn(Schedulers.newThread());
     }
 
+    private Single<CardStatusDataModel> getGiftCardStatusApiService(String giftStickerId) {
+        return stickerApi.giftCardStatus(giftStickerId).subscribeOn(Schedulers.newThread());
+    }
+
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(asyncRealm -> {
@@ -293,7 +297,7 @@ public class StickerRepository {
 
     public Flowable<List<StructIGSticker>> getStickerByEmoji(String unicode) {
         return DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmStickersDetails.class)
+            return realm.where(RealmStickerItem.class)
                     .equalTo(RealmStickersDetailsFields.NAME, unicode)
                     .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
                     .findAll()
@@ -302,8 +306,11 @@ public class StickerRepository {
                     .map(realmStickers -> {
                         List<StructIGSticker> stickers = new ArrayList<>();
                         for (int i = 0; i < realmStickers.size(); i++) {
-                            StructIGSticker sticker = new StructIGSticker().setValueWithRealm(realmStickers.get(i));
-                            stickers.add(sticker);
+                            RealmStickerItem stickerItem = realmStickers.get(i);
+                            if (stickerItem != null) {
+                                StructIGSticker sticker = new StructIGSticker(stickerItem);
+                                stickers.add(sticker);
+                            }
                         }
                         Log.i(TAG, "getStickerByEmoji: " + stickers.size());
                         return stickers;
@@ -455,5 +462,9 @@ public class StickerRepository {
 
     public Single<IssueDataModel> addIssue(String stickerId, Issue issue) {
         return addIssueApiService(stickerId, issue);
+    }
+
+    public Single<StructIGGiftSticker> getCardStatus(String giftCardId) {
+        return getGiftCardStatusApiService(giftCardId).map(StructIGGiftSticker::new);
     }
 }

@@ -2370,8 +2370,8 @@ public class FragmentChat extends BaseFragment
          * set background
          */
 
-        keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 869);
-        keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
+        keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(200));
+        keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(200));
 
         recyclerView = rootView.findViewById(R.id.chl_recycler_view_chat);
 
@@ -3279,7 +3279,7 @@ public class FragmentChat extends BaseFragment
     private void onScreenSizeChanged(int height, boolean land) {
         keyboardVisible = height > 0;
 
-        if (height > LayoutCreator.dp(72) && keyboardVisible) {
+        if (height > LayoutCreator.dp(50) && keyboardVisible) {
             if (land) {
                 keyboardHeightLand = height;
                 if (emojiSharedPreferences != null)

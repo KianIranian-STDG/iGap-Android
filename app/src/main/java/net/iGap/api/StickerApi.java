@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
@@ -64,4 +65,6 @@ public interface StickerApi {
     @POST("gift/issue/{stickerId}")
     Single<IssueDataModel> addIssue(@Path("stickerId") String stickerId, @Body Issue issue);
 
+    @GET("gift/activation-status/{giftStickerId}")
+    Single<CardStatusDataModel> giftCardStatus(@Path("giftStickerId") String giftStickerId);
 }

@@ -2,7 +2,6 @@ package net.iGap.fragments.emoji.struct;
 
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.realm.RealmStickerItem;
-import net.iGap.realm.RealmStickersDetails;
 import net.iGap.repository.sticker.StickerRepository;
 
 import java.io.File;
@@ -22,6 +21,7 @@ public class StructIGSticker {
     private long fileSize;
     private boolean isFavorite;
     private long giftAmount;
+    private String giftId; // just use in gift sticker :| i can not change server data model :\
     private List<String> tags;
 
     public StructIGSticker() {
@@ -155,17 +155,11 @@ public class StructIGSticker {
         return giftAmount > 0;
     }
 
-    public StructIGSticker setValueWithRealm(RealmStickersDetails realmStickersDetails) {
-        if (realmStickersDetails != null && realmStickersDetails.isValid()) {
-            setId(realmStickersDetails.getSt_id());
-            setName(realmStickersDetails.getName());
-            setPath(realmStickersDetails.getUri());
-            setGroupId(realmStickersDetails.getGroupId());
-            setToken(realmStickersDetails.getToken());
-            setFileName(realmStickersDetails.getFileName());
-            setFileSize((int) realmStickersDetails.getFileSize());
-            return this;
-        }
-        return null;
+    public void setGiftId(String giftId) {
+        this.giftId = giftId;
+    }
+
+    public String getGiftId() {
+        return giftId;
     }
 }

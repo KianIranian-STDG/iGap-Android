@@ -11,6 +11,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -28,14 +29,20 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.rx.IGSingleObserver;
 import net.iGap.view.StickerView;
 
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftStickerItem.ViewHolder> {
 
@@ -74,15 +81,31 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             }
         });
 
-        Gson gson = new Gson();
-
         try {
-            StructIGSticker structIGSticker = holder.structIGSticker = gson.fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
-            if (structIGSticker != null)
+            StructIGSticker structIGSticker = holder.structIGSticker = new Gson().fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
+            if (structIGSticker != null) {
                 holder.image.loadSticker(structIGSticker);
+
+                if (structIGSticker.getGiftId() != null)
+                    StickerRepository.getInstance().getCardStatus(structIGSticker.getGiftId())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new IGSingleObserver<StructIGGiftSticker>(new CompositeDisposable()) {
+                                @Override
+                                public void onSuccess(StructIGGiftSticker giftSticker) {
+                                    Log.i("GiftStickerItem", "onSuccess: " + giftSticker.isActive());
+                                    holder.visitBtn.setVisibility(giftSticker.isActive() ? View.GONE : View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                }
+                            });
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
+
 
         holder.image.setOnLongClickListener(getLongClickPerform(holder));
         holder.progress.setVisibility(View.GONE);

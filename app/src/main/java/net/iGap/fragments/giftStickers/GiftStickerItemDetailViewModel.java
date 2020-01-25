@@ -21,7 +21,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
     private ObservableInt isShowRetry = new ObservableInt(View.INVISIBLE);
     private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
     private StickerRepository stickerRepository = StickerRepository.getInstance();
-    private MutableLiveData<String> getPaymentLiveData = new MutableLiveData<>();
+    private MutableLiveData<IssueDataModel> getPaymentLiveData = new MutableLiveData<>();
 
     @Override
     public void subscribe() {
@@ -36,7 +36,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
                 .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
                     @Override
                     public void onSuccess(IssueDataModel issueDataModel) {
-                        getPaymentLiveData.postValue(issueDataModel.getToken());
+                        getPaymentLiveData.postValue(issueDataModel);
                         isShowLoading.set(View.GONE);
                         isEnabledButton.set(true);
                     }
@@ -68,7 +68,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
         return isShowLoading;
     }
 
-    public MutableLiveData<String> getGetPaymentLiveData() {
+    public MutableLiveData<IssueDataModel> getGetPaymentLiveData() {
         return getPaymentLiveData;
     }
 

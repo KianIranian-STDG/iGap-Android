@@ -61,13 +61,14 @@ public class GiftStickerItemDetailFragment extends Fragment {
         String text = "شما استیکر " + (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(sticker.getGiftAmount()))) : df.format(Double.valueOf(sticker.getGiftAmount()))) + " " + getResources().getString(R.string.rial) + "ی را انتخاب کردید!";
         binding.stickerPrice.setText(text);
 
-        viewModel.getGetPaymentLiveData().observe(getViewLifecycleOwner(), token -> {
-            if (token != null) {
+        viewModel.getGetPaymentLiveData().observe(getViewLifecycleOwner(), dataModel -> {
+            if (dataModel.getToken() != null) {
+                sticker.setGiftId(dataModel.getId());
                 if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
                     ((ParentChatMoneyTransferFragment) getParentFragment()).dismissDialog();
-                    ((ParentChatMoneyTransferFragment) getParentFragment()).delegate.onGiftStickerGetStartPayment(sticker, token);
+                    ((ParentChatMoneyTransferFragment) getParentFragment()).delegate.onGiftStickerGetStartPayment(sticker, dataModel.getToken());
                 } else if (getParentFragment() instanceof GiftStickerMainFragment) {
-                    ((GiftStickerMainFragment) getParentFragment()).loadPaymentFragment(sticker, token);
+                    ((GiftStickerMainFragment) getParentFragment()).loadPaymentFragment(sticker, dataModel.getToken());
                 }
             }
         });
