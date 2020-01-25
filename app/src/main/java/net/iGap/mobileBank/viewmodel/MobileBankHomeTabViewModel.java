@@ -1,14 +1,13 @@
 package net.iGap.mobileBank.viewmodel;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.BuildConfig;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
+import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankShebaModel;
@@ -37,6 +36,8 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         MobileBankRepository.getInstance().getMobileBankCards(this, new ResponseCallback<BaseMobileBankResponse<List<BankCardModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankCardModel>> data) {
+                //todo:// delete when account changed
+                RealmMobileBankCards.deleteAll();
                 cards = data.getData();
                 cardsData.setValue(cards);
                 showLoading.set(View.GONE);
@@ -84,7 +85,6 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
     }
 
     public void getShebaNumber(String cardNumber) {
-        if (BuildConfig.DEBUG) Log.e("NazariSheba", cardNumber);
         if (cardNumber == null) {
             shebaListener.postValue(null);
             return;
@@ -93,7 +93,6 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<String>> data) {
                 shebaListener.postValue(data.getData());
-                if (BuildConfig.DEBUG) Log.e("NazariSheba", data.getData().get(0));
             }
 
             @Override
