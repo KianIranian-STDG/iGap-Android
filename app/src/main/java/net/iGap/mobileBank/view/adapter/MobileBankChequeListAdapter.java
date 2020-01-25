@@ -83,9 +83,13 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             chNumber.setText(context.getResources().getString(R.string.mobile_bank_cheque_number,
                     CompatibleUnicode(mdata.get(position).getNumber())));
 
-            chValue.setText(context.getResources().getString(R.string.mobile_bank_cheque_balance,
-                    CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))))
-                    + context.getResources().getString(R.string.rial));
+            if (mdata.get(position).getBalance() != null)
+                chValue.setText(context.getResources().getString(R.string.mobile_bank_cheque_balance,
+                        CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))))
+                        + context.getResources().getString(R.string.rial));
+            else {
+                chValue.setText(context.getResources().getString(R.string.elecBill_error_title));
+            }
 
             chStatus.setText(context.getResources().getString(R.string.mobile_bank_cheque_status,
                     mdata.get(position).getStatus()));

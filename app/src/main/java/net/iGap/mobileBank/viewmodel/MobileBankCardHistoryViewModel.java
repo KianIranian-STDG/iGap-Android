@@ -142,25 +142,25 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
                 calender.getValue().get(datePosition).getStartMonth(),
                 calender.getValue().get(datePosition).getEndMonth(),
                 this, new ResponseCallback<BaseMobileBankResponse<List<BankHistoryModel>>>() {
-            @Override
-            public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
-                bills.setValue(data.getData());
-                if (offset == 0) {
-                    DecimalFormat df = new DecimalFormat(",###");
-                    balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
-                }
-            }
+                    @Override
+                    public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
+                        bills.setValue(data.getData());
+                        if (offset == 0 && data.getData() != null && data.getData().size() > 0) {
+                            DecimalFormat df = new DecimalFormat(",###");
+                            balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
+                        }
+                    }
 
-            @Override
-            public void onError(String error) {
+                    @Override
+                    public void onError(String error) {
 
-            }
+                    }
 
-            @Override
-            public void onFailed() {
+                    @Override
+                    public void onFailed() {
 
-            }
-        });
+                    }
+                });
     }
 
     private String compatibleUnicode(String entry) {
