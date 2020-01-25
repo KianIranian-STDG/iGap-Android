@@ -1,9 +1,12 @@
 package net.iGap.api;
 
+import com.google.gson.JsonObject;
+
 import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
+import net.iGap.fragments.emoji.apiModels.RsaDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategorisDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
@@ -64,6 +67,9 @@ public interface StickerApi {
 
     @POST("gift/issue/{stickerId}")
     Single<IssueDataModel> addIssue(@Path("stickerId") String stickerId, @Body Issue issue);
+
+    @POST("gift/activate/{giftStickerId}")
+    Single<RsaDataModel> activeGiftCard(@Path("giftStickerId") String giftStickerId, @Body JsonObject jsonObject);
 
     @GET("gift/activation-status/{giftStickerId}")
     Single<CardStatusDataModel> giftCardStatus(@Path("giftStickerId") String giftStickerId);

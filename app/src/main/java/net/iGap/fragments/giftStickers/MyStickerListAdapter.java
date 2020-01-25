@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.view.StickerView;
 
@@ -20,6 +21,11 @@ import java.util.List;
 public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdapter.ViewHolder> {
 
     private List<StructIGGiftSticker> items = new ArrayList<>();
+    private Delegate delegate;
+
+    public void setDelegate(Delegate delegate) {
+        this.delegate = delegate;
+    }
 
     public void setItems(List<StructIGGiftSticker> items) {
         this.items = items;
@@ -65,6 +71,16 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
             giftStickerPrice.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) : df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) + " " + itemView.getContext().getResources().getString(R.string.rial));
 
             giftStickerStatus.setText(giftSticker.getStatus());
+
+            itemView.setOnClickListener(v -> {
+                if (delegate != null) {
+                    delegate.onClick(giftSticker.getStructIGSticker());
+                }
+            });
         }
+    }
+
+    public interface Delegate {
+        void onClick(StructIGSticker structIGSticker);
     }
 }

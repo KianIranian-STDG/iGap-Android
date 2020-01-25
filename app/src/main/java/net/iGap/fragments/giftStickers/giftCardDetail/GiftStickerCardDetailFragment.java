@@ -18,10 +18,20 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentGiftStickerCardDetailBinding;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class GiftStickerCardDetailFragment extends Fragment {
+    private StructIGSticker structIGSticker;
+    private Delegate delegate;
+
+    public static GiftStickerCardDetailFragment getInstance(StructIGSticker structIGSticker, Delegate delegate) {
+        GiftStickerCardDetailFragment giftStickerCardDetailFragment = new GiftStickerCardDetailFragment();
+        giftStickerCardDetailFragment.structIGSticker = structIGSticker;
+        giftStickerCardDetailFragment.delegate = delegate;
+        return giftStickerCardDetailFragment;
+    }
 
     private GiftStickerCardDetailViewModel viewModel;
     private FragmentGiftStickerCardDetailBinding binding;
@@ -33,11 +43,7 @@ public class GiftStickerCardDetailFragment extends Fragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                String cardId = null;
-                if (getArguments() != null) {
-                    cardId = getArguments().getString("cardId", null);
-                }
-                return (T) new GiftStickerCardDetailViewModel(cardId);
+                return (T) new GiftStickerCardDetailViewModel(structIGSticker);
             }
         }).get(GiftStickerCardDetailViewModel.class);
     }
@@ -54,6 +60,17 @@ public class GiftStickerCardDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        viewModel.subscribe();
+
+        viewModel.getCardDetailLiveData().observe(getViewLifecycleOwner(), cardDetailDataModel -> {
+            binding.cardNumberView.setText(cardDetailDataModel.getCardNo());
+            binding.expireTime.setText(cardDetailDataModel.getExpireDate());
+            binding.internetPin2.setText(cardDetailDataModel.getCvv2());
+            binding.cvvView.setText(cardDetailDataModel.getCvv2());
+            if (delegate != null)
+                delegate.onCardActiced(structIGSticker);
+        });
+
         viewModel.getCopyValue().observe(getViewLifecycleOwner(), value -> {
             if (getActivity() != null) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -62,5 +79,9 @@ public class GiftStickerCardDetailFragment extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.copied), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public interface Delegate {
+        void onCardActiced(StructIGSticker structIGSticker);
     }
 }

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="net.iGap.fragments.giftStickers.giftCardDetail.GiftStickerCardDetailViewModel" />
@@ -80,7 +79,6 @@
             android:gravity="center"
             android:onClick="@{()->viewModel.copyValue(cardNumberView.getText().toString())}"
             android:padding="@dimen/dp8"
-            android:text="6221 0612 0670 1727"
             android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"
@@ -133,7 +131,6 @@
             android:gravity="center"
             android:onClick="@{()->viewModel.copyValue(cvvView.getText().toString())}"
             android:padding="@dimen/dp8"
-            android:text="6221"
             android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"
@@ -152,7 +149,6 @@
             android:gravity="center"
             android:onClick="@{()->viewModel.copyValue(internetPin2.getText().toString())}"
             android:padding="@dimen/dp8"
-            android:text="123456789"
             android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"
@@ -168,15 +164,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:gravity="center"
             android:onClick="@{()->viewModel.copyValue(expireTime.getText().toString())}"
             android:padding="@dimen/dp8"
-            android:gravity="center"
             android:paddingStart="@dimen/dp8"
             android:paddingLeft="@dimen/dp8"
             android:paddingEnd="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
             android:text="برای کپی کلیک کنید"
             android:textColor="?attr/iGapSubtitleTextColor"
+            android:textSize="@dimen/smallTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -190,7 +187,6 @@
             android:gravity="center"
             android:onClick="@{()->viewModel.copyValue(expireTime.getText().toString())}"
             android:padding="@dimen/dp8"
-            android:text="1403/03"
             android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"

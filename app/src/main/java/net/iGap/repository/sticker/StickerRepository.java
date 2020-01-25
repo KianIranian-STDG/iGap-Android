@@ -2,22 +2,28 @@ package net.iGap.repository.sticker;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.Issue;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
+import net.iGap.fragments.emoji.apiModels.RsaDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.module.RSACipher;
 import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickerItem;
@@ -28,15 +34,22 @@ import net.iGap.rx.IGSingleObserver;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmResults;
@@ -48,7 +61,8 @@ public class StickerRepository {
 
     private static StickerRepository stickerRepository;
     private StickerApi stickerApi;
-
+    private RSACipher rsaCipher;
+    private String publicKey;
     private String TAG = "abbasiStickerRepository";
 
     public static StickerRepository getInstance() {
@@ -59,6 +73,22 @@ public class StickerRepository {
 
     private StickerRepository() {
         stickerApi = new RetrofitFactory().getStickerRetrofit();
+
+
+        try {
+            rsaCipher = new RSACipher();
+            publicKey = rsaCipher.getPublicKey("pkcs8-pem").replace("\n", "\\n");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
     }
 
     public Single<List<StructIGStickerCategory>> getStickerCategory() {
@@ -187,6 +217,14 @@ public class StickerRepository {
 
     private Single<CardStatusDataModel> getGiftCardStatusApiService(String giftStickerId) {
         return stickerApi.giftCardStatus(giftStickerId).subscribeOn(Schedulers.newThread());
+    }
+
+    private Single<RsaDataModel> getCardDataEncryptedDataApiService(String mobileNumber, String nationalCode, String stickerId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("national_code", nationalCode);
+        jsonObject.addProperty("tel_num", mobileNumber);
+        jsonObject.addProperty("key", publicKey != null ? publicKey : "");
+        return stickerApi.activeGiftCard(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
     }
 
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
@@ -466,5 +504,27 @@ public class StickerRepository {
 
     public Single<StructIGGiftSticker> getCardStatus(String giftCardId) {
         return getGiftCardStatusApiService(giftCardId).map(StructIGGiftSticker::new);
+    }
+
+    public Single<CardDetailDataModel> getCardInfo(String stickerId) {
+        return getCardDataEncryptedDataApiService("09120423503", "4271241776", stickerId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(rsaDataModel -> {
+                    CardDetailDataModel cardDetailDataModel = null;
+                    try {
+                        cardDetailDataModel = new Gson().fromJson(rsaCipher.decrypt(rsaDataModel.getData()), CardDetailDataModel.class);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchPaddingException e) {
+                        e.printStackTrace();
+                    } catch (InvalidKeyException e) {
+                        e.printStackTrace();
+                    } catch (IllegalBlockSizeException e) {
+                        e.printStackTrace();
+                    } catch (BadPaddingException e) {
+                        e.printStackTrace();
+                    }
+                    return cardDetailDataModel;
+                });
     }
 }

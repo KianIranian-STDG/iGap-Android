@@ -21,7 +21,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
     private ObservableField<String> nationalCodeField = new ObservableField<>("");
     private ObservableBoolean isEnable = new ObservableBoolean(true);
     private ObservableInt isShowLoading = new ObservableInt(View.GONE);
-    private SingleLiveEvent<String> goToNextStep = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goToNextStep = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> showRequestErrorMessage = new SingleLiveEvent<>();
 
     public void onActiveButtonClicked(String nationalCode) {
@@ -33,7 +33,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
                         isShowLoading.set(View.INVISIBLE);
                         isEnable.set(true);
                         if (data.isSuccess()) {
-                            goToNextStep.setValue("sss");
+                            goToNextStep.setValue(true);
                         } else {
                             errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
                         }
@@ -45,7 +45,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
                         isEnable.set(true);
                         errorMessage.set(R.string.national_code_not_match_with_phone_number_error);
 
-                        goToNextStep.setValue("sss");
+                        goToNextStep.setValue(false);
                     }
 
                     @Override
@@ -84,7 +84,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
         return isShowLoading;
     }
 
-    public SingleLiveEvent<String> getGoToNextStep() {
+    public SingleLiveEvent<Boolean> getGoToNextStep() {
         return goToNextStep;
     }
 

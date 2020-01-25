@@ -164,6 +164,7 @@ import net.iGap.fragments.emoji.remove.StickerSettingFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedBottomSheet;
+import net.iGap.fragments.giftStickers.giftCardDetail.GiftStickerCardDetailFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -3614,28 +3615,6 @@ public class FragmentChat extends BaseFragment
                                     return;
                                 }
 
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        BuyGiftStickerCompletedBottomSheet bottomSheet = BuyGiftStickerCompletedBottomSheet.getInstance(structIGSticker);
-                                        bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
-                                            @Override
-                                            public void onNegativeButton(StructIGSticker structIGSticker) {
-                                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
-                                            }
-
-                                            @Override
-                                            public void onPositiveButton(StructIGSticker structIGSticker) {
-                                                sendStickerAsMessage(structIGSticker);
-                                            }
-                                        });
-
-                                        bottomSheet.show(FragmentChat.this.getActivity().getSupportFragmentManager(), null);
-
-                                    }
-                                }, 3000);
-
                                 new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.gift_sticker_title), paymentToken, result -> {
                                     if (result.isSuccess()) {
                                         Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
@@ -3682,7 +3661,12 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onActiveGiftStickerClick(StructIGSticker structIGSticker) {
-        new HelperFragment(getFragmentManager()).loadGiftStickerCard();
+        new HelperFragment(getFragmentManager()).loadGiftStickerCard(structIGSticker, new GiftStickerCardDetailFragment.Delegate() {
+            @Override
+            public void onCardActiced(StructIGSticker structIGSticker) {
+                Toast.makeText(getContext(), "Card Actived", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {

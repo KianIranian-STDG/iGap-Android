@@ -12,8 +12,18 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.R;
 import net.iGap.dialog.BaseBottomSheet;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 public class MainGiftStickerCardFragment extends BaseBottomSheet {
+    private StructIGSticker structIGSticker;
+    private GiftStickerCardDetailFragment.Delegate delegate;
+
+    public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker, GiftStickerCardDetailFragment.Delegate delegate) {
+        MainGiftStickerCardFragment mainGiftStickerCardFragment = new MainGiftStickerCardFragment();
+        mainGiftStickerCardFragment.structIGSticker = structIGSticker;
+        mainGiftStickerCardFragment.delegate = delegate;
+        return mainGiftStickerCardFragment;
+    }
 
     @Nullable
     @Override
@@ -42,16 +52,13 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadGiftStickerCardDetailFragment(String cardId) {
+    public void loadGiftStickerCardDetailFragment() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        Bundle bundle = new Bundle();
-        bundle.putString("cardId", cardId);
         if (!(fragment instanceof GiftStickerCardDetailFragment)) {
-            fragment = new GiftStickerCardDetailFragment();
+            fragment = GiftStickerCardDetailFragment.getInstance(structIGSticker, delegate);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
-        fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 }

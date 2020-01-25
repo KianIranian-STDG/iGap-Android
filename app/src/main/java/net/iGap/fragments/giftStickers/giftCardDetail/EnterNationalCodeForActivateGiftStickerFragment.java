@@ -44,9 +44,9 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
             }
         });
 
-        viewModel.getGoToNextStep().observe(getViewLifecycleOwner(), cardId -> {
-            if (cardId != null && getParentFragment() instanceof MainGiftStickerCardFragment) {
-                ((MainGiftStickerCardFragment) getParentFragment()).loadGiftStickerCardDetailFragment(cardId);
+        viewModel.getGoToNextStep().observe(getViewLifecycleOwner(), goNext -> {
+            if (goNext != null && goNext && getParentFragment() instanceof MainGiftStickerCardFragment) {
+                ((MainGiftStickerCardFragment) getParentFragment()).loadGiftStickerCardDetailFragment();
             }
         });
     }
