@@ -27,7 +27,6 @@ import net.iGap.fragments.FragmentShowMember;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.fragments.giftStickers.giftCardDetail.GiftStickerCardDetailFragment;
 import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
 import net.iGap.payment.PaymentCallBack;
 import net.iGap.payment.PaymentFragment;
@@ -342,8 +341,8 @@ public class HelperFragment {
         load();
     }
 
-    public void loadGiftStickerCard(StructIGSticker structIGSticker, GiftStickerCardDetailFragment.Delegate delegate) {
-        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, delegate);
+    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker) {
+        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker);
         fragment.show(fragmentManager, "gift sticker card");
     }
 

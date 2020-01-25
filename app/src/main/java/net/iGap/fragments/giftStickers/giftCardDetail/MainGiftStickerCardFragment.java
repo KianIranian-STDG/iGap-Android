@@ -16,12 +16,10 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 public class MainGiftStickerCardFragment extends BaseBottomSheet {
     private StructIGSticker structIGSticker;
-    private GiftStickerCardDetailFragment.Delegate delegate;
 
-    public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker, GiftStickerCardDetailFragment.Delegate delegate) {
+    public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker) {
         MainGiftStickerCardFragment mainGiftStickerCardFragment = new MainGiftStickerCardFragment();
         mainGiftStickerCardFragment.structIGSticker = structIGSticker;
-        mainGiftStickerCardFragment.delegate = delegate;
         return mainGiftStickerCardFragment;
     }
 
@@ -56,7 +54,7 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerCardDetailFragment)) {
-            fragment = GiftStickerCardDetailFragment.getInstance(structIGSticker, delegate);
+            fragment = GiftStickerCardDetailFragment.getInstance(structIGSticker);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();

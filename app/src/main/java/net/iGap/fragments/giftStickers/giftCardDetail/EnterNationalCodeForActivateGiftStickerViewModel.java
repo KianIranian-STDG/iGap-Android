@@ -27,6 +27,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
     public void onActiveButtonClicked(String nationalCode) {
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
+                isShowLoading.set(View.VISIBLE);
                 new ApiInitializer<CheckNationalCodeResponse>().initAPI(new RetrofitFactory().getShahkarRetrofit().checkNationalCode(nationalCode, "09120423503"), this, new ResponseCallback<CheckNationalCodeResponse>() {
                     @Override
                     public void onSuccess(CheckNationalCodeResponse data) {

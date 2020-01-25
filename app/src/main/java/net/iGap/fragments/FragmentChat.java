@@ -164,7 +164,6 @@ import net.iGap.fragments.emoji.remove.StickerSettingFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedBottomSheet;
-import net.iGap.fragments.giftStickers.giftCardDetail.GiftStickerCardDetailFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -3661,12 +3660,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onActiveGiftStickerClick(StructIGSticker structIGSticker) {
-        new HelperFragment(getFragmentManager()).loadGiftStickerCard(structIGSticker, new GiftStickerCardDetailFragment.Delegate() {
-            @Override
-            public void onCardActiced(StructIGSticker structIGSticker) {
-                Toast.makeText(getContext(), "Card Actived", Toast.LENGTH_SHORT).show();
-            }
-        });
+        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker);
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {

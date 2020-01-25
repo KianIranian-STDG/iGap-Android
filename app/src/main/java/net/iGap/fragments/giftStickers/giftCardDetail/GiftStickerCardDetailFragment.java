@@ -24,12 +24,10 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class GiftStickerCardDetailFragment extends Fragment {
     private StructIGSticker structIGSticker;
-    private Delegate delegate;
 
-    public static GiftStickerCardDetailFragment getInstance(StructIGSticker structIGSticker, Delegate delegate) {
+    public static GiftStickerCardDetailFragment getInstance(StructIGSticker structIGSticker) {
         GiftStickerCardDetailFragment giftStickerCardDetailFragment = new GiftStickerCardDetailFragment();
         giftStickerCardDetailFragment.structIGSticker = structIGSticker;
-        giftStickerCardDetailFragment.delegate = delegate;
         return giftStickerCardDetailFragment;
     }
 
@@ -67,8 +65,6 @@ public class GiftStickerCardDetailFragment extends Fragment {
             binding.expireTime.setText(cardDetailDataModel.getExpireDate());
             binding.internetPin2.setText(cardDetailDataModel.getCvv2());
             binding.cvvView.setText(cardDetailDataModel.getCvv2());
-            if (delegate != null)
-                delegate.onCardActiced(structIGSticker);
         });
 
         viewModel.getCopyValue().observe(getViewLifecycleOwner(), value -> {

@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentMyGiftStickerRevievedBinding;
-import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.fragments.giftStickers.giftCardDetail.GiftStickerCardDetailFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 
@@ -46,12 +44,7 @@ public class MyGiftStickerReceivedFragment extends Fragment {
         binding.giftStickerList.setAdapter(new MyStickerListAdapter());
 
         if (binding.giftStickerList.getAdapter() instanceof MyStickerListAdapter) {
-            ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate(structIGSticker -> new HelperFragment(getFragmentManager()).loadGiftStickerCard(structIGSticker, new GiftStickerCardDetailFragment.Delegate() {
-                @Override
-                public void onCardActiced(StructIGSticker structIGSticker) {
-
-                }
-            }));
+            ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate(structIGSticker -> new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker));
         }
 
         viewModel.getLoadStickerList().observe(getViewLifecycleOwner(), giftStickerList -> {
