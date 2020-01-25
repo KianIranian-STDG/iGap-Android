@@ -105,7 +105,7 @@
     <string name="igap">ئای­گەپ</string>
     <string name="igapChanel">ئای­گەپ</string>
     <string name="search">گەڕان</string>
-    <string name="d_of_d">%d لە %d</string>
+    <string name="d_of_d" formatted="false">%d لە %d</string>
     <string name="add_to_contact">زیادکردن بە بەردەنگەکان</string>
     <string name="cancel">پاشگەزبوونەوە</string>
     <string name="B_cancel">پاشگەزبوونەوە</string>
@@ -135,7 +135,7 @@
     <string name="cannot_load_data_en">ناتەوانی لە داگرتنی دەیتاکاندا</string>
     <string name="do_you_want_exit">دەتەوێ بڕۆیتە دەرەوە؟</string>
     <string name="slide_to_cancel_en">بۆ هەڵوەشانەوە بیکێشە</string>
-    <string name="video_duration">%s) %s)</string>
+    <string name="video_duration" formatted="false">"%s (%s)"</string>
     <string name="st_Info">زانیارییەکانی ئەکانت</string>
     <string name="st_Language">زمان</string>
     <string name="st_titleToolbar">رێکبەندی</string>
@@ -1233,7 +1233,6 @@
     <string name="separate_notifications">راگەیێندراوە جیاکارەکان</string>
     <string name="mark_as_unread">خوێندراوە</string>
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
     <string name="start">دەست­پێکردن</string>
     <string name="bot">رۆبات</string>
     <string name="back_to_menu">گەڕانەوە بۆ مێنۆی سەرەکی</string>
@@ -1569,7 +1568,7 @@
     <string name="item_selected">بابەتی هەڵبژێردراو</string>
     <string name="terms_and_condition">%s پەسەند دەکەم</string>
     <string name="terms_and_condition_clickable">یاسا و رێساکان</string>
-    <string name="charity_confirm">تۆ بڕی %s ریاڵت بەمەبەستی یارمەتی بە ناوەندی خێرخوازیی %s لە بەرچاو گرتووە.</string>
+    <string name="charity_confirm">تۆ بڕی %1$s ریاڵت بەمەبەستی یارمەتی بە ناوەندی خێرخوازیی %2$s لە بەرچاو گرتووە.</string>
     <string name="new_channel_hint">تۆ دەتوانی روونکردنەوەی دڵخوازی خۆت بۆ کەناڵی خۆت پێشکەش بکەیت.</string>
     <string name="new_group_hint">تۆ دەتوانی یەک روونکردنەوەی دڵخوازی خۆت بە گرووپی خۆت پێشکەش بکەیت.</string>
     <string name="permanent_link">لینکی هەمیشەیی</string>
@@ -1695,7 +1694,6 @@
     <string name="igasht_ticket_type_title">جۆری بلیت دەستنیشان بکە</string>
     <string name="igasht_enter_ticket_count_title">ژمارەی سەردانکەر بنووسە.</string>
     <string name="igasht_add_ticket_count_button_title">تۆمار</string>
-    <string name="igasht_order_ticket_title">%s بۆ %d کەس</string>
     <string name="igasht_favorites_title">بابەتی دڵخواز</string>
     <string name="igasht_history_title">رێکەوت</string>
     <string name="igasht_total_ticket_price">بڕی پارەی کۆتایی %d تمەن</string>

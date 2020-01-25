@@ -463,7 +463,6 @@
     <string name="E_114">Charge utile incorrecte :  email n\'est pas correct</string>
     <string name="E_115">Erreur Interne du Serveur</string>
     <string name="E_116">Charge utile incorrecte : sexe n\'est pas correct</string>
-    <string name="E_117">Erreur Interne du Serveur</string>
     <string name="E_118">Alerte: nombre des contacts est passé de limite fixée par serveur</string>
     <string name="list_admin">liste des dirigeants </string>
     <string name="list_modereator">liste des surveillants</string>
@@ -1687,11 +1686,9 @@
     <string name="igasht_buy_ticket_title">acheter billet</string>
     <string name="detail_title">les détailles</string>
     <string name="igasht_place_of_visit_title">lieu de visite</string>
-    <string name="igasht_add_new_place_title">ajouter au nouveau visite</string>
     <string name="igasht_ticket_type_title">veuillez choisir le type de billet</string>
     <string name="igasht_enter_ticket_count_title">veuillez entrer le nombre des visiteurs</string>
     <string name="igasht_add_ticket_count_button_title">enregistrer</string>
-    <string name="igasht_order_ticket_title">  %d personnes pour %s</string>
     <string name="igasht_favorites_title">les préférés</string>
     <string name="igasht_history_title">l\'histoire</string>
     <string name="igasht_total_ticket_price">somme totale et finale : %d Toman</string>
