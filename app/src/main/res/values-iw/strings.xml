@@ -580,7 +580,7 @@
     <string name="charge_type">شارژین نوعی</string>
     <string name="charge_type_error_message">زحمت اولماسا شارژین نوعونو سئچین </string>
     <string name="charge_wallet">پول کیفینی شارژ ائتمک </string>
-    <string name="charity_confirm">سیز %s ریال مبلغی %s خیریه سینه کمکلیک اوچون نظرده توتوبسوز</string>
+    <string name="charity_confirm">سیز %1$s ریال مبلغی %2$s خیریه سینه کمکلیک اوچون نظرده توتوبسوز</string>
     <string name="charity_title">نیکوکاری </string>
     <string name="chat">دانیشیق </string>
     <string name="chat_history_for_new_member_title">یئنی عضولر اوچون آیگپین تاریخچه سی </string>
@@ -1007,7 +1007,6 @@
     <string name="igasht_favorites_title">علاقه مندی لر</string>
     <string name="igasht_history_title">تاریخچه </string>
     <string name="igasht_location_found_count">%d مورد تاپیلمیشدیر</string>
-    <string name="igasht_order_ticket_title">%d نفر اوچون %s</string>
     <string name="igasht_place_of_visit_title">بازدید یئری</string>
     <string name="igasht_search_by_location">موقعیته اساسا آختاریش</string>
     <string name="igasht_select_location_button_title">محلی سئچمک </string>
@@ -1828,7 +1827,7 @@
     <string name="st_dark_theme">تیره زمینه لی </string>
     <string name="st_data_shams">پارسی تاریخ</string>
     <string name="st_des_bio">سیز اوزونوز باره ده مختصر بیر توضیح اوز پروفایلیزدا یازا بیلرسیز. ذکر ائتمک لازمدیر کی هر استفاده چی سیزین پروفایلیزدا بو متنی گوره جکدیر</string>
-    <string name="st_desc_delete">بو 1% پیغامی حذف ائتمکدن مطمئتسیز می؟ </string>
+    <string name="st_desc_delete">بو %1$s پیغامی حذف ائتمکدن مطمئتسیز می؟ </string>
     <string name="st_dialog_content_keepMedia">بولوتلو فضادا سیزین دسترسینیزده اولان و ذخیره ائتدیگینیز تصویرلر، ویدئولار و دیگر فایل لار بوش فضالار یاراتماق اوچون دستگاه دان سیلینیر. بوتون رسانه لر بولوتلو فضانین ذخیره ائتمه بخشینده ساخلانیلیر کی لازم اولان زمان اونلاری یئنیدن دانلود ائده بیله سینیز. </string>
     <string name="st_dialog_reset_all_notification">پروگرامین اعلانلارینین بوتون تنظیم لرینی ایلکین وضعیته قایتارماق ایسته ییرسینیز می؟ </string>
     <string name="st_dialog_reset_all_notification_no">خیر</string>
@@ -2052,7 +2051,6 @@
     <string name="verify_register_call">تماس </string>
     <string name="verify_register_sms">پیامک گوندرمک </string>
     <string name="verify_socket_message">سیز فرقلی شماره ایله اؤز پروفایلینیزا داخل اولوبسونوز. آیگپ فعال ائتمه کدونو اطلاع رسانی سیستمی واسطه سی ایله سیزین پروفایلینیزا گوندردی. زحمت اولماسا قاباخکی دستگاهی کنترل ائدیب کدو ال ایله داخل ائدین. </string>
-    <string name="verify_time_out_message">آیگپ اتوماتیک اولاراق تایید پیغامینی تشخیص وریر و داخل ائدیر. عکس تقدیرده سیز اونو آلیب اوزونوز داخل ائده بیلرسینیز. تایید کدونو آلا بیلمدیگینیز تقدیرده یئنیدن گوندرمه قسمتینی سئچین.</string>
     <string name="verify_user">تایید اولونموش استفاده چی </string>
     <string name="video_calls">آیگپین تصویری تماسی </string>
     <string name="video_duration" formatted="false">"%s (%s)"</string>
@@ -2120,6 +2118,7 @@
     <string name="zero_number">۰</string>
     <string name="zighade">ذیقعده</string>
     <string name="zihaje">ذیحجه</string>
+    <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="profile">پروفایل</string>
     <string name="install_latest_version">بو قیسمت دن ایستاده المه ائتمک تزه نسخه لازیمدیر</string>
     <string name="order_id">Order Id</string>
