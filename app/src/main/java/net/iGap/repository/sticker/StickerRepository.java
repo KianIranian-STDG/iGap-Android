@@ -62,7 +62,6 @@ public class StickerRepository {
     private static StickerRepository stickerRepository;
     private StickerApi stickerApi;
     private RSACipher rsaCipher;
-    private String publicKey;
     private String TAG = "abbasiStickerRepository";
 
     public static StickerRepository getInstance() {
@@ -73,22 +72,6 @@ public class StickerRepository {
 
     private StickerRepository() {
         stickerApi = new RetrofitFactory().getStickerRetrofit();
-
-
-        try {
-            rsaCipher = new RSACipher();
-            publicKey = rsaCipher.getPublicKey("pkcs8-pem").replace("\n", "\\n");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        }
     }
 
     public Single<List<StructIGStickerCategory>> getStickerCategory() {
@@ -223,7 +206,25 @@ public class StickerRepository {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("national_code", nationalCode);
         jsonObject.addProperty("tel_num", mobileNumber);
+
+        String publicKey = null;
+        try {
+            rsaCipher = new RSACipher();
+            publicKey = rsaCipher.getPublicKey("pkcs8-pem").replace("\n", "\\n");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
         jsonObject.addProperty("key", publicKey != null ? publicKey : "");
+
         return stickerApi.activeGiftCard(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
     }
 

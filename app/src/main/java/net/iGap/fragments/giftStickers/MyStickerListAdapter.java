@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
-import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.view.StickerView;
 
@@ -74,13 +73,13 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
 
             itemView.setOnClickListener(v -> {
                 if (delegate != null) {
-                    delegate.onClick(giftSticker.getStructIGSticker());
+                    delegate.onClick(giftSticker);
                 }
             });
         }
     }
 
     public interface Delegate {
-        void onClick(StructIGSticker structIGSticker);
+        void onClick(StructIGGiftSticker giftSticker);
     }
 }

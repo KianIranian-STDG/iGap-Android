@@ -13,7 +13,6 @@ import net.iGap.rx.ObserverViewModel;
 
 public class GiftStickerCardDetailViewModel extends ObserverViewModel {
 
-    //Must be invisible for not change view size
     private ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
     private ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);

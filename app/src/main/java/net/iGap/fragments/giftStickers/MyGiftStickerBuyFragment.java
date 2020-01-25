@@ -53,6 +53,14 @@ public class MyGiftStickerBuyFragment extends Fragment {
                 HelperError.showSnackMessage(errorMessage, false);
             }
         });
+
+        if (binding.giftStickerList.getAdapter() instanceof MyStickerListAdapter) {
+            ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate(giftSticker -> {
+                GiftStickerCreationDetailFragment detailFragment = GiftStickerCreationDetailFragment.getInstance(giftSticker);
+                if (getFragmentManager() != null)
+                    detailFragment.show(getFragmentManager(), null);
+            });
+        }
     }
 
     @Override

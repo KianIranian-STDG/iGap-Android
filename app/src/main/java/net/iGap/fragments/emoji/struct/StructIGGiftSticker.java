@@ -14,12 +14,17 @@ public class StructIGGiftSticker {
     private String status;
     private boolean isActive;
     private String rrn;
+    private String phoneNumber;
+    private String nationalCode;
 
     public StructIGGiftSticker(UserStickers userStickers) {
         structIGSticker = new StructIGSticker(userStickers.getSticker());
         status = userStickers.getActivation().getStatus();
         rrn = userStickers.getRrn();
         giftId = userStickers.getId();
+        structIGSticker.setGiftId(giftId);
+        phoneNumber = userStickers.getCreation().getMobileNumber();
+        nationalCode = userStickers.getCreation().getNationalCode();
     }
 
     public StructIGGiftSticker(CardStatusDataModel dataModel) {
@@ -42,5 +47,17 @@ public class StructIGGiftSticker {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public String getNationalCode() {
+        return nationalCode;
+    }
+
+    public String getGiftId() {
+        return giftId;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }

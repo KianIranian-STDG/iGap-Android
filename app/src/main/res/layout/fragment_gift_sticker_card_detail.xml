@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="net.iGap.fragments.giftStickers.giftCardDetail.GiftStickerCardDetailViewModel" />
@@ -165,7 +166,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:onClick="@{()->viewModel.copyValue(expireTime.getText().toString())}"
             android:padding="@dimen/dp8"
             android:paddingStart="@dimen/dp8"
             android:paddingLeft="@dimen/dp8"
@@ -206,6 +206,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:background="?attr/iGapDividerLine"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@+id/expireTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -215,26 +216,23 @@
             android:id="@+id/loadingView"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:visibility="@{viewModel.showLoadingView}"
-            app:layout_constraintBottom_toBottomOf="@+id/pageTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/help"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pageTitle" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/retryView"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onRetryViewClicked()}"
             android:text="@string/retry_icon"
             android:visibility="@{viewModel.showRetryView}"
             app:layout_constraintBottom_toBottomOf="@+id/loadingView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/loadingView"
             app:layout_constraintStart_toStartOf="@+id/loadingView"
             app:layout_constraintTop_toTopOf="@+id/loadingView" />
 
@@ -247,6 +245,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:background="?attr/iGapDividerLine"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@+id/cvvView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -260,6 +259,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:background="?attr/iGapDividerLine"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@+id/help"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

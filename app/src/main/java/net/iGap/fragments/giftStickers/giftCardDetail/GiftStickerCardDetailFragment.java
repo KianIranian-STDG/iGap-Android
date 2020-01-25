@@ -64,7 +64,7 @@ public class GiftStickerCardDetailFragment extends Fragment {
             binding.cardNumberView.setText(cardDetailDataModel.getCardNo());
             binding.expireTime.setText(cardDetailDataModel.getExpireDate());
             binding.internetPin2.setText(cardDetailDataModel.getCvv2());
-            binding.cvvView.setText(cardDetailDataModel.getCvv2());
+            binding.cvvView.setText(cardDetailDataModel.getSecondPassword());
         });
 
         viewModel.getCopyValue().observe(getViewLifecycleOwner(), value -> {

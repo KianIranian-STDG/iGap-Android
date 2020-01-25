@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp16">
+
+    <View
+        android:id="@+id/lineViewTop"
+        android:layout_width="@dimen/dp160"
+        android:layout_height="4dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:background="?attr/iGapBottomSheetHeaderLine"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".34" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:text="@string/mpl_transaction_rrn"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="@dimen/smallTextSize" />
+
+    <TextView
+        android:id="@+id/tv_rrn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:textColor="?attr/iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        tools:text="09120423503" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:text="شماره موبایل سازنده"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="@dimen/smallTextSize" />
+
+    <TextView
+        android:id="@+id/tv_creatorPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:textColor="?attr/iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        tools:text="09120423503" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:text="کد ملی سازنده"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="@dimen/smallTextSize" />
+
+    <TextView
+        android:id="@+id/tv_creatorNationalCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:textColor="?attr/iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        tools:text="12345678910" />
+
+    <Button
+        android:id="@+id/btn_active"
+        style="@style/iGapButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp16"
+        android:text="فعالسازی کارت" />
+
+
+</LinearLayout>
