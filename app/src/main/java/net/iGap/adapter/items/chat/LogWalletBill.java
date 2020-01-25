@@ -52,20 +52,29 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
         RealmRoomMessageWalletBill realmRoomMessageWalletBill = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletBill();
-        holder.titleBill.setText(R.string.bill_title);
         DbManager.getInstance().doRealmTask(realm -> {
-            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletBill.getRequestTime()) + " " + "-" + " " +
-                    TimeUtils.toLocal(realmRoomMessageWalletBill.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
-            holder.amount.setText(String.valueOf(realmRoomMessageWalletBill.getAmount()));
+            String rrn = String.valueOf(realmRoomMessageWalletBill.getRrn());
+            String cardNumber = realmRoomMessageWalletBill.getCardNumber();
+            String traceNumber = String.valueOf(realmRoomMessageWalletBill.getTraceNumber());
+            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletBill.getRequestTime()) + " " + "-" + " " + TimeUtils.toLocal(realmRoomMessageWalletBill.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+
+            if (HelperCalander.isPersianUnicode) {
+                rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
+                cardNumber = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+                traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
+                persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
+            }
+
+            holder.rrn.setText(rrn);
+            holder.cardNumber.setText(cardNumber);
+            holder.traceNumber.setText(traceNumber);
+            holder.requestTime.setText(persianCalender);
             holder.payId.setText(realmRoomMessageWalletBill.getPayId());
             holder.billId.setText(realmRoomMessageWalletBill.getBillId());
             holder.billType.setText(realmRoomMessageWalletBill.getBillType());
-            holder.cardNumber.setText(realmRoomMessageWalletBill.getCardNumber());
-            holder.terminalNo.setText(String.valueOf(realmRoomMessageWalletBill.getTerminalNo()));
-            holder.rrn.setText(String.valueOf(realmRoomMessageWalletBill.getRrn()));
-            holder.traceNumber.setText(String.valueOf(realmRoomMessageWalletBill.getTraceNumber()));
+            holder.amount.setText(String.valueOf(realmRoomMessageWalletBill.getAmount()));
             holder.orderId.setText(String.valueOf(realmRoomMessageWalletBill.getOrderId()));
-            holder.requestTime.setText(persianCalender);
+            holder.terminalNo.setText(String.valueOf(realmRoomMessageWalletBill.getTerminalNo()));
         });
     }
 
@@ -76,7 +85,6 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleBill;
         private TextView amount;
         private TextView payId;
         private TextView orderId;
@@ -92,7 +100,6 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
 
         public ViewHolder(View view) {
             super(view);
-            titleBill = view.findViewById(R.id.title_bill);
             amount = view.findViewById(R.id.tv_bill_amount);
             payId = view.findViewById(R.id.tv_bill_payId);
             orderId = view.findViewById(R.id.tv_bill_orderId);

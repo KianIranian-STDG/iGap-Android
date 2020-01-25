@@ -47,22 +47,33 @@ public class LogWalletTopup extends AbstractMessage<LogWalletTopup, LogWalletTop
         return R.layout.chat_sub_layout_log_topup;
     }
 
-
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
         RealmRoomMessageWalletTopup realmRoomMessageWalletTopup = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletTopup();
-
-        holder.title.setText(R.string.topUp_title);
-
         DbManager.getInstance().doRealmTask(realm -> {
-            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletTopup.getRequestTime()) + " " + "-" + " " +
-                    TimeUtils.toLocal(realmRoomMessageWalletTopup.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+            String rrn = String.valueOf(realmRoomMessageWalletTopup.getRrn());
+            String cardNumber=realmRoomMessageWalletTopup.getCardNumber();
+            String traceNumber=String.valueOf(realmRoomMessageWalletTopup.getTraceNumber());
+            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletTopup.getRequestTime()) + " " + "-" + " " + TimeUtils.toLocal(realmRoomMessageWalletTopup.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+
+            if (HelperCalander.isPersianUnicode) {
+                rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
+                cardNumber = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+                traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
+                persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
+            }
 
             holder.orderId.setText(String.valueOf(realmRoomMessageWalletTopup.getOrderId()));
             holder.amount.setText(String.valueOf(realmRoomMessageWalletTopup.getAmount()));
             holder.requesterNumber.setText(realmRoomMessageWalletTopup.getRequestMobileNumber());
             holder.chargerNumber.setText(realmRoomMessageWalletTopup.getChargeMobileNumber());
+            holder.cardNumber.setText(cardNumber);
+            holder.terminalNo.setText(String.valueOf(realmRoomMessageWalletTopup.getTerminalNo()));
+            holder.rrn.setText(rrn);
+            holder.traceNumber.setText(traceNumber);
+            holder.requestTime.setText(persianCalender);
+
             switch (realmRoomMessageWalletTopup.getTopupType()) {
                 case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_PREPAID_VALUE:
                     holder.topUpType.setText(R.string.irancell);
@@ -83,11 +94,6 @@ public class LogWalletTopup extends AbstractMessage<LogWalletTopup, LogWalletTop
                     holder.topUpType.setText(R.string.ritel);
                     break;
             }
-            holder.cardNumber.setText(realmRoomMessageWalletTopup.getCardNumber());
-            holder.terminalNo.setText(String.valueOf(realmRoomMessageWalletTopup.getTerminalNo()));
-            holder.rrn.setText(String.valueOf(realmRoomMessageWalletTopup.getRrn()));
-            holder.traceNumber.setText(String.valueOf(realmRoomMessageWalletTopup.getTraceNumber()));
-            holder.requestTime.setText(persianCalender);
         });
     }
 
@@ -98,7 +104,6 @@ public class LogWalletTopup extends AbstractMessage<LogWalletTopup, LogWalletTop
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView title;
         private TextView orderId;
         private TextView amount;
         private TextView requesterNumber;
@@ -114,7 +119,6 @@ public class LogWalletTopup extends AbstractMessage<LogWalletTopup, LogWalletTop
 
         public ViewHolder(View view) {
             super(view);
-            title = view.findViewById(R.id.title_topUp);
             orderId = view.findViewById(R.id.tv_topUp_orderId);
             amount = view.findViewById(R.id.tv_topUp_amount);
             requesterNumber = view.findViewById(R.id.tv_topUp_requesterNumber);

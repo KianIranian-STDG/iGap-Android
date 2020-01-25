@@ -37,9 +37,9 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/dp6"
                 android:paddingBottom="@dimen/dp6"
+                android:text="@string/topUp_title"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp15" />
-
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
