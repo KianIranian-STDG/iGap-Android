@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 public class MainGiftStickerCardFragment extends BaseBottomSheet {
     private StructIGSticker structIGSticker;
+    private MainStickerCardViewModel viewModel;
 
     public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker) {
         MainGiftStickerCardFragment mainGiftStickerCardFragment = new MainGiftStickerCardFragment();
@@ -23,16 +25,34 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         return mainGiftStickerCardFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new MainStickerCardViewModel(structIGSticker);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_parent_chat_money_transfer, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadEnterNationalCodeForActivatePage();
+        view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        viewModel.subscribe();
+
+        viewModel.getGoNextLiveData().observe(getViewLifecycleOwner(), goNext -> {
+            if (goNext != null && !goNext) {
+                loadEnterNationalCodeForActivatePage();
+                view.findViewById(R.id.progressBar).setVisibility(View.GONE);
+            } else {
+                Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                dismiss();
+            }
+        });
     }
 
     @Override
@@ -58,5 +78,17 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.onDestroy();
     }
 }

@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -29,20 +28,14 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
 import net.iGap.view.StickerView;
 
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftStickerItem.ViewHolder> {
 
@@ -85,22 +78,6 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             StructIGSticker structIGSticker = holder.structIGSticker = new Gson().fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
             if (structIGSticker != null) {
                 holder.image.loadSticker(structIGSticker);
-
-                if (structIGSticker.getGiftId() != null)
-                    StickerRepository.getInstance().getCardStatus(structIGSticker.getGiftId())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new IGSingleObserver<StructIGGiftSticker>(new CompositeDisposable()) {
-                                @Override
-                                public void onSuccess(StructIGGiftSticker giftSticker) {
-                                    Log.i("GiftStickerItem", "onSuccess: " + giftSticker.isActive());
-                                    holder.visitBtn.setVisibility(giftSticker.isActive() ? View.GONE : View.VISIBLE);
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    super.onError(e);
-                                }
-                            });
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
@@ -120,14 +97,6 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
     protected class ViewHolder extends NewChatItemHolder implements IProgress, IThumbNailItem {
         protected StickerView image;
         protected MessageProgress progress;
-        private Button visitBtn;
-        private Button addToArchiveBtn;
-        private AppCompatTextView cardNumber1;
-        private AppCompatTextView cardNumber2;
-        private AppCompatTextView cardNumber3;
-        private AppCompatTextView cardNumber4;
-        private AppCompatTextView cvv2Tv;
-        private AppCompatTextView expireTimeTv;
         private StructIGSticker structIGSticker;
 
 
@@ -157,8 +126,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             buttonLayouts.setOrientation(LinearLayout.HORIZONTAL);
             buttonLayouts.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             contentOne.addView(buttonLayouts);
-            visitBtn = new Button(getContext());
-            addToArchiveBtn = new Button(getContext());
+            Button visitBtn = new Button(getContext());
 
             visitBtn.setId(R.id.cardToCard_button);
             visitBtn.setMaxLines(1);
@@ -167,18 +135,9 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             setTypeFace(visitBtn);
             visitBtn.setTextColor(getColor(R.color.white));
 
-            addToArchiveBtn.setId(R.id.cardToCard_button);
-            addToArchiveBtn.setMaxLines(1);
-            addToArchiveBtn.setText(getResources().getString(R.string.gift_sticker_add_archive));
-            setTextSize(addToArchiveBtn, R.dimen.standardTextSize);
-            setTypeFace(addToArchiveBtn);
-            addToArchiveBtn.setTextColor(getColor(R.color.white));
-
-//            buttonLayouts.addView(addToArchiveBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 0, 6, 3, 4));
             buttonLayouts.addView(visitBtn, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER, 3, 6, 0, 4));
 
             visitBtn.setBackgroundResource(theme.getCardToCardButtonBackground(visitBtn.getContext()));
-            addToArchiveBtn.setBackgroundResource(theme.getCardToCardButtonBackground(addToArchiveBtn.getContext()));
 
             progress = getProgressBar(view.getContext(), 0);
             contentOne.addView(progress);
@@ -203,10 +162,10 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             LinearLayout cardNumberLayout = new LinearLayout(getContext());
             buttonLayouts.setOrientation(LinearLayout.HORIZONTAL);
 
-            cardNumber1 = generateCardNumberTv();
-            cardNumber2 = generateCardNumberTv();
-            cardNumber3 = generateCardNumberTv();
-            cardNumber4 = generateCardNumberTv();
+            AppCompatTextView cardNumber1 = generateCardNumberTv();
+            AppCompatTextView cardNumber2 = generateCardNumberTv();
+            AppCompatTextView cardNumber3 = generateCardNumberTv();
+            AppCompatTextView cardNumber4 = generateCardNumberTv();
 
             cardNumberLayout.addView(cardNumber1);
             cardNumberLayout.addView(cardNumber2);
@@ -217,7 +176,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             buttonLayouts.setOrientation(LinearLayout.HORIZONTAL);
 
 
-            cvv2Tv = new AppCompatTextView(getContext());
+            AppCompatTextView cvv2Tv = new AppCompatTextView(getContext());
             cvv2Tv.setLayoutParams(LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER));
             cvv2Tv.setText("----");
             cvv2Tv.setGravity(Gravity.LEFT);
@@ -226,7 +185,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             cvv2Tv.setSingleLine(true);
             setTypeFace(cvv2Tv);
 
-            expireTimeTv = new AppCompatTextView(getContext());
+            AppCompatTextView expireTimeTv = new AppCompatTextView(getContext());
             expireTimeTv.setLayoutParams(LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER));
             expireTimeTv.setText("----");
             expireTimeTv.setGravity(Gravity.RIGHT);
