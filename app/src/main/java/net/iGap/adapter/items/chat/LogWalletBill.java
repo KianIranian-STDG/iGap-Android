@@ -64,6 +64,7 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
             holder.terminalNo.setText(String.valueOf(realmRoomMessageWalletBill.getTerminalNo()));
             holder.rrn.setText(String.valueOf(realmRoomMessageWalletBill.getRrn()));
             holder.traceNumber.setText(String.valueOf(realmRoomMessageWalletBill.getTraceNumber()));
+            holder.orderId.setText(String.valueOf(realmRoomMessageWalletBill.getOrderId()));
             holder.requestTime.setText(persianCalender);
         });
     }
@@ -78,6 +79,7 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
         private TextView titleBill;
         private TextView amount;
         private TextView payId;
+        private TextView orderId;
         private TextView billId;
         private TextView billType;
         private TextView cardNumber;
@@ -93,6 +95,7 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
             titleBill = view.findViewById(R.id.title_bill);
             amount = view.findViewById(R.id.tv_bill_amount);
             payId = view.findViewById(R.id.tv_bill_payId);
+            orderId = view.findViewById(R.id.tv_bill_orderId);
             billId = view.findViewById(R.id.tv_bill_billId);
             billType = view.findViewById(R.id.tv_bill_billType);
             cardNumber = view.findViewById(R.id.tv_bill_cardNumber);
