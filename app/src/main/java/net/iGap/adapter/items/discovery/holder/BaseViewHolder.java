@@ -316,12 +316,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case POLL:
                 new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
-                break;
-/*                ChartFragment fragment = new ChartFragment();
+          /*      ChartFragment fragment = new ChartFragment();
                 Bundle b = new Bundle();
                 b.putInt("pollId", Integer.valueOf(discoveryField.value));
                 fragment.setArguments(b);
                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();*/
+            break;
             case FAVORITE_CHANNEL:
                 if (discoveryField.value.equals(""))
                     new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
