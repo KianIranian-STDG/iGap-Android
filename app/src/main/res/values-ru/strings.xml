@@ -1856,4 +1856,15 @@
     <string name="loan_count">количество займов:</string>
     <string name="remained_loan">остался: </string>
     <string name="state">государство:</string>
+    <string name="order_id">Идентификатор платежа</string>
+    <string name="requester_mobile_number">Номер мобильного телефона заявителя</string>
+    <string name="charger_mobile_number">Перезаряжаемый номер мобильного телефона</string>
+    <string name="topUp_type">Тип счета</string>
+    <string name="terminal_No">Номер терминала</string>
+    <string name="rrn">Ссылочный номер</string>
+    <string name="bill_id">ID счета</string>
+    <string name="topUp_title">Купить зарядку</string>
+    <string name="bill_title">Оплатить счет</string>
+    <string name="topUp_message">Пополнить сообщение о покупке</string>
+    <string name="bill_message">Сообщение об оплате счета</string>
 </resources>

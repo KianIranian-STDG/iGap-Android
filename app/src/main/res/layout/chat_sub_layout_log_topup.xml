@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootCardView"
+    android:id="@+id/root_topUp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp52"
@@ -10,30 +10,18 @@
     android:layout_marginBottom="@dimen/dp4"
     android:orientation="vertical"
     android:paddingBottom="@dimen/dp4"
+    app:cardBackgroundColor="#9B80CE"
     app:cardCornerRadius="12dp"
     app:cardPreventCornerOverlap="false">
 
     <LinearLayout
-        android:id="@+id/chatSubLayoutLogWallet"
+        android:id="@+id/ll_topUp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?rootBackgroundColor"
         android:orientation="vertical">
 
-        <net.iGap.module.CustomTextViewMedium
-            android:id="@+id/titleTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#E642D4F4"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp6"
-            android:paddingBottom="@dimen/dp6"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dp16" />
-
         <LinearLayout
-            android:id="@+id/amountRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -41,27 +29,73 @@
             android:orientation="vertical">
 
             <net.iGap.module.CustomTextViewMedium
-                android:layout_width="wrap_content"
+                android:id="@+id/title_topUp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="#9B80CE"
                 android:gravity="center"
-                android:text="@string/wallet_amount"
-                android:textColor="?iGapSubtitleTextColor"
+                android:paddingTop="@dimen/dp6"
+                android:paddingBottom="@dimen/dp6"
+                android:text="@string/topUp_title"
+                android:textColor="@color/white"
                 android:textSize="@dimen/dp15" />
-
 
             <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/charge_amount"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_topUp_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/fromUserIdRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/requester_mobile_number"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_topUp_requesterNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -81,60 +115,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/wallet_from"
+                android:text="@string/charger_mobile_number"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-
+                android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/fromUserId"
+                android:id="@+id/tv_topUp_chargerNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/toUserIdRoot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
-
-            <net.iGap.module.CustomTextViewMedium
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/wallet_to"
-                android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-
-
-            <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/toUserId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/traceNumberRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -154,59 +149,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/cardToCardTrace"
+                android:text="@string/topUp_type"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-
+                android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/traceNumber"
+                android:id="@+id/tv_topUp_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/invoiceNumberRoot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
-
-            <net.iGap.module.CustomTextViewMedium
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/cardToCardInvoiceNumber"
-                android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-
-
-            <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/invoiceNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/cardNumberRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -228,21 +185,19 @@
                 android:gravity="center"
                 android:text="@string/card_number"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-
+                android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/cardNumber"
+                android:id="@+id/tv_topUp_cardNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/WalletRrnNumberRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -262,23 +217,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/WalletRrnNumber"
+                android:text="@string/mpl_transaction_order_id"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-
+                android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/WalletRrnNumber"
+                android:id="@+id/tv_topUp_orderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
+                android:textSize="@dimen/dp14" />
+
         </LinearLayout>
 
+
         <LinearLayout
-            android:id="@+id/descriptionRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -298,34 +253,99 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/desc"
+                android:text="@string/terminal_No"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
-
+                android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/description"
+                android:id="@+id/tv_topUp_terminalNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?iGapSubtitleTextColor"
-                android:textSize="@dimen/dp15" />
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/rrn"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_topUp_rrn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/trace_number"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_topUp_traceNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <net.iGap.module.CustomTextViewMedium
-            android:id="@+id/payTime"
+            android:id="@+id/tv_topup_requestDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#E642D4F4"
+            android:background="#9B80CE"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
             android:textColor="@color/white"
-            android:textSize="@dimen/dp16" />
-
+            android:textSize="@dimen/dp15" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

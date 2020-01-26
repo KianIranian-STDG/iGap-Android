@@ -132,7 +132,9 @@ import net.iGap.adapter.items.chat.ImageWithTextItem;
 import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
+import net.iGap.adapter.items.chat.LogWalletBill;
 import net.iGap.adapter.items.chat.LogWalletCardToCard;
+import net.iGap.adapter.items.chat.LogWalletTopup;
 import net.iGap.adapter.items.chat.NewChatItemHolder;
 import net.iGap.adapter.items.chat.ProgressWaiting;
 import net.iGap.adapter.items.chat.StickerItem;
@@ -7950,6 +7952,18 @@ public class FragmentChat extends BaseFragment
                                 mAdapter.add(new LogWalletCardToCard(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(index, new LogWalletCardToCard(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
+                        } else if (messageInfo.realmRoomMessage.getRoomMessageWallet().getRealmRoomMessageWalletTopup() != null) {
+                            if (!addTop) {
+                                mAdapter.add(new LogWalletTopup(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogWalletTopup(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
+                        } else if (messageInfo.realmRoomMessage.getRoomMessageWallet().getRealmRoomMessageWalletBill() != null) {
+                            if (!addTop) {
+                                mAdapter.add(new LogWalletBill(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogWalletBill(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else {
                             if (!addTop) {
