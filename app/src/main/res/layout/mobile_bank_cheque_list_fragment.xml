@@ -56,10 +56,8 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcCheque"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingRight="@dimen/dp4"
                     android:paddingBottom="@dimen/dp4"
-                    android:paddingTop="@dimen/dp14"
+                    android:paddingTop="@dimen/dp4"
                     android:clipToPadding="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -72,7 +70,6 @@
             android:id="@+id/ProgressV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:elevation="2dp"
             android:visibility="@{viewModel.progressVisibility}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

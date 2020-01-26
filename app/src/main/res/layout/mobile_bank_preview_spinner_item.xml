@@ -3,6 +3,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="?rootBackgroundColor"
     android:layout_height="@dimen/dp48">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/title"
         android:text="@string/bank_parsian"
-        android:textSize="@dimen/standardTextSize"
+        android:textSize="@dimen/smallTextSize"
         android:layout_marginStart="@dimen/dp4"
         android:layout_marginLeft="@dimen/dp4"
         android:textColor="?iGapTitleTextColor"
