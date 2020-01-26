@@ -21,11 +21,12 @@ import java.text.DecimalFormat;
 
 public class GiftStickerItemDetailFragment extends Fragment {
     private StructIGSticker sticker;
+    private boolean fromChat;
 
     private GiftStickerItemDetailFragment() {
     }
 
-    public static GiftStickerItemDetailFragment getInstance(StructIGSticker structIGSticker) {
+    public static GiftStickerItemDetailFragment getInstance(StructIGSticker structIGSticker, boolean fromChat) {
         GiftStickerItemDetailFragment detailFragment = new GiftStickerItemDetailFragment();
         detailFragment.sticker = structIGSticker;
         return detailFragment;
@@ -47,6 +48,7 @@ public class GiftStickerItemDetailFragment extends Fragment {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         binding.setStickerItem(sticker);
+        binding.cancelButton.setVisibility(fromChat ? View.VISIBLE : View.GONE);
         return binding.getRoot();
     }
 

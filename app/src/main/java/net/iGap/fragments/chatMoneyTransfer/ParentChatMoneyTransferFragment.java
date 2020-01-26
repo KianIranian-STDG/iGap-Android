@@ -118,7 +118,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof EnterNationalCodeFragment)) {
-            fragment = EnterNationalCodeFragment.getInstance();
+            fragment = EnterNationalCodeFragment.getInstance(true);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
@@ -182,7 +182,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerPackageListFragment)) {
-            fragment = new GiftStickerPackageListFragment();
+            fragment = GiftStickerPackageListFragment.getInstance(true);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
@@ -192,7 +192,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemListFragment)) {
-            fragment = GiftStickerItemListFragment.getInstance(stickerGroup);
+            fragment = GiftStickerItemListFragment.getInstance(stickerGroup, true);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
@@ -202,7 +202,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemDetailFragment)) {
-            fragment = GiftStickerItemDetailFragment.getInstance(sticker);
+            fragment = GiftStickerItemDetailFragment.getInstance(sticker, true);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();

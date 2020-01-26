@@ -19,13 +19,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class GiftStickerItemListFragment extends Fragment {
     private StructIGStickerGroup stickerGroup;
+    private boolean fromChat;
 
     private GiftStickerItemListFragment() {
     }
 
-    public static GiftStickerItemListFragment getInstance(StructIGStickerGroup stickerGroup) {
+    public static GiftStickerItemListFragment getInstance(StructIGStickerGroup stickerGroup, boolean fromChat) {
         GiftStickerItemListFragment giftStickerItemListFragment = new GiftStickerItemListFragment();
         giftStickerItemListFragment.stickerGroup = stickerGroup;
+        giftStickerItemListFragment.fromChat = fromChat;
         return giftStickerItemListFragment;
     }
 
@@ -44,6 +46,7 @@ public class GiftStickerItemListFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gift_sticker_item, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        binding.cancelButton.setVisibility(fromChat ? View.VISIBLE : View.GONE);
         return binding.getRoot();
     }
 
@@ -67,7 +70,7 @@ public class GiftStickerItemListFragment extends Fragment {
         viewModel.getGoToShowDetailPage().observe(getViewLifecycleOwner(), giftStickerItem -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && giftStickerItem != null) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackageItemDetailPage(giftStickerItem);
-            }else if (getParentFragment() instanceof GiftStickerMainFragment && giftStickerItem != null){
+            } else if (getParentFragment() instanceof GiftStickerMainFragment && giftStickerItem != null) {
                 ((GiftStickerMainFragment) getParentFragment()).loadStickerPackageItemDetailPage(giftStickerItem);
             }
         });

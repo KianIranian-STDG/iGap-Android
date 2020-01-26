@@ -107,7 +107,7 @@ public class GiftStickerMainFragment extends BaseFragment {
         Bundle bundle = new Bundle();
         bundle.putBoolean("showTitle", false);
         if (!(fragment instanceof GiftStickerPackageListFragment)) {
-            fragment = new GiftStickerPackageListFragment();
+            fragment = GiftStickerPackageListFragment.getInstance(false);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragment.setArguments(bundle);
@@ -118,7 +118,7 @@ public class GiftStickerMainFragment extends BaseFragment {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.giftStickerContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemListFragment)) {
-            fragment = GiftStickerItemListFragment.getInstance(stickerGroup);
+            fragment = GiftStickerItemListFragment.getInstance(stickerGroup, false);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();
@@ -128,7 +128,7 @@ public class GiftStickerMainFragment extends BaseFragment {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.giftStickerContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerItemDetailFragment)) {
-            fragment = GiftStickerItemDetailFragment.getInstance(sticker);
+            fragment = GiftStickerItemDetailFragment.getInstance(sticker, false);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();

@@ -1,7 +1,6 @@
 package net.iGap.fragments.giftStickers;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,7 @@ public class GiftStickerHomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getChildFragmentManager().beginTransaction().replace(R.id.header, EnterNationalCodeFragment.getInstance(), EnterNationalCodeFragment.class.getName()).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.header, EnterNationalCodeFragment.getInstance(false), EnterNationalCodeFragment.class.getName()).commit();
 
         view.findViewById(R.id.myGiftStickerPage).setOnClickListener(v -> {
             if (getParentFragment() instanceof GiftStickerMainFragment) {

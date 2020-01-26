@@ -21,12 +21,15 @@ import net.iGap.helper.HelperError;
 
 public class EnterNationalCodeFragment extends Fragment {
     private EnterNationalCodeViewModel viewModel;
+    private boolean fromChat = false;
 
     private EnterNationalCodeFragment() {
     }
 
-    public static EnterNationalCodeFragment getInstance() {
-        return new EnterNationalCodeFragment();
+    public static EnterNationalCodeFragment getInstance(boolean fromChat) {
+        EnterNationalCodeFragment fragment = new EnterNationalCodeFragment();
+        fragment.fromChat = fromChat;
+        return fragment;
     }
 
     @Override

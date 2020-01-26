@@ -13,6 +13,16 @@ import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.rx.ObserverFragment;
 
 public class GiftStickerPackageListFragment extends ObserverFragment<GiftStickerPackageListViewModel> {
+    boolean fromChat;
+
+    private GiftStickerPackageListFragment() {
+    }
+
+    public static GiftStickerPackageListFragment getInstance(boolean fromChat) {
+        GiftStickerPackageListFragment fragment = new GiftStickerPackageListFragment();
+        fragment.fromChat = fromChat;
+        return fragment;
+    }
 
     @Override
     public void setupViews() {
@@ -22,6 +32,9 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
         if (getArguments() != null) {
             rootView.findViewById(R.id.pageTitle).setVisibility(getArguments().getBoolean("showTitle", true) ? View.VISIBLE : View.GONE);
         }
+
+        rootView.findViewById(R.id.cancelButton).setVisibility(fromChat ? View.VISIBLE : View.GONE);
+
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && isGoBack != null && isGoBack) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).dismissDialog();
