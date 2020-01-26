@@ -32,6 +32,7 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
     private MutableLiveData<List<BankHistoryModel>> bills;
 
     private ObservableInt progressVisibility = new ObservableInt(View.INVISIBLE);
+    private ObservableInt noItemVisibility = new ObservableInt(View.GONE);
     private MutableLiveData<ErrorModel> errorM;
 
     private String depositNumber;
@@ -136,6 +137,7 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
         Log.d(TAG, "getAccountDataForMonth: " + calender.getValue().get(datePosition).getEndMonth());
         if (offset == 0) {
             bills.setValue(null);
+            noItemVisibility.set(View.GONE);
         }
         // set bills
         MobileBankRepository.getInstance().getAccountHistory(depositNumber, offset,
@@ -145,20 +147,30 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
                         bills.setValue(data.getData());
-                        if (offset == 0 && data.getData() != null && data.getData().size() > 0) {
-                            DecimalFormat df = new DecimalFormat(",###");
-                            balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
+                        if (offset == 0) {
+                            if (data.getData() != null && data.getData().size() > 0) {
+                                DecimalFormat df = new DecimalFormat(",###");
+                                balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
+                            } else {
+                                noItemVisibility.set(View.VISIBLE);
+                            }
                         }
                     }
 
                     @Override
                     public void onError(String error) {
-
+                        if (offset == 0) {
+                            noItemVisibility.set(View.VISIBLE);
+                        } else
+                            showRequestErrorMessage.setValue("something went wrong.");
                     }
 
                     @Override
                     public void onFailed() {
-
+                        if (offset == 0) {
+                            noItemVisibility.set(View.VISIBLE);
+                        } else
+                            showRequestErrorMessage.setValue("something went wrong.");
                     }
                 });
     }
@@ -209,5 +221,9 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
 
     public void setCard(boolean card) {
         isCard = card;
+    }
+
+    public ObservableInt getNoItemVisibility() {
+        return noItemVisibility;
     }
 }

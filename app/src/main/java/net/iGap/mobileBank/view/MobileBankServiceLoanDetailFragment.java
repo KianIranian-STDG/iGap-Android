@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankLoanDetailBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
@@ -29,7 +28,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MobileBankServiceLoanDetailFragment extends BaseAPIViewFrag<MobileBankServiceLoanDetailViewModel> {
+public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<MobileBankServiceLoanDetailViewModel> {
 
     private MobileBankLoanDetailBinding binding;
     private MobileBankServiceLoanDetailAdapter adapter;

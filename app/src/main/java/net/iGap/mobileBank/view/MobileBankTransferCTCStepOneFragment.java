@@ -23,7 +23,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
 import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankTransferCtcStepOneBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -34,7 +33,7 @@ import net.iGap.mobileBank.viewmodel.MobileBankTransferCTCStepOneViewModel;
 
 import java.util.Locale;
 
-public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<MobileBankTransferCTCStepOneViewModel> {
+public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment<MobileBankTransferCTCStepOneViewModel> {
 
     private MobileBankTransferCtcStepOneBinding binding;
 

@@ -164,7 +164,7 @@
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/billTitle"
                         android:text="@string/mobile_bank_sorathesab"
@@ -175,6 +175,33 @@
                         android:layout_marginTop="@dimen/dp26"
                         android:textColor="?iGapSubtitleTextColor"
                         app:layout_constraintTop_toBottomOf="@+id/withdrawValue"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/billTitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/billTitle"
+                        app:layout_constraintStart_toEndOf="@+id/billTitle"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/noItem"
+                        android:text="@string/elecBill_error_listView"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:visibility="@{viewModel.noItemVisibility}"
+                        android:textStyle="bold"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        app:layout_constraintTop_toBottomOf="@+id/billTitle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -193,17 +220,11 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!--<androidx.core.widget.NestedScrollView
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">-->
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/billsRecycler"
-                        android:layout_marginTop="@dimen/dp8" />
-                <!--</androidx.core.widget.NestedScrollView>-->
+                    android:layout_height="wrap_content"
+                    android:id="@+id/billsRecycler"
+                    android:layout_marginTop="@dimen/dp8" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

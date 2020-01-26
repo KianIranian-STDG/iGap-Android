@@ -69,6 +69,10 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
+    public BankHistoryModel getItem(int position) {
+        return mdata.get(position);
+    }
+
     @Override
     public int getItemCount() {
         if (mdata == null)

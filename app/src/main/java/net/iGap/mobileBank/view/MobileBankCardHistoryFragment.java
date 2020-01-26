@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 
 import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankHistoryBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -28,7 +27,7 @@ import net.iGap.mobileBank.viewmodel.MobileBankCardHistoryViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCardHistoryViewModel> {
+public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<MobileBankCardHistoryViewModel> {
 
     private MobileBankHistoryBinding binding;
     private LinearSnapHelper snapHelper;
@@ -113,6 +112,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
         binding.billsRecycler.setNestedScrollingEnabled(false);
         adapter = new MobileBankHistoryAdapter(new ArrayList<>(), position -> {
             // show detail in dialog
+            showMessage(getResources().getString(R.string.info), adapter.getItem(position).getDescription());
         });
         binding.billsRecycler.setAdapter(adapter);
         resetMainRecycler();
@@ -139,6 +139,14 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
         });
 
         onDateChangedListener();
+    }
+
+    private void showMessage(String title, String message) {
+        new DialogParsian()
+                .setContext(getContext())
+                .setTitle(title)
+                .setButtonsText(getString(R.string.ok), null)
+                .showSimpleMessage(message);
     }
 
     private void showDateSelectorDialog() {
@@ -183,7 +191,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
         adapter.addItems(data);
 
         // check weather is last page or not
-        if (currentPage < totalPage) {
+        if (currentPage < totalPage && data.size() >= 30) {
             adapter.addLoading();
         } else {
             isLastPage = true;

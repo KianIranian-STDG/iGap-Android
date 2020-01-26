@@ -5,7 +5,6 @@ import android.view.View;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.util.ExtractBank;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MobileBankTransferCTCStepOneViewModel extends BaseAPIViewModel {
+public class MobileBankTransferCTCStepOneViewModel extends BaseMobileBankViewModel {
 
     private ObservableField<Integer> originCardNameVisibility = new ObservableField<>(View.GONE);
     private ObservableField<Integer> destCardNameVisibility = new ObservableField<>(View.GONE);
