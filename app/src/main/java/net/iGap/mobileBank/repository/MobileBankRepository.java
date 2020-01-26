@@ -92,7 +92,7 @@ public class MobileBankRepository {
             if (phone.startsWith("98")) {
                 phone = phone.replaceFirst("98", "0");
             }
-            new MobileBankApiInitializer<ErrorModel>().initAPI(new RetrofitFactory().getMobileBankOTPRetrofit().getOTP(Long.parseLong(cardNumber), phone), callback, responseCallback);
+            new MobileBankApiInitializer<ErrorModel>().initAPI(new RetrofitFactory().getMobileBankOTPRetrofit().getOTP(cardNumber, phone), callback, responseCallback);
         });
     }
 

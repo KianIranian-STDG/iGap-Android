@@ -97,7 +97,7 @@ public interface MobileBankApi {
 
     @POST("parsian/otp")
     @FormUrlEncoded
-    Call<ErrorModel> getOTP(@Field("cardNo") Long cardNumber,
+    Call<ErrorModel> getOTP(@Field("cardNo") String cardNumber,
                             @Field("mobile_number") String mobileNumber);
 
 }
