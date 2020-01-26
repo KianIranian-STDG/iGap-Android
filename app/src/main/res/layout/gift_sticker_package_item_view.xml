@@ -10,6 +10,7 @@
         android:id="@+id/stickerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:padding="@dimen/dp16"
         app:layout_constraintBottom_toTopOf="@id/giftStickerPackageTitle"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"

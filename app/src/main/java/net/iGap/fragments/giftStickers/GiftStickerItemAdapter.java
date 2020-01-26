@@ -49,7 +49,7 @@ public class GiftStickerItemAdapter extends RecyclerView.Adapter<GiftStickerItem
         }
 
         public void bindView(StructIGSticker structIGSticker) {
-            stickerView.loadSticker(structIGSticker, true);
+            stickerView.loadSticker(structIGSticker);
             itemView.setOnClickListener(v -> delegate.onItemClick(structIGSticker));
         }
     }
