@@ -76,6 +76,7 @@ public class MobileBankServiceLoanDetailFragment extends BaseAPIViewFrag<MobileB
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
+                .setRoundBackground(false)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

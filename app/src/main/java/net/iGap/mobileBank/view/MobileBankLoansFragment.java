@@ -58,6 +58,7 @@ public class MobileBankLoansFragment extends BaseMobileBankFragment<MobileBankLo
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(binding.toolbar.getContext())
                 .setLogoShown(true)
+                .setRoundBackground(false)
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {

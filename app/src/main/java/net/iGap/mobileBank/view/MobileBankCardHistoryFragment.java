@@ -75,6 +75,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setRoundBackground(false)
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
