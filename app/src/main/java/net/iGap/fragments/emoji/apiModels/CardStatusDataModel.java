@@ -11,6 +11,16 @@ public class CardStatusDataModel {
     private String id;
     @Expose
     private StickerDataModel sticker;
+    @Expose
+    private boolean isForwarded;
+
+    public void setForwarded(boolean forwarded) {
+        isForwarded = forwarded;
+    }
+
+    public boolean isForwarded() {
+        return isForwarded;
+    }
 
     public Activation getActivation() {
         return activation;

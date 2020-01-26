@@ -258,6 +258,10 @@ public class StickerRepository {
         return stickerApi.getCardInfo(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
     }
 
+    private Completable forwardStickerApiService(String stickerId, String toUserId) {
+        return stickerApi.forwardToUser(stickerId, toUserId).subscribeOn(Schedulers.newThread());
+    }
+
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(asyncRealm -> {
@@ -578,6 +582,11 @@ public class StickerRepository {
                     }
                     return cardDetailDataModel;
                 });
+    }
+
+    public void forwardSticker(String stickerId, String userId) {
+        forwardStickerApiService(stickerId, userId)
+                .subscribe();
     }
 
 }

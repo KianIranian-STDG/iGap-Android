@@ -16,6 +16,16 @@ import net.iGap.databinding.FragmentEnterNationalCodeForActivateGiftStickerBindi
 import net.iGap.helper.HelperError;
 
 public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
+    private boolean canForward;
+
+    private EnterNationalCodeForActivateGiftStickerFragment() {
+    }
+
+    public static EnterNationalCodeForActivateGiftStickerFragment getInstance(boolean canForward) {
+        EnterNationalCodeForActivateGiftStickerFragment fragment = new EnterNationalCodeForActivateGiftStickerFragment();
+        fragment.canForward = canForward;
+        return fragment;
+    }
 
     private EnterNationalCodeForActivateGiftStickerViewModel viewModel;
     private FragmentEnterNationalCodeForActivateGiftStickerBinding binding;
@@ -31,6 +41,7 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_national_code_for_activate_gift_sticker, container, false);
         binding.setViewModel(viewModel);
+        binding.forward.setVisibility(canForward ? View.GONE : View.VISIBLE);
         return binding.getRoot();
     }
 

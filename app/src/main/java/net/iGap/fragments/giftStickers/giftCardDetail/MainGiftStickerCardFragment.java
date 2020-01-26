@@ -48,8 +48,8 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
             view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
             viewModel.subscribe();
             viewModel.getGoNextLiveData().observe(getViewLifecycleOwner(), goNext -> {
-                if (goNext != null && !goNext) {
-                    loadEnterNationalCodeForActivatePage();
+                if (goNext != null && !goNext.isActive()) {
+                    loadEnterNationalCodeForActivatePage(goNext.isForward());
                     view.findViewById(R.id.progressBar).setVisibility(View.GONE);
                 } else {
                     Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
@@ -66,11 +66,11 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    public void loadEnterNationalCodeForActivatePage() {
+    public void loadEnterNationalCodeForActivatePage(boolean canSendToOther) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof EnterNationalCodeForActivateGiftStickerFragment)) {
-            fragment = new EnterNationalCodeForActivateGiftStickerFragment();
+            fragment = EnterNationalCodeForActivateGiftStickerFragment.getInstance(canSendToOther);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();

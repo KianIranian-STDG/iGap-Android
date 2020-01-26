@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class MainStickerCardViewModel extends ObserverViewModel {
     private StructIGSticker structIGSticker;
-    private MutableLiveData<Boolean> goNextLiveData = new MutableLiveData<>();
+    private MutableLiveData<StructIGGiftSticker> goNextLiveData = new MutableLiveData<>();
 
     public MainStickerCardViewModel(StructIGSticker structIGSticker) {
         this.structIGSticker = structIGSticker;
@@ -25,18 +25,18 @@ public class MainStickerCardViewModel extends ObserverViewModel {
                     .subscribe(new IGSingleObserver<StructIGGiftSticker>(new CompositeDisposable()) {
                         @Override
                         public void onSuccess(StructIGGiftSticker giftSticker) {
-                            goNextLiveData.postValue(giftSticker.isActive());
+                            goNextLiveData.postValue(giftSticker);
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             super.onError(e);
-                            goNextLiveData.postValue(false);
+                            goNextLiveData.postValue(null);
                         }
                     });
     }
 
-    public MutableLiveData<Boolean> getGoNextLiveData() {
+    public MutableLiveData<StructIGGiftSticker> getGoNextLiveData() {
         return goNextLiveData;
     }
 }

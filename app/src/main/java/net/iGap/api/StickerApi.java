@@ -75,4 +75,7 @@ public interface StickerApi {
 
     @POST("gift/card-info/{giftStickerId}")
     Single<RsaDataModel> getCardInfo(@Path("giftStickerId") String giftStickerId, @Body JsonObject jsonObject);
+
+    @GET("gift/forward/{stickerId}/{toUserId}")
+    Completable forwardToUser(@Path("stickerId") String stickerId, @Path("toUserId") String toUserId);
 }
