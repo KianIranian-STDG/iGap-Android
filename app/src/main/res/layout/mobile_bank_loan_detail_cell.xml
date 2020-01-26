@@ -1,0 +1,137 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="net.iGap.Theme" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginEnd="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="@dimen/dp4"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="?iGapCardViewColor">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/loanPayState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="@string/mobile_bank_detail_cell_payStatus"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="bold"
+                    android:textColor="?iGapTitleTextColor"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/payAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="@string/mobile_bank_detail_cell_payAmount"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="?iGapTitleTextColor"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/loanPayState" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/unpaidAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="@string/mobile_bank_detail_cell_unpaidAmount"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="?iGapTitleTextColor"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginBottom="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/payAmount" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/penaltyAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="@string/mobile_bank_detail_cell_penaltyAmount"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="?iGapTitleTextColor"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginBottom="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/unpaidAmount" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/paymentDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="@string/mobile_bank_detail_cell_paymentDate"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="?iGapTitleTextColor"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginBottom="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/penaltyAmount" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

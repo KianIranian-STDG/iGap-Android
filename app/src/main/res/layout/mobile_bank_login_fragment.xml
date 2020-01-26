@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.mobileBank.viewmodel.MobileBankLoginViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".mobileBank.view.MobileBankLoginFragment">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp16">
+
+                <ImageView
+                    android:id="@+id/ivLogo"
+                    android:layout_width="@dimen/dp140"
+                    android:layout_height="@dimen/dp140"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:src="@drawable/bank_logo_parsian"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/lblUsername"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp40"
+                    android:gravity="start"
+                    android:text="@string/user_name"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="@id/edtUserName"
+                    app:layout_constraintStart_toStartOf="@id/edtUserName"
+                    app:layout_constraintTop_toBottomOf="@id/ivLogo" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtUserName"
+                    style="@style/iGapEditTextStyle"
+                    android:layout_width="@dimen/dp240"
+                    android:layout_height="@dimen/dp44"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:background="@drawable/shape_gray_round_stroke"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="anvarifam"
+                    app:layout_constraintEnd_toEndOf="@id/ivLogo"
+                    app:layout_constraintStart_toStartOf="@id/ivLogo"
+                    app:layout_constraintTop_toBottomOf="@id/lblUsername" />
+
+                <TextView
+                    android:id="@+id/lblPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp18"
+                    android:gravity="start"
+                    android:text="@string/password"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="@id/edtUserName"
+                    app:layout_constraintStart_toStartOf="@id/edtUserName"
+                    app:layout_constraintTop_toBottomOf="@id/edtUserName" />
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/lytPassword"
+                    android:background="@drawable/shape_gray_round_stroke"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp44"
+                    android:layout_marginTop="@dimen/dp10"
+                    app:layout_constraintEnd_toEndOf="@id/edtUserName"
+                    app:layout_constraintStart_toStartOf="@id/edtUserName"
+                    app:layout_constraintTop_toBottomOf="@id/lblPassword" >
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtPassword"
+                        style="@style/iGapEditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:text="00147437"
+                        android:inputType="textPassword"
+                        android:paddingLeft="@dimen/dp10"
+                        android:paddingRight="@dimen/dp10"
+                        android:singleLine="true"/>
+
+                    <TextView
+                        android:id="@+id/visiblePassword"
+                        style="@style/myIconTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:paddingLeft="@dimen/dp10"
+                        android:paddingRight="@dimen/dp10"
+                        android:layout_margin="@dimen/dp4"
+                        android:background="?rootBackgroundColor"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:text="@string/eye_icon" />
+
+                </RelativeLayout>
+
+                <ProgressBar
+                    android:id="@+id/loadingView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp10"
+                    android:visibility="@{viewModel.showLoading}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lytPassword" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLogin"
+                    style="@style/iGapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp52"
+                    android:layout_marginTop="@dimen/dp60"
+                    android:enabled="@{viewModel.isEnableButton}"
+                    android:onClick="@{()->viewModel.onLoginClicked(edtUserName.getEditableText().toString(),edtPassword.getEditableText().toString())}"
+                    android:text="@string/login"
+                    app:layout_constraintEnd_toEndOf="@id/edtUserName"
+                    app:layout_constraintStart_toStartOf="@id/edtUserName"
+                    app:layout_constraintTop_toBottomOf="@id/lytPassword" />
+
+                <TextView
+                    android:id="@+id/tvForgot"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp16"
+                    android:text="@string/forgot_password"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@id/edtUserName"
+                    app:layout_constraintStart_toStartOf="@id/edtUserName"
+                    app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>

@@ -227,7 +227,8 @@
     <color name="zard">#FFEB3B</color>
     <color name="narenji">#FF9800</color>
     <color name="narenjitire">#FF5722</color>
-    <color name="gahveii">#795548</color>
+    <color name="brown">#C8926D</color>
+    <color name="brown_light">#ECCFBA</color>
     <color name="siah">#212121</color>
     <color name="sefid">#FFFFFF</color>
 
@@ -307,4 +308,6 @@
     <color name="grayTheme">#4e698a</color>
     <color name="greenThem">#b5e663</color>
     <color name="redTheme">#c82121</color>
+
+    <color name="parsian_primary">#365C5D</color>
 </resources>

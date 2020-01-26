@@ -60,6 +60,7 @@ import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.kuknos.view.KuknosEntryOptionFrag;
+import net.iGap.mobileBank.view.MobileBankLoginFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.view.NewsMainFrag;
@@ -169,6 +170,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
+//                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
+                break;
+            case PARSLAND:
+                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
                 new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();

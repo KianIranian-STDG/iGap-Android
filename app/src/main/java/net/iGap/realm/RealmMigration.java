@@ -13,6 +13,7 @@ package net.iGap.realm;
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.kuknos.service.model.RealmKuknos;
+import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
 
@@ -718,6 +719,21 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmUser.addField("walletAmount", long.class, FieldAttribute.REQUIRED);
                 realmUser.addField("ivandScore", long.class, FieldAttribute.REQUIRED);
             }
+
+            oldVersion++;
+        }
+
+
+        if (oldVersion == 43) {
+
+            RealmObjectSchema realmMB = schema.create(RealmMobileBankCards.class.getSimpleName())
+                    .addField("cardName", String.class)
+                    .addField("cardNumber", String.class)
+                    .addField("bankName", String.class)
+                    .addField("expireDate", String.class)
+                    .addField("isOrigin", boolean.class,FieldAttribute.REQUIRED);
+
+            realmMB.addPrimaryKey("cardNumber");
 
             oldVersion++;
         }
