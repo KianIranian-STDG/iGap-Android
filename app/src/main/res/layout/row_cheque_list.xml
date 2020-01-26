@@ -83,7 +83,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp10"
-            android:weightSum="3">
+            android:weightSum="2">
 
             <TextView
                 android:id="@+id/tvUsable"
@@ -96,26 +96,16 @@
                 android:text="@string/usable_count" />
 
             <TextView
-                android:id="@+id/tvPermanentBlock"
+                android:id="@+id/tvBlock"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/dp6"
                 android:layout_marginRight="@dimen/dp6"
-                android:textSize="@dimen/verySmallTextSize"
+                android:textSize="@dimen/standardTextSize"
                 android:textColor="?iGapTitleTextColor"
-                android:text="@string/permanent_block" />
-
-            <TextView
-                android:id="@+id/tvTempBlock"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_weight="1"
-                android:textSize="@dimen/verySmallTextSize"
-                android:textColor="?iGapTitleTextColor"
-                android:text="@string/temporary_block" />
+                android:text="@string/block" />
 
         </LinearLayout>
 

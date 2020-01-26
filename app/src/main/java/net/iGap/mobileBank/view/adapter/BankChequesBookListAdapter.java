@@ -50,7 +50,7 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
     class ChequeListViewHolder extends RecyclerView.ViewHolder {
 
         private View root;
-        private TextView tvNumber, tvPageCount, tvPass, tvReject, tvCached, tvPBlocked, tvTBlocked, tvUsable;
+        private TextView tvNumber, tvPageCount, tvPass, tvReject, tvCached, tvBlocked, tvUsable;
 
         public ChequeListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,8 +60,7 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
             tvPass = itemView.findViewById(R.id.tvPass);
             tvReject = itemView.findViewById(R.id.tvReject);
             tvCached = itemView.findViewById(R.id.tvCash);
-            tvPBlocked = itemView.findViewById(R.id.tvPermanentBlock);
-            tvTBlocked = itemView.findViewById(R.id.tvTempBlock);
+            tvBlocked = itemView.findViewById(R.id.tvBlock);
             tvUsable = itemView.findViewById(R.id.tvUsable);
         }
 
@@ -73,8 +72,7 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
             tvPass.setText(getString(R.string.pass_count) + checkNumbers(item.getPassCheque() + ""));
             tvReject.setText(getString(R.string.reject_count) + checkNumbers(item.getReject() + ""));
             tvCached.setText(getString(R.string.cash_count) + checkNumbers(item.getPartialCash() + ""));
-            tvPBlocked.setText(getString(R.string.permanent_block) + checkNumbers(item.getPermanentBlocked() + ""));
-            tvTBlocked.setText(getString(R.string.temporary_block) + checkNumbers(item.getTemporaryBlock() + ""));
+            tvBlocked.setText(getString(R.string.block) + ": " + checkNumbers((item.getPermanentBlocked() + item.getTemporaryBlock()) + ""));
             tvUsable.setText(getString(R.string.usable_count) + checkNumbers(item.getUnusedCheque() + ""));
 
         }

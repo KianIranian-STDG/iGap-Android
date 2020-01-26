@@ -12,6 +12,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.LoanListModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class BankLoanListAdapter extends RecyclerView.Adapter<BankLoanListAdapte
         public void bind(LoanListModel item) {
 
             tvLoanNumber.setText(getString(R.string.loan_number, item.getLoanNumber()));
-            tvAmount.setText(getString(R.string.amount_2, item.getAmount() + ""));
+            tvAmount.setText(getString(R.string.amount_2, decimalFormatter(item.getAmount())));
             tvSDate.setText(getString(R.string.start_date, item.getBeginDate()));
             tvEDate.setText(getString(R.string.end_date, item.getEndDate()));
             tvBranchName.setText(getString(R.string.branch_name, item.getBranchName()));
@@ -73,6 +74,15 @@ public class BankLoanListAdapter extends RecyclerView.Adapter<BankLoanListAdapte
             tvState.setText(getString(R.string.state, getStatusString(item.getStatus())));
             tvRemained.setText(getString(R.string.remained_loan, item.getLoanRemainder() + ""));
 
+        }
+
+        private String decimalFormatter(long entry) {
+            try {
+                DecimalFormat df = new DecimalFormat(",###");
+                return df.format(entry);
+            } catch (Exception e) {
+                return entry + "";
+            }
         }
 
         private String getStatusString(String status) {
