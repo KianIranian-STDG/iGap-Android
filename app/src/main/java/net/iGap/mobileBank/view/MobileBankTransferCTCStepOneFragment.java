@@ -69,6 +69,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
+                .setRoundBackground(false)
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {

@@ -58,6 +58,7 @@ public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<Mo
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(binding.toolbar.getContext())
                 .setLogoShown(true)
+                .setRoundBackground(false)
                 .setDefaultTitle(getString(R.string.cheque))
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
