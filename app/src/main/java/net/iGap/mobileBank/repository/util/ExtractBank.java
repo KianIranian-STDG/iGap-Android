@@ -4,7 +4,7 @@ import net.iGap.R;
 
 public class ExtractBank {
 
-    public int bankName(String cardNumber) {
+    public static int bankName(String cardNumber) {
         if (cardNumber == null)
             return R.string.empty_error_message;
         else if (cardNumber.startsWith("603799"))

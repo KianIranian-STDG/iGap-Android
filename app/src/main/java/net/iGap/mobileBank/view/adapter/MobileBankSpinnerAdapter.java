@@ -17,6 +17,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.util.ExtractBank;
 
@@ -28,7 +29,6 @@ public class MobileBankSpinnerAdapter extends ArrayAdapter<BankCardModel> {
     private List<BankCardModel> cards;
     private ListFilter listFilter = new ListFilter();
     private List<BankCardModel> dataListAllItems;
-    private ExtractBank logoDetector = new ExtractBank();
 
     public MobileBankSpinnerAdapter(Context mContext, int layoutResourceId, List<BankCardModel> data) {
         super(mContext, layoutResourceId, data);
@@ -51,12 +51,23 @@ public class MobileBankSpinnerAdapter extends ArrayAdapter<BankCardModel> {
         TextView cardNum = layout.findViewById(R.id.cardNumber);
         ImageView bankLogo = layout.findViewById(R.id.logo);
 
-        bankName.setText(cards.get(position).getCardBankName());
-        String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(cards.get(position).getPan()), String.class);
-        cardNum.setText(tempArray[0] + "-" + tempArray[1] + "-" + tempArray[2] + "-" + tempArray[3]);
-        bankLogo.setImageResource(logoDetector.bankLogo(cards.get(position).getPan()));
+        bankName.setText(ExtractBank.bankName(cards.get(position).getPan()));
+        cardNum.setText(checkAndSetPersianNumberIfNeeded(cards.get(position).getPan()));
+        bankLogo.setImageResource(ExtractBank.bankLogo(cards.get(position).getPan()));
 
         return layout;
+    }
+
+    private String checkAndSetPersianNumberIfNeeded(String cardNumber) {
+        String number = cardNumber;
+        if (HelperCalander.isPersianUnicode)
+            number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+        try {
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
+            return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
+        } catch (Exception e) {
+            return number;
+        }
     }
 
     @Override

@@ -88,12 +88,11 @@
                     app:layout_constraintStart_toStartOf="@id/edtUserName"
                     app:layout_constraintTop_toBottomOf="@id/edtUserName" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:orientation="horizontal"
                     android:id="@+id/lytPassword"
                     android:background="@drawable/shape_gray_round_stroke"
                     android:layout_width="0dp"
-                    android:weightSum="10"
                     android:layout_height="@dimen/dp44"
                     android:layout_marginTop="@dimen/dp10"
                     app:layout_constraintEnd_toEndOf="@id/edtUserName"
@@ -103,30 +102,32 @@
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtPassword"
                         style="@style/iGapEditTextStyle"
-                        android:layout_width="0dp"
-                        android:layout_weight="8.5"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:text="00147437"
                         android:inputType="textPassword"
-                        android:paddingStart="@dimen/dp6"
-                        android:paddingLeft="@dimen/dp6"
-                        android:paddingEnd="@dimen/dp6"
-                        android:paddingRight="@dimen/dp6"
+                        android:paddingLeft="@dimen/dp10"
+                        android:paddingRight="@dimen/dp10"
                         android:singleLine="true"/>
 
                     <TextView
                         android:id="@+id/visiblePassword"
                         style="@style/myIconTextViewStyle"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:layout_marginRight="@dimen/dp4"
-                        android:text="@string/eye_icon"
-                        android:layout_weight="1.5"/>
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:paddingLeft="@dimen/dp10"
+                        android:paddingRight="@dimen/dp10"
+                        android:layout_margin="@dimen/dp4"
+                        android:background="?rootBackgroundColor"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:text="@string/eye_icon" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
                 <ProgressBar
                     android:id="@+id/loadingView"
