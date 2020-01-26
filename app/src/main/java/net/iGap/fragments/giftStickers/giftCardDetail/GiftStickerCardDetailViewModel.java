@@ -21,9 +21,11 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
     private SingleLiveEvent<CardDetailDataModel> cardDetailLiveData = new SingleLiveEvent<>();
 
     private StructIGSticker structIGSticker;
+    private int mode;
 
-    GiftStickerCardDetailViewModel(StructIGSticker structIGSticker) {
+    GiftStickerCardDetailViewModel(StructIGSticker structIGSticker, int mode) {
         this.structIGSticker = structIGSticker;
+        this.mode = mode;
     }
 
     @Override
@@ -34,23 +36,44 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
         // TODO: 1/25/20 hard code
         if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
             phoneNumber = "0" + phoneNumber.substring(2);
-            StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId(), "4271241776", phoneNumber)
-                    .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
-                        @Override
-                        public void onSuccess(CardDetailDataModel cardDetailDataModel) {
-                            if (cardDetailDataModel != null)
-                                cardDetailLiveData.postValue(cardDetailDataModel);
-                            showMainView.set(View.VISIBLE);
-                            showLoadingView.set(View.GONE);
-                        }
+            if (mode == 0) {
+                StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId(), "4271241776", phoneNumber)
+                        .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
+                            @Override
+                            public void onSuccess(CardDetailDataModel cardDetailDataModel) {
+                                if (cardDetailDataModel != null)
+                                    cardDetailLiveData.postValue(cardDetailDataModel);
+                                showMainView.set(View.VISIBLE);
+                                showLoadingView.set(View.GONE);
+                            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            showLoadingView.set(View.GONE);
-                            showRetryView.set(View.VISIBLE);
-                        }
-                    });
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                showLoadingView.set(View.GONE);
+                                showRetryView.set(View.VISIBLE);
+                            }
+                        });
+            } else if (mode == 1) {
+                StickerRepository.getInstance().getGiftCardInfo("09120423503", "4271241776", structIGSticker.getGiftId())
+                        .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
+                            @Override
+                            public void onSuccess(CardDetailDataModel cardDetailDataModel) {
+                                if (cardDetailDataModel != null) {
+                                    cardDetailLiveData.postValue(cardDetailDataModel);
+                                }
+                                showMainView.set(View.VISIBLE);
+                                showLoadingView.set(View.GONE);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                showLoadingView.set(View.GONE);
+                                showRetryView.set(View.VISIBLE);
+                            }
+                        });
+            }
         }
     }
 

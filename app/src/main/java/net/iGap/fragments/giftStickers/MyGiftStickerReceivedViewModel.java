@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.sticker.StickerRepository;
@@ -20,6 +21,7 @@ public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
     private ObservableInt showLoading = new ObservableInt(View.VISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableInt showEmptyListMessage = new ObservableInt(View.GONE);
+    private SingleLiveEvent<CardDetailDataModel> cardDetailLiveEvent = new SingleLiveEvent<>();
 
     @Override
     public void subscribe() {
@@ -73,4 +75,6 @@ public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
     public SingleLiveEvent<String> getShowRequestErrorMessage() {
         return showRequestErrorMessage;
     }
+
+
 }

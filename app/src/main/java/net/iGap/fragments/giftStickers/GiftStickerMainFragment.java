@@ -46,7 +46,7 @@ public class GiftStickerMainFragment extends BaseFragment {
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
-                .setDefaultTitle("استیکر هدیه")
+                .setDefaultTitle(getResources().getString(R.string.gift_sticker_title))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

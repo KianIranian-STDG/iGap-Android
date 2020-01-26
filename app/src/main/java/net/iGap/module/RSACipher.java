@@ -19,6 +19,26 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class RSACipher {
+    private static RSACipher instance;
+
+    public static RSACipher getInstance() {
+        if (instance == null) {
+            try {
+                instance = new RSACipher();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (NoSuchPaddingException e) {
+                e.printStackTrace();
+            } catch (InvalidKeyException e) {
+                e.printStackTrace();
+            } catch (IllegalBlockSizeException e) {
+                e.printStackTrace();
+            } catch (BadPaddingException e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
 
     private PublicKey publicKey;
     private PrivateKey privateKey;

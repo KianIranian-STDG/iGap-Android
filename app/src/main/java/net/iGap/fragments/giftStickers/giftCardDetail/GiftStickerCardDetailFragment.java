@@ -12,9 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentGiftStickerCardDetailBinding;
@@ -24,10 +21,12 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class GiftStickerCardDetailFragment extends Fragment {
     private StructIGSticker structIGSticker;
+    private int mode = 0;
 
-    public static GiftStickerCardDetailFragment getInstance(StructIGSticker structIGSticker) {
+    public static GiftStickerCardDetailFragment getInstance(StructIGSticker structIGSticker, int mode) {
         GiftStickerCardDetailFragment giftStickerCardDetailFragment = new GiftStickerCardDetailFragment();
         giftStickerCardDetailFragment.structIGSticker = structIGSticker;
+        giftStickerCardDetailFragment.mode = mode;
         return giftStickerCardDetailFragment;
     }
 
@@ -37,13 +36,7 @@ public class GiftStickerCardDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
-            @NonNull
-            @Override
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new GiftStickerCardDetailViewModel(structIGSticker);
-            }
-        }).get(GiftStickerCardDetailViewModel.class);
+        viewModel = new GiftStickerCardDetailViewModel(structIGSticker, mode);
     }
 
     @Nullable
@@ -75,9 +68,5 @@ public class GiftStickerCardDetailFragment extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.copied), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    public interface Delegate {
-        void onCardActiced(StructIGSticker structIGSticker);
     }
 }

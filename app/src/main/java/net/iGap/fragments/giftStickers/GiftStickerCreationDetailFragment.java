@@ -37,7 +37,7 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.btn_active).setOnClickListener(v -> {
-            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker());
+            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), 0);
             dismiss();
         });
 

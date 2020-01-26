@@ -18,10 +18,12 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 public class MainGiftStickerCardFragment extends BaseBottomSheet {
     private StructIGSticker structIGSticker;
     private MainStickerCardViewModel viewModel;
+    private int mode = 0;
 
-    public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker) {
+    public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker, int mode) {
         MainGiftStickerCardFragment mainGiftStickerCardFragment = new MainGiftStickerCardFragment();
         mainGiftStickerCardFragment.structIGSticker = structIGSticker;
+        mainGiftStickerCardFragment.mode = mode;
         return mainGiftStickerCardFragment;
     }
 
@@ -41,18 +43,22 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        viewModel.subscribe();
 
-        viewModel.getGoNextLiveData().observe(getViewLifecycleOwner(), goNext -> {
-            if (goNext != null && !goNext) {
-                loadEnterNationalCodeForActivatePage();
-                view.findViewById(R.id.progressBar).setVisibility(View.GONE);
-            } else {
-                Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }
-        });
+        if (mode == 0) {
+            view.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            viewModel.subscribe();
+            viewModel.getGoNextLiveData().observe(getViewLifecycleOwner(), goNext -> {
+                if (goNext != null && !goNext) {
+                    loadEnterNationalCodeForActivatePage();
+                    view.findViewById(R.id.progressBar).setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            });
+        } else if (mode == 1) {
+            loadGiftStickerCardDetailFragment();
+        }
     }
 
     @Override
@@ -74,7 +80,7 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof GiftStickerCardDetailFragment)) {
-            fragment = GiftStickerCardDetailFragment.getInstance(structIGSticker);
+            fragment = GiftStickerCardDetailFragment.getInstance(structIGSticker, mode);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();

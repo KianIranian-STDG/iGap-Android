@@ -72,4 +72,7 @@ public interface StickerApi {
 
     @GET("gift/activation-status/{giftStickerId}")
     Single<CardStatusDataModel> giftCardStatus(@Path("giftStickerId") String giftStickerId);
+
+    @POST("gift/card-info/{giftStickerId}")
+    Single<RsaDataModel> getCardInfo(@Path("giftStickerId") String giftStickerId, @Body JsonObject jsonObject);
 }

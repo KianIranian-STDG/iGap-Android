@@ -212,7 +212,7 @@ public class StickerRepository {
 
         String publicKey = null;
         try {
-            rsaCipher = new RSACipher();
+            rsaCipher = RSACipher.getInstance();
             publicKey = rsaCipher.getPublicKey("pkcs8-pem").replace("\n", "\\n");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -229,6 +229,33 @@ public class StickerRepository {
         jsonObject.addProperty("key", publicKey != null ? publicKey : "");
 
         return stickerApi.activeGiftCard(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
+    }
+
+    private Single<RsaDataModel> getCardInfoApiService(String mobileNumber, String nationalCode, String stickerId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("national_code", nationalCode);
+        jsonObject.addProperty("tel_num", mobileNumber);
+
+        String publicKey = null;
+
+        rsaCipher = RSACipher.getInstance();
+
+        try {
+            publicKey = rsaCipher.getPublicKey("pkcs8-pem").replace("\n", "\\n");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
+        jsonObject.addProperty("key", publicKey != null ? publicKey : "");
+        return stickerApi.getCardInfo(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
     }
 
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
@@ -531,4 +558,26 @@ public class StickerRepository {
                     return cardDetailDataModel;
                 });
     }
+
+    public Single<CardDetailDataModel> getGiftCardInfo(String mobileNumber, String nationalCode, String stickerId) {
+        return getCardInfoApiService(mobileNumber, nationalCode, stickerId)
+                .map(rsaDataModel -> {
+                    CardDetailDataModel cardDetailDataModel = null;
+                    try {
+                        cardDetailDataModel = new Gson().fromJson(rsaCipher.decrypt(rsaDataModel.getData()), CardDetailDataModel.class);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchPaddingException e) {
+                        e.printStackTrace();
+                    } catch (InvalidKeyException e) {
+                        e.printStackTrace();
+                    } catch (IllegalBlockSizeException e) {
+                        e.printStackTrace();
+                    } catch (BadPaddingException e) {
+                        e.printStackTrace();
+                    }
+                    return cardDetailDataModel;
+                });
+    }
+
 }
