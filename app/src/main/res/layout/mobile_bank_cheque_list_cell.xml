@@ -95,6 +95,26 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/chequePrice" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/chequeDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="Cheque Date"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="@color/black"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chequeStatus" />
+
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -110,7 +130,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/chequeStatus" />
+                    app:layout_constraintTop_toBottomOf="@+id/chequeDate" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

@@ -2414,6 +2414,14 @@
     <string name="PAST_DUE">مطالبات سررسیده گذشته</string>
     <string name="CURRENT_DUE">مطالبات جاری</string>
     <string name="REJECTED">برگشت خورده</string>
-
+    <string name="USED">قابل استفاده</string>
+    <string name="CASH">نقد شده</string>
+    <string name="REJECT">برگشت خورده</string>
+    <string name="RETURN">برگشت کالا</string>
+    <string name="PAY">پرداخت قسمتی از وجه</string>
+    <string name="HOLD">مسدود</string>
+    <string name="INTERBANK_BLOCK">مسدود از اینترنت بانک</string>
+    <string name="INVALID_PARSIAN">ابطالی</string>
+    <string name="REGISTER">ثبت مبلغ شده</string>
 
 </resources>

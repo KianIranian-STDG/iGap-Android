@@ -2478,5 +2478,14 @@ Want to get it?</string>
     <string name="PAST_DUE">PAST DUE</string>
     <string name="CURRENT_DUE">CURRENT DUE</string>
     <string name="REJECTED">REJECTED</string>
+    <string name="USED">USED</string>
+    <string name="CASH">CASH</string>
+    <string name="REJECT">REJECT</string>
+    <string name="RETURN">RETURN</string>
+    <string name="PAY">PAY</string>
+    <string name="HOLD">HOLD</string>
+    <string name="INTERBANK_BLOCK">INTERBANK BLOCK</string>
+    <string name="INVALID_PARSIAN">INVALID</string>
+    <string name="REGISTER">REGISTER</string>
 
 </resources>

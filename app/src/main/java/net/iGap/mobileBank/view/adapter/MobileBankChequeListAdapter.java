@@ -66,7 +66,7 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView chNumber, chValue, chStatus;
+        private TextView chNumber, chValue, chStatus, chDate;
         private Button block;
 
         public ViewHolder(@NonNull View itemView) {
@@ -75,6 +75,7 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             chNumber = itemView.findViewById(R.id.chequeNumber);
             chValue = itemView.findViewById(R.id.chequePrice);
             chStatus = itemView.findViewById(R.id.chequeStatus);
+            chDate = itemView.findViewById(R.id.chequeDate);
             block = itemView.findViewById(R.id.blockCheque);
 
         }
@@ -91,10 +92,49 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
                 chValue.setText(context.getResources().getString(R.string.elecBill_error_title));
             }
 
-            chStatus.setText(context.getResources().getString(R.string.mobile_bank_cheque_status,
-                    mdata.get(position).getStatus()));
+            String date = mdata.get(position).getChangeStatusDate();
+            if (date == null || date.equals("")) {
+                chDate.setVisibility(View.GONE);
+            } else {
+                chDate.setText(context.getString(R.string.date) + ": " + date);
+                chDate.setVisibility(View.VISIBLE);
+            }
+            String status = mdata.get(position).getStatus();
+
+            if (status.equals("USED") || status.equals("REGISTER")) {
+                block.setVisibility(View.VISIBLE);
+            } else {
+                block.setVisibility(View.GONE);
+            }
+
+            chStatus.setText(context.getResources().getString(R.string.mobile_bank_cheque_status, getStatusText(status)));
 
             block.setOnClickListener(v -> blockBTN.onBlock(position));
+        }
+
+        private String getStatusText(String status) {
+            switch (status) {
+                case "USED":
+                    return context.getString(R.string.USED);
+                case "CASH":
+                    return context.getString(R.string.CASH);
+                case "REJECT":
+                    return context.getString(R.string.REJECT);
+                case "RETURN":
+                    return context.getString(R.string.RETURN);
+                case "PAY":
+                    return context.getString(R.string.PAY);
+                case "HOLD":
+                    return context.getString(R.string.HOLD);
+                case "INTERBANK_BLOCK":
+                    return context.getString(R.string.INTERBANK_BLOCK);
+                case "INVALID":
+                    return context.getString(R.string.INVALID_PARSIAN);
+                case "REGISTER":
+                    return context.getString(R.string.REGISTER);
+                default:
+                    return status;
+            }
         }
 
         private String decimalFormatter(Double entry) {

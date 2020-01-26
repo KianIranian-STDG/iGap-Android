@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.databinding.MobileBankLoansFragmentBinding;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.LoanListModel;
@@ -82,6 +83,11 @@ public class MobileBankLoansFragment extends BaseMobileBankFragment<MobileBankLo
         binding.rvLoans.setLayoutManager(new LinearLayoutManager(getActivity()));
         BankLoanListAdapter adapter = new BankLoanListAdapter();
         adapter.setListener(num -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankServiceLoanDetailFragment.newInstance(num))
+                        .setReplace(false)
+                        .load();
+            }
         });
         binding.rvLoans.setAdapter(adapter);
         adapter.setItems(loanListModels);
