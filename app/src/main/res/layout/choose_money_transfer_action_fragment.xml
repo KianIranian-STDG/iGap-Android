@@ -1,129 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/dp16">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/cardToCardIcon"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/dp16"
-        android:layout_marginLeft="@dimen/dp16"
-        android:text="@string/wallet_icon"
-        android:textSize="@dimen/xlargeTextSize"
-        app:layout_constraintBottom_toBottomOf="@id/cardToCardTitle"
-        app:layout_constraintEnd_toStartOf="@id/cardToCardTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cardToCardTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/cardToCardTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp16"
-        android:layout_marginEnd="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp16"
-        android:padding="@dimen/dp8"
-        android:text="@string/card_to_card"
-        android:textColor="?attr/iGapTitleTextColor"
-        android:textSize="@dimen/largeTextSize"
-        app:layout_constraintBottom_toTopOf="@id/transferMoneyTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cardToCardIcon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/cardToCard"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="@id/cardToCardTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cardToCardTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/transferMoneyIcon"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/dp16"
-        android:layout_marginLeft="@dimen/dp16"
-        android:text="@string/financial_send_money_icon"
-        android:textSize="@dimen/xlargeTextSize"
-        app:layout_constraintBottom_toBottomOf="@id/transferMoneyTitle"
-        app:layout_constraintEnd_toStartOf="@id/transferMoneyTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/transferMoneyTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/transferMoneyTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp8"
-        android:layout_marginEnd="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp16"
-        android:padding="@dimen/dp8"
-        android:text="@string/WALLET_TRANSFER_MONEY"
-        android:textColor="?attr/iGapTitleTextColor"
-        android:textSize="@dimen/largeTextSize"
-        app:layout_constraintBottom_toTopOf="@id/stickerGiftTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/transferMoneyIcon"
-        app:layout_constraintTop_toBottomOf="@id/cardToCardTitle" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/transferMoney"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:constraint_referenced_ids="transferMoneyTitle,transferMoneyIcon"
-        app:layout_constraintBottom_toBottomOf="@id/transferMoneyTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/transferMoneyTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/giftStickerIcon"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/dp16"
-        android:layout_marginLeft="@dimen/dp16"
-        android:text="@string/financial_send_money_icon"
-        android:textSize="@dimen/xlargeTextSize"
-        app:layout_constraintBottom_toBottomOf="@id/stickerGiftTitle"
-        app:layout_constraintEnd_toStartOf="@id/stickerGiftTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/stickerGiftTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/stickerGiftTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp8"
-        android:layout_marginEnd="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp16"
-        android:padding="@dimen/dp8"
-        android:text="@string/gift_sticker_title"
-        android:textColor="?attr/iGapTitleTextColor"
-        android:textSize="@dimen/largeTextSize"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/giftStickerIcon"
-        app:layout_constraintTop_toBottomOf="@id/transferMoneyTitle" />
-
-    <androidx.constraintlayout.widget.Group
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/stickerGift"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@id/stickerGiftTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/stickerGiftTitle" />
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:background="?attr/selectableItemBackgroundBorderless">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/giftStickerIcon"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:text="@string/financial_send_money_icon"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/stickerGiftTitle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp8"
+            android:text="@string/gift_sticker_title"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/giftStickerIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardToCard"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:background="?attr/selectableItemBackgroundBorderless">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cardToCardIcon"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:text="@string/wallet_icon"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/cardToCardTitle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp8"
+            android:text="@string/card_to_card"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardToCardIcon"
+            tools:layout_editor_absoluteY="0dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/transferMoney"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:background="?attr/selectableItemBackgroundBorderless">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/transferMoneyIcon"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:text="@string/financial_send_money_icon"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/transferMoneyTitle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp8"
+            android:text="@string/WALLET_TRANSFER_MONEY"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/transferMoneyIcon"
+            tools:layout_editor_absoluteY="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

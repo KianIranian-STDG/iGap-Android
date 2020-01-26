@@ -2351,7 +2351,7 @@
     <string name="kuknos_buyP_btn_server3">دریافت داده...</string>
     <string name="kuknos_login_email_str">ایمیل</string>
     <string name="kuknos_login_name_str">نام</string>
-    <string name="gift_sticker_title">استیکر هدیه</string>
+    <string name="gift_sticker_title">کارت هدیه دیجیتال</string>
     <string name="active_gift_sticker_title">فعال سازی استیکر هدیه</string>
     <string name="national_code_not_match_with_phone_number_error">عدم همخوانی کد ملی با اطلاعات سیم کارت</string>
     <string name="gift_sticker_visit">مشاهده</string>
