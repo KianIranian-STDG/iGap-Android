@@ -145,7 +145,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment
 
         binding.nextBtn.setOnClickListener(v -> {
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankTransferCtcStep3Fragment())
+                new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankTransferCtcStep2Fragment())
                         .setReplace(false)
                         .load();
             }
