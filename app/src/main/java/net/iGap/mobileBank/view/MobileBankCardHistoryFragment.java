@@ -133,6 +133,7 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
 
         // open page for reports
         binding.reportBtn.setOnClickListener(v -> {
+            viewModel.getShowRequestErrorMessage().setValue("Will be added SOON!");
             showDateSelectorDialog();
         });
 
@@ -170,9 +171,12 @@ public class MobileBankCardHistoryFragment extends BaseAPIViewFrag<MobileBankCar
 
     private void initMainRecycler(List<BankHistoryModel> data) {
 
+        if (data == null)
+            return;
+
         adapter.removeLoading();
 
-        if (data == null || data.size() == 0)
+        if (data.size() == 0)
             return;
 
         adapter.addItems(data);

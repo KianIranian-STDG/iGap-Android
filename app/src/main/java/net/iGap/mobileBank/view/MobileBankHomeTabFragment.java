@@ -189,12 +189,13 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
 
         viewModel.getBalance().observe(getViewLifecycleOwner(), balance -> showMessage(getString(R.string.mobile_bank_balance_title),
-                getString(R.string.mobile_bank_balance_message, getCurrentAccount(), balance + " " + getString(R.string.rial))));
+                getString(R.string.mobile_bank_balance_message, balance + " " + getString(R.string.rial))));
 
-        viewModel.getBalance().observe(getViewLifecycleOwner(), message -> showMessage(getString(R.string.attention), message));
+        viewModel.getOTPmessage().observe(getViewLifecycleOwner(), message -> showMessage(getString(R.string.attention), message));
     }
 
     private void showMessage(String title, String message) {
+        mDialogWait.dismiss();
         new DialogParsian()
                 .setContext(getContext())
                 .setTitle(title)

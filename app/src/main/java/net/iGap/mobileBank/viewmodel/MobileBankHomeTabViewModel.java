@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
@@ -16,6 +17,7 @@ import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.view.MobileBankHomeTabFragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +97,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
                         if (data.getData() != null && data.getData().size() != 0) {
-                            balance.setValue(data.getData().get(0).getBalance());
+                            balance.setValue(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + data.getData().get(0).getBalance()))));
                         }
                     }
 
@@ -109,6 +111,15 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
 
                     }
                 });
+    }
+
+    private String decimalFormatter(Double entry) {
+        DecimalFormat df = new DecimalFormat(",###");
+        return df.format(entry);
+    }
+
+    private String CompatibleUnicode(String entry) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
     public void getOTP(String cardNumber) {

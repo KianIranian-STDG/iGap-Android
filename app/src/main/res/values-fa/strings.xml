@@ -2372,7 +2372,7 @@
     <string name="mobile_bank_balance_cardLengthError">شماره کارت شما باید  شامل 16 عدد باشد.</string>
     <string name="mobile_bank_balance_dateLengthError">لطفا تاریخ انقضای کارت خود را به صورت کامل وارد کنید.</string>
     <string name="mobile_bank_balance_passwordLengthError">رمز کارت شما باید حداقل 6 کاراکتر باشد.</string>
-    <string name="mobile_bank_balance_message">موجودی کارت (%1$s) شما %2$s است.</string>
+    <string name="mobile_bank_balance_message">موجودی شما %1$s است.</string>
     <string name="mobile_bank_cheque_balance">"مبلغ چک: %1$s "</string>
     <string name="mobile_bank_cheque_number">"شماره چک: %1$s "</string>
     <string name="mobile_bank_cheque_status">"وضعیت چک: %1$s "</string>
