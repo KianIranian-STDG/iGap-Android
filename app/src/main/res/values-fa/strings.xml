@@ -2401,4 +2401,19 @@
     <string name="mobile_bank_load_detail_penalty">جریمه: %1$s</string>
     <string name="mobile_bank_load_detail_unpaidAmount">مبلغ پرداخت نشده: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_unpaidCount">تعداد قسط های پرداخت نشده: %1$s</string>
+
+    <string name="unpaid">پرداخت نشده</string>
+    <string name="PAID_INCOMPLETE">پرداخت شده ناقص</string>
+    <string name="DOUBTFUL_RECEIPT">دین حال شده</string>
+    <string name="ACTIVE">انتقال درحال انتظار تا تاریخ معین</string>
+    <string name="SETTLEMENT_READY">آماده برای تسویه</string>
+    <string name="FREE">تسویه شده</string>
+    <string name="OTHER">سایر</string>
+    <string name="INCOMPLETE_COLLATERAL">وثیقه ناقص</string>
+    <string name="ARREARS">مطالبات معوق</string>
+    <string name="PAST_DUE">مطالبات سررسیده گذشته</string>
+    <string name="CURRENT_DUE">مطالبات جاری</string>
+    <string name="REJECTED">برگشت خورده</string>
+
+
 </resources>
