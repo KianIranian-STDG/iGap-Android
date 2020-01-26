@@ -316,12 +316,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case POLL:
                 new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
-          /*      ChartFragment fragment = new ChartFragment();
+                break;
+            case POLL_RESULT:
+                ChartFragment fragment = new ChartFragment();
                 Bundle b = new Bundle();
                 b.putInt("pollId", Integer.valueOf(discoveryField.value));
                 fragment.setArguments(b);
-                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();*/
-            break;
+                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
+                break;
             case FAVORITE_CHANNEL:
                 if (discoveryField.value.equals(""))
                     new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
@@ -366,7 +368,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     e.printStackTrace();
                 }
                 break;
-
         }
     }
 
