@@ -1,18 +1,32 @@
 package net.iGap.mobileBank.repository.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class LoanListModel {
 
+    @SerializedName("amount")
     private long amount;
+    @SerializedName("begin_date")
     private String beginDate;
+    @SerializedName("branch_code")
     private String branchCode;
+    @SerializedName("branch_name")
     private String branchName;
+    @SerializedName("cbLoan_number")
     private String cbLoanNumber;
+    @SerializedName("end_date")
     private String endDate;
+    @SerializedName("loan_number")
     private String loanNumber;
+    @SerializedName("loan_remainder")
     private int loanRemainder;
+    @SerializedName("pay_number")
     private int payNumber;
+    @SerializedName("pre_amount")
     private long preAmount;
+    @SerializedName("status")
     private String status;
+    @SerializedName("type")
     private String type;
 
     public long getAmount() {

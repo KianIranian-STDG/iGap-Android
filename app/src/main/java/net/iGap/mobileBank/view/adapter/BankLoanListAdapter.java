@@ -69,10 +69,42 @@ public class BankLoanListAdapter extends RecyclerView.Adapter<BankLoanListAdapte
             tvSDate.setText(getString(R.string.start_date, item.getBeginDate()));
             tvEDate.setText(getString(R.string.end_date, item.getEndDate()));
             tvBranchName.setText(getString(R.string.branch_name, item.getBranchName()));
-            tvLoanCount.setText(getString(R.string.loan_count, item.getLoanNumber()));
-            tvState.setText(getString(R.string.state, item.getStatus()));
+            tvLoanCount.setText(getString(R.string.loan_count, item.getPayNumber() + ""));
+            tvState.setText(getString(R.string.state, getStatusString(item.getStatus())));
             tvRemained.setText(getString(R.string.remained_loan, item.getLoanRemainder() + ""));
 
+        }
+
+        private String getStatusString(String status) {
+            switch (status) {
+
+                case "UNPAID":
+                    return getString(R.string.unpaid);
+                case "PAID_INCOMPLETE":
+                    return getString(R.string.PAID_INCOMPLETE);
+                case "ACTIVE":
+                    return getString(R.string.ACTIVE);
+                case "DOUBTFUL_RECEIPT":
+                    return getString(R.string.DOUBTFUL_RECEIPT);
+                case "SETTLEMENT_READY":
+                    return getString(R.string.SETTLEMENT_READY);
+                case "FREE":
+                    return getString(R.string.FREE);
+                case "OTHER":
+                    return getString(R.string.OTHER);
+                case "INCOMPLETE_COLLATERAL":
+                    return getString(R.string.INCOMPLETE_COLLATERAL);
+                case "ARREARS":
+                    return getString(R.string.ARREARS);
+                case "PAST_DUE":
+                    return getString(R.string.PAST_DUE);
+                case "CURRENT_DUE":
+                    return getString(R.string.CURRENT_DUE);
+                case "REJECTED":
+                    return getString(R.string.REJECTED);
+                default:
+                    return status;
+            }
         }
 
         private String getString(int label, String value) {
@@ -80,6 +112,10 @@ public class BankLoanListAdapter extends RecyclerView.Adapter<BankLoanListAdapte
                 value = HelperCalander.convertToUnicodeFarsiNumber(value);
             }
             return itemView.getContext().getString(label) + " " + value;
+        }
+
+        private String getString(int id) {
+            return itemView.getContext().getString(id);
         }
     }
 

@@ -2465,4 +2465,18 @@ Want to get it?</string>
     <string name="mobile_bank_detail_cell_unpaidAmount">Unpaid Amount: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_penaltyAmount">Penalty Amount: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_paymentDate">Payment Date: %1$s</string>
+
+    <string name="unpaid">Unpaid</string>
+    <string name="ACTIVE">ACTIVE</string>
+    <string name="PAID_INCOMPLETE">PAID INCOMPLETE</string>
+    <string name="DOUBTFUL_RECEIPT">DOUBTFUL RECEIPT</string>
+    <string name="SETTLEMENT_READY">SETTLEMENT READY</string>
+    <string name="FREE">FREE</string>
+    <string name="OTHER">OTHER</string>
+    <string name="INCOMPLETE_COLLATERAL">INCOMPLETE COLLATERAL</string>
+    <string name="ARREARS">ARREARS</string>
+    <string name="PAST_DUE">PAST DUE</string>
+    <string name="CURRENT_DUE">CURRENT DUE</string>
+    <string name="REJECTED">REJECTED</string>
+
 </resources>
