@@ -265,6 +265,33 @@ public class MobileBankTransferCTCStepOneFragment extends BaseAPIViewFrag<Mobile
                 binding.originSpinner.showDropDown();
             }
         });
+        /*binding.originCard.cardNumberField1.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case android.R.id.paste:
+                        getClipboardData();
+                        binding.originSpinner.dismissDropDown();
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });*/
 
         // Pin 2
         binding.originCard.cardNumberField2.setOnKeyListener((v, keyCode, event) -> {

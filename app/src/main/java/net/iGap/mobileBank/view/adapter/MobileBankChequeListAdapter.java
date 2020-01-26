@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankChequeSingle;
+import net.iGap.mobileBank.repository.util.JalaliCalendar;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -89,14 +90,14 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
                         CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))))
                         + context.getResources().getString(R.string.rial));
             else {
-                chValue.setText(context.getResources().getString(R.string.elecBill_error_title));
+                chValue.setText(context.getResources().getString(R.string.mobile_bank_balance_error_no_price));
             }
 
             String date = mdata.get(position).getChangeStatusDate();
             if (date == null || date.equals("")) {
                 chDate.setVisibility(View.GONE);
             } else {
-                chDate.setText(context.getString(R.string.date) + ": " + date);
+                chDate.setText(context.getString(R.string.date) + ": " + JalaliCalendar.getPersianDate(date));
                 chDate.setVisibility(View.VISIBLE);
             }
             String status = mdata.get(position).getStatus();

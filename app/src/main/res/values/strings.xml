@@ -2465,8 +2465,12 @@ Want to get it?</string>
     <string name="mobile_bank_detail_cell_unpaidAmount">Unpaid Amount: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_penaltyAmount">Penalty Amount: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_paymentDate">Payment Date: %1$s</string>
+    <string name="mobile_bank_balance_error_no_tran">Your balance is not available. Please contact your bank.</string>
+    <string name="mobile_bank_balance_error_no_price">No Price.</string>
+
 
     <string name="unpaid">Unpaid</string>
+    <string name="paid">Paid</string>
     <string name="ACTIVE">ACTIVE</string>
     <string name="PAID_INCOMPLETE">PAID INCOMPLETE</string>
     <string name="DOUBTFUL_RECEIPT">DOUBTFUL RECEIPT</string>

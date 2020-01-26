@@ -188,10 +188,23 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
         viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
 
-        viewModel.getBalance().observe(getViewLifecycleOwner(), balance -> showMessage(getString(R.string.mobile_bank_balance_title),
-                getString(R.string.mobile_bank_balance_message, balance + " " + getString(R.string.rial))));
+        viewModel.getBalance().observe(getViewLifecycleOwner(), balance -> {
+            if (balance.equals("-1")) {
+                mDialogWait.dismiss();
+                viewModel.getShowRequestErrorMessage().setValue(getResources().getString(R.string.mobile_bank_balance_error_no_tran));
+            } else {
+                showMessage(getString(R.string.mobile_bank_balance_title),
+                        getString(R.string.mobile_bank_balance_message, balance + " " + getString(R.string.rial)));
+            }
+        });
 
-        viewModel.getOTPmessage().observe(getViewLifecycleOwner(), message -> showMessage(getString(R.string.attention), message));
+        viewModel.getOTPmessage().observe(getViewLifecycleOwner(), message -> {
+            if (message.equals("-1")) {
+                mDialogWait.dismiss();
+            } else {
+                showMessage(getString(R.string.attention), message);
+            }
+        });
     }
 
     private void showMessage(String title, String message) {
@@ -417,7 +430,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                         .setContext(getContext())
                         .setTitle(getString(R.string.mobile_bank_balance_title))
                         .setButtonsText(getString(R.string.ok), null)
-                        .showSimpleMessage(getString(R.string.mobile_bank_balance_message, cardNumber1, balance + " " + getString(R.string.rial))));
+                        .showSimpleMessage(getString(R.string.mobile_bank_balance_message, balance + " " + getString(R.string.rial))));
         frag.show(getFragmentManager(), "CardBalanceBottomSheet");
     }
 

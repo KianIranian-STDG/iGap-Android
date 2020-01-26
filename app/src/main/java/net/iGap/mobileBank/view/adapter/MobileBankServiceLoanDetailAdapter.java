@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankServiceLoanDetailModel;
+import net.iGap.mobileBank.repository.util.JalaliCalendar;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -128,7 +129,22 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
         }
 
         void initView(int position) {
-            status.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_payStatus, mdata.get(position).getPayStatus()));
+            String statusTemp = "";
+            switch (mdata.get(position).getPayStatus()) {
+                case "PAID":
+                    statusTemp = context.getResources().getString(R.string.paid);
+                    break;
+                case "NOT_PAID_BEFORE_MATURITY":
+                case "NOT_PAID_AFTER_MATURITY":
+                    statusTemp = context.getResources().getString(R.string.unpaid);
+                    break;
+                case "UNKNOWN":
+                    statusTemp = context.getResources().getString(R.string.unknown);
+                    break;
+                default:
+                    break;
+            }
+            status.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_payStatus, statusTemp));
             payAmount.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_payAmount,
                     CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPayedAmount()))),
                     context.getResources().getString(R.string.rial)));
@@ -138,7 +154,7 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
             penaltyAmount.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_penaltyAmount,
                     CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPenaltyAmount()))),
                     context.getResources().getString(R.string.rial)));
-            paymentDate.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_paymentDate, mdata.get(position).getPayStatus()));
+            paymentDate.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_paymentDate, JalaliCalendar.getPersianDate(mdata.get(position).getPayStatus())));
         }
 
         private String decimalFormatter(Double entry) {

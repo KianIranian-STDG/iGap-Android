@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
+import net.iGap.mobileBank.repository.util.JalaliCalendar;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -147,7 +148,7 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             DecimalFormat df = new DecimalFormat(",###");
             value.setText(CompatibleUnicode("" + df.format(mdata.get(position).getTransferAmount())) + " " + context.getString(R.string.rial));
-            date.setText(CompatibleUnicode(mdata.get(position).getDate()));
+            date.setText(JalaliCalendar.getPersianDate(CompatibleUnicode(mdata.get(position).getDate())));
             container.setOnClickListener(v -> clickListener.onClick(position));
             if (HelperCalander.isPersianUnicode)
                 arrow.setRotation(90);

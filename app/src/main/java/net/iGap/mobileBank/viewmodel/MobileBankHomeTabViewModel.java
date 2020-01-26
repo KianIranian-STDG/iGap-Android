@@ -98,12 +98,14 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
                     public void onSuccess(BaseMobileBankResponse<List<BankHistoryModel>> data) {
                         if (data.getData() != null && data.getData().size() != 0) {
                             balance.setValue(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + data.getData().get(0).getBalance()))));
+                        } else {
+                            balance.setValue("-1");
                         }
                     }
 
                     @Override
                     public void onError(String error) {
-
+                        showRequestErrorMessage.setValue(error);
                     }
 
                     @Override
@@ -131,7 +133,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
 
             @Override
             public void onError(String error) {
-                OTPmessage.setValue(error);
+                showRequestErrorMessage.setValue(error);
             }
 
             @Override

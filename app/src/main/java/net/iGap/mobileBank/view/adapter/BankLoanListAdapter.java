@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.LoanListModel;
+import net.iGap.mobileBank.repository.util.JalaliCalendar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +67,8 @@ public class BankLoanListAdapter extends RecyclerView.Adapter<BankLoanListAdapte
 
             tvLoanNumber.setText(getString(R.string.loan_number, item.getLoanNumber()));
             tvAmount.setText(getString(R.string.amount_2, item.getAmount() + ""));
-            tvSDate.setText(getString(R.string.start_date, item.getBeginDate()));
-            tvEDate.setText(getString(R.string.end_date, item.getEndDate()));
+            tvSDate.setText(getString(R.string.start_date, JalaliCalendar.getPersianDate(item.getBeginDate())));
+            tvEDate.setText(getString(R.string.end_date, JalaliCalendar.getPersianDate(item.getEndDate())));
             tvBranchName.setText(getString(R.string.branch_name, item.getBranchName()));
             tvLoanCount.setText(getString(R.string.loan_count, item.getPayNumber() + ""));
             tvState.setText(getString(R.string.state, getStatusString(item.getStatus())));

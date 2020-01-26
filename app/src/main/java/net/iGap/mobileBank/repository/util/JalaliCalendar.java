@@ -1,6 +1,13 @@
 package net.iGap.mobileBank.repository.util;
 
+import android.text.format.DateUtils;
+
+import net.iGap.helper.HelperCalander;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -763,6 +770,29 @@ public class JalaliCalendar extends Calendar {
     @Override
     public int getLeastMaximum(int field) {
         return LEAST_MAX_VALUES[field];
+    }
+
+    public static String getPersianDate(String entry) {
+        try {
+            return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(getTime(entry)) : getTime(entry);
+        } catch (Exception e) {
+            return entry;
+        }
+    }
+
+    private static String getTime(String entry) {
+        if (entry == null || entry.isEmpty())
+            return "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date mDate = sdf.parse(entry);
+            long timeInMilliseconds = mDate.getTime();
+            return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS) + " | " + HelperCalander.getClocktime(timeInMilliseconds, HelperCalander.isLanguagePersian);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public static class YearMonthDate {
