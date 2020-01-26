@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,9 +45,10 @@ public class ChartFragment extends BaseFragment {
     private ArrayList<BarEntry> barEntries;
     private List<PollItem> pollList;
     private BarChart chart;
-    private HelperToolbar mHelperToolbar;
+    private HelperToolbar helperToolbar;
     private SwipeRefreshLayout pullToRefresh;
-    private int pollId;//get this value from getArguments()
+    private int pollId;
+    private LinearLayout toolbar;
 
     @Nullable
     @Override
@@ -56,7 +59,6 @@ public class ChartFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         if (getArguments() != null) {
             pollId = getArguments().getInt("pollId");
         } else {
@@ -64,7 +66,7 @@ public class ChartFragment extends BaseFragment {
                 getActivity().onBackPressed();
         }
 
-        mHelperToolbar = HelperToolbar.create()
+        helperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -75,9 +77,9 @@ public class ChartFragment extends BaseFragment {
                         popBackStackFragment();
                     }
                 });
+        toolbar = view.findViewById(R.id.chart_toolbar);
+        toolbar.addView(helperToolbar.getView());
 
-        ViewGroup viewGroup = view.findViewById(R.id.chart_toolbar);
-        viewGroup.addView(mHelperToolbar.getView());
         pullToRefresh = view.findViewById(R.id.sweep);
         chart = view.findViewById(R.id.type8_chart0);
         chart.getAxisLeft().setValueFormatter(new ValueFormatter() {
@@ -86,7 +88,6 @@ public class ChartFragment extends BaseFragment {
                 return String.valueOf((int) Math.floor(value));
             }
         });
-
         chart.setMaxVisibleValueCount(100);
         chart.setPinchZoom(true);
         chart.setHighlightPerTapEnabled(false);
@@ -97,6 +98,12 @@ public class ChartFragment extends BaseFragment {
         chart.setDrawGridBackground(false);
         chart.setTouchEnabled(true);
         chart.setDoubleTapToZoomEnabled(false);
+        chart.getAxisLeft().setAxisMinimum(0);
+        chart.getAxisRight().setEnabled(false);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisLeft().setDrawGridLines(false);
+        chart.animateY(1000);
+        chart.getLegend().setEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setTextColor(new Theme().getTitleTextColor(chart.getContext()));
@@ -106,29 +113,18 @@ public class ChartFragment extends BaseFragment {
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
-        chart.getAxisLeft().setAxisMinimum(0);
-//        chart.getAxisLeft().setLabelCount(max);
-        chart.getAxisRight().setEnabled(false);
-        chart.getAxisLeft().setEnabled(false);
-        chart.getAxisLeft().setDrawGridLines(false);
-
-        // add a nice and smooth animation
-        chart.animateY(1000);
-
-        chart.getLegend().setEnabled(false);
-
         tryToUpdateOrFetchRecycleViewData(0);
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {
         setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
-
         if (!isSend) {
             if (count < 3) {
                 G.handler.postDelayed(() -> tryToUpdateOrFetchRecycleViewData(count + 1), 1000);
             } else {
                 setRefreshing(false);
+
             }
         }
     }
@@ -140,7 +136,7 @@ public class ChartFragment extends BaseFragment {
                 G.handler.post(() -> {
                     pollList = pollArrayList;
                     notifyChangeData();
-                    mHelperToolbar.setDefaultTitle(title);
+                    helperToolbar.setDefaultTitle(title);
                     setRefreshing(false);
                 });
             }
@@ -180,8 +176,6 @@ public class ChartFragment extends BaseFragment {
             public String getFormattedValue(float value) {
 
                 String myValue;
-
-                //number 22.154456 => show 2 digit of float 22.15 if crashed just show number -> 22
                 try {
                     DecimalFormat df = new DecimalFormat();
                     df.setMaximumFractionDigits(2);
@@ -196,16 +190,11 @@ public class ChartFragment extends BaseFragment {
                 return myValue + "%";
             }
         });
-        //set1.setBarBorderWidth(set1.getBarBorderWidth() == 1.f ? 0.f : 1.f);
-
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
-
         BarData data = new BarData(dataSets);
         chart.setData(data);
         chart.setFitBars(true);
-
-
         chart.setVisibleXRangeMaximum((float) totalWith / (maxSize * 6));
         chart.invalidate();
         chart.getData().notifyDataChanged();
@@ -231,11 +220,10 @@ public class ChartFragment extends BaseFragment {
     }
 
     public void addChatToEnd(String[] labels, ArrayList<BarEntry> barEntries, long sum) {
-        //convert to percent
+        /**convert to percent*/
         for (int i = 0; i < barEntries.size(); i++) {
             barEntries.get(i).setY((barEntries.get(i).getY() * 100) / sum);
         }
-
         this.labels = labels;
         this.barEntries = barEntries;
     }
