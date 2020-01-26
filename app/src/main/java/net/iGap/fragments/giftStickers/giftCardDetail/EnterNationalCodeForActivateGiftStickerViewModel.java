@@ -6,7 +6,6 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 
-import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiInitializer;
@@ -42,7 +41,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
             if (nationalCode.length() == 10) {
                 isShowLoading.set(View.VISIBLE);
 
-                String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
+                String phoneNumber = /*AccountManager.getInstance().getCurrentUser().getPhoneNumber()*/ "989120423503";
 
                 if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
                     phoneNumber = "0" + phoneNumber.substring(2);

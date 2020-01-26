@@ -26,7 +26,8 @@
             android:padding="@dimen/dp8"
             android:text="@string/active_gift_sticker_title"
             android:textColor="?attr/colorAccent"
-            android:textSize="@dimen/xlargeTextSize"
+            android:textSize="@dimen/largeTextSize"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -66,7 +67,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:padding="@dimen/dp8"
-            android:text="ابتدا برای فعالسازی کارت هدیه کد ملی خود را وارد کنید.توجه داشته باشید فعال سازی یکبار انجام شده و اطلاعات کارت برای شما ارسال میشود.\nلطفا در نگهداری اطلاعات کارت کوشا باشید."
+            android:text="برای فعالسازی کارت هدیه کد ملی خود را وارد کنید.توجه داشته باشید فعال سازی یکبار انجام شده و اطلاعات کارت برای شما ارسال میشود.\nلطفا در نگهداری اطلاعات کارت کوشا باشید."
             android:textColor="?attr/iGapSubtitleTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,15 +78,31 @@
             style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:layout_marginBottom="@dimen/dp16"
             android:enabled="@{viewModel.isEnable}"
             android:onClick="@{()->viewModel.onActiveButtonClicked(nationalCode.getEditableText().toString())}"
-            android:text="@string/activated"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/inquiry"
+            app:layout_constraintBottom_toBottomOf="@+id/forward"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/forward"
+            app:layout_constraintTop_toTopOf="@+id/forward"
+            app:layout_constraintWidth_percent=".6" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/forward"
+            style="@style/iGapOutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:enabled="@{viewModel.isEnable}"
+            android:onClick="@{()->viewModel.onActiveButtonClicked(nationalCode.getEditableText().toString())}"
+            android:text="ارسال به دیگری"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/materialButton2"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/descriptionView"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionView"
             app:layout_constraintWidth_percent=".6" />
 
         <ProgressBar
@@ -93,11 +110,10 @@
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:visibility="@{viewModel.isShowLoading}"
-            app:layout_constraintBottom_toBottomOf="@+id/materialButton2"
-            app:layout_constraintEnd_toStartOf="@+id/materialButton2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/materialButton2" />
+            app:layout_constraintBottom_toBottomOf="@+id/pageTitle"
+            app:layout_constraintEnd_toEndOf="@+id/pageTitle"
+            app:layout_constraintTop_toTopOf="@+id/pageTitle"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
