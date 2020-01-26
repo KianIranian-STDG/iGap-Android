@@ -4820,6 +4820,12 @@ public class FragmentChat extends BaseFragment
             items.add(getString(R.string.delete_item_dialog));
         }
 
+        if (message.getAdditional() != null && message.getAdditional().getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            items.clear();
+            items.add(getString(R.string.replay_item_dialog));
+            items.add(getString(R.string.delete_item_dialog));
+        }
+
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, position -> {
             if (items.get(position).equals(getString(R.string.PIN))) {
                 long _messageId = 0;
