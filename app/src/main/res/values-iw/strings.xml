@@ -2183,4 +2183,10 @@
     <string name="mobile_bank_load_detail_unpaidAmount">مبلغ پرداخت نشده: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_unpaidCount">تعداد قسط های پرداخت نشده: %1$s</string>
     <string name="mobile_bank_sorathesab">صورت حساب</string>
+    <string name="mobile_bank_load_detail_unpaidInfo">اطلاعات اقساط پرداخت نشده</string>
+    <string name="mobile_bank_load_detail_personalInfo">اطلاعات مشتری</string>
+    <string name="mobile_bank_load_detail_paymentList">لیست اقساط</string>
+    <string name="mobile_bank_load_detail_paidInfo">اطلاعات اقساط پرداخت شده</string>
+    <string name="mobile_bank_load_detail_loadInfo">اطلاعات وام</string>
+    <string name="mobile_bank_load_detail_MUnpaidInfo">اطلاعات اقساط عقب افتاده</string>
 </resources>

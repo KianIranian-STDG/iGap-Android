@@ -2491,5 +2491,11 @@ Want to get it?</string>
     <string name="INTERBANK_BLOCK">INTERBANK BLOCK</string>
     <string name="INVALID_PARSIAN">INVALID</string>
     <string name="REGISTER">REGISTER</string>
+    <string name="mobile_bank_load_detail_personalInfo">Personal Info</string>
+    <string name="mobile_bank_load_detail_loadInfo">Loan Info</string>
+    <string name="mobile_bank_load_detail_MUnpaidInfo">Matured Unpaid Info</string>
+    <string name="mobile_bank_load_detail_paidInfo">Paid Info</string>
+    <string name="mobile_bank_load_detail_unpaidInfo">Unpaid Info</string>
+    <string name="mobile_bank_load_detail_paymentList">Loan Payment List</string>
 
 </resources>

@@ -43,14 +43,15 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.pageVisibility}">
 
                     <!--first row-->
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/personalInfo"
-                        android:text="Personal Info"
+                        android:text="@string/mobile_bank_load_detail_personalInfo"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:textColor="?iGapTitleTextColor"
@@ -126,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/loanInfo"
-                        android:text="Loan Info"
+                        android:text="@string/mobile_bank_load_detail_loadInfo"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:textColor="?iGapTitleTextColor"
@@ -202,7 +203,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/maturedUnpaidInfo"
-                        android:text="Matured Unpaid Info"
+                        android:text="@string/mobile_bank_load_detail_MUnpaidInfo"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:textColor="?iGapTitleTextColor"
@@ -262,7 +263,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/paidInfo"
-                        android:text="Paid Info"
+                        android:text="@string/mobile_bank_load_detail_paidInfo"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:textColor="?iGapTitleTextColor"
@@ -322,7 +323,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/unpaidInfo"
-                        android:text="Unpaid Info"
+                        android:text="@string/mobile_bank_load_detail_unpaidInfo"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:textColor="?iGapTitleTextColor"
@@ -382,7 +383,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/loanListInfo"
-                        android:text="Loan Payment List"
+                        android:text="@string/mobile_bank_load_detail_paymentList"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:textColor="?iGapTitleTextColor"
@@ -406,19 +407,6 @@
                         app:layout_constraintStart_toEndOf="@+id/loanListInfo"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ProgressBar
-                        android:id="@+id/ProgressV"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:elevation="2dp"
-                        android:visibility="@{viewModel.progressVisibility}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintWidth_percent="0.1" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -429,5 +417,18 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <ProgressBar
+            android:id="@+id/ProgressV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{viewModel.showLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintWidth_percent="0.1" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

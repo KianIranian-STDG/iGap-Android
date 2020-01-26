@@ -88,7 +88,11 @@ public class MobileBankRepository {
     public void getOTP(String cardNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<ErrorModel> responseCallback) {
         DbManager.getInstance().doRealmTask(realm -> {
             userInfo = realm.where(RealmUserInfo.class).findFirst();
-            new MobileBankApiInitializer<ErrorModel>().initAPI(new RetrofitFactory().getMobileBankOTPRetrofit().getOTP(cardNumber, userInfo.getUserInfo().getPhoneNumber()), callback, responseCallback);
+            String phone = userInfo.getUserInfo().getPhoneNumber();
+            if (phone.startsWith("98")) {
+                phone = phone.replaceFirst("98", "0");
+            }
+            new MobileBankApiInitializer<ErrorModel>().initAPI(new RetrofitFactory().getMobileBankOTPRetrofit().getOTP(Long.parseLong(cardNumber), phone), callback, responseCallback);
         });
     }
 

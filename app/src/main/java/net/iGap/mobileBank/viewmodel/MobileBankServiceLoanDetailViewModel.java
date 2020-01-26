@@ -15,7 +15,7 @@ import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 public class MobileBankServiceLoanDetailViewModel extends BaseMobileBankViewModel {
 
     private MutableLiveData<BankServiceLoanDetailModel> loan = new MutableLiveData<>();
-    private ObservableInt progressVisibility = new ObservableInt(View.INVISIBLE);
+    private ObservableInt pageVisibility = new ObservableInt(View.INVISIBLE);
     private MutableLiveData<ErrorModel> errorM = new MutableLiveData<>();
 
     private String loanNumber;
@@ -40,6 +40,7 @@ public class MobileBankServiceLoanDetailViewModel extends BaseMobileBankViewMode
                     public void onSuccess(BaseMobileBankResponse<BankServiceLoanDetailModel> data) {
                         loan.setValue(data.getData());
                         showLoading.set(View.GONE);
+                        pageVisibility.set(View.VISIBLE);
                     }
 
                     @Override
@@ -59,8 +60,8 @@ public class MobileBankServiceLoanDetailViewModel extends BaseMobileBankViewMode
         return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
-    public ObservableInt getProgressVisibility() {
-        return progressVisibility;
+    public ObservableInt getPageVisibility() {
+        return pageVisibility;
     }
 
     public MutableLiveData<ErrorModel> getErrorM() {

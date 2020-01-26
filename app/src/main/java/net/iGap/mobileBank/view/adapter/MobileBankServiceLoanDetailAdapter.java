@@ -154,7 +154,7 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
             penaltyAmount.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_penaltyAmount,
                     CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPenaltyAmount()))),
                     context.getResources().getString(R.string.rial)));
-            paymentDate.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_paymentDate, JalaliCalendar.getPersianDate(mdata.get(position).getPayStatus())));
+            paymentDate.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_paymentDate, JalaliCalendar.getPersianDate(mdata.get(position).getPayDate())));
         }
 
         private String decimalFormatter(Double entry) {

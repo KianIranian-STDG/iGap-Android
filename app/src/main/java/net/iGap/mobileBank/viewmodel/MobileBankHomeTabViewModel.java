@@ -105,12 +105,13 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
 
                     @Override
                     public void onError(String error) {
+                        balance.setValue("-1");
                         showRequestErrorMessage.setValue(error);
                     }
 
                     @Override
                     public void onFailed() {
-
+                        balance.setValue("-1");
                     }
                 });
     }
@@ -133,12 +134,13 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
 
             @Override
             public void onError(String error) {
+                OTPmessage.setValue("-1");
                 showRequestErrorMessage.setValue(error);
             }
 
             @Override
             public void onFailed() {
-
+                OTPmessage.setValue("-1");
             }
         });
     }
