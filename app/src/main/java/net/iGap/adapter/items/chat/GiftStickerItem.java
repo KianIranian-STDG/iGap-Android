@@ -93,7 +93,6 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             holder.progressButton.setVisibility(View.VISIBLE);
         }
 
-        holder.stickerView.setOnLongClickListener(getLongClickPerform(holder));
         holder.progress.setVisibility(View.GONE);
     }
 

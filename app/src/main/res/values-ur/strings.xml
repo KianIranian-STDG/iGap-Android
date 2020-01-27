@@ -2156,8 +2156,8 @@
     <string name="emoji_category_smileys">Smileys And People</string>
     <string name="emoji_category_symbols">Symbols</string>
     <string name="emoji_category_travel">Travel And Place</string>
-    <string name="gift_sticker_title">استیکر هدیه</string>
-    <string name="active_gift_sticker_title">فعال سازی استیکر هدیه</string>
+    <string name="gift_sticker_title">کارت هدیه دیجیتال</string>
+    <string name="active_gift_sticker_title">فعال سازی کارت هدیه دیجیتال</string>
     <string name="national_code_not_match_with_phone_number_error">عدم همخوانی کد ملی با اطلاعات سیم کارت</string>
     <string name="gift_sticker_visit">مشاهده</string>
     <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>

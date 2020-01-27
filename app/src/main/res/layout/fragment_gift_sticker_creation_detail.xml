@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp16"
-        android:text="@string/gift_sticker_activation_title" />
+        android:text="فعالسازی یا ارسال به عنوان پیام" />
 
 
 </LinearLayout>

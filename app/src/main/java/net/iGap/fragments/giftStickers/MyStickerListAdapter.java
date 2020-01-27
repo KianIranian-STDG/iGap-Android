@@ -3,6 +3,7 @@ package net.iGap.fragments.giftStickers;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -53,6 +54,7 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
         private AppCompatTextView giftStickerTitle;
         private AppCompatTextView giftStickerPrice;
         private AppCompatTextView giftStickerStatus;
+        private ProgressBar progressBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +62,7 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
             giftStickerTitle = itemView.findViewById(R.id.giftStickerTitle);
             giftStickerPrice = itemView.findViewById(R.id.giftStickerPrice);
             giftStickerStatus = itemView.findViewById(R.id.giftStickerStatusView);
+            progressBar = itemView.findViewById(R.id.progressBar);
         }
 
         public void bindView(StructIGGiftSticker giftSticker) {
@@ -71,15 +74,17 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
 
             giftStickerStatus.setText(giftSticker.getStatus());
 
-            itemView.setOnClickListener(v -> {
-                if (delegate != null) {
-                    delegate.onClick(giftSticker);
-                }
-            });
+            progressBar.setVisibility(View.GONE);
+
+            itemView.setOnClickListener(v -> delegate.onClick(giftSticker, visibility -> progressBar.setVisibility(visibility)));
         }
     }
 
     public interface Delegate {
-        void onClick(StructIGGiftSticker giftSticker);
+        void onClick(StructIGGiftSticker giftSticker, ProgressDelegate progressDelegate);
+    }
+
+    public interface ProgressDelegate {
+        void onView(int visibility);
     }
 }

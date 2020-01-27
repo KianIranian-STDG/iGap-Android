@@ -106,8 +106,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
-//                actionPage(discoveryField.value, activity, haveNext);
-                new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
+                actionPage(discoveryField.value, activity, haveNext);
                 break;
             case JOIN_LINK:
                 int index = discoveryField.value.lastIndexOf("/");
@@ -179,6 +178,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case BLOCKCHAIN:
                 new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
+                break;
+            case POLL_RESULT:
+                new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();

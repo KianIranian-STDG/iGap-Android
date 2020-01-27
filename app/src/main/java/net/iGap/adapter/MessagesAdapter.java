@@ -26,6 +26,7 @@ import com.mikepenz.fastadapter.listeners.OnLongClickListener;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.CardToCardItem;
+import net.iGap.adapter.items.chat.GiftStickerItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.LogWalletCardToCard;
@@ -61,7 +62,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard || item instanceof CardToCardItem) {
+            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard || item instanceof CardToCardItem || item instanceof GiftStickerItem) {
                 if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && item.mMessage != null && item.mMessage.getUserId() != -1) {
@@ -180,7 +181,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                         item.mMessage.setLinkInfo(HelperUrl.getLinkInfo(updatedText));
                     }
                     item.mMessage.setHasMessageLink(item.mMessage.getLinkInfo() != null && item.mMessage.getLinkInfo().length() > 0);
-                    RealmRoomMessage.isEmojiInText(item.mMessage , item.mMessage.getMessage());
+                    RealmRoomMessage.isEmojiInText(item.mMessage, item.mMessage.getMessage());
 
                     item.updateMessageText(updatedText);
                     set(i, item);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +41,7 @@ public class MyGiftStickerBuyFragment extends Fragment {
 
         viewModel.subscribe();
 
-        if (getParentFragment() instanceof GiftStickerMainFragment){
+        if (getParentFragment() instanceof GiftStickerMainFragment) {
             ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_gift_sticker);
         }
 
@@ -58,12 +59,22 @@ public class MyGiftStickerBuyFragment extends Fragment {
             }
         });
 
+        viewModel.getGoNext().observe(getViewLifecycleOwner(), giftSticker -> {
+            if (giftSticker != null) {
+                if (giftSticker.isActive())
+                    Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                else if (giftSticker.isForward()) {
+                    Toast.makeText(getContext(), "شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!", Toast.LENGTH_SHORT).show();
+                } else {
+                    GiftStickerCreationDetailFragment detailFragment = GiftStickerCreationDetailFragment.getInstance(giftSticker);
+                    if (getFragmentManager() != null)
+                        detailFragment.show(getFragmentManager(), null);
+                }
+            }
+        });
+
         if (binding.giftStickerList.getAdapter() instanceof MyStickerListAdapter) {
-            ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate(giftSticker -> {
-                GiftStickerCreationDetailFragment detailFragment = GiftStickerCreationDetailFragment.getInstance(giftSticker);
-                if (getFragmentManager() != null)
-                    detailFragment.show(getFragmentManager(), null);
-            });
+            ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate((giftSticker, progressDelegate) -> viewModel.onItemClicked(giftSticker, progressDelegate));
         }
     }
 

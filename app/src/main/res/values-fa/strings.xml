@@ -2466,10 +2466,10 @@
     <string name="gift_sticker_visit">مشاهده</string>
     <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
     <string name="gift_cart_title">کارت هدیه دیجیتال</string>
-    <string name="my_gift_sticker">کارت هدیه دیجیتال من</string>
+    <string name="my_gift_sticker">کارت‌های هدیه من</string>
     <string name="my_recived_gift_sticker">کارت هدیه دیجیتال دریافت شده</string>
     <string name="expire_date">تاریخ انقضا</string>
-    <string name="send_gift_sticker">ارسال کارت هدیه دیجیتال</string>
+    <string name="send_gift_sticker">ارسال کارت هدیه</string>
     <string name="gift_sticker_send_to_other">ارسال به دیگری</string>
     <string name="gift_sticker_card_info_title">اطلاعات کارت هدیه دیجیتال</string>
     <string name="click_for_copy_title">برای کپی کلیک کنید</string>

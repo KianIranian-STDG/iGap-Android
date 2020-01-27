@@ -60,7 +60,7 @@ public class GiftStickerItemDetailFragment extends Fragment {
 
         DecimalFormat df = new DecimalFormat("#,###");
 
-        String text = "شما استیکر " + (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(sticker.getGiftAmount()))) : df.format(Double.valueOf(sticker.getGiftAmount()))) + " " + getResources().getString(R.string.rial) + "ی را انتخاب کردید!";
+        String text = "شما کارت هدیه‌ی دیجیتال به مبلغ: " + (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(sticker.getGiftAmount()))) : df.format(Double.valueOf(sticker.getGiftAmount()))) + " " + getResources().getString(R.string.rial) + " را انتخاب کرده‌اید!";
         binding.stickerPrice.setText(text);
 
         viewModel.getGetPaymentLiveData().observe(getViewLifecycleOwner(), dataModel -> {
