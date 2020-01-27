@@ -83,6 +83,11 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             e.printStackTrace();
         }
 
+        if (structMessage.isSenderMe()) {
+            holder.visitBtn.setVisibility(View.GONE);
+        } else {
+            holder.visitBtn.setVisibility(View.VISIBLE);
+        }
 
         holder.image.setOnLongClickListener(getLongClickPerform(holder));
         holder.progress.setVisibility(View.GONE);
@@ -98,6 +103,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
         protected StickerView image;
         protected MessageProgress progress;
         private StructIGSticker structIGSticker;
+        private Button visitBtn;
 
 
         public ViewHolder(View view) {
@@ -126,7 +132,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             buttonLayouts.setOrientation(LinearLayout.HORIZONTAL);
             buttonLayouts.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             contentOne.addView(buttonLayouts);
-            Button visitBtn = new Button(getContext());
+            visitBtn = new Button(getContext());
 
             visitBtn.setId(R.id.cardToCard_button);
             visitBtn.setMaxLines(1);

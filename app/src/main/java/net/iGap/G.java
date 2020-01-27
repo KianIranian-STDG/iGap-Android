@@ -374,6 +374,7 @@ public class G extends ApplicationContext {
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
     public static boolean isNeedToCheckProfileWallpaper = false;
+    public static String nationalCode;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
     public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();

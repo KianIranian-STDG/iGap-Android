@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 
 import net.iGap.AccountManager;
+import net.iGap.G;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
@@ -33,11 +34,10 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
         showLoadingView.set(View.VISIBLE);
         String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
-        // TODO: 1/25/20 hard code
         if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
             phoneNumber = "0" + phoneNumber.substring(2);
             if (mode == 0) {
-                StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId(), "4271241776", phoneNumber)
+                StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId(), G.nationalCode, phoneNumber)
                         .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
                             @Override
                             public void onSuccess(CardDetailDataModel cardDetailDataModel) {
@@ -55,7 +55,7 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
                             }
                         });
             } else if (mode == 1) {
-                StickerRepository.getInstance().getGiftCardInfo("09120423503", "4271241776", structIGSticker.getGiftId())
+                StickerRepository.getInstance().getGiftCardInfo(phoneNumber, G.nationalCode, structIGSticker.getGiftId())
                         .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
                             @Override
                             public void onSuccess(CardDetailDataModel cardDetailDataModel) {

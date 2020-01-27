@@ -585,8 +585,7 @@ public class StickerRepository {
     }
 
     public void forwardSticker(String stickerId, String userId) {
-        forwardStickerApiService(stickerId, userId)
-                .subscribe();
+        forwardStickerApiService(stickerId, userId).subscribe();
     }
 
 }

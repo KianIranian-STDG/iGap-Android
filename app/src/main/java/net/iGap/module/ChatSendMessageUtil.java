@@ -10,17 +10,24 @@
 
 package net.iGap.module;
 
+import com.google.gson.Gson;
+
 import net.iGap.DbManager;
 import net.iGap.G;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.interfaces.OnChatSendMessageResponse;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
 
-import io.realm.Realm;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
 
 /**
  * util for chat send messages
@@ -266,6 +273,37 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
 
         if (onChatSendMessageResponseRoom != null) {
             onChatSendMessageResponseRoom.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
+        }
+
+        if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
+
+            String userId = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                    return String.valueOf(realmRoom.getChatRoom().getPeerId());
+                }
+                return null;
+            });
+
+
+            if (sticker != null && userId != null) {
+                StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
+            }
+        } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
+
+            String userId = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                    return String.valueOf(realmRoom.getChatRoom().getPeerId());
+                }
+                return null;
+            });
+
+            if (sticker != null && userId != null) {
+                StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
+            }
         }
     }
 

@@ -4231,12 +4231,6 @@ public class FragmentChat extends BaseFragment
         if (soundPool != null && sendMessageSound != 0)
             playSendSound(roomId, roomMessage, chatType);
 
-        if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
-            StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
-            String userId = String.valueOf(roomMessage.getForwardFrom().getAuthor().getUser().getUserId());
-            StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
-        }
-
     }
 
     @Override

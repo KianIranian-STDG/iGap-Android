@@ -6,6 +6,8 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
+import net.iGap.G;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
@@ -30,12 +32,11 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
     public void onPaymentButtonClicked(StructIGSticker structIGSticker) {
         isShowLoading.set(View.VISIBLE);
         isEnabledButton.set(false);
-        // TODO: 1/25/20 hard code
-        String phoneNumber =/* AccountManager.getInstance().getCurrentUser().getPhoneNumber()*/ "989120423503";
 
+        String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
         if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
             phoneNumber = "0" + phoneNumber.substring(2);
-            stickerRepository.addIssue(structIGSticker.getId(), phoneNumber, "4271241776")
+            stickerRepository.addIssue(structIGSticker.getId(), phoneNumber, G.nationalCode)
                     .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
                         @Override
                         public void onSuccess(IssueDataModel issueDataModel) {
