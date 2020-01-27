@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import net.iGap.R;
 import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
-import net.iGap.helper.HelperFragment;
 
 public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
     private StructIGGiftSticker structIGGiftSticker;
@@ -37,7 +36,7 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.btn_active).setOnClickListener(v -> {
-            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), 0);
+//            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), 0);
             dismiss();
         });
 

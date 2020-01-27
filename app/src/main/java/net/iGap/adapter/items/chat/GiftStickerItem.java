@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -25,15 +26,20 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.rx.IGSingleObserver;
 import net.iGap.view.ProgressButton;
 import net.iGap.view.StickerView;
 
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftStickerItem.ViewHolder> {
 
@@ -118,6 +124,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             stickerView.setId(R.id.thumbnail);
 
             rootView.addView(stickerView, LayoutCreator.createFrame(220, 220, Gravity.TOP, 8, 0, 8, 50));
+
             progressButton = new ProgressButton(itemView.getContext());
             progressButton.setBackgroundColor(Theme.getInstance().getAccentColor(itemView.getContext()));
             progressButton.setText(itemView.getContext().getResources().getString(R.string.gift_sticker_visit));
@@ -130,7 +137,31 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                 if (FragmentChat.isInSelectionMode) {
                     itemView.performLongClick();
                 } else if (structIGSticker != null) {
-                    messageClickListener.onActiveGiftStickerClick(structIGSticker);
+                    progressButton.changeProgressTo(View.VISIBLE);
+                    StickerRepository.getInstance().getCardStatus(structIGSticker.getGiftId())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new IGSingleObserver<StructIGGiftSticker>(mAdapter.getCompositeDisposable()) {
+                                @Override
+                                public void onSuccess(StructIGGiftSticker giftSticker) {
+
+                                    if (!giftSticker.isActive())
+                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward());
+                                    else {
+                                        Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    progressButton.changeProgressTo(View.GONE);
+                                    progressButton.setText(itemView.getContext().getResources().getString(R.string.gift_sticker_visit));
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                                    progressButton.changeProgressTo(View.GONE);
+                                    progressButton.setText(itemView.getContext().getResources().getString(R.string.gift_sticker_visit));
+                                }
+                            });
                 }
             });
 

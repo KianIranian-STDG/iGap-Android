@@ -35,7 +35,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -46,15 +45,15 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
-    // contain sender id
-    public static List<String> avatarsRequested = new ArrayList<>();
-    public static List<String> usersInfoRequested = new ArrayList<>();
+import io.reactivex.disposables.CompositeDisposable;
 
+public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
     public AvatarHandler avatarHandler;
+
+    public CompositeDisposable compositeDisposable;
 
     private boolean allowAction = true;
     private Timer timer;
@@ -83,8 +82,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
-    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler) {
+    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler, CompositeDisposable compositeDisposable) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
+        this.compositeDisposable = compositeDisposable;
         iMessageItem = iMessageItemListener;
         onChatMessageRemove = chatMessageRemoveListener;
         this.avatarHandler = avatarHandler;
@@ -469,5 +469,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             runTimer();
             onAllowBotCommand.allow();
         }
+    }
+
+    public CompositeDisposable getCompositeDisposable() {
+        return compositeDisposable;
     }
 }

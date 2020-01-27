@@ -50,6 +50,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -585,7 +586,22 @@ public class StickerRepository {
     }
 
     public void forwardSticker(String stickerId, String userId) {
-        forwardStickerApiService(stickerId, userId).subscribe();
+        forwardStickerApiService(stickerId, userId).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

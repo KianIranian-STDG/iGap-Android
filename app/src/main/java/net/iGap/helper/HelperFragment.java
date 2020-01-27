@@ -341,8 +341,8 @@ public class HelperFragment {
         load();
     }
 
-    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, int mode) {
-        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, mode);
+    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, boolean canForward, int mode) {
+        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, canForward, mode);
         fragment.show(fragmentManager, "gift sticker card");
     }
 

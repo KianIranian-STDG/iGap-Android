@@ -133,7 +133,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
-    private MessagesAdapter<AbstractMessage> mAdapter;
+    public MessagesAdapter<AbstractMessage> mAdapter;
     private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
     protected Theme theme;

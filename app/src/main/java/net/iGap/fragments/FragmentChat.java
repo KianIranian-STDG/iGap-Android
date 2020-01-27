@@ -2710,7 +2710,7 @@ public class FragmentChat extends BaseFragment
         }
 
 
-        mAdapter = new MessagesAdapter<>(this, this, this, avatarHandler);
+        mAdapter = new MessagesAdapter<>(this, this, this, avatarHandler, compositeDisposable);
 
         mAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
             @Override
@@ -3659,8 +3659,8 @@ public class FragmentChat extends BaseFragment
 
 
     @Override
-    public void onActiveGiftStickerClick(StructIGSticker structIGSticker) {
-        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, 0);
+    public void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward) {
+        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, canForward, 0);
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {

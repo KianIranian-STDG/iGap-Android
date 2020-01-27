@@ -69,8 +69,12 @@ public class ProgressButton extends FrameLayout {
     public void changeProgressTo(int visibility) {
         progressBar.setVisibility(visibility);
 
-        if (visibility == VISIBLE)
+        if (visibility == VISIBLE) {
             buttonTv.setText("");
+            setEnabled(false);
+        } else {
+            setEnabled(true);
+        }
 
     }
 
