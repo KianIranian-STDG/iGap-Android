@@ -52,6 +52,14 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
             setAvatar(structBottomSheetForward, viewHolder.imgSrc);
         }
 
+        if (!structBottomSheetForward.isChecked()) {
+            viewHolder.checkBoxSelect.setChecked(false);
+            viewHolder.imgSrc.setBorderColor(ContextCompat.getColor(viewHolder.imgSrc.getContext(), R.color.transparent));
+        } else {
+            viewHolder.checkBoxSelect.setChecked(true);
+            viewHolder.imgSrc.setBorderColor(new Theme().getAccentColor(viewHolder.imgSrc.getContext()));
+        }
+
         viewHolder.txtName.setText(structBottomSheetForward.getDisplayName());
 
         viewHolder.checkBoxSelect.setChecked(structBottomSheetForward.isChecked());

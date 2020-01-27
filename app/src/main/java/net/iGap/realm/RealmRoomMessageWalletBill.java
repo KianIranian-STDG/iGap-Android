@@ -16,13 +16,16 @@ import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmRoomMessageWalletBillRealmProxy;
 
 @Parcel(implementations = {net_iGap_realm_RealmRoomMessageWalletBillRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageWalletBill.class})
 public class RealmRoomMessageWalletBill extends RealmObject {
 
-    private long fromUserId;
+    @PrimaryKey
     private long orderId;
+
+    private long fromUserId;
     private String myToken;
     private long token;
     private long amount;
@@ -39,9 +42,8 @@ public class RealmRoomMessageWalletBill extends RealmObject {
 
 
     public static RealmRoomMessageWalletBill put(Realm realm, final ProtoGlobal.RoomMessageWallet.Bill input) {
-        RealmRoomMessageWalletBill messageWallet = realm.createObject(RealmRoomMessageWalletBill.class);
+        RealmRoomMessageWalletBill messageWallet = realm.createObject(RealmRoomMessageWalletBill.class, input.getOrderId());
         messageWallet.setFromUserId(input.getFromUserId());
-        messageWallet.setOrderId(input.getOrderId());
         messageWallet.setMyToken(input.getMyToken());
         messageWallet.setToken(input.getToken());
         messageWallet.setAmount(input.getAmount());
