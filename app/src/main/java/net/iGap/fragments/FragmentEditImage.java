@@ -216,6 +216,7 @@ public class FragmentEditImage extends BaseFragment {
 
             if (onProfileImageEdited != null) {
                 onProfileImageEdited.profileImageAdd(itemGalleryList.get(0).getPath());
+                return;
             }
 
             if (getActivity() != null) {

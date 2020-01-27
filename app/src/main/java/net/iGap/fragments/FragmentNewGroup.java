@@ -565,6 +565,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     @Override
     public void profileImageAdd(String path) {
+        popBackStackFragment();
         pathSaveImage = path;
         avatarId = System.nanoTime();
 
