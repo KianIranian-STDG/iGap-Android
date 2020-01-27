@@ -144,10 +144,12 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                                 @Override
                                 public void onSuccess(StructIGGiftSticker giftSticker) {
 
-                                    if (!giftSticker.isActive())
-                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward(), structMessage);
-                                    else {
+                                    if (giftSticker.isActive())
                                         Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                                    else if (giftSticker.isForward()) {
+                                        Toast.makeText(getContext(), "شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward(), structMessage);
                                     }
 
                                     progressButton.changeProgressTo(View.GONE);
