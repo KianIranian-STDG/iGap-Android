@@ -3661,7 +3661,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward, StructMessageInfo structMessage) {
-        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, canForward, v -> forwardMessage(structMessage), 0);
+        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, canForward, v -> forwardSelectedMessageToOutOfChat(structMessage), 0);
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
@@ -4819,8 +4819,8 @@ public class FragmentChat extends BaseFragment
 
         if (message.getAdditional() != null && message.getAdditional().getAdditionalType() == AdditionalType.GIFT_STICKER) {
             items.clear();
-            items.add(getString(R.string.replay_item_dialog));
-            items.add(getString(R.string.delete_item_dialog));
+            items.add(R.string.replay_item_dialog);
+            items.add(R.string.delete_item_dialog);
         }
 
         return items;
