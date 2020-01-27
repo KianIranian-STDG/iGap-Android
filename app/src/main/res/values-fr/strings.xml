@@ -2072,10 +2072,17 @@
     <string name="gift_sticker_title">Autocollant cadeau</string>
     <string name="active_gift_sticker_title">Autocollant cadeau</string>
     <string name="national_code_not_match_with_phone_number_error">Incompatibilité du code national avec les informations de la carte SIM</string>
-    <string name="gift_sticker_visit">مشاهده</string>
-    <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
-    <string name="gift_cart_title">کارت هدیه</string>
-    <string name="my_gift_sticker">استیکرهای هدیه من</string>
-    <string name="my_recived_gift_sticker">استیکرهای هدیه دریافت شده</string>
-    <string name="expire_date">تاریخ انقضا</string>
+    <string name="gift_sticker_visit">Voir</string>
+    <string name="gift_sticker_add_archive">Ajouter aux archives</string>
+    <string name="gift_cart_title">Carte cadeau</string>
+    <string name="my_gift_sticker">Mes autocollants cadeaux</string>
+    <string name="my_recived_gift_sticker">Autocollants cadeaux reçus</string>
+    <string name="expire_date">Date d\'expiration</string>
+    <string name="send_gift_sticker">Envoyer un autocollant</string>
+    <string name="gift_sticker_send_to_other">Envoyer à un autre</string>
+    <string name="click_for_copy_title">Cliquez pour copier</string>
+    <string name="gift_sticker_creator_phone_number">Numéro de mobile du fabricant</string>
+    <string name="gift_sticker_national_code_title">Code national du constructeur</string>
+    <string name="gift_sticker_activation_title">Activez la carte</string>
+    <string name="gift_sticker_empty_list_message">Il n\'y a pas d\'autocollant</string>
 </resources>

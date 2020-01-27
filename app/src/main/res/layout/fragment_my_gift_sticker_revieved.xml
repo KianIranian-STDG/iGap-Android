@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?iGapTitleTextColor"
-            android:text="استیکری وجود ندارد"
+            android:text="@string/gift_sticker_empty_list_message"
             android:visibility="@{viewModel.showEmptyListMessage}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

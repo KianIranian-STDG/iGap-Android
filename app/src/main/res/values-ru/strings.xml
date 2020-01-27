@@ -1254,7 +1254,7 @@
     <string name="Select">Выбор</string>
     <string name="Create_new_Folder_here">Создайте новую папку здесь</string>
     <string name="Powered_by_iGap">При поддержке iGap</string>
-    <string name="on_hold">Звонок в режиме ожидания...</string>
+    <string name="on_hold">Звонок в режиме ожидания…</string>
     <string name="switchTo">переключиться на :</string>
     <string name="stop">Остановить</string>
     <string name="stop_message_bot">Вы уверены, что хотите остановить робота?</string>
@@ -1647,7 +1647,7 @@
     <string name="view_contact">Посмотреть контакт</string>
     <string name="new_group_call">Новый групповой контакт</string>
     <string name="dial_number">Страница контактов</string>
-    <string name="call">Звонок в режиме ожидания...</string>
+    <string name="call">Звонок в режиме ожидания…</string>
     <string name="Select_Country">выбор страны</string>
     <string name="enter_wallet_password">Введите пароль своего кошелька</string>
     <string name="videos">Фильмы</string>
@@ -1729,7 +1729,7 @@
     <string name="charge_type_error_message">Пожалуйста, выберите тип зарядки.</string>
     <string name="charge_price_error_message">Пожалуйста, выберите сумму зарядки.</string>
     <string name="no_channels_in_category">В этой категории нет каналов!</string>
-    <string name="message_decline_write_new">Написать новое сообщение ...</string>
+    <string name="message_decline_write_new">Написать новое сообщение …</string>
     <string name="message_decline_call_later">Я вам позвоню</string>
     <string name="message_decline_Please_call_later">Вы можете перезвонить позже?</string>
     <string name="message_decline_please_text_me">Пожалуйста, напишите мне.</string>
@@ -1848,11 +1848,19 @@
     <string name="gift_sticker_title">Подарочная наклейка</string>
     <string name="active_gift_sticker_title">Подарочная наклейка</string>
     <string name="national_code_not_match_with_phone_number_error">Национальный код несовместим с информацией SIM-карты</string>
-    <string name="gift_sticker_visit">مشاهده</string>
-    <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
-    <string name="gift_cart_title">کارت هدیه</string>
-    <string name="my_gift_sticker">استیکرهای هدیه من</string>
-    <string name="my_recived_gift_sticker">استیکرهای هدیه دریافت شده</string>
-    <string name="expire_date">تاریخ انقضا</string>
+    <string name="gift_sticker_visit">наблюдение</string>
+    <string name="gift_sticker_add_archive">Добавить в архив</string>
+    <string name="gift_cart_title">Подарочная карта</string>
+    <string name="my_gift_sticker">Мои подарочные наклейки</string>
+    <string name="my_recived_gift_sticker">Подарочные наклейки получены</string>
+    <string name="expire_date">Срок годности</string>
+    <string name="send_gift_sticker">Отправить стикер</string>
+    <string name="gift_sticker_send_to_other">Отправить другому</string>
+    <string name="gift_sticker_card_info_title">Информация о подарочной карте</string>
+    <string name="click_for_copy_title">Нажмите, чтобы скопировать</string>
+    <string name="gift_sticker_creator_phone_number">Номер мобильного телефона производителя</string>
+    <string name="gift_sticker_national_code_title">Национальный Кодекс Строителя</string>
+    <string name="gift_sticker_activation_title">Активировать карту</string>
+    <string name="gift_sticker_empty_list_message">Там нет наклейки</string>
 
 </resources>

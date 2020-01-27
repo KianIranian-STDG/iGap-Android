@@ -2360,5 +2360,13 @@
     <string name="my_gift_sticker">استیکرهای هدیه من</string>
     <string name="my_recived_gift_sticker">استیکرهای هدیه دریافت شده</string>
     <string name="expire_date">تاریخ انقضا</string>
+    <string name="send_gift_sticker">ارسال استیکر</string>
+    <string name="gift_sticker_send_to_other">ارسال به دیگری</string>
+    <string name="gift_sticker_card_info_title">اطلاعات کارت هدیه</string>
+    <string name="click_for_copy_title">برای کپی کلیک کنید</string>
+    <string name="gift_sticker_creator_phone_number">شماره موبایل سازنده</string>
+    <string name="gift_sticker_national_code_title">کد ملی سازنده</string>
+    <string name="gift_sticker_activation_title">فعالسازی کارت</string>
+    <string name="gift_sticker_empty_list_message">استیکری وجود ندارد</string>
 
 </resources>

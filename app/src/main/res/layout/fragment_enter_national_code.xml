@@ -98,7 +98,7 @@
             android:layout_marginTop="16dp"
             android:enabled="@{viewModel.isEnabled}"
             android:onClick="@{()->viewModel.onInquiryButtonClick(nationalCode.getEditableText().toString())}"
-            android:text="@string/inq_btn"
+            android:text="@string/elecBill_main_billPay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/loadingView"
             app:layout_constraintHorizontal_bias="0.65"
