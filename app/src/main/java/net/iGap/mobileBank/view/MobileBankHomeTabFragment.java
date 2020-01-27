@@ -100,7 +100,8 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 break;
 
             case R.string.transactions:
-                onTransactionsClicked();
+                if (mode == HomeTabMode.DEPOSIT)
+                    onTransactionsClicked();
                 break;
 
             case R.string.sheba_number:

@@ -75,6 +75,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/iGapEditTextStyle"
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +100,7 @@
                 android:singleLine="true"
                 android:lines="1"
                 android:maxLines="1"
-                android:inputType="textPassword"
+                android:inputType="numberPassword"
                 android:imeOptions="actionNext"
                 android:textColor="?attr/iGapTitleTextColor"
                 android:text="@={bottomSheetViewModel.password}" />

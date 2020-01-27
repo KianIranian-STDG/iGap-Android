@@ -56,6 +56,9 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
         super.onViewCreated(view, savedInstanceState);
         viewModel.setCardNumber(getArguments().getString("cardNumber"));
         viewModel.setMode(getArguments().getString("Mode"));
+        if (getArguments().getString("Mode").equals("HOT_CARD")) {
+            binding.title.setText(getResources().getString(R.string.mobile_bank_hotCard));
+        }
         onComplete();
         onTextChange();
     }

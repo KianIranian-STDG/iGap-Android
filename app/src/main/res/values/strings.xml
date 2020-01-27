@@ -2425,7 +2425,7 @@ Want to get it?</string>
     <string name="mobile_bank_sorathesab">Bills List</string>
     <string name="mobile_bank_balance_cardNumber">Card Number: </string>
     <string name="mobile_bank_balance_title">Bank Card Balance</string>
-    <string name="mobile_bank_balance_pass">password:</string>
+    <string name="mobile_bank_balance_pass">Password:</string>
     <string name="mobile_bank_balance_cvv">CVV2:</string>
     <string name="mobile_bank_balance_expireDate">Expire Date: (year/month)</string>
     <string name="mobile_bank_balance_cardError">please enter your Parsian card number.</string>
