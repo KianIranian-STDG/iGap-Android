@@ -60,7 +60,7 @@ public class Config {
     public static final int SCROLL_TO_TOP_DELAY = (int) (5 * DateUtils.HOUR_IN_MILLIS);
 
     public static final String iGapAccount = "iGap";
-    public static final String URL_WEBSOCKET = "wss://secure.igap.net/test/";
+    public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
     public static final String IGAP_LINK_PREFIX = "https://iGap.net/";
     public static final String PUBLIC_KEY_CLIENT = "-----BEGIN PUBLIC KEY-----\n"
