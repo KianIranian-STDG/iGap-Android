@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +26,6 @@ import net.iGap.request.RequestClientGetPoll;
 import java.util.ArrayList;
 
 public class PollFragment extends BaseFragment {
-
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
@@ -42,7 +40,6 @@ public class PollFragment extends BaseFragment {
         pollFragment.setArguments(bundle);
         return pollFragment;
     }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -70,7 +67,6 @@ public class PollFragment extends BaseFragment {
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
-
         pollAdapter = new PollAdapter(getActivity(), new ArrayList<>());
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -102,8 +98,8 @@ public class PollFragment extends BaseFragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
-                // .setRightSmallAvatarShown(true)
                 .setLogoShown(true)
+                // .setRightSmallAvatarShown(true)
 //                .setFragmentActivity(getActivity())
 //                .setPassCodeVisibility(true, R.string.unlock_icon)
 //                .setScannerVisibility(true, R.string.scan_qr_code_icon)
@@ -116,10 +112,7 @@ public class PollFragment extends BaseFragment {
                 });
         ViewGroup viewGroup = view.findViewById(R.id.fd_layout_toolbar);
         viewGroup.addView(mHelperToolbar.getView());
-
         tryToUpdateOrFetchRecycleViewData(0);
-
-
     }
 
     private void setRefreshing(boolean value) {
@@ -138,7 +131,6 @@ public class PollFragment extends BaseFragment {
     private void tryToUpdateOrFetchRecycleViewData(int count) {
         setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
-
         if (!isSend) {
             if (count < 3) {
                 G.handler.postDelayed(new Runnable() {
