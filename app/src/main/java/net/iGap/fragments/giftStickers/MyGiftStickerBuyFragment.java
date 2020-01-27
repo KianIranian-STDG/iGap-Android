@@ -40,6 +40,10 @@ public class MyGiftStickerBuyFragment extends Fragment {
 
         viewModel.subscribe();
 
+        if (getParentFragment() instanceof GiftStickerMainFragment){
+            ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_gift_sticker);
+        }
+
         binding.giftStickerList.setAdapter(new MyStickerListAdapter());
 
         viewModel.getLoadStickerList().observe(getViewLifecycleOwner(), stickerList -> {

@@ -8,9 +8,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginStart="@dimen/dp16"
         android:layout_marginTop="@dimen/dp16"
-        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp16"
         app:cardUseCompatPadding="true"
         app:cardBackgroundColor="?attr/iGapCardViewColor">
 
@@ -25,9 +25,9 @@
         style="@style/iGapButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginStart="@dimen/dp16"
         android:layout_marginTop="@dimen/dp16"
-        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp16"
         android:text="@string/my_gift_sticker" />
 
     <com.google.android.material.button.MaterialButton
@@ -35,9 +35,9 @@
         style="@style/iGapButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginStart="@dimen/dp16"
         android:layout_marginTop="@dimen/dp16"
-        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp16"
         android:text="@string/my_recived_gift_sticker" />
 
 </LinearLayout>
