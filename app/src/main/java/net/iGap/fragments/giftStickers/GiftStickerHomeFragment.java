@@ -35,7 +35,6 @@ public class GiftStickerHomeFragment extends Fragment {
         view.findViewById(R.id.myGiftStickerPage).setOnClickListener(v -> {
             if (getParentFragment() instanceof GiftStickerMainFragment) {
                 ((GiftStickerMainFragment) getParentFragment()).loadBuyMySticker();
-                ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_gift_sticker);
 
             }
         });
@@ -43,7 +42,6 @@ public class GiftStickerHomeFragment extends Fragment {
         view.findViewById(R.id.receivedGiftStickerPage).setOnClickListener(v -> {
             if (getParentFragment() instanceof GiftStickerMainFragment) {
                 ((GiftStickerMainFragment) getParentFragment()).loadReceivedGiftStickerPage();
-                ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_recived_gift_sticker);
             }
         });
     }

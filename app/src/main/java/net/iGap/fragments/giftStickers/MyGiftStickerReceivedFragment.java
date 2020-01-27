@@ -41,6 +41,10 @@ public class MyGiftStickerReceivedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel.subscribe();
 
+        if (getParentFragment() instanceof GiftStickerMainFragment) {
+            ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_recived_gift_sticker);
+        }
+
         binding.giftStickerList.setAdapter(new MyStickerListAdapter());
 
         if (binding.giftStickerList.getAdapter() instanceof MyStickerListAdapter) {

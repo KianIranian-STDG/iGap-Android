@@ -74,7 +74,10 @@ public class GiftStickerMainFragment extends BaseFragment {
     @Override
     public boolean onBackPressed() {
         if (getChildFragmentManager().getBackStackEntryCount() > 1) {
-            getChildFragmentManager().popBackStack();
+            getChildFragmentManager().popBackStackImmediate();
+            if (getChildFragmentManager().getBackStackEntryCount() == 1) {
+                setToolbarTitle(R.string.gift_sticker_title);
+            }
             return true;
         } else {
             return super.onBackPressed();

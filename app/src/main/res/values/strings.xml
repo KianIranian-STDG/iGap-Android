@@ -2415,22 +2415,22 @@ Want to get it?</string>
     <string name="emoji_category_smileys">Smileys And People</string>
     <string name="emoji_category_symbols">Symbols</string>
     <string name="emoji_category_travel">Travel And Place</string>
-    <string name="gift_sticker_title">Digital Gift Card</string>
-    <string name="active_gift_sticker_title">Active gift sticker</string>
+    <string name="gift_sticker_title">Digital gift card</string>
+    <string name="active_gift_sticker_title">Active digital gift card</string>
     <string name="national_code_not_match_with_phone_number_error">National code inconsistency with SIM card information</string>
     <string name="gift_sticker_visit">See</string>
     <string name="gift_sticker_add_archive">Add to archive</string>
-    <string name="gift_cart_title">gift card</string>
-    <string name="my_gift_sticker">My Gift Stickers</string>
-    <string name="my_recived_gift_sticker">Gift stickers received</string>
+    <string name="gift_cart_title">Digital gift card</string>
+    <string name="my_gift_sticker">My digital Gift Card</string>
+    <string name="my_recived_gift_sticker">Digital gift card received</string>
     <string name="expire_date">Expiration date</string>
-    <string name="send_gift_sticker">Send sticker</string>
+    <string name="send_gift_sticker">Send digital gift card</string>
     <string name="gift_sticker_send_to_other">Send to another</string>
-    <string name="gift_sticker_card_info_title">Gift Card Information</string>
+    <string name="gift_sticker_card_info_title">Digital Gift Card Information</string>
     <string name="click_for_copy_title">Click to copy</string>
     <string name="gift_sticker_creator_phone_number">Manufacturer\'s mobile number</string>
     <string name="gift_sticker_national_code_title">National Code of Constructor</string>
-    <string name="gift_sticker_activation_title">Activate the card</string>
-    <string name="gift_sticker_empty_list_message">There is no sticker</string>
+    <string name="gift_sticker_activation_title">Activate the digital Gift Card</string>
+    <string name="gift_sticker_empty_list_message">There is no digital gift card</string>
 
 </resources>
