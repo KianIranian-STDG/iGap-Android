@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dp8"
+    android:paddingEnd="@dimen/dp8">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/container">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/year"
+            android:text="98"
+            android:textSize="@dimen/smallTextSize"
+            android:layout_marginTop="@dimen/dp16"
+            android:textColor="?iGapTitleTextColor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/month"
+            android:text="اردیبهشت"
+            android:textSize="@dimen/smallTextSize"
+            android:padding="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp12"
+            android:textColor="?iGapTitleTextColor"
+            android:minWidth="@dimen/dp52"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/year"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

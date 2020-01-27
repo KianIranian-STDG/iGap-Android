@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="net.iGap"
     android:allowBackup="false"
-    android:label="@string/app_name"
-    tools:replace="allowBackup, label">
+    android:label="@string/app_name">
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />

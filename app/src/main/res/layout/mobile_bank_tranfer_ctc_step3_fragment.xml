@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep3ViewModel" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        style="@style/IGapRootViewStyle"
+        tools:context=".mobileBank.view.MobileBankTransferCtcStep3Fragment">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp16">
+
+                <include
+                    android:id="@+id/lytTop"
+                    layout="@layout/mobile_bank_top"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/lblTransfer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:text="@string/transfer_mony"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lytTop" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtPin"
+                    android:layout_width="@dimen/dp300"
+                    android:layout_height="@dimen/dp40"
+                    android:background="@drawable/shape_gray_round_stroke"
+                    android:gravity="center"
+                    android:textSize="@dimen/standardTextSize"
+                    android:hint="@string/internet_pin_2"
+                    style="@style/iGapEditTextStyle"
+                    app:layout_constraintTop_toBottomOf="@id/lblTransfer"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:lines="1"
+                    android:layout_marginTop="@dimen/dp60" />
+
+                <TextView
+                    android:id="@+id/tvTempPass"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:text="@string/get_temporary_password"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="@id/edtPin"
+                    app:layout_constraintStart_toStartOf="@id/edtPin"
+                    app:layout_constraintTop_toBottomOf="@id/edtPin" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtYear"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginTop="@dimen/dp40"
+                    android:inputType="number"
+                    android:textSize="@dimen/standardTextSize"
+                    style="@style/iGapEditTextStyle"
+                    android:gravity="center"
+                    android:hint="@string/year"
+                    app:layout_constraintStart_toStartOf="@id/edtPin"
+                    app:layout_constraintTop_toBottomOf="@id/tvTempPass"
+                    android:background="@drawable/shape_gray_round_stroke"
+                    android:maxLength="2" />
+
+                <TextView
+                    android:id="@+id/lblSlash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"
+                    app:layout_constraintStart_toEndOf="@id/edtYear"
+                    app:layout_constraintTop_toTopOf="@id/edtYear"
+                    app:layout_constraintBottom_toBottomOf="@id/edtYear"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/largeTextSize" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtMonth"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:inputType="number"
+                    android:textSize="@dimen/standardTextSize"
+                    style="@style/iGapEditTextStyle"
+                    android:gravity="center"
+                    android:hint="@string/month"
+                    app:layout_constraintStart_toEndOf="@id/lblSlash"
+                    app:layout_constraintTop_toTopOf="@id/edtYear"
+                    android:background="@drawable/shape_gray_round_stroke"
+                    android:maxLength="2" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtCVV2"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp40"
+                    android:inputType="number"
+                    android:textSize="@dimen/standardTextSize"
+                    style="@style/iGapEditTextStyle"
+                    android:gravity="center"
+                    android:hint="CVV2"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="@id/edtPin"
+                    app:layout_constraintStart_toEndOf="@id/edtMonth"
+                    app:layout_constraintTop_toTopOf="@id/edtYear"
+                    android:background="@drawable/shape_gray_round_stroke"
+                    android:maxLength="4" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cbSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapTitleTextColor"
+                    app:layout_constraintEnd_toEndOf="@id/edtPin"
+                    android:button="@drawable/check_box_background"
+                    app:layout_constraintStart_toStartOf="@id/edtPin"
+                    app:layout_constraintTop_toBottomOf="@id/edtYear"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:text="@string/save" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnInquiry"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    style="@style/iGapButton"
+                    android:text="@string/inquiry"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintWidth_percent="0.4"
+                    app:layout_constraintEnd_toStartOf="@id/btnCancel"
+                    app:layout_constraintStart_toStartOf="@id/edtPin"
+                    app:layout_constraintTop_toBottomOf="@id/cbSave"
+                    android:layout_marginTop="@dimen/dp32" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    style="@style/iGapButtonSecondary"
+                    app:layout_constraintWidth_percent="0.3"
+                    android:text="@string/cancel"
+                    android:layout_marginLeft="@dimen/dp6"
+                    android:layout_marginStart="@dimen/dp6"
+                    app:layout_constraintStart_toEndOf="@id/btnInquiry"
+                    app:layout_constraintTop_toBottomOf="@id/cbSave"
+                    app:layout_constraintEnd_toEndOf="@id/edtPin"
+                    android:layout_marginTop="@dimen/dp32" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>

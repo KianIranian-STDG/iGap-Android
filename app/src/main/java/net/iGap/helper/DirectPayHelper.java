@@ -20,7 +20,7 @@ import net.iGap.request.RequestMplSetSalesResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ir.pec.mpl.pecpayment.view.PaymentInitiator;
+import com.top.lib.mpl.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 

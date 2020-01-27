@@ -13,6 +13,7 @@ package net.iGap.realm;
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.kuknos.service.model.RealmKuknos;
+import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
 
@@ -720,6 +721,66 @@ public class RealmMigration implements io.realm.RealmMigration {
             }
 
             oldVersion++;
+        }
+
+
+        if (oldVersion == 43) {
+
+            RealmObjectSchema realmMB = schema.create(RealmMobileBankCards.class.getSimpleName())
+                    .addField("cardName", String.class)
+                    .addField("cardNumber", String.class)
+                    .addField("bankName", String.class)
+                    .addField("expireDate", String.class)
+                    .addField("isOrigin", boolean.class,FieldAttribute.REQUIRED);
+
+            realmMB.addPrimaryKey("cardNumber");
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 44) {
+            RealmObjectSchema realmBill = schema.create(RealmRoomMessageWalletBill.class.getSimpleName())
+                    .addField("orderId", long.class, FieldAttribute.REQUIRED)
+                    .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("myToken", String.class)
+                    .addField("token", long.class, FieldAttribute.REQUIRED)
+                    .addField("amount", long.class, FieldAttribute.REQUIRED)
+                    .addField("payId", String.class)
+                    .addField("billId", String.class)
+                    .addField("billType", String.class)
+                    .addField("cardNumber", String.class)
+                    .addField("merchantName", String.class)
+                    .addField("terminalNo", long.class, FieldAttribute.REQUIRED)
+                    .addField("rrn", long.class, FieldAttribute.REQUIRED)
+                    .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("requestTime", int.class, FieldAttribute.REQUIRED)
+                    .addField("status", boolean.class, FieldAttribute.REQUIRED);
+
+            realmBill.addPrimaryKey("orderId");
+
+            RealmObjectSchema realmTopup = schema.create(RealmRoomMessageWalletTopup.class.getSimpleName())
+                    .addField("orderId", long.class, FieldAttribute.REQUIRED)
+                    .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
+                    .addField("myToken", String.class)
+                    .addField("token", long.class, FieldAttribute.REQUIRED)
+                    .addField("amount", long.class, FieldAttribute.REQUIRED)
+                    .addField("requestMobileNumber", String.class)
+                    .addField("chargeMobileNumber", String.class)
+                    .addField("topupType", int.class, FieldAttribute.REQUIRED)
+                    .addField("cardNumber", String.class)
+                    .addField("merchantName", String.class)
+                    .addField("terminalNo", long.class, FieldAttribute.REQUIRED)
+                    .addField("rrn", long.class, FieldAttribute.REQUIRED)
+                    .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
+                    .addField("requestTime", int.class, FieldAttribute.REQUIRED)
+                    .addField("status", boolean.class, FieldAttribute.REQUIRED);
+
+            realmTopup.addPrimaryKey("orderId");
+
+            RealmObjectSchema realmRoomMessageWallet = schema.get(RealmRoomMessageWallet.class.getSimpleName());
+            realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletTopup", realmTopup);
+            realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletBill", realmBill);
+
         }
     }
 

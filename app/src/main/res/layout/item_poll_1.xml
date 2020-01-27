@@ -6,37 +6,37 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/type1_card0"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/discovery_margin"
-        app:cardPreventCornerOverlap="false"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/discovery_radius"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/type1_img0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards"
-            android:adjustViewBounds="true" />
+            android:src="@color/color_default_discovery_cards" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type1_tick0"
+            style="@style/myIconTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/check_icon"
-            android:visibility="gone"
             android:textColor="@color/white"
-            android:background="@color/tick_background_color"
-            style="@style/myIconTextViewStyle"/>
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 

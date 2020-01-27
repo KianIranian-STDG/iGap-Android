@@ -162,7 +162,7 @@ public class FragmentUserScore extends BaseFragment {
                     count.setTextColor(getContext().getResources().getColor(R.color.red));
                 }
 
-                if (G.selectedLanguage.equals("fa")) {
+                if (G.isAppRtl) {
                     title.setText(iVandScore.getFaName());
                 } else {
                     title.setText(iVandScore.getEnName());

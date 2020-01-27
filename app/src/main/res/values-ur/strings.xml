@@ -105,7 +105,7 @@
     <string name="igap">ئای­گەپ</string>
     <string name="igapChanel">ئای­گەپ</string>
     <string name="search">گەڕان</string>
-    <string name="d_of_d">%d لە %d</string>
+    <string name="d_of_d" formatted="false">%d لە %d</string>
     <string name="add_to_contact">زیادکردن بە بەردەنگەکان</string>
     <string name="cancel">پاشگەزبوونەوە</string>
     <string name="B_cancel">پاشگەزبوونەوە</string>
@@ -135,7 +135,7 @@
     <string name="cannot_load_data_en">ناتەوانی لە داگرتنی دەیتاکاندا</string>
     <string name="do_you_want_exit">دەتەوێ بڕۆیتە دەرەوە؟</string>
     <string name="slide_to_cancel_en">بۆ هەڵوەشانەوە بیکێشە</string>
-    <string name="video_duration">%s) %s)</string>
+    <string name="video_duration" formatted="false">"%s (%s)"</string>
     <string name="st_Info">زانیارییەکانی ئەکانت</string>
     <string name="st_Language">زمان</string>
     <string name="st_titleToolbar">رێکبەندی</string>
@@ -1233,7 +1233,6 @@
     <string name="separate_notifications">راگەیێندراوە جیاکارەکان</string>
     <string name="mark_as_unread">خوێندراوە</string>
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
     <string name="start">دەست­پێکردن</string>
     <string name="bot">رۆبات</string>
     <string name="back_to_menu">گەڕانەوە بۆ مێنۆی سەرەکی</string>
@@ -1569,7 +1568,7 @@
     <string name="item_selected">بابەتی هەڵبژێردراو</string>
     <string name="terms_and_condition">%s پەسەند دەکەم</string>
     <string name="terms_and_condition_clickable">یاسا و رێساکان</string>
-    <string name="charity_confirm">تۆ بڕی %s ریاڵت بەمەبەستی یارمەتی بە ناوەندی خێرخوازیی %s لە بەرچاو گرتووە.</string>
+    <string name="charity_confirm">تۆ بڕی %1$s ریاڵت بەمەبەستی یارمەتی بە ناوەندی خێرخوازیی %2$s لە بەرچاو گرتووە.</string>
     <string name="new_channel_hint">تۆ دەتوانی روونکردنەوەی دڵخوازی خۆت بۆ کەناڵی خۆت پێشکەش بکەیت.</string>
     <string name="new_group_hint">تۆ دەتوانی یەک روونکردنەوەی دڵخوازی خۆت بە گرووپی خۆت پێشکەش بکەیت.</string>
     <string name="permanent_link">لینکی هەمیشەیی</string>
@@ -1695,7 +1694,6 @@
     <string name="igasht_ticket_type_title">جۆری بلیت دەستنیشان بکە</string>
     <string name="igasht_enter_ticket_count_title">ژمارەی سەردانکەر بنووسە.</string>
     <string name="igasht_add_ticket_count_button_title">تۆمار</string>
-    <string name="igasht_order_ticket_title">%s بۆ %d کەس</string>
     <string name="igasht_favorites_title">بابەتی دڵخواز</string>
     <string name="igasht_history_title">رێکەوت</string>
     <string name="igasht_total_ticket_price">بڕی پارەی کۆتایی %d تمەن</string>
@@ -1996,8 +1994,12 @@
     </array>
 
     <array name="onboard_descriptions">
-        <item>جانتای پارە، حسابێکی مەجازیت بۆ دروست دەکات کە بە ژمارە مۆبایلەوە پەیوەست دەبێت و ئیدی پێویست ناکات جانتای پارە، پارەی نەخت یان کارتی بانکی لەگەڵ خۆتدا ببەیت. </item>
-        <item>لە دووکانەکان، لە نێو تاکسی یان هەر شوێنێکی دیکەدا کە جانتای پارە بە کار دەهێنن، دەتوانیت لە دوگمەی سکەن کەڵک وەربگریت و کڕینێکی چیژبەخشت هەبێت.  </item>
+        <item>جانتای پارە، حسابێکی مەجازیت بۆ دروست دەکات کە بە ژمارە مۆبایلەوە پەیوەست دەبێت و ئیدی
+            پێویست ناکات جانتای پارە، پارەی نەخت یان کارتی بانکی لەگەڵ خۆتدا ببەیت.
+        </item>
+        <item>لە دووکانەکان، لە نێو تاکسی یان هەر شوێنێکی دیکەدا کە جانتای پارە بە کار دەهێنن،
+            دەتوانیت لە دوگمەی سکەن کەڵک وەربگریت و کڕینێکی چیژبەخشت هەبێت.
+        </item>
     </array>
 
     <string name="default_theme_title">پێش گریمانە</string>
@@ -2104,6 +2106,45 @@
     <string name="map_registration_enable">Enable Nearby Visibility</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
+
+    <string name="parsian_bank">پارسیان من</string>
+    <string name="temporary_password">رمز پویا</string>
+    <string name="sheba_number">شماره شبا</string>
+    <string name="transactions">تراکنش ها</string>
+    <string name="deposit">واریز</string>
+    <string name="get_temporary_password">دریافت رمز پویا</string>
+    <string name="accounts">حساب ها</string>
+    <string name="cheque">چک</string>
+    <string name="facilities">تسهیلات</string>
+    <string name="services">خدمات</string>
+    <string name="cheque_number">شماره دسته چک :</string>
+    <string name="page_count">تعداد برگه :</string>
+    <string name="reject_count">برگشتی :</string>
+    <string name="pass_count">پاس شده :</string>
+    <string name="cash_count">نقد شده :</string>
+    <string name="temporary_block">مسدود موقت :</string>
+    <string name="permanent_block">مسدود دایم :</string>
+    <string name="usable_count">قابل استفاده :</string>
+    <string name="enter_loan_number">شماره وام را وارد کنید.</string>
+    <string name="loan_number">شماره وام: </string>
+    <string name="branch_name">نام شعبه:</string>
+    <string name="start_date">تاریخ شروع:</string>
+    <string name="end_date">تاریخ پایان:</string>
+    <string name="loan_count">تعداد اقساط:</string>
+    <string name="remained_loan">اقساط باقیمانده:</string>
+    <string name="state">وضعیت:</string>
+
+    <string name="order_id">Order Id</string>
+    <string name="requester_mobile_number">Requester Mobile Number</string>
+    <string name="charger_mobile_number">Charger Mobile Number</string>
+    <string name="topUp_type">TopUp Type</string>
+    <string name="terminal_No">Terminal No</string>
+    <string name="rrn">Reference No</string>
+    <string name="bill_id">Bill Id</string>
+    <string name="topUp_title">خرید شارژ</string>
+    <string name="bill_title">پرداخت قبض</string>
+    <string name="topUp_message">topUp message</string>
+    <string name="bill_message">Bill message</string>
     <string name="delete_recently_sticker">Delete Recently Sticker</string>
     <string name="sticker_setting">Sticker setting</string>
     <string name="empty_sticker">You haven\'t added any stickers yet!</string>

@@ -3,7 +3,6 @@ package net.iGap.kuknos.view;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_panel, container, false);
         binding.setViewmodel(kuknosPanelVM);
         binding.setLifecycleOwner(this);
-
+        isNeedResume = true;
         return binding.getRoot();
 
     }
@@ -131,7 +130,12 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
         onDataChanged();
         onProgress();
 
-        Log.d("amini", "onClick: secret data  " + kuknosPanelVM.getPrivateKeyData());
+    }
+
+    @Override
+    public void onResume() {
+        kuknosPanelVM.getDataFromServer();
+        super.onResume();
     }
 
     @Override

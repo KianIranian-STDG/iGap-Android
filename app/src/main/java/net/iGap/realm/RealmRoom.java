@@ -256,7 +256,6 @@ public class RealmRoom extends RealmObject {
          * new instance for this action ))
          */
         DbManager.getInstance().doRealmTask(realm -> {
-            Log.wtf(RealmRoom.class.getName(), "realm config: " + realm.getConfiguration().getRealmFileName());
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {

@@ -75,7 +75,7 @@
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPMessage"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPFee"
                     app:layout_constraintWidth_percent="0.7">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -96,6 +96,33 @@
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosBuyPPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:text="@{viewmodel.assetPrice}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPMessage" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosBuyPFee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:text="@{viewmodel.transactionFee}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPPrice" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosBuyPSumTitle"

@@ -41,7 +41,6 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             userName = getArguments().getString("userName", "");
             roomId = getArguments().getLong("roomId", -1);

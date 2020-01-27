@@ -29,7 +29,6 @@
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
-            android:text="انتقال وجه"
             android:textColor="@color/white"
             android:textSize="@dimen/dp16" />
 
@@ -324,7 +323,6 @@
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
-            android:text="انتقال وجه"
             android:textColor="@color/white"
             android:textSize="@dimen/dp16" />
 

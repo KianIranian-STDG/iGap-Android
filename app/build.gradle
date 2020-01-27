@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.31.0'
+        classpath 'io.fabric.tools:gradle:1.31.2'
     }
 }
 apply plugin: 'com.android.application'
@@ -30,7 +30,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 160
+        versionCode 164
         versionName "2.1.0"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
@@ -176,7 +176,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.vicmikhailau:MaskedEditText:1.1.1'
     implementation 'com.uncopt:android.justified:1.0'
@@ -220,7 +220,7 @@ dependencies {
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'com.mindorks.android:prdownloader:0.6.0'
     implementation 'com.google.firebase:firebase-core:17.2.1'
-    implementation 'com.google.firebase:firebase-messaging:20.0.1'
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
     implementation('com.github.KianIranian-STDG:Compress:2.1.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
@@ -229,17 +229,18 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
-    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta16'
+    releaseImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
+    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
+    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
+    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
+    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
+    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
+    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta19'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1' // don't upgrade this lib to version 4
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    // don't upgrade this lib to version 4
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -260,12 +261,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'ir.metrix:metrix:0.11.0'
-    implementation 'com.android.installreferrer:installreferrer:1.0'
+    implementation 'com.android.installreferrer:installreferrer:1.1.1'
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
 //  this lib is used for MPL
@@ -283,6 +284,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
 
+    /*implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'*/
 }
 
 configurations.all {

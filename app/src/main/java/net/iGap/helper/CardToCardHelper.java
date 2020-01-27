@@ -9,7 +9,7 @@ import net.iGap.R;
 import net.iGap.request.RequestMplGetCardToCardToken;
 import net.iGap.request.RequestMplSetCardToCardResult;
 
-import ir.pec.mpl.pecpayment.view.CardToCardInitiator;
+import com.top.lib.mpl.view.CardToCardInitiator;
 
 public class CardToCardHelper {
 

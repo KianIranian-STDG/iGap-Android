@@ -20,9 +20,11 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmRoomMessageWalletRealmProxy;
 
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.BILL;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.CARD_TO_CARD;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
+import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.TOPUP;
 
 @Parcel(implementations = {net_iGap_realm_RealmRoomMessageWalletRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageWallet.class})
 public class RealmRoomMessageWallet extends RealmObject {
@@ -31,6 +33,8 @@ public class RealmRoomMessageWallet extends RealmObject {
     private long id;
     private String type;
     private RealmRoomMessageWalletCardToCard realmRoomMessageWalletCardToCard;
+    private RealmRoomMessageWalletTopup realmRoomMessageWalletTopup;
+    private RealmRoomMessageWalletBill realmRoomMessageWalletBill;
     private RealmRoomMessageWalletPayment realmRoomMessageWalletPayment;
     private RealmRoomMessageWalletMoneyTransfer realmRoomMessageWalletMoneyTransfer;
 
@@ -42,6 +46,10 @@ public class RealmRoomMessageWallet extends RealmObject {
 
         if (input.getType() == CARD_TO_CARD) {
             messageWallet.setRealmRoomMessageWalletCardToCard(RealmRoomMessageWalletCardToCard.put(realm, input.getCardToCard()));
+        } else if (input.getType() == TOPUP) {
+            messageWallet.setRealmRoomMessageWalletTopup(RealmRoomMessageWalletTopup.put(realm, input.getTopup()));
+        } else if (input.getType() == BILL) {
+            messageWallet.setRealmRoomMessageWalletBill(RealmRoomMessageWalletBill.put(realm, input.getBill()));
         } else if (input.getType() == MONEY_TRANSFER) {
             messageWallet.setRealmRoomMessageWalletMoneyTransfer(RealmRoomMessageWalletMoneyTransfer.put(realm, input.getMoneyTransfer()));
         } else if (input.getType() == PAYMENT) {
@@ -76,6 +84,23 @@ public class RealmRoomMessageWallet extends RealmObject {
 
     public void setRealmRoomMessageWalletCardToCard(RealmRoomMessageWalletCardToCard realmRoomMessageWalletCardToCard) {
         this.realmRoomMessageWalletCardToCard = realmRoomMessageWalletCardToCard;
+    }
+
+
+    public RealmRoomMessageWalletTopup getRealmRoomMessageWalletTopup() {
+        return realmRoomMessageWalletTopup;
+    }
+
+    public void setRealmRoomMessageWalletTopup(RealmRoomMessageWalletTopup realmRoomMessageWalletTopup) {
+        this.realmRoomMessageWalletTopup = realmRoomMessageWalletTopup;
+    }
+
+    public RealmRoomMessageWalletBill getRealmRoomMessageWalletBill() {
+        return realmRoomMessageWalletBill;
+    }
+
+    public void setRealmRoomMessageWalletBill(RealmRoomMessageWalletBill realmRoomMessageWalletBill) {
+        this.realmRoomMessageWalletBill = realmRoomMessageWalletBill;
     }
 
     public RealmRoomMessageWalletPayment getRealmRoomMessageWalletPayment() {

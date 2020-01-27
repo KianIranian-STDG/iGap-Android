@@ -8,9 +8,10 @@ import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 public class PanelRepo {
 
@@ -44,7 +45,7 @@ public class PanelRepo {
         kuknosAPIRepository.getAssetData(assetCode, handShakeCallback, apiResponse);
     }
 
-    public void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+    public void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosHash>> apiResponse) {
         kuknosAPIRepository.paymentUser(model, handShakeCallback, apiResponse);
     }
 
@@ -58,6 +59,10 @@ public class PanelRepo {
 
     public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<IgapPayment>> apiResponse) {
         kuknosAPIRepository.buyAsset(userRepo.getAccountID(), assetCode, assetAmount, totalPrice, description, handShakeCallback, apiResponse);
+    }
+
+    public void getFee(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFeeModel>> apiResponse) {
+        kuknosAPIRepository.getFees(handShakeCallback, apiResponse);
     }
 
     public boolean isPinSet() {

@@ -13,6 +13,7 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoError;
@@ -120,7 +121,6 @@ public class FileDownloadResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-
         if (identity instanceof IGDownloadFileStruct) {
             IGDownloadFileStruct fileStruct = (IGDownloadFileStruct) identity;
 
@@ -128,9 +128,17 @@ public class FileDownloadResponse extends MessageHandler {
                 fileStruct.onStickerDownload.onError(fileStruct, majorCode, minorCode);
         } else {
 
-            RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
-            type = identityFileDownload.typeDownload;
-            RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
+        RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
+        if (majorCode == 713 && (minorCode == 2 || minorCode == 5)) {
+            HelperLog.setErrorLog(new Exception("error: " + identityFileDownload.cacheId
+                    + " offset: " + identityFileDownload.offset
+                    + " size: " + identityFileDownload.size
+                    + " typeDownload: " + identityFileDownload.typeDownload
+                    + " majorCode: " + majorCode
+                    + " minorCode: " + minorCode));
+        }
+        type = identityFileDownload.typeDownload;
+        RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
 
             if (type == RequestFileDownload.TypeDownload.FILE) {
                 if (G.onFileDownloadResponse != null) {

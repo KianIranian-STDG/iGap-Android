@@ -46,7 +46,7 @@ public class ChooseMoneyTransferActionFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.transferMoney).setVisibility(isWalletActive && isWalletRegister ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.transferMoney).setVisibility((isWalletActive && isWalletRegister) ? View.VISIBLE : View.GONE);
 
         view.findViewById(R.id.transferMoney).setOnClickListener(v -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {

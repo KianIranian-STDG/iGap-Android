@@ -1,7 +1,6 @@
 package net.iGap.adapter.items.poll;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -97,7 +96,6 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return this.pollList;
     }
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -123,6 +121,7 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return new TypeUnknownViewHolder(this, layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false));
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (pollList.size() == i) {
@@ -132,9 +131,6 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             set.clone((ConstraintLayout) viewHolder.itemView);
             set.setDimensionRatio(R.id.type1_card0, pollList.get(i).scale);
             set.applyTo((ConstraintLayout) viewHolder.itemView);
-//            String[] scales = pollList.get(i).scale.split(":");
-//            float height = Resources.getSystem().getDisplayMetrics().widthPixels *1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-//            viewHolder.itemView.getLayoutParams().height = Math.round(height);
             ((BaseViewHolder) viewHolder).bindView(pollList.get(i));
         }
     }

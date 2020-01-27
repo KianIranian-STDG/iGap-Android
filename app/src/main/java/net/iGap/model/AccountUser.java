@@ -144,7 +144,7 @@ public class AccountUser {
         byte[] mKey = Base64.decode(key, Base64.DEFAULT);
 
         RealmConfiguration oldConfig = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
-                .schemaVersion(REALM_SCHEMA_VERSION)
+                .schemaVersion(37)
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
         RealmConfiguration newConfig;
@@ -170,26 +170,23 @@ public class AccountUser {
 
         File oldRealmFile = new File(oldConfig.getPath());
         File newRealmFile = new File(newConfig.getPath());
-        if (!oldRealmFile.exists()) {
-            return newConfig;
-        } else {
+        if (oldRealmFile.exists()) {
             Realm realm = null;
-            /*try {*/
-            realm = Realm.getInstance(oldConfig);
-            realm.writeEncryptedCopyTo(newRealmFile, mKey);
-            realm.close();
+            try {
+                realm = Realm.getInstance(oldConfig);
+                realm.writeEncryptedCopyTo(newRealmFile, mKey);
+            } catch (OutOfMemoryError ignored) {
+            } catch (Exception ignored) {
+            }
+
+            try {
+                if (realm != null)
+                    realm.close();
+            } catch (Exception ignored){}
+
             Realm.deleteRealm(oldConfig);
-            return newConfig;
-            /*} catch (OutOfMemoryError oom) {
-                //TODO : what is that, exception in catch, realm may be null and close it
-                realm.close();
-                return null;
-            } catch (Exception e) {
-                //TODO : what is that, exception in catch, realm may be null and close it
-                e.printStackTrace();
-                realm.close();
-                return null;
-            }*/
         }
+
+        return newConfig;
     }
 }

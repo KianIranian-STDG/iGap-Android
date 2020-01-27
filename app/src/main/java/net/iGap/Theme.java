@@ -194,6 +194,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapDividerLine);
     }
 
+    public int getCardViewColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapCardViewColor);
+    }
+
     public int getPrimaryTextColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapPrimaryTextColor);
     }
@@ -220,6 +224,10 @@ public class Theme {
 
     public int getButtonColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapButtonColor);
+    }
+
+    public int getButtonTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapButtonTextColor);
     }
 
     public int getForwardFromTextColor(Context context) {

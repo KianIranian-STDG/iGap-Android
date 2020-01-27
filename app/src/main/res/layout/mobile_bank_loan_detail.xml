@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.mobileBank.viewmodel.MobileBankServiceLoanDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/IGapRootViewStyle">
+
+        <LinearLayout
+            android:id="@+id/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/mobile_bank_top" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.pageVisibility}">
+
+                    <!--first row-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/personalInfo"
+                        android:text="@string/mobile_bank_load_detail_personalInfo"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:gravity="start"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/personalInfoLine" />
+
+                    <View
+                        android:id="@+id/personalInfoLine"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/personalInfo"
+                        app:layout_constraintBottom_toBottomOf="@+id/personalInfo"
+                        app:layout_constraintStart_toEndOf="@+id/personalInfo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/bankCode"
+                        android:text="@string/mobile_bank_load_detail_bankCode"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/personalInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/customerCode"
+                        android:text="@string/mobile_bank_load_detail_customerCode"
+                        android:textSize="@dimen/standardTextSize"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:textColor="?iGapTitleTextColor"
+                        app:layout_constraintTop_toBottomOf="@+id/bankCode"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/customerName"
+                        android:text="@string/mobile_bank_load_detail_customerName"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapTitleTextColor"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@+id/customerCode"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!--second row-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/loanInfo"
+                        android:text="@string/mobile_bank_load_detail_loadInfo"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/customerName"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/loanInfoLine" />
+
+                    <View
+                        android:id="@+id/loanInfoLine"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/loanInfo"
+                        app:layout_constraintBottom_toBottomOf="@+id/loanInfo"
+                        app:layout_constraintStart_toEndOf="@+id/loanInfo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/amount"
+                        android:text="@string/mobile_bank_load_detail_amount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="bold"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/loanInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/discount"
+                        android:text="@string/mobile_bank_load_detail_discount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:textColor="?iGapTitleTextColor"
+                        app:layout_constraintTop_toBottomOf="@+id/amount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/penalty"
+                        android:text="@string/mobile_bank_load_detail_penalty"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapTitleTextColor"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:textStyle="normal"
+                        app:layout_constraintTop_toBottomOf="@+id/discount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!--third row-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/maturedUnpaidInfo"
+                        android:text="@string/mobile_bank_load_detail_MUnpaidInfo"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/penalty"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/maturedUnpaidInfoLine" />
+
+                    <View
+                        android:id="@+id/maturedUnpaidInfoLine"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/maturedUnpaidInfo"
+                        app:layout_constraintBottom_toBottomOf="@+id/maturedUnpaidInfo"
+                        app:layout_constraintStart_toEndOf="@+id/maturedUnpaidInfo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/MUCount"
+                        android:text="@string/mobile_bank_load_detail_MUCount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/maturedUnpaidInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/MUAmount"
+                        android:text="@string/mobile_bank_load_detail_MUAmount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:textColor="?iGapTitleTextColor"
+                        app:layout_constraintTop_toBottomOf="@+id/MUCount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!--forth row-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/paidInfo"
+                        android:text="@string/mobile_bank_load_detail_paidInfo"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/MUAmount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/paidInfoLine" />
+
+                    <View
+                        android:id="@+id/paidInfoLine"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/paidInfo"
+                        app:layout_constraintBottom_toBottomOf="@+id/paidInfo"
+                        app:layout_constraintStart_toEndOf="@+id/paidInfo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/paidCount"
+                        android:text="@string/mobile_bank_load_detail_paidCount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/paidInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/paidAmount"
+                        android:text="@string/mobile_bank_load_detail_paidAmount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:textColor="?iGapTitleTextColor"
+                        app:layout_constraintTop_toBottomOf="@+id/paidCount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!--fifth row-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/unpaidInfo"
+                        android:text="@string/mobile_bank_load_detail_unpaidInfo"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/paidAmount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/unpaidInfoLine" />
+
+                    <View
+                        android:id="@+id/unpaidInfoLine"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/unpaidInfo"
+                        app:layout_constraintBottom_toBottomOf="@+id/unpaidInfo"
+                        app:layout_constraintStart_toEndOf="@+id/unpaidInfo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/unpaidCount"
+                        android:text="@string/mobile_bank_load_detail_unpaidCount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/unpaidInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/unpaidAmount"
+                        android:text="@string/mobile_bank_load_detail_unpaidAmount"
+                        android:textSize="@dimen/standardTextSize"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:textColor="?iGapTitleTextColor"
+                        app:layout_constraintTop_toBottomOf="@+id/unpaidCount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!--sixth row-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/loanListInfo"
+                        android:text="@string/mobile_bank_load_detail_paymentList"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textStyle="normal"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:gravity="start"
+                        app:layout_constraintTop_toBottomOf="@+id/unpaidAmount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/loanListInfoLine" />
+
+                    <View
+                        android:id="@+id/loanListInfoLine"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:layout_marginRight="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/loanListInfo"
+                        app:layout_constraintBottom_toBottomOf="@+id/loanListInfo"
+                        app:layout_constraintStart_toEndOf="@+id/loanListInfo"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loansRecycler"
+                    android:layout_marginTop="@dimen/dp4" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <ProgressBar
+            android:id="@+id/ProgressV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{viewModel.showLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintWidth_percent="0.1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

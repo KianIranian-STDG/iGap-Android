@@ -245,5 +245,43 @@
             app:layout_constraintEnd_toEndOf="@id/kurdiLanguage"
             app:layout_constraintTop_toTopOf="@id/kurdiLanguage" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/azeriLanguage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onClickAzeri()}"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/txtLanguageAz"
+            app:layout_constraintEnd_toEndOf="@id/persianLanguage"
+            app:layout_constraintStart_toStartOf="@id/persianLanguage"
+            app:layout_constraintTop_toBottomOf="@id/kurdiLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtLanguageAz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp8"
+            android:text="آذری"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/azeriLanguage"
+            app:layout_constraintTop_toTopOf="@id/azeriLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/st_icon_az"
+            style="@style/primaryIconTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check_icon"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.isAzeri}"
+            app:layout_constraintBottom_toBottomOf="@id/azeriLanguage"
+            app:layout_constraintEnd_toEndOf="@id/azeriLanguage"
+            app:layout_constraintTop_toTopOf="@id/azeriLanguage" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

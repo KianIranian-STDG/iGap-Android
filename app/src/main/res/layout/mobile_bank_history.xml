@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="net.iGap.mobileBank.viewmodel.MobileBankCardHistoryViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/IGapRootViewStyle">
+
+        <LinearLayout
+            android:id="@+id/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/mobile_bank_top" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/transactionTitle"
+                        android:text="@string/transactions"
+                        android:textSize="@dimen/largeTextSize"
+                        android:textStyle="bold"
+                        android:textColor="?iGapTitleTextColor"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginLeft="@dimen/dp32"
+                        app:layout_constraintTop_toTopOf="@+id/reportBtn"
+                        app:layout_constraintBottom_toBottomOf="@+id/reportBtn"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/iGapButton"
+                        android:id="@+id/reportBtn"
+                        android:minHeight="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginRight="@dimen/dp32"
+                        android:text="@string/financial_report"
+                        android:textSize="@dimen/standardTextSize"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/balanceTitle"
+                        android:text="@string/kuknos_panelStr_balance"
+                        android:textSize="@dimen/standardTextSize"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/dp26"
+                        android:textColor="?iGapSubtitleTextColor"
+                        app:layout_constraintTop_toBottomOf="@+id/reportBtn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/balanceValue"
+                        android:text="@{viewModel.balance}"
+                        android:textSize="@dimen/largeTextSize"
+                        android:textColor="?iGapTitleTextColor"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@+id/balanceTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/timeRecycler"
+                        android:layout_marginTop="@dimen/dp26"
+                        app:layout_constraintTop_toBottomOf="@+id/balanceValue"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/incomeTitle"
+                        android:text="Income"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_marginTop="@dimen/dp26"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/timeRecycler"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/withdrawTitle"
+                        android:text="withdrawal"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="@+id/incomeTitle"
+                        app:layout_constraintStart_toEndOf="@+id/incomeTitle"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/incomeValue"
+                        android:text="@{viewModel.income}"
+                        android:gravity="center"
+                        android:textSize="@dimen/largeTextSize"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:textColor="?iGapTitleTextColor"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/incomeTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/withdrawValue"
+                        android:text="@{viewModel.withdraw}"
+                        android:gravity="center"
+                        android:textSize="@dimen/largeTextSize"
+                        android:textStyle="bold"
+                        android:textColor="?iGapTitleTextColor"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="@+id/incomeValue"
+                        app:layout_constraintStart_toEndOf="@+id/incomeTitle"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/billTitle"
+                        android:text="@string/mobile_bank_sorathesab"
+                        android:gravity="start"
+                        android:textSize="@dimen/standardTextSize"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp26"
+                        android:textColor="?iGapSubtitleTextColor"
+                        app:layout_constraintTop_toBottomOf="@+id/withdrawValue"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/billTitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/billTitle"
+                        app:layout_constraintStart_toEndOf="@+id/billTitle"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/noItem"
+                        android:text="@string/elecBill_error_listView"
+                        android:gravity="center"
+                        android:textSize="@dimen/standardTextSize"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:visibility="@{viewModel.noItemVisibility}"
+                        android:textStyle="bold"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        app:layout_constraintTop_toBottomOf="@+id/billTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/ProgressV"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:elevation="2dp"
+                        android:visibility="@{viewModel.progressVisibility}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintWidth_percent="0.1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/billsRecycler"
+                    android:layout_marginTop="@dimen/dp8" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

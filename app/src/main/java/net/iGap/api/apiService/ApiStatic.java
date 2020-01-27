@@ -19,5 +19,7 @@ class ApiStatic {
     static final String ELECTRICITY_BILL_URL = BASE_URL + "bill/" + VERSION + "api/";
     static final String STICKER_URL = "https://api.igap.net/sticker/" + VERSION;
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
+    static final String MOBILE_BANK = BASE_URL + "parsian/" + VERSION;
+    static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
 }
 

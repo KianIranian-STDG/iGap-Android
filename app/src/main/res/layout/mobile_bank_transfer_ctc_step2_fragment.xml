@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep2ViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".mobileBank.view.MobileBankTransferCtcStep2Fragment">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="vertical" />
+
+        <include layout="@layout/mobile_bank_top" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?iGapTitleTextColor"
+                    android:text="@string/transfer_mony"
+                    android:textSize="@dimen/standardTextSize"
+                    android:padding="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp16" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:text="@string/source_card"
+                    android:textSize="@dimen/standardTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:layout_marginTop="@dimen/dp16" />
+
+                <TextView
+                    android:id="@+id/tvOrigin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:padding="@dimen/dp10"
+                    android:background="@drawable/shape_round_gray"
+                    android:text="6221 **** **** 4545"
+                    android:textSize="@dimen/largeTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapTitleTextColor"
+                    android:layout_marginTop="@dimen/dp10" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:text="@string/destination_bank"
+                    android:textSize="@dimen/standardTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:layout_marginTop="@dimen/dp20" />
+
+                <TextView
+                    android:id="@+id/tvBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:padding="@dimen/dp10"
+                    android:background="@drawable/shape_round_gray"
+                    android:text="@string/bank_parsian"
+                    android:textSize="@dimen/largeTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapTitleTextColor"
+                    android:layout_marginTop="@dimen/dp10" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:text="@string/card_owner"
+                    android:textSize="@dimen/standardTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:layout_marginTop="@dimen/dp20" />
+
+                <TextView
+                    android:id="@+id/tvOwnerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:padding="@dimen/dp10"
+                    android:background="@drawable/shape_round_gray"
+                    android:text="علیرضا نظری"
+                    android:textSize="@dimen/largeTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapTitleTextColor"
+                    android:layout_marginTop="@dimen/dp10" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:text="@string/amount"
+                    android:textSize="@dimen/standardTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:layout_marginTop="@dimen/dp20" />
+
+                <TextView
+                    android:id="@+id/tvAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:padding="@dimen/dp10"
+                    android:background="@drawable/shape_round_gray"
+                    android:text="20,000,000 ریال"
+                    android:textSize="@dimen/largeTextSize"
+                    android:gravity="center"
+                    android:textColor="?iGapTitleTextColor"
+                    android:layout_marginTop="@dimen/dp10" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="10"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp20">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp48"
+                        android:layout_weight="7"
+                        style="@style/iGapButton"
+                        android:layout_marginRight="@dimen/dp6"
+                        android:layout_marginEnd="@dimen/dp6"
+                        android:text="@string/ra_confirm"
+                        android:id="@+id/btnConfirm" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp48"
+                        android:layout_weight="3"
+                        style="@style/iGapButtonSecondary"
+                        android:text="@string/cancel"
+                        android:id="@+id/btnCancel" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>
