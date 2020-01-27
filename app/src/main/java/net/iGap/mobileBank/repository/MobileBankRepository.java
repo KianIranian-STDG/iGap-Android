@@ -10,6 +10,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
+import net.iGap.mobileBank.repository.model.BankBlockCheque;
 import net.iGap.mobileBank.repository.model.BankCardBalance;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
@@ -83,6 +84,14 @@ public class MobileBankRepository {
 
     public void getLoanDetail(String loanNumber, Integer offset, Integer length, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<BankServiceLoanDetailModel>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<BankServiceLoanDetailModel>>().initAPI(bankApi.getLoanDetail(getAccessToken(), loanNumber, true, offset, length), callback, responseCallback);
+    }
+
+    public void hotCard(String cardNumber, String reason, String auth, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.hotCard(getAccessToken(), cardNumber, reason, auth), callback, responseCallback);
+    }
+
+    public void blockCheque(List<String> chequeNumbers, String depositNumber, String reason, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<BankBlockCheque>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<BankBlockCheque>>().initAPI(bankApi.blockCheque(getAccessToken(), chequeNumbers, depositNumber, reason), callback, responseCallback);
     }
 
     public void getOTP(String cardNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<ErrorModel> responseCallback) {

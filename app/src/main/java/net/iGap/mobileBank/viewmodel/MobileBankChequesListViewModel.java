@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
+import net.iGap.mobileBank.repository.model.BankBlockCheque;
 import net.iGap.mobileBank.repository.model.BankChequeSingle;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
@@ -50,6 +52,31 @@ public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
                         progressVisibility.set(View.GONE);
                     }
                 });
+    }
+
+    public void blockCheques(String chequeNumber) {
+        // TODO: 1/27/2020 delete this line in final version
+        chequeNumber = "";
+        progressVisibility.set(View.VISIBLE);
+        List<String> cheques = new ArrayList<>();
+        cheques.add(chequeNumber);
+        MobileBankRepository.getInstance().blockCheque(cheques, deposit, "", this, new ResponseCallback<BaseMobileBankResponse<BankBlockCheque>>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse<BankBlockCheque> data) {
+                progressVisibility.set(View.GONE);
+            }
+
+            @Override
+            public void onError(String error) {
+                progressVisibility.set(View.GONE);
+                showRequestErrorMessage.setValue(error);
+            }
+
+            @Override
+            public void onFailed() {
+                progressVisibility.set(View.GONE);
+            }
+        });
     }
 
     public ObservableInt getNoItemVisibility() {

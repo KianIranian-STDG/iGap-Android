@@ -2467,6 +2467,9 @@ Want to get it?</string>
     <string name="mobile_bank_detail_cell_paymentDate">Payment Date: %1$s</string>
     <string name="mobile_bank_balance_error_no_tran">Your balance is not available. Please contact your bank.</string>
     <string name="mobile_bank_balance_error_no_price">No Price.</string>
+    <string name="mobile_bank_hotCard">Block Card</string>
+    <string name="mobile_bank_hotCard_success">You have successfully blocked your card.</string>
+    <string name="mobile_bank_hotCard_fail">Blocking your card was unsuccessful. Please contact your Bank.</string>
 
 
     <string name="unpaid">Unpaid</string>

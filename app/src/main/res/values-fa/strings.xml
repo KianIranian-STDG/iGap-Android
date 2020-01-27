@@ -2444,4 +2444,7 @@
     <string name="bill_title">پرداخت قبض</string>
     <string name="topUp_message">پیام خرید شارژ</string>
     <string name="bill_message">پیام پرداخت قبض</string>
+    <string name="mobile_bank_hotCard">باطل کردن کارت</string>
+    <string name="mobile_bank_hotCard_fail">باطل کردن کارت با خطا روبرو شد. لطفا به شعبه بانک خود مراجعه کنید.</string>
+    <string name="mobile_bank_hotCard_success">کارت شما با موفقیت باطل شد.</string>
 </resources>

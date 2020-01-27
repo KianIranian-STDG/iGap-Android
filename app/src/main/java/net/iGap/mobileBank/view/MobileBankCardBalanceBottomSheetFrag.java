@@ -26,10 +26,11 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
     private MobileBankCardBalanceViewModel viewModel;
     private CompleteListener completeListener;
 
-    public static MobileBankCardBalanceBottomSheetFrag newInstance(String cardNumber) {
+    public static MobileBankCardBalanceBottomSheetFrag newInstance(String cardNumber, String mode) {
         MobileBankCardBalanceBottomSheetFrag frag = new MobileBankCardBalanceBottomSheetFrag();
         Bundle bundle = new Bundle();
         bundle.putString("cardNumber", cardNumber);
+        bundle.putString("Mode", mode);
         frag.setArguments(bundle);
         return frag;
     }
@@ -53,8 +54,8 @@ public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO: 1/22/2020 must enable this line
-//        viewModel.setCardNumber(getArguments().getString("cardNumber"));
+        viewModel.setCardNumber(getArguments().getString("cardNumber"));
+        viewModel.setMode(getArguments().getString("Mode"));
         onComplete();
         onTextChange();
     }

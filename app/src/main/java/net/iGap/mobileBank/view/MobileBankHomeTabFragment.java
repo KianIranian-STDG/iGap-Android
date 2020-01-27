@@ -127,6 +127,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                     getAcountBalance(getCurrentAccount());
                 }
                 break;
+
+            case R.string.mobile_bank_hotCard:
+                openHotCard(getCurrentAccount());
+                break;
         }
     }
 
@@ -152,6 +156,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         items.add(new MobileBankHomeItemsModel(R.string.transactions, R.string.transaction_icon));
         items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.string.sheba_icon));
         items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.string.pooya_password_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.string.pooya_password_icon));
         return items;
     }
 
@@ -424,13 +429,30 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     }
 
     private void openGetCardInfo(String cardNumber) {
-        MobileBankCardBalanceBottomSheetFrag frag = MobileBankCardBalanceBottomSheetFrag.newInstance(cardNumber);
+        MobileBankCardBalanceBottomSheetFrag frag = MobileBankCardBalanceBottomSheetFrag.newInstance(cardNumber, "BALANCE");
         frag.setCompleteListener((cardNumber1, balance) ->
                 new DialogParsian()
                         .setContext(getContext())
                         .setTitle(getString(R.string.mobile_bank_balance_title))
                         .setButtonsText(getString(R.string.ok), null)
                         .showSimpleMessage(getString(R.string.mobile_bank_balance_message, balance + " " + getString(R.string.rial))));
+        frag.show(getFragmentManager(), "CardBalanceBottomSheet");
+    }
+
+    private void openHotCard(String cardNumber) {
+        MobileBankCardBalanceBottomSheetFrag frag = MobileBankCardBalanceBottomSheetFrag.newInstance(cardNumber, "HOT_CARD");
+        frag.setCompleteListener((cardNumber1, balance) -> {
+            String message;
+            if (balance.equals("success"))
+                message = getResources().getString(R.string.mobile_bank_hotCard_success);
+            else
+                message = getResources().getString(R.string.mobile_bank_hotCard_fail);
+            new DialogParsian()
+                    .setContext(getContext())
+                    .setTitle(getString(R.string.mobile_bank_hotCard))
+                    .setButtonsText(getString(R.string.ok), null)
+                    .showSimpleMessage(message);
+        });
         frag.show(getFragmentManager(), "CardBalanceBottomSheet");
     }
 

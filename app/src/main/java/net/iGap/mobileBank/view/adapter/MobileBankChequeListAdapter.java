@@ -65,6 +65,10 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+    public BankChequeSingle getItem(int position) {
+        return mdata.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView chNumber, chValue, chStatus, chDate;

@@ -27,15 +27,17 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
 
     private MutableLiveData<String> complete = new MutableLiveData<>();
 
-    private ObservableField<String> cardNumber = new ObservableField<>("6221061090008774");
+    private ObservableField<String> cardNumber = new ObservableField<>();
     private ObservableField<Integer> cardNumberError = new ObservableField<>(0);
-    private ObservableField<String> password = new ObservableField<>("48777");
+    private ObservableField<String> password = new ObservableField<>();
     private ObservableField<Integer> passwordError = new ObservableField<>(0);
-    private ObservableField<String> CVV = new ObservableField<>("748");
+    private ObservableField<String> CVV = new ObservableField<>();
     private ObservableField<Integer> CVVError = new ObservableField<>(0);
-    private ObservableField<String> date = new ObservableField<>("0109");
+    private ObservableField<String> date = new ObservableField<>();
     private ObservableField<Integer> dateError = new ObservableField<>(0);
     private ObservableField<Integer> progress = new ObservableField<>(R.string.inquiry);
+
+    private String mode;
 
     public MobileBankCardBalanceViewModel() {
 
@@ -60,7 +62,8 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
         // check password
         if (password.get() != null) {
             if (!password.get().isEmpty()) {
-                if (password.get().length() < 6) {
+                // TODO: 1/27/2020 must change to 6
+                if (password.get().length() < 5) {
                     passwordError.set(R.string.mobile_bank_balance_passwordLengthError);
                     return false;
                 }
@@ -105,35 +108,41 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
         }
     }
 
-    private void sendData() {
-        progress.set(R.string.news_add_comment_load);
+    private String getAuth() {
         String tempAuth = null;
         BankCardAuth auth = new BankCardAuth(CVV.get(), date.get().replace("/", ""), password.get(), "EPAY", null);
         try {
             RSACipher cipher = new RSACipher();
             tempAuth = cipher.encrypt(new Gson().toJson(auth), RSACipher.stringToPublicKey(Config.PUBLIC_PARSIAN_KEY_CLIENT));
+            return tempAuth;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             showRequestErrorMessage.setValue("Bad Encryption");
-            return;
+            return null;
         } catch (NoSuchPaddingException e) {
             e.printStackTrace();
             showRequestErrorMessage.setValue("Bad Encryption");
-            return;
+            return null;
         } catch (InvalidKeyException e) {
             e.printStackTrace();
             showRequestErrorMessage.setValue("Bad Encryption");
-            return;
+            return null;
         } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
             showRequestErrorMessage.setValue("Bad Encryption");
-            return;
+            return null;
         } catch (BadPaddingException e) {
             e.printStackTrace();
             showRequestErrorMessage.setValue("Bad Encryption");
-            return;
+            return null;
         }
+    }
 
+    private void getBalance() {
+        progress.set(R.string.news_add_comment_load);
+        String tempAuth = getAuth();
+        if (tempAuth == null)
+            return;
         MobileBankRepository.getInstance().getCardBalance(cardNumber.get().replace("-", ""), tempAuth, null, this, new ResponseCallback<BaseMobileBankResponse<BankCardBalance>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<BankCardBalance> data) {
@@ -157,15 +166,43 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
         });
     }
 
+    private void hotCard() {
+        progress.set(R.string.news_add_comment_load);
+        String tempAuth = getAuth();
+        if (tempAuth == null)
+            return;
+        MobileBankRepository.getInstance().hotCard(cardNumber.get().replace("-", ""), tempAuth, "", this, new ResponseCallback<BaseMobileBankResponse>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse data) {
+                complete.setValue("success");
+                progress.set(R.string.inquiry);
+            }
+
+            @Override
+            public void onError(String error) {
+                complete.setValue("fail");
+                progress.set(R.string.inquiry);
+                showRequestErrorMessage.setValue(error);
+            }
+
+            @Override
+            public void onFailed() {
+                progress.set(R.string.inquiry);
+            }
+        });
+    }
+
     private String compatibleUnicode(String entry) {
         return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
     public void onContinueBtnClick() {
-        // TODO: 1/22/2020 must enable checks!!
-        /*if (!checkData())
-            return;*/
-        sendData();
+        if (!checkData())
+            return;
+        if (mode.equals("BALANCE"))
+            getBalance();
+        else
+            hotCard();
     }
 
     public ObservableField<Integer> getProgress() {
@@ -238,5 +275,9 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
 
     public ObservableField<Integer> getDateError() {
         return dateError;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }

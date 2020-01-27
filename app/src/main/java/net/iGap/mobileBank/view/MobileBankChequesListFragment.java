@@ -85,7 +85,7 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
         binding.rcCheque.setLayoutManager(layoutManager);
 
         adapter = new MobileBankChequeListAdapter(null, position -> {
-
+            viewModel.blockCheques(adapter.getItem(position).getNumber());
         });
         binding.rcCheque.setAdapter(adapter);
     }

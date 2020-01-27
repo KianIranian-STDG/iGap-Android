@@ -2,6 +2,7 @@ package net.iGap.api;
 
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
+import net.iGap.mobileBank.repository.model.BankBlockCheque;
 import net.iGap.mobileBank.repository.model.BankCardBalance;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
@@ -94,6 +95,20 @@ public interface MobileBankApi {
                                                                            @Field("has_detail") Boolean hasDetail,
                                                                            @Field("offset") Integer offset,
                                                                            @Field("length") Integer length);
+
+    @POST("cheque/block-cheque")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<BankBlockCheque>> blockCheque(@Header("Authorization") String token,
+                                                              @Field("cheque_numbers") List<String> chequeNumbers,
+                                                              @Field("deposit_number") String depositNumber,
+                                                              @Field("blocked_reason") String reason);
+
+    @POST("card/hot-card")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse> hotCard(@Header("Authorization") String token,
+                                         @Field("pan") String cardNumber,
+                                         @Field("reason") String reason,
+                                         @Field("auth_info") String auth);
 
     @POST("parsian/otp")
     @FormUrlEncoded
