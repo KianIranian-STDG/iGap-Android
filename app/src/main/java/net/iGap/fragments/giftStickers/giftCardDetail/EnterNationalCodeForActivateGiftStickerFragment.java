@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,17 +14,21 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentEnterNationalCodeForActivateGiftStickerBinding;
-import net.iGap.helper.HelperError;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
     private boolean canForward;
+    private View.OnClickListener sendOtherListener;
+    private StructIGSticker structIGSticker;
 
     private EnterNationalCodeForActivateGiftStickerFragment() {
     }
 
-    public static EnterNationalCodeForActivateGiftStickerFragment getInstance(boolean canForward) {
+    public static EnterNationalCodeForActivateGiftStickerFragment getInstance(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, boolean canForward) {
         EnterNationalCodeForActivateGiftStickerFragment fragment = new EnterNationalCodeForActivateGiftStickerFragment();
         fragment.canForward = canForward;
+        fragment.sendOtherListener = sendOtherListener;
+        fragment.structIGSticker = structIGSticker;
         return fragment;
     }
 
@@ -51,7 +56,7 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
 
         viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessageRes -> {
             if (errorMessageRes != null) {
-                HelperError.showSnackMessage(getString(errorMessageRes), false);
+                Toast.makeText(getContext(), getString(errorMessageRes), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -59,6 +64,13 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
             if (goNext != null && goNext && getParentFragment() instanceof MainGiftStickerCardFragment) {
                 ((MainGiftStickerCardFragment) getParentFragment()).loadGiftStickerCardDetailFragment();
             }
+        });
+
+        binding.forward.setOnClickListener(v -> {
+            if (getParentFragment() instanceof MainGiftStickerCardFragment) {
+                ((MainGiftStickerCardFragment) getParentFragment()).dismiss();
+            }
+            sendOtherListener.onClick(v);
         });
     }
 }

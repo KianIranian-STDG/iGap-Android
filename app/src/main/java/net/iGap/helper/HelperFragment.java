@@ -3,6 +3,7 @@ package net.iGap.helper;
 import android.content.res.Configuration;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -341,8 +342,8 @@ public class HelperFragment {
         load();
     }
 
-    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, boolean canForward, int mode) {
-        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, canForward, mode);
+    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, boolean canForward, View.OnClickListener sendOtherListener, int mode) {
+        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, canForward, sendOtherListener, mode);
         fragment.show(fragmentManager, "gift sticker card");
     }
 

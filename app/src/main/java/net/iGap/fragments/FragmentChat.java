@@ -3659,8 +3659,8 @@ public class FragmentChat extends BaseFragment
 
 
     @Override
-    public void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward) {
-        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, canForward, 0);
+    public void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward, StructMessageInfo structMessage) {
+        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, canForward, v -> forwardMessage(structMessage), 0);
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
@@ -4843,12 +4843,7 @@ public class FragmentChat extends BaseFragment
             } else if (items.get(position).equals(getString(R.string.share_link_item_dialog))) {
                 shearedLinkDataToOtherProgram(message);
             } else if (items.get(position).equals(getString(R.string.forward_item_dialog))) {
-                mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
-                if (getActivity() instanceof ActivityMain) {
-                    ((ActivityMain) getActivity()).setForwardMessage(true);
-                }
-                finishChat();
-                new HelperFragment(getFragmentManager()).removeAll(true);
+                forwardMessage(message);
             } else if (items.get(position).equals(getString(R.string.delete_item_dialog))) {
                 confirmAndDeleteMessage(message, false);
             } else if (items.get(position).equals(getString(R.string.delete_from_storage))) {
@@ -5047,6 +5042,15 @@ public class FragmentChat extends BaseFragment
         if (getFragmentManager() != null) {
             bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
         }
+    }
+
+    private void forwardMessage(StructMessageInfo message) {
+        mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+        if (getActivity() instanceof ActivityMain) {
+            ((ActivityMain) getActivity()).setForwardMessage(true);
+        }
+        finishChat();
+        new HelperFragment(getFragmentManager()).removeAll(true);
     }
 
     private void copyMessageToClipboard(StructMessageInfo message, boolean isShowEmpty) {

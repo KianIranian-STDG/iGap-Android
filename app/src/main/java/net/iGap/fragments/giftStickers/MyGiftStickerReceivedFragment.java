@@ -48,7 +48,7 @@ public class MyGiftStickerReceivedFragment extends Fragment {
         binding.giftStickerList.setAdapter(new MyStickerListAdapter());
 
         if (binding.giftStickerList.getAdapter() instanceof MyStickerListAdapter) {
-            ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate(structIGSticker -> new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker.getStructIGSticker(), false, 1));
+            ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate(structIGSticker -> new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker.getStructIGSticker(), false, null, 1));
         }
 
         viewModel.getLoadStickerList().observe(getViewLifecycleOwner(), giftStickerList -> {

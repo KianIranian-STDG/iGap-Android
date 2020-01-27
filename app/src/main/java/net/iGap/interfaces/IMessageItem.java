@@ -50,5 +50,5 @@ public interface IMessageItem {
 
     void onOpenLinkDialog(String url);
 
-    void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward);
+    void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward, StructMessageInfo structMessage);
 }

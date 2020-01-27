@@ -145,7 +145,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                                 public void onSuccess(StructIGGiftSticker giftSticker) {
 
                                     if (!giftSticker.isActive())
-                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward());
+                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward(), structMessage);
                                     else {
                                         Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
                                     }

@@ -18,12 +18,14 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
     private StructIGSticker structIGSticker;
     private int mode = 0;
     private boolean canForward;
+    private View.OnClickListener sendOtherListener;
 
-    public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker, boolean canForward, int mode) {
+    public static MainGiftStickerCardFragment getInstance(StructIGSticker structIGSticker, boolean canForward, View.OnClickListener sendOtherListener, int mode) {
         MainGiftStickerCardFragment mainGiftStickerCardFragment = new MainGiftStickerCardFragment();
         mainGiftStickerCardFragment.structIGSticker = structIGSticker;
         mainGiftStickerCardFragment.mode = mode;
         mainGiftStickerCardFragment.canForward = canForward;
+        mainGiftStickerCardFragment.sendOtherListener = sendOtherListener;
         return mainGiftStickerCardFragment;
     }
 
@@ -44,7 +46,7 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         super.onViewCreated(view, savedInstanceState);
 
         if (mode == 0) {
-            loadEnterNationalCodeForActivatePage(canForward);
+            loadEnterNationalCodeForActivatePage();
         } else if (mode == 1) {
             loadGiftStickerCardDetailFragment();
         }
@@ -55,11 +57,11 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    public void loadEnterNationalCodeForActivatePage(boolean canSendToOther) {
+    public void loadEnterNationalCodeForActivatePage() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof EnterNationalCodeForActivateGiftStickerFragment)) {
-            fragment = EnterNationalCodeForActivateGiftStickerFragment.getInstance(canSendToOther);
+            fragment = EnterNationalCodeForActivateGiftStickerFragment.getInstance(structIGSticker, sendOtherListener, canForward);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();

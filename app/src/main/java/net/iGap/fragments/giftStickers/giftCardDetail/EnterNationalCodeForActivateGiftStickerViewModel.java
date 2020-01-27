@@ -38,10 +38,6 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
         });
     }
 
-    public void onForwardToOther() {
-
-    }
-
     public void onActiveButtonClicked(String nationalCode) {
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {

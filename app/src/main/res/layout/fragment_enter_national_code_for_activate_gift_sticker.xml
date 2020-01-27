@@ -104,7 +104,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="8dp"
             android:enabled="@{viewModel.isEnable}"
-            android:onClick="@{()->viewModel.onForwardToOther()}"
             android:text="@string/gift_sticker_send_to_other"
             app:layout_constraintBottom_toBottomOf="@+id/materialButton2"
             app:layout_constraintEnd_toEndOf="parent"
