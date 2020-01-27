@@ -90,6 +90,7 @@
             app:layout_constraintTop_toBottomOf="@id/cardNumber">
 
             <androidx.appcompat.widget.AppCompatEditText
+                style="@style/iGapEditTextStyle"
                 android:id="@+id/passwordET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
