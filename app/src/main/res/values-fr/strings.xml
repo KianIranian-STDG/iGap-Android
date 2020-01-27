@@ -2058,5 +2058,5 @@
     <string name="delete_from_storage">Supprimer du stockage</string>
     <string name="map_registration_enable">Activer la visibilité à proximité</string>
     <string name="need_browser">Nécessite un navigateur à utiliser.</string>
-    <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
+    <string name="poll_dialog_question">Etes-vous sûr de votre avis?</string>
 </resources>

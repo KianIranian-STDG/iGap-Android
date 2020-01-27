@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +46,8 @@ public class ChartFragment extends BaseFragment {
     private List<PollItem> pollList;
     private BarChart chart;
     private HelperToolbar helperToolbar;
-    private SwipeRefreshLayout pullToRefresh;
+    private SwipeRefreshLayout swipeRefresh;
+    private TextView emptyRecycle;
     private int pollId;
     private LinearLayout toolbar;
 
@@ -59,6 +60,11 @@ public class ChartFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        toolbar = view.findViewById(R.id.chart_toolbar);
+        emptyRecycle = view.findViewById(R.id.emptyRecycle_chart);
+        swipeRefresh = view.findViewById(R.id.sweep);
+        chart = view.findViewById(R.id.type8_chart0);
+
         if (getArguments() != null) {
             pollId = getArguments().getInt("pollId");
         } else {
@@ -77,17 +83,18 @@ public class ChartFragment extends BaseFragment {
                         popBackStackFragment();
                     }
                 });
-        toolbar = view.findViewById(R.id.chart_toolbar);
         toolbar.addView(helperToolbar.getView());
 
-        pullToRefresh = view.findViewById(R.id.sweep);
-        chart = view.findViewById(R.id.type8_chart0);
-        chart.getAxisLeft().setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.valueOf((int) Math.floor(value));
-            }
-        });
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setTextColor(new Theme().getTitleTextColor(chart.getContext()));
+        xAxis.setTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(ViewMaker.dpToPixel(4));
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        tryToUpdateOrFetchRecycleViewData(0);
         chart.setMaxVisibleValueCount(100);
         chart.setPinchZoom(true);
         chart.setHighlightPerTapEnabled(false);
@@ -104,28 +111,26 @@ public class ChartFragment extends BaseFragment {
         chart.getAxisLeft().setDrawGridLines(false);
         chart.animateY(1000);
         chart.getLegend().setEnabled(false);
+        chart.getAxisLeft().setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.valueOf((int) Math.floor(value));
+            }
+        });
 
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setTextColor(new Theme().getTitleTextColor(chart.getContext()));
-        xAxis.setTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextSize(ViewMaker.dpToPixel(4));
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
-        tryToUpdateOrFetchRecycleViewData(0);
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {
-        setRefreshing(true);
+        swipeRefresh.setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
         if (!isSend) {
+            swipeRefresh.setRefreshing(false);
             if (count < 3) {
                 G.handler.postDelayed(() -> tryToUpdateOrFetchRecycleViewData(count + 1), 1000);
-            } else {
-                setRefreshing(false);
+            }/* else {
+                swipeRefresh.setRefreshing(false);
 
-            }
+            }*/
         }
     }
 
@@ -134,16 +139,16 @@ public class ChartFragment extends BaseFragment {
             @Override
             public void onPollListReady(ArrayList<PollItem> pollArrayList, String title) {
                 G.handler.post(() -> {
+                    swipeRefresh.setRefreshing(false);
                     pollList = pollArrayList;
                     notifyChangeData();
                     helperToolbar.setDefaultTitle(title);
-                    setRefreshing(false);
                 });
             }
 
             @Override
             public void onError(int major, int minor) {
-                G.handler.post(() -> setRefreshing(false));
+                G.handler.post(() -> emptyRecycle.setVisibility(View.VISIBLE));
             }
         });
     }
@@ -201,21 +206,7 @@ public class ChartFragment extends BaseFragment {
 
     }
 
-    private void setRefreshing(boolean value) {
-        pullToRefresh.setRefreshing(value);
-/*        if (value) {
-            emptyRecycle.setVisibility(View.GONE);
-        } else {
-            if (pollAdapter.getItemCount() == 0) {
-                emptyRecycle.setVisibility(View.VISIBLE);
-            } else {
-                emptyRecycle.setVisibility(View.GONE);
-            }
-        }*/
-    }
-
     public void notifyChangeData() {
-        /*this.notifyChangeData();*/
         showChart();
     }
 

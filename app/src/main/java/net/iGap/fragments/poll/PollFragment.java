@@ -26,11 +26,11 @@ import net.iGap.request.RequestClientGetPoll;
 import java.util.ArrayList;
 
 public class PollFragment extends BaseFragment {
+    private int pollId;
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
-    private SwipeRefreshLayout pullToRefresh;
-    private int pollId;
-    PollAdapter pollAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private PollAdapter pollAdapter;
     private HelperToolbar mHelperToolbar;
 
     public static PollFragment newInstance(int page) {
@@ -64,29 +64,24 @@ public class PollFragment extends BaseFragment {
     }
 
     private void init(View view) {
-        pullToRefresh = view.findViewById(R.id.pullToRefresh);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
         pollAdapter = new PollAdapter(getActivity(), new ArrayList<>());
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setRefreshing(true);
-                boolean isSend = updateOrFetchRecycleViewData();
-                if (!isSend) {
-                    setRefreshing(false);
-                    HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-                }
+        swipeRefreshLayout = view.findViewById(R.id.pullToRefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            setRefreshing(true);
+            boolean isSend = updateOrFetchRecycleViewData();
+            if (!isSend) {
+                setRefreshing(false);
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
 
-        emptyRecycle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isSend = updateOrFetchRecycleViewData();
-                if (!isSend) {
-                    HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-                }
+        emptyRecycle.setOnClickListener(v -> {
+            boolean isSend = updateOrFetchRecycleViewData();
+            if (!isSend) {
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
             }
         });
 
@@ -99,11 +94,6 @@ public class PollFragment extends BaseFragment {
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
-                // .setRightSmallAvatarShown(true)
-//                .setFragmentActivity(getActivity())
-//                .setPassCodeVisibility(true, R.string.unlock_icon)
-//                .setScannerVisibility(true, R.string.scan_qr_code_icon)
-                //  .setSearchBoxShown(true, false)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -115,30 +105,12 @@ public class PollFragment extends BaseFragment {
         tryToUpdateOrFetchRecycleViewData(0);
     }
 
-    private void setRefreshing(boolean value) {
-        pullToRefresh.setRefreshing(value);
-        if (value) {
-            emptyRecycle.setVisibility(View.GONE);
-        } else {
-            if (pollAdapter.getItemCount() == 0) {
-                emptyRecycle.setVisibility(View.VISIBLE);
-            } else {
-                emptyRecycle.setVisibility(View.GONE);
-            }
-        }
-    }
-
     private void tryToUpdateOrFetchRecycleViewData(int count) {
         setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
         if (!isSend) {
             if (count < 3) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tryToUpdateOrFetchRecycleViewData(count + 1);
-                    }
-                }, 1000);
+                G.handler.postDelayed(() -> tryToUpdateOrFetchRecycleViewData(count + 1), 1000);
             } else {
                 setRefreshing(false);
             }
@@ -149,25 +121,30 @@ public class PollFragment extends BaseFragment {
         return new RequestClientGetPoll().getPoll(pollId, new OnPollList() {
             @Override
             public void onPollListReady(ArrayList<PollItem> pollArrayList, String title) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setAdapterData(pollArrayList, title);
-                        setRefreshing(false);
-                    }
+                G.handler.post(() -> {
+                    setAdapterData(pollArrayList, title);
+                    setRefreshing(false);
                 });
             }
 
             @Override
             public void onError(int major, int minor) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setRefreshing(false);
-                    }
-                });
+                G.handler.post(() -> setRefreshing(false));
             }
         });
+    }
+
+    private void setRefreshing(boolean value) {
+        swipeRefreshLayout.setRefreshing(value);
+        if (value) {
+            emptyRecycle.setVisibility(View.GONE);
+        } else {
+            if (pollAdapter.getItemCount() == 0) {
+                emptyRecycle.setVisibility(View.VISIBLE);
+            } else {
+                emptyRecycle.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void setAdapterData(ArrayList<PollItem> pollArrayList, String title) {
