@@ -16,13 +16,16 @@ import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmRoomMessageWalletTopupRealmProxy;
 
 @Parcel(implementations = {net_iGap_realm_RealmRoomMessageWalletTopupRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageWalletTopup.class})
 public class RealmRoomMessageWalletTopup extends RealmObject {
 
-    private long fromUserId;
+    @PrimaryKey
     private long orderId;
+
+    private long fromUserId;
     private String myToken;
     private long token;
     private long amount;
@@ -35,7 +38,7 @@ public class RealmRoomMessageWalletTopup extends RealmObject {
     private long rrn;
     private long traceNumber;
     private int requestTime;
-    private boolean statusTime;
+    private boolean status;
 
 
     public static RealmRoomMessageWalletTopup put(Realm realm, final ProtoGlobal.RoomMessageWallet.Topup input) {
@@ -54,7 +57,7 @@ public class RealmRoomMessageWalletTopup extends RealmObject {
         messageWallet.setRrn(input.getRrn());
         messageWallet.setTraceNumber(input.getTraceNumber());
         messageWallet.setRequestTime(input.getRequestTime());
-        messageWallet.setStatusTime(input.getStatus());
+        messageWallet.setStatus(input.getStatus());
 
         return messageWallet;
     }
@@ -171,12 +174,12 @@ public class RealmRoomMessageWalletTopup extends RealmObject {
         this.requestTime = requestTime;
     }
 
-    public boolean isStatusTime() {
-        return statusTime;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setStatusTime(boolean statusTime) {
-        this.statusTime = statusTime;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
 }
