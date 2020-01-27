@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    android:background="?rootBackgroundColor">
+<!--
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/emptyRecycle"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/retry_icon"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:textSize="@dimen/dp22"
+        android:visibility="gone" />-->
     <LinearLayout
         android:id="@+id/chart_toolbar"
         android:layout_width="match_parent"
@@ -13,19 +28,14 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/sweep"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:paddingBottom="30dp">
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/type8_chart0"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/discovery_margin"
-            android:layout_marginTop="@dimen/discovery_margin"
-            android:layout_marginRight="@dimen/discovery_margin"
-            android:layout_marginBottom="30dp"
+            android:layout_height="match_parent"
             android:minHeight="@dimen/dp300" />
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</LinearLayout>
+</RelativeLayout>
