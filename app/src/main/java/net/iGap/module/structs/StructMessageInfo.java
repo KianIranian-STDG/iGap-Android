@@ -275,6 +275,10 @@ public class StructMessageInfo implements Parcelable {
         return getAttachment() != null;
     }
 
+    public boolean hasAdditional() {
+        return getAdditional() != null;
+    }
+
     @Override
     public int describeContents() {
         return 0;

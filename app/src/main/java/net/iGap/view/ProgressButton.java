@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
@@ -28,7 +29,6 @@ public class ProgressButton extends FrameLayout {
 
     private int radius = LayoutCreator.dpToPx(32);
     private Paint paint;
-    private boolean isRtl = G.isAppRtl;
     private int mode;
 
 
@@ -53,6 +53,7 @@ public class ProgressButton extends FrameLayout {
         buttonTv.setMaxLines(1);
         buttonTv.setSingleLine(true);
         buttonTv.setEllipsize(TextUtils.TruncateAt.END);
+        boolean isRtl = G.isAppRtl;
         buttonTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
 
         addView(buttonTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 6, 0, 6, 0));
@@ -91,6 +92,14 @@ public class ProgressButton extends FrameLayout {
             buttonTv.setText(getResources().getString(R.string.Add));
             setBackgroundColor(Theme.getInstance().getButtonColor(getContext()));
         }
+    }
+
+    public void setText(@StringRes int text) {
+        buttonTv.setText(text);
+    }
+
+    public void setText(CharSequence text) {
+        buttonTv.setText(text);
     }
 
     public int getMode() {
