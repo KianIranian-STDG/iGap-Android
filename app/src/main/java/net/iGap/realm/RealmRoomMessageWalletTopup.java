@@ -42,9 +42,8 @@ public class RealmRoomMessageWalletTopup extends RealmObject {
 
 
     public static RealmRoomMessageWalletTopup put(Realm realm, final ProtoGlobal.RoomMessageWallet.Topup input) {
-        RealmRoomMessageWalletTopup messageWallet = realm.createObject(RealmRoomMessageWalletTopup.class);
+        RealmRoomMessageWalletTopup messageWallet = realm.createObject(RealmRoomMessageWalletTopup.class, input.getOrderId());
         messageWallet.setFromUserId(input.getFromUserId());
-        messageWallet.setOrderId(input.getOrderId());
         messageWallet.setMyToken(input.getMyToken());
         messageWallet.setToken(input.getToken());
         messageWallet.setAmount(input.getAmount());
