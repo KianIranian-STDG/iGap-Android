@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment
         binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_transfer_ctc_step_one, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        isNeedResume = true;
 
         return attachToSwipeBack(binding.getRoot());
 
@@ -169,9 +171,6 @@ public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment
         textInputManagerValue();
         //listen to view model
         onDateChanged();
-        // check for clipboard instance and wait for changes
-        onClipboardDataEntry();
-        onClipboardDataChangeListener();
         // start actions for getting data from db
         viewModel.getOriginCardsDB();
         viewModel.getDestCardsDB();
@@ -180,6 +179,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment
     private void onClipboardDataChangeListener() {
         ClipboardManager clipBoard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         clipBoard.addPrimaryClipChangedListener(() -> {
+            Log.d(TAG, "onClipboardDataChangeListener: clip changed!!");
             ClipData clipData = clipBoard.getPrimaryClip();
             if (clipData == null || clipData.getItemCount() == 0)
                 return;
@@ -187,6 +187,12 @@ public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment
             String text = item.getText().toString();
             viewModel.extractCardNum(text, true);
         });
+    }
+
+    @Override
+    public void onResume() {
+        onClipboardDataEntry();
+        super.onResume();
     }
 
     private void onClipboardDataEntry() {
@@ -236,7 +242,6 @@ public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment
         });
         viewModel.getDestSuggestCards().observe(getViewLifecycleOwner(), bankCardModels -> {
             MobileBankSpinnerAdapter adapter = new MobileBankSpinnerAdapter(getContext(), R.layout.mobile_bank_preview_spinner_item, bankCardModels);
-            binding.destSuggestionSpinner.setText(getResources().getString(R.string.igap));
             binding.destSuggestionSpinner.setAdapter(adapter);
             binding.destSuggestionSpinner.showDropDown();
         });
