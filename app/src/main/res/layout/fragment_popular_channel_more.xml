@@ -89,6 +89,7 @@
             android:layout_height="@dimen/dp48"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:text="@string/retry_icon"
+            android:layout_gravity="center"
             android:textColor="?attr/iGapTitleTextColor"
             android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
