@@ -32,7 +32,7 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseMobileBankViewMod
 
     private MutableLiveData<List<BankCardModel>> originCards;
     private MutableLiveData<List<BankCardModel>> destCards;
-    private MutableLiveData<List<BankCardModel>> suggestCards;
+    private MutableLiveData<List<BankCardModel>> destSuggestCards;
 
     private Boolean completeOrigin = false;
     private Boolean completeDest = false;
@@ -43,7 +43,7 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseMobileBankViewMod
     public MobileBankTransferCTCStepOneViewModel() {
         originCards = new MutableLiveData<>();
         destCards = new MutableLiveData<>();
-        suggestCards = new MutableLiveData<>();
+        destSuggestCards = new MutableLiveData<>();
         originBankLogo = new MutableLiveData<>();
         destBankLogo = new MutableLiveData<>();
     }
@@ -64,24 +64,32 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseMobileBankViewMod
         destCards.setValue(temp);
     }
 
-    public void extractCardNum(String input) {
-        String output = "";
+    public String extractCardNum(String input, boolean loadSuggest) {
+        StringBuilder output = new StringBuilder();
+        // change everything to english
+        for (int i = 0; i < input.length(); i++) {
+            output.append(changeUnicodeToEnglishNumbers("" + input.charAt(i)));
+        }
+        // delete everything except numbers
+        output = new StringBuilder(output.toString().replaceAll("[^0-9]", ""));
+        // check if it is a card number
+        if (output.length() == 16 && loadSuggest) {
+            List<BankCardModel> temp = new ArrayList<>();
+            temp.add(new BankCardModel("Suggestion", output.toString()));
+            destSuggestCards.setValue(temp);
+        }
+        return output.toString();
+    }
+
+    private String changeUnicodeToEnglishNumbers(String input) {
         List<String> persianNumbers = Arrays.asList("۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹");
         List<String> englishNumbers = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-        for (int i = 0; i < input.length(); i++) {
-            for (String numChar : persianNumbers) {
-                if (numChar.equals("" + input.charAt(i))) {
-                    output = output + englishNumbers.get(persianNumbers.indexOf(numChar));
-                    break;
-                }
+        for (String numChar : persianNumbers) {
+            if (numChar.equals(input)) {
+                return englishNumbers.get(persianNumbers.indexOf(numChar));
             }
         }
-        output = output.replaceAll("[^0-9]", "");
-        if (output.length() == 16) {
-            List<BankCardModel> temp = new ArrayList<>();
-            temp.add(new BankCardModel("Suggestion", output));
-            suggestCards.setValue(temp);
-        }
+        return input;
     }
 
     private void getCardInfo(String cardNum, boolean isOrigin) {
@@ -267,8 +275,8 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseMobileBankViewMod
         return destCardNumSpinner;
     }
 
-    public MutableLiveData<List<BankCardModel>> getSuggestCards() {
-        return suggestCards;
+    public MutableLiveData<List<BankCardModel>> getDestSuggestCards() {
+        return destSuggestCards;
     }
 
     public MutableLiveData<Integer> getOriginBankLogo() {
@@ -278,4 +286,5 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseMobileBankViewMod
     public MutableLiveData<Integer> getDestBankLogo() {
         return destBankLogo;
     }
+
 }
