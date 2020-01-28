@@ -230,6 +230,10 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
 
+                if (iconOk.isShown()) {
+                    iconOk.performClick();
+                }
+
                 if (getActivity() != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
