@@ -30,6 +30,7 @@ import net.iGap.adapter.items.poll.PollItem;
 import net.iGap.adapter.items.poll.PollItemField;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetPoll;
@@ -50,6 +51,14 @@ public class ChartFragment extends BaseFragment {
     private TextView emptyRecycle;
     private int pollId;
     private LinearLayout toolbar;
+
+    public static ChartFragment newInstance(int page) {
+        ChartFragment chartFragment = new ChartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("pollId", page);
+        chartFragment.setArguments(bundle);
+        return chartFragment;
+    }
 
     @Nullable
     @Override
@@ -96,7 +105,7 @@ public class ChartFragment extends BaseFragment {
         xAxis.setGranularityEnabled(true);
         tryToUpdateOrFetchRecycleViewData(0);
         chart.setMaxVisibleValueCount(100);
-        chart.setPinchZoom(true);
+        chart.setPinchZoom(false);
         chart.setHighlightPerTapEnabled(false);
         chart.setDrawValueAboveBar(true);
         chart.setDrawBarShadow(false);
@@ -117,24 +126,38 @@ public class ChartFragment extends BaseFragment {
                 return String.valueOf((int) Math.floor(value));
             }
         });
+        swipeRefresh.setOnRefreshListener(() -> {
+            boolean isSend = updateOrFetchRecycleViewData();
+            if (!isSend) {
+                swipeRefresh.setRefreshing(false);
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+            } else {
+                swipeRefresh.setRefreshing(true);
+            }
+        });
 
+        emptyRecycle.setOnClickListener(v -> {
+            boolean isSend = updateOrFetchRecycleViewData();
+            if (!isSend) {
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+            }
+        });
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {
-        swipeRefresh.setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
         if (!isSend) {
-            swipeRefresh.setRefreshing(false);
+            swipeRefresh.setRefreshing(true);
             if (count < 3) {
                 G.handler.postDelayed(() -> tryToUpdateOrFetchRecycleViewData(count + 1), 1000);
-            }/* else {
+            } else {
                 swipeRefresh.setRefreshing(false);
-
-            }*/
+            }
         }
     }
 
     private boolean updateOrFetchRecycleViewData() {
+        swipeRefresh.setRefreshing(true);
         return new RequestClientGetPoll().getPoll(pollId, new OnPollList() {
             @Override
             public void onPollListReady(ArrayList<PollItem> pollArrayList, String title) {
@@ -148,7 +171,10 @@ public class ChartFragment extends BaseFragment {
 
             @Override
             public void onError(int major, int minor) {
-                G.handler.post(() -> emptyRecycle.setVisibility(View.VISIBLE));
+                G.handler.post(() -> {
+                    swipeRefresh.setRefreshing(false);
+                    emptyRecycle.setVisibility(View.VISIBLE);
+                });
             }
         });
     }
