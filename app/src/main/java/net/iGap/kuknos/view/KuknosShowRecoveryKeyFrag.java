@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,9 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
@@ -50,13 +54,15 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
 
         kuknosShowRecoveryKeyVM.initMnemonic();
+
+        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, kuknosShowRecoveryKeyVM.languages));
+        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, kuknosShowRecoveryKeyVM.lengths));
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -95,18 +101,10 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment;
-                if (kuknosShowRecoveryKeyVM.getPinCheck().get()) {
-                    fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSetPassFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                } else {
-                    fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSignupInfoFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
+                fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosSetPassFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }

@@ -38,14 +38,39 @@ public class UserRepo {
 
     // generate key pair
 
-    public void generateMnemonic() {
+    public void generateFa12Mnemonic() {
         try {
-            char[] mnemonicTemp = Wallet.generate12WordMnemonic();
-            /*String[] mnemonic = String.valueOf(mnemonicTemp).split(" ");
-            String mnemonicS = "";
-            for (String temp : mnemonic) {
-                mnemonicS = mnemonicS.concat(temp + " ");
-            }*/
+            char[] mnemonicTemp = Wallet.generate12FaWordMnemonic();
+            RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
+            Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
+        } catch (Exception e) {
+            RealmKuknos.updateMnemonic("-1");
+        }
+    }
+
+    public void generateFa24Mnemonic() {
+        try {
+            char[] mnemonicTemp = Wallet.generate24FaWordMnemonic();
+            RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
+            Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
+        } catch (Exception e) {
+            RealmKuknos.updateMnemonic("-1");
+        }
+    }
+
+    public void generateEn12Mnemonic() {
+        try {
+            char[] mnemonicTemp = Wallet.generate12EnWordMnemonic();
+            RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
+            Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
+        } catch (Exception e) {
+            RealmKuknos.updateMnemonic("-1");
+        }
+    }
+
+    public void generateEn24Mnemonic() {
+        try {
+            char[] mnemonicTemp = Wallet.generate24EnWordMnemonic();
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {

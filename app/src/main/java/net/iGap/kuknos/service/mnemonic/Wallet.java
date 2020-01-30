@@ -16,12 +16,20 @@ import javax.annotation.Nullable;
 
 public class Wallet {
 
-    public static char[] generate12WordMnemonic() throws WalletException {
+    public static char[] generate12EnWordMnemonic() throws WalletException {
         return Mnemonic.create(Strength.NORMAL, WordList.ENGLISH);
     }
 
-    public static char[] generate24WordMnemonic() throws WalletException {
+    public static char[] generate24EnWordMnemonic() throws WalletException {
         return Mnemonic.create(Strength.HIGH, WordList.ENGLISH);
+    }
+
+    public static char[] generate12FaWordMnemonic() throws WalletException {
+        return Mnemonic.create(Strength.NORMAL, WordList.FARSI);
+    }
+
+    public static char[] generate24FaWordMnemonic() throws WalletException {
+        return Mnemonic.create(Strength.HIGH, WordList.FARSI);
     }
 
     public static KeyPair createKeyPair(char[] mnemonic, @Nullable char[] passphrase, int index) throws WalletException {
