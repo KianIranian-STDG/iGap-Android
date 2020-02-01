@@ -68,7 +68,6 @@ public class PollFragment extends BaseFragment {
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
         pollAdapter = new PollAdapter(getActivity(), new ArrayList<>());
         swipeRefreshLayout = view.findViewById(R.id.pullToRefresh);
-
         swipeRefreshLayout.setOnRefreshListener(() -> {
             setRefreshing(true);
             boolean isSend = updateOrFetchRecycleViewData();
@@ -85,8 +84,7 @@ public class PollFragment extends BaseFragment {
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
-        rcDiscovery.setLayoutManager(layoutManager);
+        rcDiscovery.setLayoutManager(new LinearLayoutManager(getContext()));
         rcDiscovery.setAdapter(pollAdapter);
 
         mHelperToolbar = HelperToolbar.create()
@@ -152,5 +150,4 @@ public class PollFragment extends BaseFragment {
         mHelperToolbar.setDefaultTitle(title);
         pollAdapter.notifyChangeData();
     }
-
 }
