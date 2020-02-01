@@ -41,6 +41,7 @@ public class KeyboardView extends FrameLayout {
     }
 
     public void setCurrentMode(int mode, int contentView) {
+        currentMode = mode;
         if (mode == MODE_EMOJI) {
 
             if (emojiView == null)
@@ -115,5 +116,9 @@ public class KeyboardView extends FrameLayout {
     public void setKeyboardHeight(int keyboardHeightLand, int keyboardHeight) {
         this.keyboardHeightLand = keyboardHeightLand;
         this.keyboardHeight = keyboardHeight;
+    }
+
+    public int getCurrentMode() {
+        return currentMode;
     }
 }

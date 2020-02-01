@@ -3327,8 +3327,15 @@ public class FragmentChat extends BaseFragment
         if (keyboardView == null)
             createKeyboardView();
 
-        AndroidUtils.hideKeyboard(edtChat);
-        showPopup(KeyboardView.MODE_EMOJI);
+        if (isPopupShowing() && keyboardView.getCurrentMode() != KeyboardView.MODE_KEYBOARD) {
+            showPopup(KeyboardView.MODE_KEYBOARD);
+            openKeyboardInternal();
+            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+        } else {
+            AndroidUtils.hideKeyboard(edtChat);
+            showPopup(KeyboardView.MODE_EMOJI);
+            changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+        }
     }
 
     private void createKeyboardView() {
@@ -3445,6 +3452,8 @@ public class FragmentChat extends BaseFragment
                 createKeyboardView();
 
             if (keyboardView != null) {
+
+                keyboardView.setCurrentMode(KeyboardView.MODE_KEYBOARD, -1);
 
                 if (keyboardHeight <= 0) {
                     keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
