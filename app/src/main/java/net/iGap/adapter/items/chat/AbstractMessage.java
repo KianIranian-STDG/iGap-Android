@@ -1086,7 +1086,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
-        if (holder instanceof NewChatItemHolder && structMessage.hasAdditional() && structMessage.getAdditional().getAdditionalType() != AdditionalType.GIFT_STICKER)
+        if (holder instanceof NewChatItemHolder)
             mHolder = (NewChatItemHolder) holder;
         else
             return;
