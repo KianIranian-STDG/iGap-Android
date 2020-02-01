@@ -31,7 +31,6 @@ import net.iGap.Theme;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.UserStatusController;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.model.PassCode;
@@ -146,24 +145,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
         /*Log.wtf("ActivityEnhanced","onCreate end");*/
 
-    }
-
-    public void onScreenSizeChanged(int height, boolean land) {
-        SharedPreferences emojiSharedPreferences = getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
-
-        boolean keyboardVisible = height > 0;
-
-        if (height > LayoutCreator.dp(72) && keyboardVisible) {
-            if (land) {
-                if (emojiSharedPreferences != null)
-                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, height).apply();
-                Log.i("abbasiKeyboard", "onScreenSizeChanged: set SHP value -> " + height + " in land");
-            } else {
-                if (emojiSharedPreferences != null)
-                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, height).apply();
-                Log.i("abbasiKeyboard", "onScreenSizeChanged: set SHP value -> " + height + " in portrait");
-            }
-        }
     }
 
     private void setThemeSetting() {

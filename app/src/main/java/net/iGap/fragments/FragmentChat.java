@@ -3278,7 +3278,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void onScreenSizeChanged(int height, boolean land) {
-        keyboardVisible = height > 0;
 
         if (height > LayoutCreator.dp(50) && keyboardVisible) {
             if (land) {
@@ -3306,6 +3305,12 @@ public class FragmentChat extends BaseFragment
 
                 keyboardView.setLayoutParams(layoutParams);
             }
+        }
+
+        keyboardVisible = height > 0;
+
+        if (notifyFrameLayout != null) {
+            notifyFrameLayout.requestLayout();
         }
 
         if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
