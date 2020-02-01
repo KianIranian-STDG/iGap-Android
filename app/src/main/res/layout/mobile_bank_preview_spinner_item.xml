@@ -40,6 +40,8 @@
         android:layout_marginEnd="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
         android:textColor="?iGapTitleTextColor"
+        android:gravity="right"
+        android:textDirection="ltr"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

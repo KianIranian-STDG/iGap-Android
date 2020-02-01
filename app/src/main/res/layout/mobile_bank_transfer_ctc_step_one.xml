@@ -170,7 +170,7 @@
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/suggestionSpinner"
+                        android:id="@+id/destSuggestionSpinner"
                         android:layout_marginStart="@dimen/dp32"
                         android:layout_marginEnd="@dimen/dp32"
                         android:visibility="visible"
