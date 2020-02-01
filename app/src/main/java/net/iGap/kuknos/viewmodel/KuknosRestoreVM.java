@@ -40,7 +40,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         } else if (keys.get().split(" ").length < 12) {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_Restore_Error_invalid_str));
         } else {
-            if (pinCheck.getValue())
+            if (/*pinCheck.getValue()*/true)
                 nextPage.setValue(1);
             else
                 generateKeypair();

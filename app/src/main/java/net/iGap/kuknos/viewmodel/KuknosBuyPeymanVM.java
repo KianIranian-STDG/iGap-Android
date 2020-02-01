@@ -1,7 +1,5 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
@@ -15,7 +13,6 @@ import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.request.RequestInfoPage;
 
@@ -28,7 +25,6 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private ObservableField<String> amount = new ObservableField<>();
     private ObservableField<String> sum = new ObservableField<>();
     private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر پیمان: ...");
-    private ObservableField<String> transactionFee = new ObservableField<>("کارمزد خرید پیمان: ...");
     private MutableLiveData<ErrorM> error;
     // 0 : nothing 1: connecting to server 2: connecting to bank
     private MutableLiveData<Integer> progressState;
@@ -41,7 +37,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     Double sumTemp;
     private PanelRepo panelRepo = new PanelRepo();
     private MutableLiveData<String> TandCAgree;
-    private KuknosFeeModel.Fee fees = null;
+    private boolean termsAndConditionIsChecked = false;
 
     public KuknosBuyPeymanVM() {
         error = new MutableLiveData<>();
@@ -70,9 +66,9 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             error.setValue(new ErrorM(true, "", "1", R.string.kuknos_buyP_MaxAmount));
             return false;
         }
-        if (PMNprice == -1 || fees == null)
+        if (PMNprice == -1)
             return false;
-        sumTemp = Double.parseDouble(amount.get()) * PMNprice * (100 - fees.getDiscount()) / 100 + fees.getFee() / 10000000 * PMNprice;
+        sumTemp = Double.parseDouble(amount.get()) * PMNprice;
         BigDecimal tmp = new BigDecimal(sumTemp).setScale(0, RoundingMode.UP);
         sumTemp = Double.parseDouble(tmp.toString());
         DecimalFormat df = new DecimalFormat(",###");
@@ -87,34 +83,9 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
                 PMNprice = data.getData().getAssets().get(0).getBuyRate();
                 maxAmount = data.getData().getAssets().get(0).getRemainAmount();
-                getFees();
-            }
-
-            @Override
-            public void onError(String error) {
+                assetPrice.set("قیمت هر پیمان: " + PMNprice + " ریال");
                 progressState.setValue(0);
-            }
-
-            @Override
-            public void onFailed() {
-                progressState.setValue(0);
-            }
-        });
-    }
-
-    public void getFees() {
-        panelRepo.getFee(this, new ResponseCallback<KuknosResponseModel<KuknosFeeModel>>() {
-            @Override
-            public void onSuccess(KuknosResponseModel<KuknosFeeModel> data) {
-                for (KuknosFeeModel.Fee tmp : data.getData().getFees()) {
-                    if (tmp.getMethod().equals("charge-wallet")) {
-                        fees = tmp;
-                        break;
-                    }
-                }
-                assetPrice.set("قیمت هر پیمان: " + PMNprice * (100 - fees.getDiscount()) / 10 + " ریال");
-                transactionFee.set("کارمزد خرید: " + fees.getFee() / 10000000 + " پیمان");
-                progressState.setValue(0);
+//                getFees();
             }
 
             @Override
@@ -166,17 +137,27 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
             return true;
         }
-        Log.d("amini", "checkEntry: " + amount.get());
         if (Integer.parseInt(amount.get()) == 0) {
             error.setValue(new ErrorM(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
             return true;
+        }
+        //Terms and Condition
+        if (!termsAndConditionIsChecked) {
+            error.setValue(new ErrorM(true, "TermsAndConditionError", "0", R.string.kuknos_SignupInfo_errorTermAndCondition));
+            return false;
         }
         return false;
     }
 
     public void getTermsAndCond() {
-        if (!G.isSecure)
+        if (TandCAgree.getValue() != null && !TandCAgree.getValue().equals("error")) {
+            TandCAgree.postValue(TandCAgree.getValue());
             return;
+        }
+        if (!G.isSecure) {
+            TandCAgree.postValue("error");
+            return;
+        }
         new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
@@ -191,6 +172,10 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                 TandCAgree.setValue("error");
             }
         });
+    }
+
+    public void termsOnCheckChange(boolean isChecked) {
+        termsAndConditionIsChecked = isChecked;
     }
 
     public MutableLiveData<ErrorM> getError() {
@@ -245,11 +230,11 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         this.assetPrice = assetPrice;
     }
 
-    public ObservableField<String> getTransactionFee() {
-        return transactionFee;
+    public MutableLiveData<String> getTandCAgree() {
+        return TandCAgree;
     }
 
-    public void setTransactionFee(ObservableField<String> transactionFee) {
-        this.transactionFee = transactionFee;
+    public void setTandCAgree(MutableLiveData<String> tandCAgree) {
+        TandCAgree = tandCAgree;
     }
 }

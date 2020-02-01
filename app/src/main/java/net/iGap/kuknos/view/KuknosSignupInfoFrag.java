@@ -12,6 +12,7 @@ import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,13 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         kuknosSignupInfoVM = ViewModelProviders.of(this).get(KuknosSignupInfoVM.class);
+        /*kuknosSignupInfoVM = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new KuknosSignupInfoVM();
+            }
+        }).get(KuknosSignupInfoVM.class);*/
     }
 
     @Nullable
@@ -218,7 +226,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     }
 
     private void onCheckUsernameState() {
-        /*kuknosSignupInfoVM.getCheckUsernameState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        kuknosSignupInfoVM.getCheckUsernameState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
                 if (integer == 0) {
@@ -242,11 +250,11 @@ public class KuknosSignupInfoFrag extends BaseFragment {
                     usernameStatusGone();
                 }
             }
-        });*/
+        });
     }
 
     private void onCheckUsernameETFocus() {
-        /*binding.fragKuknosSIUsername.addTextChangedListener(new TextWatcher() {
+        binding.fragKuknosSIUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.fragKuknosSIUsernameHolder.setErrorEnabled(false);
@@ -254,22 +262,23 @@ public class KuknosSignupInfoFrag extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                kuknosSignupInfoVM.setUsernameIsValid(false);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
-        });*/
-        /*binding.fragKuknosSIUsername.setOnFocusChangeListener((v, hasFocus) -> {
+        });
+        binding.fragKuknosSIUsername.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 kuknosSignupInfoVM.cancelUsernameServer();
             } else {
                 //TODO delete log
+                Log.d("amini", "onCheckUsernameETFocus: in here");
                 if (!kuknosSignupInfoVM.getProgressSendDServerState().getValue())
                     kuknosSignupInfoVM.isUsernameValid(false);
             }
-        });*/
+        });
         binding.fragKuknosSIName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

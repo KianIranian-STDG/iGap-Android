@@ -12,6 +12,7 @@ import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
 import net.iGap.request.RequestInfoPage;
 
 import java.util.Objects;
@@ -21,9 +22,9 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
     private KuknosSignupM kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-    //    private MutableLiveData<Integer> checkUsernameState;
+    private MutableLiveData<Integer> checkUsernameState;
     private MutableLiveData<Boolean> progressSendDServerState;
-    //    private ObservableField<String> username = new ObservableField<>();
+    private ObservableField<String> username = new ObservableField<>();
     private ObservableField<String> name = new ObservableField<>();
     private ObservableField<String> phoneNum = new ObservableField<>();
     private ObservableField<String> email = new ObservableField<>();
@@ -42,28 +43,25 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
         error = new MutableLiveData<>();
         nextPage = new MutableLiveData<>();
-//        checkUsernameState = new MutableLiveData<>();
-//        checkUsernameState.setValue(-1);
-        progressSendDServerState = new MutableLiveData<>();
-        progressSendDServerState.setValue(false);
+        checkUsernameState = new MutableLiveData<>();
+        checkUsernameState.setValue(-1);
+        progressSendDServerState = new MutableLiveData<>(false);
         TandCAgree = new MutableLiveData<>(null);
     }
 
     public void onSubmitBtn() {
 
+        if (!usernameIsValid) {
+            isUsernameValid(true);
+            return;
+        }
+
         if (!checkEntryData()) {
             return;
         }
 
-        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), true);
+        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), username.get(), true);
         sendDataToServer();
-
-        // this part is for the older version with userID option
-        /*if (usernameIsValid) {
-            nextPage.setValue(true);
-            return;
-        }
-        isUsernameValid(true);*/
 
     }
 
@@ -90,9 +88,9 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         });
     }
 
-    /*public void isUsernameValid(boolean isCallFromBTN) {
+    public void isUsernameValid(boolean isCallFromBTN) {
 
-     *//*-1: begin or typing 0 : in progress 1: done & success 2: done and fail*//*
+//     -1: begin or typing 0 : in progress 1: done & success 2: done and fail
 
         if (username.get() == null) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
@@ -102,7 +100,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             // TODO: fetch data from server for valid username
             checkUsernameServer(isCallFromBTN);
         }
-    }*/
+    }
 
     private boolean checkEntryData() {
         // name
@@ -152,28 +150,36 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         return true;
     }
 
-    /*public void checkUsernameServer(boolean isCallFromBTN) {
+    public void checkUsernameServer(boolean isCallFromBTN) {
         checkUsernameState.setValue(0);
-        // TODO check from server for avalibility
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        userRepo.checkUsername(username.get(), this, new ResponseCallback<KuknosResponseModel<KuknosUsernameStatus>>() {
             @Override
-            public void run() {
-                //success
-                checkUsernameState.setValue(1);
-                usernameIsValid = true;
-                if (isCallFromBTN)
-                    nextPage.setValue(true);
-                //error
-//                checkUsernameState.setValue(2);
-//                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
+            public void onSuccess(KuknosResponseModel<KuknosUsernameStatus> data) {
+                if (!data.getData().isExist()) {
+                    checkUsernameState.setValue(1);
+                    usernameIsValid = true;
+                } else {
+                    checkUsernameState.setValue(2);
+                }
             }
-        }, 1000);
-    }*/
 
-    /*public void cancelUsernameServer() {
+            @Override
+            public void onError(String errorM) {
+                checkUsernameState.setValue(-1);
+                error.setValue(new ErrorM(true, "Server Error", errorM, 0));
+            }
+
+            @Override
+            public void onFailed() {
+                checkUsernameState.setValue(-1);
+                error.setValue(new ErrorM(true, "Server Error", "4", R.string.time_out));
+            }
+        });
+    }
+
+    public void cancelUsernameServer() {
         checkUsernameState.setValue(-1);
-    }*/
+    }
 
     public void getTermsAndCond() {
 
@@ -227,13 +233,13 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         this.nextPage = nextPage;
     }
 
-    /*public MutableLiveData<Integer> getCheckUsernameState() {
+    public MutableLiveData<Integer> getCheckUsernameState() {
         return checkUsernameState;
     }
 
     public void setCheckUsernameState(MutableLiveData<Integer> checkUsernameState) {
         this.checkUsernameState = checkUsernameState;
-    }*/
+    }
 
     public MutableLiveData<Boolean> getProgressSendDServerState() {
         return progressSendDServerState;
@@ -243,13 +249,13 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         this.usernameIsValid = usernameIsValid;
     }
 
-    /*public ObservableField<String> getUsername() {
+    public ObservableField<String> getUsername() {
         return username;
     }
 
     public void setUsername(ObservableField<String> username) {
         this.username = username;
-    }*/
+    }
 
     public ObservableField<String> getName() {
         return name;

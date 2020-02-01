@@ -1,32 +1,27 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
-import net.iGap.kuknos.service.mnemonic.Wallet;
-import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.model.OperatorType;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
 
-    public List<String> lengths = Arrays.asList("12", "24");
-    public List<String> languages = Arrays.asList("EN", "FA");
+    private List<String> lengths = Arrays.asList("24", "12");
+    private List<String> languages = Arrays.asList("FA", "EN");
     private UserRepo userRepo = new UserRepo();
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
-    private String selectedLanguage;
-    private String selectedLength;
+    private String selectedLanguage = "FA";
+    private String selectedLength = "24";
 
 
     public KuknosShowRecoveryKeyVM() {
@@ -54,7 +49,7 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
             }
         }
 
-        if (userRepo.getMnemonic().equals("-1")) {
+        if (userRepo.getMnemonic() == null || userRepo.getMnemonic().equals("-1")) {
             error.setValue(new ErrorM(true, "generate fatal error", "1", R.string.kuknos_RecoverySK_ErrorGenerateMn));
             return;
         }
@@ -69,21 +64,13 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
     }
 
     public void onItemSelectSpinnerLanguage(int position) {
-        Log.d("bagi" ,"onItemSelectSpinnerLanguage" + position);
-        if (selectedLanguage != null) {
-            initMnemonic();
-        } else {
-            selectedLanguage = languages.get(position);
-        }
+        selectedLanguage = languages.get(position);
+        initMnemonic();
     }
 
     public void onItemSelectSpinnerLength(int position) {
-        Log.d("bagi" ,"onItemSelectSpinnerLength" + position);
-        if (selectedLength != null) {
-            initMnemonic();
-        } else {
-            selectedLength = lengths.get(position);
-        }
+        selectedLength = lengths.get(position);
+        initMnemonic();
     }
 
     //Setter and Getter
@@ -119,5 +106,4 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
     public void setMnemonic(ObservableField<String> mnemonic) {
         this.mnemonic = mnemonic;
     }
-
 }

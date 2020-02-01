@@ -14,13 +14,14 @@ public class KuknosSignupM {
     public KuknosSignupM() {
     }
 
-    public KuknosSignupM(String name, String phoneNum, String email, String NID, String keyString, boolean isRegistered) {
+    public KuknosSignupM(String name, String phoneNum, String email, String NID, String keyString, String username, boolean isRegistered) {
         this.name = name;
         this.phoneNum = phoneNum;
         this.email = email;
         this.NID = NID;
         this.isRegistered = isRegistered;
         this.keyString = keyString;
+        this.username = username;
     }
 
     public String getUsername() {

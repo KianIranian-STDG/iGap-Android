@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
@@ -20,13 +21,13 @@ import com.google.android.material.snackbar.Snackbar;
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRecoveryKeyBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
@@ -58,11 +59,13 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        // disable screenshot.
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         kuknosShowRecoveryKeyVM.initMnemonic();
 
-        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, kuknosShowRecoveryKeyVM.languages));
-        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, kuknosShowRecoveryKeyVM.lengths));
+        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getString(R.string.kuknos_recoveryKey_fa), getResources().getString(R.string.kuknos_recoveryKey_en))));
+        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(CompatibleUnicode("24"), CompatibleUnicode("12"))));
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -82,6 +85,10 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         onErrorObserver();
         onNextObserver();
         progressState();
+    }
+
+    private String CompatibleUnicode(String entry) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
     private void onErrorObserver() {

@@ -7,6 +7,7 @@
     android:ellipsize="marquee"
     android:padding="@dimen/dp8"
     android:singleLine="true"
+    android:gravity="center"
     android:textAlignment="inherit"
     android:textColor="?iGapTitleTextColor" />
 

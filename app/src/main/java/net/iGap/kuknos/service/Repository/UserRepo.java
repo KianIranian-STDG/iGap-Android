@@ -10,6 +10,7 @@ import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
 import net.iGap.kuknos.service.model.RealmKuknos;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
@@ -32,6 +33,10 @@ public class UserRepo {
         kuknosAPIRepository.registerUser(info, handShakeCallback, apiResponse);
     }
 
+    public void checkUsername(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUsernameStatus>> apiResponse) {
+        kuknosAPIRepository.checkUsername(username, handShakeCallback, apiResponse);
+    }
+
     public void getUserStatus(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfo>> apiResponse) {
         kuknosAPIRepository.getUserStatus(getAccountID(), handShakeCallback, apiResponse);
     }
@@ -52,7 +57,7 @@ public class UserRepo {
         try {
             char[] mnemonicTemp = Wallet.generate24FaWordMnemonic();
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
-            Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
+            Log.d("amini", "generateMnemonic end: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
             RealmKuknos.updateMnemonic("-1");
         }

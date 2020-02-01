@@ -35,6 +35,17 @@
                 android:layout_marginBottom="50dp"
                 android:paddingBottom="@dimen/dp20">
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosRKSLanguageTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:justificationMode="inter_word"
+                    android:text="@string/kuknos_RecoverySK_languageTitle"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_language"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_language" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinner_language"
@@ -43,11 +54,11 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
-                    android:minHeight="@dimen/dp44"
+                    android:minHeight="@dimen/dp36"
                     android:onItemSelected="@{(parent,view,position,id)->viewmodel.onItemSelectSpinnerLanguage(position)}"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosRKSDescription"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSDescription" />
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintWidth_percent="0.25" />
 
                 <View
                     android:layout_width="0dp"
@@ -58,17 +69,28 @@
                     app:layout_constraintStart_toStartOf="@id/spinner_language"
                     app:layout_constraintTop_toTopOf="@id/spinner_language" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosRKSLengthTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:justificationMode="inter_word"
+                    android:text="@string/kuknos_RecoverySK_lengthTitle"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_length"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_length" />
+
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinner_length"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:minHeight="@dimen/dp44"
+                    android:minHeight="@dimen/dp36"
+                    android:layout_marginTop="@dimen/dp4"
                     android:onItemSelected="@{(parent,view,position,id)->viewmodel.onItemSelectSpinnerLength(position)}"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosRKSDescription"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_language" />
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_language"
+                    app:layout_constraintWidth_percent="0.25" />
 
                 <View
                     android:layout_width="0dp"
@@ -130,7 +152,7 @@
                     android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner_language"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_length"
                     app:layout_constraintWidth_percent="0.8" />
 
                 <androidx.appcompat.widget.AppCompatTextView

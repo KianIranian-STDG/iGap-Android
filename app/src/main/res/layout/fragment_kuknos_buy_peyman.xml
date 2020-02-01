@@ -75,7 +75,7 @@
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPFee"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPPrice"
                     app:layout_constraintWidth_percent="0.7">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -110,19 +110,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPMessage" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/fragKuknosBuyPFee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10"
-                    android:text="@{viewmodel.transactionFee}"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/dp16"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPPrice" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosBuyPSumTitle"
@@ -174,6 +161,27 @@
                     android:visibility="visible"
                     app:constraint_referenced_ids="fragKuknosBuyPSum,fragKuknosBuyPSumTitle,fragKuknosBuyPSumCurrency" />
 
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionCheck"
+                    android:layout_marginTop="10dp"
+                    android:onCheckedChanged="@{(v,isChecked)->viewmodel.termsOnCheckChange(isChecked)}"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPAmountHolder"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPSum" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionText"
+                    android:layout_marginStart="@dimen/dp6"
+                    android:layout_marginLeft="@dimen/dp6"
+                    android:text="@string/ok"
+                    app:layout_constraintStart_toEndOf="@+id/termsAndConditionCheck"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPAmountHolder"
+                    app:layout_constraintTop_toBottomOf="@+id/termsAndConditionCheck"
+                    app:layout_constraintBottom_toTopOf="@+id/termsAndConditionCheck" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/fragKuknosBuyPSubmit"
                     style="@style/iGapButton"
@@ -186,7 +194,7 @@
                     android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPSum"
+                    app:layout_constraintTop_toBottomOf="@+id/termsAndConditionCheck"
                     app:layout_constraintWidth_percent="0.6" />
 
                 <ProgressBar
