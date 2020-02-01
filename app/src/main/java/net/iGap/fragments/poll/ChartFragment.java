@@ -63,7 +63,7 @@ public class ChartFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.item_poll_chart, container, false);
+        return inflater.inflate(R.layout.fragment_poll_chart, container, false);
     }
 
     @Override
@@ -126,55 +126,60 @@ public class ChartFragment extends BaseFragment {
                 return String.valueOf((int) Math.floor(value));
             }
         });
-        swipeRefresh.setOnRefreshListener(() -> {
-            boolean isSend = updateOrFetchRecycleViewData();
-            if (!isSend) {
-                swipeRefresh.setRefreshing(false);
-                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-            } else {
-                swipeRefresh.setRefreshing(true);
-            }
-        });
 
         emptyRecycle.setOnClickListener(v -> {
             boolean isSend = updateOrFetchRecycleViewData();
             if (!isSend) {
                 HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+            } else {
+                emptyRecycle.setVisibility(View.GONE);
+            }
+        });
+
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            swipeRefresh.setRefreshing(true);
+            boolean isSend = updateOrFetchRecycleViewData();
+            if (!isSend) {
+                swipeRefresh.setRefreshing(false);
+                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+            } else {
+                emptyRecycle.setVisibility(View.GONE);
             }
         });
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {
+        swipeRefresh.setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
         if (!isSend) {
-            swipeRefresh.setRefreshing(true);
             if (count < 3) {
                 G.handler.postDelayed(() -> tryToUpdateOrFetchRecycleViewData(count + 1), 1000);
             } else {
                 swipeRefresh.setRefreshing(false);
+                emptyRecycle.setVisibility(View.VISIBLE);
             }
+        } else {
+            emptyRecycle.setVisibility(View.GONE);
         }
     }
 
     private boolean updateOrFetchRecycleViewData() {
-        swipeRefresh.setRefreshing(true);
         return new RequestClientGetPoll().getPoll(pollId, new OnPollList() {
             @Override
             public void onPollListReady(ArrayList<PollItem> pollArrayList, String title) {
                 G.handler.post(() -> {
-                    swipeRefresh.setRefreshing(false);
                     pollList = pollArrayList;
-                    notifyChangeData();
+                    showChart();
                     helperToolbar.setDefaultTitle(title);
+                    swipeRefresh.setRefreshing(false);
                 });
             }
 
             @Override
             public void onError(int major, int minor) {
-                G.handler.post(() -> {
-                    swipeRefresh.setRefreshing(false);
-                    emptyRecycle.setVisibility(View.VISIBLE);
-                });
+                swipeRefresh.setRefreshing(false);
+                emptyRecycle.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -230,10 +235,6 @@ public class ChartFragment extends BaseFragment {
         chart.invalidate();
         chart.getData().notifyDataChanged();
 
-    }
-
-    public void notifyChangeData() {
-        showChart();
     }
 
     public void addChatToEnd(String[] labels, ArrayList<BarEntry> barEntries, long sum) {
