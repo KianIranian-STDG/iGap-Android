@@ -17,6 +17,7 @@ import net.iGap.helper.HelperFragment;
 
 public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
     private StructIGGiftSticker structIGGiftSticker;
+    private boolean canForward;
 
     private GiftStickerCreationDetailFragment() {
     }
@@ -24,6 +25,7 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
     public static GiftStickerCreationDetailFragment getInstance(StructIGGiftSticker giftSticker) {
         GiftStickerCreationDetailFragment detailFragment = new GiftStickerCreationDetailFragment();
         detailFragment.structIGGiftSticker = giftSticker;
+        detailFragment.canForward = giftSticker.isActive() || giftSticker.isForward();
         return detailFragment;
     }
 
@@ -37,8 +39,12 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.btn_active).setOnClickListener(v -> {
-            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), true, v1 -> {
+        View activeBtn = view.findViewById(R.id.btn_active);
+
+        activeBtn.setVisibility(canForward ? View.VISIBLE : View.GONE);
+
+        activeBtn.setOnClickListener(v -> {
+            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), canForward, v1 -> {
                 Toast.makeText(getContext(), "onSentToOther() clicked!", Toast.LENGTH_SHORT).show();
             }, 0);
             dismiss();

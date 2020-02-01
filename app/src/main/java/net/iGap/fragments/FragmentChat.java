@@ -3309,9 +3309,9 @@ public class FragmentChat extends BaseFragment
 
         keyboardVisible = height > 0;
 
-        if (notifyFrameLayout != null) {
-            notifyFrameLayout.requestLayout();
-        }
+//        if (notifyFrameLayout != null) {
+//            notifyFrameLayout.requestLayout();
+//        }
 
         if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
