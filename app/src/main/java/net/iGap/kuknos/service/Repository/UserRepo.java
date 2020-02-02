@@ -121,7 +121,10 @@ public class UserRepo {
 
     public String getSeedKey() {
         // if -1 it's sign out. if null it's first time
-        return realmKuknos.getKuknosSeedKey();
+        if (realmKuknos.isValid())
+            return realmKuknos.getKuknosSeedKey();
+        else
+            return null;
     }
 
     public void setSeedKey(String seed) {
