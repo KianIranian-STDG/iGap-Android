@@ -61,8 +61,7 @@ public class MyGiftStickerBuyFragment extends Fragment {
         viewModel.getGoNext().observe(getViewLifecycleOwner(), giftSticker -> {
             if (giftSticker != null) {
                 GiftStickerCreationDetailFragment detailFragment = GiftStickerCreationDetailFragment.getInstance(giftSticker);
-                if (getFragmentManager() != null)
-                    detailFragment.show(getFragmentManager(), null);
+                detailFragment.show(getParentFragmentManager(), null);
             }
         });
 

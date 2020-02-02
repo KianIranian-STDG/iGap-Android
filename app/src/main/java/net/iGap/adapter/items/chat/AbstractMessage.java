@@ -1086,7 +1086,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
-        if (holder instanceof NewChatItemHolder)
+        if (holder instanceof NewChatItemHolder && !(holder instanceof GiftStickerItem.ViewHolder))
             mHolder = (NewChatItemHolder) holder;
         else
             return;

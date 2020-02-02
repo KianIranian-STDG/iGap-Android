@@ -237,7 +237,7 @@ dependencies {
     release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
     release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protpMain19'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta19'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     // don't upgrade this lib to version 4

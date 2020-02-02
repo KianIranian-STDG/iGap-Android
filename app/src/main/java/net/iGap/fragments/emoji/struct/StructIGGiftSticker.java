@@ -17,6 +17,7 @@ public class StructIGGiftSticker {
     private String phoneNumber;
     private String nationalCode;
     private boolean isForward;
+    private boolean isValid;
 
     public StructIGGiftSticker(UserStickers userStickers) {
         structIGSticker = new StructIGSticker(userStickers.getSticker());
@@ -31,12 +32,29 @@ public class StructIGGiftSticker {
     public StructIGGiftSticker(CardStatusDataModel dataModel) {
         structIGSticker = new StructIGSticker(dataModel.getSticker());
         isActive = dataModel.getActivation().getStatus().equals(ACTIVE);
+        isValid = dataModel.getActivation().getStatus().equals(NEW);
         giftId = dataModel.getId();
         isForward = dataModel.isForwarded();
     }
 
     public boolean isForward() {
         return isForward;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
+    public void setForward(boolean forward) {
+        isForward = forward;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public String getStatus() {

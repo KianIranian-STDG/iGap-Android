@@ -88,6 +88,9 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
                 .subscribe(new IGSingleObserver<StructIGGiftSticker>(mainThreadDisposable) {
                     @Override
                     public void onSuccess(StructIGGiftSticker structIGGiftSticker) {
+                        giftSticker.setActive(structIGGiftSticker.isActive());
+                        giftSticker.setValid(structIGGiftSticker.isValid());
+                        giftSticker.setForward(structIGGiftSticker.isForward());
                         goNext.postValue(giftSticker);
                     }
 

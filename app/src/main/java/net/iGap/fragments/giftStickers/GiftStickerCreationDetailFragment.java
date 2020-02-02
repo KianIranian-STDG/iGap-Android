@@ -25,7 +25,7 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
     public static GiftStickerCreationDetailFragment getInstance(StructIGGiftSticker giftSticker) {
         GiftStickerCreationDetailFragment detailFragment = new GiftStickerCreationDetailFragment();
         detailFragment.structIGGiftSticker = giftSticker;
-        detailFragment.canForward = giftSticker.isActive() || giftSticker.isForward();
+        detailFragment.canForward = giftSticker.isValid();
         return detailFragment;
     }
 
@@ -44,7 +44,7 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
         activeBtn.setVisibility(canForward ? View.VISIBLE : View.GONE);
 
         activeBtn.setOnClickListener(v -> {
-            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), canForward, v1 -> {
+            new HelperFragment(getParentFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), canForward, v1 -> {
                 Toast.makeText(getContext(), "onSentToOther() clicked!", Toast.LENGTH_SHORT).show();
             }, 0);
             dismiss();
