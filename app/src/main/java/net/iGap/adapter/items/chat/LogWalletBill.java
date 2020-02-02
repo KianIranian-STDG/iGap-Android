@@ -53,28 +53,38 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
         super.bindView(holder, payloads);
         RealmRoomMessageWalletBill realmRoomMessageWalletBill = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletBill();
         DbManager.getInstance().doRealmTask(realm -> {
-            String rrn = String.valueOf(realmRoomMessageWalletBill.getRrn());
+            String amount = String.valueOf(realmRoomMessageWalletBill.getAmount());
+            String billId = realmRoomMessageWalletBill.getBillId();
+            String payId = realmRoomMessageWalletBill.getPayId();
             String cardNumber = realmRoomMessageWalletBill.getCardNumber();
+            String orderId = String.valueOf(realmRoomMessageWalletBill.getOrderId());
+            String terminalNo = String.valueOf(realmRoomMessageWalletBill.getTerminalNo());
+            String rrn = String.valueOf(realmRoomMessageWalletBill.getRrn());
             String traceNumber = String.valueOf(realmRoomMessageWalletBill.getTraceNumber());
             String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletBill.getRequestTime()) + " " + "-" + " " + TimeUtils.toLocal(realmRoomMessageWalletBill.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
 
             if (HelperCalander.isPersianUnicode) {
-                rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
+                amount = HelperCalander.convertToUnicodeFarsiNumber(amount);
+                billId = HelperCalander.convertToUnicodeFarsiNumber(billId);
+                payId = HelperCalander.convertToUnicodeFarsiNumber(payId);
                 cardNumber = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+                orderId = HelperCalander.convertToUnicodeFarsiNumber(orderId);
+                terminalNo = HelperCalander.convertToUnicodeFarsiNumber(terminalNo);
+                rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
                 traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
                 persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
             }
 
-            holder.rrn.setText(rrn);
+            holder.amount.setText(amount);
+            holder.billType.setText(realmRoomMessageWalletBill.getBillType());
+            holder.billId.setText(billId);
+            holder.payId.setText(payId);
             holder.cardNumber.setText(cardNumber);
+            holder.orderId.setText(orderId);
+            holder.terminalNo.setText(terminalNo);
+            holder.rrn.setText(rrn);
             holder.traceNumber.setText(traceNumber);
             holder.requestTime.setText(persianCalender);
-            holder.payId.setText(realmRoomMessageWalletBill.getPayId());
-            holder.billId.setText(realmRoomMessageWalletBill.getBillId());
-            holder.billType.setText(realmRoomMessageWalletBill.getBillType());
-            holder.amount.setText(String.valueOf(realmRoomMessageWalletBill.getAmount()));
-            holder.orderId.setText(String.valueOf(realmRoomMessageWalletBill.getOrderId()));
-            holder.terminalNo.setText(String.valueOf(realmRoomMessageWalletBill.getTerminalNo()));
         });
     }
 
