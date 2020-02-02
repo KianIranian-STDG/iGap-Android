@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -302,19 +303,12 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     }
                     break;
                 case 5:
+                    Log.d("amini", "openPage: open trade");
                     fragment = fragmentManager.findFragmentByTag(KuknosTradePagerFrag.class.getName());
                     if (fragment == null) {
                         fragment = KuknosTradePagerFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }/*
-                    Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
-                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackbar.dismiss();
-                        }
-                    });
-                    snackbar.show();*/
+                    }
                     break;
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

@@ -21,6 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -112,6 +115,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         entryListener();
         goToPaymentListener();
         onTermsDownload();
+        goToPin();
     }
 
     private void onTermsDownload() {
@@ -239,6 +243,21 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
                         }
                     });
                 }
+            }
+        });
+    }
+
+    private void goToPin() {
+        kuknosBuyPeymanVM.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosEnterPinFrag.newInstance(() -> kuknosBuyPeymanVM.sendDataServer());
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }

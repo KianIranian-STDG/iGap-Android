@@ -93,6 +93,7 @@
                         android:maxLines="1"
                         android:minHeight="48dp"
                         android:text="@={viewmodel.amount}"
+                        android:enabled="@{viewmodel.amountEnable}"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>

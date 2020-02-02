@@ -1,5 +1,7 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.util.Log;
+
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
@@ -63,7 +65,8 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             public void onError(String errorM) {
                 balance.set("0.0");
                 currency.set("currency");
-                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                // TODO: 2/2/2020 activate this line. 
+//                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
             }
 
@@ -71,7 +74,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             public void onFailed() {
                 balance.set("0.0");
                 currency.set("currency");
-                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+//                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
             }
         });
@@ -184,8 +187,8 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public void goToTrading() {
+        Log.d("amini", "goToTrading: in here");
         openPage.setValue(5);
-//        error.setValue(new ErrorM(true, "", "1", R.string.kuknos_soon_error));
     }
 
     public void goTOBuyPMN() {

@@ -14,6 +14,7 @@ import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.request.RequestInfoPage;
 
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ import java.text.DecimalFormat;
 public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private ObservableField<String> amount = new ObservableField<>();
+    private ObservableField<Boolean> amountEnable = new ObservableField<>(false);
     private ObservableField<String> sum = new ObservableField<>();
     private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر پیمان: ...");
     private MutableLiveData<ErrorM> error;
@@ -32,6 +34,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private MutableLiveData<String> goToPaymentPage;
     //go to bank
     private MutableLiveData<Boolean> nextPage;
+    private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
     private int PMNprice = -1;
     private int maxAmount = 1000000;
     Double sumTemp;
@@ -43,19 +46,17 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         progressState.setValue(0);
-        sumState = new MutableLiveData<>();
-        sumState.setValue(false);
-        nextPage = new MutableLiveData<>();
-        nextPage.setValue(false);
+        sumState = new MutableLiveData<>(false);
+        nextPage = new MutableLiveData<>(false);
         goToPaymentPage = new MutableLiveData<>();
         TandCAgree = new MutableLiveData<>(null);
     }
 
     public void onSubmitBtn() {
-        if (checkEntry()) {
+        if (checkForm()) {
             return;
         }
-        sendDataServer();
+        goToPin.setValue(true);
     }
 
     public boolean updateSum() {
@@ -85,6 +86,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                 maxAmount = data.getData().getAssets().get(0).getRemainAmount();
                 assetPrice.set("قیمت هر پیمان: " + PMNprice + " ریال");
                 progressState.setValue(0);
+                amountEnable.set(true);
 //                getFees();
             }
 
@@ -100,7 +102,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         });
     }
 
-    private void sendDataServer() {
+    public void sendDataServer() {
         progressState.setValue(1);
         panelRepo.buyAsset("PMN", amount.get(), "" + (int) Math.round(sumTemp),
                 "", this, new ResponseCallback<KuknosResponseModel<IgapPayment>>() {
@@ -126,7 +128,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                 });
     }
 
-    private boolean checkEntry() {
+    private boolean checkForm() {
         if (amount.get() == null) {
             // empty
             error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
@@ -144,6 +146,24 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         //Terms and Condition
         if (!termsAndConditionIsChecked) {
             error.setValue(new ErrorM(true, "TermsAndConditionError", "1", R.string.kuknos_SignupInfo_errorTermAndCondition));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkEntry() {
+        if (amount.get() == null) {
+            // empty
+            error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
+            return true;
+        }
+        if (amount.get().isEmpty()) {
+            // empty
+            error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
+            return true;
+        }
+        if (Integer.parseInt(amount.get()) == 0) {
+            error.setValue(new ErrorM(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
             return true;
         }
         return false;
@@ -236,5 +256,13 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     public void setTandCAgree(MutableLiveData<String> tandCAgree) {
         TandCAgree = tandCAgree;
+    }
+
+    public SingleLiveEvent<Boolean> getGoToPin() {
+        return goToPin;
+    }
+
+    public ObservableField<Boolean> getAmountEnable() {
+        return amountEnable;
     }
 }

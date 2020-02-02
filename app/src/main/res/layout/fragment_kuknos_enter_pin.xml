@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="net.iGap.kuknos.viewmodel.KuknosEnterPinVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/fragKuknosVRToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </LinearLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosVRToolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:paddingBottom="@dimen/dp20">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosVRTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/kuknos_viewRecoveryEP_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp18"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosVRMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/kuknos_viewRecoveryEP_message"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosVRTitle"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragKuknosVRPassHolder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:minHeight="48dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosVRMessage"
+                    app:layout_constraintWidth_percent="0.7">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/fragKuknosVRPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:hint="@string/kuknos_viewRecoveryEP_pin"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberPassword"
+                        android:lines="1"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:minHeight="48dp"
+                        android:text="@={viewmodel.PIN}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fragKuknosVRSubmit"
+                    style="@style/iGapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.onSubmitBtn()}"
+                    android:text="@string/kuknos_viewRecoveryEP_btn"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosVRPassHolder"
+                    app:layout_constraintWidth_percent="0.6" />
+
+                <ProgressBar
+                    android:id="@+id/fragKuknosVRProgressV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosVRSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosVRSubmit"
+                    app:layout_constraintHeight_percent="0.08"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosVRSubmit"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosVRSubmit" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
