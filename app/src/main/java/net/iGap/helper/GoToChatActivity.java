@@ -14,6 +14,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -64,12 +65,12 @@ public class GoToChatActivity {
 
         String roomName = "";
 
-        if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
+        if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData || FragmentChat.structIGSticker != null) {
             roomName = DbManager.getInstance().doRealmTask(realm -> {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
 
                 if (realmRoom != null) {
-                    if (realmRoom.getReadOnly()) {
+                    if (realmRoom.getReadOnly() || (realmRoom.getType() != ProtoGlobal.Room.Type.CHAT && FragmentChat.structIGSticker != null)) {
                         if (activity != null && !(activity).isFinishing()) {
                             new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
                         }
@@ -105,24 +106,36 @@ public class GoToChatActivity {
                     fragmentChat.setArguments(getBundle());
                     new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
                 }
-            }).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    HelperGetDataFromOtherApp.hasSharedData = false;
-                    //revert main rooms list from share mode
-                    if (activity instanceof ActivityMain) {
-                        ((ActivityMain) activity).checkHasSharedData(false);
-                    }
+            }).onNegative((dialog, which) -> {
+                HelperGetDataFromOtherApp.hasSharedData = false;
+                //revert main rooms list from share mode
+                if (activity instanceof ActivityMain) {
+                    ((ActivityMain) activity).checkHasSharedData(false);
                 }
-            }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            });
+            }).neutralText(R.string.another_room).onNeutral((dialog, which) -> dialog.dismiss());
             if (!activity.isFinishing()) {
                 mDialog.show();
             }
+        } else if (FragmentChat.structIGSticker != null) {
+            String message = G.context.getString(R.string.send_message_to) + " " + roomName;
+
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive((dialog, which) -> {
+                FragmentChat fragmentChat = new FragmentChat();
+                fragmentChat.setArguments(getBundle());
+                new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+            }).onNegative((dialog, which) -> {
+                FragmentChat.structIGSticker = null;
+
+                if (activity instanceof ActivityMain) {
+                    ((ActivityMain) activity).checkHasSharedData(false);
+                }
+
+            }).neutralText(R.string.another_room).onNeutral((dialog, which) -> dialog.dismiss());
+
+            if (!activity.isFinishing()) {
+                mDialog.show();
+            }
+
         } else if (FragmentChat.mForwardMessages != null) {
 
             String message = G.context.getString(R.string.send_forward_to) + " " + roomName + "?";
@@ -132,18 +145,10 @@ public class GoToChatActivity {
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     loadChatFragment(activity);
                 }
-            }).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    disableForwardMessage(activity);
-                    FragmentChat.mForwardMessages = null;
-                }
-            }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            });
+            }).onNegative((dialog, which) -> {
+                disableForwardMessage(activity);
+                FragmentChat.mForwardMessages = null;
+            }).neutralText(R.string.another_room).onNeutral((dialog, which) -> dialog.dismiss());
             if (!(activity).isFinishing()) {
                 mDialog.show();
             }

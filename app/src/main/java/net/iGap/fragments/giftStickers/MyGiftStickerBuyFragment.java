@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentMyGiftStickerBuyBinding;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperError;
 
 public class MyGiftStickerBuyFragment extends Fragment {
@@ -62,7 +63,13 @@ public class MyGiftStickerBuyFragment extends Fragment {
         viewModel.getGoNext().observe(getViewLifecycleOwner(), giftSticker -> {
             if (giftSticker != null) {
                 GiftStickerCreationDetailFragment detailFragment = GiftStickerCreationDetailFragment.getInstance(giftSticker, v -> {
-                    Toast.makeText(getContext(), "clicked() ", Toast.LENGTH_SHORT).show();
+                    if (getActivity() instanceof ActivityMain) {
+
+                        FragmentChat.structIGSticker = giftSticker.getStructIGSticker();
+
+                        ((ActivityMain) getActivity()).setForwardMessage(true);
+                        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                    }
                 });
                 detailFragment.show(getParentFragmentManager(), null);
             }

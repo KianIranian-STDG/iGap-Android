@@ -1189,7 +1189,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     //check state of forward message from chat room and show on toolbar
     public void setForwardMessage(boolean enable) {
 
-        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null) {
+        if (!(G.isLandscape && G.twoPaneMode) && (FragmentChat.mForwardMessages != null || FragmentChat.structIGSticker != null)) {
             if (enable) {
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);

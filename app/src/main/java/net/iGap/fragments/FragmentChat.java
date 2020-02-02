@@ -417,10 +417,7 @@ public class FragmentChat extends BaseFragment
     private EmojiPopup emojiPopup;
     private boolean isPaused;
 
-    private String cardNumber = "";
-    private String description = "";
-    private String amount = "";
-
+    public static StructIGSticker structIGSticker;
 
     /**
      * *************************** common method ***************************
@@ -1980,6 +1977,10 @@ public class FragmentChat extends BaseFragment
         getDraft();
         getUserInfo();
         insertShearedData();
+
+        if (structIGSticker != null) {
+            G.handler.postDelayed(() -> sendStickerAsMessage(structIGSticker), 1000);
+        }
 
         RealmRoomMessage rm = null;
         RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
@@ -6451,6 +6452,13 @@ public class FragmentChat extends BaseFragment
         if (isReply()) {
             mReplayLayout.setTag(null);
             mReplayLayout.setVisibility(View.GONE);
+        }
+
+        if (FragmentChat.structIGSticker != null) {
+            FragmentChat.structIGSticker = null;
+            if (getActivity() instanceof ActivityMain) {
+                ((ActivityMain) getActivity()).checkHasSharedData(false);
+            }
         }
     }
 
