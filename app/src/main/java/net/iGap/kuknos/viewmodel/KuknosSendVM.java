@@ -14,6 +14,7 @@ import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.module.SingleLiveEvent;
 
 import org.stellar.sdk.KeyPair;
 
@@ -29,6 +30,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
     private ObservableField<String> currency = new ObservableField<>();
     private KuknosBalance.Balance balanceInfoM;
     private MutableLiveData<Boolean> openQrScanner;
+    private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
     private PanelRepo panelRepo = new PanelRepo();
 
     public KuknosSendVM() {
@@ -50,7 +52,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         if (!checkWalletID() || !checkAmount()) {
             return;
         }
-        sendDataServer();
+        goToPin.setValue(true);
 
     }
 
@@ -104,7 +106,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         }
     }
 
-    private void sendDataServer() {
+    public void sendDataServer() {
         kuknosSendM.setAmount(amount.get());
         kuknosSendM.setSrc(panelRepo.getUserRepo().getSeedKey());
         kuknosSendM.setDest(walletID.get());
@@ -205,4 +207,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         return openQrScanner;
     }
 
+    public SingleLiveEvent<Boolean> getGoToPin() {
+        return goToPin;
+    }
 }

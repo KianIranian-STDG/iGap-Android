@@ -2258,6 +2258,10 @@ Want to get it?</string>
     <string name="kuknos_buyAsset">Buy Asset</string>
     <string name="kuknos_recoveryKey_fa">Fa</string>
     <string name="kuknos_recoveryKey_en">En</string>
+    <string name="kuknos_enterPin_title">Enter Your PIN</string>
+    <string name="kuknos_enterPin_desc">To confirm this action, please enter your account PIN code.</string>
+    <string name="kuknos_enterPin_btnNormal">Confirm</string>
+    <string name="kuknos_enterPin_btnProgress">Checking…</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

@@ -13,6 +13,9 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -22,6 +25,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentKuknosSendBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnGetPermission;
@@ -89,6 +93,7 @@ public class KuknosSendFrag extends BaseFragment {
         progressSubmitVisibility();
         resetEdittextAfterError();
         openQrScanner();
+        goToPin();
     }
 
     private void openQrScanner() {
@@ -236,4 +241,18 @@ public class KuknosSendFrag extends BaseFragment {
         });
     }
 
+    private void goToPin() {
+        kuknosSignupInfoVM.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosEnterPinFrag.newInstance(() -> kuknosSignupInfoVM.sendDataServer());
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+        });
+    }
 }

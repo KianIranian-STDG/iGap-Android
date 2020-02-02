@@ -106,11 +106,11 @@ public class KuknosEnterPinFrag extends BaseFragment {
             if (aBoolean) {
                 binding.fragKuknosVRProgressV.setVisibility(View.VISIBLE);
                 binding.fragKuknosVRPass.setEnabled(false);
-                binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_load));
+                binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_enterPin_btnProgress));
             } else {
                 binding.fragKuknosVRProgressV.setVisibility(View.GONE);
                 binding.fragKuknosVRPass.setEnabled(true);
-                binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_viewRecoveryEP_btn));
+                binding.fragKuknosVRSubmit.setText(getResources().getText(R.string.kuknos_enterPin_btnNormal));
             }
         });
     }
