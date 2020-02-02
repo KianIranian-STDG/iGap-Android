@@ -63,11 +63,13 @@ public class ResendMessage implements IResendMessage {
     @Override
     public void deleteMessage() {
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (StructMessageInfo message : mMessages) {
-                        RealmRoomMessage.deleteMessage(realm, message.realmRoomMessage.getMessageId());
+            realm.executeTransactionAsync(realm1 -> {
+                for (StructMessageInfo message : mMessages) {
+                    if (message.realmRoomMessage != null) {
+                        if (mSelectedMessageID == message.realmRoomMessage.getMessageId()) {
+                            RealmRoomMessage.deleteMessage(realm1, message.realmRoomMessage.getMessageId());
+                            break;
+                        }
                     }
                 }
             }, () -> mListener.deleteMessage());
