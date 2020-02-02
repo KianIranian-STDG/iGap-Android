@@ -1,7 +1,5 @@
 package net.iGap.kuknos.view.adapter;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,37 +9,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperCalander;
+import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 
 import org.stellar.sdk.responses.OfferResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeHistoryAdapter.ViewHolder> {
 
-    private List<OfferResponse> kuknosTradeHistoryMS;
-    private Context context;
-    // mode : 0 history / 1 active
-    private int mode;
+    private List<KuknosTradeResponse.TradeResponse> kuknosTradeHistoryMS;
 
-    public WalletTradeHistoryAdapter(ArrayList<OfferResponse> kuknosTradeHistoryMS, int mode, Context context) {
+    public WalletTradeHistoryAdapter(List<KuknosTradeResponse.TradeResponse> kuknosTradeHistoryMS) {
         this.kuknosTradeHistoryMS = kuknosTradeHistoryMS;
-        this.context = context;
-        this.mode = mode;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.fragment_kuknos_trade_history_cell, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_kuknos_trade_history_cell, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.initView(kuknosTradeHistoryMS.get(i), mode);
+        viewHolder.initView(kuknosTradeHistoryMS.get(i));
     }
 
     @Override
@@ -74,15 +66,15 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
 
         }
 
-        public void initView(OfferResponse model, int mode) {
-            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getSelling().getType()) : model.getSelling().getType());
-            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getAmount()) : model.getAmount());
-            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBuying().getType()) : model.getBuying().getType());
-            if (mode == 0) {
-                date.setText(model.getLastModifiedTime());
-                date.setVisibility(View.VISIBLE);
-                delete.setVisibility(View.GONE);
-            } else {
+        public void initView(KuknosTradeResponse.TradeResponse model) {
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAsset().getType()) : model.getBaseAsset().getType());
+            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAmount()) : model.getBaseAmount());
+            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getCounterAsset().getType()) : model.getCounterAsset().getType());
+//            if (mode == 0) {
+            date.setText(model.getLedgerCloseTime());
+            date.setVisibility(View.VISIBLE);
+            delete.setVisibility(View.GONE);
+            /*} else {
                 date.setVisibility(View.GONE);
                 delete.setVisibility(View.VISIBLE);
                 delete.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +91,7 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
                         defaultRoundDialog.show();
                     }
                 });
-            }
+            }*/
         }
     }
 }

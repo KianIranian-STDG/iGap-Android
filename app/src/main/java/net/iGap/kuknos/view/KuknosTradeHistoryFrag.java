@@ -31,7 +31,6 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         kuknosTradeHistoryVM = ViewModelProviders.of(this).get(KuknosTradeHistoryVM.class);
-        kuknosTradeHistoryVM.setMode(KuknosTradeHistoryVM.API.TRADES_LIST);
     }
 
     @Nullable
@@ -65,8 +64,8 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
 
     private void onDataChanged() {
         kuknosTradeHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), offerResponsePage -> {
-            if (offerResponsePage.getRecords().size() != 0) {
-                WalletTradeHistoryAdapter mAdapter = new WalletTradeHistoryAdapter(offerResponsePage.getRecords(), 0, getContext());
+            if (offerResponsePage.getTrades().size() != 0) {
+                WalletTradeHistoryAdapter mAdapter = new WalletTradeHistoryAdapter(offerResponsePage.getTrades());
                 binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
             } else {
                 binding.kuknosTradeHistoryNOitem.setVisibility(View.VISIBLE);

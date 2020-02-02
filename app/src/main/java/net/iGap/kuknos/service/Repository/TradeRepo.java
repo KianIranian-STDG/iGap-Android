@@ -3,7 +3,9 @@ package net.iGap.kuknos.service.Repository;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
@@ -42,5 +44,13 @@ public class TradeRepo {
                              HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
         kuknosAPIRepository.manageOffer(userRepo.getSeedKey(), sourceCode, sourceIssuer, counterCode,
                 counterIssuer, amount, price, handShakeCallback, apiResponse);
+    }
+
+    public void getOpenOffers(int cursor, int limit, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOfferResponse>> apiResponse) {
+        kuknosAPIRepository.getOpenOffers(userRepo.getAccountID(), cursor, limit, handShakeCallback, apiResponse);
+    }
+
+    public void getTradesHistory(int cursor, int limit, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTradeResponse>> apiResponse) {
+        kuknosAPIRepository.getTradesHistory(userRepo.getAccountID(), cursor, limit, handShakeCallback, apiResponse);
     }
 }

@@ -5,8 +5,10 @@ import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
+import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
 import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
@@ -115,6 +117,20 @@ public interface KuknosApi {
     Call<KuknosResponseModel<KuknosOperationResponse>> getWalletHistory(@Field("public_key") String publicKey,
                                                                         @Field("limit") int limit,
                                                                         @Field("order") String order);
+
+    @FormUrlEncoded
+    @POST("open-offers")
+    Call<KuknosResponseModel<KuknosOfferResponse>> getOpenOffers(@Field("public_key") String publicKey,
+                                                                 @Field("limit") int limit,
+                                                                 @Field("cursor") int cursor,
+                                                                 @Field("order") String order);
+
+    @FormUrlEncoded
+    @POST("account-trades")
+    Call<KuknosResponseModel<KuknosTradeResponse>> getTradesHistory(@Field("public_key") String publicKey,
+                                                                    @Field("limit") int limit,
+                                                                    @Field("cursor") int cursor,
+                                                                    @Field("order") String order);
 
     /**
      * this api returns the user status
