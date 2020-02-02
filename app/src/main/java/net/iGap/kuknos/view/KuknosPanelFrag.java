@@ -1,11 +1,13 @@
 package net.iGap.kuknos.view;
 
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -13,10 +15,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -129,7 +133,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
         openPage();
         onDataChanged();
         onProgress();
-
+        onTermsDownload();
     }
 
     @Override
@@ -150,6 +154,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
 //        items.add(getString(R.string.kuknos_setting_changePin));
         items.add(getString(R.string.kuknos_setting_viewRecoveryP));
         items.add(getString(R.string.kuknos_setting_copySeedKey));
+        items.add(getString(R.string.kuknos_setting_sepid));
         items.add(getString(R.string.kuknos_setting_logout));
 
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, position -> {
@@ -183,6 +188,9 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
                     return;
                 case 2:
+                    kuknosPanelVM.getTermsAndCond();
+                    break;
+                case 3:
                     fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());
                     if (fragment == null) {
                         fragment = KuknosLogoutFrag.newInstance();
@@ -194,6 +202,28 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
         });
         bottomSheetFragment.setTitle(getResources().getString(R.string.kuknos_setting_title));
         bottomSheetFragment.show(getFragmentManager(), "SettingBottomSheet");
+    }
+
+    private void onTermsDownload() {
+        kuknosPanelVM.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s != null)
+                    showDialogTermAndCondition(s);
+            }
+        });
+    }
+
+    private void showDialogTermAndCondition(String message) {
+        if (getActivity() != null) {
+            Dialog dialogTermsAndCondition = new Dialog(getActivity());
+            dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
+            AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
+            termsText.setText(message);
+            dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
+            dialogTermsAndCondition.show();
+        }
     }
 
     private void onDataChanged() {

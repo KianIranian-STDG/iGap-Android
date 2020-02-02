@@ -1,11 +1,12 @@
 package net.iGap.kuknos.viewmodel;
 
+import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import net.iGap.R;
+import net.iGap.G;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
@@ -14,6 +15,7 @@ import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
 
@@ -25,6 +27,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Integer> openPage;
     private PanelRepo panelRepo = new PanelRepo();
+    private MutableLiveData<String> TandCAgree;
 
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
@@ -42,6 +45,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         progressState = new MutableLiveData<>();
         openPage = new MutableLiveData<>();
         openPage.setValue(-1);
+        TandCAgree = new MutableLiveData<>(null);
     }
 
     public void getDataFromServer() {
@@ -138,6 +142,31 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         }
     }
 
+    public void getTermsAndCond() {
+        if (TandCAgree.getValue() != null && !TandCAgree.getValue().equals("error")) {
+            TandCAgree.postValue(TandCAgree.getValue());
+            return;
+        }
+        if (!G.isSecure) {
+            TandCAgree.postValue("error");
+            return;
+        }
+        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_AGREEMENT", new RequestInfoPage.OnInfoPage() {
+            @Override
+            public void onInfo(String body) {
+                if (body != null) {
+                    TandCAgree.postValue(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                } else
+                    TandCAgree.postValue("error");
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                TandCAgree.postValue("error");
+            }
+        });
+    }
+
     public void receiveW() {
         openPage.setValue(0);
     }
@@ -155,8 +184,8 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public void goToTrading() {
-//        openPage.setValue(5);
-        error.setValue(new ErrorM(true, "", "1", R.string.kuknos_soon_error));
+        openPage.setValue(5);
+//        error.setValue(new ErrorM(true, "", "1", R.string.kuknos_soon_error));
     }
 
     public void goTOBuyPMN() {
@@ -225,4 +254,11 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         return kuknosWalletsM;
     }
 
+    public MutableLiveData<String> getTandCAgree() {
+        return TandCAgree;
+    }
+
+    public void setTandCAgree(MutableLiveData<String> tandCAgree) {
+        TandCAgree = tandCAgree;
+    }
 }

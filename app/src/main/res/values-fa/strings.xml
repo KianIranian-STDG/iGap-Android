@@ -2128,6 +2128,7 @@
     <string name="kuknos_tradeDialogDelete_message">آیا از حذف این مبادله اطمینان دارید؟</string>
     <string name="kuknos_tradeDialogDelete_btn">بله</string>
     <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
+    <string name="kuknos_setting_sepid">سپیدنامه</string>
     <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
     <string name="kuknos_setting_fileContent">توجه: این اطلاعات تنها راه دسترسی شما به حساب کاربری تان است. \nلطفا در حقظ و نگهداری این اطلاعات کوشا باشید و این اطلاعات را با کسی به اشتراک نگزارید. \n</string>

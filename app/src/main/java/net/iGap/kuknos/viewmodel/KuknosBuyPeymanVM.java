@@ -48,7 +48,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         nextPage = new MutableLiveData<>();
         nextPage.setValue(false);
         goToPaymentPage = new MutableLiveData<>();
-        TandCAgree = new MutableLiveData<>();
+        TandCAgree = new MutableLiveData<>(null);
     }
 
     public void onSubmitBtn() {
@@ -143,8 +143,8 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         }
         //Terms and Condition
         if (!termsAndConditionIsChecked) {
-            error.setValue(new ErrorM(true, "TermsAndConditionError", "0", R.string.kuknos_SignupInfo_errorTermAndCondition));
-            return false;
+            error.setValue(new ErrorM(true, "TermsAndConditionError", "1", R.string.kuknos_SignupInfo_errorTermAndCondition));
+            return true;
         }
         return false;
     }
@@ -158,18 +158,18 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             TandCAgree.postValue("error");
             return;
         }
-        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_AGREEMENT", new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 if (body != null) {
-                    TandCAgree.setValue(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
-                }
-                TandCAgree.setValue("error");
+                    TandCAgree.postValue(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                } else
+                    TandCAgree.postValue("error");
             }
 
             @Override
             public void onError(int major, int minor) {
-                TandCAgree.setValue("error");
+                TandCAgree.postValue("error");
             }
         });
     }

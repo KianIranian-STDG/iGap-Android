@@ -2198,6 +2198,7 @@ Want to get it?</string>
     <string name="kuknos_tradeDialogDelete_message">Are you sure you want to delete this trade?</string>
     <string name="kuknos_tradeDialogDelete_btn">OK</string>
     <string name="kuknos_setting_copySeedKey">Copy Seed Key</string>
+    <string name="kuknos_setting_sepid">Sepid Nameh Regulations</string>
     <string name="kuknos_setting_Directory">IGap - Kuknos</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
     <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.
