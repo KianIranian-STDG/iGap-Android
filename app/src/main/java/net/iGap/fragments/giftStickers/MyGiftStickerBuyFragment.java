@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,7 +61,9 @@ public class MyGiftStickerBuyFragment extends Fragment {
 
         viewModel.getGoNext().observe(getViewLifecycleOwner(), giftSticker -> {
             if (giftSticker != null) {
-                GiftStickerCreationDetailFragment detailFragment = GiftStickerCreationDetailFragment.getInstance(giftSticker);
+                GiftStickerCreationDetailFragment detailFragment = GiftStickerCreationDetailFragment.getInstance(giftSticker, v -> {
+                    Toast.makeText(getContext(), "clicked() ", Toast.LENGTH_SHORT).show();
+                });
                 detailFragment.show(getParentFragmentManager(), null);
             }
         });

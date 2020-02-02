@@ -19,7 +19,6 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
     private boolean canForward;
     private View.OnClickListener sendOtherListener;
-    private StructIGSticker structIGSticker;
 
     private EnterNationalCodeForActivateGiftStickerFragment() {
     }
@@ -28,7 +27,6 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
         EnterNationalCodeForActivateGiftStickerFragment fragment = new EnterNationalCodeForActivateGiftStickerFragment();
         fragment.canForward = canForward;
         fragment.sendOtherListener = sendOtherListener;
-        fragment.structIGSticker = structIGSticker;
         return fragment;
     }
 
