@@ -38,7 +38,6 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_trace_history, container, false);
-        binding.setViewmodel(kuknosTradeHistoryVM);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
