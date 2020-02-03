@@ -22,7 +22,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
     private ObservableInt isShowRetry = new ObservableInt(View.INVISIBLE);
     private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
     private StickerRepository stickerRepository = StickerRepository.getInstance();
-    private MutableLiveData<IssueDataModel> getPaymentLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<IssueDataModel> getPaymentLiveData = new SingleLiveEvent<>();
 
     @Override
     public void subscribe() {
@@ -73,7 +73,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
         return isShowLoading;
     }
 
-    public MutableLiveData<IssueDataModel> getGetPaymentLiveData() {
+    public SingleLiveEvent<IssueDataModel> getGetPaymentLiveData() {
         return getPaymentLiveData;
     }
 
