@@ -383,7 +383,7 @@ public class FragmentRegister extends BaseFragment {
                 }
 
                 public void onFinish() {
-                    dialogQrCode.dismiss();
+                    if (getActivity() != null) dialogQrCode.dismiss();
                     fragmentRegisterViewModel.onClickQrCode();
                 }
             };
