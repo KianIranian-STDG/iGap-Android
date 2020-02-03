@@ -516,7 +516,7 @@ public class FragmentShowImage extends BaseFragment {
         super.onResume();
 
         if (isLockScreen) {
-            if (videoController != null) {
+            if (videoController != null && getActivity() != null) {
                 videoController.show();
             }
         }
@@ -731,7 +731,7 @@ public class FragmentShowImage extends BaseFragment {
                 isShowToolbar = true;
             }
 
-            if (zoomableImageViewTmp != null && imgPlay.getVisibility() != View.VISIBLE && mMediaPlayer != null && videoController != null) {
+            if (getActivity() != null && zoomableImageViewTmp != null && imgPlay.getVisibility() != View.VISIBLE && mMediaPlayer != null && videoController != null) {
                 if (videoController.isShowing()) {
                     videoController.hide();
                 } else {

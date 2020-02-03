@@ -49,7 +49,6 @@
                     android:layout_marginTop="20dp"
                     android:minHeight="38dp"
                     android:background="?attr/iGapSpinnerShape"
-                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

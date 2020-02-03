@@ -35,17 +35,72 @@
                 android:layout_marginBottom="50dp"
                 android:paddingBottom="@dimen/dp20">
 
-                <CheckBox
-                    android:id="@+id/fragKuknosIdPINCheck"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosRKSLanguageTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:justificationMode="inter_word"
+                    android:text="@string/kuknos_RecoverySK_languageTitle"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_language"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_language" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinner_language"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp20"
-                    android:checked="@={viewmodel.pinCheck}"
-                    android:text="@string/kuknos_RecoverySK_CheckPIN"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSkeysET"
-                    app:layout_constraintWidth_percent="0.8" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:minHeight="@dimen/dp36"
+                    android:onItemSelected="@{(parent,view,position,id)->viewmodel.onItemSelectSpinnerLanguage(position)}"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintWidth_percent="0.25" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/background_cancel_money_action"
+                    app:layout_constraintBottom_toBottomOf="@id/spinner_language"
+                    app:layout_constraintEnd_toEndOf="@id/spinner_language"
+                    app:layout_constraintStart_toStartOf="@id/spinner_language"
+                    app:layout_constraintTop_toTopOf="@id/spinner_language" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosRKSLengthTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:justificationMode="inter_word"
+                    android:text="@string/kuknos_RecoverySK_lengthTitle"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_length"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_length" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinner_length"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp36"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:onItemSelected="@{(parent,view,position,id)->viewmodel.onItemSelectSpinnerLength(position)}"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_language"
+                    app:layout_constraintWidth_percent="0.25" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/background_cancel_money_action"
+                    app:layout_constraintBottom_toBottomOf="@id/spinner_length"
+                    app:layout_constraintEnd_toEndOf="@id/spinner_length"
+                    app:layout_constraintStart_toStartOf="@id/spinner_length"
+                    app:layout_constraintTop_toTopOf="@id/spinner_length" />
+
 
                 <ProgressBar
                     android:id="@+id/fragKuknosRKSProgressV"
@@ -72,14 +127,14 @@
                     android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdPINCheck"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSkeysET"
                     app:layout_constraintWidth_percent="0.7" />
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/fragKuknosRKSkeysET"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/background_cancel_money_action"
                     android:ems="10"
                     android:enabled="false"
@@ -97,7 +152,7 @@
                     android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSDescription"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_length"
                     app:layout_constraintWidth_percent="0.8" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -128,11 +183,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSMessage"
                     app:layout_constraintWidth_percent="0.7" />
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.50121653" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="viewmodel"

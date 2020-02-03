@@ -1343,7 +1343,7 @@ public class FragmentChat extends BaseFragment
 
             if (listPathString.size() == 1) {
                 if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
-                    boolean isGif = listPathString.get(0).toLowerCase().endsWith(".gif");
+                    boolean isGif = listPathString.get(0) != null && listPathString.get(0).toLowerCase().endsWith(".gif");
                     if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1 && !isGif) {
                         Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
                         intent.putExtra("PATH", listPathString.get(0));

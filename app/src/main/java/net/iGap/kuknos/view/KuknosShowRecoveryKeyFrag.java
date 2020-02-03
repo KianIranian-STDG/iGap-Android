@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -19,10 +21,13 @@ import com.google.android.material.snackbar.Snackbar;
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRecoveryKeyBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM;
+
+import java.util.Arrays;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
@@ -50,13 +55,17 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        // disable screenshot.
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         kuknosShowRecoveryKeyVM.initMnemonic();
+
+        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getString(R.string.kuknos_recoveryKey_fa), getResources().getString(R.string.kuknos_recoveryKey_en))));
+        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(CompatibleUnicode("24"), CompatibleUnicode("12"))));
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -78,6 +87,10 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         progressState();
     }
 
+    private String CompatibleUnicode(String entry) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
+    }
+
     private void onErrorObserver() {
         kuknosShowRecoveryKeyVM.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
@@ -95,18 +108,10 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment;
-                if (kuknosShowRecoveryKeyVM.getPinCheck().get()) {
-                    fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSetPassFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                } else {
-                    fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSignupInfoFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
+                fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosSetPassFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }

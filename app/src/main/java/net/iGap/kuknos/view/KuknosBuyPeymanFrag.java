@@ -1,17 +1,29 @@
 package net.iGap.kuknos.view;
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -23,6 +35,8 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
+
+import org.jetbrains.annotations.NotNull;
 
 public class KuknosBuyPeymanFrag extends BaseFragment {
 
@@ -74,12 +88,56 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
 
         kuknosBuyPeymanVM.getAssetValue();
 
+        String t = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
+        SpannableString ss = new SpannableString(t);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NotNull View textView) {
+                kuknosBuyPeymanVM.getTermsAndCond();
+            }
+
+            @Override
+            public void updateDrawState(@NotNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+        ss.setSpan(clickableSpan, t.indexOf(getString(R.string.terms_and_condition_clickable)), t.indexOf(getString(R.string.terms_and_condition_clickable)) + getString(R.string.terms_and_condition_clickable).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        binding.termsAndConditionText.setText(ss);
+        binding.termsAndConditionText.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.termsAndConditionText.setHighlightColor(Color.TRANSPARENT);
+
         onSumVisibility();
         onBankPage();
         onError();
         onProgress();
         entryListener();
         goToPaymentListener();
+        onTermsDownload();
+        goToPin();
+    }
+
+    private void onTermsDownload() {
+        kuknosBuyPeymanVM.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s != null)
+                    showDialogTermAndCondition(s);
+            }
+        });
+    }
+
+    private void showDialogTermAndCondition(String message) {
+        if (getActivity() != null) {
+            Dialog dialogTermsAndCondition = new Dialog(getActivity());
+            dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
+            AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
+            termsText.setText(message);
+            dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
+            dialogTermsAndCondition.show();
+        }
     }
 
 
@@ -185,6 +243,21 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
                         }
                     });
                 }
+            }
+        });
+    }
+
+    private void goToPin() {
+        kuknosBuyPeymanVM.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosEnterPinFrag.newInstance(() -> kuknosBuyPeymanVM.sendDataServer());
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }

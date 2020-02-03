@@ -2128,9 +2128,10 @@
     <string name="kuknos_tradeDialogDelete_message">آیا از حذف این مبادله اطمینان دارید؟</string>
     <string name="kuknos_tradeDialogDelete_btn">بله</string>
     <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
+    <string name="kuknos_setting_sepid">سپیدنامه</string>
     <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
-    <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.Do NOT share it with others.\n Seed Key: 2552SD4546854212313845JHJKHGGFGDGDETGJKLKMBBVGCGHFF</string>
+    <string name="kuknos_setting_fileContent">توجه: این اطلاعات تنها راه دسترسی شما به حساب کاربری تان است. \nلطفا در حقظ و نگهداری این اطلاعات کوشا باشید و این اطلاعات را با کسی به اشتراک نگزارید. \n</string>
     <string name="kuknos_setting_copySKeyTitel">ذخیره کلید مخفی</string>
     <string name="kuknos_setting_copySKeyMessage">جهت آگاهی: \n - این کلید تنها راه ورود مجدد و مدیریت حساب شما میباشد. \n - در نگهداری از این کلید کوشا باشید. \n - از به اشتراک گذاری این کلید با دیگران پرهیز کنید. \n این کلید در فولدر دانلود های شما ذخیره خواهد شد.</string>
     <string name="kuknos_setting_copySKeyBtn">ذخیره</string>
@@ -2178,6 +2179,12 @@
     <string name="kuknos_Entry_RTSeedKey_str">بازیابی از طریق کلید خصوصی</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">تمایل دارم برای ساخت حساب رمز 4 رقمی داشته باشم.</string>
+    <string name="kuknos_recoveryKey_fa">فارسی</string>
+    <string name="kuknos_recoveryKey_en">انگلیسی</string>
+    <string name="kuknos_enterPin_title">رمز حساب کاربری</string>
+    <string name="kuknos_enterPin_desc">جهت تایید این عملیات، لطفا رمز عبور خود را وارد نمایید.</string>
+    <string name="kuknos_enterPin_btnNormal">تایید</string>
+    <string name="kuknos_enterPin_btnProgress">بررسی رمز…</string>
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
     <string name="updated_version_title">نسخه شما به روز شده است</string>
@@ -2479,4 +2486,6 @@
     <string name="gift_sticker_empty_list_message">کارت هدیه دیجیتالی وجود ندارد</string>
     <string name="inquiry_and_shopping">استعلام و خرید</string>
 
+    <string name="kuknos_RecoverySK_languageTitle">زبان کلمات بازیابی</string>
+    <string name="kuknos_RecoverySK_lengthTitle">تعداد کلمات بازیابی</string>
 </resources>

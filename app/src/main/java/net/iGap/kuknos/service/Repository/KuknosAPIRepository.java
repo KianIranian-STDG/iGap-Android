@@ -12,10 +12,13 @@ import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
+import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
@@ -24,7 +27,7 @@ class KuknosAPIRepository {
 
     void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
         new ApiInitializer<KuknosResponseModel>()
-                .initAPI(apiService.createAccount(info.getName(), "IGap", info.getPhoneNum(),
+                .initAPI(apiService.createAccount(info.getName(), "IGap", info.getUsername(), info.getPhoneNum(),
                         info.getNID(), info.getEmail(), info.getKeyString()),
                         handShakeCallback, apiResponse);
     }
@@ -126,6 +129,18 @@ class KuknosAPIRepository {
 
     void buyAsset(String publicKey, String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<IgapPayment>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<IgapPayment>>().initAPI(apiService.buyAsset(publicKey, assetCode, assetAmount, totalPrice, description), handShakeCallback, apiResponse);
+    }
+
+    void checkUsername(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUsernameStatus>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosUsernameStatus>>().initAPI(apiService.checkUsername(username), handShakeCallback, apiResponse);
+    }
+
+    void getOpenOffers(String userID, int cursor, int limit, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOfferResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosOfferResponse>>().initAPI(apiService.getOpenOffers(userID, limit, cursor, "desc"), handShakeCallback, apiResponse);
+    }
+
+    void getTradesHistory(String userID, int cursor, int limit, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTradeResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosTradeResponse>>().initAPI(apiService.getTradesHistory(userID, limit, cursor, "desc"), handShakeCallback, apiResponse);
     }
 
     void getFees(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFeeModel>> apiResponse) {

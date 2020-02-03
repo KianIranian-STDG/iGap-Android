@@ -2072,6 +2072,8 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
     <string name="kuknos_RecoverySK_Btn">Okay, I have written it down.</string>
+    <string name="kuknos_RecoverySK_languageTitle">Recovery keys\' language: </string>
+    <string name="kuknos_RecoverySK_lengthTitle">Recovery keys\' length: </string>
     <string name="kuknos_RecoverySK_Hint">water Blue brown ...</string>
     <string name="kuknos_RecoverySK_Error_empty_str">Enter your key stream</string>
     <string name="kuknos_RecoverySK_Error_invalid_str">Your key stream length is not long enough.</string>
@@ -2196,6 +2198,7 @@ Want to get it?</string>
     <string name="kuknos_tradeDialogDelete_message">Are you sure you want to delete this trade?</string>
     <string name="kuknos_tradeDialogDelete_btn">OK</string>
     <string name="kuknos_setting_copySeedKey">Copy Seed Key</string>
+    <string name="kuknos_setting_sepid">Sepid Nameh Regulations</string>
     <string name="kuknos_setting_Directory">IGap - Kuknos</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
     <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.
@@ -2253,6 +2256,12 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
     <string name="kuknos_buyAsset">Buy Asset</string>
+    <string name="kuknos_recoveryKey_fa">Fa</string>
+    <string name="kuknos_recoveryKey_en">En</string>
+    <string name="kuknos_enterPin_title">Enter Your PIN</string>
+    <string name="kuknos_enterPin_desc">To confirm this action, please enter your account PIN code.</string>
+    <string name="kuknos_enterPin_btnNormal">Confirm</string>
+    <string name="kuknos_enterPin_btnProgress">Checking…</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

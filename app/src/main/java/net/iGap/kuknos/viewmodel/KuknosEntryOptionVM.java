@@ -4,18 +4,19 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.kuknos.service.Repository.UserRepo;
+import net.iGap.module.SingleLiveEvent;
 
 public class KuknosEntryOptionVM extends ViewModel {
 
-    private MutableLiveData<Boolean> goNewTPage;
-    private MutableLiveData<Boolean> goRestoreTPage;
-    private MutableLiveData<Boolean> goRestoreSeedPage;
+    private SingleLiveEvent<Boolean> goNewTPage;
+    private SingleLiveEvent<Boolean> goRestoreTPage;
+    private SingleLiveEvent<Boolean> goRestoreSeedPage;
     private UserRepo userRepo = new UserRepo();
 
     public KuknosEntryOptionVM() {
-        goNewTPage = new MutableLiveData<>();
-        goRestoreTPage = new MutableLiveData<>();
-        goRestoreSeedPage = new MutableLiveData<>();
+        goNewTPage = new SingleLiveEvent<>();
+        goRestoreTPage = new SingleLiveEvent<>();
+        goRestoreSeedPage = new SingleLiveEvent<>();
     }
 
     public boolean loginStatus() {

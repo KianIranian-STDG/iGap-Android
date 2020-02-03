@@ -294,7 +294,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private void openTransferMoneyPage() {
         if (getActivity() == null) return;
-        new HelperFragment(getActivity().getSupportFragmentManager(), new MobileBankTransferCTCStepOneFragment())
+        new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankTransferCTCStepOneFragment.newInstance(getCurrentAccount()))
                 .setReplace(false)
                 .load();
     }

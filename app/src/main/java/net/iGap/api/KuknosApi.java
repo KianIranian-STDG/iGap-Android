@@ -5,10 +5,13 @@ import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
+import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
@@ -35,6 +38,7 @@ public interface KuknosApi {
     @POST("create-account")
     Call<KuknosResponseModel> createAccount(@Field("first_name") String firstName,
                                             @Field("last_name") String lastName,
+                                            @Field("federation_name") String federationName,
                                             @Field("phone_number") String phoneNumber,
                                             @Field("national_code") String NID,
                                             @Field("mail") String email,
@@ -114,6 +118,20 @@ public interface KuknosApi {
                                                                         @Field("limit") int limit,
                                                                         @Field("order") String order);
 
+    @FormUrlEncoded
+    @POST("open-offers")
+    Call<KuknosResponseModel<KuknosOfferResponse>> getOpenOffers(@Field("public_key") String publicKey,
+                                                                 @Field("limit") int limit,
+                                                                 @Field("cursor") int cursor,
+                                                                 @Field("order") String order);
+
+    @FormUrlEncoded
+    @POST("account-trades")
+    Call<KuknosResponseModel<KuknosTradeResponse>> getTradesHistory(@Field("public_key") String publicKey,
+                                                                    @Field("limit") int limit,
+                                                                    @Field("cursor") int cursor,
+                                                                    @Field("order") String order);
+
     /**
      * this api returns the user status
      *
@@ -150,6 +168,16 @@ public interface KuknosApi {
                                                     @Field("asset_count") String assetAmount,
                                                     @Field("amount") String totalPrice,
                                                     @Field("description") String description);
+
+    /**
+     * this api make a request for username availability.
+     *
+     * @param federationName
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("account-existent")
+    Call<KuknosResponseModel<KuknosUsernameStatus>> checkUsername(@Field("federation_name") String federationName);
 
     /**
      * this api make a request for Fees.

@@ -42,7 +42,11 @@ public class RealmRoomMessageWalletBill extends RealmObject {
 
 
     public static RealmRoomMessageWalletBill put(Realm realm, final ProtoGlobal.RoomMessageWallet.Bill input) {
-        RealmRoomMessageWalletBill messageWallet = realm.createObject(RealmRoomMessageWalletBill.class, input.getOrderId());
+        RealmRoomMessageWalletBill messageWallet = realm.where(RealmRoomMessageWalletBill.class).equalTo(RealmRoomMessageWalletBillFields.ORDER_ID, input.getOrderId()).findFirst();
+        if (messageWallet == null) {
+            messageWallet = realm.createObject(RealmRoomMessageWalletBill.class, input.getOrderId());
+        }
+
         messageWallet.setFromUserId(input.getFromUserId());
         messageWallet.setMyToken(input.getMyToken());
         messageWallet.setToken(input.getToken());

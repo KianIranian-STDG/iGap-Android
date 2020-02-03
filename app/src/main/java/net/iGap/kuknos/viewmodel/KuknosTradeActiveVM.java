@@ -1,50 +1,47 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.os.Handler;
-
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosTradeHistoryM;
+import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
-import java.util.ArrayList;
-import java.util.List;
+public class KuknosTradeActiveVM extends BaseAPIViewModel {
 
-public class KuknosTradeActiveVM extends ViewModel {
-
-    private MutableLiveData<List<KuknosTradeHistoryM>> listMutableLiveData;
+    private MutableLiveData<KuknosOfferResponse> offerList;
     private MutableLiveData<ErrorM> errorM;
     private MutableLiveData<Boolean> progressState;
+    private TradeRepo tradeRepo = new TradeRepo();
 
     public KuknosTradeActiveVM() {
-        listMutableLiveData = new MutableLiveData<>();
+        offerList = new MutableLiveData<>();
         errorM = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         progressState.setValue(true);
     }
 
-    private void initModel() {
-        KuknosTradeHistoryM temp = new KuknosTradeHistoryM("20.010", "10.020", "1.010", "2019/05/01");
-        List<KuknosTradeHistoryM> listTemp = new ArrayList<>();
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listMutableLiveData.setValue(listTemp);
-    }
-
     public void getDataFromServer() {
         progressState.setValue(true);
-        // TODO Hard code in here baby
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            // hard code
-            initModel();
-            progressState.setValue(false);
-        }, 1000);
+        tradeRepo.getOpenOffers(0, 100, this, new ResponseCallback<KuknosResponseModel<KuknosOfferResponse>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosOfferResponse> data) {
+                offerList.setValue(data.getData());
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onError(String error) {
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
+                progressState.setValue(false);
+            }
+        });
     }
 
     public MutableLiveData<ErrorM> getErrorM() {
@@ -63,4 +60,7 @@ public class KuknosTradeActiveVM extends ViewModel {
         this.progressState = progressState;
     }
 
+    public MutableLiveData<KuknosOfferResponse> getOfferList() {
+        return offerList;
+    }
 }

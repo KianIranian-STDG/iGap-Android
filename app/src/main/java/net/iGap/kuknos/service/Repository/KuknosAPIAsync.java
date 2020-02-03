@@ -292,6 +292,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
     private T getTrades(String accountID) {
         Server server = new Server(KUKNOS_Horizan_Server);
         try {
+//            server.trades().forAccount(accountID).limit(100).execute();
             Page<OfferResponse> response = server.offers().forAccount(accountID).limit(100).order(RequestBuilder.Order.DESC).execute();
             successStatus = true;
             return (T) response;

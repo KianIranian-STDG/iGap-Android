@@ -1,21 +1,20 @@
 package net.iGap.kuknos.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 
-import org.stellar.sdk.responses.OfferResponse;
-import org.stellar.sdk.responses.Page;
+public class KuknosTradeHistoryVM extends BaseAPIViewModel {
 
-public class KuknosTradeHistoryVM extends ViewModel {
-
-    private MutableLiveData<Page<OfferResponse>> listMutableLiveData;
+    private MutableLiveData<KuknosTradeResponse> listMutableLiveData;
     private MutableLiveData<ErrorM> errorM;
     private MutableLiveData<Boolean> progressState;
     private TradeRepo tradeRepo = new TradeRepo();
-    private API mode;
 
     public KuknosTradeHistoryVM() {
         listMutableLiveData = new MutableLiveData<>();
@@ -25,41 +24,24 @@ public class KuknosTradeHistoryVM extends ViewModel {
     }
 
     public void getDataFromServer() {
-        if (mode == API.OFFERS_LIST) {
-            /*tradeRepo.getOffersList(new ApiResponse<Page<OfferResponse>>() {
-                @Override
-                public void onResponse(Page<OfferResponse> offerResponsePage) {
-                    listMutableLiveData.setValue(offerResponsePage);
-                }
+        progressState.setValue(true);
+        tradeRepo.getTradesHistory(0, 100, this, new ResponseCallback<KuknosResponseModel<KuknosTradeResponse>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosTradeResponse> data) {
+                listMutableLiveData.setValue(data.getData());
+                progressState.setValue(true);
+            }
 
-                @Override
-                public void onFailed(String error) {
+            @Override
+            public void onError(String error) {
+                progressState.setValue(false);
+            }
 
-                }
-
-                @Override
-                public void setProgressIndicator(boolean visibility) {
-                    progressState.setValue(visibility);
-                }
-            });*/
-        } else {
-            /*tradeRepo.getTradesList(new ApiResponse<Page<OfferResponse>>() {
-                @Override
-                public void onResponse(Page<OfferResponse> offerResponsePage) {
-                    listMutableLiveData.setValue(offerResponsePage);
-                }
-
-                @Override
-                public void onFailed(String error) {
-
-                }
-
-                @Override
-                public void setProgressIndicator(boolean visibility) {
-                    progressState.setValue(visibility);
-                }
-            });*/
-        }
+            @Override
+            public void onFailed() {
+                progressState.setValue(false);
+            }
+        });
     }
 
     public MutableLiveData<ErrorM> getErrorM() {
@@ -78,19 +60,7 @@ public class KuknosTradeHistoryVM extends ViewModel {
         this.progressState = progressState;
     }
 
-    public MutableLiveData<Page<OfferResponse>> getListMutableLiveData() {
+    public MutableLiveData<KuknosTradeResponse> getListMutableLiveData() {
         return listMutableLiveData;
-    }
-
-    public API getMode() {
-        return mode;
-    }
-
-    public void setMode(API mode) {
-        this.mode = mode;
-    }
-
-    public enum API {
-        OFFERS_LIST, TRADES_LIST
     }
 }
