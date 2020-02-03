@@ -1895,5 +1895,6 @@
     <string name="gift_sticker_national_code_title">Национальный Кодекс Строителя</string>
     <string name="gift_sticker_activation_title">Активировать карту</string>
     <string name="gift_sticker_empty_list_message">Там нет наклейки</string>
+    <string name="inquiry_and_shopping">Запрос и покупки</string>
 
 </resources>

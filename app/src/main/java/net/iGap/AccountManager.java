@@ -2,10 +2,7 @@ package net.iGap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Base64;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -115,7 +112,7 @@ public class AccountManager {
         setUserAccountListInSharedPreferences();
     }
 
-    public void updatePhoneNumber(String phoneNumber){
+    public void updatePhoneNumber(String phoneNumber) {
         userAccountList.get(currentUser).setPhoneNumber(phoneNumber);
         setUserAccountListInSharedPreferences();
     }
@@ -209,6 +206,7 @@ public class AccountManager {
         G.serverHashContact = null;
         G.jwt = null;
         G.selectedCard = null;
+        G.nationalCode = null;
         G.pullRequestQueueRunned = new AtomicBoolean(false);
     }
 

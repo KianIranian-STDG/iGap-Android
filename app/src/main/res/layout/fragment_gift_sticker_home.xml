@@ -22,7 +22,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/myGiftStickerPage"
-        style="@style/iGapButton"
+        style="@style/iGapOutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
@@ -32,7 +32,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/receivedGiftStickerPage"
-        style="@style/iGapButton"
+        style="@style/iGapOutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
