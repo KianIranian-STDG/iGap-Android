@@ -148,6 +148,10 @@ public class EmojiManager {
         }
     }
 
+    public CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics) {
+        return replaceEmoji(cs, fontMetrics, 0, false, null);
+    }
+
     public CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew) {
         return replaceEmoji(cs, fontMetrics, 0, createNew, null);
     }

@@ -28,7 +28,6 @@ import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 
 import static android.view.Gravity.CENTER;
@@ -142,7 +141,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_847 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         linearLayout_376.setLayoutParams(layout_847);
 
-        EmojiTextViewE chslr_txt_replay_from = new EmojiTextViewE(context);
+        AppCompatTextView chslr_txt_replay_from = new AppCompatTextView(context);
         chslr_txt_replay_from.setId(R.id.chslr_txt_replay_from);
         chslr_txt_replay_from.setSingleLine(true);
         chslr_txt_replay_from.setPadding(0, 0, 0, 0);
@@ -152,7 +151,6 @@ public class ViewMaker {
         chslr_txt_replay_from.setText("");
 
         chslr_txt_replay_from.setTextColor(context.getResources().getColor(R.color.colorOldBlack));
-        chslr_txt_replay_from.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
         setTextSize(chslr_txt_replay_from, R.dimen.dp12);
 
         chslr_txt_replay_from.setTypeface(ResourcesCompat.getFont(chslr_txt_replay_from.getContext(), R.font.main_font_bold));
@@ -160,7 +158,7 @@ public class ViewMaker {
         chslr_txt_replay_from.setLayoutParams(layout_55);
         linearLayout_376.addView(chslr_txt_replay_from);
 
-        EmojiTextViewE chslr_txt_replay_message = new EmojiTextViewE(context);
+        AppCompatTextView chslr_txt_replay_message = new AppCompatTextView(context);
         chslr_txt_replay_message.setId(R.id.chslr_txt_replay_message);
         chslr_txt_replay_message.setEllipsize(TextUtils.TruncateAt.END);
         chslr_txt_replay_message.setSingleLine(true);
@@ -170,7 +168,6 @@ public class ViewMaker {
         chslr_txt_replay_message.setTextColor(Theme.getInstance().getPrimaryTextColor(chslr_txt_replay_message.getContext()));
         chslr_txt_replay_message.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
 
-        chslr_txt_replay_message.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
         setTextSize(chslr_txt_replay_message, R.dimen.dp12);
         LinearLayout.LayoutParams layout_641 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_message.setLayoutParams(layout_641);
@@ -203,7 +200,7 @@ public class ViewMaker {
         cslr_ll_forward.addView(View_997);
 
 
-        TextView cslr_txt_prefix_forward = new AppCompatTextView(context);
+        AppCompatTextView cslr_txt_prefix_forward = new AppCompatTextView(context);
         cslr_txt_prefix_forward.setId(R.id.cslr_txt_prefix_forward);
         cslr_txt_prefix_forward.setText(context.getResources().getString(R.string.forwarded_from));
         cslr_txt_prefix_forward.setTextColor(Theme.getInstance().getReceivedMessageOtherTextColor(cslr_txt_prefix_forward.getContext()));
@@ -216,7 +213,7 @@ public class ViewMaker {
         cslr_txt_prefix_forward.setLayoutParams(layout_992);
         cslr_ll_forward.addView(cslr_txt_prefix_forward);
 
-        TextView cslr_txt_forward_from = new AppCompatTextView(context);
+        AppCompatTextView cslr_txt_forward_from = new AppCompatTextView(context);
         cslr_txt_forward_from.setId(R.id.cslr_txt_forward_from);
         cslr_txt_forward_from.setMinimumWidth(i_Dp(R.dimen.dp100));
         cslr_txt_forward_from.setMaxWidth(i_Dp(R.dimen.dp140));
@@ -245,10 +242,9 @@ public class ViewMaker {
         return view;
     }
 
-    static EmojiTextViewE makeTextViewMessage() {
-        EmojiTextViewE textView = new EmojiTextViewE(context);
+    static AppCompatTextView makeTextViewMessage() {
+        AppCompatTextView textView = new AppCompatTextView(context);
         textView.setPadding(10, 4, 10, 4);
-        textView.setEmojiSize(i_Dp(R.dimen.dp18));
 
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
@@ -264,8 +260,8 @@ public class ViewMaker {
         return textView;
     }
 
-    static View makeHeaderTextView(Context context, String text) {
-        EmojiTextViewE textView = new EmojiTextViewE(context);
+    static AppCompatTextView makeHeaderTextView(Context context, String text) {
+        AppCompatTextView textView = new AppCompatTextView(context);
         textView.setId(R.id.messageSenderName);
         textView.setGravity(LEFT);
         textView.setPadding(20, 0, 20, 5);
@@ -411,7 +407,7 @@ public class ViewMaker {
         layout_313.leftMargin = i_Dp(R.dimen.dp6);
         linearLayout_983.setLayoutParams(layout_313);
 
-        EmojiTextViewE fcsl_txt_name = new EmojiTextViewE(context);
+        AppCompatTextView fcsl_txt_name = new AppCompatTextView(context);
         fcsl_txt_name.setId(R.id.fcsl_txt_name);
         fcsl_txt_name.setPadding(0, 0, 0, dpToPixel(1));
         fcsl_txt_name.setText("Name");

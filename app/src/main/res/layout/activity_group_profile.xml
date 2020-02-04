@@ -63,7 +63,7 @@
                         android:layout_toEndOf="@id/toolbar_back"
                         android:layout_toRightOf="@id/toolbar_back" />
 
-                    <net.iGap.module.EmojiTextViewE
+                    <TextView
                         android:id="@+id/toolbar_txt_name_collapsed"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -79,8 +79,7 @@
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
-                        android:visibility="gone"
-                        app:emojiSize="@dimen/standardTextSize" />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/toolbar_more"
@@ -126,7 +125,7 @@
                         android:orientation="vertical"
                         android:paddingBottom="@dimen/dp10">
 
-                        <net.iGap.module.EmojiTextViewE
+                        <TextView
                             android:id="@+id/toolbar_txt_name_expanded"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -134,8 +133,7 @@
                             android:gravity="bottom|center_horizontal"
                             android:singleLine="true"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/largeTextSize"
-                            app:emojiSize="@dimen/largeTextSize" />
+                            android:textSize="@dimen/largeTextSize" />
 
                         <TextView
                             android:id="@+id/toolbar_txt_status_expanded"
@@ -166,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <net.iGap.module.EmojiTextViewE
+                <TextView
                     android:id="@+id/description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -175,7 +173,6 @@
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.haveDescription}"
-                    app:emojiSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

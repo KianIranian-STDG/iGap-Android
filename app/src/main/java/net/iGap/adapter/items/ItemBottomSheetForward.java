@@ -11,6 +11,7 @@
 package net.iGap.adapter.items;
 
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,11 +22,11 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import net.iGap.AccountManager;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.proto.ProtoGlobal;
 
@@ -60,7 +61,7 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
             viewHolder.imgSrc.setBorderColor(new Theme().getAccentColor(viewHolder.imgSrc.getContext()));
         }
 
-        viewHolder.txtName.setText(structBottomSheetForward.getDisplayName());
+        viewHolder.txtName.setText(EmojiManager.getInstance().replaceEmoji(structBottomSheetForward.getDisplayName(), viewHolder.txtName.getPaint().getFontMetricsInt()));
 
         viewHolder.checkBoxSelect.setChecked(structBottomSheetForward.isChecked());
 
@@ -126,7 +127,7 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         protected AnimateCheckBox checkBoxSelect;
-        private EmojiTextViewE txtName;
+        private TextView txtName;
         private CircleImageView imgSrc;
 
         public ViewHolder(View view) {

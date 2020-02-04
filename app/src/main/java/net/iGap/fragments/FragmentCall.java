@@ -24,6 +24,7 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -36,7 +37,6 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
@@ -261,14 +261,14 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             if (G.userLogin) {
                 new MaterialDialog.Builder(v.getContext()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                            DbManager.getInstance().doRealmTask(realm -> {
-                                //ToDo: add callback to proto request
-                                setViewState(false);
-                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                                view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
-                                mSelectedLogList.clear();
-                            });
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        //ToDo: add callback to proto request
+                        setViewState(false);
+                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                        mSelectedLogList.clear();
+                    });
                 }).negativeText(R.string.B_cancel).show();
             } else {
                 HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
@@ -408,7 +408,8 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
-            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+            if (PassCode.getInstance().isPassCode())
+                mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
 
             refreshCallList(0, true);
 
@@ -422,7 +423,8 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             mHelperToolbar.getScannerButton().setVisibility(View.GONE);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
-            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+            if (PassCode.getInstance().isPassCode())
+                mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
 
             refreshCallList(0, true);
 
@@ -592,7 +594,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                 viewHolder.timeDuration.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDuration.getText().toString()));
             }
 
-            viewHolder.name.setText(item.getUser().getDisplayName());
+            viewHolder.name.setText(EmojiManager.getInstance().replaceEmoji(item.getUser().getDisplayName(), viewHolder.name.getPaint().getFontMetricsInt()));
             avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, item.getUser().getId()).avatarType(AvatarHandler.AvatarType.USER));
         }
 
@@ -600,7 +602,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             private RealmCallLog callLog;
             private CircleImageView image;
-            private EmojiTextViewE name;
+            private TextView name;
             private MaterialDesignTextView icon;
             private TextView timeAndInfo;
             private TextView timeDuration;

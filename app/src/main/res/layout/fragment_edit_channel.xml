@@ -62,7 +62,7 @@
                     app:layout_constraintStart_toStartOf="@+id/channelAvatar"
                     app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
 
-                <net.iGap.module.EmojiEditTextE
+                <EditText
                     android:id="@+id/channelNameEditText"
                     style="@style/iGapEmojiChatStyle"
                     android:layout_width="0dp"
@@ -75,7 +75,6 @@
                     android:maxLines="1"
                     android:text="@={viewModel.channelName}"
                     android:textSize="@dimen/largeTextSize"
-                    app:emojiSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@+id/emojiButton"
                     app:layout_constraintStart_toEndOf="@id/channelAvatar"
                     app:layout_constraintTop_toTopOf="@+id/channelAvatar" />

@@ -17,12 +17,11 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
-import com.vanniktech.emoji.EmojiTextView;
-
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogMessage;
@@ -41,7 +40,6 @@ import net.iGap.view.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
-import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.adapter.items.chat.ViewMaker.setTextSize;
 import static net.iGap.adapter.items.chat.ViewMaker.setTypeFace;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
@@ -61,13 +59,13 @@ public class RoomListCell extends FrameLayout {
     public final int GIF = 0x1F308;
     public final int WALLET = 0x1F4B3;
 
-    private EmojiTextView roomNameTv;
+    private AppCompatTextView roomNameTv;
     private FontIconTextView verifyIconTv;
     private CircleImageView avatarImageView;
     private TextView messageDataTv;
     private FontIconTextView muteIconTv;
     private FontIconTextView chatIconTv;
-    private EmojiTextView lastMessageTv;
+    private AppCompatTextView lastMessageTv;
     private TextBadge badgeView;
     private FontIconTextView statusTv;
     private AppCompatImageView pinView;
@@ -142,7 +140,7 @@ public class RoomListCell extends FrameLayout {
         }
 
         if (haveName) {
-            roomNameTv.setText(room.getTitle());
+            roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt()));
         }
 
         if (room.getType() == ProtoGlobal.Room.Type.CHANNEL && room.getChannelRoom().isVerified() || room.getType() == CHAT && room.getChatRoom().isVerified()) {
@@ -210,13 +208,12 @@ public class RoomListCell extends FrameLayout {
         }
 
         if (room.getTitle() != null && !haveName) {
-            roomNameTv = new EmojiTextView(getContext());
+            roomNameTv = new AppCompatTextView(getContext());
             setTypeFace(roomNameTv);
             setTextSize(roomNameTv, R.dimen.dp13);
             roomNameTv.setSingleLine(true);
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
-            roomNameTv.setEmojiSize(i_Dp(R.dimen.dp16));
-            roomNameTv.setText(room.getTitle());
+            roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt()));
             roomNameTv.setTextColor(Theme.getInstance().getSendMessageTextColor(roomNameTv.getContext()));
             roomNameTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
             addView(roomNameTv);
@@ -225,13 +222,12 @@ public class RoomListCell extends FrameLayout {
 
         if (room.getLastMessage() != null) {
             if (!haveLastMessage) {
-                lastMessageTv = new EmojiTextView(getContext());
+                lastMessageTv = new AppCompatTextView(getContext());
                 lastMessageTv.setEllipsize(TextUtils.TruncateAt.END);
                 lastMessageTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 lastMessageTv.setSingleLine(true);
                 setTypeFace(lastMessageTv);
                 setTextSize(lastMessageTv, R.dimen.dp12);
-                lastMessageTv.setEmojiSize(i_Dp(R.dimen.dp15));
                 addView(lastMessageTv);
                 haveLastMessage = true;
             }
@@ -526,7 +522,7 @@ public class RoomListCell extends FrameLayout {
                         getContext().getResources().getDimension(R.dimen.dp52), item.getInitials(), item.getColor())));
     }
 
-    private void getLastMessage(RealmRoom room, EmojiTextView lastMessageTv) {
+    private void getLastMessage(RealmRoom room, AppCompatTextView lastMessageTv) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
 
         if (room.getActionState() != null && room.getActionStateUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
@@ -735,7 +731,7 @@ public class RoomListCell extends FrameLayout {
                 }
             }
         }
-        lastMessageTv.setText(builder, TextView.BufferType.SPANNABLE);
+        lastMessageTv.setText(EmojiManager.getInstance().replaceEmoji(builder, lastMessageTv.getPaint().getFontMetricsInt()), TextView.BufferType.SPANNABLE);
     }
 
     private int dpToPx(int dp) {

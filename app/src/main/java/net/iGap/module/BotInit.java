@@ -395,9 +395,6 @@ public class BotInit implements MakeButtons.OnClickListener {
             try {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rootView.findViewById(R.id.chl_edt_chat).getWindowToken(), 0);
-
-                MaterialDesignTextView btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
-
             } catch (IllegalStateException e) {
                 e.getStackTrace();
             }

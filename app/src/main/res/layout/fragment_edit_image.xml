@@ -140,7 +140,7 @@
                 android:textSize="@dimen/dp20" />
 
 
-            <net.iGap.module.EmojiEditTextE
+            <EditText
                 android:id="@+id/chl_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -155,8 +155,7 @@
                 android:paddingRight="@dimen/dp10"
                 android:textColor="@color/white"
                 android:textColorHint="@color/light_gray"
-                android:textSize="@dimen/standardTextSize"
-                app:emojiSize="@dimen/largeTextSize" />
+                android:textSize="@dimen/standardTextSize" />
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_ok_message"

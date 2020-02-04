@@ -61,7 +61,7 @@
                     app:layout_constraintRight_toRightOf="@id/groupAvatar"
                     app:layout_constraintTop_toTopOf="@id/groupAvatar" />
 
-                <net.iGap.module.EmojiEditTextE
+                <EditText
                     android:id="@+id/groupNameEditText"
                     style="@style/iGapEmojiChatStyle"
                     android:layout_width="0dp"
@@ -73,7 +73,6 @@
                     android:maxLines="1"
                     android:text="@={viewModel.groupName}"
                     android:textSize="@dimen/largeTextSize"
-                    app:emojiSize="@dimen/largeTextSize"
                     app:layout_constraintEnd_toStartOf="@+id/emojiButton"
                     app:layout_constraintStart_toEndOf="@id/groupAvatar"
                     app:layout_constraintTop_toTopOf="@+id/groupAvatar" />

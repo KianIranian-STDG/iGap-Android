@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent=".7" />
 
-    <net.iGap.module.EmojiTextViewE
+    <TextView
         android:id="@+id/txtTitle_forward_bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

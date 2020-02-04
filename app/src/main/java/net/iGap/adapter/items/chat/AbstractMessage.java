@@ -35,6 +35,7 @@ import android.widget.Toast;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.collection.ArrayMap;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,6 +54,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
@@ -79,7 +81,6 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MakeButtons;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyType;
@@ -182,7 +183,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     protected void setTextIfNeeded(TextView view) {
         if (!TextUtils.isEmpty(myText)) {
-            view.setText(myText);
+            view.setText(EmojiManager.getInstance().replaceEmoji(myText, view.getPaint().getFontMetricsInt(), LayoutCreator.dp(16), false));
             // if this not work then use view.requestLayout();
             view.forceLayout();
             view.setVisibility(View.VISIBLE);
@@ -467,7 +468,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (holder instanceof ChatItemWithTextHolder) {
             ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
-            withTextHolder.messageView.setHasEmoji(structMessage.hasEmojiInText());
+//            withTextHolder.messageView.setHasEmoji(structMessage.hasEmojiInText());
 
             int maxsize = 0;
             withTextHolder.removeButtonLayout();
@@ -771,7 +772,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getUserId());
             });
             if (realmRegisteredInfo != null) {
-                final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(holder.getContext(), realmRegisteredInfo.getDisplayName());
+                final AppCompatTextView _tv = ViewMaker.makeHeaderTextView(holder.getContext(), realmRegisteredInfo.getDisplayName());
 
                 _tv.measure(0, 0);       //must call measure!
                 int maxWith = 0;
@@ -1015,7 +1016,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (replayView != null) {
                 final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
-                final EmojiTextViewE replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
+                final AppCompatTextView replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1038,19 +1039,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (type == ProtoGlobal.Room.Type.CHANNEL) {
                     if (realmRoom != null) {
-                        replyFrom.setText(realmRoom.getTitle());
+                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), replyFrom.getPaint().getFontMetricsInt()));
                     }
                 } else {
                     RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
                         return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getReplyTo().getUserId());
                     });
                     if (replayToInfo != null) {
-                        replyFrom.setText(replayToInfo.getDisplayName());
+                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
                     }
                 }
 
                 String replayText = AppUtils.replyTextMessage(mMessage.getReplyTo(), holder.itemView.getResources());
-                replayMessage.setText(replayText);
+                replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
@@ -1117,9 +1118,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             });
 
-            TextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
+            AppCompatTextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
             txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
-            TextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
+            AppCompatTextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
             txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
 
             /**
@@ -1137,7 +1138,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
 
-                txtForwardFrom.setText(info.getDisplayName());
+                txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(info.getDisplayName(), txtForwardFrom.getPaint().getFontMetricsInt()));
                 structMessage.username = info.getUsername();
                 txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
             } else if (mMessage.getForwardMessage().getUserId() != 0) {
@@ -1152,7 +1153,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getRoomId()).findFirst();
                 });
                 if (realmRoom != null) {
-                    txtForwardFrom.setText(realmRoom.getTitle());
+                    txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
                     txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
 
                     switch (realmRoom.getType()) {
@@ -1186,7 +1187,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             }
                         }
 
-                        txtForwardFrom.setText(realmRoomForwardedFrom.getTitle());
+                        txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoomForwardedFrom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
                         txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
                     } else {
                         if (RealmRoom.needUpdateRoomInfo(mMessage.getForwardMessage().getAuthorRoomId())) {

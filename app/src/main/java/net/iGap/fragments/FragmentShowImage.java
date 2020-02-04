@@ -42,6 +42,7 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
@@ -50,7 +51,6 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
@@ -82,7 +82,7 @@ public class FragmentShowImage extends BaseFragment {
     private TextView txtImageName;
     private TextView txtImageDate;
     private TextView txtImageTime;
-    private EmojiTextViewE txtImageDesc;
+    private TextView txtImageDesc;
     private LinearLayout toolbarShowImage;
     private boolean isShowToolbar = true;
     private ViewGroup ltImageName;
@@ -318,7 +318,7 @@ public class FragmentShowImage extends BaseFragment {
         RealmRoomMessage realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(realmRoomMessage);
 
         if (realmRoomMessageFinal != null && realmRoomMessageFinal.isValid() && realmRoomMessageFinal.getMessage() != null && !realmRoomMessageFinal.getMessage().isEmpty()) {
-            txtImageDesc.setText(realmRoomMessageFinal.getMessage());
+            txtImageDesc.setText(EmojiManager.getInstance().replaceEmoji(realmRoomMessageFinal.getMessage(), txtImageDesc.getPaint().getFontMetricsInt()));
             txtImageDesc.setVisibility(View.VISIBLE);
         } else {
             txtImageDesc.setVisibility(View.GONE);
@@ -377,7 +377,8 @@ public class FragmentShowImage extends BaseFragment {
     private void shareImage() {
         RealmRoomMessage roomMessage = null;
 
-        if (mFList.size() > viewPager.getCurrentItem()) roomMessage = mFList.get(viewPager.getCurrentItem());
+        if (mFList.size() > viewPager.getCurrentItem())
+            roomMessage = mFList.get(viewPager.getCurrentItem());
 
         if (roomMessage != null) {
             roomMessage = RealmRoomMessage.getFinalMessage(roomMessage);

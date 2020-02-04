@@ -28,6 +28,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentSyncRegisteredContactsBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.ContactManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
@@ -42,11 +43,10 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
-import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -166,7 +166,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity() != null){
+                if (getActivity() != null) {
                     Intent intent = new Intent(getActivity(), ActivityMain.class);
                     intent.putExtra(ARG_USER_ID, userID);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -465,7 +465,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 viewHolder.title.setTextColor(getResources().getColor(R.color.black));
                 viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
 
-                viewHolder.title.setText(contact.getDisplay_name());
+                viewHolder.title.setText(EmojiManager.getInstance().replaceEmoji(contact.getDisplay_name(), viewHolder.title.getPaint().getFontMetricsInt()));
                 viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));
 
                 setAvatar(viewHolder, contact.getId());
@@ -500,7 +500,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             private CircleImageView image;
-            private EmojiTextViewE title;
+            private TextView title;
             private TextView subtitle;
             private RealmContacts realmContacts;
             private ConstraintLayout root;

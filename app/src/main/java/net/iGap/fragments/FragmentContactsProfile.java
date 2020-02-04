@@ -43,6 +43,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -173,11 +174,11 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
 
-        viewModel.menuVisibility.observe(this, visible -> {
+        viewModel.menuVisibility.observe(getViewLifecycleOwner(), visible -> {
             if (visible != null) binding.toolbarMore.setVisibility(visible);
         });
 
-        viewModel.videoCallVisibility.observe(this, visible -> {
+        viewModel.videoCallVisibility.observe(getViewLifecycleOwner(), visible -> {
             if (visible != null) binding.toolbarCall.setVisibility(visible);
         });
 
@@ -189,8 +190,8 @@ public class FragmentContactsProfile extends BaseFragment {
 
         viewModel.contactName.observe(getViewLifecycleOwner(), name -> {
             if (name != null) {
-                binding.toolbarTxtNameCollapsed.setText(name);
-                binding.toolbarTxtNameExpanded.setText(name);
+                binding.toolbarTxtNameCollapsed.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameCollapsed.getPaint().getFontMetricsInt()));
+                binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
             }
         });
 

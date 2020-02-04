@@ -31,7 +31,7 @@
         android:orientation="vertical"
         android:paddingRight="@dimen/dp6">
 
-        <net.iGap.module.EmojiTextViewE
+        <TextView
             android:id="@+id/replyFrom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:textSize="@dimen/dp12"
             android:textStyle="bold" />
 
-        <net.iGap.module.EmojiTextViewE
+        <TextView
             android:id="@+id/replayTo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

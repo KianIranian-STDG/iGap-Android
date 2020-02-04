@@ -48,7 +48,6 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
@@ -81,7 +80,7 @@ public class HelperToolbar {
     private ConstraintLayout mRootConstraint;
     private AppCompatTextView mLeftBtn, passCodeBtn, scannerBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
-    private EmojiTextViewE mTxtChatUserName;
+    private TextView mTxtChatUserName;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch;
@@ -539,7 +538,7 @@ public class HelperToolbar {
 
     }
 
-    public EmojiTextViewE getTextViewChatUserName() {
+    public TextView getTextViewChatUserName() {
         return mTxtChatUserName;
     }
 
@@ -1219,7 +1218,7 @@ public class HelperToolbar {
         private CircleImageView civAvatar;
         private CircleImageView civCloud;
         private LinearLayout layoutChatName;
-        private EmojiTextViewE tvChatName;
+        private TextView tvChatName;
         private TextView tvChatStatus;
         private TextView iconChatVerify;
         private TextView muteChatIcon;
@@ -1600,11 +1599,11 @@ public class HelperToolbar {
                     }
 
                     //chat name
-                    tvChatName = new EmojiTextViewE(getContext());
+                    tvChatName = new AppCompatTextView(getContext());
                     tvChatName.setId(R.id.view_toolbar_chat_txt_userName);
                     tvChatName.setTypeface(tfMain);
                     tvChatName.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) getContext().getResources().getDimension(R.dimen.standardTextSize));
-                    tvChatName.setEmojiSize((int) getContext().getResources().getDimension(R.dimen.standardTextSize));
+//                    tvChatName.setEmojiSize((int) getContext().getResources().getDimension(R.dimen.standardTextSize));
                     tvChatName.setSingleLine();
                     tvChatName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                     tvChatName.setGravity(Gravity.LEFT);
@@ -2169,7 +2168,7 @@ public class HelperToolbar {
             return layoutChatName;
         }
 
-        public EmojiTextViewE getTvChatName() {
+        public TextView getTvChatName() {
             return tvChatName;
         }
 

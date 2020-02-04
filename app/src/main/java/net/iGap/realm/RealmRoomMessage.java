@@ -15,8 +15,6 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.Nullable;
 
-import com.vanniktech.emoji.EmojiUtils;
-
 import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.DbManager;
@@ -490,33 +488,15 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {
-        try {
-            if (EmojiUtils.emojisCount(message) > 0) {
-                roomMessage.setHasEmojiInText(true);
-            } else {
-                roomMessage.setHasEmojiInText(false);
-            }
-        } catch (Exception e) {
-            roomMessage.setHasEmojiInText(true);
-        }
-    }
-
-    public static boolean isEmojiInText(long messageId) {
-        return DbManager.getInstance().doRealmTask(realm -> {
-            boolean hasEmoji = true;
-            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-            if (realmRoomMessage != null && realmRoomMessage.getMessage() != null) {
-                if (EmojiUtils.emojisCount(realmRoomMessage.getMessage()) <= 0) {
-                    hasEmoji = false;
-                }
-            }
-            return hasEmoji;
-
-        });
-    }
-
-    public static boolean isEmojiInText(String message) {
-        return EmojiUtils.emojisCount(message) > 0;
+//        try {
+//            if (EmojiUtils.emojisCount(message) > 0) {
+//                roomMessage.setHasEmojiInText(true);
+//            } else {
+//                roomMessage.setHasEmojiInText(false);
+//            }
+//        } catch (Exception e) {
+//            roomMessage.setHasEmojiInText(true);
+//        }
     }
 
     public static long getReplyMessageId(RealmRoomMessage realmRoomMessage) {

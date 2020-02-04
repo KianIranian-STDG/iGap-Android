@@ -109,7 +109,16 @@
     <item name="v_chatCell_pin" type="id" />
     <item name="tv_chatCell_lastMessage" type="id" />
     <item name="view_listen" type="id" />
-
+    <item name="chatSubLayoutFile" type="id" />
+    <item name="chatSubLayoutTime" type="id" />
+    <item name="chatSubLayoutLog" type="id" />
+    <item name="chatSubLayoutGifWithText" type="id" />
+    <item name="chatSubLayoutAudio" type="id" />
+    <item name="chatSubLayoutLocation" type="id" />
+    <item name="chatSubLayoutVideoWithText" type="id" />
+    <item name="chatSubLayoutImageWithText" type="id" />
+    <item name="chatSubLayoutContact" type="id" />
+    <item name="chatSubLayoutVoice" type="id" />
     <item name="bottomIcon" type="id" />
 
     <!--chat item-->
@@ -162,5 +171,30 @@
     <item name="cardToCard_button" type="id" />
     <item name="cardToCard_innerLayout" type="id" />
     <item name="more" type="id" />
+
+    <item name="view_toolbar_layout_player_music" type="id" />
+    <item name="view_toolbar_layout_strip_call" type="id" />
+    <item name="view_toolbar_player_layout" type="id" />
+    <item name="view_toolbar_main_constraint" type="id" />
+    <item name="view_toolbar_logo" type="id" />
+    <item name="view_toolbar_user_small_avatar" type="id" />
+    <item name="view_toolbar_btn_left" type="id" />
+    <item name="view_toolbar_btn_right_1" type="id" />
+    <item name="view_toolbar_btn_right_2" type="id" />
+    <item name="view_toolbar_btn_right_3" type="id" />
+    <item name="view_toolbar_btn_right_4" type="id" />
+    <item name="view_toolbar_search_layout" type="id" />
+    <item name="view_toolbar_search_layout_txt" type="id" />
+    <item name="view_toolbar_search_layout_edt_input" type="id" />
+    <item name="view_toolbar_user_chat_avatar_layout" type="id" />
+    <item name="view_toolbar_user_chat_avatar" type="id" />
+    <item name="view_toolbar_user_cloud_avatar" type="id" />
+    <item name="view_toolbar_chat_layout_userName" type="id" />
+    <item name="view_toolbar_chat_txt_userName" type="id" />
+    <item name="view_toolbar_chat_txt_verify" type="id" />
+    <item name="view_toolbar_chat_txt_isMute" type="id" />
+    <item name="view_toolbar_chat_txt_seen_status" type="id" />
+    <item name="groupName" type="id" />
+    <item name="groupMemberCount" type="id" />
 
 </resources>

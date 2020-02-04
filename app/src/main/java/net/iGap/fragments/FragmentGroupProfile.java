@@ -43,6 +43,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
@@ -153,8 +154,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         });
 
         viewModel.groupName.observe(getViewLifecycleOwner(), s -> {
-            binding.toolbarTxtNameCollapsed.setText(s);
-            binding.toolbarTxtNameExpanded.setText(s);
+            binding.toolbarTxtNameCollapsed.setText(EmojiManager.getInstance().replaceEmoji(s, binding.toolbarTxtNameCollapsed.getPaint().getFontMetricsInt()));
+            binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(s, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
         });
 
         viewModel.groupNumber.observe(getViewLifecycleOwner(), s -> binding.toolbarTxtStatusExpanded.setText(String.format("%s %s", s, getString(R.string.member))));
@@ -267,16 +268,16 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                     return false;
                 })
                 .setOnLinkLongClickListener((tv, url) -> {
-                    if (HelperUrl.isTextLink(url)){
-                        G.isLinkClicked = true ;
-                        HelperUrl.openLinkDialog(getActivity() , url);
+                    if (HelperUrl.isTextLink(url)) {
+                        G.isLinkClicked = true;
+                        HelperUrl.openLinkDialog(getActivity(), url);
                     }
                     return true;
                 });
 
         viewModel.groupDescription.observe(getViewLifecycleOwner(), groupDescription -> {
             if (getActivity() != null && groupDescription != null) {
-                binding.description.setText(HelperUrl.setUrlLink(getActivity(), groupDescription, true, false, null, true));
+                binding.description.setText(EmojiManager.getInstance().replaceEmoji(HelperUrl.setUrlLink(getActivity(), groupDescription, true, false, null, true), binding.description.getPaint().getFontMetricsInt()));
             }
         });
 
@@ -298,7 +299,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 TextInputLayout inputGroupLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
                 edtLink.setHint(getString(R.string.group_link_hint_revoke));
-                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
+                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext(), R.font.main_font));
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
                 edtLink.setText(link);
                 edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -509,7 +510,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
-        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext() , R.font.main_font));
+        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext(), R.font.main_font));
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.dp14));
         //TODO: fixed this and this will set viewModel
         if (viewModel.isPopup) {

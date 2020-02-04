@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="@id/ivCover"
         app:layout_constraintBottom_toBottomOf="@id/ivCover" />
 
-    <net.iGap.module.EmojiTextViewE
+    <TextView
         android:id="@+id/tvMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

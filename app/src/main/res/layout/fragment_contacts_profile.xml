@@ -74,7 +74,7 @@
                         app:layout_constraintLeft_toRightOf="@id/toolbar_back"
                         app:layout_constraintTop_toTopOf="@id/toolbar_back" />
 
-                    <net.iGap.module.EmojiTextViewE
+                    <TextView
                         android:id="@+id/toolbar_txt_name_collapsed"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -87,7 +87,6 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="gone"
-                        app:emojiSize="@dimen/standardTextSize"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/toolbar_avatar_collapsed_target"
                         app:layout_constraintRight_toLeftOf="@id/toolbar_call"
@@ -136,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="locale">
 
-                <net.iGap.module.EmojiTextViewE
+                <TextView
                     android:id="@+id/userBio"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -150,7 +149,6 @@
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.bioVisibility}"
-                    app:emojiSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -634,15 +632,14 @@
                 android:orientation="vertical"
                 android:paddingRight="@dimen/dp10">
 
-                <net.iGap.module.EmojiTextViewE
+                <TextView
                     android:id="@+id/toolbar_txt_name_expanded"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="left"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/standardTextSize"
-                    app:emojiSize="@dimen/standardTextSize" />
+                    android:textSize="@dimen/standardTextSize" />
 
                 <TextView
                     android:id="@+id/toolbar_txt_status_expanded"

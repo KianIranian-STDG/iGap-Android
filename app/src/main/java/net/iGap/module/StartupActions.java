@@ -15,8 +15,6 @@ import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
 import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.Config;
@@ -47,7 +45,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import io.realm.CompactOnLaunchCallback;
@@ -87,7 +84,6 @@ public final class StartupActions {
         Log.wtf(this.getClass().getName(), "StartupActions");
 
         new Thread(this::manageSettingPreferences).start();
-        EmojiManager.install(new IosEmojiProvider());
         new Thread(StartupActions::makeFolder).start();
         new Thread(this::initializeGlobalVariables).start();
         new Thread(ConnectionManager::manageConnection).start();

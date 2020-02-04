@@ -49,6 +49,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -73,7 +74,6 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -732,7 +732,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         public class ViewHolderSelectedContact extends RecyclerView.ViewHolder {
 
-            private EmojiTextViewE txtName;
+            private TextView txtName;
             private TextView txtPhone;
             private CircleImageView imgAvatar;
             private TextView btnRemove;
@@ -762,7 +762,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 chSelected.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.VISIBLE);
                 btnRemove.setTypeface(ResourcesCompat.getFont(btnRemove.getContext(), R.font.main_font));
-                txtName.setText(data.displayName);
+                txtName.setText(EmojiManager.getInstance().replaceEmoji(data.displayName, txtName.getPaint().getFontMetricsInt()));
                 avatarHandler.getAvatar(new ParamWithAvatarType(imgAvatar, data.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
                 btnRemove.setOnClickListener(v -> {

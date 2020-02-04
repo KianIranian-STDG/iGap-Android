@@ -41,8 +41,8 @@ import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -58,7 +58,6 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
@@ -776,7 +775,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     return;
                 }
 
-                viewHolder.title.setText(contact.getDisplay_name());
+                viewHolder.title.setText(EmojiManager.getInstance().replaceEmoji(contact.getDisplay_name(), viewHolder.title.getPaint().getFontMetricsInt()));
                 viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
@@ -804,7 +803,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     return;
                 }
 
-                viewHolder.title.setText(contact.getDisplay_name());
+                viewHolder.title.setText(EmojiManager.getInstance().replaceEmoji(contact.getDisplay_name(), viewHolder.title.getPaint().getFontMetricsInt()));
                 viewHolder.subtitle.setText("+" + contact.getPhone());
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
@@ -859,7 +858,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             private CircleImageView image;
-            private EmojiTextViewE title;
+            private TextView title;
             private TextView subtitle;
             private RealmContacts realmContacts;
             private ConstraintLayout root;
@@ -937,7 +936,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         public class ViewHolderCall extends RecyclerView.ViewHolder {
 
             private CircleImageView image;
-            private EmojiTextViewE title;
+            private TextView title;
             private TextView subtitle;
             private MaterialDesignTextView btnVoiceCall;
             private RealmContacts realmContacts;

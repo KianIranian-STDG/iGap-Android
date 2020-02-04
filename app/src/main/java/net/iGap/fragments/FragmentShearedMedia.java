@@ -56,6 +56,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
@@ -72,7 +73,6 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
@@ -2404,7 +2404,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         }
 
         public class ViewHolder extends mHolder {
-            private EmojiTextViewE tvMessage;
+            private TextView tvMessage;
             private LinearLayout lytLinks;
             String rawLink = "";
 
@@ -2417,7 +2417,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             public void bind(String message) {
 
-                tvMessage.setText(message);
+                tvMessage.setText(EmojiManager.getInstance().replaceEmoji(message, tvMessage.getPaint().getFontMetricsInt()));
                 Linkify.addLinks(tvMessage, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
                 String[] links = getUrlsFromText(tvMessage);

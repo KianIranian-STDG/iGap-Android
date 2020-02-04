@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_chatRoom_bottom_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -37,8 +36,7 @@
         android:paddingTop="@dimen/dp4"
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp4"
-        android:textSize="@dimen/standardTextSize"
-        app:emojiSize="@dimen/xlargeTextSize" />
+        android:textSize="@dimen/standardTextSize" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_botAction"

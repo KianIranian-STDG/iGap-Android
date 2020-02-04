@@ -93,7 +93,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
 import net.iGap.AccountManager;
 import net.iGap.Config;
@@ -231,7 +230,6 @@ import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
 import net.iGap.module.FontIconTextView;
@@ -496,7 +494,7 @@ public class FragmentChat extends BaseFragment
     private TextView btnDownHash;
     private TextView txtHashCounter;
     private TextView txtFileNameForSend;
-    private EmojiTextViewE txtName;
+    private TextView txtName;
     private TextView txtLastSeen;
     private TextView txtEmptyMessages;
     private String userName = "";
@@ -542,7 +540,7 @@ public class FragmentChat extends BaseFragment
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
-    private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
+
     /**
      * **********************************************************************
      * *************************** Message Loader ***************************
@@ -993,7 +991,7 @@ public class FragmentChat extends BaseFragment
                                 if (txtName == null) {
                                     txtName = mHelperToolbar.getTextViewChatUserName();
                                 }
-                                txtName.setText(room.getTitle());
+                                txtName.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), txtName.getPaint().getFontMetricsInt()));
                                 checkToolbarNameSize();
                             }
                         }
@@ -1622,13 +1620,13 @@ public class FragmentChat extends BaseFragment
         }
 
         if (title != null) {
-            txtName.setText(title);
+            txtName.setText(EmojiManager.getInstance().replaceEmoji(title, txtName.getPaint().getFontMetricsInt()));
         }
         /**
          * change english number to persian number
          */
         if (HelperCalander.isPersianUnicode) {
-            txtName.setText(txtName.getText().toString());
+            txtName.setText(EmojiManager.getInstance().replaceEmoji(txtName.getText().toString(), txtName.getPaint().getFontMetricsInt()));
             txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
         }
 
@@ -7168,14 +7166,14 @@ public class FragmentChat extends BaseFragment
                         return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.realmRoomMessage.getRoomId()).findFirst();
                     });
                     if (realmRoom != null) {
-                        replayFrom.setText(realmRoom.getTitle());
+                        replayFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), replayFrom.getPaint().getFontMetricsInt()));
                     }
                 } else {
                     RealmRegisteredInfo userInfo = DbManager.getInstance().doRealmTask(realm -> {
                         return RealmRegisteredInfo.getRegistrationInfo(realm, chatItem.realmRoomMessage.getUserId());
                     });
                     if (userInfo != null) {
-                        replayFrom.setText(userInfo.getDisplayName());
+                        replayFrom.setText(EmojiManager.getInstance().replaceEmoji(userInfo.getDisplayName(), replayFrom.getPaint().getFontMetricsInt()));
                     }
                 }
             } else {
@@ -7190,7 +7188,7 @@ public class FragmentChat extends BaseFragment
     private void ReplySetText(TextView replayTo, String text) {
         ArrayList<Tuple<Integer, Integer>> a = AbstractMessage.getBoldPlaces(text);
         text = AbstractMessage.removeBoldMark(text, a);
-        replayTo.setText(text);
+        replayTo.setText(EmojiManager.getInstance().replaceEmoji(text, replayTo.getPaint().getFontMetricsInt()));
     }
 
     private void initLayoutChannelFooter() {
@@ -7991,16 +7989,16 @@ public class FragmentChat extends BaseFragment
                 int _count = mForwardMessages != null ? mForwardMessages.size() : 0;
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
 
-                EmojiTextViewE emMessage = rootView.findViewById(R.id.cslhf_txt_message);
+                TextView emMessage = rootView.findViewById(R.id.cslhf_txt_message);
 
                 FontIconTextView forwardIcon = rootView.findViewById(R.id.cslhs_imv_forward);
 
                 if (HelperCalander.isPersianUnicode) {
 
-                    emMessage.setText(convertToUnicodeFarsiNumber(_count + " " + str));
+                    emMessage.setText(EmojiManager.getInstance().replaceEmoji(convertToUnicodeFarsiNumber(_count + " " + str), emMessage.getPaint().getFontMetricsInt()));
                 } else {
 
-                    emMessage.setText(_count + " " + str);
+                    emMessage.setText(EmojiManager.getInstance().replaceEmoji(_count + " " + str, emMessage.getPaint().getFontMetricsInt()));
                 }
 
                 hasForward = true;

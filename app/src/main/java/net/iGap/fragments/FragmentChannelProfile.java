@@ -32,6 +32,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperUrl;
@@ -128,8 +129,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         });
 
         viewModel.channelName.observe(getViewLifecycleOwner(), s -> {
-            binding.toolbarTxtNameCollapsed.setText(s);
-            binding.toolbarTxtNameExpanded.setText(s);
+            binding.toolbarTxtNameCollapsed.setText(EmojiManager.getInstance().replaceEmoji(s, binding.toolbarTxtNameCollapsed.getPaint().getFontMetricsInt()));
+            binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(s, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
         });
 
         viewModel.channelSecondsTitle.observe(getViewLifecycleOwner(), s -> binding.toolbarTxtStatusExpanded.setText(s));

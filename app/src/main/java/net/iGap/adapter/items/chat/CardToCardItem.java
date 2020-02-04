@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
@@ -27,7 +28,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.model.CardToCardValue;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
 
@@ -70,7 +70,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 
     protected class ViewHolder extends NewChatItemHolder {
         private TextView cardToCardAmountTv;
-        private EmojiTextViewE messageTv;
+        private TextView messageTv;
         private Button payButton;
         private FontIconTextView cardIcon;
         private ConstraintLayout rootView;
@@ -85,7 +85,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             rootView = new ConstraintLayout(view.getContext());
             set = new ConstraintSet();
             innerLayout = new LinearLayout(view.getContext());
-            messageTv = new EmojiTextViewE(view.getContext());
+            messageTv = new AppCompatTextView(view.getContext());
             payButton = new Button(view.getContext());
             cardToCardAmountTv = new TextView(view.getContext());
             cardIcon = new FontIconTextView(view.getContext());

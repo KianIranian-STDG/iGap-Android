@@ -14,9 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.vanniktech.emoji.EmojiUtils;
-
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
@@ -44,13 +41,13 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (structMessage.hasEmojiInText()) {
-            if (myText.length() <= 2) {
-                if (EmojiUtils.emojisCount(myText.toString()) == 1) {
-                    holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
-                }
-            }
-        }
+//        if (structMessage.hasEmojiInText()) {
+//            if (myText.length() <= 2) {
+//                if (EmojiUtils.emojisCount(myText.toString()) == 1) {
+//                    holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
+//                }
+//            }
+//        }
 
         setTextIfNeeded(holder.messageView);
     }

@@ -4,12 +4,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.module.EmojiTextViewE;
 
 public class ChatItemWithTextHolder extends NewChatItemHolder {
-    EmojiTextViewE messageView;
+    AppCompatTextView messageView;
     LinearLayout BtnContainer;
     private LinearLayout layoutMessageContainer;
 
@@ -68,8 +69,8 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
                     public void run() {
                         if (!G.isLinkClicked) {
                             itemView.performLongClick();
-                        }else {
-                            G.isLinkClicked = false ;
+                        } else {
+                            G.isLinkClicked = false;
                         }
                     }
                 }, 15);

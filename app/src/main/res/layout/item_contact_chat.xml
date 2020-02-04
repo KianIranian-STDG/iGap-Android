@@ -37,7 +37,7 @@
 
     </LinearLayout>
 
-    <net.iGap.module.EmojiTextViewE
+    <TextView
         android:id="@+id/tv_itemContactChat_userName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -50,7 +50,6 @@
         android:text="user name"
         android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
-        app:emojiSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"

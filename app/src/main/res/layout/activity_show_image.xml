@@ -89,9 +89,8 @@
         android:paddingLeft="@dimen/dp32"
         android:paddingRight="@dimen/dp32">
 
-        <net.iGap.module.EmojiTextViewE
+        <EditText
             android:id="@+id/asi_txt_image_desc"
-            style="@style/ChatMessages.EmojiTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"

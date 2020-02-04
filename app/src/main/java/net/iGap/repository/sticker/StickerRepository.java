@@ -27,7 +27,6 @@ import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmStickerItemFields;
-import net.iGap.realm.RealmStickersDetailsFields;
 import net.iGap.rx.IGSingleObserver;
 
 import org.jetbrains.annotations.NotNull;
@@ -322,8 +321,8 @@ public class StickerRepository {
                         stickerGroup.setName(G.context.getResources().getString(R.string.recently));
                         RealmResults<RealmStickerItem> realmStickersDetails = realm.where(RealmStickerItem.class)
                                 .limit(RECENT_STICKER_LIMIT)
-                                .notEqualTo(RealmStickersDetailsFields.RECENT_TIME, 0)
-                                .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
+                                .notEqualTo(RealmStickerItemFields.RECENT_TIME, 0)
+                                .sort(RealmStickerItemFields.RECENT_TIME, Sort.DESCENDING)
                                 .findAll();
                         List<StructIGSticker> stickers = new ArrayList<>();
                         for (int i = 0; i < realmStickersDetails.size(); i++) {
@@ -343,7 +342,7 @@ public class StickerRepository {
                         RealmResults<RealmStickerItem> stickerItems = realm.where(RealmStickerItem.class)
                                 .limit(FAVORITE_STICKER_LIMIT)
                                 .equalTo(RealmStickerItemFields.IS_FAVORITE, true)
-                                .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
+                                .sort(RealmStickerItemFields.RECENT_TIME, Sort.DESCENDING)
                                 .findAll();
 
                         if (stickerItems != null) {
@@ -372,8 +371,8 @@ public class StickerRepository {
     public Flowable<List<StructIGSticker>> getStickerByEmoji(String unicode) {
         return DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmStickerItem.class)
-                    .equalTo(RealmStickersDetailsFields.NAME, unicode)
-                    .sort(RealmStickersDetailsFields.RECENT_TIME, Sort.DESCENDING)
+                    .equalTo(RealmStickerItemFields.NAME, unicode)
+                    .sort(RealmStickerItemFields.RECENT_TIME, Sort.DESCENDING)
                     .findAll()
                     .asFlowable()
                     .filter(RealmResults::isLoaded)

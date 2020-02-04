@@ -23,12 +23,10 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.vanniktech.emoji.EmojiPopup;
 
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEditGroupBinding;
 import net.iGap.helper.HelperFragment;
@@ -57,7 +55,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     private FragmentEditGroupBinding binding;
     private EditGroupViewModel viewModel;
     private AttachFile attachFile;
-    private EmojiPopup emojiPopup;
+    //    private EmojiPopup emojiPopup;
     private boolean isEmojiShow = false;
 
     public static EditGroupFragment newInstance(long roomId) {
@@ -161,9 +159,9 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
         viewModel.goToModeratorPage.observe(getViewLifecycleOwner(), aBoolean -> showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()));
 
         viewModel.initEmoji.observe(this, aBoolean -> {
-            if (aBoolean != null) {
-                emojiPopup.toggle();
-            }
+//            if (aBoolean != null) {
+//                emojiPopup.toggle();
+//            }
         });
 
         viewModel.showDialogLeaveGroup.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -184,7 +182,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             }
         });
 
-        setUpEmojiPopup();
+//        setUpEmojiPopup();
         setAvatar();
     }
 
@@ -362,24 +360,24 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
         }).show();
     }
 
-    private void setUpEmojiPopup() {
-        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
-    }
-
-    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
-        emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
-                .setOnEmojiBackspaceClickListener(v -> {
-
-                }).setOnEmojiPopupShownListener(() -> isEmojiShow = true)
-                .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
-                }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
-                .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
-                .setBackgroundColor(BackgroundColor)
-                .setIconColor(iconColor)
-                .setDividerColor(dividerColor)
-                .build(binding.groupNameEditText);
-
-    }
+//    private void setUpEmojiPopup() {
+//        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
+//    }
+//
+//    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
+//        emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
+//                .setOnEmojiBackspaceClickListener(v -> {
+//
+//                }).setOnEmojiPopupShownListener(() -> isEmojiShow = true)
+//                .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
+//                }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
+//                .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
+//                .setBackgroundColor(BackgroundColor)
+//                .setIconColor(iconColor)
+//                .setDividerColor(dividerColor)
+//                .build(binding.groupNameEditText);
+//
+//    }
 
     private void groupLeft() {
         if (getActivity() != null) {

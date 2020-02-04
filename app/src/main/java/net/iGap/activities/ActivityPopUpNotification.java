@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,13 +37,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -55,7 +49,6 @@ import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
@@ -92,7 +85,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     //////////////////////////////////////////    attach layout
     private MaterialDesignTextView btnSmileButton;
-    private EmojiEditTextE edtChat;
+    private EditText edtChat;
     private MaterialDesignTextView btnMic;
 
     //////////////////////////////////////////
@@ -106,7 +99,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     private String color;
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    private EmojiPopup emojiPopup;
+//    private EmojiPopup emojiPopup;
 
     @Override
     protected void onResume() {
@@ -122,11 +115,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (emojiPopup != null && emojiPopup.isShowing()) {
-            emojiPopup.dismiss();
-        } else {
+//        if (emojiPopup != null && emojiPopup.isShowing()) {
+//            emojiPopup.dismiss();
+//        } else {
             super.onBackPressed();
-        }
+//        }
     }
 
     @Override
@@ -157,42 +150,42 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         btnSmileButton.setText(drawableResourceId);
     }
 
-    private void setUpEmojiPopup() {
-        setEmojiColor(new Theme().getRootColor(this), new Theme().getTitleTextColor(this), new Theme().getTitleTextColor(this));
-    }
-
-    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
-        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-            @Override
-            public void onEmojiBackspaceClick(View v) {
-
-            }
-        }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-            @Override
-            public void onEmojiPopupShown() {
-                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-            }
-        }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-            @Override
-            public void onKeyboardOpen(final int keyBoardHeight) {
-
-            }
-        }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-            @Override
-            public void onEmojiPopupDismiss() {
-                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-            }
-        }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-            @Override
-            public void onKeyboardClose() {
-                emojiPopup.dismiss();
-            }
-        })
-                .setBackgroundColor(BackgroundColor)
-                .setIconColor(iconColor)
-                .setDividerColor(dividerColor)
-                .build(edtChat);
-    }
+//    private void setUpEmojiPopup() {
+//        setEmojiColor(new Theme().getRootColor(this), new Theme().getTitleTextColor(this), new Theme().getTitleTextColor(this));
+//    }
+//
+//    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
+//        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+//            @Override
+//            public void onEmojiBackspaceClick(View v) {
+//
+//            }
+//        }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+//            @Override
+//            public void onEmojiPopupShown() {
+//                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+//            }
+//        }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+//            @Override
+//            public void onKeyboardOpen(final int keyBoardHeight) {
+//
+//            }
+//        }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+//            @Override
+//            public void onEmojiPopupDismiss() {
+//                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+//            }
+//        }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+//            @Override
+//            public void onKeyboardClose() {
+//                emojiPopup.dismiss();
+//            }
+//        })
+//                .setBackgroundColor(BackgroundColor)
+//                .setIconColor(iconColor)
+//                .setDividerColor(dividerColor)
+//                .build(edtChat);
+//    }
 
     private void setImageAndTextAppBar(int position) {
 
@@ -283,7 +276,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             initAppbar();
             initViewPager();
             initLayoutAttach();
-            setUpEmojiPopup();
+//            setUpEmojiPopup();
         }
 
         private void initMethod() {
@@ -415,11 +408,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
-                    emojiPopup.toggle();
+//                    emojiPopup.toggle();
                 }
             });
 
-            edtChat = (EmojiEditTextE) findViewById(R.id.apn_edt_chat);
+            edtChat = findViewById(R.id.apn_edt_chat);
 
             edtChat.addTextChangedListener(new TextWatcher() {
                 @Override

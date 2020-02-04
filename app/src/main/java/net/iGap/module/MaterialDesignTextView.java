@@ -17,7 +17,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.R;
-import net.iGap.helper.Emojione;
 
 public class MaterialDesignTextView extends AppCompatTextView {
 
@@ -39,14 +38,5 @@ public class MaterialDesignTextView extends AppCompatTextView {
     private void init() {
         setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
         setText(getText());
-    }
-
-    @Override
-    public void setText(CharSequence text, BufferType type) {
-        try {
-            super.setText(Emojione.shortnameToUnicode(text.toString(), false), type);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
     }
 }

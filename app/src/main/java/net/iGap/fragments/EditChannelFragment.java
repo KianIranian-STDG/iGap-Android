@@ -31,7 +31,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
-import com.vanniktech.emoji.EmojiPopup;
 
 import net.iGap.AccountManager;
 import net.iGap.Config;
@@ -80,7 +79,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     private FragmentEditChannelBinding binding;
     private EditChannelViewModel viewModel;
     private boolean isEmojiShow = false;
-    private EmojiPopup emojiPopup;
+//    private EmojiPopup emojiPopup;
 
     public static EditChannelFragment newInstance(long channelId) {
         Bundle args = new Bundle();
@@ -166,9 +165,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         });
 
         viewModel.initEmoji.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null) {
-                emojiPopup.toggle();
-            }
+//            if (aBoolean != null) {
+//                emojiPopup.toggle();
+//            }
         });
 
         viewModel.showDialogLeaveGroup.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -225,7 +224,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             }
         });
 
-        setEmojiColor();
+//        setEmojiColor();
 
     }
 
@@ -690,19 +689,19 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     }*/
 
 
-    private void setEmojiColor() {
-        emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
-                .setOnEmojiBackspaceClickListener(v -> {
-
-                }).setOnEmojiPopupShownListener(() -> isEmojiShow = true)
-                .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
-                }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
-                .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
-                .setBackgroundColor(new Theme().getRootColor(getContext()))
-                .setIconColor(new Theme().getTitleTextColor(getContext()))
-                .setDividerColor(new Theme().getTitleTextColor(getContext()))
-                .build(binding.channelNameEditText);
-    }
+//    private void setEmojiColor() {
+//        emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
+//                .setOnEmojiBackspaceClickListener(v -> {
+//
+//                }).setOnEmojiPopupShownListener(() -> isEmojiShow = true)
+//                .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
+//                }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
+//                .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
+//                .setBackgroundColor(new Theme().getRootColor(getContext()))
+//                .setIconColor(new Theme().getTitleTextColor(getContext()))
+//                .setDividerColor(new Theme().getTitleTextColor(getContext()))
+//                .build(binding.channelNameEditText);
+//    }
 
     @Override
     public void profileImageAdd(String path) {

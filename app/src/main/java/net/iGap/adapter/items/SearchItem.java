@@ -25,7 +25,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
@@ -115,15 +114,15 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         protected CircleImageView avatar;
         protected CustomTextViewMedium name;
         protected TextView txtIcon;
-        protected EmojiTextViewE lastSeen;
+        protected TextView lastSeen;
         protected TextView txtTime;
 
         public ViewHolder(View view) {
             super(view);
 
-            avatar = (CircleImageView) view.findViewById(R.id.sfsl_imv_contact_avatar);
-            name = (CustomTextViewMedium) view.findViewById(R.id.sfsl_txt_contact_name);
-            lastSeen = (EmojiTextViewE) view.findViewById(R.id.sfsl_txt_contact_lastseen);
+            avatar = view.findViewById(R.id.sfsl_imv_contact_avatar);
+            name = view.findViewById(R.id.sfsl_txt_contact_name);
+            lastSeen = view.findViewById(R.id.sfsl_txt_contact_lastseen);
             txtIcon = view.findViewById(R.id.sfsl_txt_icon);
             txtTime = view.findViewById(R.id.sfsl_txt_time);
         }

@@ -61,7 +61,7 @@
                         app:layout_constraintLeft_toRightOf="@id/toolbar_back"
                         app:layout_constraintTop_toTopOf="@id/toolbar_back" />
 
-                    <net.iGap.module.EmojiTextViewE
+                    <TextView
                         android:id="@+id/toolbar_txt_name_collapsed"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -74,7 +74,6 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="gone"
-                        app:emojiSize="@dimen/standardTextSize"
                         app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintLeft_toRightOf="@id/toolbar_avatar_collapsed_target"
                         app:layout_constraintRight_toLeftOf="@id/toolbar_edit"
@@ -127,7 +126,7 @@
                         android:orientation="vertical"
                         android:paddingBottom="@dimen/dp10">
 
-                        <net.iGap.module.EmojiTextViewE
+                        <TextView
                             android:id="@+id/toolbar_txt_name_expanded"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -135,8 +134,7 @@
                             android:gravity="bottom|center_horizontal"
                             android:singleLine="true"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/largeTextSize"
-                            app:emojiSize="@dimen/largeTextSize" />
+                            android:textSize="@dimen/largeTextSize" />
 
                         <TextView
                             android:id="@+id/toolbar_txt_status_expanded"
@@ -169,7 +167,7 @@
                 android:layout_height="match_parent"
                 android:layoutDirection="locale">
 
-                <net.iGap.module.EmojiTextViewE
+                <TextView
                     android:id="@+id/description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -178,7 +176,6 @@
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.haveDescription}"
-                    app:emojiSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
                     app:layout_constraintRight_toRightOf="@id/notification"
                     app:layout_constraintTop_toTopOf="parent" />

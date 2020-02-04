@@ -395,7 +395,7 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == 27) {
 
-            RealmObjectSchema realmStickerDetails = schema.create(RealmStickersDetails.class.getSimpleName())
+            RealmObjectSchema realmStickerDetails = schema.create("RealmStickersDetails")
                     .addField("id", long.class, FieldAttribute.REQUIRED)
                     .addField("refId", long.class, FieldAttribute.REQUIRED)
                     .addField("fileSize", long.class, FieldAttribute.REQUIRED)
@@ -407,7 +407,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("groupId", String.class)
                     .addField("sort", int.class, FieldAttribute.REQUIRED);
 
-            schema.create(RealmStickers.class.getSimpleName())
+            schema.create("RealmStickers")
                     .addField("id", long.class, FieldAttribute.REQUIRED)
                     .addField("createdAt", long.class, FieldAttribute.REQUIRED)
                     .addField("refId", long.class, FieldAttribute.REQUIRED)
@@ -455,12 +455,12 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmAttachment.addIndex(RealmAttachmentFields.TOKEN);
             }
 
-            RealmObjectSchema realmStickers = schema.get(RealmStickers.class.getSimpleName());
+            RealmObjectSchema realmStickers = schema.get("RealmStickers");
             if (realmStickers.hasField("id")) {
                 realmStickers.removeField("id");
             }
 
-            RealmObjectSchema realmStickerDetails = schema.get(RealmStickersDetails.class.getSimpleName());
+            RealmObjectSchema realmStickerDetails = schema.get("RealmStickersDetails");
             if (realmStickerDetails.hasField("id")) {
                 realmStickerDetails.removeField("id");
             }
@@ -731,7 +731,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("cardNumber", String.class)
                     .addField("bankName", String.class)
                     .addField("expireDate", String.class)
-                    .addField("isOrigin", boolean.class,FieldAttribute.REQUIRED);
+                    .addField("isOrigin", boolean.class, FieldAttribute.REQUIRED);
 
             realmMB.addPrimaryKey("cardNumber");
 
