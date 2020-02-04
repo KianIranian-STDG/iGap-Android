@@ -93,21 +93,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import com.vanniktech.emoji.sticker.OnDownloadStickerListener;
-import com.vanniktech.emoji.sticker.OnLottieStickerItemDownloaded;
-import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
-import com.vanniktech.emoji.sticker.OnStickerAvatarDownloaded;
-import com.vanniktech.emoji.sticker.OnStickerItemDownloaded;
-import com.vanniktech.emoji.sticker.OnStickerListener;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
-import com.vanniktech.emoji.sticker.struct.StructItemSticker;
-import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.AccountManager;
 import net.iGap.Config;
@@ -160,7 +146,6 @@ import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.remove.StickerSettingFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
@@ -188,8 +173,6 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
-import net.iGap.helper.downloadFile.IGDownloadFile;
-import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
@@ -301,7 +284,6 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmRoomMessageLocation;
 import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmStickerItemFields;
-import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.sticker.StickerRepository;
@@ -352,9 +334,6 @@ import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -414,7 +393,6 @@ public class FragmentChat extends BaseFragment
     public static long lastChatRoomId = 0;
     public static ArrayList<String> listPathString;
     private static List<StructBottomSheet> contacts;
-    private EmojiPopup emojiPopup;
     private boolean isPaused;
 
     public static StructIGSticker structIGSticker;
@@ -1177,10 +1155,6 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onStop() {
-        if (emojiPopup != null) {
-            emojiPopup.dismiss();
-        }
-
         canUpdateAfterDownload = false;
         if (G.onChatSendMessage != null)
             G.onChatSendMessage = null;
@@ -2314,8 +2288,6 @@ public class FragmentChat extends BaseFragment
             } else*/
             if (mAdapter != null && mAdapter.getSelections().size() > 0) {
                 mAdapter.deselect();
-            } else if (emojiPopup != null && emojiPopup.isShowing()) {
-                emojiPopup.dismiss();
             } else if (keyboardView != null && keyboardViewVisible) {
                 hideKeyboardView();
             } else if (ll_Search != null && ll_Search.isShown()) {
@@ -2659,9 +2631,6 @@ public class FragmentChat extends BaseFragment
         // final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
 
         imvSmileButton = rootView.findViewById(R.id.tv_chatRoom_emoji);
-//        if (emojiPopup == null) {
-//            setUpEmojiPopup();
-//        }
         edtChat.requestFocus();
 
         edtChat.setOnClickListener(new View.OnClickListener() {
@@ -3209,18 +3178,7 @@ public class FragmentChat extends BaseFragment
 
 
         // to toggle between keyboard and emoji popup
-        imvSmileButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-//                emojiPopup.toggle();
-//                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
-//                if (data != null && emojiPopup != null) {
-//                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
-//                }
-                onEmojiButtonClick();
-            }
-        });
+        imvSmileButton.setOnClickListener(v -> onEmojiButtonClick());
 
         edtChat.addTextChangedListener(new TextWatcher() {
             @Override
@@ -6147,229 +6105,88 @@ public class FragmentChat extends BaseFragment
         RealmRoom.setLastScrollPosition(mRoomId, messageId, firstVisiblePositionOffset);
     }
 
-    /**
-     * emoji initialization
-     */
-    private void setUpEmojiPopup() {
-        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
-
-    }
-
     private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
+//
+//        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(ac_ll_parent))
+//                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+//
+//                    @Override
+//                    public void onEmojiBackspaceClick(View v) {
+//
+//                    }
+//                }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+//                    @Override
+//                    public void onEmojiPopupShown() {
+//                        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+//                            @Override
+//                            public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
+//                                if (response.body() != null) {
+//                                    if (response.body().getOk()) {
+//                                        RealmStickers.updateStickers(response.body().getData(), () -> {
+//
+//                                        });
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
+//
+//                            }
+//                        });
+//                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+//                        isEmojiSHow = true;
+//                        if (botInit != null) botInit.close();
+//                    }
+//                }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+//                    @Override
+//                    public void onKeyboardOpen(final int keyBoardHeight) {
+//                        if (botInit != null) botInit.close();
+//                    }
+//                }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+//                    @Override
+//                    public void onEmojiPopupDismiss() {
+//                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+//                        isEmojiSHow = false;
+//                    }
+//                }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+//                    @Override
+//                    public void onKeyboardClose() {
+//                        emojiPopup.dismiss();
+//                    }
+//                }).setOnStickerListener(new OnStickerListener() {
+//                    @Override
+//                    public void onItemSticker(StructItemSticker st) {
+//
+//                })
+//                .setOnDownloadStickerListener(new OnDownloadStickerListener() {
+//                    @Override
+//                    public void downloadStickerItem(StructItemSticker sticker, OnStickerItemDownloaded onStickerItemDownloaded) {
 
-        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(ac_ll_parent))
-                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-
-                    @Override
-                    public void onEmojiBackspaceClick(View v) {
-
-                    }
-                }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-                    @Override
-                    public void onEmojiPopupShown() {
-                        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-                            @Override
-                            public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
-                                if (response.body() != null) {
-                                    if (response.body().getOk()) {
-                                        RealmStickers.updateStickers(response.body().getData(), () -> {
-
-                                        });
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
-
-                            }
-                        });
-                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-                        isEmojiSHow = true;
-                        if (botInit != null) botInit.close();
-                    }
-                }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-                    @Override
-                    public void onKeyboardOpen(final int keyBoardHeight) {
-                        if (botInit != null) botInit.close();
-                    }
-                }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-                    @Override
-                    public void onEmojiPopupDismiss() {
-                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-                        isEmojiSHow = false;
-                    }
-                }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-                    @Override
-                    public void onKeyboardClose() {
-                        emojiPopup.dismiss();
-                    }
-                }).setOnStickerListener(new OnStickerListener() {
-                    @Override
-                    public void onItemSticker(StructItemSticker st) {
-
-                        String additional = new Gson().toJson(st);
-                        long identity = AppUtils.makeRandomId();
-                        int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
-                        RealmRoomMessage roomMessage = new RealmRoomMessage();
-                        roomMessage.setMessageId(identity);
-                        roomMessage.setMessageType(STICKER);
-                        roomMessage.setRoomId(mRoomId);
-                        roomMessage.setMessage(st.getName());
-                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
-                        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
-
-                        RealmAdditional realmAdditional = new RealmAdditional();
-                        realmAdditional.setId(AppUtils.makeRandomId());
-                        realmAdditional.setAdditionalType(AdditionalType.STICKER);
-                        realmAdditional.setAdditionalData(additional);
-
-                        roomMessage.setRealmAdditional(realmAdditional);
-
-                        RealmAttachment realmAttachment = new RealmAttachment();
-                        realmAttachment.setId(identity);
-                        realmAttachment.setLocalFilePath(st.getUri());
-
-                        realmAttachment.setWidth(imageSize[0]);
-                        realmAttachment.setHeight(imageSize[1]);
-                        realmAttachment.setSize(new File(st.getUri()).length());
-                        realmAttachment.setName(new File(st.getUri()).getName());
-                        realmAttachment.setDuration(0);
-
-                        int type = st.getUri().endsWith(".json") ? StructIGSticker.ANIMATED_STICKER : StructIGSticker.NORMAL_STICKER;
-
-                        roomMessage.setAttachment(realmAttachment);
-
-                        roomMessage.getAttachment().setToken(st.getToken());
-                        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
-                        roomMessage.setShowMessage(true);
-                        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
-
-                        if (isReply()) {
-                            RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
-                                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
-                                if (copyReplyMessage1 != null) {
-                                    return realm.copyFromRealm(copyReplyMessage1);
-                                }
-                                return null;
-                            });
-
-                            if (copyReplyMessage != null) {
-                                roomMessage.setReplyTo(copyReplyMessage);
-                            }
-                        }
-
-                        new Thread(() -> {
-                            DbManager.getInstance().doRealmTask(realm -> {
-                                realm.executeTransaction(realm1 -> {
-                                    realm1.copyToRealmOrUpdate(roomMessage);
-                                });
-                            });
-                        }).start();
-
-
-                        StructMessageInfo sm = new StructMessageInfo(roomMessage);
-                        if (type == StructIGSticker.ANIMATED_STICKER)
-                            mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
-                        else
-                            mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
-                        scrollToEnd();
-
-                        if (isReply()) {
-                            mReplayLayout.setTag(null);
-                            mReplayLayout.setVisibility(View.GONE);
-                        }
-
-                    }
-                })
-                .setOnDownloadStickerListener(new OnDownloadStickerListener() {
-                    @Override
-                    public void downloadStickerItem(StructItemSticker sticker, OnStickerItemDownloaded onStickerItemDownloaded) {
-
-                        //download id must be unique
-                        IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
-                                    @Override
-                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
-                                        G.handler.post(() -> {
-                                            if (sticker.getToken().equals(fileStruct.token) && !fileStruct.path.endsWith(".json")) {
-                                                onStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
-
-                                    }
-                                }));
-                    }
-
-                    @Override
-                    public void downloadStickerAvatar(StructGroupSticker sticker, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
-
-                        //download id must be unique
-                        IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(sticker.getId(), sticker.getAvatarToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
-                                    @Override
-                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
-                                        G.handler.post(() -> {
-                                            if (fileStruct.token.equals(sticker.getAvatarToken())) {
-                                                onStickerAvatarDownloaded.onStickerAvatarDownload(fileStruct.token, fileStruct.path);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
-
-                                    }
-                                }));
-                    }
-
-
-                    @Override
-                    public void downloadLottieStickerItem(StructItemSticker sticker, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
-
-                        //download id must be unique
-                        IGDownloadFile.getInstance().startDownload(
-                                new IGDownloadFileStruct(sticker.getId(), sticker.getToken(), sticker.getAvatarSize(), sticker.getUri(), new IGDownloadFileStruct.OnDownloadListener() {
-                                    @Override
-                                    public void onDownloadComplete(IGDownloadFileStruct fileStruct) {
-                                        G.handler.post(() -> {
-                                            if (sticker.getToken().equals(fileStruct.token) && fileStruct.path.endsWith(".json")) {
-                                                lottieStickerItemDownloaded.onStickerItemDownload(fileStruct.token, fileStruct.path);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onDownloadFailed(IGDownloadFileStruct fileStruct) {
-
-                                    }
-                                }));
-                    }
-                })
-                .setOpenPageSticker(new OnOpenPageStickerListener() {
-                    @Override
-                    public void addSticker(String page) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
-                        }
-                    }
-
-                    @Override
-                    public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new StickerSettingFragment()).setReplace(false).load();
-                        }
-                    }
-                })
-                .setBackgroundColor(BackgroundColor)
-                .setIconColor(iconColor)
-                .setDividerColor(dividerColor)
-                .build(edtChat);
+//                    }
+//
+//                    @Override
+//                    public void downloadStickerAvatar(StructGroupSticker sticker, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
+//                    }
+//
+//
+//                    @Override
+//                    public void downloadLottieStickerItem(StructItemSticker sticker, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
+//                    }
+//                })
+//                .setOpenPageSticker(new OnOpenPageStickerListener() {
+//                    @Override
+//                    public void addSticker(String page) {
+//                    }
+//
+//                    @Override
+//                    public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
+//                    }
+//                })
+//                .setBackgroundColor(BackgroundColor)
+//                .setIconColor(iconColor)
+//                .setDividerColor(dividerColor)
+//                .build(edtChat);
 
     }
 
