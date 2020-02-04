@@ -45,6 +45,18 @@ public class HelperCalander {
         return isLanguagePersian ? convertToUnicodeFarsiNumber(time) : time;
     }
 
+    public static String getPersianYearMonth(int year, int mounth, int day) {
+
+        Calendar c = Calendar.getInstance();
+        c.set(year, mounth, day);
+
+        CalendarShamsi shamsi = new CalendarShamsi(c.getTime());
+
+        String time = shamsi.year + "/" + shamsi.month;
+
+        return isLanguagePersian ? convertToUnicodeFarsiNumber(time) : time;
+    }
+
     public static String getArabicCalender(int year, int mounth, int day) {
 
         GregorianCalendar gCal = new GregorianCalendar(year, mounth, day);

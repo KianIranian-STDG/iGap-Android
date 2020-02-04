@@ -105,6 +105,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/transparent"
                         android:gravity="center"
+                        android:text="46441035"
                         android:inputType="textPassword"
                         android:paddingLeft="@dimen/dp10"
                         android:paddingRight="@dimen/dp10"

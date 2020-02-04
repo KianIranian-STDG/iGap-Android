@@ -2437,6 +2437,7 @@ Want to get it?</string>
     <string name="mobile_bank_balance_pass">Password:</string>
     <string name="mobile_bank_balance_cvv">CVV2:</string>
     <string name="mobile_bank_balance_expireDate">Expire Date: (year/month)</string>
+    <string name="mobile_bank_balance_expireDate2">Expire Date:</string>
     <string name="mobile_bank_balance_cardError">please enter your Parsian card number.</string>
     <string name="mobile_bank_balance_cardLengthError">your card number must be 16 digits.</string>
     <string name="mobile_bank_balance_passwordError">please enter your password.</string>
