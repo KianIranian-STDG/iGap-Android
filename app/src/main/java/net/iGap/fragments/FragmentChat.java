@@ -4085,10 +4085,12 @@ public class FragmentChat extends BaseFragment
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message, view);
         } else if (messageType == VIDEO || messageType == VIDEO_TEXT) {
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
-                openMessage(message);
-            } else {
-                showImage(message, view);
+            if (message.realmRoomMessage != null && !message.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !message.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
+                    openMessage(message);
+                } else {
+                    showImage(message, view);
+                }
             }
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
             openMessage(message);
