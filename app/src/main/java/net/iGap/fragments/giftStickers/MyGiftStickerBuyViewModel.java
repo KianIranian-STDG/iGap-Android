@@ -2,7 +2,6 @@ package net.iGap.fragments.giftStickers;
 
 import android.view.View;
 
-import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
@@ -20,56 +19,68 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
     private MutableLiveData<List<StructIGGiftSticker>> loadStickerList = new MutableLiveData<>();
     private SingleLiveEvent<String> showRequestErrorMessage = new SingleLiveEvent<>();
     private SingleLiveEvent<StructIGGiftSticker> goNext = new SingleLiveEvent<>();
-    private ObservableInt showLoading = new ObservableInt(View.VISIBLE);
-    private ObservableInt showRetryView = new ObservableInt(View.GONE);
-    private ObservableInt showEmptyListMessage = new ObservableInt(View.GONE);
+    private MutableLiveData<Integer> showLoading = new MutableLiveData<>();
+    private MutableLiveData<Integer> showRetryView = new MutableLiveData<>();
+    private MutableLiveData<Integer> showEmptyListMessage = new MutableLiveData<>();
+
+    private String mode;
 
     @Override
     public void subscribe() {
-        showLoading.set(View.VISIBLE);
-        showEmptyListMessage.set(View.GONE);
-        StickerRepository.getInstance().getMyGiftStickerBuy()
+        showLoading.postValue(View.VISIBLE);
+        showEmptyListMessage.postValue(View.GONE);
+        StickerRepository.getInstance().getMyGiftStickerBuy(mode)
                 .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
                     @Override
                     public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
                         loadStickerList.postValue(structIGGiftStickers);
-                        showLoading.set(View.GONE);
+                        showLoading.postValue(View.GONE);
 
                         if (structIGGiftStickers.size() == 0) {
-                            showEmptyListMessage.set(View.VISIBLE);
+                            showEmptyListMessage.postValue(View.VISIBLE);
                         }
 
-                        showRetryView.set(View.GONE);
+                        showRetryView.postValue(View.GONE);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        showLoading.set(View.GONE);
-                        showRetryView.set(View.VISIBLE);
+                        showLoading.postValue(View.GONE);
+                        showRetryView.postValue(View.VISIBLE);
                     }
                 });
     }
 
     public void onRetryButtonClick() {
-        showRetryView.set(View.GONE);
+        showRetryView.postValue(View.GONE);
         subscribe();
     }
 
-    public ObservableInt getShowLoading() {
+    public MutableLiveData<Integer> getShowLoading() {
         return showLoading;
     }
 
-    public ObservableInt getShowRetryView() {
+    public MutableLiveData<Integer> getShowRetryView() {
         return showRetryView;
     }
 
-    public ObservableInt getShowEmptyListMessage() {
+    public MutableLiveData<Integer> getShowEmptyListMessage() {
         return showEmptyListMessage;
     }
 
     public MutableLiveData<List<StructIGGiftSticker>> getLoadStickerList() {
         return loadStickerList;
+    }
+
+    public void setMode(int mode) {
+        if (mode == GiftStickerPurchasedByMeFragment.NEW) {
+            this.mode = "new";
+        } else if (mode == GiftStickerPurchasedByMeFragment.ACTIVE) {
+            this.mode = "active";
+        } else {
+            this.mode = "forwarded";
+        }
     }
 
     public SingleLiveEvent<StructIGGiftSticker> getGoNext() {

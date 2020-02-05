@@ -55,8 +55,8 @@ public interface StickerApi {
     @GET("favorite/list")
     Single<StickersDataModel> getFavoriteSticker();
 
-    @GET("gift/created-list")
-    Single<UserGiftStickersDataModel> getUserGiftSticker();
+    @GET("gift/user-list")
+    Single<UserGiftStickersDataModel> getUserGiftSticker(@Query("status") String status);
 
     @GET("gift/activated-list")
     Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();

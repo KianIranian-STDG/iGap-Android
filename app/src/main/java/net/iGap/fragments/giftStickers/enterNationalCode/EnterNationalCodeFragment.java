@@ -1,5 +1,6 @@
 package net.iGap.fragments.giftStickers.enterNationalCode;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -44,6 +46,8 @@ public class EnterNationalCodeFragment extends Fragment {
         FragmentEnterNationalCodeBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_national_code, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        binding.checkBox.setTypeface(ResourcesCompat.getFont(container.getContext(), R.font.main_font));
+        binding.loadingView.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
         return binding.getRoot();
     }
 

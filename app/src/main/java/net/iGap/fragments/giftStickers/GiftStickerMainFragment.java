@@ -85,10 +85,10 @@ public class GiftStickerMainFragment extends BaseFragment {
     }
 
     public void loadBuyMySticker() {
-        Fragment fragment = getChildFragmentManager().findFragmentByTag(MyGiftStickerBuyFragment.class.getName());
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(GiftStickerPurchasedByMeMainFragment.class.getName());
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (fragment == null) {
-            fragment = new MyGiftStickerBuyFragment();
+            fragment = new GiftStickerPurchasedByMeMainFragment();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.giftStickerContainer, fragment, fragment.getClass().getName()).commit();

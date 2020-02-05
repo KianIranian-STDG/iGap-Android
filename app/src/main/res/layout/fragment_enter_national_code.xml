@@ -22,8 +22,8 @@
             android:layout_marginBottom="8dp"
             android:button="@drawable/check_box_background"
             android:checked="@{viewModel.saveChecked}"
-            android:onCheckedChanged="@{(v,isChecked)->viewModel.onSaveChecked(isChecked)}"
             android:gravity="center_vertical"
+            android:onCheckedChanged="@{(v,isChecked)->viewModel.onSaveChecked(isChecked)}"
             android:text="@string/save"
             app:layout_constraintBottom_toTopOf="@+id/inquiryButton"
             app:layout_constraintEnd_toEndOf="@+id/giftStickerTitle"
@@ -77,37 +77,42 @@
                 tools:layout_editor_absoluteY="11dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ProgressBar
-            android:id="@+id/loadingView"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:visibility="@{viewModel.showLoading}"
-            app:layout_constraintBottom_toBottomOf="@+id/inquiryButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/inquiryButton"
-            app:layout_constraintTop_toTopOf="@+id/inquiryButton" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/inquiryButton"
             style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:enabled="@{viewModel.isEnabled}"
             android:onClick="@{()->viewModel.onInquiryButtonClick(nationalCode.getEditableText().toString())}"
             android:text="@string/inquiry_and_shopping"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/loadingView"
-            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nationalCodeLayout"
             app:layout_constraintVertical_bias="0.5"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintWidth_percent=".7" />
+            app:layout_constraintVertical_chainStyle="packed" />
 
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+            android:layout_marginEnd="8dp"
+            android:visibility="@{viewModel.showLoading}"
+            app:layout_constraintBottom_toBottomOf="@+id/inquiryButton"
+            app:layout_constraintEnd_toEndOf="@+id/inquiryButton"
+            app:layout_constraintTop_toTopOf="@+id/inquiryButton"
+            android:layout_marginRight="8dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

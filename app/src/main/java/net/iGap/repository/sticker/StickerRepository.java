@@ -181,8 +181,8 @@ public class StickerRepository {
                 .flatMapCompletable(stickersDataModel -> CompletableObserver::onComplete);
     }
 
-    private Single<UserGiftStickersDataModel> getMyGiftStickerBuyApiService() {
-        return stickerApi.getUserGiftSticker().subscribeOn(Schedulers.newThread());
+    private Single<UserGiftStickersDataModel> getMyGiftStickerBuyApiService(String status) {
+        return stickerApi.getUserGiftSticker(status).subscribeOn(Schedulers.newThread());
     }
 
     private Single<UserGiftStickersDataModel> getMyActivatedGiftStickerApiService() {
@@ -495,8 +495,8 @@ public class StickerRepository {
                 })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
     }
 
-    public Single<List<StructIGGiftSticker>> getMyGiftStickerBuy() {
-        return getMyGiftStickerBuyApiService()
+    public Single<List<StructIGGiftSticker>> getMyGiftStickerBuy(String status) {
+        return getMyGiftStickerBuyApiService(status)
                 .map(userGiftStickersDataModel -> {
                     List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
                     for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
