@@ -89,7 +89,7 @@
         android:paddingLeft="@dimen/dp32"
         android:paddingRight="@dimen/dp32">
 
-        <EditText
+        <TextView
             android:id="@+id/asi_txt_image_desc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/asi_btn_share"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintVertical_bias="0" />
 
         <TextView
             android:id="@+id/asi_txt_image_name"
@@ -117,7 +117,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
             app:layout_constraintTop_toBottomOf="@id/asi_txt_image_desc"
-            app:layout_constraintHorizontal_bias="0"/>
+            app:layout_constraintHorizontal_bias="0" />
 
         <TextView
             android:id="@+id/asi_txt_image_time"
@@ -130,7 +130,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
             app:layout_constraintTop_toBottomOf="@id/asi_txt_image_name"
-            app:layout_constraintHorizontal_bias="0"/>
+            app:layout_constraintHorizontal_bias="0" />
 
         <TextView
             android:id="@+id/asi_txt_image_date"
@@ -143,7 +143,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
             app:layout_constraintTop_toBottomOf="@id/asi_txt_image_time"
-            app:layout_constraintHorizontal_bias="0"/>
+            app:layout_constraintHorizontal_bias="0" />
 
         <TextView
             android:id="@+id/asi_btn_share"
@@ -154,7 +154,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/asi_txt_image_desc"
-            app:layout_constraintVertical_bias="1"/>
+            app:layout_constraintVertical_bias="1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

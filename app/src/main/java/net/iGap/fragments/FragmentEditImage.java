@@ -12,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -32,6 +30,7 @@ import com.yalantis.ucrop.UCrop;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.emojiKeyboard.EmojiView;
 import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
@@ -50,9 +49,6 @@ import java.util.HashMap;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FragmentEditImage extends BaseFragment {
 
     private final static String PATH = "PATH";
@@ -72,7 +68,6 @@ public class FragmentEditImage extends BaseFragment {
     private ViewGroup rootSend;
     private MaterialDesignTextView imvSmileButton;
     private boolean isEmojiSHow = false;
-    //    private EmojiPopup emojiPopup;
     private String SAMPLE_CROPPED_IMAGE_NAME;
     private boolean isChatPage = true;
     private boolean isMultiItem = true;
@@ -86,20 +81,17 @@ public class FragmentEditImage extends BaseFragment {
     private OnImageEdited onProfileImageEdited;
     private boolean isReOpenChatAttachment = true;
     private GalleryListener galleryListener;
+    private EmojiView emojiView;
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
     }
 
-    public FragmentEditImage() {
-        // Required empty public constructor
+    private FragmentEditImage() {
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_edit_image, container, false);
     }
 
@@ -113,7 +105,6 @@ public class FragmentEditImage extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onViewCreated(@NotNull final View view, @Nullable Bundle savedInstanceState) {
@@ -181,8 +172,6 @@ public class FragmentEditImage extends BaseFragment {
         messageBox(view);
 
 
-//        G.imageLoader.displayImage(suitablePath(path), imgEditImage);
-
         view.findViewById(R.id.pu_ripple_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,26 +230,7 @@ public class FragmentEditImage extends BaseFragment {
 
             }
         });
-
-        /*isSoftKeyboardOpenOrNot(view);*/
     }
-
-    /*private void isSoftKeyboardOpenOrNot(final View view) {
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int heightDiff = view.getRootView().getHeight() - view.getHeight();
-                if (heightDiff > AndroidUtils.dpToPx(G.fragmentActivity, 200)) { // if more than 200 dp, it's probably a keyboard...
-                    // ... do something here
-                    rootSend.setVisibility(View.GONE);
-                } else {
-                    rootSend.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-    }*/
 
     private void messageBox(final View view) {
         if (textImageList.containsKey(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path)) {
@@ -283,13 +253,6 @@ public class FragmentEditImage extends BaseFragment {
                 }
             }
         });
-
-
-        /**
-         *
-         * get message for each item
-         *
-         */
 
         iconOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -461,11 +424,6 @@ public class FragmentEditImage extends BaseFragment {
         void result(String path);
     }
 
-    private void setUpEmojiPopup(View view) {
-//        setEmojiColor(view, new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
-
-    }
-
     private void setEmojiColor(View view, int BackgroundColor, int iconColor, int dividerColor) {
 
 //        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
@@ -585,7 +543,6 @@ public class FragmentEditImage extends BaseFragment {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
-
     }
 
     private void setValueCheckBox(int position) {
@@ -617,22 +574,17 @@ public class FragmentEditImage extends BaseFragment {
 
     private void initView(View view) {
 
-        G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
-//            path = bundle.getString(PATH);
             isChatPage = bundle.getBoolean(ISCHAT);
             isNicknamePage = bundle.getBoolean(ISNICKNAMEPAGE);
             selectPosition = bundle.getInt(SELECT_POSITION);
         }
 
-
         layoutCaption = view.findViewById(R.id.layout_caption);
         channelOrGroupProfileSetTv = view.findViewById(R.id.txtSet);
-        imvSendButton = (MaterialDesignTextView) view.findViewById(R.id.pu_txt_sendImage);
+        imvSendButton = view.findViewById(R.id.pu_txt_sendImage);
 
-        //imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
         iconOk = view.findViewById(R.id.chl_imv_ok_message);
         rootSend = view.findViewById(R.id.pu_layout_cancel_crop);
         txtEditImage = view.findViewById(R.id.txtEditImage);
@@ -641,8 +593,7 @@ public class FragmentEditImage extends BaseFragment {
         txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
         viewPager = view.findViewById(R.id.viewPagerEditText);
         checkBox = view.findViewById(R.id.checkBox_editImage);
-        imvSmileButton = (MaterialDesignTextView) view.findViewById(R.id.chl_imv_smile_button);
-//        setUpEmojiPopup(view);
+        imvSmileButton = view.findViewById(R.id.chl_imv_smile_button);
     }
 
     private void goToCropPage(View v) {
