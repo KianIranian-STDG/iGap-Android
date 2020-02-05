@@ -2065,6 +2065,6 @@
     <string name="bill_id">ID de facture</string>
     <string name="topUp_title">Acheter en charge</string>
     <string name="bill_title">Payer la facture</string>
-    <string name="topUp_message">Recharger le message d\'achat</string>
+    <string name="topUp_message">Message de Acheter en charge</string>
     <string name="bill_message">Message de paiement de facture</string>
 </resources>

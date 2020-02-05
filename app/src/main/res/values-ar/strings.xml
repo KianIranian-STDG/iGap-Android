@@ -3074,6 +3074,6 @@
     <string name="bill_id">معرف الفاتورة</string>
     <string name="topUp_title">شراء الشحن</string>
     <string name="bill_title">دفع الفاتورة</string>
-    <string name="topUp_message">إعادة شحن رسالة الشراء</string>
+    <string name="topUp_message">رسالة شراء الشحن</string>
     <string name="bill_message">رسالة دفع الفواتير</string>
 </resources>
