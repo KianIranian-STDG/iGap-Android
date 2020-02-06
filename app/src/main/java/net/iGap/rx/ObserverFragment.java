@@ -27,17 +27,14 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
         return null;
     }
 
-    public ObserverFragment() {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         viewModel = getObserverViewModel();
         setViewModel(viewModel);
 
         if (viewModel == null)
             throw new NullPointerException("You must set observerViewModel with getObserverViewModel() method");
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -60,6 +57,7 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel.onFragmentViewCreated();
+        Log.e(getClass().getName(), "onViewCreated: ");
     }
 
     public void finish() {

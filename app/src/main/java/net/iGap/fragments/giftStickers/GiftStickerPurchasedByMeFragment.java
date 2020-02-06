@@ -1,8 +1,10 @@
 package net.iGap.fragments.giftStickers;
 
+import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
@@ -17,19 +19,27 @@ public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftSti
     public static final int ACTIVE = 1;
     public static final int FORWARD = 2;
 
+    private int mode;
+
     private RecyclerView recyclerView;
     private ProgressBar loadingProgressView;
     private ProgressBar loadMoreProgressView;
     private TextView emptyTv;
-    private TextView rertyTv;
+    private TextView retryTv;
 
     private GiftStickerPurchasedByMeFragment() {
     }
 
     public static GiftStickerPurchasedByMeFragment getInstance(int mode) {
         GiftStickerPurchasedByMeFragment fragment = new GiftStickerPurchasedByMeFragment();
-        fragment.viewModel.setMode(mode);
+        fragment.mode = mode;
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel.setMode(mode);
     }
 
     @Override
@@ -38,8 +48,7 @@ public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftSti
         loadingProgressView = rootView.findViewById(R.id.pb_giftStickerPurchasedByMe_loading);
         loadMoreProgressView = rootView.findViewById(R.id.pb_giftStickerPurchasedByMe_loadMore);
         emptyTv = rootView.findViewById(R.id.tv_giftStickerPurchasedByMe_emptyView);
-        rertyTv = rootView.findViewById(R.id.ic_giftStickerPurchasedByMe_retryIcon);
-
+        retryTv = rootView.findViewById(R.id.ic_giftStickerPurchasedByMe_retryIcon);
 
         if (getParentFragment() instanceof GiftStickerMainFragment) {
             ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_gift_sticker);
@@ -78,11 +87,11 @@ public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftSti
             ((MyStickerListAdapter) recyclerView.getAdapter()).setDelegate((giftSticker, progressDelegate) -> viewModel.onItemClicked(giftSticker, progressDelegate));
         }
 
-        rertyTv.setOnClickListener(v -> viewModel.onRetryButtonClick());
+        retryTv.setOnClickListener(v -> viewModel.onRetryButtonClick());
 
         viewModel.getShowEmptyListMessage().observe(getViewLifecycleOwner(), visibility -> emptyTv.setVisibility(visibility));
         viewModel.getShowLoading().observe(getViewLifecycleOwner(), visibility -> loadingProgressView.setVisibility(visibility));
-        viewModel.getShowRetryView().observe(getViewLifecycleOwner(), visibility -> rertyTv.setVisibility(visibility));
+        viewModel.getShowRetryView().observe(getViewLifecycleOwner(), visibility -> retryTv.setVisibility(visibility));
     }
 
     @Override
@@ -93,5 +102,9 @@ public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftSti
     @Override
     public MyGiftStickerBuyViewModel getObserverViewModel() {
         return new MyGiftStickerBuyViewModel();
+    }
+
+    public int getMode() {
+        return mode;
     }
 }

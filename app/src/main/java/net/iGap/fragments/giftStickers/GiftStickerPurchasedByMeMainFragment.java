@@ -21,7 +21,6 @@ import net.iGap.R;
 import net.iGap.Theme;
 
 public class GiftStickerPurchasedByMeMainFragment extends Fragment {
-    private ViewPager viewPager;
     private TabLayout tabLayout;
 
     @Nullable
@@ -34,13 +33,15 @@ public class GiftStickerPurchasedByMeMainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewPager = view.findViewById(R.id.vp_purchasedByMe);
-        viewPager.setAdapter(new PagerAdapter(getParentFragmentManager()));
+        ViewPager viewPager = view.findViewById(R.id.vp_purchasedByMe);
+        viewPager.setAdapter(new PagerAdapter(getActivity().getSupportFragmentManager()));
+        viewPager.setOffscreenPageLimit(2);
 
         tabLayout = view.findViewById(R.id.tl_purchasedByMe);
         tabLayout.setSelectedTabIndicatorColor(new Theme().getAccentColor(getContext()));
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
         setTabLayout();
     }
 
@@ -62,32 +63,34 @@ public class GiftStickerPurchasedByMeMainFragment extends Fragment {
     }
 
     private class PagerAdapter extends FragmentStatePagerAdapter {
-        int[] modes;
+        private GiftStickerPurchasedByMeFragment[] fragments;
 
         public PagerAdapter(@NonNull FragmentManager fm) {
             super(fm);
-            modes = new int[]{
-                    GiftStickerPurchasedByMeFragment.ACTIVE,
-                    GiftStickerPurchasedByMeFragment.NEW,
-                    GiftStickerPurchasedByMeFragment.FORWARD,
+            fragments = new GiftStickerPurchasedByMeFragment[]{
+                    GiftStickerPurchasedByMeFragment.getInstance(GiftStickerPurchasedByMeFragment.ACTIVE),
+                    GiftStickerPurchasedByMeFragment.getInstance(GiftStickerPurchasedByMeFragment.NEW),
+                    GiftStickerPurchasedByMeFragment.getInstance(GiftStickerPurchasedByMeFragment.FORWARD)
             };
         }
 
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return GiftStickerPurchasedByMeFragment.getInstance(modes[position]);
+            return fragments[position];
         }
 
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            if (position == modes[0]) {
-                return "فعال شده";
-            } else if (position == modes[1]) {
-                return "ارسال شده";
-            } else if (position == modes[2]) {
+            if (position == fragments[0].getMode()) {
                 return "قابل استفاده";
+
+            } else if (position == fragments[1].getMode()) {
+                return "فعال شده";
+
+            } else if (position == fragments[2].getMode()) {
+                return "ارسال شده";
             } else {
                 return "";
             }
@@ -95,7 +98,7 @@ public class GiftStickerPurchasedByMeMainFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return modes.length;
+            return fragments.length;
         }
     }
 }

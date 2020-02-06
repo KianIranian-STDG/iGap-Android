@@ -27,6 +27,10 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
 
     @Override
     public void subscribe() {
+
+    }
+
+    private void getData() {
         showLoading.postValue(View.VISIBLE);
         showEmptyListMessage.postValue(View.GONE);
         StickerRepository.getInstance().getMyGiftStickerBuy(mode)
@@ -81,6 +85,7 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
         } else {
             this.mode = "forwarded";
         }
+        getData();
     }
 
     public SingleLiveEvent<StructIGGiftSticker> getGoNext() {
