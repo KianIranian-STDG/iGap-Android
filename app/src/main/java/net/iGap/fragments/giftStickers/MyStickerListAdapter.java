@@ -1,17 +1,23 @@
 package net.iGap.fragments.giftStickers;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.view.StickerView;
 
 import java.text.DecimalFormat;
@@ -22,6 +28,11 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
 
     private List<StructIGGiftSticker> items = new ArrayList<>();
     private Delegate delegate;
+    private AvatarHandler avatarHandler;
+
+    public MyStickerListAdapter() {
+        avatarHandler = new AvatarHandler();
+    }
 
     public void setDelegate(Delegate delegate) {
         this.delegate = delegate;
@@ -53,7 +64,7 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
         private StickerView stickerView;
         private AppCompatTextView giftStickerTitle;
         private AppCompatTextView giftStickerPrice;
-        private AppCompatTextView giftStickerStatus;
+        private ImageView userAvatarIv;
         private ProgressBar progressBar;
 
         public ViewHolder(@NonNull View itemView) {
@@ -61,22 +72,25 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
             stickerView = itemView.findViewById(R.id.stickerView);
             giftStickerTitle = itemView.findViewById(R.id.giftStickerTitle);
             giftStickerPrice = itemView.findViewById(R.id.giftStickerPrice);
-            giftStickerStatus = itemView.findViewById(R.id.giftStickerStatusView);
+            giftStickerTitle.setGravity(G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT);
+            giftStickerPrice.setGravity(G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT);
+            userAvatarIv = itemView.findViewById(R.id.userAvatar);
             progressBar = itemView.findViewById(R.id.progressBar);
         }
 
         public void bindView(StructIGGiftSticker giftSticker) {
             stickerView.loadSticker(giftSticker.getStructIGSticker());
-            giftStickerTitle.setText(giftSticker.getRrn());
+            String rrn = itemView.getContext().getResources().getString(R.string.rrn) + ": " + (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(giftSticker.getRrn()) : giftSticker.getRrn());
+            giftStickerTitle.setText(rrn);
 
             DecimalFormat df = new DecimalFormat("#,###");
             giftStickerPrice.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) : df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) + " " + itemView.getContext().getResources().getString(R.string.rial));
 
-            giftStickerStatus.setText(giftSticker.getStatus());
-
             progressBar.setVisibility(View.GONE);
 
             itemView.setOnClickListener(v -> delegate.onClick(giftSticker, visibility -> progressBar.setVisibility(visibility)));
+
+            avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarIv, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain(), true);
         }
     }
 
