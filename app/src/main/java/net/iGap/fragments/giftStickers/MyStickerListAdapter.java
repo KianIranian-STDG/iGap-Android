@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
@@ -84,13 +83,28 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
             giftStickerTitle.setText(rrn);
 
             DecimalFormat df = new DecimalFormat("#,###");
-            giftStickerPrice.setText((HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) : df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) + " " + itemView.getContext().getResources().getString(R.string.rial));
+            String price = (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) : df.format(Double.valueOf(giftSticker.getStructIGSticker().getGiftAmount()))) + " " + itemView.getContext().getResources().getString(R.string.rial);
+            giftStickerPrice.setText(price);
 
             progressBar.setVisibility(View.GONE);
 
             itemView.setOnClickListener(v -> delegate.onClick(giftSticker, visibility -> progressBar.setVisibility(visibility)));
 
-            avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarIv, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain(), true);
+
+            Long userId = null;
+
+            if (giftSticker.getFromUserId() != null) {
+                userId = Long.valueOf(giftSticker.getFromUserId());
+            } else if (giftSticker.getToUserId() != null) {
+                userId = Long.valueOf(giftSticker.getToUserId());
+            }
+
+            if (userId != null) {
+                userAvatarIv.setVisibility(View.VISIBLE);
+                avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarIv, userId).avatarType(AvatarHandler.AvatarType.USER).showMain(), true);
+            } else {
+                userAvatarIv.setVisibility(View.GONE);
+            }
         }
     }
 

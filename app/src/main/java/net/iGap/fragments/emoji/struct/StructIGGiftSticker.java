@@ -18,6 +18,8 @@ public class StructIGGiftSticker {
     private String nationalCode;
     private boolean isForward;
     private boolean isValid;
+    private String toUserId;
+    private String fromUserId;
 
     public StructIGGiftSticker(UserStickers userStickers) {
         structIGSticker = new StructIGSticker(userStickers.getSticker());
@@ -27,6 +29,8 @@ public class StructIGGiftSticker {
         structIGSticker.setGiftId(giftId);
         phoneNumber = userStickers.getCreation().getMobileNumber();
         nationalCode = userStickers.getCreation().getNationalCode();
+        toUserId = userStickers.getToUserId();
+        fromUserId = userStickers.getFromUserId();
     }
 
     public StructIGGiftSticker(CardStatusDataModel dataModel) {
@@ -83,5 +87,13 @@ public class StructIGGiftSticker {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public String getFromUserId() {
+        return fromUserId;
     }
 }

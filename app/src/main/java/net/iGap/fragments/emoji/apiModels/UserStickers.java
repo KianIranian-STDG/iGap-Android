@@ -23,6 +23,10 @@ public class UserStickers {
     private StickerDataModel sticker;
     @Expose
     private String rrn;
+    @Expose
+    private String toUserId;
+    @Expose
+    private String fromUserId;
 
     public void setRrn(String rrn) {
         this.rrn = rrn;
@@ -94,5 +98,21 @@ public class UserStickers {
 
     public void setSticker(StickerDataModel sticker) {
         this.sticker = sticker;
+    }
+
+    public String getFromUserId() {
+        return fromUserId;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    public void setFromUserId(String fromUserId) {
+        this.fromUserId = fromUserId;
     }
 }

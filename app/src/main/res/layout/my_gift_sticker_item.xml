@@ -67,7 +67,7 @@
             android:id="@+id/progressBar"
             android:layout_width="@dimen/dp32"
             android:layout_height="@dimen/dp32"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/stickerView"
             app:layout_constraintEnd_toEndOf="@+id/stickerView"
             app:layout_constraintStart_toStartOf="@+id/stickerView"

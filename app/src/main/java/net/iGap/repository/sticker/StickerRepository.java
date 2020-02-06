@@ -501,6 +501,9 @@ public class StickerRepository {
                     List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
                     for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
                         StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
+                        Log.i(TAG, "getMyGiftStickerBuy: " + userGiftStickersDataModel.getData().get(i).getFromUserId());
+                        Log.i(TAG, "getMyGiftStickerBuy: " + userGiftStickersDataModel.getData().get(i).getToUserId());
+                        Log.i(TAG, "----------------------------------------");
                         structIGGiftStickers.add(giftSticker);
                     }
                     return structIGGiftStickers;
