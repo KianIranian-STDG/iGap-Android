@@ -9,14 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragment;
 import net.iGap.rx.ObserverFragment;
+import net.iGap.services.imageLoaderService.ImageLoadingServiceInjector;
 
 public class GiftStickerHomeFragment extends ObserverFragment<GiftStickerHomeViewModel> {
     private ImageView sliderIv;
@@ -54,10 +52,9 @@ public class GiftStickerHomeFragment extends ObserverFragment<GiftStickerHomeVie
                 String[] scales = dataModel.getInfo().getScale().split(":");
                 float height = rootView.getWidth() * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
                 sliderIv.getLayoutParams().height = Math.round(height);
-                Glide.with(getContext())
-                        .load(dataModel.getData().get(0).getImageUrl())
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(sliderIv);
+
+                ImageLoadingServiceInjector.inject().loadImage(sliderIv, dataModel.getData().get(0).getImageUrl());
+
                 if (dataModel.getInfo().getTitle() != null && dataModel.getInfo().getTitleEn() != null) {
                     sliderTitleTv.setVisibility(View.VISIBLE);
                     sliderTitleTv.setGravity(Gravity.BOTTOM | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT));
