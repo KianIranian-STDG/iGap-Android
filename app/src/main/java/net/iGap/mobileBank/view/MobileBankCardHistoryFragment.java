@@ -15,8 +15,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+
 import net.iGap.R;
 import net.iGap.databinding.MobileBankHistoryBinding;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
@@ -92,9 +96,16 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     }
 
     private void initial() {
-        viewModel.setDepositNumber(getArguments().getString("accountNum"));
-        viewModel.setCard(getArguments().getBoolean("isCard"));
+        String number = getArguments().getString("accountNum");
+        boolean isCard = getArguments().getBoolean("isCard");
+
+        viewModel.setDepositNumber(number);
+        viewModel.setCard(isCard);
         viewModel.init();
+
+        //set current account data
+        binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(number, isCard));
+        binding.tvType.setText(isCard ? R.string.card_number : R.string.account);
 
         // recycler view for date
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -222,6 +233,22 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         });
 
         viewModel.getBills().observe(getViewLifecycleOwner(), this::initMainRecycler);
+    }
+
+    private String checkAndSetPersianNumberIfNeeded(String cardNumber, boolean isCard) {
+        String number = cardNumber;
+        if (HelperCalander.isPersianUnicode)
+            number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+        if (isCard) {
+            try {
+                String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
+                return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
+            } catch (Exception e) {
+                return number;
+            }
+        } else {
+            return number;
+        }
     }
 
 }

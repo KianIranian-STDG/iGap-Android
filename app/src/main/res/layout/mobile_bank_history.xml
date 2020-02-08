@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -39,6 +40,43 @@
                 android:orientation="vertical">
 
                 <include layout="@layout/mobile_bank_top" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp32"
+                    android:layout_marginRight="@dimen/dp32"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:background="@drawable/shape_round_gray">
+
+                    <TextView
+                        android:id="@+id/tvNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/smallTextSize"
+                        tools:text="6221 0610 1123 5548"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:layout_margin="@dimen/dp8" />
+
+                    <TextView
+                        android:id="@+id/tvType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/smallTextSize"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp16"
+                        tools:text="@string/card_number"
+                        android:layout_margin="@dimen/dp8" />
+
+                </RelativeLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

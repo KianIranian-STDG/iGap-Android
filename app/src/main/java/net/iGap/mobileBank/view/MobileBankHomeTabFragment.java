@@ -97,9 +97,9 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 onTransferMoneyClicked();
                 break;
 
+            case R.string.Inventory:
             case R.string.transactions:
-                if (mode == HomeTabMode.DEPOSIT)
-                    onTransactionsClicked();
+                onTransactionsClicked();
                 break;
 
             case R.string.sheba_number:
@@ -119,13 +119,13 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 onFacilitiesClick();
                 break;
 
-            case R.string.Inventory:
+            /*case R.string.Inventory:
                 if (mode == HomeTabMode.CARD)
                     openGetCardInfo(getCurrentAccount());
                 else {
                     getAcountBalance(getCurrentAccount());
                 }
-                break;
+                break;*/
 
             case R.string.mobile_bank_hotCard:
                 openHotCard(getCurrentAccount());
