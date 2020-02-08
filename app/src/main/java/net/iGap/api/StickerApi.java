@@ -6,6 +6,7 @@ import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.RsaDataModel;
+import net.iGap.fragments.emoji.apiModels.SliderDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategorisDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
@@ -78,4 +79,7 @@ public interface StickerApi {
 
     @GET("gift/forward/{stickerId}/{toUserId}")
     Completable forwardToUser(@Path("stickerId") String stickerId, @Path("toUserId") String toUserId);
+
+    @GET("gift/first-page")
+    Single<SliderDataModel> getGiftStickerHomePage();
 }

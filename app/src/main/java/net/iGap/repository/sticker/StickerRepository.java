@@ -16,6 +16,7 @@ import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.RsaDataModel;
+import net.iGap.fragments.emoji.apiModels.SliderDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
@@ -262,10 +263,13 @@ public class StickerRepository {
         return stickerApi.forwardToUser(stickerId, toUserId).subscribeOn(Schedulers.newThread());
     }
 
+    private Single<SliderDataModel> giftStickerHomePageApiService() {
+        return stickerApi.getGiftStickerHomePage().subscribeOn(Schedulers.newThread());
+    }
+
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(asyncRealm -> {
-                Log.i("abbasiNewSticker", "START UPDATE STICKER");
                 HashSet<String> hashedData = new HashSet<>();
                 ArrayList<RealmStickerGroup> itemToDelete = new ArrayList<>();
                 for (StructIGStickerGroup structGroupSticker : stickerGroup) {
@@ -286,7 +290,6 @@ public class StickerRepository {
                 for (StructIGStickerGroup updateStickers : stickerGroup) {
                     RealmStickerGroup.put(asyncRealm, updateStickers);
                 }
-                Log.i("abbasiNewSticker", "FINISH STICKER UPDATE");
             });
         });
     }
@@ -606,4 +609,7 @@ public class StickerRepository {
         });
     }
 
+    public Single<SliderDataModel> getGiftStickerHomePageImageUrl() {
+        return giftStickerHomePageApiService();
+    }
 }
