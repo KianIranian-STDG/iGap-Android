@@ -1,15 +1,12 @@
 package net.iGap.fragments.giftStickers;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragment;
@@ -18,14 +15,12 @@ import net.iGap.services.imageLoaderService.ImageLoadingServiceInjector;
 
 public class GiftStickerHomeFragment extends ObserverFragment<GiftStickerHomeViewModel> {
     private ImageView sliderIv;
-    private TextView sliderTitleTv;
 
     @Override
     public void setupViews() {
         getChildFragmentManager().beginTransaction().replace(R.id.header, EnterNationalCodeFragment.getInstance(false), EnterNationalCodeFragment.class.getName()).commit();
 
         sliderIv = rootView.findViewById(R.id.iv_giftStickerHome);
-        sliderTitleTv = rootView.findViewById(R.id.tv_giftStickerHome_sliderTitle);
 
         rootView.findViewById(R.id.myGiftStickerPage).setOnClickListener(v -> {
             if (getParentFragment() instanceof GiftStickerMainFragment) {
@@ -54,12 +49,6 @@ public class GiftStickerHomeFragment extends ObserverFragment<GiftStickerHomeVie
                 sliderIv.getLayoutParams().height = Math.round(height);
 
                 ImageLoadingServiceInjector.inject().loadImage(sliderIv, dataModel.getData().get(0).getImageUrl());
-
-                if (dataModel.getInfo().getTitle() != null && dataModel.getInfo().getTitleEn() != null) {
-                    sliderTitleTv.setVisibility(View.VISIBLE);
-                    sliderTitleTv.setGravity(Gravity.BOTTOM | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT));
-                    sliderTitleTv.setText(G.selectedLanguage.equals("fa") ? dataModel.getInfo().getTitle() : dataModel.getInfo().getTitle());
-                }
             } else {
                 sliderIv.setVisibility(View.GONE);
             }
