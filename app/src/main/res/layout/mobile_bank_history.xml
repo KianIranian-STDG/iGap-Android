@@ -146,60 +146,43 @@
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/incomeTitle"
-                        android:text="Income"
-                        android:gravity="center"
+                        android:id="@+id/servicesTitle"
+                        android:text="@string/services"
+                        android:gravity="start"
                         android:textSize="@dimen/standardTextSize"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_marginStart="@dimen/dp20"
+                        android:layout_marginEnd="@dimen/dp20"
                         android:layout_marginTop="@dimen/dp26"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/timeRecycler"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/withdrawTitle"
-                        android:text="withdrawal"
-                        android:gravity="center"
-                        android:textSize="@dimen/standardTextSize"
                         android:textColor="?iGapSubtitleTextColor"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toTopOf="@+id/incomeTitle"
-                        app:layout_constraintStart_toEndOf="@+id/incomeTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/timeRecycler"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/servicesTitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/servicesTitle"
+                        app:layout_constraintStart_toEndOf="@+id/servicesTitle"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/incomeValue"
-                        android:text="@{viewModel.income}"
-                        android:gravity="center"
-                        android:textSize="@dimen/largeTextSize"
-                        android:textStyle="bold"
-                        android:layout_marginTop="@dimen/dp8"
-                        android:textColor="?iGapTitleTextColor"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/incomeTitle"
+                        android:id="@+id/rvItems"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        android:layout_marginLeft="@dimen/dp6"
+                        android:layout_marginTop="@dimen/dp12"
+                        android:layout_marginBottom="@dimen/dp12"
+                        android:layout_marginRight="@dimen/dp6"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/withdrawValue"
-                        android:text="@{viewModel.withdraw}"
-                        android:gravity="center"
-                        android:textSize="@dimen/largeTextSize"
-                        android:textStyle="bold"
-                        android:textColor="?iGapTitleTextColor"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toTopOf="@+id/incomeValue"
-                        app:layout_constraintStart_toEndOf="@+id/incomeTitle"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/servicesTitle" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -208,11 +191,11 @@
                         android:text="@string/mobile_bank_sorathesab"
                         android:gravity="start"
                         android:textSize="@dimen/standardTextSize"
-                        android:layout_marginStart="@dimen/dp32"
-                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginStart="@dimen/dp20"
+                        android:layout_marginEnd="@dimen/dp20"
                         android:layout_marginTop="@dimen/dp26"
                         android:textColor="?iGapSubtitleTextColor"
-                        app:layout_constraintTop_toBottomOf="@+id/withdrawValue"
+                        app:layout_constraintTop_toBottomOf="@+id/rvItems"
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <View

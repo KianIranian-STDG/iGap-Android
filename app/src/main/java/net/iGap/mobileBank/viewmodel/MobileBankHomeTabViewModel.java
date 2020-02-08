@@ -21,13 +21,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
+public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryViewModel {
 
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
-    private MutableLiveData<List<String>> shebaListener = new MutableLiveData<>();
     private MutableLiveData<String> balance = new MutableLiveData<>();
-    private MutableLiveData<String> OTPmessage = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     public List<BankCardModel> cards;
     public List<BankAccountModel> accounts;
@@ -125,50 +123,6 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
-    public void getOTP(String cardNumber) {
-        MobileBankRepository.getInstance().getOTP(cardNumber, this, new ResponseCallback<ErrorModel>() {
-            @Override
-            public void onSuccess(ErrorModel data) {
-                OTPmessage.setValue(data.getMessage());
-            }
-
-            @Override
-            public void onError(String error) {
-                OTPmessage.setValue("-1");
-                showRequestErrorMessage.setValue(error);
-            }
-
-            @Override
-            public void onFailed() {
-                OTPmessage.setValue("-1");
-            }
-        });
-    }
-
-    public void getShebaNumber(String cardNumber) {
-        if (cardNumber == null) {
-            shebaListener.postValue(null);
-            return;
-        }
-        MobileBankRepository.getInstance().getShebaNumber(cardNumber, this, new ResponseCallback<BaseMobileBankResponse<List<String>>>() {
-            @Override
-            public void onSuccess(BaseMobileBankResponse<List<String>> data) {
-                shebaListener.postValue(data.getData());
-            }
-
-            @Override
-            public void onError(String error) {
-                shebaListener.postValue(null);
-                showRequestErrorMessage.setValue(error);
-            }
-
-            @Override
-            public void onFailed() {
-                shebaListener.postValue(null);
-            }
-        });
-    }
-
     public void onRetryClicked() {
         if (mMode == MobileBankHomeTabFragment.HomeTabMode.CARD) {
             getCardsByApi();
@@ -177,38 +131,8 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         }
     }
 
-    public void getShebaNumberByDeposit(String deposit) {
-        if (deposit == null) {
-            shebaListener.postValue(null);
-            return;
-        }
-        MobileBankRepository.getInstance().getShebaNumberByDeposit(deposit, this, new ResponseCallback<BaseMobileBankResponse<BankShebaModel>>() {
-            @Override
-            public void onSuccess(BaseMobileBankResponse<BankShebaModel> data) {
-                List<String> shebaList = new ArrayList<>();
-                shebaList.add(data.getData().getSheba());
-                shebaListener.postValue(shebaList);
-            }
-
-            @Override
-            public void onError(String error) {
-                showRequestErrorMessage.setValue(error);
-                shebaListener.postValue(null);
-            }
-
-            @Override
-            public void onFailed() {
-                shebaListener.postValue(null);
-            }
-        });
-    }
-
     public MutableLiveData<List<BankAccountModel>> getAccountsData() {
         return accountsData;
-    }
-
-    public MutableLiveData<List<String>> getShebaListener() {
-        return shebaListener;
     }
 
     public MutableLiveData<List<BankCardModel>> getCardsData() {
@@ -235,7 +159,4 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         return balance;
     }
 
-    public MutableLiveData<String> getOTPmessage() {
-        return OTPmessage;
-    }
 }

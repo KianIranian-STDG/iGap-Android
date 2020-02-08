@@ -1,5 +1,6 @@
 package net.iGap.mobileBank.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +22,12 @@ import com.google.common.collect.Iterables;
 import net.iGap.R;
 import net.iGap.databinding.MobileBankHistoryBinding;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
+import net.iGap.mobileBank.repository.model.MobileBankHomeItemsModel;
+import net.iGap.mobileBank.view.adapter.BankHomeItemAdapter;
 import net.iGap.mobileBank.view.adapter.MobileBankDateAdapter;
 import net.iGap.mobileBank.view.adapter.MobileBankHistoryAdapter;
 import net.iGap.mobileBank.viewmodel.MobileBankCardHistoryViewModel;
@@ -41,6 +45,9 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private int totalPage = 20;
     private boolean isLoading = false;
     private MobileBankHistoryAdapter adapter;
+    private String mCurrentNumber;
+    private boolean isCard;
+    private DialogParsian mDialogWait;
 
     private static final String TAG = "Amini";
 
@@ -93,18 +100,20 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         toolbarLayout.addView(mHelperToolbar.getView());
 
         initial();
+        setupListener();
+        setupRecyclerItems();
     }
 
     private void initial() {
-        String number = getArguments().getString("accountNum");
-        boolean isCard = getArguments().getBoolean("isCard");
+        mCurrentNumber = getArguments().getString("accountNum");
+        isCard = getArguments().getBoolean("isCard");
 
-        viewModel.setDepositNumber(number);
+        viewModel.setDepositNumber(mCurrentNumber);
         viewModel.setCard(isCard);
         viewModel.init();
 
         //set current account data
-        binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(number, isCard));
+        binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(mCurrentNumber, isCard));
         binding.tvType.setText(isCard ? R.string.card_number : R.string.account);
 
         // recycler view for date
@@ -249,6 +258,200 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         } else {
             return number;
         }
+    }
+
+
+    private void setupRecyclerItems() {
+        List<MobileBankHomeItemsModel> items;
+        items = isCard ? getCardRecyclerItems() : getDepositRecyclerItems();
+
+        BankHomeItemAdapter adapter = new BankHomeItemAdapter();
+        adapter.setItems(items);
+        adapter.setListener(this::handleItemsAdapterClick);
+
+        binding.rvItems.setNestedScrollingEnabled(false);
+        binding.rvItems.setAdapter(adapter);
+
+    }
+
+    private void handleItemsAdapterClick(int position, int title) {
+        switch (title) {
+            case R.string.transfer_mony:
+                onTransferMoneyClicked();
+                break;
+
+            case R.string.sheba_number:
+                onShebaClicked();
+                break;
+
+            case R.string.temporary_password:
+                if (isCard)
+                    getOTP(mCurrentNumber);
+                break;
+
+            case R.string.cheque:
+                openChequeListPage(mCurrentNumber);
+                break;
+
+            case R.string.mobile_bank_hotCard:
+                openHotCard(mCurrentNumber);
+                break;
+        }
+    }
+
+    private void openChequeListPage(String deposit) {
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankChequesBookListFragment.newInstance(deposit)).setReplace(false).load();
+        }
+    }
+
+    private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
+        List<MobileBankHomeItemsModel> items = new ArrayList<>();
+        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_card_to_card));
+        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
+        items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.drawable.ic_mb_pooya_pass));
+        items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.drawable.ic_mb_block));
+        return items;
+    }
+
+    private List<MobileBankHomeItemsModel> getDepositRecyclerItems() {
+        List<MobileBankHomeItemsModel> items = new ArrayList<>();
+        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_transfer));
+        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
+        items.add(new MobileBankHomeItemsModel(R.string.cheque, R.drawable.ic_mb_cheque));
+        return items;
+    }
+
+    private void setupListener() {
+
+        viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
+
+        viewModel.getOTPmessage().observe(getViewLifecycleOwner(), message -> {
+            if (message.equals("-1")) {
+                mDialogWait.dismiss();
+            } else {
+                showMessageDialog(getString(R.string.attention), message);
+            }
+        });
+    }
+
+    private void showMessageDialog(String title, String message) {
+        mDialogWait.dismiss();
+        new DialogParsian()
+                .setContext(getContext())
+                .setTitle(title)
+                .setButtonsText(getString(R.string.ok), null)
+                .showSimpleMessage(message);
+    }
+
+    private void showShebaNumberResult(List<String> bankShebaModel) {
+        mDialogWait.dismiss();
+        if (bankShebaModel != null && bankShebaModel.size() > 0) {
+            new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.sheba_number))
+                    .setButtonsText(null, getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onDeActiveButtonClicked(Dialog dialog) {
+                            mDialogWait.dismiss();
+                        }
+                    }).showShebaDialog(bankShebaModel);
+        }
+    }
+
+    private void showProgress() {
+        if (getActivity() != null) {
+            mDialogWait = new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.please_wait) + "..")
+                    .setButtonsText(null, getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onDeActiveButtonClicked(Dialog dialog) {
+                            mDialogWait.dismiss();
+                        }
+                    });
+            mDialogWait.showLoaderDialog(false);
+        }
+    }
+
+    private void getOTP(String cardNumber) {
+        if (cardNumber == null)
+            return;
+        showProgress();
+        viewModel.getOTP(cardNumber);
+    }
+
+    private void onTransferMoneyClicked() {
+
+        if (getActivity() != null && !isCard) {
+            new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.transfer_mony))
+                    .setButtonsText(getString(R.string.ok), getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onActiveButtonClicked(Dialog dialog) {
+
+                        }
+
+                        @Override
+                        public void onTransferMoneyTypeSelected(Dialog dialog, String type) {
+                            dialog.dismiss();
+                        }
+                    }).showMoneyTransferDialog();
+        } else {
+            openTransferMoneyPage();
+        }
+
+    }
+
+    private void openTransferMoneyPage() {
+        if (getActivity() == null) return;
+        new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankTransferCTCStepOneFragment.newInstance(mCurrentNumber))
+                .setReplace(false)
+                .load();
+    }
+
+    private void onShebaClicked() {
+
+        if (getActivity() != null) {
+            mDialogWait = new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.please_wait) + "..")
+                    .setButtonsText(null, getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onDeActiveButtonClicked(Dialog dialog) {
+                            mDialogWait.dismiss();
+                        }
+                    });
+            mDialogWait.showLoaderDialog(false);
+            if (isCard) {
+                viewModel.getShebaNumber(mCurrentNumber);
+            } else {
+                viewModel.getShebaNumberByDeposit(mCurrentNumber);
+            }
+        }
+
+    }
+
+    private void openHotCard(String cardNumber) {
+        MobileBankCardBalanceBottomSheetFrag frag = MobileBankCardBalanceBottomSheetFrag.newInstance(cardNumber, "HOT_CARD");
+        frag.setCompleteListener((cardNumber1, balance) -> {
+            String message;
+            if (balance.equals("success"))
+                message = getResources().getString(R.string.mobile_bank_hotCard_success);
+            else
+                message = getResources().getString(R.string.mobile_bank_hotCard_fail);
+            new DialogParsian()
+                    .setContext(getContext())
+                    .setTitle(getString(R.string.mobile_bank_hotCard))
+                    .setButtonsText(getString(R.string.ok), null)
+                    .showSimpleMessage(message);
+        });
+        frag.show(getParentFragmentManager(), "CardBalanceBottomSheet");
     }
 
 }

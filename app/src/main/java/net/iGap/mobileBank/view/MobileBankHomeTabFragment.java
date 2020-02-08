@@ -150,18 +150,18 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_balance));
+        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_card_to_card));
         items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.drawable.ic_mb_balance));
         items.add(new MobileBankHomeItemsModel(R.string.transactions, R.drawable.ic_mb_transaction));
         items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
-        items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.drawable.ic_mb_cheque));
+        items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.drawable.ic_mb_pooya_pass));
         items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.drawable.ic_mb_block));
         return items;
     }
 
     private List<MobileBankHomeItemsModel> getDepositRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_balance));
+        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_transfer));
         items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.drawable.ic_mb_balance));
         items.add(new MobileBankHomeItemsModel(R.string.transactions, R.drawable.ic_mb_transaction));
         items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
