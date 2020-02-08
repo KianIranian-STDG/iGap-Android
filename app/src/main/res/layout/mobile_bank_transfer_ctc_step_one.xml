@@ -306,7 +306,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/amount" />
 
                     <com.google.android.material.button.MaterialButton
-                        style="@style/iGapButton"
+                        style="@style/mobileBankButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:minHeight="@dimen/dp48"

@@ -61,7 +61,7 @@
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/iGapButton"
+                        style="@style/mobileBankButton"
                         android:id="@+id/reportBtn"
                         android:minHeight="@dimen/dp32"
                         android:layout_marginEnd="@dimen/dp32"

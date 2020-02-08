@@ -50,7 +50,7 @@
                     android:text="@string/source_card"
                     android:textSize="@dimen/standardTextSize"
                     android:gravity="center"
-                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textColor="@color/brown"
                     android:layout_marginTop="@dimen/dp16" />
 
                 <TextView
@@ -75,7 +75,7 @@
                     android:text="@string/destination_bank"
                     android:textSize="@dimen/standardTextSize"
                     android:gravity="center"
-                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textColor="@color/brown"
                     android:layout_marginTop="@dimen/dp20" />
 
                 <TextView
@@ -100,7 +100,7 @@
                     android:text="@string/card_owner"
                     android:textSize="@dimen/standardTextSize"
                     android:gravity="center"
-                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textColor="@color/brown"
                     android:layout_marginTop="@dimen/dp20" />
 
                 <TextView
@@ -125,7 +125,7 @@
                     android:text="@string/amount"
                     android:textSize="@dimen/standardTextSize"
                     android:gravity="center"
-                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textColor="@color/brown"
                     android:layout_marginTop="@dimen/dp20" />
 
                 <TextView
@@ -155,7 +155,7 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="7"
-                        style="@style/iGapButton"
+                        style="@style/mobileBankButton"
                         android:layout_marginRight="@dimen/dp6"
                         android:layout_marginEnd="@dimen/dp6"
                         android:text="@string/ra_confirm"

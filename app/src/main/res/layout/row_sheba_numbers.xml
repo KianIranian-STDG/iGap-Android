@@ -25,7 +25,7 @@
         android:layout_marginEnd="@dimen/dp10"
         android:gravity="center"
         android:textSize="@dimen/standardTextSize"
-        android:textColor="?iGapPrimaryIconTextColor"
+        android:textColor="@color/brown"
         android:text="@string/copy_item_dialog"
         android:textStyle="bold"
         android:paddingLeft="@dimen/dp10"

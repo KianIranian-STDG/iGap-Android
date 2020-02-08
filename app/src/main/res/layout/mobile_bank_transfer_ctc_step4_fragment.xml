@@ -50,7 +50,7 @@
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:textSize="@dimen/standardTextSize"
-                    android:textColor="?iGapPrimaryIconTextColor"
+                    android:textColor="@color/brown"
                     android:text="@string/successful_payment"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -76,7 +76,7 @@
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:text="@string/share_item_dialog"
-                        style="@style/iGapButton" />
+                        style="@style/mobileBankButton" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnBack"

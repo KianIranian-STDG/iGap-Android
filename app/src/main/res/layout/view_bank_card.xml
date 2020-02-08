@@ -41,9 +41,9 @@
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNumber"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:singleLine="true"
-            app:layout_constraintBottom_toTopOf="@id/tvNumber"
             android:textColor="@color/white"
             android:textSize="@dimen/largeTextSize"
             tools:text="علیرضا نظری"
@@ -70,46 +70,18 @@
             android:id="@+id/tvNumber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvName"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:textColor="@color/white"
             android:textSize="@dimen/xlargeTextSize"
             tools:text="6621 6688 7485 2514"
             android:gravity="center"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp2" />
-
-        <TextView
-            android:id="@+id/tvExpireDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textColor="@color/white"
-            android:textSize="@dimen/smallTextSize"
-            tools:text="@string/mobile_bank_balance_expireDate2"
-            android:gravity="center"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp16" />
-
-        <TextView
-            android:id="@+id/tvCVV2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textColor="@color/white"
-            android:textSize="@dimen/smallTextSize"
-            android:text="@string/cvv2"
-            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvName"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp16" />
-
+            android:layout_marginTop="@dimen/dp16" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

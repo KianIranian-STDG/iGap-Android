@@ -36,7 +36,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private MobileBankHomeTabFragmentBinding binding;
     private HomeTabMode mode;
     private DialogParsian mDialogWait;
-    private static String TAG = "NazariSheba";
 
     public static MobileBankHomeTabFragment newInstance(HomeTabMode mode) {
         MobileBankHomeTabFragment fragment = new MobileBankHomeTabFragment();
@@ -87,7 +86,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         adapter.setItems(items);
         adapter.setListener(this::handleItemsAdapterClick);
 
-        binding.rvItems.setLayoutManager(new LinearLayoutManager(binding.rvItems.getContext()));
         binding.rvItems.setNestedScrollingEnabled(false);
         binding.rvItems.setAdapter(adapter);
 
@@ -412,8 +410,8 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private void createViewPagerIndicators(int size) {
         for (int i = 0; i < size; i++) {
             ImageView iv = new ImageView(binding.lytIndicators.getContext());
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(28, 28);
-            lp.setMargins(6, 6, 6, 6);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(24, 24);
+            lp.setMargins(8, 8, 8, 8);
             iv.setLayoutParams(lp);
             iv.setBackgroundResource(R.drawable.indicator_slider);
             if (i == 0) iv.setSelected(true);

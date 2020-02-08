@@ -11,9 +11,38 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytRoot"
-        android:background="@drawable/shape_card_background"
+        android:background="@drawable/shape_card_background_gray"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivBankLogo"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvNumber"
+            android:layout_margin="@dimen/dp6"
+            android:src="@drawable/bank_logo_parsian" />
+
+        <TextView
+            android:id="@+id/tvNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/largeTextSize"
+            tools:text="6621 6688 7485 2514"
+            android:gravity="center"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivBankLogo"
+            app:layout_constraintBottom_toTopOf="@id/tvName"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10" />
 
         <TextView
             android:id="@+id/tvName"
@@ -46,23 +75,6 @@
             android:text="@string/add_icon_without_circle_font"
             android:gravity="center"
             android:layout_margin="@dimen/dp10" />
-
-        <TextView
-            android:id="@+id/tvNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="@dimen/largeTextSize"
-            tools:text="6621 6688 7485 2514"
-            android:gravity="center"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tvName"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp16" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
