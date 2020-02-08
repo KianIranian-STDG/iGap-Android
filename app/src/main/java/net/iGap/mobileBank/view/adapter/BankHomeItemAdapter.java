@@ -3,6 +3,7 @@ package net.iGap.mobileBank.view.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ public class BankHomeItemAdapter extends RecyclerView.Adapter<BankHomeItemAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolderItems holder, int position) {
         holder.tvTitle.setText(items.get(position).getTitle());
-        holder.tvIcon.setText(items.get(position).getIcon());
+        holder.ivIcon.setImageResource(items.get(position).getIcon());
         holder.root.setOnClickListener(v -> listener.onItemClicked(holder.getAdapterPosition(), items.get(holder.getAdapterPosition()).getTitle()));
     }
 
@@ -48,13 +49,14 @@ public class BankHomeItemAdapter extends RecyclerView.Adapter<BankHomeItemAdapte
 
     class ViewHolderItems extends RecyclerView.ViewHolder {
 
-        private TextView tvTitle, tvIcon;
+        private TextView tvTitle;
+        private ImageView ivIcon;
         private View root;
 
         ViewHolderItems(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvIcon = itemView.findViewById(R.id.tvIcon);
+            ivIcon = itemView.findViewById(R.id.ivIcon);
             root = itemView.findViewById(R.id.root);
         }
     }

@@ -17,14 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvIcon"
+        <ImageView
+            android:id="@+id/ivIcon"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
             android:layout_margin="@dimen/dp16"
-            style="@style/myIconTextViewStyleGray"
-            android:textColor="@color/brown"
-            android:text="@string/wallet_icon"
+            android:src="@drawable/ic_mb_balance"
+            android:padding="@dimen/dp2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -36,10 +35,10 @@
             android:layout_height="wrap_content"
             tools:text="@string/transfer_mony"
             android:textColor="@color/brown"
-            app:layout_constraintStart_toEndOf="@id/tvIcon"
+            app:layout_constraintStart_toEndOf="@id/ivIcon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvIcon"
-            app:layout_constraintBottom_toBottomOf="@id/tvIcon"
+            app:layout_constraintTop_toTopOf="@id/ivIcon"
+            app:layout_constraintBottom_toBottomOf="@id/ivIcon"
             android:layout_margin="@dimen/dp10" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
