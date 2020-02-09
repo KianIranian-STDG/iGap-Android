@@ -346,8 +346,6 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
 
     private void setupListener() {
 
-        viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
-
         viewModel.getOTPmessage().observe(getViewLifecycleOwner(), message -> {
             if (message.equals("-1")) {
                 mDialogWait.dismiss();
@@ -364,22 +362,6 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
                 .setTitle(title)
                 .setButtonsText(getString(R.string.ok), null)
                 .showSimpleMessage(message);
-    }
-
-    private void showShebaNumberResult(List<String> bankShebaModel) {
-        mDialogWait.dismiss();
-        if (bankShebaModel != null && bankShebaModel.size() > 0) {
-            new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.sheba_number))
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    }).showShebaDialog(bankShebaModel);
-        }
     }
 
     private void showProgress() {
@@ -439,22 +421,8 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private void onShebaClicked() {
 
         if (getActivity() != null) {
-            mDialogWait = new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.please_wait) + "..")
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    });
-            mDialogWait.showLoaderDialog(false);
-            if (isCard) {
-                viewModel.getShebaNumber(mCurrentNumber);
-            } else {
-                viewModel.getShebaNumberByDeposit(mCurrentNumber);
-            }
+            MobileBankBottomSheetFragment fragment = MobileBankBottomSheetFragment.newInstance(mCurrentNumber, isCard);
+            fragment.show(getActivity().getSupportFragmentManager(), "Sheba");
         }
 
     }

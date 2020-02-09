@@ -194,8 +194,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             if (bankAccountModels != null) saveAccountsTodb(bankAccountModels);
         });
 
-        viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
-
         viewModel.getBalance().observe(getViewLifecycleOwner(), balance -> {
             if (balance.equals("-1")) {
                 mDialogWait.dismiss();
@@ -222,22 +220,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 .setTitle(title)
                 .setButtonsText(getString(R.string.ok), null)
                 .showSimpleMessage(message);
-    }
-
-    private void showShebaNumberResult(List<String> bankShebaModel) {
-        mDialogWait.dismiss();
-        if (bankShebaModel != null && bankShebaModel.size() > 0) {
-            new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.sheba_number))
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    }).showShebaDialog(bankShebaModel);
-        }
     }
 
     private void showProgress() {
@@ -323,26 +305,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     }
 
     private void onShebaClicked() {
-
         if (getActivity() != null) {
-            mDialogWait = new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.please_wait) + "..")
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    });
-            mDialogWait.showLoaderDialog(false);
-            if (mode == HomeTabMode.CARD) {
-                viewModel.getShebaNumber(getCurrentAccount());
-            } else if (mode == HomeTabMode.DEPOSIT) {
-                viewModel.getShebaNumberByDeposit(getCurrentAccount());
-            }
+            MobileBankBottomSheetFragment fragment = MobileBankBottomSheetFragment.newInstance(getCurrentAccount(), mode == HomeTabMode.CARD);
+            fragment.show(getActivity().getSupportFragmentManager(), "Sheba");
         }
-
     }
 
     private String getCurrentAccount() {

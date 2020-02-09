@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.iGap.mobileBank.viewmodel.MobileBankBottomSheetViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".mobileBank.view.MobileBankBottomSheetFragment">
+
+        <View
+            android:id="@+id/lineViewTop"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:background="?attr/iGapBottomSheetHeaderLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/title"
+            app:layout_constraintWidth_percent=".34" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:padding="@dimen/dp8"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="visible"
+            android:text="@string/sheba_number"
+            android:textColor="?attr/iGapTitleTextColor"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/rvItems"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvItems"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp140"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp10"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintBottom_toTopOf="@id/btnClose"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{vm.showLoading}"
+            app:layout_constraintTop_toTopOf="@id/rvItems"
+            app:layout_constraintBottom_toBottomOf="@id/rvItems"
+            app:layout_constraintStart_toStartOf="@id/rvItems"
+            app:layout_constraintEnd_toEndOf="@id/rvItems" />
+
+        <TextView
+            android:id="@+id/btnRetry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{vm.showRetry}"
+            android:text="@string/retry_icon"
+            style="@style/myIconTextViewStyle"
+            android:textSize="@dimen/dp40"
+            app:layout_constraintTop_toTopOf="@id/rvItems"
+            app:layout_constraintBottom_toBottomOf="@id/rvItems"
+            app:layout_constraintStart_toStartOf="@id/rvItems"
+            app:layout_constraintEnd_toEndOf="@id/rvItems" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClose"
+            android:layout_width="@dimen/dp200"
+            android:layout_height="wrap_content"
+            style="@style/mobileBankButton"
+            android:layout_marginBottom="@dimen/dp10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvItems"
+            android:text="@string/close" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
