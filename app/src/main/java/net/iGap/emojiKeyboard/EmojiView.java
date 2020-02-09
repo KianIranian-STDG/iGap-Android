@@ -4,8 +4,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -293,48 +296,73 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             compositeDisposable.add(disposable);
         }
 
-        stickerIv = new AppCompatImageView(getContext());
-        stickerIv.setImageResource(R.drawable.ic_sticker);
-        stickerIv.setScaleType(ImageView.ScaleType.CENTER);
+        if (hasEmoji && hasSticker) {
 
-        emojiIv = new AppCompatImageView(getContext());
-        emojiIv.setImageResource(R.drawable.ic_emoji);
-        emojiIv.setScaleType(ImageView.ScaleType.CENTER);
+            stickerIv = new AppCompatImageView(getContext());
+            stickerIv.setImageResource(R.drawable.ic_sticker);
+            stickerIv.setScaleType(ImageView.ScaleType.CENTER);
 
-        settingIv = new AppCompatImageView(getContext());
-        settingIv.setScaleType(ImageView.ScaleType.CENTER);
+            emojiIv = new AppCompatImageView(getContext());
+            emojiIv.setImageResource(R.drawable.ic_emoji);
+            emojiIv.setScaleType(ImageView.ScaleType.CENTER);
 
-        settingIv.setOnClickListener(v -> {
-            if (currentPage == EMOJI)
-                listener.onBackSpace();
-            else if (currentPage == STICKER)
-                listener.onStickerSettingClick();
-        });
+            settingIv = new AppCompatImageView(getContext());
+            settingIv.setScaleType(ImageView.ScaleType.CENTER);
 
-        bottomContainer = new FrameLayout(getContext());
-        bottomViewShadow = new View(getContext());
+            settingIv.setOnClickListener(v -> {
+                if (currentPage == EMOJI)
+                    listener.onBackSpace();
+                else if (currentPage == STICKER)
+                    listener.onStickerSettingClick();
+            });
 
-        bottomViewShadow.setBackgroundColor(Color.parseColor("#BDBDBD"));
+            bottomContainer = new FrameLayout(getContext());
+            bottomViewShadow = new View(getContext());
+            bottomViewShadow.setBackgroundColor(Color.parseColor("#BDBDBD"));
 
-        int emojiX = (layoutWidth / 2) - 20;
-        int stickerX = (layoutWidth / 2) + 20;
+            int emojiX = (layoutWidth / 2) - 20;
+            int stickerX = (layoutWidth / 2) + 20;
 
-        bottomContainer.addView(stickerIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, stickerX, 0, 0, 0));
-        bottomContainer.addView(emojiIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, emojiX, 0, 0, 0));
-        bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
+            bottomContainer.addView(stickerIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, stickerX, 0, 0, 0));
+            bottomContainer.addView(emojiIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, emojiX, 0, 0, 0));
+            bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
-        bottomContainer.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
-        bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
+            bottomContainer.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+            bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
 
-        addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 42, Gravity.BOTTOM));
+            addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 42, Gravity.BOTTOM));
+
+            stickerIv.setOnClickListener(v -> setToSticker());
+            emojiIv.setOnClickListener(v -> setToEmoji());
+
+        } else if (hasEmoji) {
+
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Theme.getInstance().getDividerColor(getContext()));
+
+            bottomContainer = new FrameLayout(getContext()) {
+                @Override
+                protected void dispatchDraw(Canvas canvas) {
+                    canvas.drawArc(new RectF(0, 0, LayoutCreator.dp(45), LayoutCreator.dp(45)), 0f, 360f, true, paint);
+                    super.dispatchDraw(canvas);
+                }
+            };
+
+            settingIv = new AppCompatImageView(getContext());
+            settingIv.setScaleType(ImageView.ScaleType.CENTER);
+            settingIv.setImageResource(R.drawable.ic_backspace);
+
+            bottomContainer.setOnClickListener(v -> listener.onBackSpace());
+
+            bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER));
+            addView(bottomContainer, LayoutCreator.createFrame(45, 45, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 16, 12));
+
+        }
 
         pagerAdapter = new ViewPagerAdapter(views);
 
         viewPager = new ViewPager(getContext());
         viewPager.setAdapter(pagerAdapter);
-
-        stickerIv.setOnClickListener(v -> setToSticker());
-        emojiIv.setOnClickListener(v -> setToEmoji());
 
         viewPager.addOnPageChangeListener(this);
 
@@ -485,26 +513,31 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         bottomContainer.setTag(show ? null : 1);
 
         bottomTabContainerAnimation = new AnimatorSet();
-        bottomTabContainerAnimation.playTogether(
-                ObjectAnimator.ofFloat(bottomContainer, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(54)),
-                ObjectAnimator.ofFloat(bottomViewShadow, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(49)));
+        if (hasEmoji && hasSticker) {
+            bottomTabContainerAnimation.playTogether(
+                    ObjectAnimator.ofFloat(bottomContainer, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(54)),
+                    ObjectAnimator.ofFloat(bottomViewShadow, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(49)));
+        } else {
+            bottomTabContainerAnimation.playTogether(ObjectAnimator.ofFloat(bottomContainer, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(54)));
+        }
         bottomTabContainerAnimation.setDuration(200);
         bottomTabContainerAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
         bottomTabContainerAnimation.start();
     }
 
     private void viewPagerItemChanged(int position) {
-        if (position == EMOJI) {
-            stickerIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
-            emojiIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
-            settingIv.setImageResource(R.drawable.ic_backspace);
-            checkEmojiTabY(null, 0);
-        } else if (position == STICKER) {
-            emojiIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
-            stickerIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
-            settingIv.setImageResource(R.drawable.ic_settings);
-            checkStickersTabY(null, 0);
-        }
+        if (hasEmoji && hasSticker)
+            if (position == EMOJI) {
+                stickerIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
+                emojiIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
+                settingIv.setImageResource(R.drawable.ic_backspace);
+                checkEmojiTabY(null, 0);
+            } else if (position == STICKER) {
+                emojiIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
+                stickerIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
+                settingIv.setImageResource(R.drawable.ic_settings);
+                checkStickersTabY(null, 0);
+            }
         currentPage = position;
     }
 

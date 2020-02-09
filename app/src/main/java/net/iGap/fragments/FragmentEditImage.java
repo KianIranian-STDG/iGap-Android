@@ -2,17 +2,22 @@ package net.iGap.fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,14 +36,20 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.emojiKeyboard.EmojiView;
+import net.iGap.emojiKeyboard.KeyboardView;
+import net.iGap.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.view.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,9 +58,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
+import static android.view.View.VISIBLE;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-public class FragmentEditImage extends BaseFragment {
+public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout.Listener {
 
     private final static String PATH = "PATH";
     private final static String ISCHAT = "ISCHAT";
@@ -60,14 +73,13 @@ public class FragmentEditImage extends BaseFragment {
     private AdapterViewPager mAdapter;
     private TextView txtEditImage;
     public static UpdateImage updateImage;
-    private EditText edtChat;
+    private EventEditText edtChat;
     private TextView iconOk;
     private ViewGroup layoutCaption;
     private MaterialDesignTextView channelOrGroupProfileSetTv;
     private MaterialDesignTextView imvSendButton;
     private ViewGroup rootSend;
     private MaterialDesignTextView imvSmileButton;
-    private boolean isEmojiSHow = false;
     private String SAMPLE_CROPPED_IMAGE_NAME;
     private boolean isChatPage = true;
     private boolean isMultiItem = true;
@@ -81,7 +93,20 @@ public class FragmentEditImage extends BaseFragment {
     private OnImageEdited onProfileImageEdited;
     private boolean isReOpenChatAttachment = true;
     private GalleryListener galleryListener;
+
+    private NotifyFrameLayout rootView;
+    private FrameLayout keyboardContainer;
     private EmojiView emojiView;
+
+    private int keyboardHeight;
+    private int keyboardHeightLand;
+    private boolean keyboardVisible;
+    private int emojiPadding;
+    private int lastSizeChangeValue1;
+    private boolean lastSizeChangeValue2;
+
+    private SharedPreferences emojiSharedPreferences;
+    private String TAG = "abbasiEditImage";
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
@@ -92,7 +117,35 @@ public class FragmentEditImage extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_edit_image, container, false);
+        rootView = new NotifyFrameLayout(inflater.getContext()) {
+            @Override
+            public boolean dispatchKeyEventPreIme(KeyEvent event) {
+                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (isPopupShowing() || isKeyboardVisible()) {
+                        showPopup(-1);
+                        return false;
+                    }
+                    return true;
+                }
+                return super.dispatchKeyEventPreIme(event);
+            }
+        };
+
+        rootView.setListener(this);
+        View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
+        keyboardContainer = view.findViewById(R.id.fl_chat_keyboardContainer);
+        rootView.addView(view, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+        return rootView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getActivity() != null) {
+            emojiSharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
+        }
+
     }
 
     public static FragmentEditImage newInstance(String path, boolean isChatPage, boolean isNicknamePage, int selectPosition) {
@@ -121,12 +174,12 @@ public class FragmentEditImage extends BaseFragment {
 
         if (isChatPage) {
 
-            layoutCaption.setVisibility(View.VISIBLE);
-            imvSendButton.setVisibility(View.VISIBLE);
+            layoutCaption.setVisibility(VISIBLE);
+            imvSendButton.setVisibility(VISIBLE);
             channelOrGroupProfileSetTv.setVisibility(View.GONE);
-            checkBox.setVisibility(View.VISIBLE);
+            checkBox.setVisibility(VISIBLE);
             if (textImageList.size() > 0) {
-                txtCountImage.setVisibility(View.VISIBLE);
+                txtCountImage.setVisibility(VISIBLE);
                 txtCountImage.setText(textImageList.size() + "");
             } else {
                 txtCountImage.setVisibility(View.GONE);
@@ -138,7 +191,7 @@ public class FragmentEditImage extends BaseFragment {
 
             }
         } else {
-            channelOrGroupProfileSetTv.setVisibility(View.VISIBLE);
+            channelOrGroupProfileSetTv.setVisibility(VISIBLE);
             layoutCaption.setVisibility(View.GONE);
             imvSendButton.setVisibility(View.GONE);
             checkBox.setVisibility(View.GONE);
@@ -146,25 +199,15 @@ public class FragmentEditImage extends BaseFragment {
             isMultiItem = false;
         }
 
-        /**
-         *
-         * check list size for show number of select item
-         *
-         */
-
-
-        updateImage = new UpdateImage() {
-            @Override
-            public void result(String pathImageFilter) {
-
-                serCropAndFilterImage(pathImageFilter);
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+        edtChat.setListener(event -> {
+            if (!isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
+                showPopup(KeyboardView.MODE_KEYBOARD);
             }
+        });
+
+        updateImage = pathImageFilter -> {
+            serCropAndFilterImage(pathImageFilter);
+            G.handler.post(() -> mAdapter.notifyDataSetChanged());
         };
 
         setViewPager();
@@ -175,7 +218,7 @@ public class FragmentEditImage extends BaseFragment {
         view.findViewById(R.id.pu_ripple_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtils.closeKeyboard(v);
+                closeKeyboard();
                 if (getActivity() != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
@@ -205,30 +248,28 @@ public class FragmentEditImage extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
             }
 
-            AndroidUtils.closeKeyboard(v);
+            closeKeyboard();
+
         });
 
-        imvSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imvSendButton.setOnClickListener(v -> {
 
-                if (iconOk.isShown()) {
-                    iconOk.performClick();
-                }
-
-                if (getActivity() != null) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
-                }
-                if (galleryListener != null) galleryListener.onImageSent();
-
-                if (textImageList.size() == 0) {
-                    setValueCheckBox(viewPager.getCurrentItem());
-                }
-
-                completeEditImage.result("", edtChat.getText().toString(), textImageList);
-                AndroidUtils.closeKeyboard(v);
-
+            if (iconOk.isShown()) {
+                iconOk.performClick();
             }
+
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+            }
+            if (galleryListener != null) galleryListener.onImageSent();
+
+            if (textImageList.size() == 0) {
+                setValueCheckBox(viewPager.getCurrentItem());
+            }
+
+            completeEditImage.result("", edtChat.getText().toString(), textImageList);
+            closeKeyboard();
+
         });
     }
 
@@ -239,59 +280,51 @@ public class FragmentEditImage extends BaseFragment {
             edtChat.setText("");
         }
 
-        txtEditImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AndroidUtils.closeKeyboard(v);
-                if (getActivity() != null && itemGalleryList.size() > 0) {
-                    if (!isNicknamePage) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
-                    } else {
-                        FragmentFilterImage fragment = FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
-                        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                    }
+        txtEditImage.setOnClickListener(v -> {
+            hideKeyboard();
+            if (getActivity() != null && itemGalleryList.size() > 0) {
+                if (!isNicknamePage) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
+                } else {
+                    FragmentFilterImage fragment = FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
                 }
             }
         });
 
-        iconOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        iconOk.setOnClickListener(v -> {
 
-                String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
-                String message = edtChat.getText().toString();
+            String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
+            String message = edtChat.getText().toString();
 
-                itemGalleryList.get(viewPager.getCurrentItem()).setSelected(false);
-                checkBox.setChecked(true);
-                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+            itemGalleryList.get(viewPager.getCurrentItem()).setSelected(false);
+            checkBox.setChecked(true);
+            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
 
-                StructBottomSheet item = new StructBottomSheet();
-                item.setPath(path);
-                item.setText(message);
-                item.setId(itemGalleryList.get(viewPager.getCurrentItem()).getId());
+            StructBottomSheet item = new StructBottomSheet();
+            item.setPath(path);
+            item.setText(message);
+            item.setId(itemGalleryList.get(viewPager.getCurrentItem()).getId());
 
-                textImageList.put(path, item);
-//                FragmentChat.listPathString.add(itemGalleryList.get(((itemGalleryList.size() - selectPosition) - 1)).path);
-                if (textImageList.size() > 0 && isMultiItem) {
-                    txtCountImage.setVisibility(View.VISIBLE);
-                    txtCountImage.setText(textImageList.size() + "");
-                } else {
-                    txtCountImage.setVisibility(View.GONE);
-                }
-                closeKeyboard(v);
-                v.setVisibility(View.GONE);
+            textImageList.put(path, item);
+            if (textImageList.size() > 0 && isMultiItem) {
+                txtCountImage.setVisibility(VISIBLE);
+                txtCountImage.setText(textImageList.size() + "");
+            } else {
+                txtCountImage.setVisibility(View.GONE);
             }
+
+            v.setVisibility(View.GONE);
+
+            showPopup(-2);
+
         });
 
         edtChat.requestFocus();
 
-        edtChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isEmojiSHow) {
-
-                    imvSmileButton.performClick();
-                }
+        edtChat.setOnClickListener(v -> {
+            if (isPopupShowing()) {
+                imvSmileButton.performClick();
             }
         });
 
@@ -313,30 +346,186 @@ public class FragmentEditImage extends BaseFragment {
                     oldPath = textImageList.get(itemGalleryList.get(viewPager.getCurrentItem()).path).getText();
                 }
                 if (!oldPath.equals(s.toString())) {
-                    iconOk.setVisibility(View.VISIBLE);
+                    iconOk.setVisibility(VISIBLE);
                 } else {
                     iconOk.setVisibility(View.GONE);
                 }
             }
         });
 
+        imvSmileButton.setOnClickListener(v -> onEmojiClicked());
+    }
 
-        imvSmileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                emojiPopup.toggle();
+
+    private void onEmojiClicked() {
+        if (!isPopupShowing()) {
+            showPopup(KeyboardView.MODE_EMOJI);
+        } else {
+            showPopup(KeyboardView.MODE_KEYBOARD);
+        }
+    }
+
+    private void openKeyboardInternal() {
+        edtChat.requestFocus();
+        AndroidUtils.showKeyboard(edtChat);
+    }
+
+    public void closeKeyboard() {
+        edtChat.clearFocus();
+        AndroidUtils.hideKeyboard(edtChat);
+    }
+
+    private boolean isKeyboardVisible() {
+        return AndroidUtils.usingKeyboardInput || keyboardVisible;
+    }
+
+    private boolean isPopupShowing() {
+        return emojiView != null && emojiView.getVisibility() == VISIBLE;
+    }
+
+
+    private void onWindowSizeChanged() {
+        int size = rootView.getHeight();
+        if (!keyboardVisible) {
+            size -= emojiPadding;
+        }
+
+        Log.i(TAG, "onWindowSizeChanged: -> " + size);
+    }
+
+
+    private void showPopup(int show) {
+
+        Log.i(TAG, "showPopup: " + show);
+
+        if (show == KeyboardView.MODE_EMOJI) {
+            if (emojiView == null) {
+                createEmojiView();
             }
-        });
+
+            edtChat.requestFocus();
+            emojiView.setVisibility(VISIBLE);
+
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
+            }
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
+            }
+
+            int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
+
+            ViewGroup.LayoutParams layoutParams = keyboardContainer.getLayoutParams();
+            layoutParams.width = AndroidUtils.displaySize.x;
+            layoutParams.height = currentHeight;
+            keyboardContainer.setLayoutParams(layoutParams);
+
+            if (keyboardVisible) {
+                hideKeyboard();
+            }
+
+            if (rootView != null) {
+                emojiPadding = currentHeight;
+                rootView.requestLayout();
+                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                rootSend.setVisibility(View.GONE);
+                onWindowSizeChanged();
+            }
+        } else if (show == KeyboardView.MODE_KEYBOARD) {
+            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
 
 
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
+            }
+
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
+            }
+
+            ViewGroup.LayoutParams layoutParams = keyboardContainer.getLayoutParams();
+            layoutParams.width = AndroidUtils.displaySize.x;
+            layoutParams.height = keyboardHeight;
+            keyboardContainer.setLayoutParams(layoutParams);
+
+            openKeyboardInternal();
+
+            if (emojiView != null) {
+                emojiView.setVisibility(View.GONE);
+            }
+
+            rootSend.setVisibility(View.GONE);
+
+            if (rootView != null) {
+                rootView.requestLayout();
+                onWindowSizeChanged();
+            }
+
+        } else {
+            rootSend.setVisibility(VISIBLE);
+            keyboardContainer.setVisibility(View.GONE);
+            emojiView.setVisibility(View.GONE);
+        }
+
+        if (show == KeyboardView.MODE_KEYBOARD) {
+            emojiPadding = 0;
+        }
+    }
+
+    private void createEmojiView() {
+        if (emojiView == null) {
+            emojiView = new EmojiView(rootView.getContext(), false, true);
+            emojiView.setVisibility(View.GONE);
+            emojiView.setContentView(EmojiView.EMOJI);
+            emojiView.setListener(new EmojiView.Listener() {
+                @Override
+                public void onBackSpace() {
+                    if (edtChat.length() == 0) {
+                        return;
+                    }
+                    edtChat.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+                }
+
+                @Override
+                public void onStickerClick(StructIGSticker structIGSticker) {
+
+                }
+
+                @Override
+                public void onStickerSettingClick() {
+
+                }
+
+                @Override
+                public void onAddStickerClicked() {
+
+                }
+
+                @Override
+                public void onEmojiSelected(String unicode) {
+                    int i = edtChat.getSelectionEnd();
+
+                    if (i < 0) i = 0;
+
+                    try {
+                        CharSequence sequence = EmojiManager.getInstance().replaceEmoji(unicode, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false);
+                        if (edtChat.getText() != null)
+                            edtChat.setText(edtChat.getText().insert(i, sequence));
+                        int j = i + sequence.length();
+                        edtChat.setSelection(j, j);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        keyboardContainer.addView(emojiView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
     }
 
     private void setCheckBoxItem() {
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isMultiItem) setValueCheckBox(viewPager.getCurrentItem());
-            }
+        checkBox.setOnClickListener(v -> {
+            if (isMultiItem) setValueCheckBox(viewPager.getCurrentItem());
         });
 
         if (itemGalleryList.get(viewPager.getCurrentItem()).isSelected) {
@@ -420,49 +609,64 @@ public class FragmentEditImage extends BaseFragment {
 
     }
 
+    @Override
+    public void onSizeChanged(int keyboardSize, boolean land) {
+        if (keyboardSize > LayoutCreator.dp(50) && keyboardVisible /*&& !AndroidUtilities.isInMultiwindow && !forceFloatingEmoji*/) {
+            if (land) {
+                keyboardHeightLand = keyboardSize;
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, keyboardHeightLand).apply();
+            } else {
+                keyboardHeight = keyboardSize;
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, keyboardHeight).apply();
+            }
+        }
+
+        if (isPopupShowing()) {
+            int newHeight;
+            if (land) {
+                newHeight = keyboardHeightLand;
+            } else {
+                newHeight = keyboardHeight;
+            }
+
+            ViewGroup.LayoutParams layoutParams = keyboardContainer.getLayoutParams();
+            if (layoutParams.width != AndroidUtils.displaySize.x || layoutParams.height != newHeight) {
+                layoutParams.width = AndroidUtils.displaySize.x;
+                layoutParams.height = newHeight;
+                keyboardContainer.setLayoutParams(layoutParams);
+
+                if (rootView != null) {
+                    emojiPadding = layoutParams.height;
+                    rootView.requestLayout();
+                    onWindowSizeChanged();
+                }
+            }
+        }
+
+        if (lastSizeChangeValue1 == keyboardSize && lastSizeChangeValue2 == land) {
+            onWindowSizeChanged();
+            return;
+        }
+        lastSizeChangeValue1 = keyboardSize;
+        lastSizeChangeValue2 = land;
+
+        boolean oldValue = keyboardVisible;
+        keyboardVisible = keyboardSize > 0;
+        if (keyboardVisible && isPopupShowing()) {
+            showPopup(-1);
+        }
+        if (emojiPadding != 0 && !keyboardVisible && keyboardVisible != oldValue && !isPopupShowing()) {
+            emojiPadding = 0;
+            rootView.requestLayout();
+        }
+        onWindowSizeChanged();
+    }
+
     public interface UpdateImage {
         void result(String path);
     }
-
-    private void setEmojiColor(View view, int BackgroundColor, int iconColor, int dividerColor) {
-
-//        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
-//                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-//
-//                    @Override
-//                    public void onEmojiBackspaceClick(View v) {
-//
-//                    }
-//                }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-//                    @Override
-//                    public void onEmojiPopupShown() {
-//                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-//                        isEmojiSHow = true;
-//                    }
-//                }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-//                    @Override
-//                    public void onKeyboardOpen(final int keyBoardHeight) {
-//
-//                    }
-//                }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-//                    @Override
-//                    public void onEmojiPopupDismiss() {
-//                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-//                        isEmojiSHow = false;
-//                    }
-//                }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-//                    @Override
-//                    public void onKeyboardClose() {
-//                        emojiPopup.dismiss();
-//                    }
-//                })
-//                .setBackgroundColor(BackgroundColor)
-//                .setIconColor(iconColor)
-//                .setDividerColor(dividerColor)
-//                .build(edtChat);
-
-    }
-
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
         imvSmileButton.setText(drawableResourceId);
@@ -475,25 +679,25 @@ public class FragmentEditImage extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (getView() == null) {
-            return;
-        }
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
-                    AndroidUtils.closeKeyboard(v);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
-                    if (G.openBottomSheetItem != null && isChatPage && isReOpenChatAttachment)
-                        G.openBottomSheetItem.openBottomSheet(false);
-                    return true;
-                }
-                return false;
-            }
-        });
+//
+//        if (getView() == null) {
+//            return;
+//        }
+//        getView().setFocusableInTouchMode(true);
+//        getView().requestFocus();
+//        getView().setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
+//                    closeKeyboard();
+//                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+//                    if (G.openBottomSheetItem != null && isChatPage && isReOpenChatAttachment)
+//                        G.openBottomSheetItem.openBottomSheet(false);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
     }
 
     private class AdapterViewPager extends PagerAdapter {
@@ -564,7 +768,7 @@ public class FragmentEditImage extends BaseFragment {
             itemGalleryList.get(position).setSelected(false);
         }
         if (textImageList.size() > 0 && isChatPage) {
-            txtCountImage.setVisibility(View.VISIBLE);
+            txtCountImage.setVisibility(VISIBLE);
             txtCountImage.setText(textImageList.size() + "");
         } else {
             txtCountImage.setVisibility(View.GONE);
@@ -589,6 +793,8 @@ public class FragmentEditImage extends BaseFragment {
         rootSend = view.findViewById(R.id.pu_layout_cancel_crop);
         txtEditImage = view.findViewById(R.id.txtEditImage);
         edtChat = view.findViewById(R.id.chl_edt_chat);
+        edtChat.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        edtChat.setInputType(edtChat.getInputType() | EditorInfo.TYPE_TEXT_FLAG_CAP_SENTENCES);
         edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
         viewPager = view.findViewById(R.id.viewPagerEditText);
@@ -726,6 +932,13 @@ public class FragmentEditImage extends BaseFragment {
         mAdapter.notifyDataSetChanged();
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (rootView != null)
+            rootView.setListener(null);
     }
 
     public interface GalleryListener {

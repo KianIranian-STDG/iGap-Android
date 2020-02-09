@@ -663,6 +663,7 @@ public final class AndroidUtils {
 
     public static float density = 1;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
+    public static boolean usingKeyboardInput;
 
 
     public static int getViewInset(View view) {
@@ -705,6 +706,9 @@ public final class AndroidUtils {
             }
 
             WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+            usingKeyboardInput = configuration.keyboard != Configuration.KEYBOARD_NOKEYS && configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO;
+
             if (manager != null) {
                 Display display = manager.getDefaultDisplay();
                 if (display != null) {

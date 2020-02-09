@@ -128,19 +128,19 @@
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
                 style="@style/myIconToolbarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="@dimen/dp52"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:paddingBottom="@dimen/dp8"
                 android:text="@string/md_emoticon_with_happy_face"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dp20" />
+                android:textSize="@dimen/dp26" />
 
 
-            <EditText
+            <net.iGap.view.EventEditText
                 android:id="@+id/chl_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -160,8 +160,8 @@
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_ok_message"
                 style="@style/myIconToolbarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="@dimen/dp52"
                 android:layout_gravity="bottom"
                 android:gravity="bottom"
                 android:paddingLeft="@dimen/dp8"
@@ -169,11 +169,16 @@
                 android:paddingBottom="@dimen/dp8"
                 android:text="@string/check_icon"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dp20"
+                android:textSize="@dimen/dp26"
                 android:visibility="gone" />
 
 
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_chat_keyboardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/pu_layout_cancel_crop"
