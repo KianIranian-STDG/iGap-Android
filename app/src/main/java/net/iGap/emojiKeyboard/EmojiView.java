@@ -283,6 +283,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             addStickerIv.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
             addStickerIv.setScaleType(ImageView.ScaleType.CENTER);
             addStickerIv.setOnClickListener(v -> listener.onAddStickerClicked());
+            addStickerIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
 
             stickerContainer.addView(stickerGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
             stickerContainer.addView(stickerTabView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 40, Gravity.TOP, 0, 0, 40, 0));
@@ -301,13 +302,16 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerIv = new AppCompatImageView(getContext());
             stickerIv.setImageResource(R.drawable.ic_sticker);
             stickerIv.setScaleType(ImageView.ScaleType.CENTER);
+            stickerIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
 
             emojiIv = new AppCompatImageView(getContext());
             emojiIv.setImageResource(R.drawable.ic_emoji);
             emojiIv.setScaleType(ImageView.ScaleType.CENTER);
+            emojiIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
 
             settingIv = new AppCompatImageView(getContext());
             settingIv.setScaleType(ImageView.ScaleType.CENTER);
+            settingIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
 
             settingIv.setOnClickListener(v -> {
                 if (currentPage == EMOJI)
@@ -351,11 +355,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             settingIv = new AppCompatImageView(getContext());
             settingIv.setScaleType(ImageView.ScaleType.CENTER);
             settingIv.setImageResource(R.drawable.ic_backspace);
+            settingIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
 
             bottomContainer.setOnClickListener(v -> listener.onBackSpace());
 
             bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER));
-            addView(bottomContainer, LayoutCreator.createFrame(45, 45, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 16, 12));
+            addView(bottomContainer, LayoutCreator.createFrame(45, 45, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 16, 10));
 
         }
 
