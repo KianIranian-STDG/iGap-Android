@@ -670,13 +670,31 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EmojiManager.getInstance().loadRecentEmoji();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
         G.locationListener = this;
 
-        notifyFrameLayout = new NotifyFrameLayout(context);
+        notifyFrameLayout = new NotifyFrameLayout(context) {
+            @Override
+            public boolean dispatchKeyEventPreIme(KeyEvent event) {
+                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (keyboardVisible) {
+                        showPopup(-1);
+                        return true;
+                    }
+                    return false;
+                }
+                return super.dispatchKeyEventPreIme(event);
+            }
+        };
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
@@ -701,8 +719,6 @@ public class FragmentChat extends BaseFragment
         edtChat.setListener(this::chatMotionEvent);
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
-
-        EmojiManager.getInstance().loadRecentEmoji();
 
         return attachToSwipeBack(notifyFrameLayout);
     }
@@ -3367,7 +3383,12 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showPopup(int mode) {
-        keyboardViewVisible = true;
+
+        if (mode != -1) {
+            keyboardViewVisible = true;
+            if (keyboardView != null && keyboardView.getVisibility() == View.GONE)
+                keyboardView.setVisibility(View.VISIBLE);
+        }
 
         if (mode == KeyboardView.MODE_EMOJI) {
             if (keyboardView == null) {
@@ -3431,9 +3452,11 @@ public class FragmentChat extends BaseFragment
 
                 keyboardVisible = true;
             }
+        } else {
+            closeKeyboard();
+            G.handler.postDelayed(this::hideKeyboardView, 100);
         }
     }
-
 
     private void getStickerByEmoji(String unicode) {
         if (lastChar == null) {
@@ -3480,7 +3503,6 @@ public class FragmentChat extends BaseFragment
             compositeDisposable.add(disposable);
         }
     }
-
 
     private void hideKeyboardView() {
         if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {

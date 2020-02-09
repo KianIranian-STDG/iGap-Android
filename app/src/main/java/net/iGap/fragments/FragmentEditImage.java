@@ -383,7 +383,6 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         return emojiView != null && emojiView.getVisibility() == VISIBLE;
     }
 
-
     private void onWindowSizeChanged() {
         int size = rootView.getHeight();
         if (!keyboardVisible) {
@@ -392,7 +391,6 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
         Log.i(TAG, "onWindowSizeChanged: -> " + size);
     }
-
 
     private void showPopup(int show) {
 
