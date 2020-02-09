@@ -45,13 +45,14 @@ public class BankCardsAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         View layout = LayoutInflater.from(container.getContext()).inflate(R.layout.view_bank_card, container, false);
-        TextView tvName, tvNumber , icAdd;
-        ImageView ivLogo;
+        TextView tvName, tvNumber, icAdd;
+        ImageView ivLogo, ivShetabLogo;
         ConstraintLayout lytRoot ;
 
         tvName = layout.findViewById(R.id.tvName);
         tvNumber = layout.findViewById(R.id.tvNumber);
         ivLogo = layout.findViewById(R.id.ivBankLogo);
+        ivShetabLogo = layout.findViewById(R.id.ivBankShetabLogo);
         icAdd = layout.findViewById(R.id.tvAdd);
         lytRoot = layout.findViewById(R.id.lytRoot);
 
@@ -66,6 +67,7 @@ public class BankCardsAdapter extends PagerAdapter {
         }else {
 
             icAdd.setVisibility(View.VISIBLE);
+            ivShetabLogo.setVisibility(View.GONE);
             lytRoot.setBackgroundResource(R.drawable.shape_gray_round_stroke_dash);
             tvName.setVisibility(View.GONE);
             tvNumber.setVisibility(View.GONE);

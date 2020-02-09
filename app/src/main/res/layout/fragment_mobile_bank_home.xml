@@ -22,10 +22,12 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
             android:layoutDirection="ltr"
-
+            app:tabIndicatorHeight="@dimen/dp2"
             app:tabBackground="?rootBackgroundColor"
-            app:tabIndicatorColor="?iGapPrimaryIconTextColor" />
+            app:tabIndicatorColor="@color/brown" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"

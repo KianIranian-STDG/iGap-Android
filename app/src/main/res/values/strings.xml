@@ -2419,6 +2419,7 @@ Want to get it?</string>
     <string name="sheba_number">SHEBA Number</string>
     <string name="get_temporary_password">Get POOYA Password</string>
     <string name="accounts">Accounts</string>
+    <string name="account">Account</string>
     <string name="cheque">Cheque</string>
     <string name="facilities">Loans</string>
     <string name="services">Services</string>
@@ -2437,6 +2438,7 @@ Want to get it?</string>
     <string name="mobile_bank_balance_pass">Password:</string>
     <string name="mobile_bank_balance_cvv">CVV2:</string>
     <string name="mobile_bank_balance_expireDate">Expire Date: (year/month)</string>
+    <string name="mobile_bank_balance_expireDate2">Expire Date:</string>
     <string name="mobile_bank_balance_cardError">please enter your Parsian card number.</string>
     <string name="mobile_bank_balance_cardLengthError">your card number must be 16 digits.</string>
     <string name="mobile_bank_balance_passwordError">please enter your password.</string>
@@ -2521,5 +2523,6 @@ Want to get it?</string>
     <string name="bill_title">Paying the bill</string>
     <string name="topUp_message">Recharge purchase message</string>
     <string name="bill_message">Bill payment message</string>
+    <string name="soon">Coming soon...</string>
 
 </resources>

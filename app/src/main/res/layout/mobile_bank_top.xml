@@ -10,7 +10,7 @@
         android:id="@+id/parsianIcon"
         android:layout_margin="@dimen/dp6"
         android:adjustViewBounds="true"
-        app:srcCompat="@drawable/bank_logo_parsian"
+        app:srcCompat="@drawable/ic_logo_parsian_svg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/graphicLine" />

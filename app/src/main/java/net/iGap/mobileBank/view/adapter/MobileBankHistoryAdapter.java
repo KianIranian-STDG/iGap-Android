@@ -1,10 +1,12 @@
 package net.iGap.mobileBank.view.adapter;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -142,8 +144,8 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
             if (mdata.get(position).getTransferAmount() < 0) {
                 title.setText("برداشت");
                 statusIcon.setText(R.string.bank_withdraw_ic);
-                statusIcon.setTextColor(context.getResources().getColor(R.color.red));
-                value.setTextColor(context.getResources().getColor(R.color.red));
+                statusIcon.setTextColor(context.getResources().getColor(R.color.brown));
+                value.setTextColor(context.getResources().getColor(R.color.brown));
             } else {
                 title.setText("واریز");
                 statusIcon.setText(R.string.bank_income_ic);

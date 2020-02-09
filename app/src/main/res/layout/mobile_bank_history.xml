@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -44,6 +45,72 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <Spinner
+                        android:id="@+id/spAccounts"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        app:layout_constraintStart_toStartOf="@id/lytAccounts"
+                        app:layout_constraintEnd_toEndOf="@id/lytAccounts"
+                        app:layout_constraintTop_toTopOf="@id/lytAccounts"
+                        app:layout_constraintBottom_toBottomOf="@id/lytAccounts" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/lytAccounts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp32"
+                        android:layout_marginRight="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp10"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@drawable/shape_round_gray">
+
+                        <TextView
+                            android:id="@+id/tvNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@id/accountsArrow"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:textColor="?iGapTitleTextColor"
+                            android:textSize="@dimen/smallTextSize"
+                            tools:text="6221 0610 1123 5548"
+                            android:paddingRight="@dimen/dp1"
+                            android:paddingLeft="@dimen/dp1"
+                            android:layout_margin="@dimen/dp8" />
+
+                        <TextView
+                            android:id="@+id/accountsArrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tvNumber"
+                            app:layout_constraintBottom_toBottomOf="@id/tvNumber"
+                            android:layout_marginLeft="@dimen/dp10"
+                            android:layout_marginRight="@dimen/dp10"
+                            style="@style/myIconTextViewStyle"
+                            android:text="@string/down_arrow_icon"
+                            android:textSize="@dimen/largeTextSize" />
+
+                        <TextView
+                            android:id="@+id/tvType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:textColor="?iGapTitleTextColor"
+                            android:textSize="@dimen/smallTextSize"
+                            android:paddingStart="@dimen/dp16"
+                            android:paddingLeft="@dimen/dp16"
+                            tools:text="@string/card_number"
+                            android:layout_margin="@dimen/dp8" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -61,15 +128,16 @@
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/iGapButton"
+                        style="@style/mobileBankButton"
                         android:id="@+id/reportBtn"
                         android:minHeight="@dimen/dp32"
                         android:layout_marginEnd="@dimen/dp32"
                         android:layout_marginRight="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp10"
                         android:text="@string/financial_report"
                         android:textSize="@dimen/standardTextSize"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/lytAccounts" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
@@ -108,60 +176,43 @@
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/incomeTitle"
-                        android:text="Income"
-                        android:gravity="center"
+                        android:id="@+id/servicesTitle"
+                        android:text="@string/services"
+                        android:gravity="start"
                         android:textSize="@dimen/standardTextSize"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:layout_marginStart="@dimen/dp20"
+                        android:layout_marginEnd="@dimen/dp20"
                         android:layout_marginTop="@dimen/dp26"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/timeRecycler"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/withdrawTitle"
-                        android:text="withdrawal"
-                        android:gravity="center"
-                        android:textSize="@dimen/standardTextSize"
                         android:textColor="?iGapSubtitleTextColor"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toTopOf="@+id/incomeTitle"
-                        app:layout_constraintStart_toEndOf="@+id/incomeTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/timeRecycler"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginEnd="@dimen/dp16"
+                        app:layout_constraintTop_toTopOf="@id/servicesTitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/servicesTitle"
+                        app:layout_constraintStart_toEndOf="@+id/servicesTitle"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/incomeValue"
-                        android:text="@{viewModel.income}"
-                        android:gravity="center"
-                        android:textSize="@dimen/largeTextSize"
-                        android:textStyle="bold"
-                        android:layout_marginTop="@dimen/dp8"
-                        android:textColor="?iGapTitleTextColor"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/incomeTitle"
+                        android:id="@+id/rvItems"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        android:layout_marginLeft="@dimen/dp6"
+                        android:layout_marginTop="@dimen/dp12"
+                        android:layout_marginBottom="@dimen/dp12"
+                        android:layout_marginRight="@dimen/dp6"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/withdrawTitle" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/withdrawValue"
-                        android:text="@{viewModel.withdraw}"
-                        android:gravity="center"
-                        android:textSize="@dimen/largeTextSize"
-                        android:textStyle="bold"
-                        android:textColor="?iGapTitleTextColor"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toTopOf="@+id/incomeValue"
-                        app:layout_constraintStart_toEndOf="@+id/incomeTitle"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/servicesTitle" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -170,11 +221,11 @@
                         android:text="@string/mobile_bank_sorathesab"
                         android:gravity="start"
                         android:textSize="@dimen/standardTextSize"
-                        android:layout_marginStart="@dimen/dp32"
-                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginStart="@dimen/dp20"
+                        android:layout_marginEnd="@dimen/dp20"
                         android:layout_marginTop="@dimen/dp26"
                         android:textColor="?iGapSubtitleTextColor"
-                        app:layout_constraintTop_toBottomOf="@+id/withdrawValue"
+                        app:layout_constraintTop_toBottomOf="@+id/rvItems"
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <View

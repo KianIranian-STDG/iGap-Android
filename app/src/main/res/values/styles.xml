@@ -252,6 +252,10 @@
         <item name="backgroundTint">?iGapButtonColor</item>
     </style>
 
+    <style name="mobileBankButton" parent="BaseIGapButtonStyle">
+        <item name="backgroundTint">@color/brown</item>
+    </style>
+
     <style name="iGapButtonSecondary" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">?iGapSubtitleTextColor</item>
     </style>

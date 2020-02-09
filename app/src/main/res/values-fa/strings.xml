@@ -2353,6 +2353,7 @@
     <string name="get_temporary_password">دریافت رمز پویا</string>
     <string name="kuknos_soon_error">مبادله توکن ها به زودی فعال میشود.</string>
     <string name="accounts">حساب ها</string>
+    <string name="account">حساب</string>
     <string name="cheque">چک</string>
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
@@ -2372,6 +2373,7 @@
     <string name="mobile_bank_balance_cvv">"شماره CVV2: "</string>
     <string name="mobile_bank_balance_dateError">لطفا تاریخ انقضای کارت خود را وارد کنید.</string>
     <string name="mobile_bank_balance_expireDate">تاریخ انقضا: (ماه/سال)</string>
+    <string name="mobile_bank_balance_expireDate2">تاریخ انقضا:</string>
     <string name="mobile_bank_balance_pass">رمز کارت:</string>
     <string name="mobile_bank_balance_passwordError">لطفا رمز کارت خود را وارد کنید.</string>
     <string name="mobile_bank_balance_title">موجودی کارت بانکی</string>
@@ -2456,4 +2458,5 @@
     <string name="mobile_bank_hotCard_success">کارت شما با موفقیت باطل شد.</string>
     <string name="kuknos_RecoverySK_languageTitle">زبان کلمات بازیابی</string>
     <string name="kuknos_RecoverySK_lengthTitle">تعداد کلمات بازیابی</string>
+    <string name="soon">بزودی...</string>
 </resources>
