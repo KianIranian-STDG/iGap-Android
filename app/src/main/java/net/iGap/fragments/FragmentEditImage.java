@@ -405,6 +405,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
             edtChat.requestFocus();
             emojiView.setVisibility(VISIBLE);
+            keyboardContainer.setVisibility(VISIBLE);
 
             if (keyboardHeight <= 0) {
                 keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
@@ -421,7 +422,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             keyboardContainer.setLayoutParams(layoutParams);
 
             if (keyboardVisible) {
-                hideKeyboard();
+                closeKeyboard();
             }
 
             if (rootView != null) {
@@ -434,6 +435,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         } else if (show == KeyboardView.MODE_KEYBOARD) {
             changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
 
+            keyboardContainer.setVisibility(VISIBLE);
 
             if (keyboardHeight <= 0) {
                 keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
@@ -465,6 +467,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             rootSend.setVisibility(VISIBLE);
             keyboardContainer.setVisibility(View.GONE);
             emojiView.setVisibility(View.GONE);
+            closeKeyboard();
         }
 
         if (show == KeyboardView.MODE_KEYBOARD) {
@@ -674,6 +677,12 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
     public interface CompleteEditImage {
         void result(String path, String message, HashMap<String, StructBottomSheet> textImageList);
+    }
+
+    @Override
+    public void onPause() {
+        showPopup(-1);
+        super.onPause();
     }
 
     @Override

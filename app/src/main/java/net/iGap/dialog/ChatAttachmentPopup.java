@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -41,22 +40,23 @@ import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.OnClickCamera;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPathAdapterBottomSheet;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructBottomSheet;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.selector.ResolutionSelectorsKt;
 
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.R.string.item;
 import static net.iGap.fragments.FragmentChat.listPathString;
 
@@ -92,6 +92,9 @@ public class ChatAttachmentPopup {
     private View contentView;
     private int mChatBoxHeight;
     private int mMessagesLayoutHeight;
+
+    private SharedPreferences emojiSharedPreferences;
+
 
     private ChatAttachmentPopup() {
     }
@@ -770,21 +773,19 @@ public class ChatAttachmentPopup {
     }
 
     private int getKeyboardHeight() {
-        try {
-            final InputMethodManager imm = (InputMethodManager) mContext.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            final Class inputMethodManagerClass = imm.getClass();
-            final Method visibleHeightMethod = inputMethodManagerClass.getDeclaredMethod("getInputMethodWindowVisibleHeight");
-            visibleHeightMethod.setAccessible(true);
-            return (int) visibleHeightMethod.invoke(imm);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+
+        int currentHeight = LayoutCreator.dp(300);
+
+        if (contentView != null) {
+            emojiSharedPreferences = mContext.getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
+            int keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
+            int keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
+
+            currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
+
         }
 
-        return ViewGroup.LayoutParams.WRAP_CONTENT;
+        return currentHeight;
     }
 
     private void animateViewWithCircularReveal(View myView) {
