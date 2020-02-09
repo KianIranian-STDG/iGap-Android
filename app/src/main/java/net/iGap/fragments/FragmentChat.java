@@ -3505,6 +3505,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private void hideKeyboardView() {
+        if (keyboardView == null)
+            return;
+
         if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
             layoutParams.bottomMargin = LayoutCreator.dp(60);
@@ -3526,10 +3529,6 @@ public class FragmentChat extends BaseFragment
             showPopup(KeyboardView.MODE_KEYBOARD);
             openKeyboardInternal();
         }
-    }
-
-    public void openKeyboard() {
-        AndroidUtils.showKeyboard(edtChat);
     }
 
     public void closeKeyboard() {
@@ -5744,10 +5743,10 @@ public class FragmentChat extends BaseFragment
             mAdapter.deselect();
 
             edtChat.requestFocus();
-            InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.showSoftInput(edtChat, InputMethodManager.SHOW_IMPLICIT);
-            }
+
+            showPopup(KeyboardView.MODE_KEYBOARD);
+            openKeyboardInternal();
+            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
 
             //disable chat search when reply a message
             if (ll_Search != null && ll_Search.isShown()) goneSearchBox(edtSearchMessage);
