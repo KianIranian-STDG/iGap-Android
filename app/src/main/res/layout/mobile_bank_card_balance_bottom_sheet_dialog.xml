@@ -85,6 +85,7 @@
             android:hint="@string/mobile_bank_balance_pass"
             android:textColorHint="?attr/iGapHintTextColor"
             app:passwordToggleEnabled="true"
+            app:passwordToggleTint="?iGapSubtitleTextColor"
             app:errorText="@{bottomSheetViewModel.passwordError}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

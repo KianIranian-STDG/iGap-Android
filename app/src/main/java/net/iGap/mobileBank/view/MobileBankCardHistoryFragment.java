@@ -2,11 +2,11 @@ package net.iGap.mobileBank.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -25,8 +25,11 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
+import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
 import net.iGap.mobileBank.repository.model.MobileBankHomeItemsModel;
+import net.iGap.mobileBank.view.adapter.AccountSpinnerAdapter;
 import net.iGap.mobileBank.view.adapter.BankHomeItemAdapter;
 import net.iGap.mobileBank.view.adapter.MobileBankDateAdapter;
 import net.iGap.mobileBank.view.adapter.MobileBankHistoryAdapter;
@@ -48,8 +51,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private String mCurrentNumber;
     private boolean isCard;
     private DialogParsian mDialogWait;
-
-    private static final String TAG = "Amini";
+    private List<String> items = new ArrayList<>();
 
     public static MobileBankCardHistoryFragment newInstance(String accountNumber, boolean isCard) {
         MobileBankCardHistoryFragment frag = new MobileBankCardHistoryFragment();
@@ -80,8 +82,64 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
+
+        if (getArguments() == null) popBackStackFragment();
+        mCurrentNumber = getArguments().getString("accountNum");
+        isCard = getArguments().getBoolean("isCard");
+
+        setupToolbar();
+        setupSpinner();
+        initial();
+        setupListener();
+        setupRecyclerItems();
+    }
+
+    private void setupSpinner() {
+        AccountSpinnerAdapter adapter = new AccountSpinnerAdapter(getAccountsItem(), isCard);
+        binding.spAccounts.setAdapter(adapter);
+        binding.spAccounts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String number = items.get(position);
+                if (getArguments() != null) getArguments().putString("accountNum", number);
+                mCurrentNumber = number;
+
+                resetMainRecycler();
+                viewModel.getBalance().set("...");
+                viewModel.setDepositNumber(mCurrentNumber);
+                binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(mCurrentNumber, isCard));
+                viewModel.getAccountDataForMonth(0);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        binding.lytAccounts.setOnClickListener(v -> binding.spAccounts.performClick());
+
+    }
+
+    private List<String> getAccountsItem() {
+        items = new ArrayList<>();
+        if (isCard) {
+            List<RealmMobileBankCards> cards = RealmMobileBankCards.getCards();
+            for (RealmMobileBankCards card : cards) {
+                items.add(card.getCardNumber());
+            }
+        } else {
+            List<RealmMobileBankAccounts> accounts = RealmMobileBankAccounts.getAccounts();
+            for (RealmMobileBankAccounts account : accounts) {
+                items.add(account.getAccountNumber());
+            }
+        }
+
+        return items;
+    }
+
+    private void setupToolbar() {
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -99,14 +157,9 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         LinearLayout toolbarLayout = binding.Toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        initial();
-        setupListener();
-        setupRecyclerItems();
     }
 
     private void initial() {
-        mCurrentNumber = getArguments().getString("accountNum");
-        isCard = getArguments().getBoolean("isCard");
 
         viewModel.setDepositNumber(mCurrentNumber);
         viewModel.setCard(isCard);
@@ -146,7 +199,6 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
                 if (diff == 0) {
                     isLoading = true;
                     currentPage++;
-                    Log.d(TAG, "loadMoreItems: Load more Bitch!!!");
                     viewModel.getAccountDataForMonth(currentPage * 30);
                 }
             }
@@ -154,8 +206,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
 
         // open page for reports
         binding.reportBtn.setOnClickListener(v -> {
-            viewModel.getShowRequestErrorMessage().setValue("Will be added SOON!");
-            showDateSelectorDialog();
+            showMessage(binding.reportBtn.getContext().getString(R.string.financial_report), binding.reportBtn.getContext().getString(R.string.soon));
         });
 
         onDateChangedListener();
@@ -167,35 +218,6 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
                 .setTitle(title)
                 .setButtonsText(getString(R.string.ok), null)
                 .showSimpleMessage(message);
-    }
-
-    private void showDateSelectorDialog() {
-        /*Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "IRANSansMobile.ttf");
-        PersianCalendar initDate = new PersianCalendar();
-        PersianDatePickerDialog picker = new PersianDatePickerDialog(getContext())
-                .setMinYear(1300)
-                .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
-                .setTypeFace(typeface)
-                .setPositiveButtonResource(R.string.select)
-                .setNegativeButtonResource(R.string.cancel)
-                .setTodayButtonResource(R.string.today)
-                .setTodayButtonVisible(true)
-                .setInitDate(initDate)
-                .setTitleColor(new Theme().getButtonTextColor(getContext()))
-                .setActionTextColor(new Theme().getButtonTextColor(getContext()))
-                .setBackgroundColor(new Theme().getRootColor(getContext()))
-                .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
-                .setShowInBottomSheet(true)
-                .setListener(new Listener() {
-                    @Override
-                    public void onDateSelected(PersianCalendar persianCalendar) {
-                    }
-
-                    @Override
-                    public void onDismissed() {
-                    }
-                });
-        picker.show();*/
     }
 
     private void initMainRecycler(List<BankHistoryModel> data) {
@@ -307,7 +329,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
 
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_card_to_card));
+        items.add(new MobileBankHomeItemsModel(R.string.cardToCardBtnText, R.drawable.ic_mb_card_to_card));
         items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
         items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.drawable.ic_mb_pooya_pass));
         items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.drawable.ic_mb_block));

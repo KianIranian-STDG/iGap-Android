@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 
 import java.util.List;
@@ -21,9 +22,9 @@ import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;
 
 public class BankAccountsAdapter extends PagerAdapter {
 
-    private List<BankAccountModel> mAccounts;
+    private List<RealmMobileBankAccounts> mAccounts;
 
-    public BankAccountsAdapter(List<BankAccountModel> accounts) {
+    public BankAccountsAdapter(List<RealmMobileBankAccounts> accounts) {
         this.mAccounts = accounts;
         //cards.add(null); // for add
     }
@@ -56,7 +57,7 @@ public class BankAccountsAdapter extends PagerAdapter {
             icAdd.setVisibility(View.GONE);
             lytRoot.setBackgroundResource(R.drawable.shape_card_background_gray);
             setTextSize(tvName, R.dimen.smallTextSize);
-            tvName.setText(mAccounts.get(position).getTitle());
+            tvName.setText(mAccounts.get(position).getAccountName());
             tvNumber.setText(checkAndSetPersianNumberIfNeeded(mAccounts.get(position).getAccountNumber()));
 
         } else {

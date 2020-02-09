@@ -2458,4 +2458,5 @@
     <string name="mobile_bank_hotCard_success">کارت شما با موفقیت باطل شد.</string>
     <string name="kuknos_RecoverySK_languageTitle">زبان کلمات بازیابی</string>
     <string name="kuknos_RecoverySK_lengthTitle">تعداد کلمات بازیابی</string>
+    <string name="soon">بزودی...</string>
 </resources>

@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import net.iGap.R;
 import net.iGap.databinding.MobileBankHomeTabFragmentBinding;
 import net.iGap.helper.HelperFragment;
+import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
@@ -150,7 +151,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_card_to_card));
+        items.add(new MobileBankHomeItemsModel(R.string.cardToCardBtnText, R.drawable.ic_mb_card_to_card));
         items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.drawable.ic_mb_balance));
         items.add(new MobileBankHomeItemsModel(R.string.transactions, R.drawable.ic_mb_transaction));
         items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
@@ -188,7 +189,9 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             if (bankCardModels != null) saveCardsTodb(bankCardModels);
         });
 
-        viewModel.getAccountsData().observe(getViewLifecycleOwner(), this::setupViewPagerDeposits);
+        viewModel.getAccountsData().observe(getViewLifecycleOwner(), bankAccountModels -> {
+            if (bankAccountModels != null) saveAccountsTodb(bankAccountModels);
+        });
 
         viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
 
@@ -368,11 +371,16 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         RealmMobileBankCards.putOrUpdate(bankCardModels, this::setupViewPagerCards);
     }
 
-    private void setupViewPagerDeposits(List<BankAccountModel> accountModels) {
-        if (accountModels == null || accountModels.size() == 0) return;
-        binding.vpCards.setAdapter(new BankAccountsAdapter(accountModels));
-        binding.vpCards.setOffscreenPageLimit(accountModels.size() - 1);
-        initViewPager(accountModels.size());
+    private void saveAccountsTodb(List<BankAccountModel> bankAccountModels) {
+        RealmMobileBankAccounts.putOrUpdate(bankAccountModels, this::setupViewPagerDeposits);
+    }
+
+    private void setupViewPagerDeposits() {
+        List<RealmMobileBankAccounts> accounts = new ArrayList<>(RealmMobileBankAccounts.getAccounts());
+        if (accounts.size() == 0) return;
+        binding.vpCards.setAdapter(new BankAccountsAdapter(accounts));
+        binding.vpCards.setOffscreenPageLimit(accounts.size() - 1);
+        initViewPager(accounts.size());
         setupRecyclerItems();
     }
 

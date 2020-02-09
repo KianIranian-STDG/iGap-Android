@@ -41,46 +41,75 @@
 
                 <include layout="@layout/mobile_bank_top" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp32"
-                    android:layout_marginRight="@dimen/dp32"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10"
-                    android:background="@drawable/shape_round_gray">
-
-                    <TextView
-                        android:id="@+id/tvNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/smallTextSize"
-                        tools:text="6221 0610 1123 5548"
-                        android:paddingRight="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:layout_margin="@dimen/dp8" />
-
-                    <TextView
-                        android:id="@+id/tvType"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/smallTextSize"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        tools:text="@string/card_number"
-                        android:layout_margin="@dimen/dp8" />
-
-                </RelativeLayout>
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:id="@+id/spAccounts"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        app:layout_constraintStart_toStartOf="@id/lytAccounts"
+                        app:layout_constraintEnd_toEndOf="@id/lytAccounts"
+                        app:layout_constraintTop_toTopOf="@id/lytAccounts"
+                        app:layout_constraintBottom_toBottomOf="@id/lytAccounts" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/lytAccounts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp32"
+                        android:layout_marginRight="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp10"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@drawable/shape_round_gray">
+
+                        <TextView
+                            android:id="@+id/tvNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@id/accountsArrow"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:textColor="?iGapTitleTextColor"
+                            android:textSize="@dimen/smallTextSize"
+                            tools:text="6221 0610 1123 5548"
+                            android:paddingRight="@dimen/dp1"
+                            android:paddingLeft="@dimen/dp1"
+                            android:layout_margin="@dimen/dp8" />
+
+                        <TextView
+                            android:id="@+id/accountsArrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tvNumber"
+                            app:layout_constraintBottom_toBottomOf="@id/tvNumber"
+                            android:layout_marginLeft="@dimen/dp10"
+                            android:layout_marginRight="@dimen/dp10"
+                            style="@style/myIconTextViewStyle"
+                            android:text="@string/down_arrow_icon"
+                            android:textSize="@dimen/largeTextSize" />
+
+                        <TextView
+                            android:id="@+id/tvType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:textColor="?iGapTitleTextColor"
+                            android:textSize="@dimen/smallTextSize"
+                            android:paddingStart="@dimen/dp16"
+                            android:paddingLeft="@dimen/dp16"
+                            tools:text="@string/card_number"
+                            android:layout_margin="@dimen/dp8" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -104,10 +133,11 @@
                         android:minHeight="@dimen/dp32"
                         android:layout_marginEnd="@dimen/dp32"
                         android:layout_marginRight="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp10"
                         android:text="@string/financial_report"
                         android:textSize="@dimen/standardTextSize"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/lytAccounts" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"

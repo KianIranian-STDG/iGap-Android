@@ -6,7 +6,7 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp40"
+        android:layout_height="@dimen/dp32"
         android:id="@+id/parsianIcon"
         android:layout_margin="@dimen/dp6"
         android:adjustViewBounds="true"

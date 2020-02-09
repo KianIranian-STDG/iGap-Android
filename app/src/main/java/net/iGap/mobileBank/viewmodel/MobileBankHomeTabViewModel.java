@@ -9,6 +9,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.MobileBankRepository;
+import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
@@ -40,7 +41,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
         MobileBankRepository.getInstance().getMobileBankCards(this, new ResponseCallback<BaseMobileBankResponse<List<BankCardModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankCardModel>> data) {
-                //todo:// delete when account changed
+                //todo: delete when cards changed
                 RealmMobileBankCards.deleteAll();
                 cards = data.getData();
                 cardsData.setValue(cards);
@@ -68,6 +69,8 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
         MobileBankRepository.getInstance().getMobileBankAccounts(this, new ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankAccountModel>> data) {
+                //todo: delete when accounts changed
+                RealmMobileBankAccounts.deleteAll();
                 accounts = data.getData();
                 accountsData.postValue(data.getData());
                 showLoading.set(View.GONE);
