@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -64,6 +65,7 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
         private AppCompatTextView giftStickerTitle;
         private AppCompatTextView giftStickerPrice;
         private ImageView userAvatarIv;
+        private TextView sendOrReciveTv;
         private ProgressBar progressBar;
 
         public ViewHolder(@NonNull View itemView) {
@@ -74,6 +76,7 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
             giftStickerTitle.setGravity(G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT);
             giftStickerPrice.setGravity(G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT);
             userAvatarIv = itemView.findViewById(R.id.userAvatar);
+            sendOrReciveTv = itemView.findViewById(R.id.tv_giftStickerSendOrReceived);
             progressBar = itemView.findViewById(R.id.progressBar);
         }
 
@@ -95,15 +98,19 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
 
             if (giftSticker.getFromUserId() != null) {
                 userId = Long.valueOf(giftSticker.getFromUserId());
+                sendOrReciveTv.setText(R.string.forward_icon);
             } else if (giftSticker.getToUserId() != null) {
                 userId = Long.valueOf(giftSticker.getToUserId());
+                sendOrReciveTv.setText(R.string.reply_icon);
             }
 
             if (userId != null) {
                 userAvatarIv.setVisibility(View.VISIBLE);
+                sendOrReciveTv.setVisibility(View.VISIBLE);
                 avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarIv, userId).avatarType(AvatarHandler.AvatarType.USER).showMain(), true);
             } else {
                 userAvatarIv.setVisibility(View.GONE);
+                sendOrReciveTv.setVisibility(View.GONE);
             }
         }
     }

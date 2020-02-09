@@ -85,6 +85,24 @@
             app:layout_constraintStart_toStartOf="@+id/giftStickerPrice"
             app:layout_constraintTop_toBottomOf="@+id/giftStickerPrice" />
 
+        <TextView
+            android:id="@+id/tv_giftStickerSendOrReceived"
+            style="@style/baseFontIcon"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp8"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:layout_marginEnd="@dimen/dp8"
+            android:visibility="gone"
+            android:textSize="@dimen/dp24"
+            app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
+            app:layout_constraintEnd_toStartOf="@+id/userAvatar"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/giftStickerPrice"
+            app:layout_constraintTop_toTopOf="@+id/userAvatar"
+            android:layout_marginRight="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp8" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
