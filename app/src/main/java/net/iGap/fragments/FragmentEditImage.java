@@ -121,11 +121,11 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (isPopupShowing() || isKeyboardVisible()) {
+                    if (isKeyboardVisible()) {
                         showPopup(-1);
-                        return false;
+                        return true;
                     }
-                    return true;
+                    return false;
                 }
                 return super.dispatchKeyEventPreIme(event);
             }
@@ -677,6 +677,15 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
     public interface CompleteEditImage {
         void result(String path, String message, HashMap<String, StructBottomSheet> textImageList);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (isPopupShowing()) {
+            showPopup(-1);
+            return true;
+        } else
+            return super.onBackPressed();
     }
 
     @Override
