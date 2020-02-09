@@ -95,6 +95,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private void handleItemsAdapterClick(int position, int title) {
         switch (title) {
             case R.string.transfer_mony:
+            case R.string.cardToCardBtnText:
                 onTransferMoneyClicked();
                 break;
 
