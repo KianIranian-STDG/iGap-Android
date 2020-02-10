@@ -115,8 +115,10 @@ public class FragmentNotificationAndSound extends BaseFragment {
         });
     }
 
+    /**
+     * setup LED dialog in to notification and sound setting
+     **/
     private void showLEDDialog() {
-        /**setup message LED dialog**/
         GradientDrawable gradientDrawable = (GradientDrawable) binding.ivLedMessage.getBackground();
         gradientDrawable.setColor(viewModel.ledColorMessage);
         viewModel.showMessageLedDialog.observe(getViewLifecycleOwner(), isShow -> {
@@ -141,7 +143,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             binding.ivLedMessage.setBackground(gradientDrawable);
 
         });
-        /**setup group LED dialog**/
+
         GradientDrawable gradientDrawableGroup = (GradientDrawable) binding.ivLedGroup.getBackground();
         gradientDrawableGroup.setColor(viewModel.ledColorGroup);
         viewModel.showGroupLedDialog.observe(getViewLifecycleOwner(), isShow -> {
@@ -168,6 +170,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
         });
     }
 
+    /**
+     * setup VIbration dialog in to notification and sound setting
+     **/
     private void showVibrationDialog() {
         AudioManager audioManager = (AudioManager) getContext().getSystemService(getContext().AUDIO_SERVICE);
         viewModel.showMessageVibrationDialog.observe(getViewLifecycleOwner(), isShow -> {
@@ -197,6 +202,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
         });
     }
 
+    /**
+     * setup PopupNotification in to notification and sound setting
+     **/
     private void showPopupNotification() {
         viewModel.showMessagePopupNotification.observe(getViewLifecycleOwner(), list -> {
             int pop = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 1);
@@ -217,6 +225,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     }
 
+    /**
+     * setup Message Sound in to notification and sound setting
+     **/
     private void showMessageSound() {
         viewModel.showMessageSound.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null & isShow) {
@@ -242,6 +253,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     }
 
+    /**
+     * setup Group Sound in to notification and sound setting
+     **/
     private void showGroupSound() {
         viewModel.showGroupSound.observe(getViewLifecycleOwner(), isShow -> {
             int getGroupSoundSelected = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
