@@ -2517,9 +2517,9 @@ Want to get it?</string>
     <string name="terminal_No">Terminal No</string>
     <string name="rrn">Reference No</string>
     <string name="bill_id">Bill id</string>
-    <string name="topUp_title">buying the charge</string>
-    <string name="bill_title">Paying the bill</string>
-    <string name="topUp_message">Recharge purchase message</string>
+    <string name="topUp_title">Buying the charge</string>
+    <string name="bill_title">Bill payment</string>
+    <string name="topUp_message">Buying the charge message</string>
     <string name="bill_message">Bill payment message</string>
     <string name="soon">Coming soon...</string>
     <string name="delete_recently_sticker">Delete Recently Sticker</string>
