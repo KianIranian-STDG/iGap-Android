@@ -180,7 +180,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case BLOCKCHAIN:
                 new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
                 break;
-            case POLL_RESULT:
+            case VIRTUAL_GIFT_CARD:
                 new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
                 break;
             case NEWS:
