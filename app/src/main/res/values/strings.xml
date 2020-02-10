@@ -2556,5 +2556,6 @@ Want to get it?</string>
     <string name="gift_sticker_empty_list_message">There is no digital gift card</string>
     <string name="inquiry_and_shopping">Inquiry and shopping</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
+    <string name="poll_dialog_question">Are you sure of your opinion?</string>
 
 </resources>

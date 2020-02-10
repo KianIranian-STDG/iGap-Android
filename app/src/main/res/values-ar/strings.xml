@@ -3134,4 +3134,5 @@
     <string name="gift_sticker_empty_list_message">لا يوجد ملصق</string>
     <string name="inquiry_and_shopping">التحقيق والتسوق</string>
     <string name="activate_or_send_as_message">تنشيط أو إرسال كرسالة</string>
+    <string name="poll_dialog_question">هل أنت متأكد من رأيك </string>
 </resources>

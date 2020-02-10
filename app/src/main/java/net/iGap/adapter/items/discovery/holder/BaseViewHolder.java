@@ -47,6 +47,7 @@ import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
+import net.iGap.fragments.poll.ChartFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
@@ -324,7 +325,8 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case POLL:
                 new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
                 break;
-            case UNRECOGNIZED:
+            case POLL_RESULT:
+                new HelperFragment(activity.getSupportFragmentManager(), ChartFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
                 break;
             case FAVORITE_CHANNEL:
                 if (discoveryField.value.equals(""))
@@ -336,7 +338,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     popularMoreChannelFragment.setArguments(bundle);
                     new HelperFragment(activity.getSupportFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
                 }
-
                 break;
             case FINANCIAL_HISTORY:
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();

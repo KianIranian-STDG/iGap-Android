@@ -1899,5 +1899,6 @@
     <string name="gift_sticker_empty_list_message">Там нет наклейки</string>
     <string name="inquiry_and_shopping">Запрос и покупки</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
+    <string name="poll_dialog_question">Вы уверены в своем мнении</string>
 
 </resources>

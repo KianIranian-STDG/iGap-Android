@@ -34,7 +34,6 @@ public class DiscoveryFragmentAgreement extends FragmentToolBarBack {
     public static DiscoveryFragmentAgreement newInstance(DiscoveryItemField discoveryField, String agreementSlug) {
         DiscoveryFragmentAgreement discoveryFragment = new DiscoveryFragmentAgreement();
         Bundle bundle = new Bundle();
-
         bundle.putSerializable("discoveryField", discoveryField);
         bundle.putString("agreementSlug", agreementSlug);
         discoveryFragment.setArguments(bundle);
