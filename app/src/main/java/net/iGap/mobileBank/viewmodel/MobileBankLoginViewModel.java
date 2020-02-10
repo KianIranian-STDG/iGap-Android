@@ -73,8 +73,6 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
-                        if (BuildConfig.DEBUG)
-                            Log.e("NazariToken", data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
                         onLoginResponse.postValue(true);
                     }

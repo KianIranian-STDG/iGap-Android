@@ -59,21 +59,19 @@ public class BankCardsAdapter extends PagerAdapter {
         if (mCards.get(position) != null){
 
             icAdd.setVisibility(View.GONE);
-            lytRoot.setBackgroundResource(R.drawable.shape_card_background);
             tvName.setText(mCards.get(position).getCardName());
             tvNumber.setText(checkAndSetPersianNumberIfNeeded(mCards.get(position).getCardNumber()));
             ivLogo.setImageResource(getCardBankLogo(mCards.get(position).getCardNumber()));
 
-        }else {
+        }/*else {
 
             icAdd.setVisibility(View.VISIBLE);
             ivShetabLogo.setVisibility(View.GONE);
-            lytRoot.setBackgroundResource(R.drawable.shape_gray_round_stroke_dash);
             tvName.setVisibility(View.GONE);
             tvNumber.setVisibility(View.GONE);
             ivLogo.setVisibility(View.GONE);
 
-        }
+        }*/
 
         container.addView(layout);
         return layout;

@@ -299,7 +299,8 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private void handleItemsAdapterClick(int position, int title) {
         switch (title) {
             case R.string.transfer_mony:
-                onTransferMoneyClicked();
+                showComingSoon();
+                //onTransferMoneyClicked();
                 break;
 
             case R.string.sheba_number:

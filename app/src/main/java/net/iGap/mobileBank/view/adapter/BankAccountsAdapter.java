@@ -60,14 +60,14 @@ public class BankAccountsAdapter extends PagerAdapter {
             tvName.setText(mAccounts.get(position).getAccountName());
             tvNumber.setText(checkAndSetPersianNumberIfNeeded(mAccounts.get(position).getAccountNumber()));
 
-        } else {
+        } /*else {
 
             icAdd.setVisibility(View.VISIBLE);
             lytRoot.setBackgroundResource(R.drawable.shape_gray_round_stroke_dash);
             tvName.setVisibility(View.GONE);
             tvNumber.setVisibility(View.GONE);
 
-        }
+        }*/
 
         container.addView(layout);
         return layout;

@@ -104,7 +104,7 @@ public class DialogParsian {
                 mListener.onActiveButtonClicked(mDialog);
         });
 
-        mContentLayout.addView(tvMessage, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 12f, 12f, 12f, 12f));
+        mContentLayout.addView(tvMessage, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 2f, 12f, 2f, 12f));
         mDialog.show();
     }
 

@@ -79,7 +79,7 @@ public class ExtractBank {
         else if (cardNumber.startsWith("627412"))
             return R.drawable.bank_logo_eghtesad_novin;
         else if (cardNumber.startsWith("622106"))
-            return R.drawable.bank_logo_parsian;
+            return R.drawable.ic_logo_parsian_without_theme;
         else if (cardNumber.startsWith("502229"))
             return R.drawable.bank_logo_pasargad;
         else if (cardNumber.startsWith("627488"))

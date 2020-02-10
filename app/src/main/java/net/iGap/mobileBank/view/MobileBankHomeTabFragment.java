@@ -96,12 +96,17 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         switch (title) {
             case R.string.transfer_mony:
             case R.string.cardToCardBtnText:
-                onTransferMoneyClicked();
+                showComingSoon();
+                //onTransferMoneyClicked();
                 break;
 
             case R.string.Inventory:
             case R.string.transactions:
-                onTransactionsClicked();
+                if (mode == HomeTabMode.DEPOSIT) {
+                    onTransactionsClicked();
+                } else {
+                    showComingSoon();
+                }
                 break;
 
             case R.string.sheba_number:
