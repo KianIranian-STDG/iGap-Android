@@ -15,7 +15,6 @@ public class RealmStickerItem extends RealmObject {
     private boolean isFavorite;
     private long recentTime;
     private long fileSize;
-    private RealmList<String> tags;
 
     public static RealmStickerItem put(Realm realm, StructIGSticker structIGSticker) {
         RealmStickerItem realmStickerItem = realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
@@ -30,11 +29,6 @@ public class RealmStickerItem extends RealmObject {
         realmStickerItem.setName(structIGSticker.getName());
         realmStickerItem.setToken(structIGSticker.getToken());
         realmStickerItem.setFavorite(structIGSticker.isFavorite());
-
-        RealmList<String> tags = new RealmList<>();
-        tags.addAll(structIGSticker.getTags());
-        realmStickerItem.setTags(tags);
-
         return realmStickerItem;
     }
 
@@ -68,10 +62,6 @@ public class RealmStickerItem extends RealmObject {
 
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
-    }
-
-    public void setTags(RealmList<String> tags) {
-        this.tags = tags;
     }
 
     public String getId() {
@@ -108,9 +98,5 @@ public class RealmStickerItem extends RealmObject {
 
     public long getFileSize() {
         return fileSize;
-    }
-
-    public RealmList<String> getTags() {
-        return tags;
     }
 }

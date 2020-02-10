@@ -779,8 +779,10 @@ public class RealmMigration implements io.realm.RealmMigration {
             realmTopup.addPrimaryKey("orderId");
 
             RealmObjectSchema realmRoomMessageWallet = schema.get(RealmRoomMessageWallet.class.getSimpleName());
-            realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletTopup", realmTopup);
-            realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletBill", realmBill);
+            if (realmRoomMessageWallet != null) {
+                realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletTopup", realmTopup);
+                realmRoomMessageWallet.addRealmObjectField("realmRoomMessageWalletBill", realmBill);
+            }
 
             oldVersion++;
         }
@@ -791,8 +793,41 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmMB = schema.create(RealmMobileBankAccounts.class.getSimpleName())
                     .addField("accountNumber", String.class)
                     .addField("accountName", String.class);
-
             realmMB.addPrimaryKey("accountNumber");
+
+            RealmObjectSchema realmUser = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUser != null) {
+                realmUser.addField("nationalCode", String.class);
+            }
+
+            if (schema.contains("RealmStickers")) {
+                schema.remove("RealmStickers");
+            }
+
+            if (schema.contains("RealmStickersDetails")) {
+                schema.remove("RealmStickersDetails");
+            }
+
+            RealmObjectSchema realmStickerItem = schema.create(RealmStickerItem.class.getSimpleName())
+                    .addField(RealmStickerItemFields.ID, String.class)
+                    .addField(RealmStickerItemFields.FILE_NAME, String.class)
+                    .addField(RealmStickerItemFields.GROUP_ID, String.class)
+                    .addField(RealmStickerItemFields.NAME, String.class)
+                    .addField(RealmStickerItemFields.TOKEN, String.class)
+                    .addField(RealmStickerItemFields.IS_FAVORITE, boolean.class)
+                    .addField(RealmStickerItemFields.RECENT_TIME, long.class)
+                    .addField(RealmStickerItemFields.FILE_SIZE, long.class);
+
+            schema.create(RealmStickerGroup.class.getSimpleName())
+                    .addField(RealmStickerGroupFields.ID, String.class)
+                    .addField(RealmStickerGroupFields.NAME, String.class)
+                    .addField(RealmStickerGroupFields.TYPE, String.class)
+                    .addField(RealmStickerGroupFields.AVATAR_NAME, String.class)
+                    .addField(RealmStickerGroupFields.AVATAR_TOKEN, String.class)
+                    .addField(RealmStickerGroupFields.CATEGORY_ID, String.class)
+                    .addField(RealmStickerGroupFields.IS_GIFTABLE, boolean.class)
+                    .addField(RealmStickerGroupFields.AVATAR_SIZE, long.class)
+                    .addRealmListField(RealmStickerGroupFields.STICKER_ITEMS.$, realmStickerItem);
 
             oldVersion++;
         }

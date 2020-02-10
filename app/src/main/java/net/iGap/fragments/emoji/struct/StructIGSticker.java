@@ -49,7 +49,6 @@ public class StructIGSticker {
         setPath(StickerRepository.getInstance().getStickerPath(stickerItem.getToken(), stickerItem.getName()));
         setToken(stickerItem.getToken());
         setFavorite(stickerItem.isFavorite());
-        setTags(stickerItem.getTags());
     }
 
     public String getPath() {
