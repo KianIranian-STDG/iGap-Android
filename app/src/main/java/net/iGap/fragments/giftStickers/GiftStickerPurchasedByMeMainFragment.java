@@ -34,7 +34,7 @@ public class GiftStickerPurchasedByMeMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ViewPager viewPager = view.findViewById(R.id.vp_purchasedByMe);
-        viewPager.setAdapter(new PagerAdapter(getActivity().getSupportFragmentManager()));
+        viewPager.setAdapter(new PagerAdapter(getChildFragmentManager()));
         viewPager.setOffscreenPageLimit(2);
 
         tabLayout = view.findViewById(R.id.tl_purchasedByMe);
