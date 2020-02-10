@@ -1899,5 +1899,28 @@
     <string name="gift_sticker_empty_list_message">Там нет наклейки</string>
     <string name="inquiry_and_shopping">Запрос и покупки</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
+    <string name="poll_dialog_question">Вы уверены в своем мнении</string>
+
+    <string name="mobileBankSorat">Список счетов</string>
+    <string name="mobile_bank_sorathesab">Список счетов</string>
+    <string name="mobile_bank_balance_cardNumber">Номер карты: </string>
+    <string name="mobile_bank_balance_title">Баланс банковской карты</string>
+    <string name="mobile_bank_balance_pass">пароль:</string>
+    <string name="mobile_bank_balance_cvv">CVV2:</string>
+    <string name="mobile_bank_balance_expireDate">Срок годности (год / месяц)</string>
+    <string name="mobile_bank_balance_expireDate2">Срок годности:</string>
+    <string name="mobile_bank_balance_cardError">пожалуйста, введите номер вашей карты Parsian.</string>
+    <string name="mobile_bank_balance_cardLengthError">your card number must be 16 digits.</string>
+    <string name="mobile_bank_balance_passwordError">Пожалуйста, введите пароль.</string>
+    <string name="mobile_bank_balance_passwordLengthError">Ваш пароль должен содержать не менее 6 символов.</string>
+    <string name="mobile_bank_balance_CVVError">пожалуйста, введите ваш номер CVV2.</string>
+    <string name="mobile_bank_balance_CVVLengthError">Ваш номер CVV2 должен быть не менее 3 цифр.</string>
+    <string name="mobile_bank_balance_dateError">please enter your expire date.</string>
+    <string name="mobile_bank_balance_dateLengthError">please enter your expire date completely.</string>
+    <string name="mobile_bank_balance_message">Ваш баланс %1$s.</string>
+    <string name="mobile_bank_cheque_balance">Баланс: %1$s </string>
+    <string name="mobile_bank_cheque_number">Номер чека: %1$s</string>
+    <string name="mobile_bank_cheque_status">Положение дел: %1$s</string>
+    <string name="mobile_bank_hotCard">Заблокировать карту</string>
 
 </resources>

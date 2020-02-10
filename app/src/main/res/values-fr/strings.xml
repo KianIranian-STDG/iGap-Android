@@ -2124,4 +2124,28 @@
     <string name="gift_sticker_empty_list_message">Il n\'y a pas d\'autocollant</string>
     <string name="inquiry_and_shopping">Demande et achats</string>
     <string name="activate_or_send_as_message">Activer ou envoyer comme message</string>
+
+    <string name="mobileBankSorat">Liste des factures</string>
+    <string name="mobile_bank_sorathesab">Liste des factures</string>
+    <string name="mobile_bank_balance_cardNumber">Numéro de carte: </string>
+    <string name="mobile_bank_balance_title">Solde de carte bancaire</string>
+    <string name="mobile_bank_balance_pass">Mot de passe:</string>
+    <string name="mobile_bank_balance_cvv">CVV2:</string>
+    <string name="mobile_bank_balance_expireDate">Date d\'expiration (année / mois)</string>
+    <string name="mobile_bank_balance_expireDate2">Date d\'expiration:</string>
+    <string name="mobile_bank_balance_cardError">veuillez entrer votre numéro de carte Parsian.</string>
+    <string name="mobile_bank_balance_cardLengthError">votre numéro de carte doit être composé de 16 chiffres.</string>
+    <string name="mobile_bank_balance_passwordError">s\'il vous plait entrez votre mot de passe.</string>
+    <string name="mobile_bank_balance_passwordLengthError">votre mot de passe doit contenir au moins 6 caractères.</string>
+    <string name="mobile_bank_balance_CVVError">veuillez entrer votre numéro CVV2.</string>
+    <string name="mobile_bank_balance_CVVLengthError">votre numéro CVV2 doit comporter au moins 3 chiffres.</string>
+    <string name="mobile_bank_balance_dateError">veuillez entrer votre date d\'expiration.</string>
+    <string name="mobile_bank_balance_dateLengthError">пожалуйста, введите дату истечения.</string>
+    <string name="mobile_bank_balance_message">Votre équilibre est %1$s.</string>
+    <string name="mobile_bank_cheque_balance">vérifier le solde: %1$s </string>
+    <string name="mobile_bank_cheque_number">Numéro du chèque: %1$s</string>
+    <string name="mobile_bank_cheque_status">Statut: %1$s</string>
+    <string name="mobile_bank_hotCard">Bloquer la carte</string>
+
+    <string name="poll_dialog_question">Etes-vous sûr de votre avis?</string>
 </resources>

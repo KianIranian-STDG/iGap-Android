@@ -3134,4 +3134,27 @@
     <string name="gift_sticker_empty_list_message">لا يوجد ملصق</string>
     <string name="inquiry_and_shopping">التحقيق والتسوق</string>
     <string name="activate_or_send_as_message">تنشيط أو إرسال كرسالة</string>
+
+    <string name="mobileBankSorat">قائمة الفواتير</string>
+    <string name="mobile_bank_sorathesab">قائمة الفواتير</string>
+    <string name="mobile_bank_balance_CVVError">يرجى إدخال رقم CVV2 الخاص بك.</string>
+    <string name="mobile_bank_balance_cardError">يرجى إدخال رقم البطاقة البارسية.</string>
+    <string name="mobile_bank_balance_cardNumber">"رقم البطاقة: "</string>
+    <string name="mobile_bank_balance_cvv">"رقم CVV2: "</string>
+    <string name="mobile_bank_balance_dateError">الرجاء إدخال تاريخ انتهاء الصلاحية.</string>
+    <string name="mobile_bank_balance_expireDate">تاريخ الانتهاء (السنة / الشهر)</string>
+    <string name="mobile_bank_balance_expireDate2">تاريخ الانتهاء:</string>
+    <string name="mobile_bank_balance_pass">كلمه السر:</string>
+    <string name="mobile_bank_balance_passwordError">من فضلك أدخل رقمك السري.</string>
+    <string name="mobile_bank_balance_title">رصيد البطاقة المصرفية</string>
+    <string name="mobile_bank_balance_CVVLengthError">يجب أن يتكون رقم CVV2 من 3 أرقام على الأقل.</string>
+    <string name="mobile_bank_balance_cardLengthError">يجب أن يكون رقم بطاقتك 16 رقمًا.</string>
+    <string name="mobile_bank_balance_dateLengthError">لطفا تاریخ انقضای کارت خود را به صورت کامل وارد کنید.</string>
+    <string name="mobile_bank_balance_passwordLengthError">يجب أن تحتوي كلمة مرورك على 6 أحرف على الأقل.</string>
+    <string name="mobile_bank_balance_message">رصيدك هو %1$s.</string>
+    <string name="mobile_bank_cheque_balance">"تحقق التوازن: %1$s "</string>
+    <string name="mobile_bank_cheque_number">"رقم الشيك: %1$s "</string>
+    <string name="mobile_bank_hotCard">بطاقة بلوك</string>
+    <string name="mobile_bank_cheque_status">"الحالة: %1$s "</string>
+    <string name="poll_dialog_question">هل أنت متأكد من رأيك </string>
 </resources>

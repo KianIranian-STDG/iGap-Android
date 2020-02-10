@@ -23,7 +23,6 @@ public class RequestClientSetPollItemClick {
     public void setPollClicked(int itemId, OnSetPollItemClick onSetPollItemClick) {
         ProtoClientSetPollItemClick.ClientSetPollItemClick.Builder builder = ProtoClientSetPollItemClick.ClientSetPollItemClick.newBuilder();
         builder.setItemId(itemId);
-
         RequestWrapper requestWrapper = new RequestWrapper(625, builder, onSetPollItemClick);
         try {
             RequestQueue.sendRequest(requestWrapper);
