@@ -2488,4 +2488,5 @@
 
     <string name="kuknos_RecoverySK_languageTitle">زبان کلمات بازیابی</string>
     <string name="kuknos_RecoverySK_lengthTitle">تعداد کلمات بازیابی</string>
+    <string name="activate_or_send_as_message">فعالسازی یا ارسال به عنوان پیام</string>
 </resources>

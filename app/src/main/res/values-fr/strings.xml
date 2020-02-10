@@ -2121,4 +2121,5 @@
     <string name="gift_sticker_activation_title">Activez la carte</string>
     <string name="gift_sticker_empty_list_message">Il n\'y a pas d\'autocollant</string>
     <string name="inquiry_and_shopping">Demande et achats</string>
+    <string name="activate_or_send_as_message">Activer ou envoyer comme message</string>
 </resources>

@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp16"
-        android:text="فعالسازی یا ارسال به عنوان پیام" />
+        android:text="@string/activate_or_send_as_message" />
 
 
 </LinearLayout>

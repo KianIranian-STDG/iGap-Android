@@ -2173,4 +2173,5 @@
     <string name="gift_sticker_national_code_title">کد ملی سازنده</string>
     <string name="gift_sticker_activation_title">فعالسازی کارت</string>
     <string name="gift_sticker_empty_list_message">استیکری وجود ندارد</string>
+    <string name="activate_or_send_as_message">Activate or send as message</string>
 </resources>
