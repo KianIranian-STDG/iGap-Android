@@ -1,6 +1,7 @@
 package net.iGap.fragments.giftStickers;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -43,6 +44,7 @@ public class GiftStickerHomeFragment extends ObserverFragment<GiftStickerHomeVie
         viewModel.getSliderVisibilityLiveData().observe(getViewLifecycleOwner(), visibility -> sliderIv.setVisibility(visibility));
 
         viewModel.getSliderMutableLiveData().observe(getViewLifecycleOwner(), dataModel -> {
+            Log.i("abbasiPro", "getSliderMutableLiveData: START " + (dataModel == null));
             if (dataModel.getData().get(0).getImageUrl() != null) {
                 String[] scales = dataModel.getInfo().getScale().split(":");
                 float height = rootView.getWidth() * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
@@ -52,6 +54,7 @@ public class GiftStickerHomeFragment extends ObserverFragment<GiftStickerHomeVie
             } else {
                 sliderIv.setVisibility(View.GONE);
             }
+            Log.i("abbasiPro", "onViewCreated: END");
         });
 
     }
