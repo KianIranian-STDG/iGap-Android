@@ -38,6 +38,11 @@ ext {
     suppportLibVersion = "28.0.0"
 }
 
+project.ext{
+    protoMainVersion = "protoMain22"
+    protoBetaVersion = "protoBeta22"
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
