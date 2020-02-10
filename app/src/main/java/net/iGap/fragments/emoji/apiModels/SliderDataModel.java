@@ -1,7 +1,7 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import net.iGap.model.popularChannel.Slide;
 
@@ -9,11 +9,11 @@ import java.util.List;
 
 public class SliderDataModel {
 
-    @Expose
+    @SerializedName("data")
     private List<Slide> data;
-    @Expose
+    @SerializedName("info")
     private Info info;
-    @Expose
+    @SerializedName("type")
     private String type;
 
     public List<Slide> getData() {

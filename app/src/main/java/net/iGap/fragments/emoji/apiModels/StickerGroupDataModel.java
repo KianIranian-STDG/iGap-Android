@@ -1,49 +1,49 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class StickerGroupDataModel {
 
-    @Expose
+    @SerializedName("id")
     private String id;
-    @Expose
+    @SerializedName("avatarName")
     private String avatarName;
-    @Expose
+    @SerializedName("avatarSize")
     private long avatarSize;
-    @Expose
+    @SerializedName("avatarToken")
     private String avatarToken;
-    @Expose
+    @SerializedName("categoryId")
     private String categoryId;
-    @Expose
+    @SerializedName("createdAt")
     private long createdAt;
-    @Expose
+    @SerializedName("createdBy")
     private long createdBy;
-    @Expose
+    @SerializedName("isGiftable")
     private boolean isGiftable;
-    @Expose
+    @SerializedName("isNew")
     private boolean isNew;
-    @Expose
+    @SerializedName("isVip")
     private boolean isVip;
-    @Expose
+    @SerializedName("name")
     private String name;
-    @Expose
+    @SerializedName("price")
     private long price;
-    @Expose
+    @SerializedName("sort")
     private int sort;
-    @Expose
+    @SerializedName("status")
     private String status;
-    @Expose
+    @SerializedName("stickers")
     private List<StickerDataModel> stickers;
-    @Expose
+    @SerializedName("type")
     private String type;
-    @Expose
+    @SerializedName("updatedAt")
     private String updatedAt;
-    @Expose
+    @SerializedName("isInUserList")
     private boolean isInUserList;
-    @Expose
+    @SerializedName("isReadonly")
     private boolean isReadonly;
 
     public String getId() {

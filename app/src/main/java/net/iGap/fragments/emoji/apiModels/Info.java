@@ -1,14 +1,13 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Info {
 
-    @Expose
+    @SerializedName("scale")
     private String scale;
-    @Expose
+    @SerializedName("title")
     private String title;
     @SerializedName("title_en")
     private String titleEn;

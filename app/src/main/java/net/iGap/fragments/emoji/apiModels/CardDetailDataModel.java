@@ -1,14 +1,13 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class CardDetailDataModel {
 
     @SerializedName("card_no")
     private String cardNo;
-    @Expose
+    @SerializedName("cvv2")
     private String cvv2;
     @SerializedName("expire_date")
     private String expireDate;

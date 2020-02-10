@@ -1,11 +1,11 @@
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class StickersDataModel {
-    @Expose
+    @SerializedName("data")
     private List<StickerDataModel> data;
 
     public void setData(List<StickerDataModel> data) {

@@ -1,9 +1,9 @@
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class RsaDataModel {
-    @Expose
+    @SerializedName("data")
     private String data;
 
     public String getData() {

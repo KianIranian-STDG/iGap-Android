@@ -1,11 +1,11 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Activation {
 
-    @Expose
+    @SerializedName("status")
     private String status;
 
     public String getStatus() {

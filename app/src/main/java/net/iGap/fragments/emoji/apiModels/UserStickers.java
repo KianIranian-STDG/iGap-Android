@@ -1,31 +1,31 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class UserStickers {
 
-    @Expose
+    @SerializedName("activation")
     private Activation activation;
-    @Expose
+    @SerializedName("amount")
     private Long amount;
-    @Expose
+    @SerializedName("createdAt")
     private String createdAt;
-    @Expose
+    @SerializedName("creation")
     private Creation creation;
-    @Expose
+    @SerializedName("id")
     private String id;
-    @Expose
+    @SerializedName("requestCount")
     private Long requestCount;
-    @Expose
+    @SerializedName("updatedAt")
     private String updatedAt;
-    @Expose
+    @SerializedName("sticker")
     private StickerDataModel sticker;
-    @Expose
+    @SerializedName("rrn")
     private String rrn;
-    @Expose
+    @SerializedName("toUserId")
     private String toUserId;
-    @Expose
+    @SerializedName("fromUserId")
     private String fromUserId;
 
     public void setRrn(String rrn) {

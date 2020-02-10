@@ -1,17 +1,17 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class StickerCategoryDataModel {
 
-    @Expose
+    @SerializedName("id")
     private String id;
-    @Expose
+    @SerializedName("name")
     private String name;
-    @Expose
+    @SerializedName("sort")
     private Long sort;
-    @Expose
+    @SerializedName("status")
     private String status;
 
     public String getId() {

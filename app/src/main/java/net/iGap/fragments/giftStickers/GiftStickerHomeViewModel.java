@@ -1,6 +1,5 @@
 package net.iGap.fragments.giftStickers;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
@@ -29,17 +28,13 @@ public class GiftStickerHomeViewModel extends ObserverViewModel {
                 .subscribe(new IGSingleObserver<SliderDataModel>(mainThreadDisposable) {
                     @Override
                     public void onSuccess(SliderDataModel dataModel) {
-                        Log.i("abbasiPro", "onSuccess getGiftStickerHomePageImageUrl START");
                         sliderMutableLiveData.postValue(dataModel);
-                        Log.i("abbasiPro", "onSuccess getGiftStickerHomePageImageUrl END");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        Log.i("abbasiPro", "onError getGiftStickerHomePageImageUrl START");
                         sliderVisibilityLiveData.postValue(View.GONE);
-                        Log.i("abbasiPro", "onError getGiftStickerHomePageImageUrl END");
                     }
                 });
 

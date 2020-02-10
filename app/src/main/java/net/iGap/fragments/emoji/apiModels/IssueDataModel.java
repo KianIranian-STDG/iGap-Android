@@ -1,11 +1,11 @@
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class IssueDataModel {
-    @Expose
+    @SerializedName("token")
     private String token;
-    @Expose
+    @SerializedName("id")
     private String id;
 
     public String getId() {

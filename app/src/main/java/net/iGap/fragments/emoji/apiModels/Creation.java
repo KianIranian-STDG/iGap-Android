@@ -1,16 +1,16 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Creation {
-    @Expose
+    @SerializedName("mobileNumber")
     private String mobileNumber;
-    @Expose
+    @SerializedName("nationalCode")
     private String nationalCode;
-    @Expose
+    @SerializedName("status")
     private String status;
-    @Expose
+    @SerializedName("userId")
     private String userId;
 
     public String getNationalCode() {

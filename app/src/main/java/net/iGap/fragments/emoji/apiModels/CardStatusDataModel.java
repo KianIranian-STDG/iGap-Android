@@ -1,17 +1,17 @@
 
 package net.iGap.fragments.emoji.apiModels;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class CardStatusDataModel {
 
-    @Expose
+    @SerializedName("activation")
     private Activation activation;
-    @Expose
+    @SerializedName("id")
     private String id;
-    @Expose
+    @SerializedName("sticker")
     private StickerDataModel sticker;
-    @Expose
+    @SerializedName("isForwarded")
     private boolean isForwarded;
 
     public void setForwarded(boolean forwarded) {
