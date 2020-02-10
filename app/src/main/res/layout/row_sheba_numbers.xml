@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp40"
+    android:layout_height="@dimen/dp48"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -9,8 +9,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp10"
-        android:textColor="?iGapTitleTextColor"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/largeTextSize"
+        android:paddingLeft="@dimen/dp4"
+        android:paddingRight="@dimen/dp4"
         android:singleLine="true"
         app:layout_constraintRight_toLeftOf="@id/tvCopy"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -21,6 +23,7 @@
         android:id="@+id/tvCopy"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:background="?selectableItemBackgroundBorderless"
         android:layout_marginRight="@dimen/dp10"
         android:layout_marginEnd="@dimen/dp10"
         android:gravity="center"
@@ -34,5 +37,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/tvTitle" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="?iGapDividerLine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
