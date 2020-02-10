@@ -1,6 +1,7 @@
 package net.iGap.fragments.giftStickers;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.mobileBank.repository.util.JalaliCalendar;
+import net.iGap.module.AndroidUtils;
 
 public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
     private StructIGGiftSticker structIGGiftSticker;
@@ -49,14 +54,14 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
             dismiss();
         });
 
-        TextView textView = view.findViewById(R.id.tv_creatorPhoneNumber);
-        textView.setText(structIGGiftSticker.getPhoneNumber());
-
-        TextView textView1 = view.findViewById(R.id.tv_creatorNationalCode);
-        textView1.setText(structIGGiftSticker.getNationalCode());
-
         TextView rrnTv = view.findViewById(R.id.tv_rrn);
-        rrnTv.setText(structIGGiftSticker.getRrn());
+        rrnTv.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(structIGGiftSticker.getRrn()) : structIGGiftSticker.getRrn());
+
+        TextView dateTv = view.findViewById(R.id.tv_date);
+        dateTv.setText(JalaliCalendar.getPersianDate(AndroidUtils.compatibleUnicode(structIGGiftSticker.getCreatedAt().replace("T", " "))));
+
+        rrnTv.setGravity(G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT);
+        dateTv.setGravity(G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT);
 
     }
 

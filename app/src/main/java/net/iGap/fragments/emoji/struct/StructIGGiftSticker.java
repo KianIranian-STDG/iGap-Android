@@ -14,12 +14,11 @@ public class StructIGGiftSticker {
     private String status;
     private boolean isActive;
     private String rrn;
-    private String phoneNumber;
-    private String nationalCode;
     private boolean isForward;
     private boolean isValid;
     private String toUserId;
     private String fromUserId;
+    private String createdAt;
 
     public StructIGGiftSticker(UserStickers userStickers) {
         structIGSticker = new StructIGSticker(userStickers.getSticker());
@@ -27,10 +26,9 @@ public class StructIGGiftSticker {
         rrn = userStickers.getRrn();
         giftId = userStickers.getId();
         structIGSticker.setGiftId(giftId);
-        phoneNumber = userStickers.getCreation().getMobileNumber();
-        nationalCode = userStickers.getCreation().getNationalCode();
         toUserId = userStickers.getToUserId();
         fromUserId = userStickers.getFromUserId();
+        createdAt = userStickers.getCreatedAt();
     }
 
     public StructIGGiftSticker(CardStatusDataModel dataModel) {
@@ -77,16 +75,8 @@ public class StructIGGiftSticker {
         return isActive;
     }
 
-    public String getNationalCode() {
-        return nationalCode;
-    }
-
     public String getGiftId() {
         return giftId;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public String getToUserId() {
@@ -95,5 +85,13 @@ public class StructIGGiftSticker {
 
     public String getFromUserId() {
         return fromUserId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

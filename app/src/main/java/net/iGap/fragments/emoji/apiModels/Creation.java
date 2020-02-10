@@ -13,14 +13,6 @@ public class Creation {
     @Expose
     private String userId;
 
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
-
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
-
     public String getNationalCode() {
         return nationalCode;
     }

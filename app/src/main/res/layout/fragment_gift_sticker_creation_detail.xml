@@ -36,39 +36,23 @@
         android:textSize="@dimen/standardTextSize"
         tools:text="09120423503" />
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
-        android:text="@string/gift_sticker_creator_phone_number"
+        android:text="@string/date"
         android:textColor="?attr/iGapHintTextColor"
         android:textSize="@dimen/smallTextSize" />
 
     <TextView
-        android:id="@+id/tv_creatorPhoneNumber"
+        android:id="@+id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
         android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         tools:text="09120423503" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
-        android:text="@string/gift_sticker_national_code_title"
-        android:textColor="?attr/iGapHintTextColor"
-        android:textSize="@dimen/smallTextSize" />
-
-    <TextView
-        android:id="@+id/tv_creatorNationalCode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
-        android:textColor="?attr/iGapTitleTextColor"
-        android:textSize="@dimen/standardTextSize"
-        tools:text="12345678910" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_active"

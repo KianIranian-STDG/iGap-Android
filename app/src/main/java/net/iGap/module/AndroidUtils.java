@@ -38,6 +38,7 @@ import android.view.inputmethod.InputMethodManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.emojiKeyboard.emoji.DispatchQueue;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
 import net.iGap.proto.ProtoGlobal;
 
@@ -771,6 +772,10 @@ public final class AndroidUtils {
 
         }
         return val;
+    }
+
+    public static String compatibleUnicode(String entry) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
 
