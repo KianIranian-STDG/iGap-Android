@@ -7,6 +7,7 @@
     android:layout_marginTop="@dimen/dp4"
     android:layout_marginBottom="@dimen/dp4"
     app:cardElevation="@dimen/dp1"
+    app:cardBackgroundColor="?attr/iGapCardViewColor"
     app:cardCornerRadius="@dimen/dp8"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
