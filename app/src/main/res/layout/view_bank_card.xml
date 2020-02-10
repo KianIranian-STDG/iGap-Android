@@ -5,24 +5,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:cardUseCompatPadding="true"
-    app:cardCornerRadius="@dimen/dp10"
-    android:layout_margin="@dimen/dp10"
-    app:cardElevation="@dimen/dp4">
+    app:cardCornerRadius="@dimen/dp16"
+    android:layout_margin="@dimen/dp4"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="@dimen/dp6">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lytRoot"
-        android:background="@drawable/shape_card_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/ivBankLogo"
-            android:layout_width="@dimen/toolbar_icon_size"
-            android:layout_height="@dimen/toolbar_icon_size"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_margin="@dimen/dp10"
-            tools:src="@drawable/bank_logo_parsian" />
+            app:srcCompat="@drawable/ic_logo_parsian_without_theme" />
 
         <ImageView
             android:id="@+id/ivBankShetabLogo"
@@ -32,23 +32,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_margin="@dimen/dp10"
             android:padding="@dimen/dp2"
-            android:src="@drawable/bank_cards_icon" />
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvNumber"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/largeTextSize"
-            tools:text="علیرضا نظری"
-            android:gravity="center"
-            android:layout_margin="@dimen/dp10" />
+            app:srcCompat="@drawable/ic_shetab" />
 
         <TextView
             android:id="@+id/tvAdd"
@@ -70,18 +54,44 @@
             android:id="@+id/tvNumber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/xlargeTextSize"
             tools:text="6621 6688 7485 2514"
             android:gravity="center"
-            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0.9"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tvName"
+            app:layout_constraintBottom_toTopOf="@id/ivFooter"
             android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp16" />
+            android:layout_marginRight="@dimen/dp10" />
+
+        <ImageView
+            android:id="@+id/ivFooter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/mobile_bank_cards_footer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivFooter"
+            app:layout_constraintBottom_toBottomOf="@id/ivFooter"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/largeTextSize"
+            android:textStyle="bold"
+            tools:text="علیرضا نظری"
+            android:gravity="center"
+            android:layout_margin="@dimen/dp10" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

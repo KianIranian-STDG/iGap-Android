@@ -106,11 +106,12 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             }
             String status = mdata.get(position).getStatus();
 
-            if (status.equals("USED") || status.equals("REGISTER")) {
+            /*if (status.equals("USED") || status.equals("REGISTER")) {
                 block.setVisibility(View.VISIBLE);
             } else {
                 block.setVisibility(View.GONE);
-            }
+            }*/
+            block.setVisibility(View.GONE);
 
             chStatus.setText(context.getResources().getString(R.string.mobile_bank_cheque_status, getStatusText(status)));
 

@@ -38,4 +38,15 @@ public abstract class BaseMobileBankFragment<T extends BaseMobileBankViewModel> 
             }
         });
     }
+
+    void showComingSoon() {
+        if (getContext() == null) return;
+        HelperError.showSnackMessage(getString(R.string.soon), false);
+        /*new DialogParsian()
+                .setContext(getContext())
+                .setTitle(null)
+                .setButtonsText(getString(R.string.ok), null)
+                .showSimpleMessage(getString(R.string.soon));*/
+    }
+
 }
