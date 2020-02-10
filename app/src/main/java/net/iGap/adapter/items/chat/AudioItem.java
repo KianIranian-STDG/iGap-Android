@@ -239,7 +239,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         setTextIfNeeded(holder.messageView);
 
-        final long _st = (int) ((mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getDuration() : structMessage.getAttachment().getDuration()) * 1000);
+        final long _st = (long) (structMessage.getAttachment() != null ? structMessage.getAttachment().getDuration() * 1000 : 0);
 
         holder.songTimeTv.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
 
@@ -367,7 +367,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setTextAppearance(view.getContext(), android.R.style.TextAppearance_Medium);
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
             setTextSize(songFileName, R.dimen.smallTextSize);
-            songFileName.setTypeface(ResourcesCompat.getFont(songFileName.getContext() , R.font.main_font));
+            songFileName.setTypeface(ResourcesCompat.getFont(songFileName.getContext(), R.font.main_font));
 
             songArtist = new AppCompatTextView(view.getContext());
             songArtist.setId(R.id.songArtist);
@@ -380,7 +380,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             playBtn = new MaterialDesignTextView(view.getContext());
             playBtn.setId(R.id.txt_play_music);
             playBtn.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
-            playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext() , R.font.font_icon_old));
+            playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext(), R.font.font_icon_old));
             playBtn.setGravity(CENTER);
             playBtn.setTextColor(getColor(R.color.white));
             playBtn.setText(R.string.md_play_arrow);

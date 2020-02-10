@@ -91,10 +91,10 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     }
                 });
             } else {
-                showErrorMessage.setValue(R.string.error);
+                showErrorMessage.setValue(R.string.please_enter_your_password);
             }
         } else {
-            showErrorMessage.setValue(R.string.error);
+            showErrorMessage.setValue(R.string.enter_username);
         }
     }
 

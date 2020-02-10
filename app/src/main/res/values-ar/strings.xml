@@ -3072,6 +3072,7 @@
     <string name="sheba_number">رقم شبا</string>
     <string name="get_temporary_password">الحصول على كلمة السر پویا</string>
     <string name="accounts">حسابات</string>
+    <string name="account">حساب</string>
     <string name="cheque">التحقق من</string>
     <string name="facilities">مرافق</string>
     <string name="services">خدمات</string>
@@ -3102,6 +3103,7 @@
     <string name="bill_title">دفع الفاتورة</string>
     <string name="topUp_message">إعادة شحن رسالة الشراء</string>
     <string name="bill_message">رسالة دفع الفواتير</string>
+    <string name="soon">قريبا...</string>
     <string name="delete_recently_sticker">حذف ملصق مؤخرا</string>
     <string name="sticker_setting">إعداد الملصقات</string>
     <string name="empty_sticker">لم تقم بإضافة أي ملصقات بعد!</string>

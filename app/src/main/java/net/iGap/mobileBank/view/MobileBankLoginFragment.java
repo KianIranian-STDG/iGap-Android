@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.MobileBankLoginFragmentBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -86,6 +87,11 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
             }
         });
 
+        viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null && getContext() != null) {
+                HelperError.showSnackMessage(getContext().getString(errorMessage), false);
+            }
+        });
     }
 
     private void setUsernameFromCache() {

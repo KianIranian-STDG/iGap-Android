@@ -7,6 +7,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
@@ -40,7 +41,7 @@ public class TransferMoneyTypeAdapter extends RecyclerView.Adapter<TransferMoney
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (mTypes.get(position).isSelected) {
             holder.rbChecked.setChecked(true);
-            holder.root.setBackgroundResource(R.drawable.shape_round_stroke);
+            holder.root.setBackgroundResource(R.drawable.shape_round_stroke_brown);
         } else {
             holder.rbChecked.setChecked(false);
             holder.root.setBackgroundResource(0);
@@ -66,7 +67,7 @@ public class TransferMoneyTypeAdapter extends RecyclerView.Adapter<TransferMoney
 
         private View root;
         private TextView tvType;
-        private RadioButton rbChecked;
+        private AppCompatRadioButton rbChecked;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

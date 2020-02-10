@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MobileBankCardHistoryViewModel extends BaseMobileBankViewModel {
+public class MobileBankCardHistoryViewModel extends BaseMobileBankMainAndHistoryViewModel {
 
     private ObservableField<String> balance = new ObservableField<>("...");
     private ObservableField<String> income = new ObservableField<>("...");

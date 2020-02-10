@@ -2123,6 +2123,7 @@
     <string name="install_latest_version">بو قیسمت دن ایستاده المه ائتمک تزه نسخه لازیمدیر</string>
     <string name="get_temporary_password">دریافت رمز پویا</string>
     <string name="accounts">حساب ها</string>
+    <string name="account">حساب</string>
     <string name="cheque">چک</string>
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
@@ -2157,6 +2158,7 @@
     <string name="mobile_bank_balance_error_no_price">بدون قیمت</string>
     <string name="mobile_bank_balance_error_no_tran">موجودی شما در دسترس نیست. لطفا به نزدیک ترین شعبه مراجعه کنید.</string>
     <string name="mobile_bank_balance_expireDate">تاریخ انقضا: (ماه/سال)</string>
+    <string name="mobile_bank_balance_expireDate2">تاریخ انقضا:</string>
     <string name="mobile_bank_balance_message">موجودی شما %1$s است.</string>
     <string name="mobile_bank_balance_pass">رمز کارت:</string>
     <string name="mobile_bank_balance_passwordError">لطفا رمز کارت خود را وارد کنید.</string>
@@ -2200,6 +2202,7 @@
     <string name="bill_title">پرداخت قبض</string>
     <string name="topUp_message">topUp message</string>
     <string name="bill_message">Bill message</string>
+    <string name="soon">بزودی...</string>
     <string name="inquiry_and_shopping">آختارما الیپ وریپ اوچون</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
 </resources>

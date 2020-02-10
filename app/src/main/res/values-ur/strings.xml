@@ -2114,6 +2114,7 @@
     <string name="deposit">واریز</string>
     <string name="get_temporary_password">دریافت رمز پویا</string>
     <string name="accounts">حساب ها</string>
+    <string name="account">حساب</string>
     <string name="cheque">چک</string>
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
@@ -2145,6 +2146,7 @@
     <string name="bill_title">پرداخت قبض</string>
     <string name="topUp_message">topUp message</string>
     <string name="bill_message">Bill message</string>
+    <string name="soon">بزودی...</string>
     <string name="delete_recently_sticker">Delete Recently Sticker</string>
     <string name="sticker_setting">Sticker setting</string>
     <string name="empty_sticker">You haven\'t added any stickers yet!</string>

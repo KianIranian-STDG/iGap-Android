@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import net.iGap.R;
 import net.iGap.databinding.MobileBankHomeTabFragmentBinding;
 import net.iGap.helper.HelperFragment;
+import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
@@ -36,7 +37,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private MobileBankHomeTabFragmentBinding binding;
     private HomeTabMode mode;
     private DialogParsian mDialogWait;
-    private static String TAG = "NazariSheba";
 
     public static MobileBankHomeTabFragment newInstance(HomeTabMode mode) {
         MobileBankHomeTabFragment fragment = new MobileBankHomeTabFragment();
@@ -87,7 +87,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         adapter.setItems(items);
         adapter.setListener(this::handleItemsAdapterClick);
 
-        binding.rvItems.setLayoutManager(new LinearLayoutManager(binding.rvItems.getContext()));
         binding.rvItems.setNestedScrollingEnabled(false);
         binding.rvItems.setAdapter(adapter);
 
@@ -96,12 +95,13 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private void handleItemsAdapterClick(int position, int title) {
         switch (title) {
             case R.string.transfer_mony:
+            case R.string.cardToCardBtnText:
                 onTransferMoneyClicked();
                 break;
 
+            case R.string.Inventory:
             case R.string.transactions:
-                if (mode == HomeTabMode.DEPOSIT)
-                    onTransactionsClicked();
+                onTransactionsClicked();
                 break;
 
             case R.string.sheba_number:
@@ -121,13 +121,13 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 onFacilitiesClick();
                 break;
 
-            case R.string.Inventory:
+            /*case R.string.Inventory:
                 if (mode == HomeTabMode.CARD)
                     openGetCardInfo(getCurrentAccount());
                 else {
                     getAcountBalance(getCurrentAccount());
                 }
-                break;
+                break;*/
 
             case R.string.mobile_bank_hotCard:
                 openHotCard(getCurrentAccount());
@@ -152,28 +152,28 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.string.transfer_money_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.string.wallet_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.transactions, R.string.transaction_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.string.sheba_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.string.pooya_password_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.string.pooya_password_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.cardToCardBtnText, R.drawable.ic_mb_card_to_card));
+        items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.drawable.ic_mb_balance));
+        items.add(new MobileBankHomeItemsModel(R.string.transactions, R.drawable.ic_mb_transaction));
+        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
+        items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.drawable.ic_mb_pooya_pass));
+        items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.drawable.ic_mb_block));
         return items;
     }
 
     private List<MobileBankHomeItemsModel> getDepositRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.string.transfer_money_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.string.wallet_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.transactions, R.string.transaction_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.string.sheba_icon));
-        items.add(new MobileBankHomeItemsModel(R.string.cheque, R.string.cheque_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.transfer_mony, R.drawable.ic_mb_transfer));
+        items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.drawable.ic_mb_balance));
+        items.add(new MobileBankHomeItemsModel(R.string.transactions, R.drawable.ic_mb_transaction));
+        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
+        items.add(new MobileBankHomeItemsModel(R.string.cheque, R.drawable.ic_mb_cheque));
         return items;
     }
 
     private List<MobileBankHomeItemsModel> getServiceRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
-        items.add(new MobileBankHomeItemsModel(R.string.facilities, R.string.bank_facilities_icon));
+        items.add(new MobileBankHomeItemsModel(R.string.facilities, R.drawable.ic_mb_loan));
         return items;
     }
 
@@ -190,9 +190,9 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             if (bankCardModels != null) saveCardsTodb(bankCardModels);
         });
 
-        viewModel.getAccountsData().observe(getViewLifecycleOwner(), this::setupViewPagerDeposits);
-
-        viewModel.getShebaListener().observe(getViewLifecycleOwner(), this::showShebaNumberResult);
+        viewModel.getAccountsData().observe(getViewLifecycleOwner(), bankAccountModels -> {
+            if (bankAccountModels != null) saveAccountsTodb(bankAccountModels);
+        });
 
         viewModel.getBalance().observe(getViewLifecycleOwner(), balance -> {
             if (balance.equals("-1")) {
@@ -220,22 +220,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 .setTitle(title)
                 .setButtonsText(getString(R.string.ok), null)
                 .showSimpleMessage(message);
-    }
-
-    private void showShebaNumberResult(List<String> bankShebaModel) {
-        mDialogWait.dismiss();
-        if (bankShebaModel != null && bankShebaModel.size() > 0) {
-            new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.sheba_number))
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    }).showShebaDialog(bankShebaModel);
-        }
     }
 
     private void showProgress() {
@@ -321,26 +305,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     }
 
     private void onShebaClicked() {
-
         if (getActivity() != null) {
-            mDialogWait = new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.please_wait) + "..")
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    });
-            mDialogWait.showLoaderDialog(false);
-            if (mode == HomeTabMode.CARD) {
-                viewModel.getShebaNumber(getCurrentAccount());
-            } else if (mode == HomeTabMode.DEPOSIT) {
-                viewModel.getShebaNumberByDeposit(getCurrentAccount());
-            }
+            MobileBankBottomSheetFragment fragment = MobileBankBottomSheetFragment.newInstance(getCurrentAccount(), mode == HomeTabMode.CARD);
+            fragment.show(getActivity().getSupportFragmentManager(), "Sheba");
         }
-
     }
 
     private String getCurrentAccount() {
@@ -370,11 +338,16 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         RealmMobileBankCards.putOrUpdate(bankCardModels, this::setupViewPagerCards);
     }
 
-    private void setupViewPagerDeposits(List<BankAccountModel> accountModels) {
-        if (accountModels == null || accountModels.size() == 0) return;
-        binding.vpCards.setAdapter(new BankAccountsAdapter(accountModels));
-        binding.vpCards.setOffscreenPageLimit(accountModels.size() - 1);
-        initViewPager(accountModels.size());
+    private void saveAccountsTodb(List<BankAccountModel> bankAccountModels) {
+        RealmMobileBankAccounts.putOrUpdate(bankAccountModels, this::setupViewPagerDeposits);
+    }
+
+    private void setupViewPagerDeposits() {
+        List<RealmMobileBankAccounts> accounts = new ArrayList<>(RealmMobileBankAccounts.getAccounts());
+        if (accounts.size() == 0) return;
+        binding.vpCards.setAdapter(new BankAccountsAdapter(accounts));
+        binding.vpCards.setOffscreenPageLimit(accounts.size() - 1);
+        initViewPager(accounts.size());
         setupRecyclerItems();
     }
 
@@ -412,8 +385,8 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private void createViewPagerIndicators(int size) {
         for (int i = 0; i < size; i++) {
             ImageView iv = new ImageView(binding.lytIndicators.getContext());
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(28, 28);
-            lp.setMargins(6, 6, 6, 6);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(24, 24);
+            lp.setMargins(8, 8, 8, 8);
             iv.setLayoutParams(lp);
             iv.setBackgroundResource(R.drawable.indicator_slider);
             if (i == 0) iv.setSelected(true);

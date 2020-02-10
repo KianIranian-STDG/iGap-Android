@@ -2063,6 +2063,7 @@
     <string name="sheba_number">SHEBA Nombre</string>
     <string name="get_temporary_password">obtenir le mot de passe POOYA</string>
     <string name="accounts">Comptes</string>
+    <string name="account">Compte</string>
     <string name="cheque">Vérifier</string>
     <string name="facilities">Installations</string>
     <string name="services">Service</string>
@@ -2093,6 +2094,7 @@
     <string name="bill_title">Payer la facture</string>
     <string name="topUp_message">Recharger le message d\'achat</string>
     <string name="bill_message">Message de paiement de facture</string>
+    <string name="soon">Bientôt disponible...</string>
     <string name="delete_recently_sticker">Supprimer récemment l\'autocollant</string>
     <string name="sticker_setting">Réglage de l\'autocollant</string>
     <string name="empty_sticker">Vous n\'avez pas encore ajouté d\'autocollants!</string>

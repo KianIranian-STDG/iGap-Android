@@ -5,8 +5,8 @@
 
     <stroke
         android:width="@dimen/dp1"
-        android:color="?iGapSubtitleTextColor"/>
+        android:color="?iGapDividerLine" />
 
-    <corners android:radius="@dimen/dp8" />
+    <corners android:radius="@dimen/dp6" />
 
 </shape>

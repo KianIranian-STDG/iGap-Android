@@ -2,6 +2,7 @@ package net.iGap.mobileBank.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;

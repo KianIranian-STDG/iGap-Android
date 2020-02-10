@@ -1837,6 +1837,7 @@
     <string name="sheba_number">SHEBA номер</string>
     <string name="get_temporary_password">получить пароль POOYA</string>
     <string name="accounts">Счета</string>
+    <string name="account">учетная запись</string>
     <string name="cheque">Проверить</string>
     <string name="facilities">оборудование</string>
     <string name="services">Сервисы</string>
@@ -1867,6 +1868,7 @@
     <string name="bill_title">Оплатить счет</string>
     <string name="topUp_message">Пополнить сообщение о покупке</string>
     <string name="bill_message">Сообщение об оплате счета</string>
+    <string name="soon">скоро...</string>
     <string name="delete_recently_sticker">Удалить недавно стикер</string>
     <string name="sticker_setting">Настройка стикера</string>
     <string name="empty_sticker">Вы еще не добавили наклейки!</string>

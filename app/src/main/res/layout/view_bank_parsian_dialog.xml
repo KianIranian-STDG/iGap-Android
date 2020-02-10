@@ -64,7 +64,7 @@
             android:id="@+id/btnActive"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
-            style="@style/iGapButton"
+            style="@style/mobileBankButton"
             android:text="@string/ok"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"

@@ -9,6 +9,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.MobileBankRepository;
+import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
@@ -21,13 +22,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
+public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryViewModel {
 
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
-    private MutableLiveData<List<String>> shebaListener = new MutableLiveData<>();
     private MutableLiveData<String> balance = new MutableLiveData<>();
-    private MutableLiveData<String> OTPmessage = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     public List<BankCardModel> cards;
     public List<BankAccountModel> accounts;
@@ -42,7 +41,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         MobileBankRepository.getInstance().getMobileBankCards(this, new ResponseCallback<BaseMobileBankResponse<List<BankCardModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankCardModel>> data) {
-                //todo:// delete when account changed
+                //todo: delete when cards changed
                 RealmMobileBankCards.deleteAll();
                 cards = data.getData();
                 cardsData.setValue(cards);
@@ -70,6 +69,8 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         MobileBankRepository.getInstance().getMobileBankAccounts(this, new ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>>() {
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankAccountModel>> data) {
+                //todo: delete when accounts changed
+                RealmMobileBankAccounts.deleteAll();
                 accounts = data.getData();
                 accountsData.postValue(data.getData());
                 showLoading.set(View.GONE);
@@ -125,50 +126,6 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
-    public void getOTP(String cardNumber) {
-        MobileBankRepository.getInstance().getOTP(cardNumber, this, new ResponseCallback<ErrorModel>() {
-            @Override
-            public void onSuccess(ErrorModel data) {
-                OTPmessage.setValue(data.getMessage());
-            }
-
-            @Override
-            public void onError(String error) {
-                OTPmessage.setValue("-1");
-                showRequestErrorMessage.setValue(error);
-            }
-
-            @Override
-            public void onFailed() {
-                OTPmessage.setValue("-1");
-            }
-        });
-    }
-
-    public void getShebaNumber(String cardNumber) {
-        if (cardNumber == null) {
-            shebaListener.postValue(null);
-            return;
-        }
-        MobileBankRepository.getInstance().getShebaNumber(cardNumber, this, new ResponseCallback<BaseMobileBankResponse<List<String>>>() {
-            @Override
-            public void onSuccess(BaseMobileBankResponse<List<String>> data) {
-                shebaListener.postValue(data.getData());
-            }
-
-            @Override
-            public void onError(String error) {
-                shebaListener.postValue(null);
-                showRequestErrorMessage.setValue(error);
-            }
-
-            @Override
-            public void onFailed() {
-                shebaListener.postValue(null);
-            }
-        });
-    }
-
     public void onRetryClicked() {
         if (mMode == MobileBankHomeTabFragment.HomeTabMode.CARD) {
             getCardsByApi();
@@ -177,38 +134,8 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         }
     }
 
-    public void getShebaNumberByDeposit(String deposit) {
-        if (deposit == null) {
-            shebaListener.postValue(null);
-            return;
-        }
-        MobileBankRepository.getInstance().getShebaNumberByDeposit(deposit, this, new ResponseCallback<BaseMobileBankResponse<BankShebaModel>>() {
-            @Override
-            public void onSuccess(BaseMobileBankResponse<BankShebaModel> data) {
-                List<String> shebaList = new ArrayList<>();
-                shebaList.add(data.getData().getSheba());
-                shebaListener.postValue(shebaList);
-            }
-
-            @Override
-            public void onError(String error) {
-                showRequestErrorMessage.setValue(error);
-                shebaListener.postValue(null);
-            }
-
-            @Override
-            public void onFailed() {
-                shebaListener.postValue(null);
-            }
-        });
-    }
-
     public MutableLiveData<List<BankAccountModel>> getAccountsData() {
         return accountsData;
-    }
-
-    public MutableLiveData<List<String>> getShebaListener() {
-        return shebaListener;
     }
 
     public MutableLiveData<List<BankCardModel>> getCardsData() {
@@ -235,7 +162,4 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankViewModel {
         return balance;
     }
 
-    public MutableLiveData<String> getOTPmessage() {
-        return OTPmessage;
-    }
 }
