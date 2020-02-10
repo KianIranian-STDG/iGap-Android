@@ -4,7 +4,6 @@ import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.AccountManager;
 import net.iGap.G;
@@ -36,7 +35,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
         String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
         if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
             phoneNumber = "0" + phoneNumber.substring(2);
-            stickerRepository.addIssue(structIGSticker.getId(), phoneNumber, G.nationalCode)
+            stickerRepository.addIssue(structIGSticker.getId(), phoneNumber, G.getNationalCode())
                     .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
                         @Override
                         public void onSuccess(IssueDataModel issueDataModel) {

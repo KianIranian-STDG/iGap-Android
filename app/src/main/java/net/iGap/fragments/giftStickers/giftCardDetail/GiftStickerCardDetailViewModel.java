@@ -37,7 +37,7 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
         if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
             phoneNumber = "0" + phoneNumber.substring(2);
             if (mode == 0) {
-                StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId(), G.nationalCode, phoneNumber)
+                StickerRepository.getInstance().getCardInfo(structIGSticker.getGiftId(), G.getNationalCode(), phoneNumber)
                         .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
                             @Override
                             public void onSuccess(CardDetailDataModel cardDetailDataModel) {
@@ -55,7 +55,7 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
                             }
                         });
             } else if (mode == 1) {
-                StickerRepository.getInstance().getGiftCardInfo(phoneNumber, G.nationalCode, structIGSticker.getGiftId())
+                StickerRepository.getInstance().getGiftCardInfo(phoneNumber, G.getNationalCode(), structIGSticker.getGiftId())
                         .subscribe(new IGSingleObserver<CardDetailDataModel>(mainThreadDisposable) {
                             @Override
                             public void onSuccess(CardDetailDataModel cardDetailDataModel) {

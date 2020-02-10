@@ -45,7 +45,7 @@ public class MyGiftStickerReceivedFragment extends Fragment {
             ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_recived_gift_sticker);
         }
 
-        binding.giftStickerList.setAdapter(new MyStickerListAdapter());
+        binding.giftStickerList.setAdapter(new MyStickerListAdapter(1));
 
         if (binding.giftStickerList.getAdapter() instanceof MyStickerListAdapter) {
             ((MyStickerListAdapter) binding.giftStickerList.getAdapter()).setDelegate((giftSticker, progressDelegate) -> {

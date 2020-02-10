@@ -450,6 +450,19 @@ public class G extends ApplicationContext {
         return baseContext;
     }
 
+    public static String getNationalCode() {
+
+        if (G.nationalCode == null)
+            return DbManager.getInstance().doRealmTask(realm -> {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null)
+                    G.nationalCode = realmUserInfo.getNationalCode();
+                return G.nationalCode;
+            });
+        else
+            return G.nationalCode;
+    }
+
     @Override
     public void onCreate() {
         Log.wtf(this.getClass().getName(), "onCreate");

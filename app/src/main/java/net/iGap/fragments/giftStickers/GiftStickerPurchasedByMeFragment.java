@@ -54,7 +54,7 @@ public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftSti
             ((GiftStickerMainFragment) getParentFragment()).setToolbarTitle(R.string.my_gift_sticker);
         }
 
-        recyclerView.setAdapter(new MyStickerListAdapter());
+        recyclerView.setAdapter(new MyStickerListAdapter(0));
 
         viewModel.getLoadStickerList().observe(getViewLifecycleOwner(), stickerList -> {
             if (recyclerView.getAdapter() instanceof MyStickerListAdapter && stickerList != null) {
