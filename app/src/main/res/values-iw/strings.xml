@@ -2205,5 +2205,8 @@
     <string name="soon">بزودی...</string>
     <string name="inquiry_and_shopping">آختارما الیپ وریپ اوچون</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
+    <string name="mobileBankSorat">صورت حساب</string>
+    <string name="mobile_bank_hotCard">مسدود کردن کارت</string>
+
     <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
 </resources>

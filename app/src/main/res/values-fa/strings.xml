@@ -2370,7 +2370,6 @@
     <string name="cheque">چک</string>
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
-    <string name="mobileBankSorat">صورت حساب</string>
     <string name="cheque_number">شماره دسته چک :</string>
     <string name="page_count">تعداد برگه :</string>
     <string name="reject_count">برگشتی :</string>
@@ -2379,6 +2378,7 @@
     <string name="temporary_block">مسدود موقت :</string>
     <string name="permanent_block">مسدود دایم :</string>
     <string name="usable_count">قابل استفاده :</string>
+    <string name="mobileBankSorat">صورت حساب</string>
     <string name="mobile_bank_sorathesab">صورت حساب</string>
     <string name="mobile_bank_balance_CVVError">لطفا شماره CVV2 کارت خود را وارد کنید.</string>
     <string name="mobile_bank_balance_cardError">لطفا شماره کارت خود را وارد کنید.</string>
