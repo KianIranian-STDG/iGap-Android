@@ -3021,6 +3021,8 @@ public class FragmentChat extends BaseFragment
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                lastChar = null;
+
                 if (!addToView) {
                     resetAndGetFromEnd();
                 }
@@ -3291,7 +3293,10 @@ public class FragmentChat extends BaseFragment
 
         if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
-            layoutParams.bottomMargin = keyboardHeight + LayoutCreator.dp(60);
+            if (keyboardViewVisible)
+                layoutParams.bottomMargin = keyboardHeight + LayoutCreator.dp(60);
+            else
+                layoutParams.bottomMargin = LayoutCreator.dp(60);
         }
     }
 
@@ -3323,6 +3328,7 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onStickerSettingClicked() {
                     if (getActivity() != null) {
+                        showPopup(-1);
                         new HelperFragment(getActivity().getSupportFragmentManager(), new StickerSettingFragment()).setReplace(false).load();
                     }
                 }
@@ -3343,6 +3349,7 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onAddStickerClicked() {
                     if (getActivity() != null) {
+                        showPopup(-1);
                         new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                     }
                 }
@@ -3519,6 +3526,7 @@ public class FragmentChat extends BaseFragment
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
             layoutParams.bottomMargin = LayoutCreator.dp(60);
         }
+
         keyboardViewVisible = false;
         keyboardView.setVisibility(View.GONE);
     }
