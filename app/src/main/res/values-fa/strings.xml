@@ -2497,5 +2497,5 @@
     <string name="activate_or_send_as_message">فعالسازی یا ارسال به عنوان پیام</string>
     <string name="soon">بزودی...</string>
     <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
-    <string name="delete_recent_emoji">Delete Recent Emoji</string>
+    <string name="delete_recent_emoji">حذف اموجی های اخیر</string>
 </resources>
