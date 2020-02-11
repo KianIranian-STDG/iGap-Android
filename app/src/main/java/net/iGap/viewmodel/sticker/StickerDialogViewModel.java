@@ -98,6 +98,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
                     @Override
                     public void onSuccess(StructIGStickerGroup stickerGroup) {
+                        favoriteStickerLiveData.postValue(false);
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         closeDialogMutableLiveData.postValue(true);
                     }
@@ -106,7 +107,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                     public void onError(Throwable e) {
                         super.onError(e);
                         addOrRemoveProgressLiveData.postValue(View.GONE);
-                        closeDialogMutableLiveData.postValue(true);
+                        closeDialogMutableLiveData.postValue(false);
                     }
                 });
     }

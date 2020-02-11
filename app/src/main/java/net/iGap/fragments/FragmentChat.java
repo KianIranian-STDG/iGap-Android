@@ -1134,6 +1134,7 @@ public class FragmentChat extends BaseFragment
     public void onPause() {
         isPaused = true;
         storingLastPosition();
+        showPopup(-1);
         super.onPause();
 
         lastChatRoomId = 0;
@@ -2360,8 +2361,8 @@ public class FragmentChat extends BaseFragment
          * set background
          */
 
-        keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
-        keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
+        keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(280));
+        keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(280));
 
         recyclerView = rootView.findViewById(R.id.chl_recycler_view_chat);
 
@@ -3305,11 +3306,9 @@ public class FragmentChat extends BaseFragment
         if (isPopupShowing() && keyboardView.getCurrentMode() != KeyboardView.MODE_KEYBOARD) {
             showPopup(KeyboardView.MODE_KEYBOARD);
             openKeyboardInternal();
-            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
         } else {
             AndroidUtils.hideKeyboard(edtChat);
             showPopup(KeyboardView.MODE_EMOJI);
-            changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
         }
     }
 
@@ -3385,6 +3384,12 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showPopup(int mode) {
+
+        if (mode == KeyboardView.MODE_EMOJI) {
+            changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+        } else {
+            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+        }
 
         if (mode != -1) {
             keyboardViewVisible = true;
@@ -5750,7 +5755,6 @@ public class FragmentChat extends BaseFragment
 
             showPopup(KeyboardView.MODE_KEYBOARD);
             openKeyboardInternal();
-            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
 
             //disable chat search when reply a message
             if (ll_Search != null && ll_Search.isShown()) goneSearchBox(edtSearchMessage);
