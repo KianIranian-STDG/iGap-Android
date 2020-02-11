@@ -72,8 +72,6 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                 }
                 if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                     messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
-                } else {
-                    messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                 }
             }
         });

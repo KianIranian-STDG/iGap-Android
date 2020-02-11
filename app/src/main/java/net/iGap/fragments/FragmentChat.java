@@ -682,6 +682,8 @@ public class FragmentChat extends BaseFragment
         isNeedResume = true;
         G.locationListener = this;
 
+        StickerRepository.getInstance().getUserStickersGroup();
+
         notifyFrameLayout = new NotifyFrameLayout(context) {
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {

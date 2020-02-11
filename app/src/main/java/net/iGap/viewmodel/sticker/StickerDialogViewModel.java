@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 import net.iGap.rx.ObserverViewModel;
@@ -24,6 +25,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
     private MutableLiveData<Integer> addOrRemoveProgressLiveData = new MutableLiveData<>();
     private MutableLiveData<StructIGStickerGroup> stickersMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> addOrRemoveStickerLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> favoriteStickerLiveData = new SingleLiveEvent<>();
     private MutableLiveData<Boolean> closeDialogMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<StructIGSticker> openPreviewViewLiveData = new MutableLiveData<>();
     private MutableLiveData<StructIGSticker> sendMessageLiveData = new MutableLiveData<>();
@@ -122,6 +124,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
 
     private void onStickerFavoriteChange(boolean favorite) {
         addOrRemoveStickerLiveData.postValue(favorite ? R.string.remove_sticker_with_size : R.string.add_sticker_with_size);
+        favoriteStickerLiveData.postValue(favorite);
     }
 
     public MutableLiveData<Integer> getProgressMutableLiveData() {
@@ -150,6 +153,10 @@ public class StickerDialogViewModel extends ObserverViewModel {
 
     public MutableLiveData<Integer> getAddOrRemoveProgressLiveData() {
         return addOrRemoveProgressLiveData;
+    }
+
+    public SingleLiveEvent<Boolean> getFavoriteStickerLiveData() {
+        return favoriteStickerLiveData;
     }
 
     @Override

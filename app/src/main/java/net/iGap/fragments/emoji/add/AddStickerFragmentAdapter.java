@@ -72,6 +72,9 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter<AddStickerFr
             });
 
             stickerCell.loadAvatar(sticker);
+
+            listener.onButtonStatusChange(isFavorite -> stickerCell.getButton().setMode(isFavorite ? 0 : 1));
+
         }
     }
 
@@ -79,9 +82,15 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter<AddStickerFr
         void onButtonClick(StructIGStickerGroup stickerGroup, ProgressStatus progressStatus);
 
         void onCellClick(StructIGStickerGroup stickerGroup);
+
+        void onButtonStatusChange(ButtonsStatus buttonsStatus);
     }
 
     public interface ProgressStatus {
         void setVisibility(boolean isFavorite);
+    }
+
+    public interface ButtonsStatus {
+        void changed(boolean isFavorite);
     }
 }

@@ -68,6 +68,11 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
             public void onCellClick(StructIGStickerGroup stickerGroup) {
                 viewModel.onItemCellClicked(stickerGroup);
             }
+
+            @Override
+            public void onButtonStatusChange(AddStickerFragmentAdapter.ButtonsStatus buttonsStatus) {
+                viewModel.getButtonStatusChangedLiveData().observe(getViewLifecycleOwner(), buttonsStatus::changed);
+            }
         });
 
 
@@ -93,7 +98,7 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
     private void openFragmentAddStickerToFavorite(String groupId) {
         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, true);
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, true, addedInUserList -> viewModel.onButtonStatusChanged(addedInUserList));
 
         if (getFragmentManager() != null)
             dialogFragment.show(getFragmentManager(), "dialogFragment");

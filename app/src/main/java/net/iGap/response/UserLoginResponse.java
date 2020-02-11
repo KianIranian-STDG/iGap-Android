@@ -23,7 +23,6 @@ import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -123,8 +122,6 @@ public class UserLoginResponse extends MessageHandler {
                 realmUserInfo.setWalletRegister(builder.getWalletAgreementAccepted());
             }
         });
-
-        StickerRepository.getInstance().getUserStickersGroup();
     }
 
     @Override

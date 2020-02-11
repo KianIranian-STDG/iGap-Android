@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 import net.iGap.rx.ObserverViewModel;
@@ -23,6 +24,7 @@ public class AddStickerViewModel extends ObserverViewModel {
 
     private MutableLiveData<StructIGStickerGroup> openStickerDetailLiveData = new MutableLiveData<>();
     private MutableLiveData<List<StructIGStickerGroup>> stickerGroupLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> buttonStatusChangedLiveData = new SingleLiveEvent<>();
 
     private MutableLiveData<Integer> loadMoreProgressLiveData = new MutableLiveData<>();
 
@@ -108,9 +110,17 @@ public class AddStickerViewModel extends ObserverViewModel {
         return stickerGroupLiveData;
     }
 
+    public SingleLiveEvent<Boolean> getButtonStatusChangedLiveData() {
+        return buttonStatusChangedLiveData;
+    }
+
     public void onPageEnded() {
         page++;
         pagination.onNext(page);
+    }
+
+    public void onButtonStatusChanged(boolean addedInUserList) {
+        buttonStatusChangedLiveData.postValue(addedInUserList);
     }
 
     public interface OnClickResult {
