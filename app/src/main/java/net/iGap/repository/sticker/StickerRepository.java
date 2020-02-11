@@ -489,7 +489,7 @@ public class StickerRepository {
 
                     if (realmStickerGroup != null) {
                         try {
-                            DbManager.getInstance().doRealmTransaction(asyncRealm -> realmStickerGroup.deleteFromRealm());
+                            DbManager.getInstance().doRealmTransaction(asyncRealm -> realmStickerGroup.removeFromRealm());
                             stickerGroup.setInUserList(false);
                         } catch (Exception e) {
                             e.printStackTrace();
