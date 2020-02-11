@@ -3085,6 +3085,11 @@
     <string name="mobile_bank_load_detail_unpaidCount">عدد الاقساط غير المدفوعة: %1$s</string>
     <string name="mobile_bank_load_detail_unpaidAmount">المبلغ غير المدفوع: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_paymentList">قائمة التقسيط</string>
+    <string name="mobile_bank_detail_cell_payStatus">وضعیت پرداخت: %1$s</string>
+    <string name="mobile_bank_detail_cell_payAmount">مبلغ الدفع: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_unpaidAmount">المبلغ المتبقي: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_penaltyAmount">مقدار الغرامة: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_paymentDate">تاريخ الدفع: %1$s</string>
 
     <string name="transactions">المعاملات</string>
     <string name="deposit">الوديعة</string>

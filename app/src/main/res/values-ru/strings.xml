@@ -1848,6 +1848,11 @@
     <string name="mobile_bank_load_detail_unpaidCount">Количество неоплаченных взносов: %1$s</string>
     <string name="mobile_bank_load_detail_unpaidAmount">Сумма не оплачена: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_paymentList">Рассрочка</string>
+    <string name="mobile_bank_detail_cell_payStatus">Статус оплаты: %1$s</string>
+    <string name="mobile_bank_detail_cell_payAmount">Сумма платежа: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_unpaidAmount">Оставшаяся сумма: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_penaltyAmount">Сумма штрафа: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_paymentDate">Дата оплаты: %1$s</string>
 
     <string name="mobile_bank_load_detail_bankCode">Код банка: %1$s</string>
     <string name="temporary_password">POOYA пароль</string>

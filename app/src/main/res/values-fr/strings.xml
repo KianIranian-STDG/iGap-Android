@@ -2076,6 +2076,11 @@
     <string name="mobile_bank_load_detail_unpaidCount">Nombre de versements impayés: %1$s</string>
     <string name="mobile_bank_load_detail_unpaidAmount">Montant non payé: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_paymentList">Liste des versements</string>
+    <string name="mobile_bank_detail_cell_payStatus">Statut de paiement: %1$s</string>
+    <string name="mobile_bank_detail_cell_payAmount">Montant du paiement: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_unpaidAmount">Montant restant: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_penaltyAmount">Le montant de l\'amende: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_paymentDate">Date de paiement: %1$s</string>
 
     <string name="transactions">Transactions</string>
     <string name="deposit">Dépôt</string>

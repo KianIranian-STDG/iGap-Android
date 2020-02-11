@@ -2151,6 +2151,11 @@
     <string name="mobile_bank_load_detail_unpaidCount">تعداد قسط های پرداخت نشده: %1$s</string>
     <string name="mobile_bank_load_detail_unpaidAmount">مبلغ پرداخت نشده: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_paymentList">لیست اقساط</string>
+    <string name="mobile_bank_detail_cell_payStatus">وضعیت پرداخت: %1$s</string>
+    <string name="mobile_bank_detail_cell_payAmount">مبلغ پرداختی: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_unpaidAmount">مبلغ باقیمانده: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_penaltyAmount">مبلغ جریمه: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_paymentDate">تاریخ پرداخت: %1$s</string>
 
     <string name="order_id">شناسه پرداخت</string>
     <string name="requester_mobile_number">شماره موبایل درخواست دهنده</string>
