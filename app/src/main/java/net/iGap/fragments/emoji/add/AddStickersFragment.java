@@ -98,7 +98,7 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
     private void openFragmentAddStickerToFavorite(String groupId) {
         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, true, addedInUserList -> viewModel.onButtonStatusChanged(addedInUserList));
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, true);
 
         if (getFragmentManager() != null)
             dialogFragment.show(getFragmentManager(), "dialogFragment");

@@ -16,17 +16,20 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.eventbus.EventListener;
+import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.view.ProgressButton;
 import net.iGap.view.StickerView;
 
-public class AddStickerCell extends FrameLayout {
+public class AddStickerCell extends FrameLayout implements EventListener {
 
     private StickerView groupAvatarIv;
     private TextView groupNameTv;
     private TextView groupStickerCountTv;
     private ProgressButton button;
+    private String stickerGroupId;
     private boolean isRtl = G.isAppRtl;
 
     public AddStickerCell(@NonNull Context context) {
@@ -63,6 +66,10 @@ public class AddStickerCell extends FrameLayout {
 
     }
 
+    public void setStickerGroupId(String stickreGroupId) {
+        this.stickerGroupId = stickreGroupId;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(LayoutCreator.dpToPx(61), MeasureSpec.EXACTLY));
@@ -74,6 +81,18 @@ public class AddStickerCell extends FrameLayout {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(new Theme().getDividerColor(getContext()));
         canvas.drawLine(isRtl ? 0 : LayoutCreator.dpToPx(62), getHeight() - 1, isRtl ? getWidth() - LayoutCreator.dpToPx(62) : getWidth() - getPaddingRight(), getHeight() - 1, paint);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        EventManager.getInstance().addEventListener(EventManager.STICKER_CHANGED, this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        EventManager.getInstance().removeEventListener(EventManager.STICKER_CHANGED, this);
     }
 
     public void loadAvatar(StructIGStickerGroup stickerGroup) {
@@ -90,5 +109,16 @@ public class AddStickerCell extends FrameLayout {
 
     public ProgressButton getButton() {
         return button;
+    }
+
+    @Override
+    public void receivedMessage(int id, Object... message) {
+        if (id == EventManager.STICKER_CHANGED) {
+            String groupId = (String) message[0];
+            boolean isInUserList = (boolean) message[1];
+
+            if (groupId.equals(stickerGroupId))
+                G.handler.post(() -> getButton().setMode(isInUserList ? 0 : 1));
+        }
     }
 }

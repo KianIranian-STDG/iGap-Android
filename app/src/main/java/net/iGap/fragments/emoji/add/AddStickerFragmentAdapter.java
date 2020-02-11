@@ -54,7 +54,7 @@ public class AddStickerFragmentAdapter extends RecyclerView.Adapter<AddStickerFr
         }
 
         private void bindView(StructIGStickerGroup sticker) {
-
+            stickerCell.setStickerGroupId(sticker.getGroupId());
             stickerCell.getButton().setMode(sticker.isInUserList() ? 0 : 1);
             stickerCell.getGroupNameTv().setText(sticker.getName());
 

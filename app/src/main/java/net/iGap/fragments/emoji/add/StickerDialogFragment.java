@@ -41,21 +41,12 @@ public class StickerDialogFragment extends BaseBottomSheet {
     private AnimatedStickerCell stickerCell;
 
     private OnStickerDialogListener listener;
-    private Delegate delegate;
 
     private String TAG = "abbasiStickerDialog";
 
     public static StickerDialogFragment getInstance(StructIGStickerGroup stickerGroup, boolean readOnlyChat) {
         StickerDialogFragment dialogAddSticker = new StickerDialogFragment();
         dialogAddSticker.stickerGroup = stickerGroup;
-        dialogAddSticker.readOnlyChat = readOnlyChat;
-        return dialogAddSticker;
-    }
-
-    public static StickerDialogFragment getInstance(StructIGStickerGroup stickerGroup, boolean readOnlyChat, Delegate delegate) {
-        StickerDialogFragment dialogAddSticker = new StickerDialogFragment();
-        dialogAddSticker.stickerGroup = stickerGroup;
-        dialogAddSticker.delegate = delegate;
         dialogAddSticker.readOnlyChat = readOnlyChat;
         return dialogAddSticker;
     }
@@ -193,12 +184,6 @@ public class StickerDialogFragment extends BaseBottomSheet {
 
         addOrRemoveTv.setOnClickListener(v -> viewModel.onAddOrRemoveStickerClicked());
 
-        viewModel.getFavoriteStickerLiveData().observe(getViewLifecycleOwner(), favorite -> {
-            if (delegate != null) {
-                delegate.onStatusChange(favorite);
-            }
-        });
-
         viewModel.getSticker();
     }
 
@@ -221,9 +206,5 @@ public class StickerDialogFragment extends BaseBottomSheet {
     public void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
-    }
-
-    public interface Delegate {
-        void onStatusChange(boolean addedInUserList);
     }
 }
