@@ -2239,8 +2239,12 @@
     </array>
 
     <array name="onboard_descriptions">
-        <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.</item>
-        <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.</item>
+        <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف
+            پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.
+        </item>
+        <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن
+            استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.
+        </item>
     </array>
     <string name="news_MHits">پربازدیدترین</string>
     <string name="news_comment">نظرات</string>
@@ -2413,6 +2417,7 @@
     <string name="mobile_bank_detail_cell_unpaidAmount">مبلغ باقیمانده: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_MUAmount">مبلغ قسط های پرداخت نشده: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_MUCount">تعداد قسط های پرداخت نشده: %1$s</string>
+
     <string name="mobile_bank_load_detail_amount">مبلغ: %1$s %2$s</string>
     <string name="mobile_bank_load_detail_bankCode">کد بانک: %1$s</string>
     <string name="mobile_bank_load_detail_customerCode">کد مشتری: %1$s</string>

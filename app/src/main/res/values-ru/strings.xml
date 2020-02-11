@@ -1830,7 +1830,26 @@
     <string name="delete_from_storage">Удалить из хранилища</string>
     <string name="map_registration_enable">Включить видимость поблизости</string>
     <string name="need_browser">Требуется браузер для использования.</string>
-    <string name="parsian_bank">My Parsian</string>
+    <string name="parsian_bank">Мой Parsian</string>
+    <string name="mobile_bank_load_detail_personalInfo">Информация для клиентов</string>
+    <string name="mobile_bank_load_detail_customerCode">Код клиента: %1$s</string>
+    <string name="mobile_bank_load_detail_customerName">Имя клиента: %1$s</string>
+    <string name="mobile_bank_load_detail_loadInfo">Кредитная информация</string>
+    <string name="mobile_bank_load_detail_amount">миссионер: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_discount">скидка: %1$s</string>
+    <string name="mobile_bank_load_detail_penalty">неустойка: %1$s</string>
+    <string name="mobile_bank_load_detail_MUnpaidInfo">Просроченная рассрочка платежа</string>
+    <string name="mobile_bank_load_detail_MUCount">Количество неоплаченных взносов: %1$s</string>
+    <string name="mobile_bank_load_detail_MUAmount">Сумма неоплаченных взносов: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paidInfo">Информация об оплате в рассрочку</string>
+    <string name="mobile_bank_load_detail_paidCount">Количество внесенных платежей: %1$s</string>
+    <string name="mobile_bank_load_detail_paidAmount">Оплаченная сумма:: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_unpaidInfo">Информация о неоплаченном взносе</string>
+    <string name="mobile_bank_load_detail_unpaidCount">Количество неоплаченных взносов: %1$s</string>
+    <string name="mobile_bank_load_detail_unpaidAmount">Сумма не оплачена: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paymentList">Рассрочка</string>
+
+    <string name="mobile_bank_load_detail_bankCode">Код банка: %1$s</string>
     <string name="temporary_password">POOYA пароль</string>
     <string name="transactions">операции</string>
     <string name="deposit">депозит</string>

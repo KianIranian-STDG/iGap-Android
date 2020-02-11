@@ -2057,7 +2057,26 @@
     <string name="need_browser">Nécessite un navigateur à utiliser.</string>
     <string name="install_latest_version">Installez la dernière version pour utiliser cette fonction</string>
     <string name="temporary_password">Mot de passe POOYA</string>
-    <string name="parsian_bank">My Parsian</string>
+    <string name="parsian_bank">Mon Parsian</string>
+    <string name="mobile_bank_load_detail_personalInfo">Information client</string>
+    <string name="mobile_bank_load_detail_bankCode">Code bancaire: %1$s</string>
+    <string name="mobile_bank_load_detail_customerCode">Code client: %1$s</string>
+    <string name="mobile_bank_load_detail_customerName">Nom du client: %1$s</string>
+    <string name="mobile_bank_load_detail_loadInfo">Informations sur le prêt</string>
+    <string name="mobile_bank_load_detail_amount">Montant: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_discount">Remises: %1$s</string>
+    <string name="mobile_bank_load_detail_penalty">Très bien: %1$s</string>
+    <string name="mobile_bank_load_detail_MUnpaidInfo">Informations sur les versements en retard</string>
+    <string name="mobile_bank_load_detail_MUCount">Nombre de versements impayés: %1$s</string>
+    <string name="mobile_bank_load_detail_MUAmount">Montant des versements impayés: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paidInfo">Informations sur l\'acompte payé</string>
+    <string name="mobile_bank_load_detail_paidCount">Nombre de versements payés: %1$s</string>
+    <string name="mobile_bank_load_detail_paidAmount">Montant payé:: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_unpaidInfo">Informations sur les versements impayés</string>
+    <string name="mobile_bank_load_detail_unpaidCount">Nombre de versements impayés: %1$s</string>
+    <string name="mobile_bank_load_detail_unpaidAmount">Montant non payé: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paymentList">Liste des versements</string>
+
     <string name="transactions">Transactions</string>
     <string name="deposit">Dépôt</string>
     <string name="sheba_number">SHEBA Nombre</string>
