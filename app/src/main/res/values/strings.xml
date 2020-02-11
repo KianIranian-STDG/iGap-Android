@@ -2524,7 +2524,6 @@ Want to get it?</string>
     <string name="soon">Coming soon...</string>
     <string name="delete_recently_sticker">Delete Recently Sticker</string>
     <string name="delete_favorite_sticker">Delete Favorite Sticker</string>
-    <string name="delete_recent_emoji">Delete Recent Emoji</string>
     <string name="sticker_setting">Sticker setting</string>
     <string name="empty_sticker">You haven\'t added any stickers yet!</string>
     <string name="emoji_category_activity">Activity</string>
@@ -2555,5 +2554,6 @@ Want to get it?</string>
     <string name="inquiry_and_shopping">Inquiry and shopping</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
     <string name="poll_dialog_question">Are you sure of your opinion?</string>
+    <string name="delete_recent_emoji">Delete Recent Emoji</string>
 
 </resources>

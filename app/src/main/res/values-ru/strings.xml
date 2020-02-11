@@ -1946,5 +1946,6 @@
     <string name="mobile_bank_cheque_number">Номер чека: %1$s</string>
     <string name="mobile_bank_cheque_status">Положение дел: %1$s</string>
     <string name="mobile_bank_hotCard">Заблокировать карту</string>
+    <string name="delete_recent_emoji">Удалить последние Emoji</string>
 
 </resources>

@@ -2220,5 +2220,6 @@
     <string name="mobile_bank_cheque_number">"شماره چک: %1$s "</string>
     <string name="mobile_bank_cheque_status">"وضعیت چک: %1$s "</string>
     <string name="mobile_bank_hotCard">مسدود کردن کارت</string>
+    <string name="delete_recent_emoji">Delete Recent Emoji</string>
 
 </resources>

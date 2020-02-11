@@ -2172,4 +2172,5 @@
     <string name="mobile_bank_hotCard">Bloquer la carte</string>
 
     <string name="poll_dialog_question">Etes-vous sûr de votre avis?</string>
+    <string name="delete_recent_emoji">Supprimer les emoji récents</string>
 </resources>

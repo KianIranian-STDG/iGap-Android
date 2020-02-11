@@ -60,6 +60,7 @@
                 android:background="?rootBackgroundColor"
                 android:gravity="center_vertical"
                 android:padding="@dimen/dp14"
+                android:visibility="gone"
                 android:text="@string/delete_favorite_sticker"
                 android:textColor="@color/red"
                 android:textSize="@dimen/standardTextSize"
