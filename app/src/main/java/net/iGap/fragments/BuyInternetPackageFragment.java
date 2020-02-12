@@ -1,4 +1,4 @@
-package net.iGap.internetpackage;
+package net.iGap.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +17,8 @@ import net.iGap.databinding.FragmentBuyInternetPackageBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.viewmodel.BuyInternetPackageViewModel;
+import net.iGap.adapter.InternetPackageListAdapter;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 public class BuyInternetPackageFragment extends BaseAPIViewFrag<BuyInternetPackageViewModel> {

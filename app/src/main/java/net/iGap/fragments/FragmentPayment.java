@@ -19,7 +19,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.viewmodel.FragmentPaymentViewModel;
 
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package net.iGap.internetpackage;
+package net.iGap.model.internetPackage;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package net.iGap.internetpackage;
+package net.iGap.viewmodel;
 
 import android.view.View;
 
@@ -8,6 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.model.internetPackage.InternetPackage;
+import net.iGap.model.internetPackage.MciInternetPackageFilter;
+import net.iGap.repository.MciInternetPackageRepository;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;

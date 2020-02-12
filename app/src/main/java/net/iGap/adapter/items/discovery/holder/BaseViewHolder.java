@@ -60,7 +60,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.internetpackage.BuyInternetPackageFragment;
+import net.iGap.fragments.BuyInternetPackageFragment;
 import net.iGap.kuknos.view.KuknosEntryOptionFrag;
 import net.iGap.mobileBank.view.MobileBankLoginFragment;
 import net.iGap.model.MciPurchaseResponse;

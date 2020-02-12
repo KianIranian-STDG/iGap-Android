@@ -1,4 +1,4 @@
-package net.iGap.internetpackage;
+package net.iGap.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
+import net.iGap.model.internetPackage.InternetPackage;
 
 import java.util.List;
 

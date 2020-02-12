@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.internetpackage.BuyInternetPackageViewModel" />
+            type="net.iGap.viewmodel.BuyInternetPackageViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
