@@ -28,25 +28,18 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     public int ledColorMessage;
     public int ledColorGroup;
-
     public ObservableBoolean isAlertMassage = new ObservableBoolean();
-    public ObservableBoolean isMassagePreview = new ObservableBoolean();
-    public ObservableBoolean isAppSound = new ObservableBoolean();
-    public ObservableBoolean isInAppVibration = new ObservableBoolean();
-    public ObservableBoolean isInAppPreView = new ObservableBoolean();
-    public ObservableBoolean isSoundInChat = new ObservableBoolean();
-    public ObservableBoolean isSeparateNotification = new ObservableBoolean();
-    public ObservableBoolean isKeepService = new ObservableBoolean();
     public ObservableBoolean isAlertGroup = new ObservableBoolean();
+    public ObservableBoolean isMassagePreview = new ObservableBoolean();
     public ObservableBoolean isGroupPreView = new ObservableBoolean();
-    public ObservableInt callbackVibrateMessage = new ObservableInt(R.string.array_Default);
-    public ObservableInt callbackPopUpNotificationMessage = new ObservableInt();
-    public ObservableField<String> callbackSoundMessage = new ObservableField<>();
-    public ObservableInt callbackVibrateGroup = new ObservableInt(R.string.array_Default);
-    public ObservableInt callbackPopUpNotificationGroup = new ObservableInt(R.string.st_sound);
-    public ObservableField<String> callBackSoundGroup = new ObservableField<>();
     public MutableLiveData<Integer> messageLedColor = new MutableLiveData<>();
     public MutableLiveData<Integer> groupLedColor = new MutableLiveData<>();
+    public ObservableInt callbackVibrateMessage = new ObservableInt(R.string.array_Default);
+    public ObservableInt callbackVibrateGroup = new ObservableInt(R.string.array_Default);
+    public ObservableInt callbackPopUpNotificationMessage = new ObservableInt();
+    public ObservableInt callbackPopUpNotificationGroup = new ObservableInt(R.string.st_sound);
+    public ObservableField<String> callbackSoundMessage = new ObservableField<>();
+    public ObservableField<String> callBackSoundGroup = new ObservableField<>();
     public SingleLiveEvent<Boolean> showMessageLedDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showGroupLedDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showMessageVibrationDialog = new SingleLiveEvent<>();
@@ -55,9 +48,15 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     public SingleLiveEvent<Boolean> showGroupPopupNotification = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showMessageSound = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showGroupSound = new SingleLiveEvent<>();
+
+    public ObservableBoolean isAppSound = new ObservableBoolean();
+    public ObservableBoolean isInAppVibration = new ObservableBoolean();
+    public ObservableBoolean isInAppPreView = new ObservableBoolean();
+    public ObservableBoolean isSoundInChat = new ObservableBoolean();
+    public ObservableBoolean isSeparateNotification = new ObservableBoolean();
+    public ObservableBoolean isKeepService = new ObservableBoolean();
     public SingleLiveEvent<Integer> startVibration = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> playSound = new SingleLiveEvent<>();
-
     private String[] soundList;
     private SharedPreferences sharedPreferences;
     public int messageDialogSoundMessage;
@@ -114,7 +113,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         isGroupPreView.set(isChecked);
         if (isChecked) {
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1)
-            .apply();
+                    .apply();
         } else {
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 0).apply();
         }
@@ -402,23 +401,23 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         showMessageSound.setValue(true);
     }
 
+
+    public void onClickSoundGroup() {
+        showGroupSound.setValue(true);
+    }
+
     public void setChooseSound() {
         sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, messageChooseSound).commit();
+    }
+
+    public void chooseSound() {
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, groupChooseSound).commit();
     }
 
     public void getSoundMessagePosition(int which) {
         messageChooseSound = which;
         callbackSoundMessage.set(soundList[which]);
         playSound(which);
-    }
-
-
-    public void onClickSoundGroup() {
-        showGroupSound.setValue(true);
-    }
-
-    public void chooseSound() {
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, groupChooseSound).apply();
     }
 
     public void getSoundGroupPosition(int which) {
