@@ -1,6 +1,7 @@
 package net.iGap.model.mobileBank;
 
-import net.iGap.mobileBank.repository.util.JalaliCalendar;
+
+import net.iGap.module.mobileBank.JalaliCalendar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

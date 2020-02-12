@@ -6,7 +6,12 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.model.mobileBank.BaseMobileBankResponse;
+import net.iGap.model.mobileBank.LoanListModel;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.MobileBankRepository;
+
+import java.util.List;
 
 public class MobileBankLoansViewModel extends BaseMobileBankViewModel {
 

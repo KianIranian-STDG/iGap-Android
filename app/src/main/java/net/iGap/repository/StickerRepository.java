@@ -25,8 +25,10 @@ import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.RSACipher;
 import net.iGap.realm.RealmStickerGroup;
+import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickerItem;
 import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.realm.RealmStickerItemFields;
 
 import org.jetbrains.annotations.NotNull;
 

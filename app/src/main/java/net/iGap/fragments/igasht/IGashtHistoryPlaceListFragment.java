@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.adapter.igahst.PlaceHistoryAdapter;
 import net.iGap.databinding.FragmentIgashtHistoryPlaceBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.igasht.IGashtHistoryPlaceViewModel;
 
 public class IGashtHistoryPlaceListFragment extends IGashtBaseView<IGashtHistoryPlaceViewModel> {
 

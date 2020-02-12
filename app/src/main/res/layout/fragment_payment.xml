@@ -16,7 +16,7 @@
 
         <variable
             name="backHandler"
-            type="net.iGap.interfaces.IBackHandler" />
+            type="net.iGap.observers.interfaces.IBackHandler" />
     </data>
 
     <LinearLayout
