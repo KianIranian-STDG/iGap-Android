@@ -33,7 +33,7 @@ public class StructIGSticker {
         setFileSize(stickerDataModel.getFileSize());
         setGroupId(stickerDataModel.getGroupId());
         setId(stickerDataModel.getId());
-        setPath(StickerRepository.getInstance().getStickerPath(stickerDataModel.getToken(), stickerDataModel.getName()));
+        setPath(StickerRepository.getInstance().getStickerPath(stickerDataModel.getToken(), stickerDataModel.getFileName()));
         setToken(stickerDataModel.getToken());
         setFavorite(stickerDataModel.isFavorite());
         setTags(stickerDataModel.getTags());
@@ -46,7 +46,7 @@ public class StructIGSticker {
         setFileSize(stickerItem.getFileSize());
         setGroupId(stickerItem.getGroupId());
         setId(stickerItem.getId());
-        setPath(StickerRepository.getInstance().getStickerPath(stickerItem.getToken(), stickerItem.getName()));
+        setPath(StickerRepository.getInstance().getStickerPath(stickerItem.getToken(), stickerItem.getFileName()));
         setToken(stickerItem.getToken());
         setFavorite(stickerItem.isFavorite());
     }
