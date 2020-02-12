@@ -2119,6 +2119,7 @@
     <string name="kuknos_trade_sell">فروش</string>
     <string name="kuknos_trade_recieve">خرید</string>
     <string name="kuknos_trade_amount">مقدار</string>
+    <string name="kuknos_trade_price">قیمت</string>
     <string name="kuknos_trade_delete"></string>
     <string name="kuknos_trade_date">تاریخ</string>
     <string name="kuknos_tradePager_trade">مبادله</string>

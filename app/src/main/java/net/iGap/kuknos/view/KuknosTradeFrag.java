@@ -13,12 +13,16 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosTradeBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.kuknos.view.adapter.WalletHistorySpinnerAdapter;
 import net.iGap.kuknos.viewmodel.KuknosTradeVM;
 
@@ -90,6 +94,7 @@ public class KuknosTradeFrag extends BaseFragment {
         onDataChanged();
         onProgress();
         entryListener();
+        goToPin();
     }
 
     private void onDataChanged() {
@@ -203,6 +208,21 @@ public class KuknosTradeFrag extends BaseFragment {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+    }
+
+    private void goToPin() {
+        kuknosTradeVM.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosEnterPinFrag.newInstance(() -> kuknosTradeVM.sendDataServer());
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }

@@ -40,10 +40,10 @@ public class TradeRepo {
     }*/
 
     public void manangeOffer(String sourceCode, String sourceIssuer, String counterCode,
-                             String counterIssuer, String amount, String price,
+                             String counterIssuer, String amount, String price, String offerID,
                              HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
         kuknosAPIRepository.manageOffer(userRepo.getSeedKey(), sourceCode, sourceIssuer, counterCode,
-                counterIssuer, amount, price, handShakeCallback, apiResponse);
+                counterIssuer, amount, price, offerID, handShakeCallback, apiResponse);
     }
 
     public void getOpenOffers(int cursor, int limit, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOfferResponse>> apiResponse) {

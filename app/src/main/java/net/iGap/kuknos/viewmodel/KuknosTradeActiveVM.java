@@ -9,6 +9,8 @@ import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 
+import org.stellar.sdk.responses.SubmitTransactionResponse;
+
 public class KuknosTradeActiveVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosOfferResponse> offerList;
@@ -42,6 +44,39 @@ public class KuknosTradeActiveVM extends BaseAPIViewModel {
                 progressState.setValue(false);
             }
         });
+    }
+
+    public void deleteTrade(int position) {
+        progressState.setValue(true);
+        KuknosOfferResponse.OfferResponse deleteItem = offerList.getValue().getOffers().get(position);
+        tradeRepo.manangeOffer(
+                deleteItem.getSelling().getAsset().getType().equals("native") ? "PMN" : deleteItem.getSelling().getAssetCode(),
+                deleteItem.getSelling().getAssetIssuer(),
+                deleteItem.getBuying().getAsset().getType().equals("native") ? "PMN" : deleteItem.getBuying().getAssetCode(),
+                deleteItem.getBuying().getAssetIssuer(),
+                "0", "0", String.valueOf(deleteItem.getId()), this,
+                new ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>>() {
+                    @Override
+                    public void onSuccess(KuknosResponseModel<SubmitTransactionResponse> data) {
+                        KuknosOfferResponse temp = offerList.getValue();
+                        temp.getOffers().remove(position);
+                        offerList.setValue(temp);
+                        progressState.setValue(false);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        errorM.setValue(new ErrorM(true, "", "", 0));
+                        progressState.setValue(false);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        errorM.setValue(new ErrorM(true, "", "", 0));
+                        progressState.setValue(false);
+                    }
+
+                });
     }
 
     public MutableLiveData<ErrorM> getErrorM() {

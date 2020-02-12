@@ -117,11 +117,11 @@ class KuknosAPIRepository {
     }*/
 
     void manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
-                     String counterCode, String counterIssuer, String amount, String price,
+                     String counterCode, String counterIssuer, String amount, String price, String offerID,
                      HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
         new KuknosSDKRepo(KuknosSDKRepo.API.MANAGE_OFFER, XDR -> new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
                 .initAPI(apiService.buyOffer(XDR), handShakeCallback, apiResponse))
-                .execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer, amount, price);
+                .execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer, amount, price, offerID);
         /*new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
                 .initAPI(apiService.buyOffer(new KuknosSDKRepo().manageOffer(accountSeed, sourceCode, sourceIssuer,
                         counterCode, counterIssuer, amount, price))

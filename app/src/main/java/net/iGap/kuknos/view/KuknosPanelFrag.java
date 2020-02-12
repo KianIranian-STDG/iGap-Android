@@ -34,6 +34,7 @@ import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.WalletSpinnerArrayAdapter;
@@ -189,7 +190,8 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
                     return;
                 case 2:
-                    kuknosPanelVM.getTermsAndCond();
+                    HelperUrl.openWebBrowser(getContext(), "https://www.kuknos.org/wp/");
+//                    kuknosPanelVM.getTermsAndCond();
                     break;
                 case 3:
                     fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());

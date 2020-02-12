@@ -191,7 +191,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             TandCAgree.postValue("error");
             return;
         }
-        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_AGREEMENT", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_SIGNUP_AGREEMENT", new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 if (body != null)

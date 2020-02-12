@@ -119,13 +119,13 @@ public class KuknosAddAssetFrag extends BaseFragment {
             }
         });
 
-        kuknosAddAssetVM.getProgressStateAdv().observe(getViewLifecycleOwner(), aBoolean -> {
+        /*kuknosAddAssetVM.getProgressStateAdv().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosAddAProgressVAdv.setVisibility(View.VISIBLE);
             } else {
                 binding.fragKuknosAddAProgressVAdv.setVisibility(View.GONE);
             }
-        });
+        });*/
     }
 
     private void onDataChanged() {

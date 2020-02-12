@@ -2189,6 +2189,7 @@ Want to get it?</string>
     <string name="kuknos_trade_sell">Selling</string>
     <string name="kuknos_trade_recieve">Receiving</string>
     <string name="kuknos_trade_amount">Amount</string>
+    <string name="kuknos_trade_price">Price</string>
     <string name="kuknos_trade_delete"></string>
     <string name="kuknos_trade_date">Date</string>
     <string name="kuknos_tradePager_trade">Trade</string>

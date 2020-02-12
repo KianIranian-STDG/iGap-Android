@@ -55,6 +55,7 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
         private TextView recieve;
         private TextView date;
         private TextView delete;
+        private TextView price;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +65,7 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
             recieve = itemView.findViewById(R.id.kuknos_tradeHistoryCell_receive);
             date = itemView.findViewById(R.id.kuknos_tradeHistoryCell_date);
             delete = itemView.findViewById(R.id.kuknos_tradeHistoryCell_delete);
+            price = itemView.findViewById(R.id.kuknos_tradeHistoryCell_price);
 
         }
 
@@ -79,6 +81,9 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
             date.setText(model.getLedgerCloseTime());
             date.setVisibility(View.VISIBLE);
             delete.setVisibility(View.GONE);
+            price.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()))
+                    : df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()));
         }
     }
 }

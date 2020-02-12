@@ -65,7 +65,12 @@ public class KuknosTradeActiveFrag extends BaseFragment {
     private void onDataChanged() {
         kuknosTradeHistoryVM.getOfferList().observe(getViewLifecycleOwner(), offerResponsePage -> {
             if (offerResponsePage.getOffers().size() != 0) {
-                WalletOpenOfferAdapter mAdapter = new WalletOpenOfferAdapter(offerResponsePage.getOffers());
+                WalletOpenOfferAdapter mAdapter = new WalletOpenOfferAdapter(offerResponsePage.getOffers(), new WalletOpenOfferAdapter.onClickListener() {
+                    @Override
+                    public void onDelete(int position) {
+                        kuknosTradeHistoryVM.deleteTrade(position);
+                    }
+                });
                 binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
             } else {
                 binding.kuknosTradeHistoryNOitem.setVisibility(View.VISIBLE);
@@ -80,8 +85,7 @@ public class KuknosTradeActiveFrag extends BaseFragment {
                 defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
                         .setMessage(getResources().getString(R.string.kuknos_wHistory_error));
                 defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-                    //close frag
-                    popBackStackFragment();
+
                 });
                 defaultRoundDialog.show();
             }

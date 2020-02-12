@@ -14,6 +14,7 @@ import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.module.SingleLiveEvent;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
@@ -25,6 +26,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
 
     private MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosOriginWalletsM;
     private MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosDestinationWalletsM;
+    private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> fetchProgressState;
     private MutableLiveData<Boolean> sendProgressState;
@@ -103,10 +105,10 @@ public class KuknosTradeVM extends BaseAPIViewModel {
     public void exchangeAction() {
         if (!checkEntry())
             return;
-        sendDataServer();
+        goToPin.setValue(true);
     }
 
-    private void sendDataServer() {
+    public void sendDataServer() {
         sendProgressState.setValue(true);
         double price = Double.valueOf(originAmount.get()) / Double.valueOf(destAmount.get());
         Log.d("amini", "sendDataServer: " + price + " ");
@@ -115,7 +117,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
                 kuknosOriginWalletsM.getValue().get(originPosition).getAssetIssuer(),
                 kuknosDestinationWalletsM.getValue().get(destPosition).getAsset().getType().equals("native") ? "PMN" : kuknosDestinationWalletsM.getValue().get(destPosition).getAssetCode(),
                 kuknosDestinationWalletsM.getValue().get(destPosition).getAssetIssuer(),
-                destAmount.get(), Double.toString(price), this,
+                destAmount.get(), Double.toString(price), "0", this,
                 new ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>>() {
                     @Override
                     public void onSuccess(KuknosResponseModel<SubmitTransactionResponse> data) {
@@ -222,5 +224,9 @@ public class KuknosTradeVM extends BaseAPIViewModel {
 
     public void setDestPosition(int destPosition) {
         this.destPosition = destPosition;
+    }
+
+    public SingleLiveEvent<Boolean> getGoToPin() {
+        return goToPin;
     }
 }

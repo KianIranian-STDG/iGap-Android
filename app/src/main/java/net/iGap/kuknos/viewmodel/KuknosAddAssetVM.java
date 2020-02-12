@@ -66,8 +66,7 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
                 assetPageMutableLiveData.setValue(data.getData());
-                // TODO: 8/18/2019 change this part to get data from server
-                advAssetPageMutableLiveData.setValue(data.getData());
+                /*advAssetPageMutableLiveData.setValue(data.getData());*/
                 progressStateAdv.setValue(false);
             }
 
