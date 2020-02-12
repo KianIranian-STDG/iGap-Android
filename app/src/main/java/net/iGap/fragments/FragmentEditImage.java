@@ -464,7 +464,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         } else {
             rootSend.setVisibility(VISIBLE);
             keyboardContainer.setVisibility(View.GONE);
-            emojiView.setVisibility(View.GONE);
+            if (emojiView != null)
+                emojiView.setVisibility(View.GONE);
             closeKeyboard();
         }
 

@@ -67,6 +67,7 @@ import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.view.NewsMainFrag;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.repository.sticker.StickerRepository;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.viewmodel.UserScoreViewModel;
@@ -301,6 +302,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 // coming soon
                 break;
             case STICKER_SHOP:/** tested **/
+                StickerRepository.getInstance().getUserStickersGroup();
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                 break;
             case CARD_TO_CARD:
