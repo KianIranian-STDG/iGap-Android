@@ -21,7 +21,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.repository.StickerRepository;

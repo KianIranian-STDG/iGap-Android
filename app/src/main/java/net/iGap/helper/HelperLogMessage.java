@@ -20,10 +20,10 @@ import android.view.View;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.observers.interfaces.OnChatGetRoom;

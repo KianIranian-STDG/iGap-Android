@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserContactsGetBlockedList;
 import net.iGap.realm.RealmContacts;

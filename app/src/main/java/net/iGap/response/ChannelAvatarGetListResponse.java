@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoChannelAvatarGetList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;

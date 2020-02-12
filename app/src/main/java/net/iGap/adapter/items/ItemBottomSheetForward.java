@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hanks.library.AnimateCheckBox;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.avatar.AvatarHandler;

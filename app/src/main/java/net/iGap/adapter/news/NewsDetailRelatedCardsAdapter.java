@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.model.news.NewsList;
 
 public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

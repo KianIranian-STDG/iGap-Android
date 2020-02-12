@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoGeoGetNearbyDistance;

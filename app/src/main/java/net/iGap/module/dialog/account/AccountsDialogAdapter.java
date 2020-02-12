@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.avatar.AvatarHandler;

@@ -28,7 +28,7 @@ import com.crashlytics.android.Crashlytics;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.adapter.ThemeColorListAdapter;
 import net.iGap.databinding.FragmentChatSettingsBinding;
 import net.iGap.helper.HelperFragment;

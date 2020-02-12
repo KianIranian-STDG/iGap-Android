@@ -1,6 +1,6 @@
 package net.iGap.repository;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.model.igasht.BaseIGashtResponse;

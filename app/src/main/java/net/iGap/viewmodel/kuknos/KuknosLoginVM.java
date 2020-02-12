@@ -1,0 +1,119 @@
+package net.iGap.viewmodel.kuknos;
+
+import android.text.TextUtils;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
+import net.iGap.R;
+import net.iGap.repository.kuknos.UserRepo;
+import net.iGap.model.kuknos.ErrorM;
+import net.iGap.model.kuknos.KuknoscheckUserM;
+
+public class KuknosLoginVM extends ViewModel {
+
+    private KuknoscheckUserM kuknoscheckUserM;
+    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<Boolean> nextPage;
+    private MutableLiveData<Integer> progressState;
+    private ObservableField<String> ID = new ObservableField<>();
+    private ObservableField<String> userNum = new ObservableField<>();
+    private UserRepo userRepo = new UserRepo();
+
+    public KuknosLoginVM() {
+        error = new MutableLiveData<>();
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
+        progressState = new MutableLiveData<>();
+        userNum.set(userRepo.getUserNum());
+    }
+
+    public void onSubmit() {
+        if (TextUtils.isEmpty(ID.get())) {
+            error.setValue(new ErrorM(true, "Empty Entry", "0", R.string.kuknos_login_error_empty_str));
+        } else if (ID.get().length() != 10) {
+            error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_login_error_invalid_str));
+        } else {
+            checkUser();
+        }
+    }
+
+    private void checkUser() {
+        /*userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
+            @Override
+            public void onResponse(KuknoscheckUserM kuknoscheckUserM) {
+                if (kuknoscheckUserM.getToken() != null) {
+                    KuknosLoginVM.this.kuknoscheckUserM = kuknoscheckUserM;
+                    nextPage.setValue(true);
+                }
+            }
+
+            @Override
+            public void onFailed(String error) {
+                if (error.equals("registeredBefore"))
+                    KuknosLoginVM.this.error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
+                else
+                    KuknosLoginVM.this.error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_ErrorStr));
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                if (visibility)
+                    progressState.setValue(1);
+                else
+                    progressState.setValue(0);
+            }
+        });*/
+    }
+
+    public boolean loginStatus() {
+        if (userRepo.getSeedKey() != null) {
+            return !userRepo.getSeedKey().equals("-1");
+        }
+        return false;
+    }
+
+    // Setter and Getter
+
+    public MutableLiveData<ErrorM> getError() {
+        return error;
+    }
+
+    public void setError(MutableLiveData<ErrorM> error) {
+        this.error = error;
+    }
+
+    public MutableLiveData<Boolean> getNextPage() {
+        return nextPage;
+    }
+
+    public void setNextPage(MutableLiveData<Boolean> nextPage) {
+        this.nextPage = nextPage;
+    }
+
+    public ObservableField<String> getID() {
+        return ID;
+    }
+
+    public void setID(ObservableField<String> ID) {
+        this.ID = ID;
+    }
+
+    public ObservableField<String> getUserNum() {
+        return userNum;
+    }
+
+    public MutableLiveData<Integer> getProgressState() {
+        return progressState;
+    }
+
+    public void setProgressState(MutableLiveData<Integer> progressState) {
+        this.progressState = progressState;
+    }
+
+    public KuknoscheckUserM getKuknoscheckUserM() {
+        return kuknoscheckUserM;
+    }
+
+}

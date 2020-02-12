@@ -2,7 +2,7 @@ package net.iGap.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.repository.CPayRepository;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;

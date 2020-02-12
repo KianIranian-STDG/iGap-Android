@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;

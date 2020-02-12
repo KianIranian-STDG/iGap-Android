@@ -12,8 +12,8 @@ package net.iGap.realm;
 
 import android.text.format.DateUtils;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;

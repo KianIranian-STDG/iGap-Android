@@ -26,10 +26,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperUrl;

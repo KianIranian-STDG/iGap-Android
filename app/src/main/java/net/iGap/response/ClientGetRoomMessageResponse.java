@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomMessage;
 import net.iGap.proto.ProtoError;

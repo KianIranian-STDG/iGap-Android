@@ -22,7 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentProfileBinding;
 import net.iGap.helper.GoToChatActivity;

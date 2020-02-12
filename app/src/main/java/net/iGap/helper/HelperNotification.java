@@ -24,8 +24,8 @@ import android.view.Display;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;

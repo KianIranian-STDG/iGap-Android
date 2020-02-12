@@ -10,7 +10,7 @@ import com.downloader.Error;
 import com.downloader.PRDownloader;
 import com.downloader.Progress;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.beepTunes.downloadQuality.DownloadQualityFragment;

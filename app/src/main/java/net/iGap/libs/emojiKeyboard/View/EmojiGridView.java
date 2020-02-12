@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.libs.emojiKeyboard.adapter.EmojiAdapter;
 import net.iGap.libs.emojiKeyboard.struct.StructIGEmojiGroup;
 import net.iGap.helper.LayoutCreator;

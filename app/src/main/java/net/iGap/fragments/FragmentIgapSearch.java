@@ -38,7 +38,7 @@ import com.mikepenz.fastadapter.listeners.OnClickListener;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.adapter.items.SearchItamIGap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUrl;

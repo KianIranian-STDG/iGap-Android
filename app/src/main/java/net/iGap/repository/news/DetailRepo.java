@@ -1,6 +1,6 @@
 package net.iGap.repository.news;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.model.news.NewsApiArg;

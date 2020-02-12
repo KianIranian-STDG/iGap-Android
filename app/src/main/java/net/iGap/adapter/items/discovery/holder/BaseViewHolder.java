@@ -20,7 +20,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -61,7 +61,7 @@ import net.iGap.helper.HelperWallet;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.fragments.BuyInternetPackageFragment;
-import net.iGap.kuknos.view.KuknosEntryOptionFrag;
+import net.iGap.fragments.kuknos.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;

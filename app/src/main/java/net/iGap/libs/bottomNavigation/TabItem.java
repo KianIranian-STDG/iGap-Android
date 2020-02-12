@@ -16,10 +16,10 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;

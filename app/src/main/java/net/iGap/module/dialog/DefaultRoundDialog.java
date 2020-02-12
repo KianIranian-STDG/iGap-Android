@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 
 public class DefaultRoundDialog extends AlertDialog.Builder {
 

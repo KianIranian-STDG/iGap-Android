@@ -36,7 +36,7 @@ import com.mikepenz.fastadapter_extensions.items.ProgressItem;
 import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityMediaPlayerBinding;

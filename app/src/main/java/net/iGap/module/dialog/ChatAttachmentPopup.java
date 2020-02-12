@@ -31,7 +31,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.AdapterPopupOpenGallery;

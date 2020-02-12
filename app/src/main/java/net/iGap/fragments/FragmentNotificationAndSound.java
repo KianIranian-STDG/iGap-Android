@@ -19,7 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;

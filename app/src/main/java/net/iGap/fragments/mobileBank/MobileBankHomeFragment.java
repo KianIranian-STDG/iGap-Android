@@ -17,7 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;

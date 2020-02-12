@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.model.popularChannel.Category;
 

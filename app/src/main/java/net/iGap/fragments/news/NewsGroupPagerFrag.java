@@ -21,13 +21,13 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.kuknos.view.adapter.TabAdapter;
+import net.iGap.adapter.kuknos.TabAdapter;
 import net.iGap.model.news.NewsApiArg;
 
 import java.util.Objects;

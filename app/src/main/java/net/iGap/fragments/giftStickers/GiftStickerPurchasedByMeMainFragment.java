@@ -18,7 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 
 public class GiftStickerPurchasedByMeMainFragment extends Fragment {
     private TabLayout tabLayout;

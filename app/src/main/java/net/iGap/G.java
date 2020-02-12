@@ -42,6 +42,8 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.*;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;

@@ -16,7 +16,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;

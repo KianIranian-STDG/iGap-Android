@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import net.iGap.AccountHelper;
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.dialog.DefaultRoundDialog;

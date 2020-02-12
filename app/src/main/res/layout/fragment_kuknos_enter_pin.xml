@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosEnterPinVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosEnterPinVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

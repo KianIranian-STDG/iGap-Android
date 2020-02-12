@@ -7,7 +7,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 

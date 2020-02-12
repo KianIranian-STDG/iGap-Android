@@ -25,7 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
 import net.iGap.module.dialog.account.AccountDialogListener;

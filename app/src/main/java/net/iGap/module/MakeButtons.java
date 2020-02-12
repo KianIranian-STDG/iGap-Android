@@ -23,7 +23,6 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.proto.ProtoGlobal;
 

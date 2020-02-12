@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 
 import io.realm.Realm;
 import io.realm.RealmObject;

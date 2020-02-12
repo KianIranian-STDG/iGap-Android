@@ -48,11 +48,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.observers.eventbus.EventListener;

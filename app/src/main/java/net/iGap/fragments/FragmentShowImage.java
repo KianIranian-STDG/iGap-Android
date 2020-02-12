@@ -38,7 +38,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;

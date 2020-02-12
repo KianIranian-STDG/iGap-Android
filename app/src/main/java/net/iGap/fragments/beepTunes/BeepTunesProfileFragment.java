@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.helper.avatar.AvatarHandler;

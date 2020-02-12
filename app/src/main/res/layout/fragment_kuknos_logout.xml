@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosLogoutVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosLogoutVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

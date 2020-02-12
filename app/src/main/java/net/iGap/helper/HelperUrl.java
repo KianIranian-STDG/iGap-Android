@@ -39,10 +39,10 @@ import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;

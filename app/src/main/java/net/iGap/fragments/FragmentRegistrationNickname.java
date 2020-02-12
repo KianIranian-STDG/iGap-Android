@@ -40,7 +40,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;

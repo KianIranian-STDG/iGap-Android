@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 
 import org.paygear.fragment.CardsFragment;
 import org.paygear.model.Payment;

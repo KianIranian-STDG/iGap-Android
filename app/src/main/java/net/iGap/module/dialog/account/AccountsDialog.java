@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
-import net.iGap.AccountHelper;
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;

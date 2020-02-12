@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;

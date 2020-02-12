@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;

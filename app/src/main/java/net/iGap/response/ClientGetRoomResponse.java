@@ -13,7 +13,7 @@ package net.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;

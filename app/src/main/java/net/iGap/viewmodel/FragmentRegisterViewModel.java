@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;

@@ -20,7 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.helper.LayoutCreator;
 
 public class ProgressButton extends FrameLayout {

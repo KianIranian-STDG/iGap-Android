@@ -10,7 +10,7 @@
 
 package net.iGap.helper;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.observers.interfaces.OnClientGetRoomResponse;
 import net.iGap.observers.interfaces.OnUserInfoResponse;

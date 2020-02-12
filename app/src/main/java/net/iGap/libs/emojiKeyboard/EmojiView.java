@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.libs.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.libs.emojiKeyboard.View.ScrollTabView;
 import net.iGap.libs.emojiKeyboard.adapter.EmojiAdapter;

@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.fragments.discovery.DiscoveryFragment;

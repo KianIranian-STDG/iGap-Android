@@ -1,10 +1,7 @@
 package net.iGap.realm;
 
-import net.iGap.DbManager;
-import net.iGap.realm.RealmUserInfo;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.request.RequestUserProfileGetEmail;
-
-import io.realm.Realm;
 
 public class RealmElectricityBill {
 

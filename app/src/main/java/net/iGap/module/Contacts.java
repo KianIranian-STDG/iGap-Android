@@ -12,14 +12,13 @@ package net.iGap.module;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
@@ -33,7 +32,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**

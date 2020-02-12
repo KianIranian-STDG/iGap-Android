@@ -16,8 +16,8 @@ import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.observers.interfaces.IChatItemAttachment;
 import net.iGap.module.MyType;

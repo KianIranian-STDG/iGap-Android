@@ -10,9 +10,8 @@
 
 package net.iGap.realm;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
-import net.iGap.kuknos.service.model.RealmKuknos;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
 

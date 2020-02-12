@@ -8,7 +8,7 @@ import androidx.collection.ArrayMap;
 import com.lalongooo.videocompressor.CompressTask;
 import com.lalongooo.videocompressor.OnCompress;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.HelperSetAction;

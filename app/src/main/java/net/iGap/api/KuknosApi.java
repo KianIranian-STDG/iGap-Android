@@ -1,17 +1,17 @@
 package net.iGap.api;
 
-import net.iGap.kuknos.service.model.Parsian.IgapPayment;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosHash;
-import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
-import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
-import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
+import net.iGap.model.kuknos.Parsian.IgapPayment;
+import net.iGap.model.kuknos.Parsian.KuknosAsset;
+import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
+import net.iGap.model.kuknos.Parsian.KuknosHash;
+import net.iGap.model.kuknos.Parsian.KuknosOfferResponse;
+import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
+import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
+import net.iGap.model.kuknos.Parsian.KuknosTradeResponse;
+import net.iGap.model.kuknos.Parsian.KuknosTransactionResult;
+import net.iGap.model.kuknos.Parsian.KuknosUserInfo;
+import net.iGap.model.kuknos.Parsian.KuknosUsernameStatus;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 

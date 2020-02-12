@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosChangePassVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosChangePassVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

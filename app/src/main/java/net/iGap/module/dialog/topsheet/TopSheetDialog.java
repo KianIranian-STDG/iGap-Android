@@ -36,7 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;
 import net.iGap.module.dialog.BottomSheetListAdapter;
 

@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.RoomType;

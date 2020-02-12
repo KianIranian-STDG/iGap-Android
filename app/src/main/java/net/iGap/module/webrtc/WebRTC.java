@@ -15,7 +15,7 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.activities.ActivityCall;
 import net.iGap.proto.ProtoSignalingOffer;

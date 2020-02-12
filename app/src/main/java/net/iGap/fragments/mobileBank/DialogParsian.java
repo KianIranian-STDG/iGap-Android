@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.adapter.mobileBank.ShebaNumbersAdapter;

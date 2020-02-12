@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;

@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.UserStatusController;

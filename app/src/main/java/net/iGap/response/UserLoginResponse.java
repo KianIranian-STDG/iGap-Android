@@ -13,7 +13,7 @@ package net.iGap.response;
 import android.os.Looper;
 
 import net.iGap.Config;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperConnectionState;

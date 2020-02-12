@@ -28,7 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;

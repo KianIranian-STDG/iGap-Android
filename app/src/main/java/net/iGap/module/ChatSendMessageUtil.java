@@ -12,7 +12,7 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;

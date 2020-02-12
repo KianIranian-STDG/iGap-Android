@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;

@@ -36,7 +36,7 @@ import com.pchmn.materialchips.model.ChipInterface;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;

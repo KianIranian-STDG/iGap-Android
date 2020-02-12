@@ -18,7 +18,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.annotation.Keep;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.helper.LayoutCreator;
 
 public class CheckBox extends View {

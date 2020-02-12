@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;

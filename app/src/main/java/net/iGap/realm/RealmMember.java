@@ -15,7 +15,7 @@ import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.module.SUID;
 import net.iGap.proto.ProtoChannelGetMemberList;

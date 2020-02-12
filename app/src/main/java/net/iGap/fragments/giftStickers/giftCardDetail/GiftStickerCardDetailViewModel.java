@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.databinding.ObservableInt;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;

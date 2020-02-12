@@ -12,7 +12,7 @@ package net.iGap.realm;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.observers.interfaces.OnInfo;

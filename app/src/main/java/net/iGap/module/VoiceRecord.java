@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.helper.HelperString;
 import net.iGap.observers.interfaces.OnVoiceRecord;
 import net.iGap.proto.ProtoGlobal;

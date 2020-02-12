@@ -17,10 +17,10 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;

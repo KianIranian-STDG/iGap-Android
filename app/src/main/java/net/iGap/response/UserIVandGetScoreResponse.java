@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserIVandGetScore;

@@ -1,6 +1,6 @@
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.model.mobileBank.BankCardModel;
 
 import java.util.List;

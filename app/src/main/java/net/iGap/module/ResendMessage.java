@@ -13,7 +13,7 @@ package net.iGap.module;
 import android.app.Activity;
 import android.content.Context;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.upload.UploadManager;
