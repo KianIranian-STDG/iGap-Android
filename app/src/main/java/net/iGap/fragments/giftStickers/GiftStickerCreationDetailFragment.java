@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BaseBottomSheet;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;

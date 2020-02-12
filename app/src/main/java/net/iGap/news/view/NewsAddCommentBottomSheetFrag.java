@@ -1,6 +1,5 @@
 package net.iGap.news.view;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,12 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
 import net.iGap.R;
 import net.iGap.databinding.NewsAddAccountBottomSheetDialogBinding;
-import net.iGap.dialog.BaseBottomSheet;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.news.viewmodel.NewsAddCommentVM;
 
 public class NewsAddCommentBottomSheetFrag extends BaseBottomSheet {

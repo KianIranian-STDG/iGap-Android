@@ -21,7 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -29,9 +29,6 @@ import net.iGap.realm.RealmRoomFields;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class MyDialog {
 

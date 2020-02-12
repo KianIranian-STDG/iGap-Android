@@ -9,7 +9,7 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.FileUtils;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.rx.ObserverViewModel;
 
 import java.io.File;

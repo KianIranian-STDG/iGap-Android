@@ -31,7 +31,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
-import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;

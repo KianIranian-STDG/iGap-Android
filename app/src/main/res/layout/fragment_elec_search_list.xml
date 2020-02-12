@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.electricity_bill.viewmodel.ElectricityBillSearchListVM" />
+            type="net.iGap.viewmodel.electricity_bill.ElectricityBillSearchListVM" />
 
     </data>
 

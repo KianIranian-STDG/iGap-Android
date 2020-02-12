@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosTraceHistoryBinding;
-import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.kuknos.view.adapter.WalletTradeHistoryAdapter;
 import net.iGap.kuknos.viewmodel.KuknosTradeHistoryVM;

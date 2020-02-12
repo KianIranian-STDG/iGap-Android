@@ -24,7 +24,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 
 import java.util.ArrayList;

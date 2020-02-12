@@ -23,7 +23,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentKuknosSendBinding;
-import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;

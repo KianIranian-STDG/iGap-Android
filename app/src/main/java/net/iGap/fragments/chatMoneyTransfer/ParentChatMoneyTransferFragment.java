@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.AccountManager;
 import net.iGap.R;
-import net.iGap.dialog.BaseBottomSheet;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.GiftStickerItemDetailFragment;

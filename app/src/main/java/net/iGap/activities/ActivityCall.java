@@ -55,7 +55,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityCallBinding;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.eventbus.EventManager;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;

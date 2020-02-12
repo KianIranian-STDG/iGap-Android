@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.module.dialog.BottomSheetItemClickCallback;
 import net.iGap.helper.HelperCalander;
 
 import java.util.List;

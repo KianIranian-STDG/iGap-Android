@@ -17,7 +17,7 @@ import net.iGap.AccountHelper;
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentActivation;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegister;

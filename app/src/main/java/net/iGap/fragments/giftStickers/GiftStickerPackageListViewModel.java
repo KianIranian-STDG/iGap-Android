@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 import net.iGap.rx.ObserverViewModel;
 

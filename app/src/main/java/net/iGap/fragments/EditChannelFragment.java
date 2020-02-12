@@ -39,7 +39,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEditChannelBinding;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;

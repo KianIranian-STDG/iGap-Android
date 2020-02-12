@@ -26,7 +26,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentSettingBinding;
-import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;

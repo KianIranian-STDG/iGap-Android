@@ -32,7 +32,7 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 import net.iGap.view.ProgressButton;
 import net.iGap.view.StickerView;

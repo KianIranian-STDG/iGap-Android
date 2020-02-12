@@ -10,7 +10,7 @@ import net.iGap.G;
 import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 import net.iGap.rx.ObserverViewModel;
 

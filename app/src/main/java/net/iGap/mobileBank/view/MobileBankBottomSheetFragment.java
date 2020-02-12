@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.MobileBankBottomSheetFragmentBinding;
-import net.iGap.dialog.BaseBottomSheet;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.helper.HelperError;
 import net.iGap.mobileBank.view.adapter.ShebaNumbersAdapter;
 import net.iGap.mobileBank.viewmodel.MobileBankBottomSheetViewModel;

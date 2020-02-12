@@ -20,7 +20,7 @@ import androidx.databinding.ObservableInt;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermission;

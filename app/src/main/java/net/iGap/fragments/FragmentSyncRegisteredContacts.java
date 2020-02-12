@@ -27,7 +27,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentSyncRegisteredContactsBinding;
-import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.ContactManager;
 import net.iGap.helper.HelperError;

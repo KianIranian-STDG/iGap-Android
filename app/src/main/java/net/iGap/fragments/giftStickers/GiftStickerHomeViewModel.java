@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.fragments.emoji.apiModels.SliderDataModel;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.rx.IGSingleObserver;
 import net.iGap.rx.ObserverViewModel;
 

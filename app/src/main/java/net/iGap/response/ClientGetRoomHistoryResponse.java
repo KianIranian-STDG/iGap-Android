@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import net.iGap.DataBinderMapperImpl;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;

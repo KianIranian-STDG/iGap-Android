@@ -33,7 +33,7 @@ import com.google.android.gms.tasks.Task;
 import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
-import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;

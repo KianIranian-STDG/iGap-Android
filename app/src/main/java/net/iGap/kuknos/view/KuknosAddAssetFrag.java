@@ -20,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosAddAssetBinding;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;

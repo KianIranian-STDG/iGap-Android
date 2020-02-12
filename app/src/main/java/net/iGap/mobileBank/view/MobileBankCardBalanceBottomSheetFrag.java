@@ -17,7 +17,7 @@ import com.google.common.collect.Iterables;
 
 import net.iGap.R;
 import net.iGap.databinding.MobileBankCardBalanceBottomSheetDialogBinding;
-import net.iGap.dialog.BaseBottomSheet;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.mobileBank.viewmodel.MobileBankCardBalanceViewModel;
 
 public class MobileBankCardBalanceBottomSheetFrag extends BaseBottomSheet {
