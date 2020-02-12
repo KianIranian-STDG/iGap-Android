@@ -13,8 +13,6 @@ package net.iGap.realm;
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.kuknos.service.model.RealmKuknos;
-import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
-import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
 

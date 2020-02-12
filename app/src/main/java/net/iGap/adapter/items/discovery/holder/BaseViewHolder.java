@@ -62,7 +62,7 @@ import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.fragments.BuyInternetPackageFragment;
 import net.iGap.kuknos.view.KuknosEntryOptionFrag;
-import net.iGap.mobileBank.view.MobileBankLoginFragment;
+import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.view.NewsMainFrag;

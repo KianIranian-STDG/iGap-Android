@@ -8,7 +8,7 @@
 
         <variable
             name="bottomSheetViewModel"
-            type="net.iGap.mobileBank.viewmodel.MobileBankCardBalanceViewModel" />
+            type="net.iGap.viewmodel.mobileBank.MobileBankCardBalanceViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -16,7 +16,7 @@ import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
-import net.iGap.mobileBank.repository.util.JalaliCalendar;
+import net.iGap.module.mobileBank.JalaliCalendar;
 import net.iGap.module.AndroidUtils;
 
 public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
