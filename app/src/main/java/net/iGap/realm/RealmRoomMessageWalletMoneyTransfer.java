@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.observers.interfaces.RealmMoneyTransfer;
 import net.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;

@@ -28,7 +28,7 @@ import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmMoneyTransfer;
+import net.iGap.observers.interfaces.RealmMoneyTransfer;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package net.iGap.payment;
+package net.iGap.viewmodel;
 
 import android.view.View;
 
@@ -9,8 +9,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.model.payment.CheckOrderResponse;
+import net.iGap.model.payment.CheckOrderStatusResponse;
+import net.iGap.model.payment.Payment;
+import net.iGap.model.payment.PaymentResult;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
+import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
 

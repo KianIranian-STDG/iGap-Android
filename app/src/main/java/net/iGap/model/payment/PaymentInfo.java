@@ -1,6 +1,8 @@
-package net.iGap.payment;
+package net.iGap.model.payment;
 
 import com.google.gson.annotations.SerializedName;
+
+import net.iGap.model.payment.BaseProduct;
 
 public class PaymentInfo {
 

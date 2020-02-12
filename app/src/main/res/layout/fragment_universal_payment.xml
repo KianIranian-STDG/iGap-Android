@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.payment.PaymentViewModel" />
+            type="net.iGap.viewmodel.PaymentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -29,8 +29,8 @@ import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentFragment;
+import net.iGap.observers.interfaces.PaymentCallBack;
+import net.iGap.fragments.PaymentFragment;
 
 /**
  * this is helper class for open new fragment

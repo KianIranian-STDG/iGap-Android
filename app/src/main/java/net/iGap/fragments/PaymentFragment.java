@@ -1,4 +1,4 @@
-package net.iGap.payment;
+package net.iGap.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,16 +20,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
 import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
+import net.iGap.model.payment.Payment;
+import net.iGap.observers.interfaces.PaymentCallBack;
+import net.iGap.viewmodel.PaymentViewModel;
 
 public class PaymentFragment extends BaseAPIViewFrag {
 

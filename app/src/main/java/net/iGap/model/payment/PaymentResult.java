@@ -1,4 +1,4 @@
-package net.iGap.payment;
+package net.iGap.model.payment;
 
 public class PaymentResult {
 

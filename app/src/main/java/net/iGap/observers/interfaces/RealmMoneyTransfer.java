@@ -1,4 +1,4 @@
-package net.iGap.realm;
+package net.iGap.observers.interfaces;
 
 public interface RealmMoneyTransfer {
     long getFromUserId();
