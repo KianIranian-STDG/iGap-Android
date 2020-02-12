@@ -688,7 +688,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyboardVisible) {
+                    if (keyboardViewVisible) {
                         showPopup(-1);
                         return true;
                     }
@@ -3308,7 +3308,7 @@ public class FragmentChat extends BaseFragment
         if (keyboardView == null)
             createKeyboardView();
 
-        if (isPopupShowing() && keyboardView.getCurrentMode() != KeyboardView.MODE_KEYBOARD) {
+        if (isPopupShowing() && keyboardView.getCurrentMode() != KeyboardView.MODE_KEYBOARD && keyboardView.getCurrentMode() != -1) {
             showPopup(KeyboardView.MODE_KEYBOARD);
             openKeyboardInternal();
         } else {
@@ -3465,7 +3465,7 @@ public class FragmentChat extends BaseFragment
             }
         } else {
             if (keyboardView != null)
-                keyboardView.setCurrentMode(-1, -1);
+                keyboardView.setCurrentMode(mode, -1);
 
             closeKeyboard();
             G.handler.postDelayed(this::hideKeyboardView, 100);
