@@ -56,7 +56,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         if (checkForm()) {
             return;
         }
-        goToPin.setValue(true);
+        sendDataServer();
     }
 
     public boolean updateSum() {

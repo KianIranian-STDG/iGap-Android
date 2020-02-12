@@ -239,6 +239,14 @@ public class KuknosSendFrag extends BaseFragment {
 
             }
         });
+        binding.fragKuknosSWalletAddressET.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                kuknosSignupInfoVM.cancelFederation();
+            } else {
+                if (kuknosSignupInfoVM.getFederationProgressVisibility().get() != View.VISIBLE)
+                    kuknosSignupInfoVM.convertFederation(false);
+            }
+        });
     }
 
     private void goToPin() {

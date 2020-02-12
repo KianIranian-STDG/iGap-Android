@@ -2,7 +2,6 @@ package net.iGap.kuknos.service.model.Parsian;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.stellar.sdk.Asset;
 import org.stellar.sdk.responses.Link;
 import org.stellar.sdk.responses.Response;
 
@@ -23,38 +22,25 @@ public class KuknosOfferResponse {
 
     public class OfferResponse extends Response {
         @SerializedName("id")
-        private final Long id;
+        private Long id;
         @SerializedName("paging_token")
-        private final String pagingToken;
+        private String pagingToken;
         @SerializedName("seller")
-        private final String seller;
+        private String seller;
         @SerializedName("selling")
-        private final Asset selling;
+        private KuknosAsset.Asset selling;
         @SerializedName("buying")
-        private final Asset buying;
+        private KuknosAsset.Asset buying;
         @SerializedName("amount")
-        private final String amount;
+        private String amount;
         @SerializedName("price")
-        private final String price;
+        private String price;
         @SerializedName("last_modified_ledger")
-        private final Integer lastModifiedLedger;
+        private Integer lastModifiedLedger;
         @SerializedName("last_modified_time")
-        private final String lastModifiedTime;
+        private String lastModifiedTime;
         @SerializedName("_links")
-        private final org.stellar.sdk.responses.OfferResponse.Links links;
-
-        public OfferResponse(Long id, String pagingToken, String seller, Asset selling, Asset buying, String amount, String price, Integer lastModifiedLedger, String lastModifiedTime, org.stellar.sdk.responses.OfferResponse.Links links) {
-            this.id = id;
-            this.pagingToken = pagingToken;
-            this.seller = seller;
-            this.selling = selling;
-            this.buying = buying;
-            this.amount = amount;
-            this.price = price;
-            this.lastModifiedLedger = lastModifiedLedger;
-            this.lastModifiedTime = lastModifiedTime;
-            this.links = links;
-        }
+        private Links links;
 
         public Long getId() {
             return id;
@@ -68,11 +54,11 @@ public class KuknosOfferResponse {
             return seller;
         }
 
-        public Asset getSelling() {
+        public KuknosAsset.Asset getSelling() {
             return selling;
         }
 
-        public Asset getBuying() {
+        public KuknosAsset.Asset getBuying() {
             return buying;
         }
 
@@ -93,7 +79,7 @@ public class KuknosOfferResponse {
             return lastModifiedTime;
         }
 
-        public org.stellar.sdk.responses.OfferResponse.Links getLinks() {
+        public Links getLinks() {
             return links;
         }
 

@@ -10,6 +10,7 @@ import net.iGap.kuknos.service.model.KuknosSignupM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosFederation;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
@@ -52,7 +53,7 @@ class KuknosAPIRepository {
     void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosHash>> apiResponse) {
         new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, XDR -> new ApiInitializer<KuknosResponseModel<KuknosHash>>()
                 .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse))
-                .execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
+                .execute(model.getSrc(), model.getDest(), model.getAssetCode(), model.getAssetInssuer(), model.getAmount(), model.getMemo());
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.payment(new KuknosSDKRepo().paymentToOtherXDR(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo()))
                         , handShakeCallback, apiResponse);*/
@@ -136,11 +137,15 @@ class KuknosAPIRepository {
     }
 
     void getOpenOffers(String userID, int cursor, int limit, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOfferResponse>> apiResponse) {
-        new ApiInitializer<KuknosResponseModel<KuknosOfferResponse>>().initAPI(apiService.getOpenOffers(userID, limit, cursor, "desc"), handShakeCallback, apiResponse);
+        new ApiInitializer<KuknosResponseModel<KuknosOfferResponse>>().initAPI(apiService.getOpenOffers(userID, limit, cursor, null), handShakeCallback, apiResponse);
     }
 
     void getTradesHistory(String userID, int cursor, int limit, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTradeResponse>> apiResponse) {
-        new ApiInitializer<KuknosResponseModel<KuknosTradeResponse>>().initAPI(apiService.getTradesHistory(userID, limit, cursor, "desc"), handShakeCallback, apiResponse);
+        new ApiInitializer<KuknosResponseModel<KuknosTradeResponse>>().initAPI(apiService.getTradesHistory(userID, limit, cursor, null), handShakeCallback, apiResponse);
+    }
+
+    void convertFederation(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosFederation>>().initAPI(apiService.convertFederation(username), handShakeCallback, apiResponse);
     }
 
     void getFees(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFeeModel>> apiResponse) {

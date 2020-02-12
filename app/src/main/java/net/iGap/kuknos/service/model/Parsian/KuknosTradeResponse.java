@@ -11,7 +11,7 @@ import java.util.List;
 
 public class KuknosTradeResponse {
 
-    @SerializedName("trades")
+    @SerializedName("offers")
     private List<TradeResponse> trades;
 
     public List<TradeResponse> getTrades() {
@@ -67,7 +67,7 @@ public class KuknosTradeResponse {
         protected final Price price;
 
         @SerializedName("_links")
-        private org.stellar.sdk.responses.TradeResponse.Links links;
+        private Links links;
 
         public TradeResponse(String id, String pagingToken, String ledgerCloseTime, String offerId, boolean baseIsSeller, String baseAccount, String baseOfferId, String baseAmount, String baseAssetType, String baseAssetCode, String baseAssetIssuer, String counterAccount, String counterOfferId, String counterAmount, String counterAssetType, String counterAssetCode, String counterAssetIssuer, Price price) {
             this.id = id;
@@ -170,7 +170,7 @@ public class KuknosTradeResponse {
             return price;
         }
 
-        public org.stellar.sdk.responses.TradeResponse.Links getLinks() {
+        public Links getLinks() {
             return links;
         }
 

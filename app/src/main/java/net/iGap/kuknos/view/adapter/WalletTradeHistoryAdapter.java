@@ -14,6 +14,7 @@ import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 
 import org.stellar.sdk.responses.OfferResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeHistoryAdapter.ViewHolder> {
@@ -67,31 +68,17 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
         }
 
         public void initView(KuknosTradeResponse.TradeResponse model) {
-            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAsset().getType()) : model.getBaseAsset().getType());
-            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAmount()) : model.getBaseAmount());
-            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getCounterAsset().getType()) : model.getCounterAsset().getType());
-//            if (mode == 0) {
+            String sellTXT = "" + (model.getBaseAsset().getType().equals("native") ? "PMN" : model.getBaseAssetCode());
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(sellTXT) : sellTXT);
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            amount.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.parseDouble(model.getBaseAmount())))
+                    : df.format(Double.parseDouble(model.getBaseAmount())));
+            String recieveTXT = "" + (model.getCounterAsset().getType().equals("native") ? "PMN" : model.getCounterAssetCode());
+            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(recieveTXT) : recieveTXT);
             date.setText(model.getLedgerCloseTime());
             date.setVisibility(View.VISIBLE);
             delete.setVisibility(View.GONE);
-            /*} else {
-                date.setVisibility(View.GONE);
-                delete.setVisibility(View.VISIBLE);
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(context);
-                        defaultRoundDialog.setTitle(context.getResources().getString(R.string.kuknos_tradeDialogDelete_title))
-                                .setMessage(context.getResources().getString(R.string.kuknos_tradeDialogDelete_message));
-                        defaultRoundDialog.setPositiveButton(context.getResources().getString(R.string.kuknos_tradeDialogDelete_btn), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                deleteCell(model);
-                            }
-                        });
-                        defaultRoundDialog.show();
-                    }
-                });
-            }*/
         }
     }
 }

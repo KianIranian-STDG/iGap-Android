@@ -8,6 +8,7 @@ import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosFederation;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
@@ -63,6 +64,10 @@ public class PanelRepo {
 
     public void getFee(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFeeModel>> apiResponse) {
         kuknosAPIRepository.getFees(handShakeCallback, apiResponse);
+    }
+
+    public void convertFederation(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
+        kuknosAPIRepository.convertFederation(username, handShakeCallback, apiResponse);
     }
 
     public boolean isPinSet() {

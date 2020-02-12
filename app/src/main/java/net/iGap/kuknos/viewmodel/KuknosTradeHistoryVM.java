@@ -29,7 +29,7 @@ public class KuknosTradeHistoryVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosTradeResponse> data) {
                 listMutableLiveData.setValue(data.getData());
-                progressState.setValue(true);
+                progressState.setValue(false);
             }
 
             @Override

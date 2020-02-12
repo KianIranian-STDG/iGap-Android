@@ -63,7 +63,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
 
     private void onDataChanged() {
         kuknosTradeHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), offerResponsePage -> {
-            if (offerResponsePage.getTrades().size() != 0) {
+            if (offerResponsePage.getTrades() != null && offerResponsePage.getTrades().size() != 0) {
                 WalletTradeHistoryAdapter mAdapter = new WalletTradeHistoryAdapter(offerResponsePage.getTrades());
                 binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
             } else {

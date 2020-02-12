@@ -14,7 +14,6 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="@dimen/dp10"
             android:background="@drawable/kuknos_list_header_style"
-            app:layout_constraintBottom_toTopOf="@+id/kuknos_tradeHistory_recycler"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

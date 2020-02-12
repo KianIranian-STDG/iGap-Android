@@ -15,6 +15,7 @@ import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class WalletOpenOfferAdapter extends RecyclerView.Adapter<WalletOpenOfferAdapter.ViewHolder> {
@@ -70,9 +71,17 @@ public class WalletOpenOfferAdapter extends RecyclerView.Adapter<WalletOpenOffer
         }
 
         public void initView(KuknosOfferResponse.OfferResponse model) {
-            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getSelling().getType()) : model.getSelling().getType());
-            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getAmount()) : model.getAmount());
-            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBuying().getType()) : model.getBuying().getType());
+            String sellTXT = "" + (model.getSelling().getAsset().getType().equals("native") ? "PMN" : model.getSelling().getAssetCode());
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(sellTXT) : sellTXT);
+
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            amount.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.parseDouble(model.getAmount())))
+                    : df.format(Double.parseDouble(model.getAmount())));
+
+            String recieveTXT = "" + (model.getBuying().getAsset().getType().equals("native") ? "PMN" : model.getBuying().getAssetCode());
+            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(recieveTXT) : recieveTXT);
+
             date.setVisibility(View.GONE);
             delete.setVisibility(View.VISIBLE);
             delete.setOnClickListener(v -> {

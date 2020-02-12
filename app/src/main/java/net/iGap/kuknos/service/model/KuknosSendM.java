@@ -6,7 +6,8 @@ public class KuknosSendM {
     private String dest;
     private String memo;
     private String amount;
-    private String assetcode;
+    private String assetCode;
+    private String assetInssuer;
 
     public KuknosSendM() {
     }
@@ -43,11 +44,19 @@ public class KuknosSendM {
         this.amount = amount;
     }
 
-    public String getAssetcode() {
-        return assetcode;
+    public String getAssetCode() {
+        return assetCode;
     }
 
-    public void setAssetcode(String assetcode) {
-        this.assetcode = assetcode;
+    public void setAssetCode(String assetCode) {
+        this.assetCode = assetCode;
+    }
+
+    public String getAssetInssuer() {
+        return assetInssuer;
+    }
+
+    public void setAssetInssuer(String assetInssuer) {
+        this.assetInssuer = assetInssuer;
     }
 }

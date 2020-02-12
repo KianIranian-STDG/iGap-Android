@@ -3,6 +3,7 @@ package net.iGap.api;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.Parsian.KuknosFederation;
 import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
@@ -118,6 +119,15 @@ public interface KuknosApi {
                                                                         @Field("limit") int limit,
                                                                         @Field("order") String order);
 
+    /**
+     * this api returns all of open trades for an account
+     *
+     * @param publicKey
+     * @param limit
+     * @param cursor
+     * @param order
+     * @return
+     */
     @FormUrlEncoded
     @POST("open-offers")
     Call<KuknosResponseModel<KuknosOfferResponse>> getOpenOffers(@Field("public_key") String publicKey,
@@ -125,12 +135,30 @@ public interface KuknosApi {
                                                                  @Field("cursor") int cursor,
                                                                  @Field("order") String order);
 
+    /**
+     * this api returns all of closed trades for an account
+     * @param publicKey
+     * @param limit
+     * @param cursor
+     * @param order
+     * @return
+     */
     @FormUrlEncoded
     @POST("account-trades")
     Call<KuknosResponseModel<KuknosTradeResponse>> getTradesHistory(@Field("public_key") String publicKey,
                                                                     @Field("limit") int limit,
                                                                     @Field("cursor") int cursor,
                                                                     @Field("order") String order);
+
+    /**
+     * this api checks for federations and converts username to public key
+     *
+     * @param username
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("get-public-key")
+    Call<KuknosResponseModel<KuknosFederation>> convertFederation(@Field("federation_name") String username);
 
     /**
      * this api returns the user status
