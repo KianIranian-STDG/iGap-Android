@@ -5,7 +5,7 @@ import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.igasht.BaseIGashtResponse;
+import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 
 import java.util.List;

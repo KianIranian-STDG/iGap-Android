@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.igasht.BaseIGashtResponse;
+import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 

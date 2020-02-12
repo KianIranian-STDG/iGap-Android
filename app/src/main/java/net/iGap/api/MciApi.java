@@ -1,6 +1,6 @@
 package net.iGap.api;
 
-import net.iGap.igasht.BaseIGashtResponse;
+import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.internetpackage.InternetPackage;
 import net.iGap.internetpackage.MciInternetPackageFilter;
 import net.iGap.model.MciPurchaseResponse;
