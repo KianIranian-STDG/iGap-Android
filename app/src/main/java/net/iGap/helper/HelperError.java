@@ -15,7 +15,6 @@ import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import net.iGap.AccountHelper;
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
@@ -52,7 +51,7 @@ public class HelperError {
                 WebSocketClient.getInstance().disconnectSocket(true);
                 break;
             case 8://session is terminate
-                Log.wtf(HelperError.class.getName(),"case 8:");
+                Log.wtf(HelperError.class.getName(), "case 8:");
                 G.logoutAccount.postValue(true);
                 break;
             case 9:
@@ -65,7 +64,7 @@ public class HelperError {
                 break;
             case 109:
                 error = G.fragmentActivity.getResources().getString(R.string.E_109);
-                Log.wtf(HelperError.class.getName(),"case 109:");
+                Log.wtf(HelperError.class.getName(), "case 109:");
                 G.logoutAccount.postValue(true);
                 break;
             case 110:
@@ -74,7 +73,7 @@ public class HelperError {
                 break;
             case 111:
                 if (minorCode != 4) {
-                    Log.wtf(HelperError.class.getName(),"case 111:");
+                    Log.wtf(HelperError.class.getName(), "case 111:");
                     G.logoutAccount.postValue(true);
                 } else {
                     error = G.fragmentActivity.getResources().getString(R.string.E_111);
@@ -504,13 +503,15 @@ public class HelperError {
                 if (minorCode == 1) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_713_1);
                 } else if (minorCode == 2) {
-                    error = G.fragmentActivity.getResources().getString(R.string.E_713_2);
+                    if (BuildConfig.DEBUG)
+                        error = G.fragmentActivity.getResources().getString(R.string.E_713_2);
                 } else if (minorCode == 3) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_713_3);
                 } else if (minorCode == 4) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_713_4);
                 } else if (minorCode == 5) {
-                    error = G.fragmentActivity.getResources().getString(R.string.E_713_5);
+                    if (BuildConfig.DEBUG)
+                        error = G.fragmentActivity.getResources().getString(R.string.E_713_5);
                 }
                 break;
             case 714:
