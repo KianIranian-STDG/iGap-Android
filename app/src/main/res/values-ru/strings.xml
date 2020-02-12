@@ -1947,5 +1947,6 @@
     <string name="mobile_bank_cheque_status">Положение дел: %1$s</string>
     <string name="mobile_bank_hotCard">Заблокировать карту</string>
     <string name="delete_recent_emoji">Удалить последние Emoji</string>
+    <string name="mobile_bank_balance_error_no_price">Нет цены.</string>
 
 </resources>
