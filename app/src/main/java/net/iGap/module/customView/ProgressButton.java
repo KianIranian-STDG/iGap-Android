@@ -1,4 +1,4 @@
-package net.iGap.view;
+package net.iGap.module.customView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -8,7 +8,7 @@
  * All rights reserved.
  */
 
-package net.iGap.webrtc;
+package net.iGap.module.webrtc;
 
 
 import android.hardware.Camera;
@@ -41,8 +41,6 @@ import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
-import org.webrtc.VideoFrame;
-import org.webrtc.VideoSink;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 import org.webrtc.voiceengine.WebRtcAudioManager;

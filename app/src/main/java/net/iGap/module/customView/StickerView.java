@@ -1,4 +1,4 @@
-package net.iGap.view;
+package net.iGap.module.customView;
 
 import android.content.Context;
 import android.util.AttributeSet;

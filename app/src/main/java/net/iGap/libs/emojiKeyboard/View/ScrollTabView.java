@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import net.iGap.Theme;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.view.StickerView;
+import net.iGap.module.customView.StickerView;
 
 public class ScrollTabView extends HorizontalScrollView {
 

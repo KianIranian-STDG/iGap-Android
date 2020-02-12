@@ -1,4 +1,4 @@
-package net.iGap.webservice;
+package net.iGap.api.webservice;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

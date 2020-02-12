@@ -17,7 +17,7 @@
 //public static ISignalingSessionHold iSignalingSessionHold;
 //public static ISignalingGetCallLog iSignalingGetCallLog;
 
-package net.iGap.webrtc;
+package net.iGap.module.webrtc;
 
 import android.util.Log;
 

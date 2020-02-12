@@ -1,4 +1,4 @@
-package net.iGap.webservice;
+package net.iGap.api.webservice;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;

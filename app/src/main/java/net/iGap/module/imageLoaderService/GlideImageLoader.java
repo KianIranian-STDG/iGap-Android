@@ -1,4 +1,4 @@
-package net.iGap.services.imageLoaderService;
+package net.iGap.module.imageLoaderService;
 
 import android.widget.ImageView;
 

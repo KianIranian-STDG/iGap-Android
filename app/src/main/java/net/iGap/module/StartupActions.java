@@ -34,7 +34,7 @@ import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.webrtc.CallObserver;
+import net.iGap.module.webrtc.CallObserver;
 
 import org.jetbrains.annotations.NotNull;
 

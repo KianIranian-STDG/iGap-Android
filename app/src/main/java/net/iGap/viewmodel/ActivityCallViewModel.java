@@ -44,7 +44,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.webrtc.WebRTC;
+import net.iGap.module.webrtc.WebRTC;
 
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 

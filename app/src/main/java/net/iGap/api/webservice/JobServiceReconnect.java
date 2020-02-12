@@ -1,4 +1,4 @@
-package net.iGap.webservice;
+package net.iGap.api.webservice;
 
 import android.content.Context;
 import android.os.Bundle;

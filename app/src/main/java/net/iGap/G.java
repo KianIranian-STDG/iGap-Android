@@ -54,7 +54,7 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
-import net.iGap.webservice.JobServiceReconnect;
+import net.iGap.api.webservice.JobServiceReconnect;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;

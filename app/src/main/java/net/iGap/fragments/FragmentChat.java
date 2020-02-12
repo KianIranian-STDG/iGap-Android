@@ -308,7 +308,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.view.EventEditText;
+import net.iGap.module.customView.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;

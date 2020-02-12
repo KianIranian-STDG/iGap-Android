@@ -1,4 +1,4 @@
-package net.iGap.view;
+package net.iGap.module.customView;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.LayoutCreator;

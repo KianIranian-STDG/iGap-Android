@@ -23,9 +23,9 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.webservice.APIService;
-import net.iGap.webservice.ApiUtils;
-import net.iGap.webservice.Post;
+import net.iGap.api.webservice.APIService;
+import net.iGap.api.webservice.ApiUtils;
+import net.iGap.api.webservice.Post;
 
 import org.paygear.RaadApp;
 import org.paygear.fragment.PaymentResultDialog;

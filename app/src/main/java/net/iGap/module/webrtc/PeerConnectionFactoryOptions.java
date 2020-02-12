@@ -1,4 +1,4 @@
-package net.iGap.webrtc;
+package net.iGap.module.webrtc;
 
 
 import org.webrtc.PeerConnectionFactory;

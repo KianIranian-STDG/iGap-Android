@@ -1,4 +1,4 @@
-package net.iGap.webservice;
+package net.iGap.api.webservice;
 
 /*
  * This is the source code of iGap for Android

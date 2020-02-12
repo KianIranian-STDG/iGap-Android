@@ -1,4 +1,4 @@
-package net.iGap.services.imageLoaderService;
+package net.iGap.module.imageLoaderService;
 
 public class ImageLoadingServiceInjector {
     private static ImageLoaderService imageLoadingService;

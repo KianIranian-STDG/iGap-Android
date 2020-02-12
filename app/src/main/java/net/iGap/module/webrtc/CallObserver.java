@@ -8,7 +8,7 @@
  * All rights reserved.
  */
 
-package net.iGap.webrtc;
+package net.iGap.module.webrtc;
 
 import android.content.Context;
 import android.media.AudioManager;

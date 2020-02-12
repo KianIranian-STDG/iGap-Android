@@ -23,7 +23,7 @@ import net.iGap.Theme;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.view.ProgressButton;
+import net.iGap.module.customView.ProgressButton;
 
 public class AddAnimatedStickerCell extends FrameLayout {
 

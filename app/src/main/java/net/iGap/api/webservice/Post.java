@@ -1,4 +1,4 @@
-package net.iGap.webservice;
+package net.iGap.api.webservice;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -35,8 +35,8 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.view.CheckBox;
-import net.iGap.view.TextBadge;
+import net.iGap.module.customView.CheckBox;
+import net.iGap.module.customView.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;

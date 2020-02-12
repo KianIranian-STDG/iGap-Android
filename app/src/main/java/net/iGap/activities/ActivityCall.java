@@ -67,7 +67,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.ActivityCallViewModel;
-import net.iGap.webrtc.WebRTC;
+import net.iGap.module.webrtc.WebRTC;
 
 import org.webrtc.EglBase;
 import org.webrtc.VideoFrame;

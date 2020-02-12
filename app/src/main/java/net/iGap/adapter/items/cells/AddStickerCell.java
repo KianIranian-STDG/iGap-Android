@@ -20,8 +20,8 @@ import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.view.ProgressButton;
-import net.iGap.view.StickerView;
+import net.iGap.module.customView.ProgressButton;
+import net.iGap.module.customView.StickerView;
 
 public class AddStickerCell extends FrameLayout implements EventListener {
 

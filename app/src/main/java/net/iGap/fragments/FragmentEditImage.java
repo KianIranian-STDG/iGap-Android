@@ -49,7 +49,7 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.view.EventEditText;
+import net.iGap.module.customView.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 

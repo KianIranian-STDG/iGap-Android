@@ -1,4 +1,4 @@
-package net.iGap.view;
+package net.iGap.module.customView;
 
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;

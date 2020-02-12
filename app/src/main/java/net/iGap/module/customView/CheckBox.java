@@ -1,4 +1,4 @@
-package net.iGap.view;
+package net.iGap.module.customView;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

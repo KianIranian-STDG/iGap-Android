@@ -18,7 +18,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.request.RequestSignalingGetConfiguration;
-import net.iGap.webrtc.WebRTC;
+import net.iGap.module.webrtc.WebRTC;
 
 public class CallSelectFragment extends BaseBottomSheet {
 

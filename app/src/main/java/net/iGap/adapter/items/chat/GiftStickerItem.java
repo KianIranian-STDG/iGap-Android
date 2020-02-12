@@ -34,8 +34,8 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.repository.StickerRepository;
 import net.iGap.observers.rx.IGSingleObserver;
-import net.iGap.view.ProgressButton;
-import net.iGap.view.StickerView;
+import net.iGap.module.customView.ProgressButton;
+import net.iGap.module.customView.StickerView;
 
 import java.util.List;
 

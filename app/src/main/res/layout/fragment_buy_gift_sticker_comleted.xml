@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <net.iGap.view.StickerView
+        <net.iGap.module.customView.StickerView
             android:id="@+id/stickerView"
             android:padding="@dimen/dp16"
             android:layout_width="0dp"
