@@ -52,8 +52,8 @@ public class BuyGiftStickerCompletedFragment extends Fragment {
         binding.stickerView.loadSticker(structIGSticker);
 
         if (delegate == null) {
-            binding.positiveButton.setText(R.string.my_gift_sticker);
-            binding.negativeButton.setText(R.string.my_recived_gift_sticker);
+            binding.positiveButton.setText(R.string.back_to_menu);
+            binding.negativeButton.setVisibility(View.GONE);
         }
 
         binding.negativeButton.setOnClickListener(v -> {
@@ -73,7 +73,7 @@ public class BuyGiftStickerCompletedFragment extends Fragment {
                 dismiss();
             } else {
                 if (getParentFragment() instanceof GiftStickerMainFragment){
-                    ((GiftStickerMainFragment) getParentFragment()).loadBuyMySticker();
+                    ((GiftStickerMainFragment) getParentFragment()).goToHomePage();
                 }
             }
         });

@@ -50,8 +50,12 @@ public class GiftStickerMainFragment extends BaseFragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
+                        if (getChildFragmentManager().findFragmentById(R.id.giftStickerContainer) instanceof BuyGiftStickerCompletedFragment) {
+                            goToHomePage();
+                        } else {
+                            if (getActivity() != null) {
+                                getActivity().onBackPressed();
+                            }
                         }
                     }
                 });
@@ -155,6 +159,11 @@ public class GiftStickerMainFragment extends BaseFragment {
                 }
             });
         }
+    }
+
+    public void goToHomePage() {
+        getChildFragmentManager().popBackStack(GiftStickerHomeFragment.class.getName(), 0);
+        setToolbarTitle(R.string.gift_sticker_title);
     }
 
     public void setToolbarTitle(int titleRes) {
