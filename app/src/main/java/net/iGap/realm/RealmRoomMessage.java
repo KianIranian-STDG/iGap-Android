@@ -27,7 +27,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.upload.UploadManager;
-import net.iGap.interfaces.OnActivityChatStart;
+import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;

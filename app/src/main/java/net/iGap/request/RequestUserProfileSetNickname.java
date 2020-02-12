@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.observers.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.proto.ProtoUserProfileNickname;
 
 public class RequestUserProfileSetNickname {

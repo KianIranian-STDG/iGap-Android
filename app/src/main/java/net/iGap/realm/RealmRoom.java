@@ -11,15 +11,13 @@
 package net.iGap.realm;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.AccountManager;
-import net.iGap.DbManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnClientGetRoomMessage;
+import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -32,7 +30,6 @@ import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import io.realm.Realm;

@@ -23,7 +23,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsGrouplistFragBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.view.Adapter.NewsGroupAdapter;
 import net.iGap.news.viewmodel.NewsGroupListVM;

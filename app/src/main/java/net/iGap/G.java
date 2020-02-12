@@ -42,7 +42,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
-import net.iGap.interfaces.*;
+import net.iGap.observers.interfaces.*;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;

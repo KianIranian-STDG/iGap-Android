@@ -12,7 +12,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.giftStickers.enterNationalCode.CheckNationalCodeResponse;
 import net.iGap.module.SingleLiveEvent;

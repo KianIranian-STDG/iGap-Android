@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.repository.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.rx.ObserverViewModel;
+import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.observers.rx.ObserverViewModel;
 
 import io.reactivex.disposables.CompositeDisposable;
 

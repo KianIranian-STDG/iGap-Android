@@ -26,7 +26,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
-import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SerializationUtils;
 import net.iGap.proto.ProtoGlobal;

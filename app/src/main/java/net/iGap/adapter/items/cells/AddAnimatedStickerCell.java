@@ -20,8 +20,8 @@ import com.airbnb.lottie.LottieDrawable;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.view.ProgressButton;
 

@@ -21,7 +21,7 @@ import net.iGap.Theme;
 import net.iGap.databinding.FragmentMobileBankHomeBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.view.adapter.MobileBankHomeAdapter;
 
 import org.jetbrains.annotations.NotNull;

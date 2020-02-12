@@ -10,7 +10,7 @@
 
 package net.iGap.module;
 
-import net.iGap.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestChatUpdateStatus;
 import net.iGap.request.RequestGroupUpdateStatus;

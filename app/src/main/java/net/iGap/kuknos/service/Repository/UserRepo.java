@@ -3,8 +3,8 @@ package net.iGap.kuknos.service.Repository;
 import android.util.Log;
 
 import net.iGap.DbManager;
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.kuknos.service.mnemonic.Wallet;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosSignupM;

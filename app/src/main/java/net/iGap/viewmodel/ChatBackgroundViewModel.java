@@ -15,7 +15,7 @@ import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.interfaces.OnGetWallpaper;
+import net.iGap.observers.interfaces.OnGetWallpaper;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;

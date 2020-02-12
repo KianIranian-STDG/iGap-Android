@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 
 import org.jetbrains.annotations.NotNull;

@@ -60,8 +60,8 @@ import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
-import net.iGap.interfaces.OnAudioFocusChangeListener;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnAudioFocusChangeListener;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -76,7 +76,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 

@@ -10,13 +10,8 @@
 
 package net.iGap.response;
 
-import android.content.pm.PackageManager;
-
-import com.crashlytics.android.Crashlytics;
-
-import net.iGap.G;
 import net.iGap.helper.HelperTracker;
-import net.iGap.interfaces.OnUserRegistration;
+import net.iGap.observers.interfaces.OnUserRegistration;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserRegister;
 

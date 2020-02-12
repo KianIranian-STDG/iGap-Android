@@ -5,12 +5,12 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.FileUtils;
 import net.iGap.repository.StickerRepository;
-import net.iGap.rx.ObserverViewModel;
+import net.iGap.observers.rx.ObserverViewModel;
 
 import java.io.File;
 import java.util.List;

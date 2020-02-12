@@ -5,8 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
@@ -14,12 +13,10 @@ import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankAccountModel;
 import net.iGap.mobileBank.repository.model.BankCardModel;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;
-import net.iGap.mobileBank.repository.model.BankShebaModel;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
 import net.iGap.mobileBank.view.MobileBankHomeTabFragment;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryViewModel {

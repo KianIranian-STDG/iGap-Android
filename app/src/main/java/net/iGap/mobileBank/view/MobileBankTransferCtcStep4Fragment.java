@@ -15,7 +15,7 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankTransferCtcStep4FragmentBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.TransferMoneyCtcResultModel;
 import net.iGap.mobileBank.view.adapter.TransferMoneyResultAdapter;
 import net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep4ViewModel;

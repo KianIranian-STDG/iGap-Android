@@ -18,7 +18,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentFragmentSecurityBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentSecurityViewModel;
 
 import org.jetbrains.annotations.NotNull;

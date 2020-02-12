@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.databinding.MobileBankChequeListFragmentBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankChequeSingle;
 import net.iGap.mobileBank.view.adapter.MobileBankChequeListAdapter;
 import net.iGap.mobileBank.viewmodel.MobileBankChequesListViewModel;

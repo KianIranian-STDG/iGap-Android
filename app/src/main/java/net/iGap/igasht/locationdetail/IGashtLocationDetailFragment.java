@@ -22,7 +22,7 @@ import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class IGashtLocationDetailFragment extends IGashtBaseView<IGashtLocationDetailViewModel> {
 

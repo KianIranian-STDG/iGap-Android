@@ -3,7 +3,7 @@ package net.iGap.fragments.emoji;
 import android.util.Log;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnStickerDownloaded;
+import net.iGap.observers.interfaces.OnStickerDownloaded;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestFileDownload;

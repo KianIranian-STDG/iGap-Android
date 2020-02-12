@@ -2,8 +2,8 @@ package net.iGap.kuknos.service.Repository;
 
 import net.iGap.api.KuknosApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.KuknosSignupM;

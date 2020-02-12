@@ -6,7 +6,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 
 // base view model implements callback for repository and handle on fail and base onError.
 // in other view model extends this you should override onSuccess and if have custom onError override it

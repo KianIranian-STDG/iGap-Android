@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 import net.iGap.Config;
 import net.iGap.R;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankCardAuth;

@@ -22,7 +22,7 @@ import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosViewRecoveryEPVM;
 
 public class KuknosViewRecoveryEPFrag extends BaseFragment {

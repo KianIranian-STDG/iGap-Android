@@ -9,21 +9,16 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
-import net.iGap.AccountHelper;
-import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.HelperLogout;
 import net.iGap.helper.UserStatusController;
-import net.iGap.interfaces.OnContactFetchForServer;
-import net.iGap.interfaces.OnSecuring;
-import net.iGap.interfaces.OnUserLogin;
+import net.iGap.observers.interfaces.OnContactFetchForServer;
+import net.iGap.observers.interfaces.OnSecuring;
+import net.iGap.observers.interfaces.OnUserLogin;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserContactsGetBlockedList;

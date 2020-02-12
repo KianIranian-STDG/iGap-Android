@@ -23,7 +23,7 @@ import net.iGap.databinding.FragmentKuknosRestoreSignupBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosRestoreSignupVM;
 
 public class KuknosRestoreSignupFrag extends BaseFragment {

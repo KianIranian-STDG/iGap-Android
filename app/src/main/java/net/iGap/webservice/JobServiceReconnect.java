@@ -17,8 +17,8 @@ import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
 import net.iGap.WebSocketClient;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 
 public class JobServiceReconnect extends JobService {
     EventListener eventListener;

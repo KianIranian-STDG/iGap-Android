@@ -27,7 +27,7 @@ import net.iGap.databinding.FragmentKuknosSetpasswordConfirmBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosSetPassConfirmVM;
 
 public class KuknosSetPassConfirmFrag extends BaseFragment {

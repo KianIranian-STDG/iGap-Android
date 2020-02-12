@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnUserProfileSetGenderResponse;
+import net.iGap.observers.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserProfileGender;
 

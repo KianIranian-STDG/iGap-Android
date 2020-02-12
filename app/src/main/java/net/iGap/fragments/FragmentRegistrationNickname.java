@@ -49,7 +49,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;

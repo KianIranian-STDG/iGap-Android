@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
+
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;

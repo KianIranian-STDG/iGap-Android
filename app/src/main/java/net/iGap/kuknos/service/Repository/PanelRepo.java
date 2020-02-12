@@ -2,8 +2,8 @@ package net.iGap.kuknos.service.Repository;
 
 import android.util.Log;
 
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;

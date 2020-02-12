@@ -32,7 +32,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.interfaces.OnActivityChatStart;
+import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.libs.Tuple;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;

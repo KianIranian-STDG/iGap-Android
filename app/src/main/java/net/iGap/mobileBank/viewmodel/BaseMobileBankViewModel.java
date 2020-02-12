@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.MobileBankExpiredTokenCallback;
+import net.iGap.observers.interfaces.MobileBankExpiredTokenCallback;
 import net.iGap.module.SingleLiveEvent;
 
 public abstract class BaseMobileBankViewModel extends BaseAPIViewModel implements MobileBankExpiredTokenCallback {

@@ -22,7 +22,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import net.iGap.AccountManager;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;

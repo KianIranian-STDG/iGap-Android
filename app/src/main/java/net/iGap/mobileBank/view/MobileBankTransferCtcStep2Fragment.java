@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,7 @@ import net.iGap.R;
 import net.iGap.databinding.MobileBankTransferCtcStep2FragmentBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep2ViewModel;
 
 public class MobileBankTransferCtcStep2Fragment extends BaseMobileBankFragment<MobileBankTransferCtcStep2ViewModel> {

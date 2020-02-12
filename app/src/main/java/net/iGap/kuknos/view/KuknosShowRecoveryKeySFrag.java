@@ -18,7 +18,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosShowRecoveryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeySVM;
 
 public class KuknosShowRecoveryKeySFrag extends BaseFragment {

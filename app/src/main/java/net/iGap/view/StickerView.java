@@ -14,9 +14,9 @@ import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;

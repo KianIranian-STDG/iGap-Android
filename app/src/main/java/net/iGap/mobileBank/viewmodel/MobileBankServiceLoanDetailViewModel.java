@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.MobileBankRepository;

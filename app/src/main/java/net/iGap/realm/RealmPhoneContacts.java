@@ -14,14 +14,13 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnQueueSendContact;
+import net.iGap.observers.interfaces.OnQueueSendContact;
 import net.iGap.module.Contacts;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

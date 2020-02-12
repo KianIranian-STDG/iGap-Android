@@ -24,7 +24,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentPrivacyAndSecurityBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserProfileGetSelfRemove;

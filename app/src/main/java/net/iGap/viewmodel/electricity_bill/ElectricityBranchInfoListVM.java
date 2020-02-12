@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.ElectricityBillAPIRepository;
 import net.iGap.model.electricity_bill.BranchData;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;

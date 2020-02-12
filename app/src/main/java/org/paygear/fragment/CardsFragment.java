@@ -45,7 +45,7 @@ import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.RefreshLayout;

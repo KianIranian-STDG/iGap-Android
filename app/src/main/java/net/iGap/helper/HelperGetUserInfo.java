@@ -11,8 +11,8 @@
 package net.iGap.helper;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnGetUserInfo;
-import net.iGap.interfaces.OnUserInfoResponse;
+import net.iGap.observers.interfaces.OnGetUserInfo;
+import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserInfo;
 

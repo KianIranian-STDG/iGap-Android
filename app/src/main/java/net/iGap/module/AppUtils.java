@@ -42,7 +42,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperMimeType;
-import net.iGap.interfaces.IResendMessage;
+import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.CircleProgress.CircularProgressView;
 import net.iGap.module.structs.StructMessageInfo;

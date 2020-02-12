@@ -28,7 +28,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsFirstPage;

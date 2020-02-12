@@ -1,7 +1,6 @@
 package net.iGap.mobileBank.viewmodel;
 
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
@@ -9,10 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.R;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.mobileBank.repository.MobileBankRepository;
 import net.iGap.mobileBank.repository.model.BankAuth;
 import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;

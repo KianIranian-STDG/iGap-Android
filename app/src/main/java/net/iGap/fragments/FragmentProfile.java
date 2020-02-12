@@ -30,7 +30,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.UserProfileViewModel;
 

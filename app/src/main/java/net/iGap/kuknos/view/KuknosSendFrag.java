@@ -28,8 +28,8 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosSendVM;
 
 import java.io.IOException;

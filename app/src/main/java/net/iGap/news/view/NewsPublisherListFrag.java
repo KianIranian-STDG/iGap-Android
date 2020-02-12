@@ -18,7 +18,7 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsPublisherlistFragBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.news.repository.model.NewsPublisher;
 import net.iGap.news.view.Adapter.NewsPublisherAdapter;
 import net.iGap.news.viewmodel.NewsPublisherListVM;

@@ -19,7 +19,7 @@ import net.iGap.R;
 import net.iGap.databinding.MobileBankLoanDetailBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankServiceLoanDetailModel;
 import net.iGap.mobileBank.view.adapter.MobileBankServiceLoanDetailAdapter;
 import net.iGap.mobileBank.viewmodel.MobileBankServiceLoanDetailViewModel;

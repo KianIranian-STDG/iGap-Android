@@ -1,8 +1,8 @@
 package net.iGap.news.repository;
 
 import net.iGap.DbManager;
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.news.repository.api.NewsAPIRepository;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsComment;
@@ -12,8 +12,6 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 public class DetailRepo {
 

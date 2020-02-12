@@ -34,7 +34,7 @@ import net.iGap.fragments.FragmentCallAction;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 

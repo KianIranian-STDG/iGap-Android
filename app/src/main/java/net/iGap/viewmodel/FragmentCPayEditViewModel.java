@@ -4,8 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.AccountManager;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
-import net.iGap.api.repository.CPayRepository;
+import net.iGap.repository.CPayRepository;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
 

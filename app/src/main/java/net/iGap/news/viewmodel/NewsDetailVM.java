@@ -7,8 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.news.repository.DetailRepo;
 import net.iGap.news.repository.model.NewsComment;

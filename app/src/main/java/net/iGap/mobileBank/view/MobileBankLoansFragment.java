@@ -15,7 +15,7 @@ import net.iGap.R;
 import net.iGap.databinding.MobileBankLoansFragmentBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.LoanListModel;
 import net.iGap.mobileBank.view.adapter.BankLoanListAdapter;
 import net.iGap.mobileBank.viewmodel.MobileBankLoansViewModel;

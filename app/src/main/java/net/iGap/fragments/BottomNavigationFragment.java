@@ -25,7 +25,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.OnUnreadChange;
+import net.iGap.observers.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.news.view.NewsMainFrag;

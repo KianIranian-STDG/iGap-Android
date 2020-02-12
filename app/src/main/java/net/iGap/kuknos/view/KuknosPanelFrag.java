@@ -35,7 +35,7 @@ import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.WalletSpinnerArrayAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 

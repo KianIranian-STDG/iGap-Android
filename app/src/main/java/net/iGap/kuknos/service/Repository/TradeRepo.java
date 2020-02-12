@@ -1,7 +1,7 @@
 package net.iGap.kuknos.service.Repository;
 
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
 import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;

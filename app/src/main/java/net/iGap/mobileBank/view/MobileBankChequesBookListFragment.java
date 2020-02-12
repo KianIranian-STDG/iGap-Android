@@ -14,7 +14,7 @@ import net.iGap.R;
 import net.iGap.databinding.MobileBankChequesBookListFragmentBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
 import net.iGap.mobileBank.view.adapter.BankChequesBookListAdapter;
 import net.iGap.mobileBank.viewmodel.MobileBankChequesBookListViewModel;

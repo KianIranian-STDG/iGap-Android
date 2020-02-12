@@ -9,14 +9,12 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.DbManager;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.OnUserIVandGetScore;
+import net.iGap.observers.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 public class UserScoreViewModel extends ViewModel {
 

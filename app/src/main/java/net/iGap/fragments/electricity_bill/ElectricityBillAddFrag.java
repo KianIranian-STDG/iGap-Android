@@ -22,7 +22,7 @@ import net.iGap.databinding.FragmentElecBillAddBinding;
 import net.iGap.viewmodel.electricity_bill.ElectricityBillAddVM;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class ElectricityBillAddFrag extends BaseAPIViewFrag<ElectricityBillAddVM> {
 

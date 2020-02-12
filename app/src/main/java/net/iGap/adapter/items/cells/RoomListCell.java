@@ -21,7 +21,7 @@ import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogMessage;

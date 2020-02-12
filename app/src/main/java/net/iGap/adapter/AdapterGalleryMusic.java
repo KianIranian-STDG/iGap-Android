@@ -9,8 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperThumbnail;
-import net.iGap.interfaces.GalleryItemListener;
+import net.iGap.observers.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryMusicModel;
 import net.iGap.module.CircleImageView;
 

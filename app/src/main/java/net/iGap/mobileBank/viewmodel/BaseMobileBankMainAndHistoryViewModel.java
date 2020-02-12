@@ -2,15 +2,9 @@ package net.iGap.mobileBank.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.mobileBank.repository.MobileBankRepository;
-import net.iGap.mobileBank.repository.model.BankShebaModel;
-import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
-import net.iGap.mobileBank.view.MobileBankHomeTabFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseMobileBankMainAndHistoryViewModel extends BaseMobileBankViewModel {
 

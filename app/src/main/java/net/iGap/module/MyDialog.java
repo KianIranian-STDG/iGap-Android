@@ -22,7 +22,7 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;

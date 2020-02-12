@@ -24,7 +24,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnVoiceRecord;
+import net.iGap.observers.interfaces.OnVoiceRecord;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.IOException;

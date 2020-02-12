@@ -24,7 +24,7 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;

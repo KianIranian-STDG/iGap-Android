@@ -20,7 +20,7 @@ import net.iGap.adapter.electricity_bill.ElectricityBranchInfoListAdapter;
 import net.iGap.viewmodel.electricity_bill.ElectricityBranchInfoListVM;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBranchInfoListVM> {
 

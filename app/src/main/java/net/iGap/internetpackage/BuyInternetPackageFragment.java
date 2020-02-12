@@ -11,14 +11,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.MySpinnerAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentBuyInternetPackageBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class BuyInternetPackageFragment extends BaseAPIViewFrag<BuyInternetPackageViewModel> {
 

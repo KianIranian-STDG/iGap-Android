@@ -31,7 +31,7 @@ import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;

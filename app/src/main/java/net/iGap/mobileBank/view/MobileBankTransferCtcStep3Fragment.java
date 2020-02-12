@@ -15,7 +15,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.MobileBankTranferCtcStep3FragmentBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep3ViewModel;
 
 public class MobileBankTransferCtcStep3Fragment extends BaseAPIViewFrag<MobileBankTransferCtcStep3ViewModel> {

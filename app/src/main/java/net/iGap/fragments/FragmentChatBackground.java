@@ -36,7 +36,7 @@ import net.iGap.databinding.ActivityChatBackgroundBinding;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.ChatBackgroundViewModel;

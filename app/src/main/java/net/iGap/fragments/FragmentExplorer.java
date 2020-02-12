@@ -26,9 +26,9 @@ import net.iGap.R;
 import net.iGap.adapter.AdapterExplorer;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.IOnBackPressed;
-import net.iGap.interfaces.IPickFile;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.IOnBackPressed;
+import net.iGap.observers.interfaces.IPickFile;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.FileUtils;
 import net.iGap.module.structs.StructExplorerItem;
 

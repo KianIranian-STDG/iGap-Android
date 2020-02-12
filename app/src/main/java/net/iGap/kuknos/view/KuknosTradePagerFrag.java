@@ -21,7 +21,7 @@ import net.iGap.Theme;
 import net.iGap.databinding.FragmentKuknosTradePagerBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.TabAdapter;
 
 public class KuknosTradePagerFrag extends BaseFragment {

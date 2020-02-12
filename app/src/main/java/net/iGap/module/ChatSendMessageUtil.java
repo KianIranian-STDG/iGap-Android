@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.interfaces.OnChatSendMessageResponse;
+import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;

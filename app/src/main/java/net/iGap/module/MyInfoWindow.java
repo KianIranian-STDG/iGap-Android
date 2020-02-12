@@ -20,8 +20,8 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnGeoGetComment;
-import net.iGap.interfaces.OnInfo;
+import net.iGap.observers.interfaces.OnGeoGetComment;
+import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
@@ -29,8 +29,6 @@ import net.iGap.request.RequestGeoGetComment;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
-
-import io.realm.Realm;
 
 public class MyInfoWindow extends InfoWindow {
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.news.repository.api.NewsAPIRepository;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsFirstPage;

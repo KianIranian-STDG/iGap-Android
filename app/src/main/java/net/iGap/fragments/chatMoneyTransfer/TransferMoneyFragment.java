@@ -20,9 +20,9 @@ import com.google.android.material.button.MaterialButton;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
-import net.iGap.eventbus.socketMessages;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;

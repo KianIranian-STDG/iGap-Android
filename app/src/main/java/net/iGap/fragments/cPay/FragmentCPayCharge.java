@@ -20,7 +20,7 @@ import net.iGap.databinding.FragmentCpayChargeBinding;
 import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayChargeViewModel;
 
 

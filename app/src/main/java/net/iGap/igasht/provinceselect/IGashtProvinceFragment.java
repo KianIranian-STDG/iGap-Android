@@ -20,7 +20,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationlist.IGashtLocationListFragment;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewModel> {
 

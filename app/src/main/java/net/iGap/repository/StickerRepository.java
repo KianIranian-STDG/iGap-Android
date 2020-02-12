@@ -9,7 +9,7 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.StickerApi;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
@@ -26,7 +26,7 @@ import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.RSACipher;
 import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickerItem;
-import net.iGap.rx.IGSingleObserver;
+import net.iGap.observers.rx.IGSingleObserver;
 
 import org.jetbrains.annotations.NotNull;
 

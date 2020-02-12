@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
-import net.iGap.rx.ObserverFragment;
+import net.iGap.observers.rx.ObserverFragment;
 
 public class GiftStickerPackageListFragment extends ObserverFragment<GiftStickerPackageListViewModel> {
     boolean fromChat;

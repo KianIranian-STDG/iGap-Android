@@ -24,7 +24,7 @@ import net.iGap.databinding.MobileBankHistoryBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.mobileBank.repository.db.RealmMobileBankAccounts;
 import net.iGap.mobileBank.repository.db.RealmMobileBankCards;
 import net.iGap.mobileBank.repository.model.BankHistoryModel;

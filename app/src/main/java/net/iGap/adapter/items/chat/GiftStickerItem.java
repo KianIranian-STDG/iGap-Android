@@ -29,11 +29,11 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.repository.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
+import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.view.ProgressButton;
 import net.iGap.view.StickerView;
 

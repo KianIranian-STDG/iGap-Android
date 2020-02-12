@@ -28,7 +28,7 @@ import net.iGap.databinding.FragmentKuknosRestorePasswordBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosRestorePassVM;
 
 public class KuknosRestorePassFrag extends BaseFragment {

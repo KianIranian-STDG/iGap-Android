@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.DbManager;
-import net.iGap.interfaces.OnInfo;
+import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserContactsGetBlockedList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;

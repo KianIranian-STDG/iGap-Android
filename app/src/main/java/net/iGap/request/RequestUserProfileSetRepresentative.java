@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnUserProfileSetRepresentative;
+import net.iGap.observers.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.proto.ProtoUserProfileRepresentative;
 
 public class RequestUserProfileSetRepresentative {

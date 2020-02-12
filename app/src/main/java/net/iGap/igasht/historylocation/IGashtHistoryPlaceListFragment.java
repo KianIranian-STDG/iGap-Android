@@ -20,7 +20,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.barcodescaner.FragmentIgashtBarcodeScan;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class IGashtHistoryPlaceListFragment extends IGashtBaseView<IGashtHistoryPlaceViewModel> {
 

@@ -2,8 +2,8 @@ package net.iGap.repository;
 
 import net.iGap.api.ElecBillApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.model.electricity_bill.BillData;
 import net.iGap.model.electricity_bill.BillRegister;

@@ -27,7 +27,7 @@ import net.iGap.viewmodel.electricity_bill.ElectricityBillSearchListVM;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.util.List;
 

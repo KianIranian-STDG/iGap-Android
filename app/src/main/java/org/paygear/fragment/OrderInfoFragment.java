@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;

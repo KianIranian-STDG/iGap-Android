@@ -2,8 +2,8 @@ package net.iGap.news.repository.api;
 
 import net.iGap.api.NewsApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsComment;

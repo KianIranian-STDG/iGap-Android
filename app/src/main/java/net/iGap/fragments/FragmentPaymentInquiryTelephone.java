@@ -17,7 +17,7 @@ import net.iGap.fragments.inquiryBill.ShowBillInquiryFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.jetbrains.annotations.NotNull;
 

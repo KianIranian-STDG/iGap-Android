@@ -26,7 +26,7 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.helper.upload.UploadTask;
-import net.iGap.interfaces.OnUserAvatarResponse;
+import net.iGap.observers.interfaces.OnUserAvatarResponse;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;

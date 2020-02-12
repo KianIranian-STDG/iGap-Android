@@ -24,8 +24,8 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnFileDownloadResponse;
-import net.iGap.interfaces.OnSongDownload;
+import net.iGap.observers.interfaces.OnFileDownloadResponse;
+import net.iGap.observers.interfaces.OnSongDownload;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.proto.ProtoFileDownload;
