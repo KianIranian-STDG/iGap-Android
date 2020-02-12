@@ -65,7 +65,7 @@ import net.iGap.kuknos.view.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.news.view.NewsMainFrag;
+import net.iGap.fragments.news.NewsMainFrag;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;

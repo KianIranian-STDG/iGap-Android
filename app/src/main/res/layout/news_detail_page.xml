@@ -9,7 +9,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.news.viewmodel.NewsDetailVM" />
+            type="net.iGap.viewmodel.news.NewsDetailVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

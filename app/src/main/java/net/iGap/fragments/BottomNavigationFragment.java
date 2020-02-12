@@ -28,7 +28,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.observers.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
-import net.iGap.news.view.NewsMainFrag;
+import net.iGap.fragments.news.NewsMainFrag;
 
 import java.util.ArrayList;
 import java.util.List;
