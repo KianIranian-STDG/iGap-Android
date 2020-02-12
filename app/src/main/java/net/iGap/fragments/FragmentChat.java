@@ -68,7 +68,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
@@ -421,7 +420,7 @@ public class FragmentChat extends BaseFragment
     private boolean isRepley = false;
     private boolean swipeBack = false;
     private AttachFile attachFile;
-    private AppCompatEditText edtSearchMessage;
+    private EventEditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
     private SharedPreferences emojiSharedPreferences;
     private EventEditText edtChat;
@@ -449,7 +448,6 @@ public class FragmentChat extends BaseFragment
     private View viewAttachFile;
     private View viewMicRecorder;
     private VoiceRecord voiceRecord;
-    private MaterialDesignTextView txtClearMessageSearch;
     private MaterialDesignTextView btnHashLayoutClose;
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
@@ -3472,6 +3470,11 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    @Override
+    protected void hideKeyboard() {
+        showPopup(-1);
+    }
+
     private void getStickerByEmoji(String unicode) {
         if (lastChar == null) {
             lastChar = unicode;
@@ -3546,7 +3549,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    public void closeKeyboard() {
+    private void closeKeyboard() {
         AndroidUtils.hideKeyboard(edtChat);
     }
 
@@ -4648,6 +4651,9 @@ public class FragmentChat extends BaseFragment
         });
         if (getFragmentManager() != null)
             bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
+
+        hideKeyboard();
+
     }
 
     private List<Integer> setupMessageContainerClickDialogItems(StructMessageInfo message) {
@@ -6230,7 +6236,8 @@ public class FragmentChat extends BaseFragment
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
-        imvSmileButton.setText(drawableResourceId);
+        if (imvSmileButton != null)
+            imvSmileButton.setText(drawableResourceId);
     }
 
     /**
@@ -7334,39 +7341,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initLayoutSearchNavigation() {
-        //  ll_navigate_Message = (LinearLayout)  rootView.findViewById(R.id.ac_ll_message_navigation);
-        //  btnUpMessage = (TextView)  rootView.findViewById(R.id.ac_btn_message_up);
-        txtClearMessageSearch = rootView.findViewById(R.id.ac_btn_clear_message_search);
-        //  btnDownMessage = (TextView) findViewById(R.id.ac_btn_message_down);
-        //  txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
-
-        //btnUpMessage.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //
-        //        if (selectedPosition > 0) {
-        //            deSelectMessage(selectedPosition);
-        //            selectedPosition--;
-        //            selectMessage(selectedPosition);
-        //            recyclerView.scrollToPosition(selectedPosition);
-        //            txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + " " + messageCounter);
-        //        }
-        //    }
-        //});
-
-        //btnDownMessage.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        if (selectedPosition < messageCounter - 1) {
-        //            deSelectMessage(selectedPosition);
-        //            selectedPosition++;
-        //            selectMessage(selectedPosition);
-        //            recyclerView.scrollToPosition(selectedPosition);
-        //            txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + messageCounter);
-        //        }
-        //    }
-        //});
-
         final RippleView rippleClose = rootView.findViewById(R.id.chl_btn_close_ripple_search_message);
         rippleClose.setOnClickListener(view -> {
             if (edtSearchMessage.getText().toString().length() == 0) {
@@ -7381,10 +7355,14 @@ public class FragmentChat extends BaseFragment
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        edtSearchMessage.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
-            return true;
+
+        edtSearchMessage.setListener(event -> {
+            if (/*isPopupShowing() && */event.getAction() == MotionEvent.ACTION_DOWN) {
+                showPopup(KeyboardView.MODE_KEYBOARD);
+                openKeyboardInternal();
+            }
         });
+
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -7442,8 +7420,8 @@ public class FragmentChat extends BaseFragment
             layoutToolbar.setVisibility(View.VISIBLE);
         }
         goneSearchHashFooter();
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+        hideKeyboard();
 
     }
 
@@ -9234,6 +9212,9 @@ public class FragmentChat extends BaseFragment
                         initHashView();
                     }
                     G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
+
+                    showPopup(KeyboardView.MODE_KEYBOARD);
+
                 } else if (items.get(position).equals(getString(R.string.clear_history))) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override

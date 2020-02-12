@@ -459,7 +459,7 @@
                     android:paddingRight="@dimen/dp8"
                     android:visibility="gone">
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                    <net.iGap.view.EventEditText
                         android:id="@+id/chl_edt_search_message"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
