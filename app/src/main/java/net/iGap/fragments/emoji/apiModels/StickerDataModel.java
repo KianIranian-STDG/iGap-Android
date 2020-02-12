@@ -7,7 +7,7 @@ import java.util.List;
 
 public class StickerDataModel {
 
-    @SerializedName("id")
+    @SerializedName("_id")
     private String id;
     @SerializedName("createdAt")
     private String createdAt;

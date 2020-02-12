@@ -1948,5 +1948,8 @@
     <string name="mobile_bank_hotCard">Заблокировать карту</string>
     <string name="delete_recent_emoji">Удалить последние Emoji</string>
     <string name="mobile_bank_balance_error_no_price">Нет цены.</string>
+    <string name="usable">قابل استفاده</string>
+    <string name="activated">فعال شده</string>
+    <string name="posted">Posted</string>
 
 </resources>

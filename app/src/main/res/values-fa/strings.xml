@@ -2498,4 +2498,7 @@
     <string name="soon">بزودی...</string>
     <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
     <string name="delete_recent_emoji">حذف اموجی های اخیر</string>
+    <string name="usable">قابل استفاده</string>
+    <string name="activated">فعال شده</string>
+    <string name="posted">ارسال شده</string>
 </resources>

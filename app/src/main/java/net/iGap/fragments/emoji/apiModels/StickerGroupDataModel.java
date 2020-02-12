@@ -7,7 +7,7 @@ import java.util.List;
 
 public class StickerGroupDataModel {
 
-    @SerializedName("id")
+    @SerializedName("_id")
     private String id;
     @SerializedName("avatarName")
     private String avatarName;

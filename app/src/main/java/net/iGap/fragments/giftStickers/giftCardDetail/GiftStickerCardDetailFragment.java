@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentGiftStickerCardDetailBinding;
+import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -67,6 +68,8 @@ public class GiftStickerCardDetailFragment extends Fragment {
             binding.expireTime.setText(expireTime);
             binding.internetPin2.setText(cardDetailDataModel.getCvv2());
             binding.cvvView.setText(cardDetailDataModel.getSecondPassword());
+
+            EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, true);
         });
 
         viewModel.getCopyValue().observe(getViewLifecycleOwner(), value -> {

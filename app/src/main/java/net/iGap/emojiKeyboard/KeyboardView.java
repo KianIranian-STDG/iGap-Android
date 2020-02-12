@@ -33,13 +33,6 @@ public class KeyboardView extends FrameLayout {
 
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (listener != null)
-            listener.onViewCreated(currentMode);
-    }
-
     public void setCurrentMode(int mode, int contentView) {
         currentMode = mode;
         if (mode == MODE_EMOJI) {
@@ -56,6 +49,9 @@ public class KeyboardView extends FrameLayout {
         } else if (mode == MODE_BOT_UNDER_BUTTON) {
 
         }
+
+        if (listener != null)
+            listener.onViewCreated(currentMode);
     }
 
     private void createEmojiView() {

@@ -2555,5 +2555,8 @@ Want to get it?</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
     <string name="poll_dialog_question">Are you sure of your opinion?</string>
     <string name="delete_recent_emoji">Delete Recent Emoji</string>
+    <string name="usable">Usable</string>
+    <string name="activated">Activated</string>
+    <string name="posted">Posted</string>
 
 </resources>

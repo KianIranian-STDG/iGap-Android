@@ -3183,4 +3183,7 @@
     <string name="poll_dialog_question">هل أنت متأكد من رأيك </string>
     <string name="delete_recent_emoji">حذف الرموز التعبيرية الحديثة</string>
     <string name="mobile_bank_balance_error_no_price">لا ثمن</string>
+    <string name="usable">صالح للإستعمال</string>
+    <string name="activated">المنشط</string>
+    <string name="posted">نشر</string>
 </resources>

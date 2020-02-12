@@ -2174,4 +2174,7 @@
 
     <string name="poll_dialog_question">Etes-vous sûr de votre avis?</string>
     <string name="delete_recent_emoji">Supprimer les emoji récents</string>
+    <string name="usable">قابل استفاده</string>
+    <string name="activated">فعال شده</string>
+    <string name="posted">Posted</string>
 </resources>

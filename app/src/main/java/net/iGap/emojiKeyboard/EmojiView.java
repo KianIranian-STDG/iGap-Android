@@ -330,7 +330,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             bottomContainer.addView(stickerIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, stickerX, 0, 0, 0));
             bottomContainer.addView(emojiIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, emojiX, 0, 0, 0));
             bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
-
+            bottomContainer.setOnClickListener(v -> {
+            });
             bottomContainer.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
             bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
 

@@ -2222,5 +2222,8 @@
     <string name="mobile_bank_hotCard">مسدود کردن کارت</string>
     <string name="delete_recent_emoji">Delete Recent Emoji</string>
     <string name="mobile_bank_balance_error_no_price">بدون قیمت</string>
+    <string name="usable">قابل استفاده</string>
+    <string name="activated">فعال شده</string>
+    <string name="posted">Posted</string>
 
 </resources>

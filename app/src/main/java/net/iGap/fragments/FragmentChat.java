@@ -3413,7 +3413,6 @@ public class FragmentChat extends BaseFragment
                 keyboardContainer.addView(keyboardView);
 
             keyboardVisible = false;
-            currentKeyboardViewContent = KeyboardView.MODE_EMOJI;
 
             if (keyboardHeight <= 0) {
                 keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
@@ -3435,10 +3434,8 @@ public class FragmentChat extends BaseFragment
             keyboardView.setVisibility(View.VISIBLE);
 
         } else if (mode == KeyboardView.MODE_ATTACHMENT) {
-            currentKeyboardViewContent = KeyboardView.MODE_ATTACHMENT;
 
         } else if (mode == KeyboardView.MODE_KEYBOARD) {
-            currentKeyboardViewContent = KeyboardView.MODE_KEYBOARD;
 
             if (keyboardView == null)
                 createKeyboardView();
@@ -3467,6 +3464,9 @@ public class FragmentChat extends BaseFragment
                 keyboardVisible = true;
             }
         } else {
+            if (keyboardView != null)
+                keyboardView.setCurrentMode(-1, -1);
+
             closeKeyboard();
             G.handler.postDelayed(this::hideKeyboardView, 100);
         }
@@ -6138,91 +6138,6 @@ public class FragmentChat extends BaseFragment
      */
     private void saveMessageIdPositionState(final long messageId) {
         RealmRoom.setLastScrollPosition(mRoomId, messageId, firstVisiblePositionOffset);
-    }
-
-    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
-//
-//        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(ac_ll_parent))
-//                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-//
-//                    @Override
-//                    public void onEmojiBackspaceClick(View v) {
-//
-//                    }
-//                }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-//                    @Override
-//                    public void onEmojiPopupShown() {
-//                        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-//                            @Override
-//                            public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
-//                                if (response.body() != null) {
-//                                    if (response.body().getOk()) {
-//                                        RealmStickers.updateStickers(response.body().getData(), () -> {
-//
-//                                        });
-//                                    }
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
-//
-//                            }
-//                        });
-//                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-//                        isEmojiSHow = true;
-//                        if (botInit != null) botInit.close();
-//                    }
-//                }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-//                    @Override
-//                    public void onKeyboardOpen(final int keyBoardHeight) {
-//                        if (botInit != null) botInit.close();
-//                    }
-//                }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-//                    @Override
-//                    public void onEmojiPopupDismiss() {
-//                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-//                        isEmojiSHow = false;
-//                    }
-//                }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-//                    @Override
-//                    public void onKeyboardClose() {
-//                        emojiPopup.dismiss();
-//                    }
-//                }).setOnStickerListener(new OnStickerListener() {
-//                    @Override
-//                    public void onItemSticker(StructItemSticker st) {
-//
-//                })
-//                .setOnDownloadStickerListener(new OnDownloadStickerListener() {
-//                    @Override
-//                    public void downloadStickerItem(StructItemSticker sticker, OnStickerItemDownloaded onStickerItemDownloaded) {
-
-//                    }
-//
-//                    @Override
-//                    public void downloadStickerAvatar(StructGroupSticker sticker, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
-//                    }
-//
-//
-//                    @Override
-//                    public void downloadLottieStickerItem(StructItemSticker sticker, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
-//                    }
-//                })
-//                .setOpenPageSticker(new OnOpenPageStickerListener() {
-//                    @Override
-//                    public void addSticker(String page) {
-//                    }
-//
-//                    @Override
-//                    public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
-//                    }
-//                })
-//                .setBackgroundColor(BackgroundColor)
-//                .setIconColor(iconColor)
-//                .setDividerColor(dividerColor)
-//                .build(edtChat);
-
     }
 
     private void sendStickerAsMessage(StructIGSticker structIGSticker) {

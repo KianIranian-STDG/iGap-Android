@@ -47,6 +47,17 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
             }
         });
 
+        rootView.findViewById(R.id.cancelButton).setOnClickListener(v -> viewModel.onCancelButtonClick());
+        rootView.findViewById(R.id.retryView).setOnClickListener(v -> viewModel.onRetryButtonClicked());
+
+        viewModel.getIsShowLoadingLiveData().observe(getViewLifecycleOwner(), visibility -> rootView.findViewById(R.id.loadingView).setVisibility(visibility));
+        viewModel.getIsShowRetryViewLiveData().observe(getViewLifecycleOwner(), visibility -> rootView.findViewById(R.id.retryView).setVisibility(visibility));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         viewModel.getGoToPackageItemPage().observe(getViewLifecycleOwner(), giftStickerPackage -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment && giftStickerPackage != null) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
@@ -54,12 +65,6 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
                 ((GiftStickerMainFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
             }
         });
-
-        rootView.findViewById(R.id.cancelButton).setOnClickListener(v -> viewModel.onCancelButtonClick());
-        rootView.findViewById(R.id.retryView).setOnClickListener(v -> viewModel.onRetryButtonClicked());
-
-        viewModel.getIsShowLoadingLiveData().observe(getViewLifecycleOwner(), visibility -> rootView.findViewById(R.id.loadingView).setVisibility(visibility));
-        viewModel.getIsShowRetryViewLiveData().observe(getViewLifecycleOwner(), visibility -> rootView.findViewById(R.id.retryView).setVisibility(visibility));
     }
 
     @Override
