@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.AccountManager;
 import net.iGap.G;
@@ -209,7 +210,7 @@ public class RoomListCell extends FrameLayout {
 
         if (room.getTitle() != null && !haveName) {
             roomNameTv = new AppCompatTextView(getContext());
-            setTypeFace(roomNameTv);
+            roomNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
             setTextSize(roomNameTv, R.dimen.dp13);
             roomNameTv.setSingleLine(true);
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
