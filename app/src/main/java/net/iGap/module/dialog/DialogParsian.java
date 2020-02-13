@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
-import net.iGap.helper.LayoutCreator;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.adapter.mobileBank.ShebaNumbersAdapter;
 import net.iGap.adapter.mobileBank.TransferMoneyTypeAdapter;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.module.Theme;
 
 import java.util.List;
 
@@ -33,8 +33,7 @@ public class DialogParsian {
     private String mTitle;
     private String mActiveButtonText, mDeActiveButtonText;
     private FrameLayout mContentLayout;
-    private Button mActiveButton, mDeActiveButton;
-    private TextView mTitleTextView, mCloseButton;
+    private Button mActiveButton;
     private ParsianDialogListener mListener;
 
     public DialogParsian setContext(Context context) {
@@ -66,23 +65,23 @@ public class DialogParsian {
         if (mDialog.getWindow() != null)
             mDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        mCloseButton = mDialog.findViewById(R.id.tvClose);
-        mTitleTextView = mDialog.findViewById(R.id.tvTitle);
+        TextView closeButton = mDialog.findViewById(R.id.tvClose);
+        TextView titleTextView = mDialog.findViewById(R.id.tvTitle);
         mContentLayout = mDialog.findViewById(R.id.lytContent);
         mActiveButton = mDialog.findViewById(R.id.btnActive);
-        mDeActiveButton = mDialog.findViewById(R.id.btnDeActive);
+        Button mDeActiveButton = mDialog.findViewById(R.id.btnDeActive);
 
-        mTitleTextView.setVisibility(mTitle == null ? View.GONE : View.VISIBLE);
+        titleTextView.setVisibility(mTitle == null ? View.GONE : View.VISIBLE);
         mActiveButton.setVisibility(mActiveButtonText == null ? View.GONE : View.VISIBLE);
         mDeActiveButton.setVisibility(mDeActiveButtonText == null ? View.GONE : View.VISIBLE);
 
-        mCloseButton.setOnClickListener(v -> mDialog.dismiss());
+        closeButton.setOnClickListener(v -> mDialog.dismiss());
         mDeActiveButton.setOnClickListener(v -> {
             mDialog.dismiss();
             mListener.onDeActiveButtonClicked(mDialog);
         });
 
-        if (mTitle != null) mTitleTextView.setText(mTitle);
+        if (mTitle != null) titleTextView.setText(mTitle);
         if (mActiveButtonText != null) mActiveButton.setText(mActiveButtonText);
         if (mDeActiveButtonText != null) mDeActiveButton.setText(mDeActiveButtonText);
     }

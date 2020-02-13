@@ -352,18 +352,9 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
             if (message.equals("-1")) {
                 mDialogWait.dismiss();
             } else {
-                showMessageDialog(getString(R.string.attention), message);
+                showMessage(getString(R.string.attention), message);
             }
         });
-    }
-
-    private void showMessageDialog(String title, String message) {
-        mDialogWait.dismiss();
-        new DialogParsian()
-                .setContext(getContext())
-                .setTitle(title)
-                .setButtonsText(getString(R.string.ok), null)
-                .showSimpleMessage(message);
     }
 
     private void showProgress() {

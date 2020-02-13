@@ -126,14 +126,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 onFacilitiesClick();
                 break;
 
-            /*case R.string.Inventory:
-                if (mode == HomeTabMode.CARD)
-                    openGetCardInfo(getCurrentAccount());
-                else {
-                    getAcountBalance(getCurrentAccount());
-                }
-                break;*/
-
             case R.string.mobile_bank_hotCard:
                 openHotCard(getCurrentAccount());
                 break;
@@ -204,8 +196,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 mDialogWait.dismiss();
                 viewModel.getShowRequestErrorMessage().setValue(getResources().getString(R.string.mobile_bank_balance_error_no_tran));
             } else {
-                showMessage(getString(R.string.mobile_bank_balance_title),
-                        getString(R.string.mobile_bank_balance_message, balance + " " + getString(R.string.rial)));
+                showMessage(getString(R.string.mobile_bank_balance_title), getString(R.string.mobile_bank_balance_message, balance + " " + getString(R.string.rial)));
             }
         });
 
