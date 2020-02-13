@@ -1,4 +1,4 @@
-package net.iGap.fragments.mobileBank;
+package net.iGap.module.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

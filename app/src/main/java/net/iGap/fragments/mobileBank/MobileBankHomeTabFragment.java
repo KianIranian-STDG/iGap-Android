@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import net.iGap.R;
 import net.iGap.databinding.MobileBankHomeTabFragmentBinding;
 import net.iGap.helper.HelperFragment;
+import net.iGap.module.dialog.DialogParsian;
 import net.iGap.realm.RealmMobileBankAccounts;
 import net.iGap.realm.RealmMobileBankCards;
 import net.iGap.model.mobileBank.BankAccountModel;
