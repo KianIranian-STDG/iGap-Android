@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +33,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
 import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
 
 import org.jetbrains.annotations.NotNull;
@@ -109,13 +109,29 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         binding.termsAndConditionText.setHighlightColor(Color.TRANSPARENT);
 
         onSumVisibility();
-        onBankPage();
+//        onBankPage();
         onError();
         onProgress();
         entryListener();
         goToPaymentListener();
         onTermsDownload();
-        goToPin();
+        onPaymentDialog();
+//        goToPin();
+    }
+
+    private void onPaymentDialog() {
+        kuknosBuyPeymanVM.getPaymentData().observe(getViewLifecycleOwner(), new Observer<KuknosPaymentResponse>() {
+            @Override
+            public void onChanged(KuknosPaymentResponse kuknosPaymentResponse) {
+                if (kuknosPaymentResponse != null)
+                    showDialog(getResources().getString(R.string.kuknos_payment_title),
+                            getResources().getString(R.string.kuknos_payment_assetCode) + " " + kuknosPaymentResponse.getAssetCode()
+                                    + "\n" + getResources().getString(R.string.kuknos_payment_assetCount) + " " + kuknosPaymentResponse.getAssetCount()
+                                    + "\n" + getResources().getString(R.string.kuknos_payment_assetPrice) + " " + kuknosPaymentResponse.getAssetPrice() + " " + getResources().getString(R.string.rial)
+                                    + "\n" + getResources().getString(R.string.kuknos_payment_totalAmount) + " " + kuknosPaymentResponse.getTotalAmount() + " " + getResources().getString(R.string.rial)
+                                    + "\n" + getResources().getString(R.string.kuknos_payment_hash) + " " + kuknosPaymentResponse.getHash());
+            }
+        });
     }
 
     private void onTermsDownload() {
@@ -149,7 +165,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
             } else if (errorM.getState() && errorM.getMessage().equals("1")) {
                 showDialog(errorM.getResID());
             } else {
-                showDialog(errorM.getMessage());
+                showDialog(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle), errorM.getMessage());
             }
         });
     }
@@ -164,9 +180,9 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         defaultRoundDialog.show();
     }
 
-    private void showDialog(String message) {
+    private void showDialog(String title, String message) {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
+        defaultRoundDialog.setTitle(title);
         defaultRoundDialog.setMessage(message);
         defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
 
@@ -238,8 +254,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
                 if (getActivity() != null && token != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.kuknos_buyAsset), token, result -> {
                         if (getActivity() != null && result.isSuccess()) {
-                            Toast.makeText(getContext(), "Payment Done. ", Toast.LENGTH_LONG).show();
-                            getActivity().onBackPressed();
+                            kuknosBuyPeymanVM.getPaymentData("" + result.getRRN());
                         }
                     });
                 }

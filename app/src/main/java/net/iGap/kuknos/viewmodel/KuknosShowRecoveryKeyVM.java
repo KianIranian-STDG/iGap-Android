@@ -7,6 +7,7 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.module.SingleLiveEvent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,7 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
     private List<String> languages = Arrays.asList("FA", "EN");
     private UserRepo userRepo = new UserRepo();
     private MutableLiveData<ErrorM> error;
-    private MutableLiveData<Boolean> nextPage;
+    private SingleLiveEvent<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
     private String selectedLanguage = "FA";
@@ -25,7 +26,7 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
 
 
     public KuknosShowRecoveryKeyVM() {
-        nextPage = new MutableLiveData<>();
+        nextPage = new SingleLiveEvent<>();
         nextPage.setValue(false);
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
@@ -85,10 +86,6 @@ public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
 
     public MutableLiveData<Boolean> getNextPage() {
         return nextPage;
-    }
-
-    public void setNextPage(MutableLiveData<Boolean> nextPage) {
-        this.nextPage = nextPage;
     }
 
     public MutableLiveData<Boolean> getProgressState() {

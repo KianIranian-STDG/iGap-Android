@@ -8,6 +8,7 @@ import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
@@ -206,6 +207,10 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("account-existent")
     Call<KuknosResponseModel<KuknosUsernameStatus>> checkUsername(@Field("federation_name") String federationName);
+
+    @FormUrlEncoded
+    @POST("get-payment")
+    Call<KuknosResponseModel<KuknosPaymentResponse>> getPaymentData(@Field("rrn") String RRN);
 
     /**
      * this api make a request for Fees.

@@ -13,6 +13,7 @@ import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.Parsian.IgapPayment;
 import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.request.RequestInfoPage;
@@ -28,6 +29,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private ObservableField<String> sum = new ObservableField<>();
     private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر پیمان: ...");
     private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosPaymentResponse> paymentData = new MutableLiveData<>(null);
     // 0 : nothing 1: connecting to server 2: connecting to bank
     private MutableLiveData<Integer> progressState;
     private MutableLiveData<Boolean> sumState;
@@ -126,6 +128,27 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                     }
 
                 });
+    }
+
+    public void getPaymentData(String RRN) {
+        progressState.setValue(3);
+        panelRepo.getPaymentData(RRN, this, new ResponseCallback<KuknosResponseModel<KuknosPaymentResponse>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosPaymentResponse> data) {
+                paymentData.setValue(data.getData());
+                progressState.setValue(0);
+            }
+
+            @Override
+            public void onError(String error) {
+                progressState.setValue(0);
+            }
+
+            @Override
+            public void onFailed() {
+                progressState.setValue(0);
+            }
+        });
     }
 
     private boolean checkForm() {
@@ -264,5 +287,9 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     public ObservableField<Boolean> getAmountEnable() {
         return amountEnable;
+    }
+
+    public MutableLiveData<KuknosPaymentResponse> getPaymentData() {
+        return paymentData;
     }
 }

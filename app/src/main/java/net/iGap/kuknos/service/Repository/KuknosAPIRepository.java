@@ -15,6 +15,7 @@ import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosHash;
 import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
@@ -150,5 +151,9 @@ class KuknosAPIRepository {
 
     void getFees(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFeeModel>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosFeeModel>>().initAPI(apiService.getFee(), handShakeCallback, apiResponse);
+    }
+
+    void getPaymentData(String RRA, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosPaymentResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosPaymentResponse>>().initAPI(apiService.getPaymentData(RRA), handShakeCallback, apiResponse);
     }
 }

@@ -2263,6 +2263,12 @@ Want to get it?</string>
     <string name="kuknos_enterPin_desc">To confirm this action, please enter your account PIN code.</string>
     <string name="kuknos_enterPin_btnNormal">Confirm</string>
     <string name="kuknos_enterPin_btnProgress">Checking…</string>
+    <string name="kuknos_payment_title">Transaction Receipt</string>
+    <string name="kuknos_payment_assetCode">Asset: </string>
+    <string name="kuknos_payment_assetCount">Asset Amount: </string>
+    <string name="kuknos_payment_assetPrice">Asset Price: </string>
+    <string name="kuknos_payment_totalAmount">Total Amount: </string>
+    <string name="kuknos_payment_hash">Kuknos Hash: </string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>
