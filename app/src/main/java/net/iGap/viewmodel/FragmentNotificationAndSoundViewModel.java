@@ -24,6 +24,8 @@ import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 
+import yogesh.firzen.mukkiasevaigal.S;
+
 public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     public int ledColorMessage;
@@ -38,8 +40,8 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     public ObservableInt callbackVibrateGroup = new ObservableInt(R.string.array_Default);
     public ObservableInt callbackPopUpNotificationMessage = new ObservableInt();
     public ObservableInt callbackPopUpNotificationGroup = new ObservableInt(R.string.st_sound);
-    public ObservableField<String> callbackSoundMessage = new ObservableField<>();
-    public ObservableField<String> callBackSoundGroup = new ObservableField<>();
+    public SingleLiveEvent<String> callbackSoundMessage = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> callBackSoundGroup = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showMessageLedDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showGroupLedDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showMessageVibrationDialog = new SingleLiveEvent<>();
@@ -407,22 +409,22 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     public void setChooseSound() {
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, messageChooseSound).commit();
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, messageChooseSound).apply();
     }
 
     public void chooseSound() {
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, groupChooseSound).commit();
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, groupChooseSound).apply();
     }
 
     public void getSoundMessagePosition(int which) {
         messageChooseSound = which;
-        callbackSoundMessage.set(soundList[which]);
+        callbackSoundMessage.setValue(soundList[which]);
         playSound(which);
     }
 
     public void getSoundGroupPosition(int which) {
         groupChooseSound = which;
-        callBackSoundGroup.set(soundList[which]);
+        callBackSoundGroup.setValue(soundList[which]);
         playSound(which);
     }
 
