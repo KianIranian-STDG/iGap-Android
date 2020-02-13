@@ -5255,6 +5255,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
         final List<StructMessageInfo> failedMessages = mAdapter.getFailedMessages();
+        hideKeyboard();
         new ResendMessage(G.fragmentActivity, new IResendMessage() {
             @Override
             public void deleteMessage() {
