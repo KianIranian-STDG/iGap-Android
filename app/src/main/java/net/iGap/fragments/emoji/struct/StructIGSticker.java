@@ -1,5 +1,7 @@
 package net.iGap.fragments.emoji.struct;
 
+import com.google.gson.annotations.SerializedName;
+
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.realm.RealmStickerItem;
 import net.iGap.repository.sticker.StickerRepository;
@@ -8,18 +10,30 @@ import java.io.File;
 import java.util.List;
 
 public class StructIGSticker {
+    //use @SerializedName for message additional data
+
     public static final int NORMAL_STICKER = 0;
     public static final int ANIMATED_STICKER = 1;
 
+    @SerializedName("path")
     private String path;
+    @SerializedName("name")
     private String name;
+    @SerializedName("type")
     private int type;
+    @SerializedName("id")
     private String id;
+    @SerializedName("token")
     private String token;
+    @SerializedName("groupId")
     private String groupId;
+    @SerializedName("fileName")
     private String fileName;
+    @SerializedName("fileSize")
     private long fileSize;
+    @SerializedName("isFavorite")
     private boolean isFavorite;
+    @SerializedName("giftAmount")
     private long giftAmount;
     private String giftId; // just use in gift sticker :| i can not change server data model :\
     private List<String> tags;
