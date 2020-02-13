@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.BankChequeBookListModel;
 
 import java.util.ArrayList;
@@ -67,13 +67,13 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
         @SuppressLint("SetTextI18n")
         public void bind(BankChequeBookListModel item) {
 
-            tvNumber.setText(getString(R.string.cheque_number) + checkNumbers(item.getNumber()));
-            tvPageCount.setText(getString(R.string.page_count) + checkNumbers(item.getPageCount() + ""));
-            tvPass.setText(getString(R.string.pass_count) + checkNumbers(item.getPassCheque() + ""));
-            tvReject.setText(getString(R.string.reject_count) + checkNumbers(item.getReject() + ""));
-            tvCached.setText(getString(R.string.cash_count) + checkNumbers(item.getPartialCash() + ""));
-            tvBlocked.setText(getString(R.string.block) + ": " + checkNumbers((item.getPermanentBlocked() + item.getTemporaryBlock()) + ""));
-            tvUsable.setText(getString(R.string.usable_count) + checkNumbers(item.getUnusedCheque() + ""));
+            tvNumber.setText(getString(R.string.cheque_number) + HelperMobileBank.checkNumbersInMultiLangs(item.getNumber()));
+            tvPageCount.setText(getString(R.string.page_count) + HelperMobileBank.checkNumbersInMultiLangs(item.getPageCount() + ""));
+            tvPass.setText(getString(R.string.pass_count) + HelperMobileBank.checkNumbersInMultiLangs(item.getPassCheque() + ""));
+            tvReject.setText(getString(R.string.reject_count) + HelperMobileBank.checkNumbersInMultiLangs(item.getReject() + ""));
+            tvCached.setText(getString(R.string.cash_count) + HelperMobileBank.checkNumbersInMultiLangs(item.getPartialCash() + ""));
+            tvBlocked.setText(getString(R.string.block) + ": " + HelperMobileBank.checkNumbersInMultiLangs((item.getPermanentBlocked() + item.getTemporaryBlock()) + ""));
+            tvUsable.setText(getString(R.string.usable_count) + HelperMobileBank.checkNumbersInMultiLangs(item.getUnusedCheque() + ""));
 
         }
 
@@ -81,12 +81,6 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
             return tvNumber.getContext().getString(id);
         }
 
-        private String checkNumbers(String text) {
-            if (HelperCalander.isPersianUnicode) {
-                return HelperCalander.convertToUnicodeFarsiNumber(text);
-            }
-            return text;
-        }
     }
 
     public interface ChequeListListener {

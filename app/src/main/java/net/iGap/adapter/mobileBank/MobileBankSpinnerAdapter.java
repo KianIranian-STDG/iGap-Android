@@ -18,8 +18,8 @@ import com.google.common.collect.Iterables;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.BankCardModel;
-import net.iGap.module.mobileBank.ExtractBank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +51,9 @@ public class MobileBankSpinnerAdapter extends ArrayAdapter<BankCardModel> {
         TextView cardNum = layout.findViewById(R.id.cardNumber);
         ImageView bankLogo = layout.findViewById(R.id.logo);
 
-        bankName.setText(ExtractBank.bankName(cards.get(position).getPan()));
+        bankName.setText(HelperMobileBank.bankName(cards.get(position).getPan()));
         cardNum.setText(checkAndSetPersianNumberIfNeeded(cards.get(position).getPan()));
-        bankLogo.setImageResource(ExtractBank.bankLogo(cards.get(position).getPan()));
+        bankLogo.setImageResource(HelperMobileBank.bankLogo(cards.get(position).getPan()));
 
         return layout;
     }

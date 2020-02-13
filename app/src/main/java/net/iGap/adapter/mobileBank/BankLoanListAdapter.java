@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.LoanListModel;
 import net.iGap.module.mobileBank.JalaliCalendar;
 
@@ -119,10 +119,7 @@ public class BankLoanListAdapter extends RecyclerView.Adapter<BankLoanListAdapte
         }
 
         private String getString(int label, String value) {
-            if (HelperCalander.isPersianUnicode) {
-                value = HelperCalander.convertToUnicodeFarsiNumber(value);
-            }
-            return itemView.getContext().getString(label) + " " + value;
+            return itemView.getContext().getString(label) + " " + HelperMobileBank.checkNumbersInMultiLangs(value);
         }
 
         private String getString(int id) {

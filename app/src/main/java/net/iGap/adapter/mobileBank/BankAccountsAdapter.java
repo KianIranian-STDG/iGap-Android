@@ -11,7 +11,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.realm.RealmMobileBankAccounts;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class BankAccountsAdapter extends PagerAdapter {
             lytRoot.setBackgroundResource(R.drawable.shape_card_background_gray);
             setTextSize(tvName, R.dimen.smallTextSize);
             tvName.setText(mAccounts.get(position).getAccountName());
-            tvNumber.setText(checkAndSetPersianNumberIfNeeded(mAccounts.get(position).getAccountNumber()));
+            tvNumber.setText(HelperMobileBank.checkNumbersInMultiLangs(mAccounts.get(position).getAccountNumber()));
 
         } /*else {
 
@@ -69,13 +69,6 @@ public class BankAccountsAdapter extends PagerAdapter {
 
         container.addView(layout);
         return layout;
-    }
-
-    private String checkAndSetPersianNumberIfNeeded(String cardNumber) {
-        String number = cardNumber;
-        if (HelperCalander.isPersianUnicode)
-            number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
-        return number;
     }
 
     @Override

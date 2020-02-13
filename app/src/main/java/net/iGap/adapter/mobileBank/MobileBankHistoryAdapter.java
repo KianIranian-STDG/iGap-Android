@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.BankHistoryModel;
 import net.iGap.module.mobileBank.JalaliCalendar;
 
@@ -151,15 +152,11 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
                 value.setTextColor(context.getResources().getColor(R.color.green));
             }
             DecimalFormat df = new DecimalFormat(",###");
-            value.setText(CompatibleUnicode("" + df.format(mdata.get(position).getTransferAmount())) + " " + context.getString(R.string.rial));
-            date.setText(JalaliCalendar.getPersianDate(CompatibleUnicode(mdata.get(position).getDate())));
+            value.setText(HelperMobileBank.checkNumbersInMultiLangs("" + df.format(mdata.get(position).getTransferAmount())) + " " + context.getString(R.string.rial));
+            date.setText(JalaliCalendar.getPersianDate(HelperMobileBank.checkNumbersInMultiLangs(mdata.get(position).getDate())));
             container.setOnClickListener(v -> clickListener.onClick(position));
             if (HelperCalander.isPersianUnicode)
                 arrow.setRotation(90);
-        }
-
-        private String CompatibleUnicode(String entry) {
-            return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
         }
     }
 

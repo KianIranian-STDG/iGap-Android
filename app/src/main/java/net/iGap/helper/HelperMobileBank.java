@@ -1,8 +1,11 @@
-package net.iGap.module.mobileBank;
+package net.iGap.helper;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 
 import net.iGap.R;
 
-public class ExtractBank {
+public class HelperMobileBank {
 
     public static int bankName(String cardNumber) {
         if (cardNumber == null)
@@ -130,4 +133,17 @@ public class ExtractBank {
             return R.drawable.bank_logo_default;
     }
 
+    public static String getCardNumberPattern(String cardNumber) {
+        String number = checkNumbersInMultiLangs(cardNumber);
+        try {
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
+            return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
+        } catch (Exception e) {
+            return number;
+        }
+    }
+
+    public static String checkNumbersInMultiLangs(String number) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(number) : number;
+    }
 }

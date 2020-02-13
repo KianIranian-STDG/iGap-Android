@@ -5,8 +5,8 @@ import android.view.View;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.BankCardModel;
-import net.iGap.module.mobileBank.ExtractBank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +98,7 @@ public class MobileBankTransferCTCStepOneViewModel extends BaseMobileBankViewMod
 
     private int getCardBank(String cardNum) {
         // bank logo
-        return ExtractBank.bankLogo(cardNum);
+        return HelperMobileBank.bankLogo(cardNum);
     }
 
     private void translateValue() {

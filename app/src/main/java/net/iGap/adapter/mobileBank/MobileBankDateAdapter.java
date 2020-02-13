@@ -11,9 +11,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.BankDateModel;
+import net.iGap.module.Theme;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class MobileBankDateAdapter extends RecyclerView.Adapter<MobileBankDateAd
 
         void initView(int position) {
 
-            year.setText(CompatibleUnicode(mdata.get(position).getYear().replace("13", "")));
+            year.setText(HelperMobileBank.checkNumbersInMultiLangs(mdata.get(position).getYear().replace("13", "")));
             month.setText(mdata.get(position).getMonthName());
             container.setOnClickListener(v -> {
                 if (!mdata.get(position).isActive())
@@ -91,9 +91,6 @@ public class MobileBankDateAdapter extends RecyclerView.Adapter<MobileBankDateAd
             }
         }
 
-        private String CompatibleUnicode(String entry) {
-            return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
-        }
     }
 
     public interface OnItemClickListener {

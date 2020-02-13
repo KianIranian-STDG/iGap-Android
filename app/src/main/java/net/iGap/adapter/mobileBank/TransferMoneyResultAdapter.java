@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.TransferMoneyCtcResultModel;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class TransferMoneyResultAdapter extends RecyclerView.Adapter<TransferMon
         }
 
         holder.tvKey.setText(items.get(position).getKey());
-        holder.tvValue.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(items.get(position).getValue()) : items.get(position).getValue());
+        holder.tvValue.setText(HelperMobileBank.checkNumbersInMultiLangs(items.get(position).getValue()));
 
     }
 

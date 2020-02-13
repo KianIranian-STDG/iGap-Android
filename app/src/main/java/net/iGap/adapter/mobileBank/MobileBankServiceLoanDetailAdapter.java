@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.BankServiceLoanDetailModel;
 import net.iGap.module.mobileBank.JalaliCalendar;
 
@@ -146,13 +146,13 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
             }
             status.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_payStatus, statusTemp));
             payAmount.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_payAmount,
-                    CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPayedAmount()))),
+                    HelperMobileBank.checkNumbersInMultiLangs(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPayedAmount()))),
                     context.getResources().getString(R.string.rial)));
             unpaidAmount.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_unpaidAmount,
-                    CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getUnpaidAmount()))),
+                    HelperMobileBank.checkNumbersInMultiLangs(decimalFormatter(Double.parseDouble("" + mdata.get(position).getUnpaidAmount()))),
                     context.getResources().getString(R.string.rial)));
             penaltyAmount.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_penaltyAmount,
-                    CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPenaltyAmount()))),
+                    HelperMobileBank.checkNumbersInMultiLangs(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPenaltyAmount()))),
                     context.getResources().getString(R.string.rial)));
             paymentDate.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_paymentDate, JalaliCalendar.getPersianDate(mdata.get(position).getPayDate())));
         }
@@ -162,9 +162,6 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
             return df.format(entry);
         }
 
-        private String CompatibleUnicode(String entry) {
-            return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
-        }
     }
 
     public class LoadViewHolder extends RecyclerView.ViewHolder {

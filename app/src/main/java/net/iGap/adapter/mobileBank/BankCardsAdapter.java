@@ -7,17 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 import net.iGap.realm.RealmMobileBankCards;
-import net.iGap.module.mobileBank.ExtractBank;
 
 import java.util.List;
 
@@ -46,21 +41,18 @@ public class BankCardsAdapter extends PagerAdapter {
 
         View layout = LayoutInflater.from(container.getContext()).inflate(R.layout.view_bank_card, container, false);
         TextView tvName, tvNumber, icAdd;
-        ImageView ivLogo, ivShetabLogo;
-        ConstraintLayout lytRoot ;
+        ImageView ivLogo;
 
         tvName = layout.findViewById(R.id.tvName);
         tvNumber = layout.findViewById(R.id.tvNumber);
         ivLogo = layout.findViewById(R.id.ivBankLogo);
-        ivShetabLogo = layout.findViewById(R.id.ivBankShetabLogo);
         icAdd = layout.findViewById(R.id.tvAdd);
-        lytRoot = layout.findViewById(R.id.lytRoot);
 
         if (mCards.get(position) != null){
 
             icAdd.setVisibility(View.GONE);
             tvName.setText(mCards.get(position).getCardName());
-            tvNumber.setText(checkAndSetPersianNumberIfNeeded(mCards.get(position).getCardNumber()));
+            tvNumber.setText(HelperMobileBank.getCardNumberPattern(mCards.get(position).getCardNumber()));
             ivLogo.setImageResource(getCardBankLogo(mCards.get(position).getCardNumber()));
 
         }/*else {
@@ -77,19 +69,8 @@ public class BankCardsAdapter extends PagerAdapter {
         return layout;
     }
 
-    private String checkAndSetPersianNumberIfNeeded(String cardNumber) {
-        String number = cardNumber;
-        if (HelperCalander.isPersianUnicode) number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
-        try {
-            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
-            return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
-        }catch (Exception e){
-            return number;
-        }
-    }
-
     private int getCardBankLogo(String cardNumber) {
-        return ExtractBank.bankLogo(cardNumber);
+        return HelperMobileBank.bankLogo(cardNumber);
     }
 
     @Override

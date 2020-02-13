@@ -8,11 +8,8 @@ import android.widget.BaseAdapter;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperMobileBank;
 
 import java.util.List;
 
@@ -57,25 +54,8 @@ public class AccountSpinnerAdapter extends BaseAdapter {
         }
 
         holder.txtTitle.setGravity(Gravity.CENTER);
-        holder.txtTitle.setText(checkAndSetPersianNumberIfNeeded(items.get(position)));
+        holder.txtTitle.setText(isCard ? HelperMobileBank.getCardNumberPattern(items.get(position)) : HelperMobileBank.checkNumbersInMultiLangs(items.get(position)));
         return convertView;
-    }
-
-
-    private String checkAndSetPersianNumberIfNeeded(String cardNumber) {
-        String number = cardNumber;
-        if (HelperCalander.isPersianUnicode)
-            number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
-        if (isCard) {
-            try {
-                String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
-                return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
-            } catch (Exception e) {
-                return number;
-            }
-        } else {
-            return number;
-        }
     }
 
     private class viewHolder {

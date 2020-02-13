@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperMobileBank;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ShebaNumbersAdapter extends RecyclerView.Adapter<ShebaNumbersAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderSheba holder, int position) {
-        holder.tvSheba.setText(items.get(position));
+        holder.tvSheba.setText(HelperMobileBank.checkNumbersInMultiLangs(items.get(position)));
         holder.tvCopy.setOnClickListener(v -> copy(items.get(holder.getAdapterPosition()), holder.tvCopy.getContext()));
     }
 
