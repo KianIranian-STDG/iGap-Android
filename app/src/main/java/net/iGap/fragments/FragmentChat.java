@@ -6954,7 +6954,8 @@ public class FragmentChat extends BaseFragment
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
         edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
+            if (actionId == EditorInfo.IME_ACTION_SEARCH)
+                hideKeyboard();
             return true;
         });
         edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -7355,6 +7356,12 @@ public class FragmentChat extends BaseFragment
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
+        edtSearchMessage.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH)
+                hideKeyboard();
+            return true;
+        });
 
         edtSearchMessage.setListener(event -> {
             if (/*isPopupShowing() && */event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -9081,7 +9088,9 @@ public class FragmentChat extends BaseFragment
             closeWebViewForSpecialUrlChat(false);
             return;
         }
-        closeKeyboard(view);
+
+        hideKeyboard();
+
         if (G.twoPaneMode) {
             if (getActivity() instanceof ActivityMain) {
                 ((ActivityMain) getActivity()).goToTabletEmptyPage();
@@ -9211,9 +9220,10 @@ public class FragmentChat extends BaseFragment
                         initHash = true;
                         initHashView();
                     }
-                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
+//                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
 
                     showPopup(KeyboardView.MODE_KEYBOARD);
+                    AndroidUtils.showKeyboard(edtSearchMessage);
 
                 } else if (items.get(position).equals(getString(R.string.clear_history))) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
