@@ -7,11 +7,11 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
-import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
+import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosError;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosTransactionResult;
 
 public class KuknosAddAssetVM extends BaseAPIViewModel {
 
@@ -21,7 +21,7 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
     private TradeRepo tradeRepo = new TradeRepo();
     private PanelRepo panelRepo = new PanelRepo();
 
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Boolean> progressStateAdv;
     private MutableLiveData<Integer> openAddList;
@@ -48,13 +48,13 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String errorM) {
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
             }
 
             @Override
             public void onFailed() {
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
             }
         });
@@ -66,20 +66,19 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
                 assetPageMutableLiveData.setValue(data.getData());
-                // TODO: 8/18/2019 change this part to get data from server
-                advAssetPageMutableLiveData.setValue(data.getData());
+                /*advAssetPageMutableLiveData.setValue(data.getData());*/
                 progressStateAdv.setValue(false);
             }
 
             @Override
             public void onError(String errorM) {
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressStateAdv.setValue(false);
             }
 
             @Override
             public void onFailed() {
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressStateAdv.setValue(false);
             }
 
@@ -98,13 +97,13 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String errorM) {
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
             }
 
             @Override
             public void onFailed() {
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
             }
 
@@ -123,11 +122,11 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         return advAssetPageMutableLiveData;
     }
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

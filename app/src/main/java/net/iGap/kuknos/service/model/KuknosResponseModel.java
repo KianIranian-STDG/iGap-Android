@@ -2,23 +2,14 @@ package net.iGap.kuknos.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class KuknosSubmitM {
+public class KuknosResponseModel<G> {
 
-    @SerializedName("ok")
-    private int ok;
     @SerializedName("name")
     private String name;
     @SerializedName("message")
     private String message;
-
-    public KuknosSubmitM() {
-    }
-
-    public KuknosSubmitM(int ok, String name, String message) {
-        this.ok = ok;
-        this.name = name;
-        this.message = message;
-    }
+    @SerializedName("data")
+    private G data;
 
     public String getName() {
         return name;
@@ -36,11 +27,11 @@ public class KuknosSubmitM {
         this.message = message;
     }
 
-    public int getOk() {
-        return ok;
+    public G getData() {
+        return data;
     }
 
-    public void setOk(int ok) {
-        this.ok = ok;
+    public void setData(G data) {
+        this.data = data;
     }
 }

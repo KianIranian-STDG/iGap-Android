@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosBalance;
 
 import java.util.ArrayList;
 import java.util.List;

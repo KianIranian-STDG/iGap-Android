@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.R;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
-import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosError;
 
 public class KuknosSetPassConfirmVM extends ViewModel {
 
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
     private String selectedPin;
@@ -34,7 +34,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
             PIN = PIN1 + PIN2 + PIN3 + PIN4;
             checkPIN();
         } else {
-            error.setValue(new ErrorM(true, "Set Pin", "0", R.string.kuknos_SetPass_error));
+            error.setValue(new KuknosError(true, "Set Pin", "0", R.string.kuknos_SetPass_error));
         }
     }
 
@@ -42,7 +42,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         if (PIN.equals(selectedPin)) {
             sendDataToServer();
         } else {
-            error.setValue(new ErrorM(true, "PIN NOT Match", "0", R.string.kuknos_SetPassConf_error));
+            error.setValue(new KuknosError(true, "PIN NOT Match", "0", R.string.kuknos_SetPassConf_error));
         }
     }
 
@@ -56,7 +56,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         try {
             userRepo.generateKeyPairWithMnemonicAndPIN();
         } catch (WalletException e) {
-            error.setValue(new ErrorM(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
         nextPage.setValue(true);
@@ -96,11 +96,11 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         this.PIN4 = PIN4;
     }
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

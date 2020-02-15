@@ -14,6 +14,8 @@ import net.iGap.helper.HelperCalander;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 public class PaymentViewModel extends BaseAPIViewModel {
 
     private ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
@@ -232,7 +234,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 }
                 closeButtonColor.set(R.color.accent);
                 paymentRRN.set(data.getPaymentInfo().getRrn());
-                paymentResult = new PaymentResult(data.getPaymentInfo().getOrderId(), data.isPaymentSuccess());
+                paymentResult = new PaymentResult(data.getPaymentInfo().getOrderId(), String.format(Locale.US, "%.0f", data.getPaymentInfo().getRrn()), data.isPaymentSuccess());
             }
 
             @Override

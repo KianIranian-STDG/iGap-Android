@@ -13,10 +13,10 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
-import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosError;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
@@ -25,7 +25,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosBalance> kuknosWalletsM;
     private KuknosAsset asset = null;
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Integer> openPage;
     private PanelRepo panelRepo = new PanelRepo();
@@ -154,7 +154,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             TandCAgree.postValue("error");
             return;
         }
-        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_AGREEMENT", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_SEPID_AGREEMENT", new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 if (body != null) {
@@ -209,11 +209,11 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     // getter and setter
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

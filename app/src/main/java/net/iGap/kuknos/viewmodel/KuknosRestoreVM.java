@@ -10,14 +10,14 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
-import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosError;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.service.model.KuknosUserInfo;
 
 public class KuknosRestoreVM extends BaseAPIViewModel {
 
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Integer> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> keys = new ObservableField<>();
@@ -36,9 +36,9 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     public void onNext() {
         if (TextUtils.isEmpty(keys.get())) {
-            error.setValue(new ErrorM(true, "Empty Entry", "0", R.string.kuknos_Restore_Error_empty_str));
+            error.setValue(new KuknosError(true, "Empty Entry", "0", R.string.kuknos_Restore_Error_empty_str));
         } else if (keys.get().split(" ").length < 12) {
-            error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_Restore_Error_invalid_str));
+            error.setValue(new KuknosError(true, "Invalid Entry", "0", R.string.kuknos_Restore_Error_invalid_str));
         } else {
             if (/*pinCheck.getValue()*/true)
                 nextPage.setValue(1);
@@ -53,7 +53,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         try {
             userRepo.generateKeyPairWithMnemonic();
         } catch (WalletException e) {
-            error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
         checkUserInfo();
@@ -93,11 +93,11 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     //Setter and Getter
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

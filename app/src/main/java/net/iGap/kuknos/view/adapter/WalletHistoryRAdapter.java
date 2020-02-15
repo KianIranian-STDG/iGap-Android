@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.UserRepo;
-import net.iGap.kuknos.service.model.Parsian.KuknosCreateAccountOpResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosPaymentOpResponse;
+import net.iGap.kuknos.service.model.KuknosCreateAccountOpResponse;
+import net.iGap.kuknos.service.model.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.KuknosPaymentOpResponse;
 
 import java.text.DecimalFormat;
 

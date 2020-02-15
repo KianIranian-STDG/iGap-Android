@@ -2119,6 +2119,7 @@
     <string name="kuknos_trade_sell">فروش</string>
     <string name="kuknos_trade_recieve">خرید</string>
     <string name="kuknos_trade_amount">مقدار</string>
+    <string name="kuknos_trade_price">قیمت</string>
     <string name="kuknos_trade_delete"></string>
     <string name="kuknos_trade_date">تاریخ</string>
     <string name="kuknos_tradePager_trade">مبادله</string>
@@ -2185,6 +2186,12 @@
     <string name="kuknos_enterPin_desc">جهت تایید این عملیات، لطفا رمز عبور خود را وارد نمایید.</string>
     <string name="kuknos_enterPin_btnNormal">تایید</string>
     <string name="kuknos_enterPin_btnProgress">بررسی رمز…</string>
+    <string name="kuknos_payment_title">رسید تراکنش</string>
+    <string name="kuknos_payment_assetCode">دارایی: </string>
+    <string name="kuknos_payment_assetCount">تعداد دارایی: </string>
+    <string name="kuknos_payment_assetPrice">قیمت دارایی: </string>
+    <string name="kuknos_payment_totalAmount">قیمت کل: </string>
+    <string name="kuknos_payment_hash">رسید ققنوس: </string>
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
     <string name="updated_version_title">نسخه شما به روز شده است</string>

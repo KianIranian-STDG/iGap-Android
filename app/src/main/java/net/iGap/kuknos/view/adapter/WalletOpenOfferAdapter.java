@@ -13,17 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperCalander;
-import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
+import net.iGap.kuknos.service.model.KuknosOfferResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class WalletOpenOfferAdapter extends RecyclerView.Adapter<WalletOpenOfferAdapter.ViewHolder> {
 
     private List<KuknosOfferResponse.OfferResponse> kuknosTradeHistoryMS;
     private Context context;
+    private onClickListener clickListener;
 
-    public WalletOpenOfferAdapter(List<KuknosOfferResponse.OfferResponse> kuknosTradeHistoryMS) {
+    public WalletOpenOfferAdapter(List<KuknosOfferResponse.OfferResponse> kuknosTradeHistoryMS, onClickListener clickListener) {
         this.kuknosTradeHistoryMS = kuknosTradeHistoryMS;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -36,7 +39,7 @@ public class WalletOpenOfferAdapter extends RecyclerView.Adapter<WalletOpenOffer
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.initView(kuknosTradeHistoryMS.get(i));
+        viewHolder.initView(i);
     }
 
     @Override
@@ -44,35 +47,44 @@ public class WalletOpenOfferAdapter extends RecyclerView.Adapter<WalletOpenOffer
         return kuknosTradeHistoryMS.size();
     }
 
-    private void deleteCell(KuknosOfferResponse.OfferResponse model) {
-        // TODO: 2/3/2020 make api call
-        kuknosTradeHistoryMS.remove(model);
-        notifyDataSetChanged();
+    private void deleteCell(int position) {
+        clickListener.onDelete(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView sell;
         private TextView amount;
-        private TextView recieve;
+        private TextView receive;
         private TextView date;
         private TextView delete;
+        private TextView price;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             sell = itemView.findViewById(R.id.kuknos_tradeHistoryCell_sell);
             amount = itemView.findViewById(R.id.kuknos_tradeHistoryCell_amount);
-            recieve = itemView.findViewById(R.id.kuknos_tradeHistoryCell_receive);
+            receive = itemView.findViewById(R.id.kuknos_tradeHistoryCell_receive);
             date = itemView.findViewById(R.id.kuknos_tradeHistoryCell_date);
             delete = itemView.findViewById(R.id.kuknos_tradeHistoryCell_delete);
+            price = itemView.findViewById(R.id.kuknos_tradeHistoryCell_price);
 
         }
 
-        public void initView(KuknosOfferResponse.OfferResponse model) {
-            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getSelling().getType()) : model.getSelling().getType());
-            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getAmount()) : model.getAmount());
-            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBuying().getType()) : model.getBuying().getType());
+        public void initView(int position) {
+            KuknosOfferResponse.OfferResponse model = kuknosTradeHistoryMS.get(position);
+            String sellTXT = "" + (model.getSelling().getAsset().getType().equals("native") ? "PMN" : model.getSelling().getAssetCode());
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(sellTXT) : sellTXT);
+
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            amount.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.parseDouble(model.getAmount())))
+                    : df.format(Double.parseDouble(model.getAmount())));
+
+            String recieveTXT = "" + (model.getBuying().getAsset().getType().equals("native") ? "PMN" : model.getBuying().getAssetCode());
+            receive.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(recieveTXT) : recieveTXT);
+
             date.setVisibility(View.GONE);
             delete.setVisibility(View.VISIBLE);
             delete.setOnClickListener(v -> {
@@ -81,12 +93,20 @@ public class WalletOpenOfferAdapter extends RecyclerView.Adapter<WalletOpenOffer
                         .setMessage(context.getResources().getString(R.string.kuknos_tradeDialogDelete_message));
                 defaultRoundDialog.setPositiveButton(context.getResources().getString(R.string.kuknos_tradeDialogDelete_btn), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        deleteCell(model);
+                        deleteCell(position);
                     }
                 });
                 defaultRoundDialog.show();
             });
+
+            price.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.parseDouble(model.getPrice())))
+                    : df.format(Double.parseDouble(model.getPrice())));
 //            }
         }
+    }
+
+    public interface onClickListener {
+        void onDelete(int position);
     }
 }

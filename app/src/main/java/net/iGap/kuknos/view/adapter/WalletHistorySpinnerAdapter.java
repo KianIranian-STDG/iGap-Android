@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosBalance;
 
 import java.util.ArrayList;
 import java.util.List;

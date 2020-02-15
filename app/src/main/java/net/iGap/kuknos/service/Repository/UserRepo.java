@@ -7,10 +7,10 @@ import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.mnemonic.Wallet;
 import net.iGap.kuknos.service.mnemonic.WalletException;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
-import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.service.model.KuknosUserInfo;
+import net.iGap.kuknos.service.model.KuknosUsernameStatus;
 import net.iGap.kuknos.service.model.RealmKuknos;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
@@ -49,6 +49,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }
@@ -59,6 +60,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic end: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }
@@ -69,6 +71,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }
@@ -79,6 +82,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }

@@ -9,10 +9,10 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.UserRepo;
-import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosError;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.service.model.KuknosUsernameStatus;
 import net.iGap.request.RequestInfoPage;
 
 import java.util.Objects;
@@ -20,7 +20,7 @@ import java.util.Objects;
 public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
     private KuknosSignupM kuknosSignupM;
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Integer> checkUsernameState;
     private MutableLiveData<Boolean> progressSendDServerState;
@@ -76,13 +76,13 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String errorM) {
-                error.setValue(new ErrorM(true, "", errorM, 0));
+                error.setValue(new KuknosError(true, "", errorM, 0));
                 progressSendDServerState.setValue(false);
             }
 
             @Override
             public void onFailed() {
-                error.setValue(new ErrorM(true, "", "No connection to server", 0));
+                error.setValue(new KuknosError(true, "", "No connection to server", 0));
                 progressSendDServerState.setValue(false);
             }
         });
@@ -93,9 +93,9 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
 //     -1: begin or typing 0 : in progress 1: done & success 2: done and fail
 
         if (username.get() == null) {
-            error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
+            error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         } else if (username.get().isEmpty()) {
-            error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
+            error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         } else {
             // TODO: fetch data from server for valid username
             checkUsernameServer(isCallFromBTN);
@@ -105,46 +105,46 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
     private boolean checkEntryData() {
         // name
         if (name.get() == null) {
-            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
+            error.setValue(new KuknosError(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
             return false;
         }
         if (Objects.requireNonNull(name.get()).isEmpty()) {
-            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
+            error.setValue(new KuknosError(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameEmptyInvalid));
             return false;
         }
         if (name.get().length() < 3) {
-            error.setValue(new ErrorM(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameLengthInvalid));
+            error.setValue(new KuknosError(true, "Invalid Name Format", "2", R.string.kuknos_SignupInfo_errorNameLengthInvalid));
             return false;
         }
         // NID
         if (NID.get() == null) {
-            error.setValue(new ErrorM(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            error.setValue(new KuknosError(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
             return false;
         }
         if (Objects.requireNonNull(NID.get()).isEmpty()) {
-            error.setValue(new ErrorM(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            error.setValue(new KuknosError(true, "Invalid NID Format", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
             return false;
         }
         if (NID.get().length() != 10) {
-            error.setValue(new ErrorM(true, "Invalid NID Length", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
+            error.setValue(new KuknosError(true, "Invalid NID Length", "3", R.string.kuknos_SignupInfo_errorNIDFormatInvalid));
             return false;
         }
         // email
         if (email.get() == null) {
-            error.setValue(new ErrorM(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            error.setValue(new KuknosError(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
             return false;
         }
         if (Objects.requireNonNull(email.get()).isEmpty()) {
-            error.setValue(new ErrorM(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            error.setValue(new KuknosError(true, "Invalid NID Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
             return false;
         }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.get()).matches()) {
-            error.setValue(new ErrorM(true, "Invalid NID Length", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
+            error.setValue(new KuknosError(true, "Invalid NID Length", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
             return false;
         }
         //Terms and Condition
         if (!termsAndConditionIsChecked) {
-            error.setValue(new ErrorM(true, "Invalid NID Length", "4", R.string.kuknos_SignupInfo_errorTermAndCondition));
+            error.setValue(new KuknosError(true, "Invalid NID Length", "4", R.string.kuknos_SignupInfo_errorTermAndCondition));
             return false;
         }
         return true;
@@ -166,13 +166,13 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             @Override
             public void onError(String errorM) {
                 checkUsernameState.setValue(-1);
-                error.setValue(new ErrorM(true, "Server Error", errorM, 0));
+                error.setValue(new KuknosError(true, "Server Error", errorM, 0));
             }
 
             @Override
             public void onFailed() {
                 checkUsernameState.setValue(-1);
-                error.setValue(new ErrorM(true, "Server Error", "4", R.string.time_out));
+                error.setValue(new KuknosError(true, "Server Error", "4", R.string.time_out));
             }
         });
     }
@@ -191,7 +191,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             TandCAgree.postValue("error");
             return;
         }
-        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_AGREEMENT", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_SIGNUP_AGREEMENT", new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 if (body != null)
@@ -217,11 +217,11 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         return kuknosSignupM;
     }
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

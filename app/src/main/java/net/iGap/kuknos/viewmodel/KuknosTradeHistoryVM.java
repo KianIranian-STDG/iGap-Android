@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.TradeRepo;
-import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
+import net.iGap.kuknos.service.model.KuknosError;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosTradeResponse;
 
 public class KuknosTradeHistoryVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosTradeResponse> listMutableLiveData;
-    private MutableLiveData<ErrorM> errorM;
+    private MutableLiveData<KuknosError> errorM;
     private MutableLiveData<Boolean> progressState;
     private TradeRepo tradeRepo = new TradeRepo();
 
@@ -29,7 +29,7 @@ public class KuknosTradeHistoryVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosTradeResponse> data) {
                 listMutableLiveData.setValue(data.getData());
-                progressState.setValue(true);
+                progressState.setValue(false);
             }
 
             @Override
@@ -44,11 +44,11 @@ public class KuknosTradeHistoryVM extends BaseAPIViewModel {
         });
     }
 
-    public MutableLiveData<ErrorM> getErrorM() {
+    public MutableLiveData<KuknosError> getErrorM() {
         return errorM;
     }
 
-    public void setErrorM(MutableLiveData<ErrorM> errorM) {
+    public void setErrorM(MutableLiveData<KuknosError> errorM) {
         this.errorM = errorM;
     }
 

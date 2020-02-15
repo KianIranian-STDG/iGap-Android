@@ -14,7 +14,6 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="@dimen/dp10"
             android:background="@drawable/kuknos_list_header_style"
-            app:layout_constraintBottom_toTopOf="@+id/kuknos_tradeHistory_recycler"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -52,6 +51,18 @@
                 android:gravity="center"
                 android:minHeight="38dp"
                 android:text="@string/kuknos_trade_amount"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:minHeight="38dp"
+                android:text="@string/kuknos_trade_price"
                 android:textColor="@color/buttonTextColor"
                 android:textSize="@dimen/dp14"
                 android:textStyle="bold" />

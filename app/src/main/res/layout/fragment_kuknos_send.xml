@@ -100,6 +100,17 @@
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosSWalletAddressHolder"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosSWalletAddressHolder" />
 
+                <ProgressBar
+                    style="@style/IGapRootViewStyle"
+                    android:id="@+id/fragKuknosFederationProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="@{viewmodel.federationProgressVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSQRCode"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosSQRCode"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosSQRCode"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosSQRCode" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fragKuknosSTextHolder"
                     android:layout_width="0dp"

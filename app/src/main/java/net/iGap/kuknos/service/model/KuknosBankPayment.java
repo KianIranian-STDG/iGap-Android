@@ -2,13 +2,10 @@ package net.iGap.kuknos.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class KuknoscheckUserM {
+public class KuknosBankPayment {
 
     @SerializedName("token")
     private String token;
-
-    public KuknoscheckUserM() {
-    }
 
     public String getToken() {
         return token;

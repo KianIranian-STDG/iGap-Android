@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
+import net.iGap.kuknos.service.model.KuknosTradeResponse;
 
 import org.stellar.sdk.responses.OfferResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeHistoryAdapter.ViewHolder> {
@@ -54,6 +55,7 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
         private TextView recieve;
         private TextView date;
         private TextView delete;
+        private TextView price;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,35 +65,25 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
             recieve = itemView.findViewById(R.id.kuknos_tradeHistoryCell_receive);
             date = itemView.findViewById(R.id.kuknos_tradeHistoryCell_date);
             delete = itemView.findViewById(R.id.kuknos_tradeHistoryCell_delete);
+            price = itemView.findViewById(R.id.kuknos_tradeHistoryCell_price);
 
         }
 
         public void initView(KuknosTradeResponse.TradeResponse model) {
-            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAsset().getType()) : model.getBaseAsset().getType());
-            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAmount()) : model.getBaseAmount());
-            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getCounterAsset().getType()) : model.getCounterAsset().getType());
-//            if (mode == 0) {
+            String sellTXT = "" + (model.getBaseAsset().getType().equals("native") ? "PMN" : model.getBaseAssetCode());
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(sellTXT) : sellTXT);
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            amount.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.parseDouble(model.getBaseAmount())))
+                    : df.format(Double.parseDouble(model.getBaseAmount())));
+            String recieveTXT = "" + (model.getCounterAsset().getType().equals("native") ? "PMN" : model.getCounterAssetCode());
+            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(recieveTXT) : recieveTXT);
             date.setText(model.getLedgerCloseTime());
             date.setVisibility(View.VISIBLE);
             delete.setVisibility(View.GONE);
-            /*} else {
-                date.setVisibility(View.GONE);
-                delete.setVisibility(View.VISIBLE);
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(context);
-                        defaultRoundDialog.setTitle(context.getResources().getString(R.string.kuknos_tradeDialogDelete_title))
-                                .setMessage(context.getResources().getString(R.string.kuknos_tradeDialogDelete_message));
-                        defaultRoundDialog.setPositiveButton(context.getResources().getString(R.string.kuknos_tradeDialogDelete_btn), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                deleteCell(model);
-                            }
-                        });
-                        defaultRoundDialog.show();
-                    }
-                });
-            }*/
+            price.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()))
+                    : df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()));
         }
     }
 }

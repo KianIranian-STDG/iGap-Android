@@ -20,17 +20,16 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosRestoreBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosRestoreVM;
 
-public class KuknosRestoreFrag extends BaseFragment {
+public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
 
     private FragmentKuknosRestoreBinding binding;
-    private KuknosRestoreVM kuknosRestoreVM;
 
     public static KuknosRestoreFrag newInstance() {
         return new KuknosRestoreFrag();
@@ -39,7 +38,7 @@ public class KuknosRestoreFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosRestoreVM = ViewModelProviders.of(this).get(KuknosRestoreVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosRestoreVM.class);
     }
 
     @Nullable
@@ -47,7 +46,7 @@ public class KuknosRestoreFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_restore, container, false);
-        binding.setViewmodel(kuknosRestoreVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
 
@@ -83,11 +82,11 @@ public class KuknosRestoreFrag extends BaseFragment {
 
     private void getCachedData() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        kuknosRestoreVM.setToken(sharedpreferences.getString("Token", ""));
+        viewModel.setToken(sharedpreferences.getString("Token", ""));
     }
 
     private void onPINCheck() {
-        kuknosRestoreVM.getPinCheck().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getPinCheck().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
                 binding.fragKuknosIdSubmit.setText(getResources().getString(R.string.kuknos_Restore_checkBtn));
             else
@@ -96,7 +95,7 @@ public class KuknosRestoreFrag extends BaseFragment {
     }
 
     private void onErrorObserver() {
-        kuknosRestoreVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 if (errorM.getMessage().equals("0")) {
                     binding.fragKuknosRkeysET.setError("" + getString(errorM.getResID()));
@@ -111,7 +110,7 @@ public class KuknosRestoreFrag extends BaseFragment {
     }
 
     private void onNextObserver() {
-        kuknosRestoreVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = null;
@@ -122,7 +121,7 @@ public class KuknosRestoreFrag extends BaseFragment {
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString("key_phrase", kuknosRestoreVM.getKeys().get());
+                bundle.putString("key_phrase", viewModel.getKeys().get());
                 fragment.setArguments(bundle);
             } else if (nextPage == 2) {
                 saveRegisterInfo();
@@ -145,12 +144,12 @@ public class KuknosRestoreFrag extends BaseFragment {
     private void saveRegisterInfo() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("RegisterInfo", new Gson().toJson(kuknosRestoreVM.getKuknosSignupM()));
+        editor.putString("RegisterInfo", new Gson().toJson(viewModel.getKuknosSignupM()));
         editor.apply();
     }
 
     private void progressState() {
-        kuknosRestoreVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_login_progress_str));
                 binding.fragKuknosIdSubmit.setEnabled(false);
