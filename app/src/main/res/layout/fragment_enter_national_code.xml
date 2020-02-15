@@ -23,6 +23,7 @@
             android:button="@drawable/check_box_background"
             android:checked="@{viewModel.saveChecked}"
             android:gravity="center_vertical"
+            android:textColor="?iGapTitleTextColor"
             android:onCheckedChanged="@{(v,isChecked)->viewModel.onSaveChecked(isChecked)}"
             android:text="@string/save"
             app:layout_constraintBottom_toTopOf="@+id/inquiryButton"
@@ -54,10 +55,10 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nationalCodeLayout"
-            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textColorHint="?iGapSubtitleTextColor"
             android:hint="@string/national_code"
             app:errorEnabled="@{viewModel.hasError}"
             app:errorText="@{viewModel.errorMessage}"
@@ -69,6 +70,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nationalCode"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -76,11 +78,6 @@
                 android:text="@{viewModel.nationalCodeField}"
                 tools:layout_editor_absoluteY="11dp" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/inquiryButton"

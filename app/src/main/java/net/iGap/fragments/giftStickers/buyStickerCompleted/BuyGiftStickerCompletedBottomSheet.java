@@ -39,6 +39,11 @@ public class BuyGiftStickerCompletedBottomSheet extends BaseBottomSheet {
     }
 
     @Override
+    public int getTheme() {
+        return R.style.BaseBottomSheetDialog;
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
