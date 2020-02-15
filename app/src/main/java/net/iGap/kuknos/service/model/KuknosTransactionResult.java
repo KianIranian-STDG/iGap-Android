@@ -1,4 +1,4 @@
-package net.iGap.kuknos.service.model.Parsian;
+package net.iGap.kuknos.service.model;
 
 import com.google.common.base.Optional;
 import com.google.common.io.BaseEncoding;

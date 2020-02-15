@@ -1,8 +1,8 @@
-package net.iGap.kuknos.service.model.Parsian;
+package net.iGap.kuknos.service.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class IgapPayment {
+public class KuknosBankPayment {
 
     @SerializedName("token")
     private String token;

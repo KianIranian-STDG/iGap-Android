@@ -12,8 +12,8 @@ import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosUserInfo;
 
 public class KuknosRestoreVM extends BaseAPIViewModel {
 

@@ -13,10 +13,10 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSendM;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosFederation;
-import net.iGap.kuknos.service.model.Parsian.KuknosHash;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosFederation;
+import net.iGap.kuknos.service.model.KuknosHash;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.module.SingleLiveEvent;
 
 import org.stellar.sdk.KeyPair;

@@ -6,8 +6,8 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosOfferResponse;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 

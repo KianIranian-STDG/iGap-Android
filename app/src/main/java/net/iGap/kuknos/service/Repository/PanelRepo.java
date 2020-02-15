@@ -5,15 +5,15 @@ import android.util.Log;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.model.KuknosSendM;
-import net.iGap.kuknos.service.model.Parsian.IgapPayment;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosFederation;
-import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosHash;
-import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosBankPayment;
+import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosFederation;
+import net.iGap.kuknos.service.model.KuknosFeeModel;
+import net.iGap.kuknos.service.model.KuknosHash;
+import net.iGap.kuknos.service.model.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.KuknosPaymentResponse;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 
 public class PanelRepo {
 
@@ -59,7 +59,7 @@ public class PanelRepo {
         kuknosAPIRepository.getSpecificAssets(assetCode, handShakeCallback, apiResponse);
     }
 
-    public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<IgapPayment>> apiResponse) {
+    public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBankPayment>> apiResponse) {
         kuknosAPIRepository.buyAsset(userRepo.getAccountID(), assetCode, assetAmount, totalPrice, description, handShakeCallback, apiResponse);
     }
 

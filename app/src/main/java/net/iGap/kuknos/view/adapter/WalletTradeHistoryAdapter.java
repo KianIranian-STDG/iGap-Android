@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
+import net.iGap.kuknos.service.model.KuknosTradeResponse;
 
 import org.stellar.sdk.responses.OfferResponse;
 

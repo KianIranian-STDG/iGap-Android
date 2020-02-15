@@ -11,8 +11,8 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosUsernameStatus;
 import net.iGap.request.RequestInfoPage;
 
 import java.util.Objects;

@@ -8,10 +8,10 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
+import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosTransactionResult;
 
 public class KuknosAddAssetVM extends BaseAPIViewModel {
 

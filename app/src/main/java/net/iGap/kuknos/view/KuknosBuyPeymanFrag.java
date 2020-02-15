@@ -33,7 +33,7 @@ import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
+import net.iGap.kuknos.service.model.KuknosPaymentResponse;
 import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
 
 import org.jetbrains.annotations.NotNull;

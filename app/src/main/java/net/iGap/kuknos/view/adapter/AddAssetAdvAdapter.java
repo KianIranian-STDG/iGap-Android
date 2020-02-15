@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosAsset;
 
 import java.util.List;
 

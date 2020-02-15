@@ -6,8 +6,8 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosTradeResponse;
 
 public class KuknosTradeHistoryVM extends BaseAPIViewModel {
 

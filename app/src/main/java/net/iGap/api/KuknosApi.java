@@ -1,19 +1,19 @@
 package net.iGap.api;
 
-import net.iGap.kuknos.service.model.Parsian.IgapPayment;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosFederation;
-import net.iGap.kuknos.service.model.Parsian.KuknosFeeModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosHash;
-import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosOperationResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
-import net.iGap.kuknos.service.model.Parsian.KuknosUserInfo;
-import net.iGap.kuknos.service.model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.service.model.KuknosBankPayment;
+import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosFederation;
+import net.iGap.kuknos.service.model.KuknosFeeModel;
+import net.iGap.kuknos.service.model.KuknosHash;
+import net.iGap.kuknos.service.model.KuknosOfferResponse;
+import net.iGap.kuknos.service.model.KuknosOperationResponse;
+import net.iGap.kuknos.service.model.KuknosPaymentResponse;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosTradeResponse;
+import net.iGap.kuknos.service.model.KuknosTransactionResult;
+import net.iGap.kuknos.service.model.KuknosUserInfo;
+import net.iGap.kuknos.service.model.KuknosUsernameStatus;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
@@ -192,11 +192,11 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("payment-request")
-    Call<KuknosResponseModel<IgapPayment>> buyAsset(@Field("public_key") String publicKey,
-                                                    @Field("asset_code") String assetCode,
-                                                    @Field("asset_count") String assetAmount,
-                                                    @Field("amount") String totalPrice,
-                                                    @Field("description") String description);
+    Call<KuknosResponseModel<KuknosBankPayment>> buyAsset(@Field("public_key") String publicKey,
+                                                          @Field("asset_code") String assetCode,
+                                                          @Field("asset_count") String assetAmount,
+                                                          @Field("amount") String totalPrice,
+                                                          @Field("description") String description);
 
     /**
      * this api make a request for username availability.

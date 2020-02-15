@@ -2,11 +2,11 @@ package net.iGap.kuknos.service.Repository;
 
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosOfferResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.service.model.Parsian.KuknosTradeResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosTransactionResult;
+import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosOfferResponse;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosTradeResponse;
+import net.iGap.kuknos.service.model.KuknosTransactionResult;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 

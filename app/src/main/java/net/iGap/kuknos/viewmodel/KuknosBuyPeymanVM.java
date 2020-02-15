@@ -11,10 +11,10 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.IgapPayment;
-import net.iGap.kuknos.service.model.Parsian.KuknosAsset;
-import net.iGap.kuknos.service.model.Parsian.KuknosPaymentResponse;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosBankPayment;
+import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosPaymentResponse;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.request.RequestInfoPage;
 
@@ -107,9 +107,9 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     public void sendDataServer() {
         progressState.setValue(1);
         panelRepo.buyAsset("PMN", amount.get(), "" + (int) Math.round(sumTemp),
-                "", this, new ResponseCallback<KuknosResponseModel<IgapPayment>>() {
+                "", this, new ResponseCallback<KuknosResponseModel<KuknosBankPayment>>() {
                     @Override
-                    public void onSuccess(KuknosResponseModel<IgapPayment> data) {
+                    public void onSuccess(KuknosResponseModel<KuknosBankPayment> data) {
                         goToPaymentPage.setValue(data.getData().getToken());
                         progressState.setValue(0);
                     }

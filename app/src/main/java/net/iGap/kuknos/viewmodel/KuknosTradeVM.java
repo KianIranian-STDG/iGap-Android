@@ -12,8 +12,8 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.Parsian.KuknosBalance;
-import net.iGap.kuknos.service.model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.module.SingleLiveEvent;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
