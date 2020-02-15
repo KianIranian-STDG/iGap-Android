@@ -11,8 +11,8 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.Repository.TradeRepo;
-import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosBalance;
+import net.iGap.kuknos.service.model.KuknosError;
 import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.module.SingleLiveEvent;
 
@@ -27,7 +27,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
     private MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosOriginWalletsM;
     private MutableLiveData<ArrayList<KuknosBalance.Balance>> kuknosDestinationWalletsM;
     private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> fetchProgressState;
     private MutableLiveData<Boolean> sendProgressState;
     private PanelRepo panelRepo = new PanelRepo();
@@ -69,7 +69,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
             public void onError(String errorM) {
                 balance.set("0.0");
                 currency.set("currency");
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
                 fetchProgressState.setValue(false);
             }
 
@@ -77,7 +77,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
             public void onFailed() {
                 balance.set("0.0");
                 currency.set("currency");
-                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
                 fetchProgressState.setValue(false);
             }
 
@@ -121,19 +121,19 @@ public class KuknosTradeVM extends BaseAPIViewModel {
                 new ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>>() {
                     @Override
                     public void onSuccess(KuknosResponseModel<SubmitTransactionResponse> data) {
-                        error.setValue(new ErrorM(false, "success submission", "2", R.string.kuknos_trade_success));
+                        error.setValue(new KuknosError(false, "success submission", "2", R.string.kuknos_trade_success));
                         sendProgressState.setValue(false);
                     }
 
                     @Override
                     public void onError(String errorM) {
-                        error.setValue(new ErrorM(true, "fail during submission", errorM, R.string.kuknos_trade_fail));
+                        error.setValue(new KuknosError(true, "fail during submission", errorM, R.string.kuknos_trade_fail));
                         sendProgressState.setValue(false);
                     }
 
                     @Override
                     public void onFailed() {
-                        error.setValue(new ErrorM(true, "fail during submission", "2", R.string.kuknos_trade_fail));
+                        error.setValue(new KuknosError(true, "fail during submission", "2", R.string.kuknos_trade_fail));
                         sendProgressState.setValue(false);
                     }
 
@@ -143,30 +143,30 @@ public class KuknosTradeVM extends BaseAPIViewModel {
     private boolean checkEntry() {
         if (originAmount.get() == null) {
             // empty
-            error.setValue(new ErrorM(true, "empty origin amount", "0", R.string.kuknos_trade_emptyOriginAmount));
+            error.setValue(new KuknosError(true, "empty origin amount", "0", R.string.kuknos_trade_emptyOriginAmount));
             return false;
         }
         if (originAmount.get().isEmpty()) {
             // empty
-            error.setValue(new ErrorM(true, "empty origin amount", "0", R.string.kuknos_trade_emptyOriginAmount));
+            error.setValue(new KuknosError(true, "empty origin amount", "0", R.string.kuknos_trade_emptyOriginAmount));
             return false;
         }
         if (Integer.parseInt(originAmount.get()) == 0) {
-            error.setValue(new ErrorM(true, "zero origin fail", "0", R.string.kuknos_trade_zeroOriginAmount));
+            error.setValue(new KuknosError(true, "zero origin fail", "0", R.string.kuknos_trade_zeroOriginAmount));
             return false;
         }
         if (destAmount.get() == null) {
             // empty
-            error.setValue(new ErrorM(true, "empty dest amount", "1", R.string.kuknos_trade_emptyDestAmount));
+            error.setValue(new KuknosError(true, "empty dest amount", "1", R.string.kuknos_trade_emptyDestAmount));
             return false;
         }
         if (destAmount.get().isEmpty()) {
             // empty
-            error.setValue(new ErrorM(true, "empty dest amount", "1", R.string.kuknos_trade_emptyDestAmount));
+            error.setValue(new KuknosError(true, "empty dest amount", "1", R.string.kuknos_trade_emptyDestAmount));
             return false;
         }
         if (Integer.parseInt(destAmount.get()) == 0) {
-            error.setValue(new ErrorM(true, "zero dest fail", "1", R.string.kuknos_trade_zeroDestAmount));
+            error.setValue(new KuknosError(true, "zero dest fail", "1", R.string.kuknos_trade_zeroDestAmount));
             return false;
         }
         return true;
@@ -174,11 +174,11 @@ public class KuknosTradeVM extends BaseAPIViewModel {
 
     // getter and setter
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

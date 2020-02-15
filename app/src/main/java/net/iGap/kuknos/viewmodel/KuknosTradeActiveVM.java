@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.kuknos.service.Repository.TradeRepo;
-import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosError;
 import net.iGap.kuknos.service.model.KuknosOfferResponse;
 import net.iGap.kuknos.service.model.KuknosResponseModel;
 
@@ -14,7 +14,7 @@ import org.stellar.sdk.responses.SubmitTransactionResponse;
 public class KuknosTradeActiveVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosOfferResponse> offerList;
-    private MutableLiveData<ErrorM> errorM;
+    private MutableLiveData<KuknosError> errorM;
     private MutableLiveData<Boolean> progressState;
     private TradeRepo tradeRepo = new TradeRepo();
 
@@ -66,24 +66,24 @@ public class KuknosTradeActiveVM extends BaseAPIViewModel {
 
                     @Override
                     public void onError(String error) {
-                        errorM.setValue(new ErrorM(true, "", "", 0));
+                        errorM.setValue(new KuknosError(true, "", "", 0));
                         progressState.setValue(false);
                     }
 
                     @Override
                     public void onFailed() {
-                        errorM.setValue(new ErrorM(true, "", "", 0));
+                        errorM.setValue(new KuknosError(true, "", "", 0));
                         progressState.setValue(false);
                     }
 
                 });
     }
 
-    public MutableLiveData<ErrorM> getErrorM() {
+    public MutableLiveData<KuknosError> getErrorM() {
         return errorM;
     }
 
-    public void setErrorM(MutableLiveData<ErrorM> errorM) {
+    public void setErrorM(MutableLiveData<KuknosError> errorM) {
         this.errorM = errorM;
     }
 

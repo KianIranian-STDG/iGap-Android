@@ -10,9 +10,9 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.Repository.PanelRepo;
-import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosBankPayment;
 import net.iGap.kuknos.service.model.KuknosAsset;
+import net.iGap.kuknos.service.model.KuknosBankPayment;
+import net.iGap.kuknos.service.model.KuknosError;
 import net.iGap.kuknos.service.model.KuknosPaymentResponse;
 import net.iGap.kuknos.service.model.KuknosResponseModel;
 import net.iGap.module.SingleLiveEvent;
@@ -28,7 +28,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private ObservableField<Boolean> amountEnable = new ObservableField<>(false);
     private ObservableField<String> sum = new ObservableField<>();
     private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر پیمان: ...");
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<KuknosPaymentResponse> paymentData = new MutableLiveData<>(null);
     // 0 : nothing 1: connecting to server 2: connecting to bank
     private MutableLiveData<Integer> progressState;
@@ -66,7 +66,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             return false;
         }
         if (Integer.parseInt(amount.get()) > maxAmount) {
-            error.setValue(new ErrorM(true, "", "1", R.string.kuknos_buyP_MaxAmount));
+            error.setValue(new KuknosError(true, "", "1", R.string.kuknos_buyP_MaxAmount));
             return false;
         }
         if (PMNprice == -1)
@@ -117,14 +117,14 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                     @Override
                     public void onError(String errorM) {
                         progressState.setValue(0);
-                        error.setValue(new ErrorM(true, "wrong pin", errorM, R.string.kuknos_buyP_failS));
+                        error.setValue(new KuknosError(true, "wrong pin", errorM, R.string.kuknos_buyP_failS));
 
                     }
 
                     @Override
                     public void onFailed() {
                         progressState.setValue(0);
-                        error.setValue(new ErrorM(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
+                        error.setValue(new KuknosError(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
                     }
 
                 });
@@ -154,21 +154,21 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private boolean checkForm() {
         if (amount.get() == null) {
             // empty
-            error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
+            error.setValue(new KuknosError(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
             return true;
         }
         if (amount.get().isEmpty()) {
             // empty
-            error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
+            error.setValue(new KuknosError(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
             return true;
         }
         if (Integer.parseInt(amount.get()) == 0) {
-            error.setValue(new ErrorM(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
+            error.setValue(new KuknosError(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
             return true;
         }
         //Terms and Condition
         if (!termsAndConditionIsChecked) {
-            error.setValue(new ErrorM(true, "TermsAndConditionError", "1", R.string.kuknos_SignupInfo_errorTermAndCondition));
+            error.setValue(new KuknosError(true, "TermsAndConditionError", "1", R.string.kuknos_SignupInfo_errorTermAndCondition));
             return true;
         }
         return false;
@@ -177,16 +177,16 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private boolean checkEntry() {
         if (amount.get() == null) {
             // empty
-            error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
+            error.setValue(new KuknosError(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
             return true;
         }
         if (amount.get().isEmpty()) {
             // empty
-            error.setValue(new ErrorM(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
+            error.setValue(new KuknosError(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
             return true;
         }
         if (Integer.parseInt(amount.get()) == 0) {
-            error.setValue(new ErrorM(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
+            error.setValue(new KuknosError(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
             return true;
         }
         return false;
@@ -221,11 +221,11 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         termsAndConditionIsChecked = isChecked;
     }
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

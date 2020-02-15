@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.Repository.UserRepo;
-import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosError;
 import net.iGap.module.SingleLiveEvent;
 
 import java.util.Arrays;
@@ -17,7 +17,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
     private List<String> lengths = Arrays.asList("24", "12");
     private List<String> languages = Arrays.asList("FA", "EN");
     private UserRepo userRepo = new UserRepo();
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private SingleLiveEvent<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
@@ -51,7 +51,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         }
 
         if (userRepo.getMnemonic() == null || userRepo.getMnemonic().equals("-1")) {
-            error.setValue(new ErrorM(true, "generate fatal error", "1", R.string.kuknos_RecoverySK_ErrorGenerateMn));
+            error.setValue(new KuknosError(true, "generate fatal error", "1", R.string.kuknos_RecoverySK_ErrorGenerateMn));
             return;
         }
         mnemonic.set(userRepo.getMnemonic());
@@ -76,11 +76,11 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
 
     //Setter and Getter
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 
