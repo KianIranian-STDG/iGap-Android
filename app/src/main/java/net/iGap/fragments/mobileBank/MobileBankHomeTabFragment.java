@@ -16,17 +16,17 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
-import net.iGap.databinding.MobileBankHomeTabFragmentBinding;
-import net.iGap.helper.HelperFragment;
-import net.iGap.module.dialog.DialogParsian;
-import net.iGap.realm.RealmMobileBankAccounts;
-import net.iGap.realm.RealmMobileBankCards;
-import net.iGap.model.mobileBank.BankAccountModel;
-import net.iGap.model.mobileBank.BankCardModel;
-import net.iGap.model.mobileBank.MobileBankHomeItemsModel;
 import net.iGap.adapter.mobileBank.BankAccountsAdapter;
 import net.iGap.adapter.mobileBank.BankCardsAdapter;
 import net.iGap.adapter.mobileBank.BankHomeItemAdapter;
+import net.iGap.databinding.MobileBankHomeTabFragmentBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.model.mobileBank.BankAccountModel;
+import net.iGap.model.mobileBank.BankCardModel;
+import net.iGap.model.mobileBank.MobileBankHomeItemsModel;
+import net.iGap.module.dialog.DialogParsian;
+import net.iGap.realm.RealmMobileBankAccounts;
+import net.iGap.realm.RealmMobileBankCards;
 import net.iGap.viewmodel.mobileBank.MobileBankHomeTabViewModel;
 
 import java.util.ArrayList;
@@ -34,13 +34,16 @@ import java.util.List;
 
 public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBankHomeTabViewModel> {
 
+    private String MODE_KEY = "MODE";
     private MobileBankHomeTabFragmentBinding binding;
     private HomeTabMode mode;
     private DialogParsian mDialogWait;
 
     public static MobileBankHomeTabFragment newInstance(HomeTabMode mode) {
         MobileBankHomeTabFragment fragment = new MobileBankHomeTabFragment();
-        fragment.mode = mode;
+        Bundle bundle = new Bundle();
+        bundle.putString(fragment.MODE_KEY, mode.name());
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -61,6 +64,11 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            mode = HomeTabMode.valueOf(getArguments().getString(MODE_KEY));
+        } else {
+            return;
+        }
         viewModel.setFragmentState(mode);
         disableViewPagerIfNeed();
         setupListener();

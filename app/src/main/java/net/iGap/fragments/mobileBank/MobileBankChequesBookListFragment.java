@@ -11,24 +11,27 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.adapter.mobileBank.BankChequesBookListAdapter;
 import net.iGap.databinding.MobileBankChequesBookListFragmentBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.model.mobileBank.BankChequeBookListModel;
-import net.iGap.adapter.mobileBank.BankChequesBookListAdapter;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.mobileBank.MobileBankChequesBookListViewModel;
 
 import java.util.List;
 
 public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<MobileBankChequesBookListViewModel> {
 
+    private String DEPOSIT_KEY = "DEPOSIT";
     private MobileBankChequesBookListFragmentBinding binding;
     private String depositNumber;
 
     public static MobileBankChequesBookListFragment newInstance(String deposit) {
         MobileBankChequesBookListFragment fragment = new MobileBankChequesBookListFragment();
-        fragment.depositNumber = deposit;
+        Bundle bundle = new Bundle();
+        bundle.putString(fragment.DEPOSIT_KEY, deposit);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -50,6 +53,16 @@ public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<Mo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupToolbar();
+
+        //get data from argument
+        if (getArguments() != null) {
+            depositNumber = getArguments().getString(DEPOSIT_KEY);
+            if (depositNumber == null) return;
+        } else {
+            return;
+        }
+
+        //setup
         viewModel.getCheques(depositNumber);
         setupListeners();
     }
