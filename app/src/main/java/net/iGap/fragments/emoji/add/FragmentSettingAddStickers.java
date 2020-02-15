@@ -94,12 +94,15 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
 
                         if (G.selectedLanguage.equals("fa")) {
                             Collections.reverse(categories);
-                            viewPager.setCurrentItem(categories.size() - 1);
                         }
 
                         adapter.setData(categories);
                         adapter.notifyDataSetChanged();
                         updateFontTabLayout();
+
+                        if (G.selectedLanguage.equals("fa")) {
+                            viewPager.setCurrentItem(categories.size() - 1);
+                        }
 
                         pBar.setVisibility(View.GONE);
                     }
