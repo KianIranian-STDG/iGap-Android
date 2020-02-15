@@ -90,6 +90,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                     public void onSuccess(StructIGStickerGroup stickerGroup) {
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         onStickerFavoriteChange(stickerGroup.isInUserList());
+                        EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), stickerGroup.isInUserList());
                     }
 
                     @Override
@@ -110,6 +111,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                         onStickerFavoriteChange(false);
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         closeDialogMutableLiveData.postValue(true);
+                        EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), false);
                     }
 
                     @Override
@@ -133,7 +135,6 @@ public class StickerDialogViewModel extends ObserverViewModel {
     }
 
     private void onStickerFavoriteChange(boolean favorite) {
-        EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), favorite);
         addOrRemoveStickerLiveData.postValue(favorite ? R.string.remove_sticker_with_size : R.string.add_sticker_with_size);
     }
 
