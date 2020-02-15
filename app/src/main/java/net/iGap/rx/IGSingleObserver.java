@@ -23,6 +23,7 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
 
     @Override
     public void onError(Throwable e) {
+        e.printStackTrace();
 //        EventBus.getDefault().post(new AaException(ExceptionMessageFactory.getMessage(e)));
         EventManager.getInstance().postEvent(EventManager.IG_ERROR, e);
     }

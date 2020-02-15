@@ -35,6 +35,7 @@ public class StructIGSticker {
     private boolean isFavorite;
     @SerializedName("giftAmount")
     private long giftAmount;
+    @SerializedName("giftId")
     private String giftId; // just use in gift sticker :| i can not change server data model :\
     private List<String> tags;
 

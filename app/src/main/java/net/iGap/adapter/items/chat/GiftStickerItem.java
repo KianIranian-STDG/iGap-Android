@@ -156,7 +156,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                                 @Override
                                 public void onError(Throwable e) {
                                     super.onError(e);
-                                    Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "خطا در دریافت وضعیت کارت هدیه!", Toast.LENGTH_SHORT).show();
                                     progressButton.changeProgressTo(View.GONE);
                                     progressButton.setText(itemView.getContext().getResources().getString(R.string.gift_sticker_visit));
                                 }
