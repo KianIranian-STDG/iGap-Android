@@ -21,11 +21,11 @@ import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
-import net.iGap.repository.StickerRepository;
+import net.iGap.module.Theme;
 import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.repository.StickerRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,12 +94,15 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
 
                         if (G.selectedLanguage.equals("fa")) {
                             Collections.reverse(categories);
-                            viewPager.setCurrentItem(categories.size() - 1);
                         }
 
                         adapter.setData(categories);
                         adapter.notifyDataSetChanged();
                         updateFontTabLayout();
+
+                        if (G.selectedLanguage.equals("fa")) {
+                            viewPager.setCurrentItem(categories.size() - 1);
+                        }
 
                         pBar.setVisibility(View.GONE);
                     }
