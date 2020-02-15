@@ -78,9 +78,13 @@ public class GiftStickerMainFragment extends BaseFragment {
     @Override
     public boolean onBackPressed() {
         if (getChildFragmentManager().getBackStackEntryCount() > 1) {
-            getChildFragmentManager().popBackStackImmediate();
-            if (getChildFragmentManager().getBackStackEntryCount() == 1) {
-                setToolbarTitle(R.string.gift_sticker_title);
+            if (getChildFragmentManager().findFragmentById(R.id.giftStickerContainer) instanceof BuyGiftStickerCompletedFragment) {
+                goToHomePage();
+            } else {
+                getChildFragmentManager().popBackStackImmediate();
+                if (getChildFragmentManager().getBackStackEntryCount() == 1) {
+                    setToolbarTitle(R.string.gift_sticker_title);
+                }
             }
             return true;
         } else {
