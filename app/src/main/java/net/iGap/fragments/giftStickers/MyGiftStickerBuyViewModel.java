@@ -4,6 +4,8 @@ import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.G;
+import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.sticker.StickerRepository;
@@ -27,7 +29,7 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
 
     @Override
     public void subscribe() {
-
+        EventManager.getInstance().addEventListener(EventManager.STICKER_CHANGED, this);
     }
 
     private void getData() {
@@ -116,5 +118,17 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
                         goNext.postValue(null);
                     }
                 });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventManager.getInstance().removeEventListener(EventManager.STICKER_CHANGED, this);
+    }
+
+    @Override
+    public void receivedMessage(int id, Object... message) {
+        super.receivedMessage(id, message);
+        G.handler.post(this::getData);
     }
 }
