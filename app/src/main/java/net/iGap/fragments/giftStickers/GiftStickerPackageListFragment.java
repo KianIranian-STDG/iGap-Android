@@ -47,14 +47,6 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
             }
         });
 
-        viewModel.getGoToPackageItemPage().observe(getViewLifecycleOwner(), giftStickerPackage -> {
-            if (getParentFragment() instanceof ParentChatMoneyTransferFragment && giftStickerPackage != null) {
-                ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
-            } else if (getParentFragment() instanceof GiftStickerMainFragment) {
-                ((GiftStickerMainFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
-            }
-        });
-
         rootView.findViewById(R.id.cancelButton).setOnClickListener(v -> viewModel.onCancelButtonClick());
         rootView.findViewById(R.id.retryView).setOnClickListener(v -> viewModel.onRetryButtonClicked());
 
@@ -65,6 +57,19 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        viewModel.getGoToPackageItemPage().observe(getViewLifecycleOwner(), giftStickerPackage -> {
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment && giftStickerPackage != null) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
+            } else if (getParentFragment() instanceof GiftStickerMainFragment) {
+                ((GiftStickerMainFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
+            }
+        });
     }
 
     @Override

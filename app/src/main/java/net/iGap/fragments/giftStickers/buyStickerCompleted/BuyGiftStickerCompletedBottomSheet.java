@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.R;
-import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.module.dialog.BaseBottomSheet;
 
 public class BuyGiftStickerCompletedBottomSheet extends BaseBottomSheet {
 
@@ -36,6 +36,11 @@ public class BuyGiftStickerCompletedBottomSheet extends BaseBottomSheet {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_parent_chat_money_transfer, container, false);
+    }
+
+    @Override
+    public int getTheme() {
+        return R.style.BaseBottomSheetDialog;
     }
 
     @Override
