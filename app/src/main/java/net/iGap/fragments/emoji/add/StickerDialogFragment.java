@@ -38,6 +38,7 @@ public class StickerDialogFragment extends BaseBottomSheet {
     private ImageView previewIv;
     private ProgressBar addOrRemoveProgressBar;
     private ProgressBar progressBar;
+    private TextView retryView;
     private AnimatedStickerCell stickerCell;
 
     private OnStickerDialogListener listener;
@@ -78,6 +79,7 @@ public class StickerDialogFragment extends BaseBottomSheet {
         addOrRemoveTv = view.findViewById(R.id.tv_stickerDialog_add);
         previewIv = view.findViewById(R.id.iv_stickerDialog_preview);
         stickerCell = view.findViewById(R.id.iv_stickerDialog_lottiePreview);
+        retryView = view.findViewById(R.id.retryView);
         addOrRemoveProgressBar = view.findViewById(R.id.pb_stickerDialog_addOrRemove);
 
         addOrRemoveProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
@@ -176,6 +178,7 @@ public class StickerDialogFragment extends BaseBottomSheet {
         });
 
         viewModel.getAddOrRemoveProgressLiveData().observe(getViewLifecycleOwner(), visibility -> addOrRemoveProgressBar.setVisibility(visibility));
+        viewModel.getRetryViewLiveData().observe(getViewLifecycleOwner(), visibility -> retryView.setVisibility(visibility));
 
         previewIv.setOnClickListener(v -> viewModel.onPreviewImageClicked());
         stickerCell.setOnClickListener(v -> viewModel.onPreviewImageClicked());
@@ -183,6 +186,7 @@ public class StickerDialogFragment extends BaseBottomSheet {
         viewModel.getCloseDialogMutableLiveData().observe(getViewLifecycleOwner(), close -> dismiss());
 
         addOrRemoveTv.setOnClickListener(v -> viewModel.onAddOrRemoveStickerClicked());
+        retryView.setOnClickListener(v -> viewModel.onRetryViewClicked());
 
         viewModel.getSticker();
     }
