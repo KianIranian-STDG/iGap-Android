@@ -32,21 +32,12 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
 
     public EnterNationalCodeViewModel() {
 
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null && realmUserInfo.getNationalCode() != null && realmUserInfo.getNationalCode().length() == 10) {
-                String nationalCode = realmUserInfo.getNationalCode();
-                nationalCodeField.set(nationalCode);
-            }
-        });
     }
 
     public void onInquiryButtonClick(String nationalCode) {
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
                 String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
-
-                G.nationalCode = nationalCode;
 
                 if (saveChecked.get()) {
                     DbManager.getInstance().doRealmTask(realm -> {
@@ -57,6 +48,8 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
                             }
                         });
                     });
+
+                    G.nationalCode = nationalCode;
                 }
 
                 if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
@@ -100,6 +93,11 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
             hasError.set(true);
             errorMessageNationalCode.set(R.string.elecBill_Entry_userIDError);
         }
+    }
+
+    public void onStart() {
+        if (G.getNationalCode() != null && nationalCodeField.get() == null)
+            nationalCodeField.set(G.getNationalCode());
     }
 
     public void onSaveChecked(boolean checked) {

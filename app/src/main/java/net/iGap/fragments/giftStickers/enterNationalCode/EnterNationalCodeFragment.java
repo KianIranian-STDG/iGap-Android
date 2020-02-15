@@ -52,6 +52,12 @@ public class EnterNationalCodeFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.onStart();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 

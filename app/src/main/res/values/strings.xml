@@ -2548,7 +2548,7 @@ Want to get it?</string>
     <string name="gift_sticker_add_archive">Add to archive</string>
     <string name="gift_cart_title">Digital gift card</string>
     <string name="my_gift_sticker">My Cards</string>
-    <string name="my_recived_gift_sticker">Digital gift card received</string>
+    <string name="my_recived_gift_sticker">Activated digital gift card</string>
     <string name="expire_date">Expiration date</string>
     <string name="send_gift_sticker">Send card</string>
     <string name="gift_sticker_send_to_other">Send to another</string>
@@ -2565,5 +2565,6 @@ Want to get it?</string>
     <string name="usable">Usable</string>
     <string name="activated">Activated</string>
     <string name="posted">Posted</string>
+    <string name="gift_sticker_inquiry_and_activated">Inquiry and activated</string>
 
 </resources>

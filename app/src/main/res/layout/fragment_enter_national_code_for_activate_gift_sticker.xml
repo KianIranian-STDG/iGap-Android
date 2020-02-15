@@ -84,7 +84,7 @@
             android:layout_marginBottom="16dp"
             android:enabled="@{viewModel.isEnable}"
             android:onClick="@{()->viewModel.onActiveButtonClicked(nationalCode.getEditableText().toString())}"
-            android:text="@string/inquiry"
+            android:text="@string/gift_sticker_inquiry_and_activated"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

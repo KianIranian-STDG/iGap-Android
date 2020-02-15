@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
@@ -46,8 +47,10 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         super.onViewCreated(view, savedInstanceState);
 
         if (mode == 0) {
-            loadEnterNationalCodeForActivatePage();
-        } else if (mode == 1) {
+            loadEnterNationalCodeForActivatePage(canForward);
+        } else if (G.getNationalCode() == null) {
+            loadEnterNationalCodeForActivatePage(true);
+        } else if (mode == 1 && G.getNationalCode() != null) {
             loadGiftStickerCardDetailFragment();
         }
     }
@@ -57,7 +60,7 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    public void loadEnterNationalCodeForActivatePage() {
+    private void loadEnterNationalCodeForActivatePage(boolean canForward) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         if (!(fragment instanceof EnterNationalCodeForActivateGiftStickerFragment)) {
