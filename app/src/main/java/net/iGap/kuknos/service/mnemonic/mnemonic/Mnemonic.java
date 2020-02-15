@@ -34,7 +34,6 @@ public class Mnemonic {
             throw new MnemonicException("Fatal error! SHA-256 algorithm does not exist!");
         }
 
-
         char[] binaryHash = PrimitiveUtil.bytesToBinaryAsChars(hashBits);
         char[] checkSum = PrimitiveUtil.charSubArray(binaryHash, 0, entropy.length * 8 / 32);
         char[] entropyBits = PrimitiveUtil.bytesToBinaryAsChars(entropy);
