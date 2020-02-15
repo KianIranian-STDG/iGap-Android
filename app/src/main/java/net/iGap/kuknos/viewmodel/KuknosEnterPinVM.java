@@ -4,13 +4,13 @@ import android.os.Handler;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 
-public class KuknosEnterPinVM extends ViewModel {
+public class KuknosEnterPinVM extends BaseAPIViewModel {
 
     private ObservableField<String> PIN = new ObservableField<>();
     private MutableLiveData<ErrorM> error;

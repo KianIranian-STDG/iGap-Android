@@ -19,17 +19,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosTradeBinding;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.kuknos.view.adapter.WalletHistorySpinnerAdapter;
 import net.iGap.kuknos.viewmodel.KuknosTradeVM;
 
-public class KuknosTradeFrag extends BaseFragment {
+public class KuknosTradeFrag extends BaseAPIViewFrag<KuknosTradeVM> {
 
     private FragmentKuknosTradeBinding binding;
-    private KuknosTradeVM kuknosTradeVM;
     private Spinner originSpinner;
     private Spinner destSpinner;
 
@@ -40,7 +39,7 @@ public class KuknosTradeFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosTradeVM = ViewModelProviders.of(this).get(KuknosTradeVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosTradeVM.class);
     }
 
     @Nullable
@@ -48,7 +47,7 @@ public class KuknosTradeFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_trade, container, false);
-        binding.setViewmodel(kuknosTradeVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -68,7 +67,7 @@ public class KuknosTradeFrag extends BaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("amini", "onItemSelected: in item selected");
-                kuknosTradeVM.originSpinnerSelect(position);
+                viewModel.originSpinnerSelect(position);
             }
 
             @Override
@@ -79,7 +78,7 @@ public class KuknosTradeFrag extends BaseFragment {
         destSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                kuknosTradeVM.setDestPosition(position);
+                viewModel.setDestPosition(position);
             }
 
             @Override
@@ -88,7 +87,7 @@ public class KuknosTradeFrag extends BaseFragment {
             }
         });
 
-        kuknosTradeVM.getDataFromServer();
+        viewModel.getDataFromServer();
 
         onErrorObserver();
         onDataChanged();
@@ -98,13 +97,13 @@ public class KuknosTradeFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosTradeVM.getKuknosOriginWalletsM().observe(getViewLifecycleOwner(), balances -> {
+        viewModel.getKuknosOriginWalletsM().observe(getViewLifecycleOwner(), balances -> {
             if (balances.size() != 0) {
                 WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(), balances);
                 originSpinner.setAdapter(adapter);
             }
         });
-        kuknosTradeVM.getKuknosDestinationWalletsM().observe(getViewLifecycleOwner(), balances -> {
+        viewModel.getKuknosDestinationWalletsM().observe(getViewLifecycleOwner(), balances -> {
             if (balances.size() != 0) {
                 WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(), balances);
                 destSpinner.setAdapter(adapter);
@@ -114,7 +113,7 @@ public class KuknosTradeFrag extends BaseFragment {
 
     private void onErrorObserver() {
 
-        kuknosTradeVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getMessage().equals("0") && errorM.getState()) {
                 //origin Problem
                 binding.fragKuknosTranTAmountHolder.setError("" + getString(errorM.getResID()));
@@ -155,7 +154,7 @@ public class KuknosTradeFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        kuknosTradeVM.getSendProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getSendProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosTranProgressV.setVisibility(View.VISIBLE);
                 binding.fragKuknosTranExchange.setEnabled(false);
@@ -169,7 +168,7 @@ public class KuknosTradeFrag extends BaseFragment {
             }
         });
 
-        kuknosTradeVM.getFetchProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getFetchProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
                 binding.fragKuknosPProgressV.setVisibility(View.VISIBLE);
             else
@@ -213,13 +212,13 @@ public class KuknosTradeFrag extends BaseFragment {
     }
 
     private void goToPin() {
-        kuknosTradeVM.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosEnterPinFrag.newInstance(() -> kuknosTradeVM.sendDataServer());
+                    fragment = KuknosEnterPinFrag.newInstance(() -> viewModel.sendDataServer());
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

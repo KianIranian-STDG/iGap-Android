@@ -1,12 +1,12 @@
 package net.iGap.kuknos.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.module.SingleLiveEvent;
 
-public class KuknosEntryOptionVM extends ViewModel {
+public class KuknosEntryOptionVM extends BaseAPIViewModel {
 
     private SingleLiveEvent<Boolean> goNewTPage;
     private SingleLiveEvent<Boolean> goRestoreTPage;

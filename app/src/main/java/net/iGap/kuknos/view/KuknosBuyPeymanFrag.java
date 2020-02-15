@@ -27,9 +27,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -38,10 +38,9 @@ import net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM;
 
 import org.jetbrains.annotations.NotNull;
 
-public class KuknosBuyPeymanFrag extends BaseFragment {
+public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
 
     private FragmentKuknosBuyPeymanBinding binding;
-    private KuknosBuyPeymanVM kuknosBuyPeymanVM;
 
     public static KuknosBuyPeymanFrag newInstance() {
         return new KuknosBuyPeymanFrag();
@@ -50,7 +49,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosBuyPeymanVM = ViewModelProviders.of(this).get(KuknosBuyPeymanVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosBuyPeymanVM.class);
     }
 
     @Nullable
@@ -58,7 +57,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_buy_peyman, container, false);
-        binding.setViewmodel(kuknosBuyPeymanVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -86,14 +85,14 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosBuyPToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        kuknosBuyPeymanVM.getAssetValue();
+        viewModel.getAssetValue();
 
         String t = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
         SpannableString ss = new SpannableString(t);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NotNull View textView) {
-                kuknosBuyPeymanVM.getTermsAndCond();
+                viewModel.getTermsAndCond();
             }
 
             @Override
@@ -120,7 +119,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void onPaymentDialog() {
-        kuknosBuyPeymanVM.getPaymentData().observe(getViewLifecycleOwner(), new Observer<KuknosPaymentResponse>() {
+        viewModel.getPaymentData().observe(getViewLifecycleOwner(), new Observer<KuknosPaymentResponse>() {
             @Override
             public void onChanged(KuknosPaymentResponse kuknosPaymentResponse) {
                 if (kuknosPaymentResponse != null)
@@ -135,7 +134,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void onTermsDownload() {
-        kuknosBuyPeymanVM.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s != null)
@@ -158,7 +157,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
 
 
     private void onError() {
-        kuknosBuyPeymanVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState() && errorM.getMessage().equals("0")) {
                 binding.fragKuknosBuyPAmountHolder.setError(getResources().getString(errorM.getResID()));
                 binding.fragKuknosBuyPAmountHolder.requestFocus();
@@ -191,7 +190,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        kuknosBuyPeymanVM.getProgressState().observe(getViewLifecycleOwner(), integer -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), integer -> {
             if (integer == 0) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
                 binding.fragKuknosBuyPAmount.setEnabled(true);
@@ -209,7 +208,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void onSumVisibility() {
-        kuknosBuyPeymanVM.getSumState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getSumState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
                 binding.fragKuknosBuyPSumGroup.setVisibility(View.VISIBLE);
             else
@@ -231,7 +230,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (kuknosBuyPeymanVM.updateSum())
+                if (viewModel.updateSum())
                     binding.fragKuknosBuyPSumGroup.setVisibility(View.VISIBLE);
                 else
                     binding.fragKuknosBuyPSumGroup.setVisibility(View.GONE);
@@ -240,7 +239,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void onBankPage() {
-        kuknosBuyPeymanVM.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 // go to Bank
             }
@@ -248,13 +247,13 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void goToPaymentListener() {
-        kuknosBuyPeymanVM.getGoToPaymentPage().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String token) {
                 if (getActivity() != null && token != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.kuknos_buyAsset), token, result -> {
                         if (getActivity() != null && result.isSuccess()) {
-                            kuknosBuyPeymanVM.getPaymentData("" + result.getRRN());
+                            viewModel.getPaymentData("" + result.getRRN());
                         }
                     });
                 }
@@ -263,13 +262,13 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
     }
 
     private void goToPin() {
-        kuknosBuyPeymanVM.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosEnterPinFrag.newInstance(() -> kuknosBuyPeymanVM.sendDataServer());
+                    fragment = KuknosEnterPinFrag.newInstance(() -> viewModel.sendDataServer());
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

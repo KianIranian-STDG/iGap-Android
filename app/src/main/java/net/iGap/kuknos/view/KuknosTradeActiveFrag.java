@@ -12,16 +12,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosTraceHistoryBinding;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.kuknos.view.adapter.WalletOpenOfferAdapter;
 import net.iGap.kuknos.viewmodel.KuknosTradeActiveVM;
 
-public class KuknosTradeActiveFrag extends BaseFragment {
+public class KuknosTradeActiveFrag extends BaseAPIViewFrag<KuknosTradeActiveVM> {
 
     private FragmentKuknosTraceHistoryBinding binding;
-    private KuknosTradeActiveVM kuknosTradeHistoryVM;
 
     public static KuknosTradeActiveFrag newInstance() {
         return new KuknosTradeActiveFrag();
@@ -30,7 +29,7 @@ public class KuknosTradeActiveFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosTradeHistoryVM = ViewModelProviders.of(this).get(KuknosTradeActiveVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosTradeActiveVM.class);
     }
 
     @Nullable
@@ -55,7 +54,7 @@ public class KuknosTradeActiveFrag extends BaseFragment {
         binding.kuknosTradeHistoryRecycler.setLayoutManager(layoutManager);
         binding.kuknosTradeHistoryDate.setText("");
 
-        kuknosTradeHistoryVM.getDataFromServer();
+        viewModel.getDataFromServer();
 
         onError();
         onProgressVisibility();
@@ -63,12 +62,12 @@ public class KuknosTradeActiveFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosTradeHistoryVM.getOfferList().observe(getViewLifecycleOwner(), offerResponsePage -> {
+        viewModel.getOfferList().observe(getViewLifecycleOwner(), offerResponsePage -> {
             if (offerResponsePage.getOffers().size() != 0) {
                 WalletOpenOfferAdapter mAdapter = new WalletOpenOfferAdapter(offerResponsePage.getOffers(), new WalletOpenOfferAdapter.onClickListener() {
                     @Override
                     public void onDelete(int position) {
-                        kuknosTradeHistoryVM.deleteTrade(position);
+                        viewModel.deleteTrade(position);
                     }
                 });
                 binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
@@ -79,7 +78,7 @@ public class KuknosTradeActiveFrag extends BaseFragment {
     }
 
     private void onError() {
-        kuknosTradeHistoryVM.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
                 defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
@@ -93,7 +92,7 @@ public class KuknosTradeActiveFrag extends BaseFragment {
     }
 
     private void onProgressVisibility() {
-        kuknosTradeHistoryVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.kuknosTradeHistoryProgressV.setVisibility(View.VISIBLE);
             } else {

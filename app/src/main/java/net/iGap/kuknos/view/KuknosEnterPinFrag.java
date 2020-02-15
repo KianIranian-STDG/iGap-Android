@@ -14,17 +14,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosEnterPinBinding;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosEnterPinVM;
 
-public class KuknosEnterPinFrag extends BaseFragment {
+public class KuknosEnterPinFrag extends BaseAPIViewFrag<KuknosEnterPinVM> {
 
     private FragmentKuknosEnterPinBinding binding;
-    private KuknosEnterPinVM kuknosViewRecoveryEPVM;
     private OnPinEntered pinEntered;
 
     public static KuknosEnterPinFrag newInstance(OnPinEntered pinEntered) {
@@ -38,7 +37,7 @@ public class KuknosEnterPinFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosViewRecoveryEPVM = ViewModelProviders.of(this).get(KuknosEnterPinVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosEnterPinVM.class);
     }
 
     @Nullable
@@ -46,7 +45,7 @@ public class KuknosEnterPinFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_enter_pin, container, false);
-        binding.setViewmodel(kuknosViewRecoveryEPVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -81,7 +80,7 @@ public class KuknosEnterPinFrag extends BaseFragment {
 
 
     private void onError() {
-        kuknosViewRecoveryEPVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState() && errorM.getMessage().equals("0")) {
                 binding.fragKuknosVRPassHolder.setError(getResources().getString(errorM.getResID()));
                 binding.fragKuknosVRPassHolder.requestFocus();
@@ -102,7 +101,7 @@ public class KuknosEnterPinFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        kuknosViewRecoveryEPVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosVRProgressV.setVisibility(View.VISIBLE);
                 binding.fragKuknosVRPass.setEnabled(false);
@@ -135,7 +134,7 @@ public class KuknosEnterPinFrag extends BaseFragment {
     }
 
     private void onNextPage() {
-        kuknosViewRecoveryEPVM.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 popBackStackFragment();
                 pinEntered.correctPin();

@@ -45,10 +45,9 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KuknosPanelFrag extends BaseAPIViewFrag {
+public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
     private FragmentKuknosPanelBinding binding;
-    private KuknosPanelVM kuknosPanelVM;
     private Spinner walletSpinner;
 
     public static KuknosPanelFrag newInstance() {
@@ -58,8 +57,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosPanelVM = ViewModelProviders.of(this).get(KuknosPanelVM.class);
-        this.viewModel = kuknosPanelVM;
+        viewModel = ViewModelProviders.of(this).get(KuknosPanelVM.class);
     }
 
     @Nullable
@@ -67,7 +65,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_panel, container, false);
-        binding.setViewmodel(kuknosPanelVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
         isNeedResume = true;
         return binding.getRoot();
@@ -100,10 +98,10 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
         walletSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getAssets().size()))
-                    kuknosPanelVM.spinnerSelect(position);
+                if (position != (viewModel.getKuknosWalletsM().getValue().getAssets().size()))
+                    viewModel.spinnerSelect(position);
                 else {
-                    walletSpinner.setSelection(kuknosPanelVM.getPosition());
+                    walletSpinner.setSelection(viewModel.getPosition());
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     Fragment fragment = fragmentManager.findFragmentByTag(KuknosAddAssetFrag.class.getName());
@@ -120,7 +118,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                         }
                     });
                     snackbar.show();
-                    walletSpinner.setSelection(kuknosPanelVM.getPosition());*/
+                    walletSpinner.setSelection(viewModel.getPosition());*/
                 }
             }
 
@@ -130,7 +128,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
             }
         });
 
-        kuknosPanelVM.getDataFromServer();
+        viewModel.getDataFromServer();
         onErrorObserver();
         openPage();
         onDataChanged();
@@ -140,7 +138,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
 
     @Override
     public void onResume() {
-        kuknosPanelVM.getDataFromServer();
+        viewModel.getDataFromServer();
         super.onResume();
     }
 
@@ -172,7 +170,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     }
                     break;*/
                 case 0:
-                    if (kuknosPanelVM.isPinSet()) {
+                    if (viewModel.isPinSet()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosViewRecoveryEPFrag.newInstance();
@@ -191,7 +189,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     return;
                 case 2:
                     HelperUrl.openWebBrowser(getContext(), "https://www.kuknos.org/wp/");
-//                    kuknosPanelVM.getTermsAndCond();
+//                    viewModel.getTermsAndCond();
                     break;
                 case 3:
                     fragment = fragmentManager.findFragmentByTag(KuknosLogoutFrag.class.getName());
@@ -208,7 +206,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
     }
 
     private void onTermsDownload() {
-        kuknosPanelVM.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s != null)
@@ -230,7 +228,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
     }
 
     private void onDataChanged() {
-        kuknosPanelVM.getKuknosWalletsM().observe(getViewLifecycleOwner(), accountResponse -> {
+        viewModel.getKuknosWalletsM().observe(getViewLifecycleOwner(), accountResponse -> {
             if (accountResponse.getAssets().size() != 0) {
                 WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), accountResponse.getAssets());
                 walletSpinner.setAdapter(adapter);
@@ -241,7 +239,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
 
     private void onErrorObserver() {
 
-        kuknosPanelVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 if (errorM.getMessage().equals("0")) {
                     binding.fragKuknosPError.setVisibility(View.VISIBLE);
@@ -260,7 +258,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
     }
 
     private void openPage() {
-        kuknosPanelVM.getOpenPage().observe(getViewLifecycleOwner(), pageID -> {
+        viewModel.getOpenPage().observe(getViewLifecycleOwner(), pageID -> {
             if (pageID == -1)
                 return;
             FragmentManager fragmentManager = getChildFragmentManager();
@@ -276,10 +274,10 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     break;
                 case 1:
                     fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
-                    if (fragment == null && !kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()).equals("")) {
+                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("")) {
                         fragment = KuknosSendFrag.newInstance();
                         Bundle b = new Bundle();
-                        b.putString("balanceClientInfo", kuknosPanelVM.convertToJSON(kuknosPanelVM.getPosition()));
+                        b.putString("balanceClientInfo", viewModel.convertToJSON(viewModel.getPosition()));
                         fragment.setArguments(b);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     } else {
@@ -295,7 +293,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     break;
                 case 3:
                     initialSettingBS();
-                    kuknosPanelVM.getOpenPage().setValue(-1);
+                    viewModel.getOpenPage().setValue(-1);
                     return;
                 case 4:
                     fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
@@ -314,12 +312,12 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
                     break;
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            kuknosPanelVM.getOpenPage().setValue(-1);
+            viewModel.getOpenPage().setValue(-1);
         });
     }
 
     private void onProgress() {
-        kuknosPanelVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosPProgressV.setVisibility(View.VISIBLE);
                 binding.fragKuknosPRecieve.setEnabled(false);
@@ -365,7 +363,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag {
         File myExternalFile = new File(dir, getString(R.string.kuknos_setting_fileName));
         try {
             FileOutputStream fos = new FileOutputStream(myExternalFile);
-            String temp = getString(R.string.kuknos_setting_fileContent) + kuknosPanelVM.getPrivateKeyData();
+            String temp = getString(R.string.kuknos_setting_fileContent) + viewModel.getPrivateKeyData();
             fos.write(temp.getBytes());
             fos.close();
         } catch (Exception e) {

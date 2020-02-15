@@ -13,18 +13,17 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosWHistoryBinding;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.WalletHistoryRAdapter;
 import net.iGap.kuknos.viewmodel.KuknosWHistoryVM;
 
-public class KuknosWHistoryFrag extends BaseFragment {
+public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
 
     private FragmentKuknosWHistoryBinding binding;
-    private KuknosWHistoryVM kuknosWHistoryVM;
 
     public static KuknosWHistoryFrag newInstance() {
         return new KuknosWHistoryFrag();
@@ -33,7 +32,7 @@ public class KuknosWHistoryFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosWHistoryVM = ViewModelProviders.of(this).get(KuknosWHistoryVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosWHistoryVM.class);
     }
 
     @Nullable
@@ -41,7 +40,7 @@ public class KuknosWHistoryFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_w_history, container, false);
-        binding.setViewmodel(kuknosWHistoryVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -73,7 +72,7 @@ public class KuknosWHistoryFrag extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.kuknosWHistoryRecycler.setLayoutManager(layoutManager);
 
-        kuknosWHistoryVM.getDataFromServer();
+        viewModel.getDataFromServer();
 
         onError();
         onProgressVisibility();
@@ -81,16 +80,16 @@ public class KuknosWHistoryFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosWHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), operationResponsePage -> {
+        viewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), operationResponsePage -> {
             if (operationResponsePage.getOperations().size() != 0) {
-                WalletHistoryRAdapter mAdapter = new WalletHistoryRAdapter(kuknosWHistoryVM.getListMutableLiveData().getValue(), getContext());
+                WalletHistoryRAdapter mAdapter = new WalletHistoryRAdapter(viewModel.getListMutableLiveData().getValue(), getContext());
                 binding.kuknosWHistoryRecycler.setAdapter(mAdapter);
             }
         });
     }
 
     private void onError() {
-        kuknosWHistoryVM.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
                 defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
@@ -105,7 +104,7 @@ public class KuknosWHistoryFrag extends BaseFragment {
     }
 
     private void onProgressVisibility() {
-        kuknosWHistoryVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.kuknosWHistoryProgressV.setVisibility(View.VISIBLE);
             } else {

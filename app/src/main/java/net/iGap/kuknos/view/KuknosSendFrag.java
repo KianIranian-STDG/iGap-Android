@@ -22,9 +22,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosSendBinding;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
@@ -34,10 +34,9 @@ import net.iGap.kuknos.viewmodel.KuknosSendVM;
 
 import java.io.IOException;
 
-public class KuknosSendFrag extends BaseFragment {
+public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
 
     private FragmentKuknosSendBinding binding;
-    private KuknosSendVM kuknosSignupInfoVM;
 
     public static KuknosSendFrag newInstance() {
         return new KuknosSendFrag();
@@ -46,7 +45,7 @@ public class KuknosSendFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosSignupInfoVM = ViewModelProviders.of(this).get(KuknosSendVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosSendVM.class);
     }
 
     @Nullable
@@ -54,11 +53,11 @@ public class KuknosSendFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_send, container, false);
-        binding.setViewmodel(kuknosSignupInfoVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         Bundle b = getArguments();
-        kuknosSignupInfoVM.setBalanceInfoM(b.getString("balanceClientInfo"));
+        viewModel.setBalanceInfoM(b.getString("balanceClientInfo"));
 
         return binding.getRoot();
 
@@ -97,7 +96,7 @@ public class KuknosSendFrag extends BaseFragment {
     }
 
     private void openQrScanner() {
-        kuknosSignupInfoVM.getOpenQrScanner().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getOpenQrScanner().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 try {
                     HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
@@ -123,12 +122,12 @@ public class KuknosSendFrag extends BaseFragment {
     }
 
     public void setWalletIDQrCode(String code) {
-        kuknosSignupInfoVM.getWalletID().set(code);
+        viewModel.getWalletID().set(code);
     }
 
     private void onError() {
 
-        kuknosSignupInfoVM.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 switch (errorM.getMessage()) {
                     case "0":
@@ -151,7 +150,7 @@ public class KuknosSendFrag extends BaseFragment {
     }
 
     private void onTransfer() {
-        kuknosSignupInfoVM.getPayResult().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getPayResult().observe(getViewLifecycleOwner(), errorM -> {
             DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
             defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle));
             if (errorM.getResID() == 0)
@@ -173,7 +172,7 @@ public class KuknosSendFrag extends BaseFragment {
     }
 
     private void progressSubmitVisibility() {
-        kuknosSignupInfoVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosSSubmit.setText(getString(R.string.kuknos_send_connectingServer));
                 binding.fragKuknosSAmountET.setEnabled(false);
@@ -241,22 +240,22 @@ public class KuknosSendFrag extends BaseFragment {
         });
         binding.fragKuknosSWalletAddressET.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                kuknosSignupInfoVM.cancelFederation();
+                viewModel.cancelFederation();
             } else {
-                if (kuknosSignupInfoVM.getFederationProgressVisibility().get() != View.VISIBLE)
-                    kuknosSignupInfoVM.convertFederation(false);
+                if (viewModel.getFederationProgressVisibility().get() != View.VISIBLE)
+                    viewModel.convertFederation(false);
             }
         });
     }
 
     private void goToPin() {
-        kuknosSignupInfoVM.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getGoToPin().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosEnterPinFrag.newInstance(() -> kuknosSignupInfoVM.sendDataServer());
+                    fragment = KuknosEnterPinFrag.newInstance(() -> viewModel.sendDataServer());
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

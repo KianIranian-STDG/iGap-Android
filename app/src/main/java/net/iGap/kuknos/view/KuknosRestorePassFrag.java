@@ -24,17 +24,16 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosRestorePasswordBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosRestorePassVM;
 
-public class KuknosRestorePassFrag extends BaseFragment {
+public class KuknosRestorePassFrag extends BaseAPIViewFrag<KuknosRestorePassVM> {
 
     private FragmentKuknosRestorePasswordBinding binding;
-    private KuknosRestorePassVM kuknosSetPassVM;
 
     public static KuknosRestorePassFrag newInstance() {
         return new KuknosRestorePassFrag();
@@ -44,8 +43,8 @@ public class KuknosRestorePassFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosSetPassVM = ViewModelProviders.of(this).get(KuknosRestorePassVM.class);
-        kuknosSetPassVM.setKeyPhrase(getArguments().getString("key_phrase"));
+        viewModel = ViewModelProviders.of(this).get(KuknosRestorePassVM.class);
+        viewModel.setKeyPhrase(getArguments().getString("key_phrase"));
     }
 
     @Nullable
@@ -53,7 +52,7 @@ public class KuknosRestorePassFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_restore_password, container, false);
-        binding.setViewmodel(kuknosSetPassVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -90,11 +89,11 @@ public class KuknosRestorePassFrag extends BaseFragment {
 
     private void getCachedData() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        kuknosSetPassVM.setToken(sharedpreferences.getString("Token", ""));
+        viewModel.setToken(sharedpreferences.getString("Token", ""));
     }
 
     private void onNext() {
-        kuknosSetPassVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage == 1) {
                 saveRegisterInfo();
                 FragmentManager fragmentManager = getChildFragmentManager();
@@ -121,12 +120,12 @@ public class KuknosRestorePassFrag extends BaseFragment {
     private void saveRegisterInfo() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("RegisterInfo", new Gson().toJson(kuknosSetPassVM.getKuknosSignupM()));
+        editor.putString("RegisterInfo", new Gson().toJson(viewModel.getKuknosSignupM()));
         editor.apply();
     }
 
     private void onError() {
-        kuknosSetPassVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 //TODO clear Log
                 if (errorM.getMessage().equals("0")) {
@@ -139,7 +138,7 @@ public class KuknosRestorePassFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        kuknosSetPassVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosSPSubmit.setText(getString(R.string.kuknos_SignupInfo_submitConnecting));
                 binding.fragKuknosSPProgressV.setEnabled(false);
@@ -237,7 +236,7 @@ public class KuknosRestorePassFrag extends BaseFragment {
         // Pin 4
         binding.fragKuknosSPNum4.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
-                kuknosSetPassVM.setCompletePin(false);
+                viewModel.setCompletePin(false);
                 if (((AppCompatEditText) v).getEditableText().length() == 0) {
                     binding.fragKuknosSPNum3.requestFocus();
                     binding.fragKuknosSPNum4.setEnabled(false);
@@ -261,7 +260,7 @@ public class KuknosRestorePassFrag extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 if (s.length() == 1) {
                     // build the Pin Code
-                    kuknosSetPassVM.setCompletePin(true);
+                    viewModel.setCompletePin(true);
                 }
             }
         });

@@ -2,9 +2,9 @@ package net.iGap.kuknos.viewmodel;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.module.SingleLiveEvent;
@@ -12,7 +12,7 @@ import net.iGap.module.SingleLiveEvent;
 import java.util.Arrays;
 import java.util.List;
 
-public class KuknosShowRecoveryKeyVM extends BaseAPIViewModel {
+public class KuknosShowRecoveryKeyVM extends ViewModel {
 
     private List<String> lengths = Arrays.asList("24", "12");
     private List<String> languages = Arrays.asList("FA", "EN");
