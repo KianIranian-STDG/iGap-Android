@@ -2508,4 +2508,5 @@
     <string name="usable">قابل استفاده</string>
     <string name="activated">فعال شده</string>
     <string name="posted">ارسال شده</string>
+    <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
 </resources>

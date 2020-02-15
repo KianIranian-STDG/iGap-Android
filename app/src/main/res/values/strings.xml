@@ -2565,5 +2565,6 @@ Want to get it?</string>
     <string name="usable">Usable</string>
     <string name="activated">Activated</string>
     <string name="posted">Posted</string>
+    <string name="kuknos_send_token_error">Can Not send this token.</string>
 
 </resources>

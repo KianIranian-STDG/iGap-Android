@@ -1951,5 +1951,6 @@
     <string name="usable">قابل استفاده</string>
     <string name="activated">فعال شده</string>
     <string name="posted">Posted</string>
+    <string name="kuknos_send_token_error">Не могу отправить этот токен.</string>
 
 </resources>
