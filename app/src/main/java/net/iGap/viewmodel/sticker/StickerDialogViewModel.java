@@ -111,7 +111,6 @@ public class StickerDialogViewModel extends ObserverViewModel {
                         onStickerFavoriteChange(false);
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         closeDialogMutableLiveData.postValue(true);
-                        EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), false);
                     }
 
                     @Override
