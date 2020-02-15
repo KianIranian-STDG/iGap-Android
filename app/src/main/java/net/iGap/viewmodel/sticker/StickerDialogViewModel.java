@@ -5,12 +5,12 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.repository.StickerRepository;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
 
 public class StickerDialogViewModel extends ObserverViewModel {
     private static final String TAG = "abbasiSticker ViewModel";
@@ -23,6 +23,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
 
     private MutableLiveData<Integer> progressMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> addOrRemoveProgressLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> retryViewLiveData = new MutableLiveData<>();
     private MutableLiveData<StructIGStickerGroup> stickersMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> addOrRemoveStickerLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> closeDialogMutableLiveData = new MutableLiveData<>();
@@ -63,6 +64,8 @@ public class StickerDialogViewModel extends ObserverViewModel {
 
                         stickersMutableLiveData.postValue(stickerGroup);
 
+                        retryViewLiveData.postValue(View.GONE);
+
                         onStickerFavoriteChange(stickerGroup.isInUserList());
                     }
 
@@ -70,8 +73,14 @@ public class StickerDialogViewModel extends ObserverViewModel {
                     public void onError(Throwable e) {
                         super.onError(e);
                         progressMutableLiveData.postValue(View.GONE);
+                        retryViewLiveData.postValue(View.VISIBLE);
                     }
                 });
+    }
+
+    public void onRetryViewClicked() {
+        retryViewLiveData.setValue(View.VISIBLE);
+        getSticker();
     }
 
     private void addStickerToMyStickers(StructIGStickerGroup stickerGroup) {
@@ -154,6 +163,10 @@ public class StickerDialogViewModel extends ObserverViewModel {
 
     public MutableLiveData<Integer> getAddOrRemoveProgressLiveData() {
         return addOrRemoveProgressLiveData;
+    }
+
+    public MutableLiveData<Integer> getRetryViewLiveData() {
+        return retryViewLiveData;
     }
 
     @Override
