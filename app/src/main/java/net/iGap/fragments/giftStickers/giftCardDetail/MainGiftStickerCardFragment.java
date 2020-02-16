@@ -59,7 +59,11 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         } else if (mode == ACTIVE_CARD_WHIT_FORWARD) {
             loadEnterNationalCodeForActivatePage(true);
         } else if (mode == ACTIVE_CARD_WHIT_OUT_FORWARD) {
-            loadEnterNationalCodeForActivatePage(false);
+            if (G.getNationalCode() == null) {
+                loadEnterNationalCodeForActivatePage(false);
+            } else {
+                loadGiftStickerCardDetailFragment(SHOW_CARD_INFO);
+            }
         } else {
             Toast.makeText(getContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
         }
