@@ -2152,7 +2152,7 @@
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_recieve_walletCopy">آدرس کیف پول من: \n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
-    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت استفاده کنید.</string>
+    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت یا خرید پیمان استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error2">خطای سرور. لطفا دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error3">شماره تراکنش اشتباه است. لطفا دوباره تلاش کنید.</string>
