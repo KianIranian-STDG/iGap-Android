@@ -13,6 +13,8 @@ public class CardStatusDataModel {
     private StickerDataModel sticker;
     @SerializedName("isForwarded")
     private boolean isForwarded;
+    @SerializedName("isCardOwner")
+    private boolean isCardOwner;
 
     public void setForwarded(boolean forwarded) {
         isForwarded = forwarded;
@@ -46,4 +48,11 @@ public class CardStatusDataModel {
         this.sticker = sticker;
     }
 
+    public void setCardOwner(boolean cardOwner) {
+        isCardOwner = cardOwner;
+    }
+
+    public boolean isCardOwner() {
+        return isCardOwner;
+    }
 }
