@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentGiftStickerCardDetailBinding;
-import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -55,21 +54,23 @@ public class GiftStickerCardDetailFragment extends Fragment {
         viewModel.subscribe();
 
         viewModel.getCardDetailLiveData().observe(getViewLifecycleOwner(), cardDetailDataModel -> {
-            String cardNumber = cardDetailDataModel.getCardNo().substring(0, 4).concat(" - ");
-            cardNumber += cardDetailDataModel.getCardNo().substring(4, 8).concat(" - ");
-            cardNumber += cardDetailDataModel.getCardNo().substring(8, 12).concat(" - ");
-            cardNumber += cardDetailDataModel.getCardNo().substring(12);
+            try {
+                String cardNumber = cardDetailDataModel.getCardNo().substring(0, 4).concat(" - ");
+                cardNumber += cardDetailDataModel.getCardNo().substring(4, 8).concat(" - ");
+                cardNumber += cardDetailDataModel.getCardNo().substring(8, 12).concat(" - ");
+                cardNumber += cardDetailDataModel.getCardNo().substring(12);
 
-            String expireTime = cardDetailDataModel.getExpireDate().substring(0, 2).concat(" / ");
-            expireTime += cardDetailDataModel.getExpireDate().substring(2);
+                String expireTime = cardDetailDataModel.getExpireDate().substring(2).concat(" / ");
+                expireTime += cardDetailDataModel.getExpireDate().substring(0, 2);
 
-            binding.cardNumberView.setText(cardNumber);
-            binding.cardNumberView.setLayoutDirection(android.view.View.LAYOUT_DIRECTION_LTR);
-            binding.expireTime.setText(expireTime);
-            binding.internetPin2.setText(cardDetailDataModel.getCvv2());
-            binding.cvvView.setText(cardDetailDataModel.getSecondPassword());
-
-            EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, true);
+                binding.cardNumberView.setText(cardNumber);
+                binding.cardNumberView.setLayoutDirection(android.view.View.LAYOUT_DIRECTION_LTR);
+                binding.expireTime.setText(expireTime);
+                binding.internetPin2.setText(cardDetailDataModel.getCvv2());
+                binding.cvvView.setText(cardDetailDataModel.getSecondPassword());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         viewModel.getCopyValue().observe(getViewLifecycleOwner(), value -> {

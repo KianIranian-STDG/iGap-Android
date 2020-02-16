@@ -6,6 +6,7 @@ import androidx.databinding.ObservableInt;
 
 import net.iGap.AccountManager;
 import net.iGap.G;
+import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
@@ -64,6 +65,8 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
                                 }
                                 showMainView.set(View.VISIBLE);
                                 showLoadingView.set(View.GONE);
+
+                                EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, true);
                             }
 
                             @Override
@@ -83,7 +86,7 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
     }
 
     public void copyValue(String value) {
-        copyValue.setValue(value);
+        copyValue.setValue(value.replace("/", "").replace(" - ", "").replace(" ", "").replace("-", ""));
     }
 
 

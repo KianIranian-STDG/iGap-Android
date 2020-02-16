@@ -22,7 +22,6 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
     public static final int ACTIVE_CARD_WHIT_OUT_FORWARD = 2;
     public static final int SHOW_CARD_INFO = 3;
 
-
     private StructIGSticker structIGSticker;
     private int mode = -1;
 
@@ -62,7 +61,7 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         } else if (mode == ACTIVE_CARD_WHIT_OUT_FORWARD) {
             loadEnterNationalCodeForActivatePage(false);
         } else {
-            Toast.makeText(getContext(), "Toastttt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
         }
     }
 
