@@ -2227,5 +2227,6 @@
     <string name="posted">Posted</string>
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
+    <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
 
 </resources>

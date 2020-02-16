@@ -12,6 +12,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentEnterNationalCodeForActivateGiftStickerBinding;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
@@ -66,7 +69,18 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
 
         viewModel.getGoToNextStep().observe(getViewLifecycleOwner(), goNext -> {
             if (goNext != null && goNext && getParentFragment() instanceof MainGiftStickerCardFragment) {
-                ((MainGiftStickerCardFragment) getParentFragment()).loadGiftStickerCardDetailFragment();
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(R.string.app_name)
+                        .content(R.string.active_gift_card_note)
+                        .positiveText(R.string.ok)
+                        .onPositive((dialog, which) -> {
+                            ((MainGiftStickerCardFragment) getParentFragment()).loadGiftStickerCardDetailFragment();
+                            dialog.dismiss();
+                        })
+                        .onNegative((dialog, which) -> dialog.dismiss())
+                        .negativeText(R.string.cancel)
+                        .show();
+
             }
         });
 

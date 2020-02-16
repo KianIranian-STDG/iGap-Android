@@ -3188,4 +3188,6 @@
     <string name="posted">نشر</string>
     <string name="gift_sticker_inquiry_and_activated">التحقيق وتفعيلها</string>
     <string name="kuknos_send_token_error">لا يمكن إرسال هذا الرمز المميز.</string>
+    <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟
+لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
 </resources>
