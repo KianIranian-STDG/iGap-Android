@@ -22,7 +22,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class GiftStickerCardDetailFragment extends Fragment {
     private StructIGSticker structIGSticker;
-    private int mode = 0;
+    private int mode = -1;
 
     public static GiftStickerCardDetailFragment getInstance(StructIGSticker structIGSticker, int mode) {
         GiftStickerCardDetailFragment giftStickerCardDetailFragment = new GiftStickerCardDetailFragment();

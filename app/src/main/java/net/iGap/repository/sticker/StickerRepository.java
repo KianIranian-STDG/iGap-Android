@@ -206,7 +206,7 @@ public class StickerRepository {
         return stickerApi.giftCardStatus(giftStickerId).subscribeOn(Schedulers.newThread());
     }
 
-    private Single<RsaDataModel> getCardDataEncryptedDataApiService(String mobileNumber, String nationalCode, String stickerId) {
+    private Single<RsaDataModel> getActiveGiftCardApiService(String mobileNumber, String nationalCode, String stickerId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("national_code", nationalCode);
         jsonObject.addProperty("tel_num", mobileNumber);
@@ -547,8 +547,8 @@ public class StickerRepository {
         return getGiftCardStatusApiService(giftCardId).map(StructIGGiftSticker::new);
     }
 
-    public Single<CardDetailDataModel> getCardInfo(String stickerId, String nationalCode, String mobileNumber) {
-        return getCardDataEncryptedDataApiService(mobileNumber, nationalCode, stickerId)
+    public Single<CardDetailDataModel> getActiveGiftCard(String stickerId, String nationalCode, String mobileNumber) {
+        return getActiveGiftCardApiService(mobileNumber, nationalCode, stickerId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(rsaDataModel -> {
                     CardDetailDataModel cardDetailDataModel = null;

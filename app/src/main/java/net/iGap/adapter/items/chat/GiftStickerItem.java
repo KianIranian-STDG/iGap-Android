@@ -28,6 +28,7 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
@@ -141,12 +142,14 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                                 @Override
                                 public void onSuccess(StructIGGiftSticker giftSticker) {
 
-                                    if (giftSticker.isActive())
-                                        Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
-                                    else if (giftSticker.isForward()) {
+                                    if (giftSticker.isActive() && giftSticker.isCardOwner()) {
+                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, MainGiftStickerCardFragment.ACTIVE_BY_ME, structMessage);
+                                    } else if (giftSticker.isForward()) {
                                         Toast.makeText(getContext(), "شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!", Toast.LENGTH_SHORT).show();
+                                    } else if (giftSticker.isActive()) {
+                                        Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward(), structMessage);
+                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward() ? MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_OUT_FORWARD : MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_FORWARD, structMessage);
                                     }
 
                                     progressButton.changeProgressTo(View.GONE);

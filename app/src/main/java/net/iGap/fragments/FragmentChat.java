@@ -3670,8 +3670,8 @@ public class FragmentChat extends BaseFragment
 
 
     @Override
-    public void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward, StructMessageInfo structMessage) {
-        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, canForward, v -> forwardSelectedMessageToOutOfChat(structMessage), 0);
+    public void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, StructMessageInfo structMessage) {
+        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, v -> forwardSelectedMessageToOutOfChat(structMessage), mode);
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
