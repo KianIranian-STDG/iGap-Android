@@ -87,6 +87,7 @@
                     android:scrollHorizontally="false"
                     android:text="@={viewmodel.keys}"
                     android:textColor="?iGapTitleTextColor"
+                    android:textColorHint="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp18"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

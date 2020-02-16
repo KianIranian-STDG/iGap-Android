@@ -69,9 +69,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         binding.setLifecycleOwner(this);
         isNeedResume = true;
         return binding.getRoot();
-
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -281,7 +279,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                         fragment.setArguments(b);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     } else {
-                        Toast.makeText(getContext(), "Can NOT send this token.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.kuknos_send_token_error, Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case 2:

@@ -921,7 +921,7 @@
                         android:paddingBottom="@dimen/dp12">
 
 
-                        <com.uncopt.android.widget.text.justify.JustifiedTextView
+                        <TextView
                             android:id="@+id/stns_txt_keep_alive_service"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

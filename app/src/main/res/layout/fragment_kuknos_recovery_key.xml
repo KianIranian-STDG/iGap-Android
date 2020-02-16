@@ -149,6 +149,7 @@
                     android:scrollHorizontally="false"
                     android:text="@{viewmodel.mnemonic}"
                     android:textColor="?iGapTitleTextColor"
+                    android:textColorHint="?iGapSubtitleTextColor"
                     android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
