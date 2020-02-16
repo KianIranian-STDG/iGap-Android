@@ -54,7 +54,7 @@ public class KuknosTradeActiveVM extends BaseAPIViewModel {
                 deleteItem.getSelling().getAssetIssuer(),
                 deleteItem.getBuying().getAsset().getType().equals("native") ? "PMN" : deleteItem.getBuying().getAssetCode(),
                 deleteItem.getBuying().getAssetIssuer(),
-                "0", "0", String.valueOf(deleteItem.getId()), this,
+                "0", deleteItem.getPrice(), String.valueOf(deleteItem.getId()), this,
                 new ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>>() {
                     @Override
                     public void onSuccess(KuknosResponseModel<SubmitTransactionResponse> data) {

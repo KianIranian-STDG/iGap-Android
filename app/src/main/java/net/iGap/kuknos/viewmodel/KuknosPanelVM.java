@@ -55,7 +55,6 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
-                //todo fix it here
                 kuknosWalletsM.setValue(data.getData());
                 spinnerSelect(0);
                 progressState.setValue(false);
@@ -65,17 +64,18 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             public void onError(String errorM) {
                 balance.set("0.0");
                 currency.set("currency");
-                // TODO: 2/2/2020 activate this line. 
-//                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
+                kuknosWalletsM.setValue(null);
             }
 
             @Override
             public void onFailed() {
                 balance.set("0.0");
                 currency.set("currency");
-//                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
+                kuknosWalletsM.setValue(null);
             }
         });
     }

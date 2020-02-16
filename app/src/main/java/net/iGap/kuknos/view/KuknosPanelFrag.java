@@ -37,6 +37,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.kuknos.service.model.KuknosBalance;
 import net.iGap.kuknos.view.adapter.WalletSpinnerArrayAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 
@@ -96,9 +97,9 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         walletSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != (viewModel.getKuknosWalletsM().getValue().getAssets().size()))
+                if (viewModel.getKuknosWalletsM().getValue() != null && position != (viewModel.getKuknosWalletsM().getValue().getAssets().size()))
                     viewModel.spinnerSelect(position);
-                else {
+                else if (viewModel.getKuknosWalletsM().getValue() != null) {
                     walletSpinner.setSelection(viewModel.getPosition());
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -227,10 +228,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
     private void onDataChanged() {
         viewModel.getKuknosWalletsM().observe(getViewLifecycleOwner(), accountResponse -> {
-            if (accountResponse.getAssets().size() != 0) {
+            if (accountResponse != null && accountResponse.getAssets().size() != 0) {
                 WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), accountResponse.getAssets());
                 walletSpinner.setAdapter(adapter);
                 binding.fragKuknosPError.setVisibility(View.GONE);
+            } else {
+                List<KuknosBalance.Balance> noItem = new ArrayList<>();
+                KuknosBalance.Balance temp = new KuknosBalance.Balance();
+                temp.setAssetCode("-1");
+                noItem.add(temp);
+                WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), noItem);
+                walletSpinner.setAdapter(adapter);
             }
         });
     }

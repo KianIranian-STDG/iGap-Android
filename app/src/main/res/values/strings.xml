@@ -2224,7 +2224,7 @@ Want to get it?</string>
     <string name="kuknos_recieve_walletCopy">My Kuknos wallet address is: \n</string>
     <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
     <string name="kuknos_soon_error">Trade will be active soon.</string>
-    <string name="kuknos_panelStr_firstUser">Account was not found or it has no credits. Use Receive menu to get credits.</string>
+    <string name="kuknos_panelStr_firstUser">Account was not found or it has no credits. Use Receive or Buy Peyman menu to get credits.</string>
     <string name="Kuknos_transaction_error1">Transaction is not successful. Please try again later.</string>
     <string name="Kuknos_transaction_error2">Server Error. Please try again later.</string>
     <string name="Kuknos_transaction_error3">Transaction Sequence has NOT found. Please try again later.</string>

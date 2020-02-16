@@ -1,5 +1,6 @@
 package net.iGap.kuknos.view.adapter;
 
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import net.iGap.kuknos.service.model.KuknosTradeResponse;
 import org.stellar.sdk.responses.OfferResponse;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeHistoryAdapter.ViewHolder> {
@@ -78,12 +82,28 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
                     : df.format(Double.parseDouble(model.getBaseAmount())));
             String recieveTXT = "" + (model.getCounterAsset().getType().equals("native") ? "PMN" : model.getCounterAssetCode());
             recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(recieveTXT) : recieveTXT);
-            date.setText(model.getLedgerCloseTime());
+            date.setText(getTime(model.getLedgerCloseTime()));
             date.setVisibility(View.VISIBLE);
             delete.setVisibility(View.GONE);
             price.setText(HelperCalander.isPersianUnicode ?
                     HelperCalander.convertToUnicodeFarsiNumber(df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()))
                     : df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()));
+        }
+
+        private String getTime(String date) {
+            if (date == null || date.isEmpty())
+                return "";
+            date = date.replace("T", " ");
+            date = date.replace("Z", "");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                Date mDate = sdf.parse(date);
+                long timeInMilliseconds = mDate.getTime();
+                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS) + " | " + HelperCalander.getClocktime(timeInMilliseconds, HelperCalander.isLanguagePersian);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return "";
+            }
         }
     }
 }
