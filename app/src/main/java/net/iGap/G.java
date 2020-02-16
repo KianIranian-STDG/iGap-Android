@@ -11,6 +11,8 @@
 package net.iGap;
 
 import android.accounts.Account;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -39,12 +41,10 @@ import com.yariksoffice.lingver.Lingver;
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
+import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
-import net.iGap.observers.interfaces.*;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
@@ -52,11 +52,13 @@ import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.observers.interfaces.*;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
-import net.iGap.api.webservice.JobServiceReconnect;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
@@ -401,6 +403,11 @@ public class G extends ApplicationContext {
             }
             return null;
         });
+
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Token", result);
+        clipboard.setPrimaryClip(clip);
+
         Log.i("abbasiApiToken", "getApiToken: " + tok);
         return result;
     }

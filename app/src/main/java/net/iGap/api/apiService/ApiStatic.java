@@ -9,7 +9,7 @@ class ApiStatic {
     static final String BEEP_TUNES_URL = BASE_URL + SERVICES + VERSION + "beep-tunes/";
     static final String CHANNEL_URL = BASE_URL + SERVICES + VERSION + "channel/";
     static final String KUKNOS_URL = BASE_URL + "kuknos/" + VERSION;
-    static final String PAYMENT_URL = BASE_URL + SERVICES + VERSION + "payment/";
+    static final String PAYMENT_URL = BASE_URL + "payment/";
     static final String ATI_URL = BASE_URL + SERVICES + VERSION + "ati/";
     static final String MCI_URL = BASE_URL + SERVICES + VERSION + "mci/";
     static final String CPAY_URL = BASE_URL + SERVICES + VERSION + "ati/c-pay/";
@@ -17,7 +17,7 @@ class ApiStatic {
     static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
     static final String ELECTRICITY_BILL_URL = BASE_URL + "bill/" + VERSION + "api/";
-    static final String STICKER_URL = "https://api.igap.net/sticker/" + VERSION;
+    static final String STICKER_URL = "https://api.igap.net/sticker-test/" + VERSION;
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
     static final String MOBILE_BANK = BASE_URL + "parsian/" + VERSION;
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
