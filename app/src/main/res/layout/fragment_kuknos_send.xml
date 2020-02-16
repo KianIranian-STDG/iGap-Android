@@ -60,6 +60,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:textColorHint="?iGapSubtitleTextColor"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosSQRCode"
                     app:layout_constraintHorizontal_chainStyle="packed"
@@ -70,6 +71,7 @@
                         android:id="@+id/fragKuknosSWalletAddressET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/iGapEditTextStyle"
                         android:ems="10"
                         android:gravity="start|center"
                         android:hint="@string/kuknos_send_walletAddress"
@@ -81,8 +83,8 @@
                         android:scrollbars="vertical"
                         android:scrollHorizontally="false"
                         android:text="@={viewmodel.walletID}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="18dp" />
+                        android:textSize="@dimen/largeTextSize" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -117,6 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:minHeight="48dp"
+                    android:textColorHint="?iGapSubtitleTextColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSWalletAddressHolder"
@@ -126,6 +129,7 @@
                         android:id="@+id/fragKuknosSTextET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/iGapEditTextStyle"
                         android:ems="10"
                         android:enabled="false"
                         android:gravity="start|center"
@@ -136,8 +140,8 @@
                         android:maxLines="1"
                         android:minHeight="48dp"
                         android:text="@={viewmodel.text}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/dp18" />
+                        android:textSize="@dimen/largeTextSize" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -145,6 +149,7 @@
                     android:id="@+id/fragKuknosSAmountHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textColorHint="?iGapSubtitleTextColor"
                     android:layout_marginTop="10dp"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosSCurrency"
@@ -156,6 +161,7 @@
                         android:id="@+id/fragKuknosSAmountET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/iGapEditTextStyle"
                         android:digits="0123456789."
                         android:ems="10"
                         android:enabled="false"
@@ -167,8 +173,8 @@
                         android:maxLines="1"
                         android:minHeight="48dp"
                         android:text="@={viewmodel.amount}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/dp18" />
+                        android:textSize="@dimen/largeTextSize" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView

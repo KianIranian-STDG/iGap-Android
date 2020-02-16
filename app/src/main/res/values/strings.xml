@@ -2566,5 +2566,6 @@ Want to get it?</string>
     <string name="activated">Activated</string>
     <string name="posted">Posted</string>
     <string name="gift_sticker_inquiry_and_activated">Inquiry and activated</string>
+    <string name="kuknos_send_token_error">Can Not send this token.</string>
 
 </resources>

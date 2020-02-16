@@ -3187,4 +3187,5 @@
     <string name="activated">المنشط</string>
     <string name="posted">نشر</string>
     <string name="gift_sticker_inquiry_and_activated">التحقيق وتفعيلها</string>
+    <string name="kuknos_send_token_error">لا يمكن إرسال هذا الرمز المميز.</string>
 </resources>
