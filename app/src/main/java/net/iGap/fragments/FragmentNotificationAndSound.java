@@ -88,7 +88,6 @@ public class FragmentNotificationAndSound extends BaseFragment {
         showLEDDialog();
         showVibrationDialog();
         showPopupNotification();
-
         showMessageSound();
         showGroupSound();
     }
@@ -222,7 +221,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 int messageDialogSoundMessage = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
                 new MaterialDialog.Builder(getContext()).title(R.string.Ringtone).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(messageDialogSoundMessage, (dialog, view, which, text) -> {
-                            viewModel.getSoundMessagePosition(which);
+                            viewModel.getSoundMessagePosition(which,true);
                             return true;
                         }).positiveText(R.string.B_ok).negativeText(R.string.B_cancel)
                         .onPositive((dialog, which) -> {
@@ -246,7 +245,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             int getGroupSoundSelected = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
             new MaterialDialog.Builder(getContext()).title(R.string.Ringtone).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback()
                     .itemsCallbackSingleChoice(getGroupSoundSelected, (dialog, view, which, text) -> {
-                        viewModel.getSoundGroupPosition(which);
+                        viewModel.getSoundGroupPosition(which,true);
                         return true;
                     }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                     .onPositive((dialog, which) -> {

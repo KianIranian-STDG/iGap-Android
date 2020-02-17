@@ -18,14 +18,10 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
-
-import yogesh.firzen.mukkiasevaigal.S;
-
 public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     public int ledColorMessage;
@@ -40,8 +36,8 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     public ObservableInt callbackVibrateGroup = new ObservableInt(R.string.array_Default);
     public ObservableInt callbackPopUpNotificationMessage = new ObservableInt();
     public ObservableInt callbackPopUpNotificationGroup = new ObservableInt(R.string.st_sound);
-    public SingleLiveEvent<String> callbackSoundMessage = new SingleLiveEvent<>();
-    public SingleLiveEvent<String> callBackSoundGroup = new SingleLiveEvent<>();
+    public ObservableField<String> callbackSoundMessage = new ObservableField<>();
+    public ObservableField<String> callBackSoundGroup = new ObservableField<>();
     public SingleLiveEvent<Boolean> showMessageLedDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showGroupLedDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showMessageVibrationDialog = new SingleLiveEvent<>();
@@ -74,8 +70,8 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         setGroupVibrateTime(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0));
         setPopupNotificationMessageText(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0));
         setPopupNotificationGroupText(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0));
-        getSoundMessagePosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0));
-        getSoundGroupPosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0));
+        getSoundMessagePosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0),false);
+        getSoundGroupPosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0),false);
     }
 
     //===============================================================================
@@ -416,16 +412,18 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, groupChooseSound).apply();
     }
 
-    public void getSoundMessagePosition(int which) {
+    public void getSoundMessagePosition(int which, boolean isSetSound) {
         messageChooseSound = which;
-        callbackSoundMessage.setValue(soundList[which]);
-        playSound(which);
+        callbackSoundMessage.set(soundList[which]);
+        if (isSetSound)
+            playSound(which);
     }
 
-    public void getSoundGroupPosition(int which) {
+    public void getSoundGroupPosition(int which, boolean isSound) {
         groupChooseSound = which;
-        callBackSoundGroup.setValue(soundList[which]);
-        playSound(which);
+        callBackSoundGroup.set(soundList[which]);
+        if (isSound)
+            playSound(which);
     }
 
     /**
