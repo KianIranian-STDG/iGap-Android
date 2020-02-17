@@ -3549,6 +3549,10 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    public boolean isKeyboardViewOpen() {
+        return keyboardViewVisible;
+    }
+
     private void closeKeyboard() {
         AndroidUtils.hideKeyboard(edtChat);
     }
