@@ -8,7 +8,7 @@
  * All rights reserved.
  */
 
-package net.iGap.adapter;
+package net.iGap.adapter.items;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -23,9 +23,9 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageHelper;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
 import net.iGap.observers.interfaces.OnRotateImage;
-import net.iGap.module.structs.StructBottomSheet;
 
 import org.jetbrains.annotations.NotNull;
 
