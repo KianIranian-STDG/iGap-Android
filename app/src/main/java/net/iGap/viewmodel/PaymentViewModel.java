@@ -9,15 +9,17 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.helper.HelperCalander;
 import net.iGap.model.payment.CheckOrderResponse;
 import net.iGap.model.payment.CheckOrderStatusResponse;
 import net.iGap.model.payment.Payment;
 import net.iGap.model.payment.PaymentResult;
 import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.helper.HelperCalander;
 import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Locale;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 
@@ -237,7 +239,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 }
                 closeButtonColor.set(R.color.accent);
                 paymentRRN.set(data.getPaymentInfo().getRrn());
-                paymentResult = new PaymentResult(data.getPaymentInfo().getOrderId(), data.isPaymentSuccess());
+                paymentResult = new PaymentResult(data.getPaymentInfo().getOrderId(), String.format(Locale.US, "%.0f", data.getPaymentInfo().getRrn()), data.isPaymentSuccess());
             }
 
             @Override

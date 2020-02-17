@@ -12,9 +12,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentEnterNationalCodeForActivateGiftStickerBinding;
-import net.iGap.fragments.emoji.struct.StructIGSticker;
 
 public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
     private boolean canForward;
@@ -23,7 +25,7 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
     private EnterNationalCodeForActivateGiftStickerFragment() {
     }
 
-    public static EnterNationalCodeForActivateGiftStickerFragment getInstance(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, boolean canForward) {
+    public static EnterNationalCodeForActivateGiftStickerFragment getInstance(View.OnClickListener sendOtherListener, boolean canForward) {
         EnterNationalCodeForActivateGiftStickerFragment fragment = new EnterNationalCodeForActivateGiftStickerFragment();
         fragment.canForward = canForward;
         fragment.sendOtherListener = sendOtherListener;
@@ -44,8 +46,14 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_national_code_for_activate_gift_sticker, container, false);
         binding.setViewModel(viewModel);
-        binding.forward.setVisibility(canForward ? View.GONE : View.VISIBLE);
+        binding.forward.setVisibility(canForward ? View.VISIBLE : View.GONE);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.onStart();
     }
 
     @Override
@@ -60,7 +68,18 @@ public class EnterNationalCodeForActivateGiftStickerFragment extends Fragment {
 
         viewModel.getGoToNextStep().observe(getViewLifecycleOwner(), goNext -> {
             if (goNext != null && goNext && getParentFragment() instanceof MainGiftStickerCardFragment) {
-                ((MainGiftStickerCardFragment) getParentFragment()).loadGiftStickerCardDetailFragment();
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(R.string.app_name)
+                        .content(R.string.active_gift_card_note)
+                        .positiveText(R.string.ok)
+                        .onPositive((dialog, which) -> {
+                            ((MainGiftStickerCardFragment) getParentFragment()).loadGiftStickerCardDetailFragment(((MainGiftStickerCardFragment) getParentFragment()).getCurrentMode());
+                            dialog.dismiss();
+                        })
+                        .onNegative((dialog, which) -> dialog.dismiss())
+                        .negativeText(R.string.cancel)
+                        .show();
+
             }
         });
 

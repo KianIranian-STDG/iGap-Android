@@ -2,7 +2,6 @@ package net.iGap.model.kuknos.Parsian;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.stellar.sdk.Asset;
 import org.stellar.sdk.responses.Link;
 import org.stellar.sdk.responses.Response;
 
@@ -29,9 +28,9 @@ public class KuknosOfferResponse {
         @SerializedName("seller")
         private final String seller;
         @SerializedName("selling")
-        private final Asset selling;
+        private final KuknosAsset.Asset selling;
         @SerializedName("buying")
-        private final Asset buying;
+        private final KuknosAsset.Asset buying;
         @SerializedName("amount")
         private final String amount;
         @SerializedName("price")
@@ -43,7 +42,7 @@ public class KuknosOfferResponse {
         @SerializedName("_links")
         private final org.stellar.sdk.responses.OfferResponse.Links links;
 
-        public OfferResponse(Long id, String pagingToken, String seller, Asset selling, Asset buying, String amount, String price, Integer lastModifiedLedger, String lastModifiedTime, org.stellar.sdk.responses.OfferResponse.Links links) {
+        public OfferResponse(Long id, String pagingToken, String seller, KuknosAsset.Asset selling, KuknosAsset.Asset buying, String amount, String price, Integer lastModifiedLedger, String lastModifiedTime, org.stellar.sdk.responses.OfferResponse.Links links) {
             this.id = id;
             this.pagingToken = pagingToken;
             this.seller = seller;
@@ -68,11 +67,11 @@ public class KuknosOfferResponse {
             return seller;
         }
 
-        public Asset getSelling() {
+        public KuknosAsset.Asset getSelling() {
             return selling;
         }
 
-        public Asset getBuying() {
+        public KuknosAsset.Asset getBuying() {
             return buying;
         }
 

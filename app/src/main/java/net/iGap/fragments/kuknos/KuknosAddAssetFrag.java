@@ -19,24 +19,23 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentKuknosAddAssetBinding;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.model.kuknos.Parsian.KuknosAsset;
-import net.iGap.model.kuknos.Parsian.KuknosBalance;
 import net.iGap.adapter.kuknos.AddAssetAdvAdapter;
 import net.iGap.adapter.kuknos.AddAssetCurrentAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.databinding.FragmentKuknosAddAssetBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.model.kuknos.Parsian.KuknosAsset;
+import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosAddAssetVM;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class KuknosAddAssetFrag extends BaseFragment {
+public class KuknosAddAssetFrag extends BaseAPIViewFrag<KuknosAddAssetVM> {
 
     private FragmentKuknosAddAssetBinding binding;
-    private KuknosAddAssetVM kuknosAddAssetVM;
 
     public static KuknosAddAssetFrag newInstance() {
         return new KuknosAddAssetFrag();
@@ -45,7 +44,7 @@ public class KuknosAddAssetFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosAddAssetVM = ViewModelProviders.of(this).get(KuknosAddAssetVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosAddAssetVM.class);
     }
 
     @Nullable
@@ -53,7 +52,7 @@ public class KuknosAddAssetFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_add_asset, container, false);
-        binding.setViewmodel(kuknosAddAssetVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -90,8 +89,8 @@ public class KuknosAddAssetFrag extends BaseFragment {
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(getContext());
         binding.fragKuknosAddARecycler.setLayoutManager(layoutManager2);
 
-        kuknosAddAssetVM.getAccountDataFromServer();
-        kuknosAddAssetVM.getAssetDataFromServer();
+        viewModel.getAccountDataFromServer();
+        viewModel.getAssetDataFromServer();
         onErrorObserver();
         onDataChanged();
         onProgress();
@@ -100,7 +99,7 @@ public class KuknosAddAssetFrag extends BaseFragment {
 
     private void onErrorObserver() {
 
-        kuknosAddAssetVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 Snackbar snackbar = Snackbar.make(binding.fragKuknosAddAContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
@@ -111,7 +110,7 @@ public class KuknosAddAssetFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        kuknosAddAssetVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosAddAProgressV.setVisibility(View.VISIBLE);
             } else {
@@ -119,22 +118,22 @@ public class KuknosAddAssetFrag extends BaseFragment {
             }
         });
 
-        kuknosAddAssetVM.getProgressStateAdv().observe(getViewLifecycleOwner(), aBoolean -> {
+        /*viewModel.getProgressStateAdv().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosAddAProgressVAdv.setVisibility(View.VISIBLE);
             } else {
                 binding.fragKuknosAddAProgressVAdv.setVisibility(View.GONE);
             }
-        });
+        });*/
     }
 
     private void onDataChanged() {
-        kuknosAddAssetVM.getAccountPageMutableLiveData().observe(getViewLifecycleOwner(), this::initCurrentAssets);
-        kuknosAddAssetVM.getAdvAssetPageMutableLiveData().observe(getViewLifecycleOwner(), this::initAdvPager);
+        viewModel.getAccountPageMutableLiveData().observe(getViewLifecycleOwner(), this::initCurrentAssets);
+        viewModel.getAdvAssetPageMutableLiveData().observe(getViewLifecycleOwner(), this::initAdvPager);
     }
 
     private void onAddBTN() {
-        kuknosAddAssetVM.getOpenAddList().observe(getViewLifecycleOwner(), integer -> initNewAssetBS(kuknosAddAssetVM.getAssetPageMutableLiveData().getValue()));
+        viewModel.getOpenAddList().observe(getViewLifecycleOwner(), integer -> initNewAssetBS(viewModel.getAssetPageMutableLiveData().getValue()));
     }
 
     private void initNewAssetBS(KuknosAsset response) {
@@ -169,13 +168,13 @@ public class KuknosAddAssetFrag extends BaseFragment {
     }
 
     private void addAsset(int position) {
-        kuknosAddAssetVM.addAsset(position);
+        viewModel.addAsset(position);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        AddAssetAdvAdapter adapter = new AddAssetAdvAdapter(kuknosAddAssetVM.getAdvAssetPageMutableLiveData().getValue().getAssets(), getContext(), getDisplayMetrics());
+        AddAssetAdvAdapter adapter = new AddAssetAdvAdapter(viewModel.getAdvAssetPageMutableLiveData().getValue().getAssets(), getContext(), getDisplayMetrics());
         adapter.setItemMargin((int) getResources().getDimension(R.dimen.pager_margin));
         adapter.updateDisplayMetrics();
         binding.fragKuknosAddARecyclerAdv.setAdapter(adapter);

@@ -6,17 +6,15 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.giftStickers.enterNationalCode.CheckNationalCodeResponse;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.realm.RealmUserInfo;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.interfaces.ResponseCallback;
 
 public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIViewModel {
 
@@ -29,13 +27,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
     private SingleLiveEvent<Integer> showRequestErrorMessage = new SingleLiveEvent<>();
 
     public EnterNationalCodeForActivateGiftStickerViewModel() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null && realmUserInfo.getNationalCode() != null && realmUserInfo.getNationalCode().length() == 10) {
-                String nationalCode = realmUserInfo.getNationalCode();
-                nationalCodeField.set(nationalCode);
-            }
-        });
+
     }
 
     public void onActiveButtonClicked(String nationalCode) {
@@ -90,6 +82,11 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
         }
     }
 
+    public void onStart() {
+        if (G.getNationalCode() != null)
+            nationalCodeField.set(G.getNationalCode());
+    }
+
     public ObservableBoolean getHasError() {
         return hasError;
     }
@@ -117,4 +114,5 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
     public SingleLiveEvent<Integer> getShowRequestErrorMessage() {
         return showRequestErrorMessage;
     }
+
 }

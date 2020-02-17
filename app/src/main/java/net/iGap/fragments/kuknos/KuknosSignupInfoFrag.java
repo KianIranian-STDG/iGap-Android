@@ -12,7 +12,6 @@ import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +32,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosSignupInfoBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -42,10 +41,9 @@ import net.iGap.viewmodel.kuknos.KuknosSignupInfoVM;
 
 import org.jetbrains.annotations.NotNull;
 
-public class KuknosSignupInfoFrag extends BaseFragment {
+public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
 
     private FragmentKuknosSignupInfoBinding binding;
-    private KuknosSignupInfoVM kuknosSignupInfoVM;
 
     public static KuknosSignupInfoFrag newInstance() {
         return new KuknosSignupInfoFrag();
@@ -54,8 +52,8 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosSignupInfoVM = ViewModelProviders.of(this).get(KuknosSignupInfoVM.class);
-        /*kuknosSignupInfoVM = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+        viewModel = ViewModelProviders.of(this).get(KuknosSignupInfoVM.class);
+        /*viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -69,7 +67,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_signup_info, container, false);
-        binding.setViewmodel(kuknosSignupInfoVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -97,7 +95,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosSIToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        /*if (kuknosSignupInfoVM.loginStatus()) {
+        /*if (viewModel.loginStatus()) {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
@@ -114,7 +112,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NotNull View textView) {
-                kuknosSignupInfoVM.getTermsAndCond();
+                viewModel.getTermsAndCond();
             }
 
             @Override
@@ -139,7 +137,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     }
 
     private void onTermsDownload() {
-        kuknosSignupInfoVM.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s != null)
@@ -163,13 +161,13 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     private void saveRegisterInfo() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("RegisterInfo", new Gson().toJson(kuknosSignupInfoVM.getKuknosSignupM()));
+        editor.putString("RegisterInfo", new Gson().toJson(viewModel.getKuknosSignupM()));
         editor.apply();
     }
 
     private void onError() {
 
-        kuknosSignupInfoVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 switch (errorM.getMessage()) {
                     case "0":
@@ -208,7 +206,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
 
     private void onGoNextPage() {
 
-        kuknosSignupInfoVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
                 saveRegisterInfo();
 
@@ -226,7 +224,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     }
 
     private void onCheckUsernameState() {
-        kuknosSignupInfoVM.getCheckUsernameState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        viewModel.getCheckUsernameState().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
                 if (integer == 0) {
@@ -262,7 +260,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                kuknosSignupInfoVM.setUsernameIsValid(false);
+                viewModel.setUsernameIsValid(false);
             }
 
             @Override
@@ -271,12 +269,10 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         });
         binding.fragKuknosSIUsername.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                kuknosSignupInfoVM.cancelUsernameServer();
+                viewModel.cancelUsernameServer();
             } else {
-                //TODO delete log
-                Log.d("amini", "onCheckUsernameETFocus: in here");
-                if (!kuknosSignupInfoVM.getProgressSendDServerState().getValue())
-                    kuknosSignupInfoVM.isUsernameValid(false);
+                if (!viewModel.getProgressSendDServerState().getValue())
+                    viewModel.isUsernameValid(false);
             }
         });
         binding.fragKuknosSIName.addTextChangedListener(new TextWatcher() {
@@ -358,7 +354,7 @@ public class KuknosSignupInfoFrag extends BaseFragment {
     }
 
     private void progressSubmitVisibility() {
-        kuknosSignupInfoVM.getProgressSendDServerState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressSendDServerState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosSISubmit.setText(getString(R.string.kuknos_SignupInfo_submitConnecting));
                 binding.fragKuknosSIUsername.setEnabled(false);

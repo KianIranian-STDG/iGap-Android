@@ -55,11 +55,6 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
@@ -70,6 +65,11 @@ public class GiftStickerPackageListFragment extends ObserverFragment<GiftSticker
                 ((GiftStickerMainFragment) getParentFragment()).loadStickerPackageItemPage(giftStickerPackage);
             }
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

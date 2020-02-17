@@ -25,12 +25,12 @@ import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.FragmentShowMember;
+import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
 import net.iGap.observers.interfaces.PaymentCallBack;
-import net.iGap.fragments.PaymentFragment;
 
 /**
  * this is helper class for open new fragment
@@ -342,8 +342,8 @@ public class HelperFragment {
         load();
     }
 
-    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, boolean canForward, View.OnClickListener sendOtherListener, int mode) {
-        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, canForward, sendOtherListener, mode);
+    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, int mode) {
+        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, sendOtherListener, mode);
         fragment.show(fragmentManager, "gift sticker card");
     }
 

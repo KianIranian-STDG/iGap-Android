@@ -5,11 +5,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.StickerApi;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
@@ -24,10 +22,12 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.RSACipher;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.realm.RealmStickerGroup;
 import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickerItem;
-import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.realm.RealmStickerItemFields;
 
 import org.jetbrains.annotations.NotNull;
@@ -206,7 +206,7 @@ public class StickerRepository {
         return stickerApi.giftCardStatus(giftStickerId).subscribeOn(Schedulers.newThread());
     }
 
-    private Single<RsaDataModel> getCardDataEncryptedDataApiService(String mobileNumber, String nationalCode, String stickerId) {
+    private Single<RsaDataModel> getActiveGiftCardApiService(String mobileNumber, String nationalCode, String stickerId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("national_code", nationalCode);
         jsonObject.addProperty("tel_num", mobileNumber);
@@ -547,8 +547,8 @@ public class StickerRepository {
         return getGiftCardStatusApiService(giftCardId).map(StructIGGiftSticker::new);
     }
 
-    public Single<CardDetailDataModel> getCardInfo(String stickerId, String nationalCode, String mobileNumber) {
-        return getCardDataEncryptedDataApiService(mobileNumber, nationalCode, stickerId)
+    public Single<CardDetailDataModel> getActiveGiftCard(String stickerId, String nationalCode, String mobileNumber) {
+        return getActiveGiftCardApiService(mobileNumber, nationalCode, stickerId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(rsaDataModel -> {
                     CardDetailDataModel cardDetailDataModel = null;

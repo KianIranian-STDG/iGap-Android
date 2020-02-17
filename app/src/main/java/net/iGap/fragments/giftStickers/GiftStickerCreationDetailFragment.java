@@ -12,12 +12,13 @@ import androidx.annotation.Nullable;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
+import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
-import net.iGap.module.mobileBank.JalaliCalendar;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.dialog.BaseBottomSheet;
+import net.iGap.module.mobileBank.JalaliCalendar;
 
 public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
     private StructIGGiftSticker structIGGiftSticker;
@@ -50,7 +51,7 @@ public class GiftStickerCreationDetailFragment extends BaseBottomSheet {
         activeBtn.setVisibility(canForward ? View.VISIBLE : View.GONE);
 
         activeBtn.setOnClickListener(v -> {
-            new HelperFragment(getParentFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), structIGGiftSticker.isForward(), clickListener, 0);
+            new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGGiftSticker.getStructIGSticker(), clickListener, structIGGiftSticker.isForward() ? MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_OUT_FORWARD : MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_FORWARD);
             dismiss();
         });
 

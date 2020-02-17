@@ -2,16 +2,18 @@ package net.iGap.repository.kuknos;
 
 import android.util.Log;
 
-import net.iGap.observers.interfaces.HandShakeCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.model.kuknos.KuknosPaymentResponse;
 import net.iGap.model.kuknos.KuknosSendM;
-import net.iGap.model.kuknos.Parsian.IgapPayment;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.model.kuknos.Parsian.KuknosBankPayment;
+import net.iGap.model.kuknos.Parsian.KuknosFederation;
 import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
 import net.iGap.model.kuknos.Parsian.KuknosHash;
 import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 
 public class PanelRepo {
 
@@ -57,12 +59,20 @@ public class PanelRepo {
         kuknosAPIRepository.getSpecificAssets(assetCode, handShakeCallback, apiResponse);
     }
 
-    public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<IgapPayment>> apiResponse) {
+    public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBankPayment>> apiResponse) {
         kuknosAPIRepository.buyAsset(userRepo.getAccountID(), assetCode, assetAmount, totalPrice, description, handShakeCallback, apiResponse);
     }
 
     public void getFee(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFeeModel>> apiResponse) {
         kuknosAPIRepository.getFees(handShakeCallback, apiResponse);
+    }
+
+    public void convertFederation(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
+        kuknosAPIRepository.convertFederation(username, handShakeCallback, apiResponse);
+    }
+
+    public void getPaymentData(String RRA, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosPaymentResponse>> apiResponse) {
+        kuknosAPIRepository.getPaymentData(RRA, handShakeCallback, apiResponse);
     }
 
     public boolean isPinSet() {

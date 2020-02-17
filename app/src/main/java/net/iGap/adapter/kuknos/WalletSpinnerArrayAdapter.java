@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.squareup.picasso.Picasso;
 
@@ -58,7 +59,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
             walletPic.setVisibility(View.VISIBLE);
             // config text
-            walletName.setTypeface(null, Typeface.BOLD);
+            walletName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font), Typeface.BOLD);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             // set style
             ConstraintLayout constraintLayout = layout.findViewById(R.id.fragKuknosPconstraint);
@@ -72,10 +73,14 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
             constraintSet.applyTo(constraintLayout);*/
         } else {
             // config text
-            walletName.setTypeface(null, Typeface.NORMAL);
+            walletName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font), Typeface.NORMAL);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             // set
-            walletName.setText("" + (wallets.get(position).getAsset().getType().equals("native") ? "PMN" : wallets.get(position).getAssetCode()));
+            // set if asset code is -1 then it's no asset and we add no item
+            if (wallets.get(position).getAssetCode() != null && wallets.get(position).getAssetCode().equals("-1"))
+                walletName.setText(context.getResources().getString(R.string.no_item));
+            else
+                walletName.setText("" + (wallets.get(position).getAsset().getType().equals("native") ? "PMN" : wallets.get(position).getAssetCode()));
         }
 
         return layout;
@@ -84,7 +89,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        View layout = convertView;
+        View layout;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layout = inflater.inflate(R.layout.fragment_kuknos_panel_spin_cell, parent, false);
@@ -102,7 +107,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
             walletPic.setVisibility(View.VISIBLE);
             // config text
-            walletName.setTypeface(null, Typeface.BOLD);
+            walletName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font), Typeface.BOLD);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             walletName.setTextColor(context.getResources().getColor(R.color.white));
             // set style
@@ -117,10 +122,13 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
             constraintSet.applyTo(constraintLayout);*/
         } else {
             // config text
-            walletName.setTypeface(null, Typeface.NORMAL);
+            walletName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font), Typeface.NORMAL);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-            // set
-            walletName.setText("" + (wallets.get(position).getAsset().getType().equals("native") ? "PMN" : wallets.get(position).getAssetCode()));
+            // set if asset code is -1 then it's no asset and we add no item
+            if (wallets.get(position).getAssetCode() != null && wallets.get(position).getAssetCode().equals("-1"))
+                walletName.setText(context.getResources().getString(R.string.no_item));
+            else
+                walletName.setText("" + (wallets.get(position).getAsset().getType().equals("native") ? "PMN" : wallets.get(position).getAssetCode()));
         }
 
         return layout;
@@ -128,7 +136,10 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
 
     @Override
     public int getCount() {
-        return wallets.size() + 1;
+        if (wallets.get(0).getAssetCode().equals("-1"))
+            return wallets.size();
+        else
+            return wallets.size() + 1;
     }
 
     @Override

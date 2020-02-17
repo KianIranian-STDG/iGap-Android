@@ -20,17 +20,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosLogoutBinding;
-import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosLogoutVM;
 
 public class KuknosLogoutFrag extends BaseFragment {
 
     private FragmentKuknosLogoutBinding binding;
-    private KuknosLogoutVM kuknoslogoutVM;
+    private KuknosLogoutVM viewModel;
 
     public static KuknosLogoutFrag newInstance() {
         return new KuknosLogoutFrag();
@@ -39,7 +39,7 @@ public class KuknosLogoutFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknoslogoutVM = ViewModelProviders.of(this).get(KuknosLogoutVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosLogoutVM.class);
     }
 
     @Nullable
@@ -47,7 +47,7 @@ public class KuknosLogoutFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_logout, container, false);
-        binding.setViewmodel(kuknoslogoutVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -83,7 +83,7 @@ public class KuknosLogoutFrag extends BaseFragment {
 
 
     private void onError() {
-        kuknoslogoutVM.getError().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState() && errorM.getMessage().equals("0")) {
                 binding.fragKuknosLogoutPassHolder.setError(getResources().getString(errorM.getResID()));
                 binding.fragKuknosLogoutPassHolder.requestFocus();
@@ -104,7 +104,7 @@ public class KuknosLogoutFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        kuknoslogoutVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.fragKuknosLogoutProgressV.setVisibility(View.VISIBLE);
                 binding.fragKuknosLogoutPass.setEnabled(false);
@@ -137,7 +137,7 @@ public class KuknosLogoutFrag extends BaseFragment {
     }
 
     private void onNextPage() {
-        kuknoslogoutVM.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 updateRegisterInfo();
                 popBackStackFragment();

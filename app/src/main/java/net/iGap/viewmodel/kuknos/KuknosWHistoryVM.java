@@ -3,16 +3,16 @@ package net.iGap.viewmodel.kuknos;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.repository.kuknos.PanelRepo;
-import net.iGap.model.kuknos.ErrorM;
+import net.iGap.model.kuknos.KuknosError;
 import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.kuknos.PanelRepo;
 
 public class KuknosWHistoryVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosOperationResponse> listMutableLiveData;
-    private MutableLiveData<ErrorM> errorM;
+    private MutableLiveData<KuknosError> errorM;
     private MutableLiveData<Boolean> progressState;
     private PanelRepo panelRepo = new PanelRepo();
 
@@ -48,11 +48,11 @@ public class KuknosWHistoryVM extends BaseAPIViewModel {
         return listMutableLiveData;
     }
 
-    public MutableLiveData<ErrorM> getErrorM() {
+    public MutableLiveData<KuknosError> getErrorM() {
         return errorM;
     }
 
-    public void setErrorM(MutableLiveData<ErrorM> errorM) {
+    public void setErrorM(MutableLiveData<KuknosError> errorM) {
         this.errorM = errorM;
     }
 

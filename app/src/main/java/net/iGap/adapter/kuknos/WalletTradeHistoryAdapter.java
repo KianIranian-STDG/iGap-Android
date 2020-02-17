@@ -1,5 +1,6 @@
 package net.iGap.adapter.kuknos;
 
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,10 @@ import net.iGap.model.kuknos.Parsian.KuknosTradeResponse;
 
 import org.stellar.sdk.responses.OfferResponse;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeHistoryAdapter.ViewHolder> {
@@ -54,6 +59,7 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
         private TextView recieve;
         private TextView date;
         private TextView delete;
+        private TextView price;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,35 +69,41 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
             recieve = itemView.findViewById(R.id.kuknos_tradeHistoryCell_receive);
             date = itemView.findViewById(R.id.kuknos_tradeHistoryCell_date);
             delete = itemView.findViewById(R.id.kuknos_tradeHistoryCell_delete);
+            price = itemView.findViewById(R.id.kuknos_tradeHistoryCell_price);
 
         }
 
         public void initView(KuknosTradeResponse.TradeResponse model) {
-            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAsset().getType()) : model.getBaseAsset().getType());
-            amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBaseAmount()) : model.getBaseAmount());
-            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getCounterAsset().getType()) : model.getCounterAsset().getType());
-//            if (mode == 0) {
-            date.setText(model.getLedgerCloseTime());
+            String sellTXT = "" + (model.getBaseAsset().getType().equals("native") ? "PMN" : model.getBaseAssetCode());
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(sellTXT) : sellTXT);
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            amount.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.parseDouble(model.getBaseAmount())))
+                    : df.format(Double.parseDouble(model.getBaseAmount())));
+            String recieveTXT = "" + (model.getCounterAsset().getType().equals("native") ? "PMN" : model.getCounterAssetCode());
+            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(recieveTXT) : recieveTXT);
+            date.setText(getTime(model.getLedgerCloseTime()));
             date.setVisibility(View.VISIBLE);
             delete.setVisibility(View.GONE);
-            /*} else {
-                date.setVisibility(View.GONE);
-                delete.setVisibility(View.VISIBLE);
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(context);
-                        defaultRoundDialog.setTitle(context.getResources().getString(R.string.kuknos_tradeDialogDelete_title))
-                                .setMessage(context.getResources().getString(R.string.kuknos_tradeDialogDelete_message));
-                        defaultRoundDialog.setPositiveButton(context.getResources().getString(R.string.kuknos_tradeDialogDelete_btn), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                deleteCell(model);
-                            }
-                        });
-                        defaultRoundDialog.show();
-                    }
-                });
-            }*/
+            price.setText(HelperCalander.isPersianUnicode ?
+                    HelperCalander.convertToUnicodeFarsiNumber(df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()))
+                    : df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()));
+        }
+
+        private String getTime(String date) {
+            if (date == null || date.isEmpty())
+                return "";
+            date = date.replace("T", " ");
+            date = date.replace("Z", "");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                Date mDate = sdf.parse(date);
+                long timeInMilliseconds = mDate.getTime();
+                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS) + " | " + HelperCalander.getClocktime(timeInMilliseconds, HelperCalander.isLanguagePersian);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return "";
+            }
         }
     }
 }

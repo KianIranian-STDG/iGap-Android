@@ -10,18 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.bumptech.glide.Glide;
-
 import net.iGap.G;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.observers.eventbus.EventListener;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 
 import java.io.File;
 
@@ -65,6 +64,7 @@ public class StickerView extends FrameLayout implements EventListener {
 
         if (stickerIv == null && type == StructIGSticker.ANIMATED_STICKER) {
             stickerIv = new AnimatedStickerCell(getContext());
+            ((AnimatedStickerCell) stickerIv).setFailureListener(Throwable::printStackTrace);
             addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
         } else if (stickerIv == null) {
             stickerIv = new AppCompatImageView(getContext());
@@ -74,8 +74,8 @@ public class StickerView extends FrameLayout implements EventListener {
         if (hasFileOnLocal()) {
             if (type == StructIGSticker.ANIMATED_STICKER && stickerIv instanceof AnimatedStickerCell) {
                 ((AnimatedStickerCell) stickerIv).playAnimation(viewPath);
-            } else {
-                Glide.with(getContext()).load(viewPath).into(stickerIv);
+            } else if (!(stickerIv instanceof AnimatedStickerCell)) {
+                ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath);
             }
         } else {
             if (type == StructIGSticker.NORMAL_STICKER) {
@@ -126,10 +126,10 @@ public class StickerView extends FrameLayout implements EventListener {
                 String fileToken = (String) message[1];
 
                 if (viewToken != null && viewToken.equals(fileToken)) {
-                    if (viewType == StructIGSticker.ANIMATED_STICKER) {
+                    if (viewType == StructIGSticker.ANIMATED_STICKER && stickerIv instanceof AnimatedStickerCell) {
                         ((AnimatedStickerCell) stickerIv).playAnimation(filePath);
                     } else if (filePath.equals(viewPath)) {
-                        Glide.with(getContext()).load(filePath).into(stickerIv);
+                        ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath);
                     }
                 }
             } else if (id == EventManager.EMOJI_LOADED) {

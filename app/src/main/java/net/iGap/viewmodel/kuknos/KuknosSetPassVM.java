@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.model.kuknos.ErrorM;
+import net.iGap.model.kuknos.KuknosError;
 
 public class KuknosSetPassVM extends ViewModel {
 
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> nextPage;
     private String PIN;
     private String PIN1;
@@ -28,7 +28,7 @@ public class KuknosSetPassVM extends ViewModel {
             PIN = PIN1 + PIN2 + PIN3 + PIN4;
             nextPage.setValue(true);
         } else {
-            error.setValue(new ErrorM(true, "Set Pin", "0", R.string.kuknos_SetPass_error));
+            error.setValue(new KuknosError(true, "Set Pin", "0", R.string.kuknos_SetPass_error));
         }
     }
 
@@ -66,11 +66,11 @@ public class KuknosSetPassVM extends ViewModel {
         this.PIN4 = PIN4;
     }
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

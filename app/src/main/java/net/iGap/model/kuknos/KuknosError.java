@@ -1,16 +1,16 @@
 package net.iGap.model.kuknos;
 
-public class ErrorM {
+public class KuknosError {
 
     private String title;
     private String message;
     private boolean state;
     private int resID;
 
-    public ErrorM() {
+    public KuknosError() {
     }
 
-    public ErrorM(boolean state, String title, String message, int resID) {
+    public KuknosError(boolean state, String title, String message, int resID) {
         this.state = state;
         this.title = title;
         this.message = message;

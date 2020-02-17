@@ -2,15 +2,15 @@ package net.iGap.repository.kuknos;
 
 import android.util.Log;
 
-import net.iGap.module.accountManager.DbManager;
-import net.iGap.observers.interfaces.HandShakeCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.module.kuknos.mnemonic.Wallet;
-import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.model.kuknos.KuknosSignupM;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.model.kuknos.Parsian.KuknosUserInfo;
 import net.iGap.model.kuknos.Parsian.KuknosUsernameStatus;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.kuknos.mnemonic.Wallet;
+import net.iGap.module.kuknos.mnemonic.WalletException;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmKuknos;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
@@ -49,6 +49,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }
@@ -59,6 +60,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic end: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }
@@ -69,6 +71,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }
@@ -79,6 +82,7 @@ public class UserRepo {
             RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
             Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
         } catch (Exception e) {
+            e.printStackTrace();
             RealmKuknos.updateMnemonic("-1");
         }
     }
@@ -97,9 +101,10 @@ public class UserRepo {
     }
 
     public void generateKeyPairWithMnemonicAndPIN() throws WalletException {
+//        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosMnemonic());
+//        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosPIN());
         KeyPair pair = Wallet.createKeyPair(realmKuknos.getKuknosMnemonic().toCharArray(), realmKuknos.getKuknosPIN().toCharArray(), 0);
         RealmKuknos.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
-//        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosMnemonic());
 //        Log.d("amini", "generateKeyPairWithMnemonic: seed :" + new String(pair.getSecretSeed()));
 //        Log.d("amini", "generateKeyPairWithMnemonic: public :" + pair.getAccountId());
     }

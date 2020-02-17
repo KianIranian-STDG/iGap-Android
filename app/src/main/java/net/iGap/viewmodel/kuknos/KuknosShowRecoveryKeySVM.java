@@ -6,12 +6,12 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.model.kuknos.KuknosError;
 import net.iGap.repository.kuknos.UserRepo;
-import net.iGap.model.kuknos.ErrorM;
 
 public class KuknosShowRecoveryKeySVM extends ViewModel {
 
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> nextPage;
     private ObservableField<String> keys = new ObservableField<>();
 
@@ -38,11 +38,11 @@ public class KuknosShowRecoveryKeySVM extends ViewModel {
 
     //Setter and Getter
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

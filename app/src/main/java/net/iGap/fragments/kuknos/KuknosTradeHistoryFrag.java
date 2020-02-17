@@ -12,16 +12,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
+import net.iGap.adapter.kuknos.WalletTradeHistoryAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosTraceHistoryBinding;
 import net.iGap.module.dialog.DefaultRoundDialog;
-import net.iGap.fragments.BaseFragment;
-import net.iGap.adapter.kuknos.WalletTradeHistoryAdapter;
 import net.iGap.viewmodel.kuknos.KuknosTradeHistoryVM;
 
-public class KuknosTradeHistoryFrag extends BaseFragment {
+public class KuknosTradeHistoryFrag extends BaseAPIViewFrag<KuknosTradeHistoryVM> {
 
     private FragmentKuknosTraceHistoryBinding binding;
-    private KuknosTradeHistoryVM kuknosTradeHistoryVM;
 
     public static KuknosTradeHistoryFrag newInstance() {
         return new KuknosTradeHistoryFrag();
@@ -30,7 +29,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosTradeHistoryVM = ViewModelProviders.of(this).get(KuknosTradeHistoryVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosTradeHistoryVM.class);
     }
 
     @Nullable
@@ -54,7 +53,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.kuknosTradeHistoryRecycler.setLayoutManager(layoutManager);
 
-        kuknosTradeHistoryVM.getDataFromServer();
+        viewModel.getDataFromServer();
 
         onError();
         onProgressVisibility();
@@ -62,8 +61,8 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosTradeHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), offerResponsePage -> {
-            if (offerResponsePage.getTrades().size() != 0) {
+        viewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), offerResponsePage -> {
+            if (offerResponsePage.getTrades() != null && offerResponsePage.getTrades().size() != 0) {
                 WalletTradeHistoryAdapter mAdapter = new WalletTradeHistoryAdapter(offerResponsePage.getTrades());
                 binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
             } else {
@@ -73,7 +72,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     }
 
     private void onError() {
-        kuknosTradeHistoryVM.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
+        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
                 DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
                 defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
@@ -88,7 +87,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     }
 
     private void onProgressVisibility() {
-        kuknosTradeHistoryVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.kuknosTradeHistoryProgressV.setVisibility(View.VISIBLE);
             } else {

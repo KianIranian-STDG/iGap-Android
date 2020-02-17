@@ -21,7 +21,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class GiftStickerCardDetailFragment extends Fragment {
     private StructIGSticker structIGSticker;
-    private int mode = 0;
+    private int mode = -1;
 
     public static GiftStickerCardDetailFragment getInstance(StructIGSticker structIGSticker, int mode) {
         GiftStickerCardDetailFragment giftStickerCardDetailFragment = new GiftStickerCardDetailFragment();
@@ -54,19 +54,23 @@ public class GiftStickerCardDetailFragment extends Fragment {
         viewModel.subscribe();
 
         viewModel.getCardDetailLiveData().observe(getViewLifecycleOwner(), cardDetailDataModel -> {
-            String cardNumber = cardDetailDataModel.getCardNo().substring(0, 4).concat(" - ");
-            cardNumber += cardDetailDataModel.getCardNo().substring(4, 8).concat(" - ");
-            cardNumber += cardDetailDataModel.getCardNo().substring(8, 12).concat(" - ");
-            cardNumber += cardDetailDataModel.getCardNo().substring(12);
+            try {
+                String cardNumber = cardDetailDataModel.getCardNo().substring(0, 4).concat(" - ");
+                cardNumber += cardDetailDataModel.getCardNo().substring(4, 8).concat(" - ");
+                cardNumber += cardDetailDataModel.getCardNo().substring(8, 12).concat(" - ");
+                cardNumber += cardDetailDataModel.getCardNo().substring(12);
 
-            String expireTime = cardDetailDataModel.getExpireDate().substring(0, 2).concat(" / ");
-            expireTime += cardDetailDataModel.getExpireDate().substring(2);
+                String expireTime = cardDetailDataModel.getExpireDate().substring(2).concat(" / ");
+                expireTime += cardDetailDataModel.getExpireDate().substring(0, 2);
 
-            binding.cardNumberView.setText(cardNumber);
-            binding.cardNumberView.setLayoutDirection(android.view.View.LAYOUT_DIRECTION_LTR);
-            binding.expireTime.setText(expireTime);
-            binding.internetPin2.setText(cardDetailDataModel.getCvv2());
-            binding.cvvView.setText(cardDetailDataModel.getSecondPassword());
+                binding.cardNumberView.setText(cardNumber);
+                binding.cardNumberView.setLayoutDirection(android.view.View.LAYOUT_DIRECTION_LTR);
+                binding.expireTime.setText(expireTime);
+                binding.internetPin2.setText(cardDetailDataModel.getCvv2());
+                binding.cvvView.setText(cardDetailDataModel.getSecondPassword());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         viewModel.getCopyValue().observe(getViewLifecycleOwner(), value -> {

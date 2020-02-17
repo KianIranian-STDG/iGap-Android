@@ -75,6 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:minHeight="48dp"
+                    android:textColorHint="?iGapSubtitleTextColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutMessage"
@@ -97,6 +98,7 @@
                         android:minHeight="48dp"
                         android:text="@={viewmodel.PIN}"
                         android:textColor="?iGapTitleTextColor"
+                        android:textColorHint="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 

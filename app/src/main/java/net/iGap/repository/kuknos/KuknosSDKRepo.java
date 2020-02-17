@@ -57,16 +57,16 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     private String runSDK(String... ts) {
         switch (apiEnum) {
             case PAYMENT_SEND:
-                return paymentToOtherXDR(ts[0], ts[1], ts[2], ts[3]);
+                return paymentToOtherXDR(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5]);
             case CHANGE_TRUST:
                 return trustlineXDR(ts[0], ts[1], ts[2]);
             case MANAGE_OFFER:
-                return manageOffer(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6]);
+                return manageOffer(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6], Long.parseLong(ts[7]));
         }
         return null;
     }
 
-    private String paymentToOtherXDR(String sourceS, String destinationS, String amount, String memo) {
+    private String paymentToOtherXDR(String sourceS, String destinationS, String tokenCode, String tokenIssuer, String amount, String memo) {
         Server server = new Server(KUKNOS_Horizan_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
         KeyPair destination = KeyPair.fromAccountId(destinationS);
@@ -197,12 +197,22 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     }
 
     private String manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
-                               String counterCode, String counterIssuer, String amount, String price) {
+                               String counterCode, String counterIssuer, String amount, String price, long offerID) {
         Server server = new Server(KUKNOS_Horizan_Server);
         Network network = new Network("Kuknos-NET");
         KeyPair source = KeyPair.fromSecretSeed(accountSeed);
-        Asset sourceAsset = new AssetTypeCreditAlphaNum4(sourceCode, sourceIssuer);
-        Asset counterAsset = new AssetTypeCreditAlphaNum4(counterCode, counterIssuer);
+        Asset sourceAsset;
+        if (!sourceCode.equals("PMN")) {
+            sourceAsset = new AssetTypeCreditAlphaNum4(sourceCode, sourceIssuer);
+        } else {
+            sourceAsset = new AssetTypeNative();
+        }
+        Asset counterAsset;
+        if (!counterCode.equals("PMN")) {
+            counterAsset = new AssetTypeCreditAlphaNum4(counterCode, counterIssuer);
+        } else {
+            counterAsset = new AssetTypeNative();
+        }
 
         // If there was no error, load up-to-date information on your account.
         AccountResponse sourceAccount;
@@ -214,10 +224,10 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         }
 
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
-                .addOperation(new ManageSellOfferOperation.Builder(sourceAsset, counterAsset, amount, price).build())
+                .addOperation(new ManageSellOfferOperation.Builder(sourceAsset, counterAsset, amount, price).setOfferId(offerID).build())
                 .addMemo(Memo.text(""))
                 .setTimeout(60)
-                .setOperationFee(1000)
+                .setOperationFee(50000)
                 .build();
         // Sign the transaction to prove you are actually the person sending it.
         transaction.sign(source);

@@ -16,27 +16,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FontIconTextView;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.customView.CheckBox;
+import net.iGap.module.customView.TextBadge;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.module.customView.CheckBox;
-import net.iGap.module.customView.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -209,7 +210,7 @@ public class RoomListCell extends FrameLayout {
 
         if (room.getTitle() != null && !haveName) {
             roomNameTv = new AppCompatTextView(getContext());
-            setTypeFace(roomNameTv);
+            roomNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
             setTextSize(roomNameTv, R.dimen.dp13);
             roomNameTv.setSingleLine(true);
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);

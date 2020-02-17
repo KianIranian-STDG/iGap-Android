@@ -17,12 +17,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
+import net.iGap.adapter.kuknos.TabAdapter;
 import net.iGap.databinding.FragmentKuknosTradePagerBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.adapter.kuknos.TabAdapter;
 
 public class KuknosTradePagerFrag extends BaseFragment {
 

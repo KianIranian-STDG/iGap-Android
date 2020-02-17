@@ -26,7 +26,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
+import net.iGap.fragments.emoji.add.StickerAdapter;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.libs.emojiKeyboard.View.ScrollTabView;
 import net.iGap.libs.emojiKeyboard.adapter.EmojiAdapter;
@@ -35,10 +38,7 @@ import net.iGap.libs.emojiKeyboard.adapter.ViewPagerAdapter;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.emojiKeyboard.sticker.StickerGroupAdapter;
 import net.iGap.libs.emojiKeyboard.struct.StructIGEmojiGroup;
-import net.iGap.fragments.emoji.add.StickerAdapter;
-import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.helper.LayoutCreator;
+import net.iGap.module.Theme;
 import net.iGap.repository.StickerRepository;
 
 import java.util.ArrayList;
@@ -330,7 +330,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             bottomContainer.addView(stickerIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, stickerX, 0, 0, 0));
             bottomContainer.addView(emojiIv, LayoutCreator.createFrame(30, 30, Gravity.CENTER, emojiX, 0, 0, 0));
             bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
-
+            bottomContainer.setOnClickListener(v -> {
+            });
             bottomContainer.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
             bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
 

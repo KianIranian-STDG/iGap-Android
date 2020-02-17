@@ -1,5 +1,7 @@
 package net.iGap.fragments.emoji.struct;
 
+import com.google.gson.annotations.SerializedName;
+
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.realm.RealmStickerItem;
 import net.iGap.repository.StickerRepository;
@@ -8,19 +10,32 @@ import java.io.File;
 import java.util.List;
 
 public class StructIGSticker {
+    //use @SerializedName for message additional data
+
     public static final int NORMAL_STICKER = 0;
     public static final int ANIMATED_STICKER = 1;
 
+    @SerializedName("path")
     private String path;
+    @SerializedName("name")
     private String name;
+    @SerializedName("type")
     private int type;
+    @SerializedName("id")
     private String id;
+    @SerializedName("token")
     private String token;
+    @SerializedName("groupId")
     private String groupId;
+    @SerializedName("fileName")
     private String fileName;
+    @SerializedName("fileSize")
     private long fileSize;
+    @SerializedName("isFavorite")
     private boolean isFavorite;
+    @SerializedName("giftAmount")
     private long giftAmount;
+    @SerializedName("giftId")
     private String giftId; // just use in gift sticker :| i can not change server data model :\
     private List<String> tags;
 
@@ -33,7 +48,7 @@ public class StructIGSticker {
         setFileSize(stickerDataModel.getFileSize());
         setGroupId(stickerDataModel.getGroupId());
         setId(stickerDataModel.getId());
-        setPath(StickerRepository.getInstance().getStickerPath(stickerDataModel.getToken(), stickerDataModel.getName()));
+        setPath(StickerRepository.getInstance().getStickerPath(stickerDataModel.getToken(), stickerDataModel.getFileName()));
         setToken(stickerDataModel.getToken());
         setFavorite(stickerDataModel.isFavorite());
         setTags(stickerDataModel.getTags());
@@ -46,7 +61,7 @@ public class StructIGSticker {
         setFileSize(stickerItem.getFileSize());
         setGroupId(stickerItem.getGroupId());
         setId(stickerItem.getId());
-        setPath(StickerRepository.getInstance().getStickerPath(stickerItem.getToken(), stickerItem.getName()));
+        setPath(StickerRepository.getInstance().getStickerPath(stickerItem.getToken(), stickerItem.getFileName()));
         setToken(stickerItem.getToken());
         setFavorite(stickerItem.isFavorite());
     }

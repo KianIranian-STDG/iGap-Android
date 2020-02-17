@@ -34,7 +34,6 @@ public class Mnemonic {
             throw new MnemonicException("Fatal error! SHA-256 algorithm does not exist!");
         }
 
-
         char[] binaryHash = PrimitiveUtil.bytesToBinaryAsChars(hashBits);
         char[] checkSum = PrimitiveUtil.charSubArray(binaryHash, 0, entropy.length * 8 / 32);
         char[] entropyBits = PrimitiveUtil.bytesToBinaryAsChars(entropy);
@@ -67,9 +66,10 @@ public class Mnemonic {
 
         try {
             KeySpec ks = new PBEKeySpec(mnemonic, salt, 2048, 512);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             return skf.generateSecret(ks).getEncoded();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new MnemonicException("Fatal error when generating seed from mnemonic!");
         }
     }

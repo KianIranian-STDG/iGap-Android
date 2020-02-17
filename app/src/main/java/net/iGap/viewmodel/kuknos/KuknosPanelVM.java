@@ -10,13 +10,13 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
-import net.iGap.repository.kuknos.PanelRepo;
-import net.iGap.model.kuknos.ErrorM;
+import net.iGap.model.kuknos.KuknosError;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.kuknos.PanelRepo;
 import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
@@ -25,7 +25,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosBalance> kuknosWalletsM;
     private KuknosAsset asset = null;
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Integer> openPage;
     private PanelRepo panelRepo = new PanelRepo();
@@ -55,7 +55,6 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
-                //todo fix it here
                 kuknosWalletsM.setValue(data.getData());
                 spinnerSelect(0);
                 progressState.setValue(false);
@@ -65,17 +64,18 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             public void onError(String errorM) {
                 balance.set("0.0");
                 currency.set("currency");
-                // TODO: 2/2/2020 activate this line. 
-//                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
+                kuknosWalletsM.setValue(null);
             }
 
             @Override
             public void onFailed() {
                 balance.set("0.0");
                 currency.set("currency");
-//                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
+                kuknosWalletsM.setValue(null);
             }
         });
     }
@@ -154,7 +154,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             TandCAgree.postValue("error");
             return;
         }
-        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_AGREEMENT", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_SEPID_AGREEMENT", new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 if (body != null) {
@@ -209,11 +209,11 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     // getter and setter
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

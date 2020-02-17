@@ -84,13 +84,11 @@ public class GiftStickerPurchasedByMeMainFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == fragments[0].getMode()) {
-                return "قابل استفاده";
-
+                return getResources().getString(R.string.usable);
             } else if (position == fragments[1].getMode()) {
-                return "فعال شده";
-
+                return getResources().getString(R.string.activated);
             } else if (position == fragments[2].getMode()) {
-                return "ارسال شده";
+                return getResources().getString(R.string.posted);
             } else {
                 return "";
             }

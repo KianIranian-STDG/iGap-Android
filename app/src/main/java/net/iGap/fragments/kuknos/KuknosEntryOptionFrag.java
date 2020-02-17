@@ -19,18 +19,17 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.gson.Gson;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosEntryOptionBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.model.kuknos.KuknosSignupM;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosEntryOptionVM;
 
-public class KuknosEntryOptionFrag extends BaseFragment {
+public class KuknosEntryOptionFrag extends BaseAPIViewFrag<KuknosEntryOptionVM> {
 
     private FragmentKuknosEntryOptionBinding binding;
-    private KuknosEntryOptionVM kuknosEntryOptionVM;
 
     public static KuknosEntryOptionFrag newInstance() {
         return new KuknosEntryOptionFrag();
@@ -39,7 +38,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        kuknosEntryOptionVM = ViewModelProviders.of(this).get(KuknosEntryOptionVM.class);
+        viewModel = ViewModelProviders.of(this).get(KuknosEntryOptionVM.class);
     }
 
     @Nullable
@@ -47,7 +46,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_entry_option, container, false);
-        binding.setViewmodel(kuknosEntryOptionVM);
+        binding.setViewmodel(viewModel);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -74,7 +73,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosEToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        if (kuknosEntryOptionVM.loginStatus() && isRegisteredSharesPref()) {
+        if (viewModel.loginStatus() && isRegisteredSharesPref()) {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
@@ -101,7 +100,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
 
     private void onNewTObserver() {
 
-        kuknosEntryOptionVM.getGoNewTPage().observe(getViewLifecycleOwner(), nextPage -> {
+        viewModel.getGoNewTPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -118,7 +117,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
 
     private void onRestoreTObserver() {
 
-        kuknosEntryOptionVM.getGoRestoreTPage().observe(getViewLifecycleOwner(), nextPage -> {
+        viewModel.getGoRestoreTPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -133,7 +132,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
     }
 
     private void onRestoreSeedObserver() {
-        kuknosEntryOptionVM.getGoRestoreSeedPage().observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getGoRestoreSeedPage().observe(getViewLifecycleOwner(), aBoolean -> {
 
         });
     }

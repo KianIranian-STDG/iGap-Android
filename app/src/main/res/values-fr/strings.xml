@@ -2174,4 +2174,11 @@
 
     <string name="poll_dialog_question">Etes-vous sûr de votre avis?</string>
     <string name="delete_recent_emoji">Supprimer les emoji récents</string>
+    <string name="usable">قابل استفاده</string>
+    <string name="activated">فعال شده</string>
+    <string name="posted">Posted</string>
+    <string name="gift_sticker_inquiry_and_activated">Enquête et activé</string>
+    <string name="kuknos_send_token_error">Impossible d\'envoyer ce jeton.</string>
+    <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?!
+Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
 </resources>

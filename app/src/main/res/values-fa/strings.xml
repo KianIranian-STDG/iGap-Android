@@ -2119,6 +2119,7 @@
     <string name="kuknos_trade_sell">فروش</string>
     <string name="kuknos_trade_recieve">خرید</string>
     <string name="kuknos_trade_amount">مقدار</string>
+    <string name="kuknos_trade_price">قیمت</string>
     <string name="kuknos_trade_delete"></string>
     <string name="kuknos_trade_date">تاریخ</string>
     <string name="kuknos_tradePager_trade">مبادله</string>
@@ -2151,7 +2152,7 @@
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_recieve_walletCopy">آدرس کیف پول من: \n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
-    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت استفاده کنید.</string>
+    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت یا خرید پیمان استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error2">خطای سرور. لطفا دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error3">شماره تراکنش اشتباه است. لطفا دوباره تلاش کنید.</string>
@@ -2185,6 +2186,12 @@
     <string name="kuknos_enterPin_desc">جهت تایید این عملیات، لطفا رمز عبور خود را وارد نمایید.</string>
     <string name="kuknos_enterPin_btnNormal">تایید</string>
     <string name="kuknos_enterPin_btnProgress">بررسی رمز…</string>
+    <string name="kuknos_payment_title">رسید تراکنش</string>
+    <string name="kuknos_payment_assetCode">دارایی: </string>
+    <string name="kuknos_payment_assetCount">تعداد دارایی: </string>
+    <string name="kuknos_payment_assetPrice">قیمت دارایی: </string>
+    <string name="kuknos_payment_totalAmount">قیمت کل: </string>
+    <string name="kuknos_payment_hash">رسید ققنوس: </string>
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
     <string name="updated_version_title">نسخه شما به روز شده است</string>
@@ -2480,7 +2487,7 @@
     <string name="gift_sticker_add_archive">اضافه کردن به آرشیو</string>
     <string name="gift_cart_title">کارت هدیه دیجیتال</string>
     <string name="my_gift_sticker">کارت‌های هدیه من</string>
-    <string name="my_recived_gift_sticker">کارت هدیه دیجیتال دریافت شده</string>
+    <string name="my_recived_gift_sticker">کارت هدیه دیجیتال فعال شده</string>
     <string name="expire_date">تاریخ انقضا</string>
     <string name="send_gift_sticker">ارسال کارت هدیه</string>
     <string name="gift_sticker_send_to_other">ارسال به دیگری</string>
@@ -2498,4 +2505,11 @@
     <string name="soon">بزودی...</string>
     <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
     <string name="delete_recent_emoji">حذف اموجی های اخیر</string>
+    <string name="usable">قابل استفاده</string>
+    <string name="activated">فعال شده</string>
+    <string name="posted">ارسال شده</string>
+    <string name="gift_sticker_inquiry_and_activated">استعلام و فعال‌سازی</string>
+    <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
+    <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟!
+        توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
 </resources>

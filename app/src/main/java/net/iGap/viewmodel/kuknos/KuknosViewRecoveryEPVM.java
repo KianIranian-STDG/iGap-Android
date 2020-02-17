@@ -7,13 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.model.kuknos.KuknosError;
 import net.iGap.repository.kuknos.UserRepo;
-import net.iGap.model.kuknos.ErrorM;
 
 public class KuknosViewRecoveryEPVM extends ViewModel {
 
     private ObservableField<String> PIN = new ObservableField<>();
-    private MutableLiveData<ErrorM> error;
+    private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<Boolean> nextPage;
     private UserRepo userRepo = new UserRepo();
@@ -49,20 +49,20 @@ public class KuknosViewRecoveryEPVM extends ViewModel {
     private boolean checkEntry() {
         if (PIN.get() == null) {
             // empty
-            error.setValue(new ErrorM(true, "empty pin", "0", R.string.kuknos_viewRecoveryEP_emptyPIN));
+            error.setValue(new KuknosError(true, "empty pin", "0", R.string.kuknos_viewRecoveryEP_emptyPIN));
             return false;
         }
         if (PIN.get().isEmpty()) {
             // empty
-            error.setValue(new ErrorM(true, "empty pin", "0", R.string.kuknos_viewRecoveryEP_emptyPIN));
+            error.setValue(new KuknosError(true, "empty pin", "0", R.string.kuknos_viewRecoveryEP_emptyPIN));
             return false;
         }
         if (PIN.get().length() != 4) {
-            error.setValue(new ErrorM(true, "wrong length pin", "0", R.string.kuknos_viewRecoveryEP_wrongPIN));
+            error.setValue(new KuknosError(true, "wrong length pin", "0", R.string.kuknos_viewRecoveryEP_wrongPIN));
             return false;
         }
         if (!PIN.get().equals(userRepo.getPIN())) {
-            error.setValue(new ErrorM(true, "wrong length pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
+            error.setValue(new KuknosError(true, "wrong length pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
             return false;
         }
         return true;
@@ -76,11 +76,11 @@ public class KuknosViewRecoveryEPVM extends ViewModel {
         this.PIN = PIN;
     }
 
-    public MutableLiveData<ErrorM> getError() {
+    public MutableLiveData<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<ErrorM> error) {
+    public void setError(MutableLiveData<KuknosError> error) {
         this.error = error;
     }
 

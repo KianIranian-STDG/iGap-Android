@@ -68,7 +68,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
@@ -94,12 +93,9 @@ import com.google.gson.JsonSyntaxException;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.Config;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
@@ -132,15 +128,6 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
-import net.iGap.module.dialog.ChatAttachmentPopup;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.libs.emojiKeyboard.EmojiView;
-import net.iGap.libs.emojiKeyboard.KeyboardView;
-import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.observers.eventbus.EventListener;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -173,6 +160,56 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.helper.upload.UploadManager;
+import net.iGap.libs.MyWebViewClient;
+import net.iGap.libs.Tuple;
+import net.iGap.libs.emojiKeyboard.EmojiView;
+import net.iGap.libs.emojiKeyboard.KeyboardView;
+import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.model.PassCode;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
+import net.iGap.module.AttachFile;
+import net.iGap.module.BotInit;
+import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.CircleImageView;
+import net.iGap.module.ContactUtils;
+import net.iGap.module.DialogAnimation;
+import net.iGap.module.FileListerDialog.FileListerDialog;
+import net.iGap.module.FileListerDialog.OnFileSelectedListener;
+import net.iGap.module.FontIconTextView;
+import net.iGap.module.IntentRequests;
+import net.iGap.module.LastSeenTimeUtil;
+import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.MessageLoader;
+import net.iGap.module.MusicPlayer;
+import net.iGap.module.MyLinearLayoutManager;
+import net.iGap.module.ResendMessage;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SUID;
+import net.iGap.module.Theme;
+import net.iGap.module.TimeUtils;
+import net.iGap.module.VoiceRecord;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.customView.EventEditText;
+import net.iGap.module.dialog.ChatAttachmentPopup;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.enums.Additional;
+import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.ConnectionState;
+import net.iGap.module.enums.GroupChatRole;
+import net.iGap.module.enums.ProgressState;
+import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.module.structs.StructBottomSheetForward;
+import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.structs.StructMessageOption;
+import net.iGap.module.structs.StructWebView;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IDispatchTochEvent;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.IOnBackPressed;
@@ -218,43 +255,6 @@ import net.iGap.observers.interfaces.OnUserUpdateStatus;
 import net.iGap.observers.interfaces.OnVoiceRecord;
 import net.iGap.observers.interfaces.OpenBottomSheetItem;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.libs.MyWebViewClient;
-import net.iGap.libs.Tuple;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.model.PassCode;
-import net.iGap.module.AndroidUtils;
-import net.iGap.module.AppUtils;
-import net.iGap.module.AttachFile;
-import net.iGap.module.BotInit;
-import net.iGap.module.ChatSendMessageUtil;
-import net.iGap.module.CircleImageView;
-import net.iGap.module.ContactUtils;
-import net.iGap.module.DialogAnimation;
-import net.iGap.module.FileListerDialog.FileListerDialog;
-import net.iGap.module.FileListerDialog.OnFileSelectedListener;
-import net.iGap.module.FontIconTextView;
-import net.iGap.module.IntentRequests;
-import net.iGap.module.LastSeenTimeUtil;
-import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.MessageLoader;
-import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyLinearLayoutManager;
-import net.iGap.module.ResendMessage;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.SUID;
-import net.iGap.module.TimeUtils;
-import net.iGap.module.VoiceRecord;
-import net.iGap.module.additionalData.AdditionalType;
-import net.iGap.module.enums.Additional;
-import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.module.enums.ConnectionState;
-import net.iGap.module.enums.GroupChatRole;
-import net.iGap.module.enums.ProgressState;
-import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.module.structs.StructBottomSheetForward;
-import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.module.structs.StructMessageOption;
-import net.iGap.module.structs.StructWebView;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoClientRoomReport;
@@ -308,7 +308,6 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.module.customView.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
@@ -421,7 +420,7 @@ public class FragmentChat extends BaseFragment
     private boolean isRepley = false;
     private boolean swipeBack = false;
     private AttachFile attachFile;
-    private AppCompatEditText edtSearchMessage;
+    private EventEditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
     private SharedPreferences emojiSharedPreferences;
     private EventEditText edtChat;
@@ -449,7 +448,6 @@ public class FragmentChat extends BaseFragment
     private View viewAttachFile;
     private View viewMicRecorder;
     private VoiceRecord voiceRecord;
-    private MaterialDesignTextView txtClearMessageSearch;
     private MaterialDesignTextView btnHashLayoutClose;
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
@@ -688,7 +686,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyboardVisible) {
+                    if (keyboardViewVisible) {
                         showPopup(-1);
                         return true;
                     }
@@ -3308,7 +3306,7 @@ public class FragmentChat extends BaseFragment
         if (keyboardView == null)
             createKeyboardView();
 
-        if (isPopupShowing() && keyboardView.getCurrentMode() != KeyboardView.MODE_KEYBOARD) {
+        if (isPopupShowing() && keyboardView.getCurrentMode() != KeyboardView.MODE_KEYBOARD && keyboardView.getCurrentMode() != -1) {
             showPopup(KeyboardView.MODE_KEYBOARD);
             openKeyboardInternal();
         } else {
@@ -3413,7 +3411,6 @@ public class FragmentChat extends BaseFragment
                 keyboardContainer.addView(keyboardView);
 
             keyboardVisible = false;
-            currentKeyboardViewContent = KeyboardView.MODE_EMOJI;
 
             if (keyboardHeight <= 0) {
                 keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
@@ -3435,10 +3432,8 @@ public class FragmentChat extends BaseFragment
             keyboardView.setVisibility(View.VISIBLE);
 
         } else if (mode == KeyboardView.MODE_ATTACHMENT) {
-            currentKeyboardViewContent = KeyboardView.MODE_ATTACHMENT;
 
         } else if (mode == KeyboardView.MODE_KEYBOARD) {
-            currentKeyboardViewContent = KeyboardView.MODE_KEYBOARD;
 
             if (keyboardView == null)
                 createKeyboardView();
@@ -3467,9 +3462,17 @@ public class FragmentChat extends BaseFragment
                 keyboardVisible = true;
             }
         } else {
+            if (keyboardView != null)
+                keyboardView.setCurrentMode(mode, -1);
+
             closeKeyboard();
             G.handler.postDelayed(this::hideKeyboardView, 100);
         }
+    }
+
+    @Override
+    protected void hideKeyboard() {
+        showPopup(-1);
     }
 
     private void getStickerByEmoji(String unicode) {
@@ -3546,7 +3549,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    public void closeKeyboard() {
+    private void closeKeyboard() {
         AndroidUtils.hideKeyboard(edtChat);
     }
 
@@ -3667,8 +3670,8 @@ public class FragmentChat extends BaseFragment
 
 
     @Override
-    public void onActiveGiftStickerClick(StructIGSticker structIGSticker, boolean canForward, StructMessageInfo structMessage) {
-        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, canForward, v -> forwardSelectedMessageToOutOfChat(structMessage), 0);
+    public void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, StructMessageInfo structMessage) {
+        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, v -> forwardSelectedMessageToOutOfChat(structMessage), mode);
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
@@ -4648,6 +4651,9 @@ public class FragmentChat extends BaseFragment
         });
         if (getFragmentManager() != null)
             bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
+
+        hideKeyboard();
+
     }
 
     private List<Integer> setupMessageContainerClickDialogItems(StructMessageInfo message) {
@@ -5249,6 +5255,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
         final List<StructMessageInfo> failedMessages = mAdapter.getFailedMessages();
+        hideKeyboard();
         new ResendMessage(G.fragmentActivity, new IResendMessage() {
             @Override
             public void deleteMessage() {
@@ -6140,91 +6147,6 @@ public class FragmentChat extends BaseFragment
         RealmRoom.setLastScrollPosition(mRoomId, messageId, firstVisiblePositionOffset);
     }
 
-    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
-//
-//        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(ac_ll_parent))
-//                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-//
-//                    @Override
-//                    public void onEmojiBackspaceClick(View v) {
-//
-//                    }
-//                }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-//                    @Override
-//                    public void onEmojiPopupShown() {
-//                        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-//                            @Override
-//                            public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
-//                                if (response.body() != null) {
-//                                    if (response.body().getOk()) {
-//                                        RealmStickers.updateStickers(response.body().getData(), () -> {
-//
-//                                        });
-//                                    }
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
-//
-//                            }
-//                        });
-//                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-//                        isEmojiSHow = true;
-//                        if (botInit != null) botInit.close();
-//                    }
-//                }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-//                    @Override
-//                    public void onKeyboardOpen(final int keyBoardHeight) {
-//                        if (botInit != null) botInit.close();
-//                    }
-//                }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-//                    @Override
-//                    public void onEmojiPopupDismiss() {
-//                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-//                        isEmojiSHow = false;
-//                    }
-//                }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-//                    @Override
-//                    public void onKeyboardClose() {
-//                        emojiPopup.dismiss();
-//                    }
-//                }).setOnStickerListener(new OnStickerListener() {
-//                    @Override
-//                    public void onItemSticker(StructItemSticker st) {
-//
-//                })
-//                .setOnDownloadStickerListener(new OnDownloadStickerListener() {
-//                    @Override
-//                    public void downloadStickerItem(StructItemSticker sticker, OnStickerItemDownloaded onStickerItemDownloaded) {
-
-//                    }
-//
-//                    @Override
-//                    public void downloadStickerAvatar(StructGroupSticker sticker, OnStickerAvatarDownloaded onStickerAvatarDownloaded) {
-//                    }
-//
-//
-//                    @Override
-//                    public void downloadLottieStickerItem(StructItemSticker sticker, OnLottieStickerItemDownloaded lottieStickerItemDownloaded) {
-//                    }
-//                })
-//                .setOpenPageSticker(new OnOpenPageStickerListener() {
-//                    @Override
-//                    public void addSticker(String page) {
-//                    }
-//
-//                    @Override
-//                    public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
-//                    }
-//                })
-//                .setBackgroundColor(BackgroundColor)
-//                .setIconColor(iconColor)
-//                .setDividerColor(dividerColor)
-//                .build(edtChat);
-
-    }
-
     private void sendStickerAsMessage(StructIGSticker structIGSticker) {
 
         String additional = new Gson().toJson(structIGSticker);
@@ -6315,7 +6237,8 @@ public class FragmentChat extends BaseFragment
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
-        imvSmileButton.setText(drawableResourceId);
+        if (imvSmileButton != null)
+            imvSmileButton.setText(drawableResourceId);
     }
 
     /**
@@ -7032,7 +6955,8 @@ public class FragmentChat extends BaseFragment
         EditText edtSearch = viewBottomSheetForward.findViewById(R.id.edtSearch);
         edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
+            if (actionId == EditorInfo.IME_ACTION_SEARCH)
+                hideKeyboard();
             return true;
         });
         edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -7419,39 +7343,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initLayoutSearchNavigation() {
-        //  ll_navigate_Message = (LinearLayout)  rootView.findViewById(R.id.ac_ll_message_navigation);
-        //  btnUpMessage = (TextView)  rootView.findViewById(R.id.ac_btn_message_up);
-        txtClearMessageSearch = rootView.findViewById(R.id.ac_btn_clear_message_search);
-        //  btnDownMessage = (TextView) findViewById(R.id.ac_btn_message_down);
-        //  txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
-
-        //btnUpMessage.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //
-        //        if (selectedPosition > 0) {
-        //            deSelectMessage(selectedPosition);
-        //            selectedPosition--;
-        //            selectMessage(selectedPosition);
-        //            recyclerView.scrollToPosition(selectedPosition);
-        //            txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + " " + messageCounter);
-        //        }
-        //    }
-        //});
-
-        //btnDownMessage.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        if (selectedPosition < messageCounter - 1) {
-        //            deSelectMessage(selectedPosition);
-        //            selectedPosition++;
-        //            selectMessage(selectedPosition);
-        //            recyclerView.scrollToPosition(selectedPosition);
-        //            txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + messageCounter);
-        //        }
-        //    }
-        //});
-
         final RippleView rippleClose = rootView.findViewById(R.id.chl_btn_close_ripple_search_message);
         rippleClose.setOnClickListener(view -> {
             if (edtSearchMessage.getText().toString().length() == 0) {
@@ -7466,10 +7357,20 @@ public class FragmentChat extends BaseFragment
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
         edtSearchMessage.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) closeKeyboard(v);
+            if (actionId == EditorInfo.IME_ACTION_SEARCH)
+                hideKeyboard();
             return true;
         });
+
+        edtSearchMessage.setListener(event -> {
+            if (/*isPopupShowing() && */event.getAction() == MotionEvent.ACTION_DOWN) {
+                showPopup(KeyboardView.MODE_KEYBOARD);
+                openKeyboardInternal();
+            }
+        });
+
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -7527,8 +7428,8 @@ public class FragmentChat extends BaseFragment
             layoutToolbar.setVisibility(View.VISIBLE);
         }
         goneSearchHashFooter();
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+        hideKeyboard();
 
     }
 
@@ -9188,7 +9089,9 @@ public class FragmentChat extends BaseFragment
             closeWebViewForSpecialUrlChat(false);
             return;
         }
-        closeKeyboard(view);
+
+        hideKeyboard();
+
         if (G.twoPaneMode) {
             if (getActivity() instanceof ActivityMain) {
                 ((ActivityMain) getActivity()).goToTabletEmptyPage();
@@ -9318,7 +9221,11 @@ public class FragmentChat extends BaseFragment
                         initHash = true;
                         initHashView();
                     }
-                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
+//                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
+
+                    showPopup(KeyboardView.MODE_KEYBOARD);
+                    AndroidUtils.showKeyboard(edtSearchMessage);
+
                 } else if (items.get(position).equals(getString(R.string.clear_history))) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override

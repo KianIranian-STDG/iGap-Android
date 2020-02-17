@@ -19,6 +19,7 @@ public class StructIGGiftSticker {
     private String toUserId;
     private String fromUserId;
     private String createdAt;
+    private boolean isCardOwner;
 
     public StructIGGiftSticker(UserStickers userStickers) {
         structIGSticker = new StructIGSticker(userStickers.getSticker());
@@ -37,6 +38,7 @@ public class StructIGGiftSticker {
         isValid = dataModel.getActivation().getStatus().equals(NEW);
         giftId = dataModel.getId();
         isForward = dataModel.isForwarded();
+        isCardOwner = dataModel.isCardOwner();
     }
 
     public boolean isForward() {
@@ -93,5 +95,13 @@ public class StructIGGiftSticker {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isCardOwner() {
+        return isCardOwner;
+    }
+
+    public void setCardOwner(boolean cardOwner) {
+        isCardOwner = cardOwner;
     }
 }

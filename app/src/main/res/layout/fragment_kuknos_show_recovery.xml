@@ -87,6 +87,7 @@
                     android:scrollbars="vertical"
                     android:scrollHorizontally="false"
                     android:text="@={viewmodel.keys}"
+                    android:textColorHint="?iGapSubtitleTextColor"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     app:layout_constraintEnd_toEndOf="parent"

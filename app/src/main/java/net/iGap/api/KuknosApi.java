@@ -1,8 +1,10 @@
 package net.iGap.api;
 
-import net.iGap.model.kuknos.Parsian.IgapPayment;
+import net.iGap.model.kuknos.KuknosPaymentResponse;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.model.kuknos.Parsian.KuknosBankPayment;
+import net.iGap.model.kuknos.Parsian.KuknosFederation;
 import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
 import net.iGap.model.kuknos.Parsian.KuknosHash;
 import net.iGap.model.kuknos.Parsian.KuknosOfferResponse;
@@ -118,6 +120,15 @@ public interface KuknosApi {
                                                                         @Field("limit") int limit,
                                                                         @Field("order") String order);
 
+    /**
+     * this api returns all of open trades for an account
+     *
+     * @param publicKey
+     * @param limit
+     * @param cursor
+     * @param order
+     * @return
+     */
     @FormUrlEncoded
     @POST("open-offers")
     Call<KuknosResponseModel<KuknosOfferResponse>> getOpenOffers(@Field("public_key") String publicKey,
@@ -125,12 +136,31 @@ public interface KuknosApi {
                                                                  @Field("cursor") int cursor,
                                                                  @Field("order") String order);
 
+    /**
+     * this api returns all of closed trades for an account
+     *
+     * @param publicKey
+     * @param limit
+     * @param cursor
+     * @param order
+     * @return
+     */
     @FormUrlEncoded
     @POST("account-trades")
     Call<KuknosResponseModel<KuknosTradeResponse>> getTradesHistory(@Field("public_key") String publicKey,
                                                                     @Field("limit") int limit,
                                                                     @Field("cursor") int cursor,
                                                                     @Field("order") String order);
+
+    /**
+     * this api checks for federations and converts username to public key
+     *
+     * @param username
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("get-public-key")
+    Call<KuknosResponseModel<KuknosFederation>> convertFederation(@Field("federation_name") String username);
 
     /**
      * this api returns the user status
@@ -163,11 +193,11 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("payment-request")
-    Call<KuknosResponseModel<IgapPayment>> buyAsset(@Field("public_key") String publicKey,
-                                                    @Field("asset_code") String assetCode,
-                                                    @Field("asset_count") String assetAmount,
-                                                    @Field("amount") String totalPrice,
-                                                    @Field("description") String description);
+    Call<KuknosResponseModel<KuknosBankPayment>> buyAsset(@Field("public_key") String publicKey,
+                                                          @Field("asset_code") String assetCode,
+                                                          @Field("asset_count") String assetAmount,
+                                                          @Field("amount") String totalPrice,
+                                                          @Field("description") String description);
 
     /**
      * this api make a request for username availability.
@@ -178,6 +208,10 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("account-existent")
     Call<KuknosResponseModel<KuknosUsernameStatus>> checkUsername(@Field("federation_name") String federationName);
+
+    @FormUrlEncoded
+    @POST("get-payment")
+    Call<KuknosResponseModel<KuknosPaymentResponse>> getPaymentData(@Field("rrn") String RRN);
 
     /**
      * this api make a request for Fees.

@@ -96,6 +96,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:gravity="center"
+            android:textColor="?attr/iGapSubtitleTextColor"
             android:padding="@dimen/dp8"
             android:text="@string/cvv2"
             android:visibility="@{viewModel.showMainView}"

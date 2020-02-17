@@ -2,7 +2,7 @@ package net.iGap.model.kuknos.Parsian;
 
 import com.google.gson.annotations.SerializedName;
 
-public class IgapPayment {
+public class KuknosBankPayment {
 
     @SerializedName("token")
     private String token;
