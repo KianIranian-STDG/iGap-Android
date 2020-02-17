@@ -87,7 +87,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "" + R.string.kuknos_send_errorServer;
         }
@@ -181,7 +181,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         AccountResponse sourceAccount = null;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "" + R.string.kuknos_send_errorServer;
         }
@@ -219,7 +219,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         AccountResponse sourceAccount;
         try {
             sourceAccount = server.accounts().account(source.getAccountId());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "" + R.string.kuknos_send_errorServer;
         }
