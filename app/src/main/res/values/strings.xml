@@ -756,6 +756,9 @@ Want to get it?</string>
     <string name="there_is_no_sheared_media">There are no shared media</string>
     <string name="pending">Pending</string>
     <string name="completed">Completed</string>
+    <string name="payment_userScore">Your Score: </string>
+    <string name="payment_spentScore">Spending Score: </string>
+    <string name="payment_price">Final Price: </string>
     <!-- New String -->
     <string name="please_enter_channel_name">Please Enter Channel Name</string>
     <string name="new_channel">New Channel</string>

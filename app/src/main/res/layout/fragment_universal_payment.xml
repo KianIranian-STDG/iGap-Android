@@ -156,9 +156,18 @@
             android:text="@{@string/payment_rrn_title(viewModel.paymentRRN)}"
             android:textColor="?iGapSubtitleTextColor"
             android:visibility="@{viewModel.showPaymentErrorMessage}"
-            app:layout_constraintBottom_toTopOf="@id/cancelButton"
+            app:layout_constraintBottom_toTopOf="@id/paymentFeatureRC"
             app:layout_constraintEnd_toEndOf="@id/price"
             app:layout_constraintStart_toStartOf="@id/price" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/paymentFeatureRC"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/cancelButton" />
 
         <!--<android.support.v7.widget.AppCompatTextView
             android:id="@+id/paymentOrderId"

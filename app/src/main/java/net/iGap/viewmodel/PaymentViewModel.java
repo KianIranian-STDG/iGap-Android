@@ -9,15 +9,18 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.helper.HelperCalander;
 import net.iGap.model.payment.CheckOrderResponse;
 import net.iGap.model.payment.CheckOrderStatusResponse;
 import net.iGap.model.payment.Payment;
+import net.iGap.model.payment.PaymentFeature;
 import net.iGap.model.payment.PaymentResult;
 import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.helper.HelperCalander;
 import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 
@@ -40,6 +43,8 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private ObservableDouble paymentRRN = new ObservableDouble();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
+    private MutableLiveData<List<PaymentFeature>> discountOption = new MutableLiveData<>(null);
+    private int discountPlanPosition = -1;
 
     private String token;
     private String orderId;
@@ -195,6 +200,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
                 title.set(data.getInfo().getProduct().getTitle());
                 orderDetail = data;
+                discountOption.setValue(data.getDiscountOption());
             }
 
             @Override
@@ -272,5 +278,17 @@ public class PaymentViewModel extends BaseAPIViewModel {
         paymentStatus.set("error");
         closeButtonColor.set(R.color.red);
         showRetryView.set(View.VISIBLE);
+    }
+
+    public MutableLiveData<List<PaymentFeature>> getDiscountOption() {
+        return discountOption;
+    }
+
+    public int getDiscountPlanPosition() {
+        return discountPlanPosition;
+    }
+
+    public void setDiscountPlanPosition(int discountPlanPosition) {
+        this.discountPlanPosition = discountPlanPosition;
     }
 }
