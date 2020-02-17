@@ -17,21 +17,21 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
+import net.iGap.adapter.items.BottomSheetItem;
 import net.iGap.databinding.FragmentBottomSheetSelectImageBinding;
-import net.iGap.module.dialog.BaseBottomSheet;
-import net.iGap.module.dialog.BottomSheetItemClickCallback;
-import net.iGap.module.dialog.BottomSheetListAdapter;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.module.AttachFile;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.dialog.BaseBottomSheet;
+import net.iGap.module.dialog.BottomSheetItemClickCallback;
+import net.iGap.module.dialog.BottomSheetListAdapter;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnClickCamera;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
-import net.iGap.module.AttachFile;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.structs.StructBottomSheet;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -31,23 +31,24 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
-import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.AdapterPopupOpenGallery;
+import net.iGap.adapter.items.BottomSheetItem;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.observers.interfaces.OnClickCamera;
-import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.observers.interfaces.OnClickCamera;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -213,7 +214,7 @@ public class ChatAttachmentPopup {
 
         //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
-        if (height == 0) {
+        if (height == 0 || (mFragment instanceof FragmentChat && !((FragmentChat) mFragment).isKeyboardOpen())) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
             contentView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(contentView.getContext(), R.drawable.popup_background), contentView.getContext(), R.attr.rootBackgroundColor));
             contentView.setElevation(4);
