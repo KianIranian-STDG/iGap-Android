@@ -13,7 +13,7 @@
         android:layout_marginEnd="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
         android:layout_marginBottom="@dimen/dp8"
-        app:cardBackgroundColor="@color/kuknos_WH_itembg"
+        app:cardBackgroundColor="?iGapCardViewColor"
         app:cardCornerRadius="6dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
