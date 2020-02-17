@@ -27,7 +27,8 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         PAYMENT_SEND, CHANGE_TRUST, MANAGE_OFFER
     }
 
-    private static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org" /*"https://horizon-testnet.stellar.org"*/;
+    private static final String KUKNOS_Horizan_Server = "https://horizon.kuknos.org" /*"https://horizon-testnet.stellar.org"*/;
+    private static final String PASS_PHRASE = "Kuknos Foundation, Feb 2019" /*"https://horizon-testnet.stellar.org"*/;
     private API apiEnum;
     private callBack response;
 
@@ -93,7 +94,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
 
         // todo add other currency and base fee ** very IMP.
         // Start building the transaction.
-        Network network = new Network("Kuknos-NET");
+        Network network = new Network(PASS_PHRASE);
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
                 .addOperation(new PaymentOperation.Builder(destination.getAccountId(), new AssetTypeNative(), amount).build())
                 // A memo allows you to add your own metadata to a transaction. It's
@@ -172,7 +173,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
 
     private String trustlineXDR(String AccountSeed, String code, String issuer) {
         Server server = new Server(KUKNOS_Horizan_Server);
-        Network network = new Network("Kuknos-NET");
+        Network network = new Network(PASS_PHRASE);
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
         Asset asset = new AssetTypeCreditAlphaNum4(code, issuer);
 
@@ -199,7 +200,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     private String manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
                                String counterCode, String counterIssuer, String amount, String price, long offerID) {
         Server server = new Server(KUKNOS_Horizan_Server);
-        Network network = new Network("Kuknos-NET");
+        Network network = new Network(PASS_PHRASE);
         KeyPair source = KeyPair.fromSecretSeed(accountSeed);
         Asset sourceAsset;
         if (!sourceCode.equals("PMN")) {
