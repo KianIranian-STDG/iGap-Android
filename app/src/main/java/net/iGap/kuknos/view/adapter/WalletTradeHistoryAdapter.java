@@ -86,8 +86,7 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
             date.setVisibility(View.VISIBLE);
             delete.setVisibility(View.GONE);
             price.setText(HelperCalander.isPersianUnicode ?
-                    HelperCalander.convertToUnicodeFarsiNumber(df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()))
-                    : df.format(model.getPrice().getNumerator() / model.getPrice().getDenominator()));
+                    HelperCalander.convertToUnicodeFarsiNumber(model.getPrice().toString()) : model.getPrice().toString());
         }
 
         private String getTime(String date) {
