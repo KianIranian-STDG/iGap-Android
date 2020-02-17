@@ -3,7 +3,6 @@ package net.iGap.kuknos.service.model;
 import com.google.gson.annotations.SerializedName;
 
 import org.stellar.sdk.Asset;
-import org.stellar.sdk.Price;
 import org.stellar.sdk.responses.Link;
 import org.stellar.sdk.responses.Response;
 
@@ -64,12 +63,12 @@ public class KuknosTradeResponse {
         protected final String counterAssetIssuer;
 
         @SerializedName("price")
-        protected final Price price;
+        protected final KuknosTradePrice price;
 
         @SerializedName("_links")
         private Links links;
 
-        public TradeResponse(String id, String pagingToken, String ledgerCloseTime, String offerId, boolean baseIsSeller, String baseAccount, String baseOfferId, String baseAmount, String baseAssetType, String baseAssetCode, String baseAssetIssuer, String counterAccount, String counterOfferId, String counterAmount, String counterAssetType, String counterAssetCode, String counterAssetIssuer, Price price) {
+        public TradeResponse(String id, String pagingToken, String ledgerCloseTime, String offerId, boolean baseIsSeller, String baseAccount, String baseOfferId, String baseAmount, String baseAssetType, String baseAssetCode, String baseAssetIssuer, String counterAccount, String counterOfferId, String counterAmount, String counterAssetType, String counterAssetCode, String counterAssetIssuer, KuknosTradePrice price) {
             this.id = id;
             this.pagingToken = pagingToken;
             this.ledgerCloseTime = ledgerCloseTime;
@@ -166,7 +165,7 @@ public class KuknosTradeResponse {
             return counterAssetIssuer;
         }
 
-        public Price getPrice() {
+        public KuknosTradePrice getPrice() {
             return price;
         }
 
