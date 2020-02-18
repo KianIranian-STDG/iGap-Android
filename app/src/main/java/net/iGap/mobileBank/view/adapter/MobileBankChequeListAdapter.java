@@ -115,7 +115,7 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             if (status.equals("CASH")) {
                 chStatus.setTextColor(Theme.getInstance().getPrimaryTextIconColor(chStatus.getContext()));
             } else {
-                chStatus.setTextColor(Theme.getInstance().getTitleTextColor(chStatus.getContext()));
+                chStatus.setTextColor(chStatus.getContext().getResources().getColor(R.color.brown));
             }
 
             block.setOnClickListener(v -> blockBTN.onBlock(position));
