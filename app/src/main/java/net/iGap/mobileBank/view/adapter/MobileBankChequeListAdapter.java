@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.mobileBank.repository.model.BankChequeSingle;
 import net.iGap.mobileBank.repository.util.JalaliCalendar;
@@ -86,13 +87,10 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         void initView(int position) {
-            chNumber.setText(context.getResources().getString(R.string.mobile_bank_cheque_number,
-                    CompatibleUnicode(mdata.get(position).getNumber())));
+            chNumber.setText(CompatibleUnicode(mdata.get(position).getNumber()));
 
             if (mdata.get(position).getBalance() != null)
-                chValue.setText(context.getResources().getString(R.string.mobile_bank_cheque_balance,
-                        CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))))
-                        + context.getResources().getString(R.string.rial));
+                chValue.setText(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))) + context.getResources().getString(R.string.rial));
             else {
                 chValue.setText(context.getResources().getString(R.string.mobile_bank_balance_error_no_price));
             }
@@ -113,7 +111,12 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             }*/
             block.setVisibility(View.GONE);
 
-            chStatus.setText(context.getResources().getString(R.string.mobile_bank_cheque_status, getStatusText(status)));
+            chStatus.setText(getStatusText(status).toLowerCase());
+            if (status.equals("CASH")) {
+                chStatus.setTextColor(Theme.getInstance().getPrimaryTextIconColor(chStatus.getContext()));
+            } else {
+                chStatus.setTextColor(Theme.getInstance().getTitleTextColor(chStatus.getContext()));
+            }
 
             block.setOnClickListener(v -> blockBTN.onBlock(position));
         }

@@ -2382,7 +2382,7 @@
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
     <string name="cheque_number">شماره دسته چک :</string>
-    <string name="page_count">تعداد برگه :</string>
+    <string name="page_count">برگه</string>
     <string name="reject_count">برگشتی :</string>
     <string name="pass_count">پاس شده :</string>
     <string name="cash_count">نقد شده :</string>
@@ -2456,7 +2456,7 @@
     <string name="INTERBANK_BLOCK">مسدود از اینترنت بانک</string>
     <string name="INVALID_PARSIAN">ابطالی</string>
     <string name="REGISTER">ثبت مبلغ شده</string>
-    <string name="mobile_bank_balance_error_no_price">بدون قیمت</string>
+    <string name="mobile_bank_balance_error_no_price">بدون مبلغ</string>
     <string name="mobile_bank_balance_error_no_tran">موجودی شما در دسترس نیست. لطفا به نزدیک ترین شعبه مراجعه کنید.</string>
     <string name="paid">پرداخت شده</string>
     <string name="mobile_bank_load_detail_loadInfo">اطلاعات وام</string>

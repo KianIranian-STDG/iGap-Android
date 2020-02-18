@@ -50,7 +50,7 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
     class ChequeListViewHolder extends RecyclerView.ViewHolder {
 
         private View root;
-        private TextView tvNumber, tvPageCount, tvPass, tvReject, tvCached, tvBlocked, tvUsable;
+        private TextView tvNumber, tvPageCount, tvPass, tvReject, tvBlocked, tvUsable;
 
         public ChequeListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,7 +59,6 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
             tvPageCount = itemView.findViewById(R.id.chequeCount);
             tvPass = itemView.findViewById(R.id.tvPass);
             tvReject = itemView.findViewById(R.id.tvReject);
-            tvCached = itemView.findViewById(R.id.tvCash);
             tvBlocked = itemView.findViewById(R.id.tvBlock);
             tvUsable = itemView.findViewById(R.id.tvUsable);
         }
@@ -67,11 +66,10 @@ public class BankChequesBookListAdapter extends RecyclerView.Adapter<BankCheques
         @SuppressLint("SetTextI18n")
         public void bind(BankChequeBookListModel item) {
 
-            tvNumber.setText(getString(R.string.cheque_number) + checkNumbers(item.getNumber()));
-            tvPageCount.setText(getString(R.string.page_count) + checkNumbers(item.getPageCount() + ""));
+            tvNumber.setText(checkNumbers(item.getNumber()));
+            tvPageCount.setText(checkNumbers(item.getPageCount() + " ") + getString(R.string.page_count));
             tvPass.setText(getString(R.string.pass_count) + checkNumbers(item.getPassCheque() + ""));
             tvReject.setText(getString(R.string.reject_count) + checkNumbers(item.getReject() + ""));
-            tvCached.setText(getString(R.string.cash_count) + checkNumbers(item.getPartialCash() + ""));
             tvBlocked.setText(getString(R.string.block) + ": " + checkNumbers((item.getPermanentBlocked() + item.getTemporaryBlock()) + ""));
             tvUsable.setText(getString(R.string.usable_count) + checkNumbers(item.getUnusedCheque() + ""));
 

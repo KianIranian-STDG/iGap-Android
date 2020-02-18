@@ -1866,7 +1866,7 @@
     <string name="facilities">оборудование</string>
     <string name="services">Сервисы</string>
     <string name="cheque_number">Номер чека :</string>
-    <string name="page_count">Количество страниц :</string>
+    <string name="page_count">страниц</string>
     <string name="reject_count">отклонять :</string>
     <string name="pass_count">прошло :</string>
     <string name="cash_count">обналичить :</string>
