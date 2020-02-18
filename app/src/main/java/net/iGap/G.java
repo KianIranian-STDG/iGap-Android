@@ -399,7 +399,8 @@ public class G extends ApplicationContext {
             }
             return null;
         });
-        Log.i("abbasiApiToken", "getApiToken: " + tok);
+        if (BuildConfig.DEBUG)
+            Log.i("abbasiApiToken", "getApiToken: " + tok);
         return result;
     }
 
