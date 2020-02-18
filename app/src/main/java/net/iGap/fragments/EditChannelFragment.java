@@ -705,7 +705,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     @Override
     public void profileImageAdd(String path) {
-        popBackStackFragment();
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().popBackStack(EditChannelFragment.class.getName(), 0);
+        }
         viewModel.uploadAvatar(path);
     }
 
