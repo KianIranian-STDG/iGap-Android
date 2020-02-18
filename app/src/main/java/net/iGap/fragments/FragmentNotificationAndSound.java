@@ -129,15 +129,14 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 picker.addOpacityBar(opacityBar);
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
                     viewModel.setMessagePickerColor(picker.getColor());
+                    viewModel.messageLedColor.observe(getViewLifecycleOwner(), integer -> {
+                        gradientDrawable.setColor(integer);
+                        binding.ivLedMessage.setBackground(gradientDrawable);
+                    });
                     dialog.dismiss();
                 });
                 dialog.show();
             }
-        });
-        viewModel.messageLedColor.observe(getViewLifecycleOwner(), integer -> {
-            gradientDrawable.setColor(integer);
-            binding.ivLedMessage.setBackground(gradientDrawable);
-
         });
 
         GradientDrawable gradientDrawableGroup = (GradientDrawable) binding.ivLedGroup.getBackground();
@@ -155,14 +154,14 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 picker.setOldCenterColor(picker.getColor());
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
                     viewModel.setGroupPickerColor(picker.getColor());
+                    viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
+                        gradientDrawableGroup.setColor(integer);
+                        binding.ivLedGroup.setBackground(gradientDrawableGroup);
+                    });
                     dialog.dismiss();
                 });
                 dialog.show();
             }
-        });
-        viewModel.groupLedColor.observe(getViewLifecycleOwner(), integer -> {
-            gradientDrawableGroup.setColor(integer);
-            binding.ivLedGroup.setBackground(gradientDrawableGroup);
         });
     }
 
@@ -271,7 +270,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     private void showGroupSound() {
         viewModel.showGroupSound.observe(getViewLifecycleOwner(), isShow -> {
-            if(isShow!=null & isShow){
+            if (isShow != null & isShow) {
                 int getGroupSoundSelected = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
                 new MaterialDialog.Builder(getContext()).title(R.string.Ringtone).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(getGroupSoundSelected, (dialog, view, which, text) -> {
@@ -280,7 +279,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                         .onPositive((dialog, which) -> {
                             viewModel.setChooseGroupSound();
-                        }).show();}
+                        }).show();
+            }
 
         });
         viewModel.playSound.observe(getViewLifecycleOwner(), musicId -> {

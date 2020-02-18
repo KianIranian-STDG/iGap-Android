@@ -213,7 +213,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     public void onClickMessagePreViewGroup() {
         isGroupPreView.set(!isGroupPreView.get());
-
     }
 
     public void onCheckedChangedMessagePreViewGroup(boolean isChecked) {
