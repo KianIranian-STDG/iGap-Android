@@ -36,12 +36,20 @@ import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentGallery extends BaseFragment {
+
+    private final String MODE_KEY = "MODE";
+    private final String FOLDER_KEY = "FOLDER";
+    private final String SUB_FOLDER_KEY = "SUB_FOLDER";
+    private final String ID_KEY = "ID";
+    private final String RETURN_DIRECTLY_KEY = "RETURN_DIRECT";
+    private final String LISTENER_KEY = "LISTENER";
 
     private AdapterGalleryPhoto mGalleryPhotoAdapter;
     private AdapterGalleryVideo mGalleryVideoAdapter;
@@ -59,28 +67,34 @@ public class FragmentGallery extends BaseFragment {
 
     public static FragmentGallery newInstance(GalleryMode mode, String folder, String id) {
         FragmentGallery fragment = new FragmentGallery();
-        fragment.mFolderName = folder;
-        fragment.mFolderId = id;
-        fragment.mGalleryMode = mode;
-        fragment.isSubFolder = true;
+        Bundle bundle = new Bundle();
+        bundle.putString(fragment.FOLDER_KEY, folder);
+        bundle.putString(fragment.MODE_KEY, mode.name());
+        bundle.putString(fragment.ID_KEY, id);
+        bundle.putBoolean(fragment.SUB_FOLDER_KEY, true);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     public static FragmentGallery newInstance(GalleryMode mode, boolean isReturnResultDirectly, String folder, String id, GalleryFragmentListener listener) {
         FragmentGallery fragment = new FragmentGallery();
-        fragment.mFolderName = folder;
-        fragment.mFolderId = id;
-        fragment.mGalleryMode = mode;
-        fragment.mGalleryListener = listener;
-        fragment.isSubFolder = true;
-        fragment.isReturnResultDirectly = isReturnResultDirectly;
+        Bundle bundle = new Bundle();
+        bundle.putString(fragment.FOLDER_KEY, folder);
+        bundle.putString(fragment.MODE_KEY, mode.name());
+        bundle.putString(fragment.ID_KEY, id);
+        bundle.putSerializable(fragment.LISTENER_KEY, listener);
+        bundle.putBoolean(fragment.RETURN_DIRECTLY_KEY, isReturnResultDirectly);
+        bundle.putBoolean(fragment.SUB_FOLDER_KEY, true);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     public static FragmentGallery newInstance(GalleryMode mode, GalleryFragmentListener listener) {
         FragmentGallery fragment = new FragmentGallery();
-        fragment.mGalleryListener = listener;
-        fragment.mGalleryMode = mode;
+        Bundle bundle = new Bundle();
+        bundle.putString(fragment.MODE_KEY, mode.name());
+        bundle.putSerializable(fragment.LISTENER_KEY, listener);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -92,6 +106,14 @@ public class FragmentGallery extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            mGalleryMode = GalleryMode.valueOf(getArguments().getString(MODE_KEY));
+            mFolderName = getArguments().getString(FOLDER_KEY, null);
+            isReturnResultDirectly = getArguments().getBoolean(RETURN_DIRECTLY_KEY, false);
+            mGalleryListener = (GalleryFragmentListener) getArguments().getSerializable(LISTENER_KEY);
+            mFolderId = getArguments().getString(ID_KEY, null);
+            isSubFolder = getArguments().getBoolean(SUB_FOLDER_KEY, false);
+        }
         initToolbar(view);
         initRecyclerView(view);
     }
@@ -504,7 +526,7 @@ public class FragmentGallery extends BaseFragment {
         }).show();
     }
 
-    public interface GalleryFragmentListener {
+    public interface GalleryFragmentListener extends Serializable {
         void openOsGallery();
 
         default void onGalleryResult(String path) {
