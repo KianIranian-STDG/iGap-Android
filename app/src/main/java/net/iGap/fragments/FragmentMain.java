@@ -247,7 +247,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
-            MusicPlayer.playerStateChangeListener.observe(this, isVisible -> {
+            MusicPlayer.playerStateChangeListener.observe(getViewLifecycleOwner(), isVisible -> {
                 notifyChatRoomsList();
 
                 if (!mHelperToolbar.getmSearchBox().isShown()) {
@@ -257,6 +257,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -509,6 +510,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     }
 
+    private void invalidateViews() {
+        int count = mRecyclerView.getChildCount();
+        for (int i = 0; i < count; i++) {
+            mRecyclerView.getChildAt(i).invalidate();
+        }
+    }
+
     //***************************************************************************************************************************
 
 
@@ -739,6 +747,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         super.onDestroyView();
 
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
     }
@@ -1169,6 +1178,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
                 if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
             });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.handler.post(this::invalidateViews);
         }
 
     }

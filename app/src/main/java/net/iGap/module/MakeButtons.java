@@ -24,6 +24,10 @@ import com.squareup.picasso.Picasso;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.eventbus.EventListener;
+import net.iGap.eventbus.EventManager;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.proto.ProtoGlobal;
 
@@ -94,7 +98,7 @@ public class MakeButtons {
         void onClick(View view, ButtonEntity buttonEntity);
     }
 
-    public static LinearLayout addButtons(Theme theme , ButtonEntity entity, OnClickListener onClickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
+    public static LinearLayout addButtons(Theme theme, ButtonEntity entity, OnClickListener onClickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
@@ -192,18 +196,36 @@ public class MakeButtons {
         }
 
         if (entity.getLable().trim() != null) {
-            TextView btn1 = new AppCompatTextView(mainLayout.getContext());
+            TextView btn1 = new AppCompatTextView(mainLayout.getContext()) {
+                EventListener eventListener = (id, message) -> {
+                    if (id == EventManager.EMOJI_LOADED) {
+                        G.runOnUiThread(this::invalidate);
+                    }
+                };
+
+                @Override
+                protected void onAttachedToWindow() {
+                    super.onAttachedToWindow();
+                    EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, eventListener);
+                }
+
+                @Override
+                protected void onDetachedFromWindow() {
+                    super.onDetachedFromWindow();
+                    EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, eventListener);
+                }
+            };
 
             // btn1.setId(R.id.btn1);
             btn1.setEllipsize(TextUtils.TruncateAt.END);
             btn1.setGravity(CENTER);
             btn1.setPadding(i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2));
             btn1.setMaxLines(1);
-            btn1.setTypeface(ResourcesCompat.getFont(btn1.getContext() , R.font.main_font));
+            btn1.setTypeface(ResourcesCompat.getFont(btn1.getContext(), R.font.main_font));
             if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
                 btn1.setText(R.string.cardToCardBtnText);
             } else {
-                btn1.setText(entity.getLable());
+                btn1.setText(EmojiManager.getInstance().replaceEmoji(entity.getLable(), btn1.getPaint().getFontMetricsInt(), LayoutCreator.dp(25), false));
             }
             btn1.setTextSize(16);
             card.setBackgroundResource(theme.getCardToCardButtonBackground(mainLayout.getContext()));
