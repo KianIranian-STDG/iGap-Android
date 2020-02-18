@@ -1,4 +1,4 @@
-package net.iGap.kuknos.service.model;
+package net.iGap.model.kuknos.Parsian;
 
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
