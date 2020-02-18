@@ -4452,7 +4452,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
 
-        if (message.realmRoomMessage.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
+        if (message.getRealmRoomMessage().getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
             checkSticker(message);
             return;
         }
