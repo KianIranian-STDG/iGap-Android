@@ -93,7 +93,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:text="@string/retry_icon"
         android:textColor="?attr/iGapTitleTextColor"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tv_stickerDialog_add"
         app:layout_constraintEnd_toEndOf="@+id/rv_stickerDialog"
         app:layout_constraintStart_toStartOf="parent"

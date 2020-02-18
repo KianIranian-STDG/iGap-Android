@@ -2431,7 +2431,7 @@ Want to get it?</string>
     <string name="facilities">Loans</string>
     <string name="services">Services</string>
     <string name="cheque_number">Cheque number :</string>
-    <string name="page_count">Page count :</string>
+    <string name="page_count">pages</string>
     <string name="reject_count">Reject :</string>
     <string name="pass_count">Passed :</string>
     <string name="cash_count"> Cashed :</string>

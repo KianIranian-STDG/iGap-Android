@@ -2092,7 +2092,7 @@
     <string name="facilities">Installations</string>
     <string name="services">Service</string>
     <string name="cheque_number">Numéro de chèque :</string>
-    <string name="page_count">nombre de pages :</string>
+    <string name="page_count">pages </string>
     <string name="reject_count">rejeter :</string>
     <string name="pass_count">réussi :</string>
     <string name="cash_count">encaissé :</string>

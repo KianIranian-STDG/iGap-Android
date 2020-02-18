@@ -58,6 +58,9 @@ public class StructMessageInfo implements Parcelable {
     public long songLength;
     private String TAG = " abbasiAnimation";
 
+    public RealmRoomMessage getRealmRoomMessage() {
+        return realmRoomMessage.getForwardMessage() == null ? realmRoomMessage : realmRoomMessage.getForwardMessage();
+    }
 
     public void setSongArtist(String songArtist) {
         this.songArtist = songArtist;

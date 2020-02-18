@@ -1,6 +1,5 @@
 package net.iGap.dialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -21,15 +18,22 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.proto.ProtoGlobal;
 
+import java.io.Serializable;
+
 public class JoinDialogFragment extends BaseBottomSheet {
 
+    private final String ROOM_KEY = "room";
+    private final String JOIN_LISTENER_KEY = "listener";
     private JoinDialogListener mListener;
     private ProtoGlobal.Room mRoom;
 
     public JoinDialogFragment setData(ProtoGlobal.Room room, JoinDialogListener listener) {
-        this.mListener = listener;
-        this.mRoom = room;
-        return this;
+        JoinDialogFragment fragment = new JoinDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(fragment.ROOM_KEY, room);
+        bundle.putSerializable(fragment.JOIN_LISTENER_KEY, listener);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Nullable
@@ -41,6 +45,13 @@ public class JoinDialogFragment extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            mRoom = (ProtoGlobal.Room) getArguments().getSerializable(ROOM_KEY);
+            mListener = (JoinDialogListener) getArguments().getSerializable(JOIN_LISTENER_KEY);
+        } else {
+            dismiss();
+            return;
+        }
         setupView(view);
     }
 
@@ -97,7 +108,7 @@ public class JoinDialogFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    public interface JoinDialogListener {
+    public interface JoinDialogListener extends Serializable {
         void onJoinClicked();
 
         void onCancelClicked();

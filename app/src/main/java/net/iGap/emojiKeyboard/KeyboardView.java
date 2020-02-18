@@ -40,10 +40,13 @@ public class KeyboardView extends FrameLayout {
             if (emojiView == null)
                 createEmojiView();
 
+            emojiView.setVisibility(VISIBLE);
+
             emojiView.setContentView(EmojiView.EMOJI);
 
         } else if (mode == MODE_KEYBOARD) {
-
+            if (emojiView != null)
+                emojiView.setVisibility(INVISIBLE);
         } else if (mode == MODE_ATTACHMENT) {
 
         } else if (mode == MODE_BOT_UNDER_BUTTON) {

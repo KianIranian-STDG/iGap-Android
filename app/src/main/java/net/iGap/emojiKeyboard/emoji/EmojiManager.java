@@ -57,6 +57,10 @@ public class EmojiManager {
 
     private Runnable invalidateRunnable = () -> EventManager.getInstance().postEvent(EventManager.EMOJI_LOADED);
 
+    static {
+        getInstance();
+    }
+
     public static EmojiManager getInstance() {
         if (instance == null) {
             instance = new EmojiManager();

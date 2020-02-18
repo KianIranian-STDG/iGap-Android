@@ -2120,7 +2120,7 @@
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
     <string name="cheque_number">شماره دسته چک :</string>
-    <string name="page_count">تعداد برگه :</string>
+    <string name="page_count"> برگه</string>
     <string name="reject_count">برگشتی :</string>
     <string name="pass_count">پاس شده :</string>
     <string name="cash_count">نقد شده :</string>
