@@ -367,7 +367,9 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
 
     @Override
     public void profileImageAdd(String path) {
-        popBackStackFragment();
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().popBackStack(FragmentRegistrationNickname.class.getName(), 0);
+        }
         viewModel.uploadAvatar(path);
     }
 }
