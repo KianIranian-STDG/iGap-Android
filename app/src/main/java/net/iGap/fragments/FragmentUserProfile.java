@@ -327,7 +327,9 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
     @Override
     public void profileImageAdd(String path) {
-        popBackStackFragment();
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        }
         viewModel.uploadAvatar(path);
     }
 }

@@ -405,7 +405,9 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     @Override
     public void profileImageAdd(String path) {
-        popBackStackFragment();
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().popBackStack(EditGroupFragment.class.getName(), 0);
+        }
         viewModel.uploadAvatar(path);
     }
 }
