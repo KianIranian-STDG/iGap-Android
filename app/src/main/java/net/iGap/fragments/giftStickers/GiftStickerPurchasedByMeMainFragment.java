@@ -36,6 +36,7 @@ public class GiftStickerPurchasedByMeMainFragment extends Fragment {
         ViewPager viewPager = view.findViewById(R.id.vp_purchasedByMe);
         viewPager.setAdapter(new PagerAdapter(getChildFragmentManager()));
         viewPager.setOffscreenPageLimit(2);
+        viewPager.setCurrentItem(1);
 
         tabLayout = view.findViewById(R.id.tl_purchasedByMe);
         tabLayout.setSelectedTabIndicatorColor(new Theme().getAccentColor(getContext()));

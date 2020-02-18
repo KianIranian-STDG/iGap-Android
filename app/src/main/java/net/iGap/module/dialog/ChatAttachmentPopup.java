@@ -214,7 +214,7 @@ public class ChatAttachmentPopup {
 
         //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
-        if (height == 0 || (mFragment instanceof FragmentChat && !((FragmentChat) mFragment).isKeyboardOpen())) {
+        if (height == 0 || (mFragment instanceof FragmentChat && !((FragmentChat) mFragment).isKeyboardViewOpen())) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
             contentView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(contentView.getContext(), R.drawable.popup_background), contentView.getContext(), R.attr.rootBackgroundColor));
             contentView.setElevation(4);

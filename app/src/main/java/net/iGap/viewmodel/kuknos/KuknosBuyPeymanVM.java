@@ -292,4 +292,8 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     public MutableLiveData<KuknosPaymentResponse> getPaymentData() {
         return paymentData;
     }
+
+    public void setAmountEnable(boolean amountEnable) {
+        this.amountEnable.set(amountEnable);
+    }
 }

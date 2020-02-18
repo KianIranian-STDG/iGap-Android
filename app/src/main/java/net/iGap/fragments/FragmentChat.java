@@ -3549,7 +3549,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    public boolean isKeyboardOpen() {
+    public boolean isKeyboardViewOpen() {
         return keyboardViewVisible;
     }
 

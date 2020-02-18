@@ -187,7 +187,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
                     return;
                 case 2:
-                    HelperUrl.openWebBrowser(getContext(), "https://www.kuknos.org/wp/");
+                    HelperUrl.openWebBrowser(getContext(), "http://d.igap.net/kuknus");
 //                    viewModel.getTermsAndCond();
                     break;
                 case 3:

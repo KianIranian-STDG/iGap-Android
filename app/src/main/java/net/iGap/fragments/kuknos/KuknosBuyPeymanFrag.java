@@ -193,10 +193,10 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
         viewModel.getProgressState().observe(getViewLifecycleOwner(), integer -> {
             if (integer == 0) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
-                binding.fragKuknosBuyPAmount.setEnabled(true);
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
             } else if (integer == 1) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
+                viewModel.setAmountEnable(false);
                 binding.fragKuknosBuyPAmount.setEnabled(false);
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server));
             } else if (integer == 2) {
