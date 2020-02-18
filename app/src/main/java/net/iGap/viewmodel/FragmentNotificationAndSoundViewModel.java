@@ -11,7 +11,6 @@ package net.iGap.viewmodel;
 
 
 import android.content.SharedPreferences;
-
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
@@ -22,6 +21,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
+
 public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     public int ledColorMessage;
@@ -60,18 +60,22 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     public int messageDialogSoundMessage;
     private int messageChooseSound;
     private int groupChooseSound;
+    private int messageChooseVibrate;
+    private int groupChooseVibrate;
+    private int messageChoosePopup;
+    private int groupChoosePopup;
 
 
     public FragmentNotificationAndSoundViewModel(SharedPreferences sharedPreferences, String[] sound) {
         this.sharedPreferences = sharedPreferences;
         this.soundList = sound;
         getInfo();
-        setMessageVibrateTime(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0));
-        setGroupVibrateTime(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0));
-        setPopupNotificationMessageText(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0));
-        setPopupNotificationGroupText(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0));
-        getSoundMessagePosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0),false);
-        getSoundGroupPosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0),false);
+        setMessageVibrateTime(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0), false);
+        setGroupVibrateTime(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0), false);
+        saveSettingPopupConditionMessage(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0));
+        saveSettingPopupConditionGroup(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0));
+        getSoundMessagePosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0), false);
+        getSoundGroupPosition(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0), false);
     }
 
     //===============================================================================
@@ -217,10 +221,14 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     /**
-     * led
+     * led settings
      **/
     public void onClickMessageLed() {
         showMessageLedDialog.setValue(true);
+    }
+
+    public void onClickGroupLed() {
+        showGroupLedDialog.setValue(true);
     }
 
     public void setMessagePickerColor(int color) {
@@ -228,25 +236,24 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, color).apply();
     }
 
-    public void onClickGroupLed() {
-        showGroupLedDialog.setValue(true);
-    }
-
     public void setGroupPickerColor(int color) {
         groupLedColor.setValue(color);
         sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, color).apply();
     }
 
-
     /**
-     * vibrate
+     * Vibration settings
      **/
     public void onClickMessageVibration() {
         showMessageVibrationDialog.setValue(true);
     }
 
-    public void setMessageVibrateText(int which) {
-        switch (which) {
+    public void onClickGroupVibration() {
+        showGroupVibrationDialog.setValue(true);
+    }
+
+    public void setMessageVibrateText(int messageChooseVibrate) {
+        switch (messageChooseVibrate) {
             case 0:
                 callbackVibrateMessage.set(R.string.array_Default);
                 break;
@@ -265,34 +272,8 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         }
     }
 
-    public void setMessageVibrateTime(int which) {
-        switch (which) {
-            case 0:
-                startVibration.setValue(350);
-                break;
-            case 1:
-                startVibration.setValue(200);
-                break;
-            case 2:
-                startVibration.setValue(500);
-                break;
-            case 3:
-                startVibration.setValue(-1);
-                break;
-            case 4:
-                startVibration.setValue(0);
-                break;
-        }
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which).apply();
-        setMessageVibrateText(which);
-    }
-
-    public void onClickGroupVibration() {
-        showGroupVibrationDialog.setValue(true);
-    }
-
-    public void setGroupVibrateText(int which) {
-        switch (which) {
+    public void setGroupVibrateText(int groupChooseVibrate) {
+        switch (groupChooseVibrate) {
             case 0:
                 callbackVibrateGroup.set(R.string.array_Default);
                 break;
@@ -311,29 +292,66 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         }
     }
 
-    public void setGroupVibrateTime(int which) {
-        switch (which) {
-            case 0:
-                startVibration.setValue(350);
-                break;
-            case 1:
-                startVibration.setValue(200);
-
-                break;
-            case 2:
-                startVibration.setValue(500);
-                break;
-            case 3:
-                startVibration.setValue(-1);
-                break;
-            case 4:
-                startVibration.setValue(0);
-                break;
+    public void setMessageVibrateTime(int which, boolean isVibrate) {
+        messageChooseVibrate = which;
+        if (isVibrate) {
+            switch (which) {
+                case 0:
+                    startVibration.setValue(350);
+                    break;
+                case 1:
+                    startVibration.setValue(200);
+                    break;
+                case 2:
+                    startVibration.setValue(500);
+                    break;
+                case 3:
+                    startVibration.setValue(-1);
+                    break;
+                case 4:
+                    startVibration.setValue(0);
+                    break;
+            }
         }
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, which).apply();
-        setGroupVibrateText(which);
+        setMessageVibrateText(which);
+
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which).apply();
     }
 
+    public void setGroupVibrateTime(int which, boolean isSetVibrate) {
+        groupChooseVibrate = which;
+        if (isSetVibrate) {
+            switch (which) {
+                case 0:
+                    startVibration.setValue(350);
+                    break;
+                case 1:
+                    startVibration.setValue(200);
+                    break;
+                case 2:
+                    startVibration.setValue(500);
+                    break;
+                case 3:
+                    startVibration.setValue(-1);
+                    break;
+                case 4:
+                    startVibration.setValue(0);
+                    break;
+            }
+        }
+
+        setGroupVibrateText(which);
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, which).apply();
+
+    }
+
+    public void chooseVibrate() {
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, messageChooseVibrate).apply();
+    }
+
+    public void groupChooseVibrate() {
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, groupChooseVibrate).apply();
+    }
 
     /**
      * popupNotification
@@ -342,22 +360,12 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         showMessagePopupNotification.setValue(true);
     }
 
-    public void saveMessagePopUpNotification(int which) {
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, which).apply();
-        setPopupNotificationMessageText(which);
-    }
-
     public void onClickGroupPopUpNotification() {
         showGroupPopupNotification.setValue(true);
     }
 
-    public void setGroupPopUpNotification(int which) {
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, which).apply();
-        setPopupNotificationGroupText(which);
-
-    }
-
-    private void setPopupNotificationMessageText(int which) {
+    public void saveSettingPopupConditionMessage(int which) {
+        messageChoosePopup = which;
         switch (which) {
             case 0:
                 callbackPopUpNotificationMessage.set(R.string.array_No_popup);
@@ -372,9 +380,11 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
                 callbackPopUpNotificationMessage.set(R.string.array_Always_show_popup);
                 break;
         }
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, which).apply();
     }
 
-    private void setPopupNotificationGroupText(int which) {
+    public void saveSettingPopupConditionGroup(int which) {
+        groupChoosePopup = which;
         switch (which) {
             case 0:
                 callbackPopUpNotificationGroup.set(R.string.array_No_popup);
@@ -389,26 +399,34 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
                 callbackPopUpNotificationGroup.set(R.string.array_Always_show_popup);
                 break;
         }
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, which).apply();
+    }
+
+    public void setChooseMessagePopup() {
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, messageChoosePopup).apply();
+    }
+
+    public void setChooseGroupPopup() {
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, groupChoosePopup).apply();
     }
 
     /**
-     * sound
+     * Sound settings
      **/
 
     public void onClickSoundMessage() {
         showMessageSound.setValue(true);
     }
 
-
     public void onClickSoundGroup() {
         showGroupSound.setValue(true);
     }
 
-    public void setChooseSound() {
+    public void setChooseMessageSound() {
         sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, messageChooseSound).apply();
     }
 
-    public void chooseSound() {
+    public void setChooseGroupSound() {
         sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, groupChooseSound).apply();
     }
 
@@ -427,7 +445,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
     }
 
     /**
-     * app
+     * In-app settings
      **/
 
     public void onClickInAppSound() {
@@ -504,10 +522,6 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
                 .apply();
     }
 
-    //===============================================================================
-    //====================================Methods====================================
-    //===============================================================================
-
     private boolean getBoolean(int num) {
         return num != 0;
     }
@@ -520,11 +534,9 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         ledColorMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
         ledColorGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
         messageDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
-
         isAppSound.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND_NEW, 1)));
         isInAppVibration.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE_NEW, 1)));
         isInAppPreView.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW_NEW, 1)));
-
         isSoundInChat.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND_NEW, 1)));
         isSeparateNotification.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 1)));
         isKeepService.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1)));
