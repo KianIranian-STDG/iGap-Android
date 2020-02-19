@@ -18,22 +18,15 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.proto.ProtoGlobal;
 
-import java.io.Serializable;
-
 public class JoinDialogFragment extends BaseBottomSheet {
 
-    private final String ROOM_KEY = "room";
-    private final String JOIN_LISTENER_KEY = "listener";
     private JoinDialogListener mListener;
     private ProtoGlobal.Room mRoom;
 
     public JoinDialogFragment setData(ProtoGlobal.Room room, JoinDialogListener listener) {
-        JoinDialogFragment fragment = new JoinDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(fragment.ROOM_KEY, room);
-        bundle.putSerializable(fragment.JOIN_LISTENER_KEY, listener);
-        fragment.setArguments(bundle);
-        return fragment;
+        this.mListener = listener;
+        this.mRoom = room;
+        return this;
     }
 
     @Nullable
@@ -45,13 +38,6 @@ public class JoinDialogFragment extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null) {
-            mRoom = (ProtoGlobal.Room) getArguments().getSerializable(ROOM_KEY);
-            mListener = (JoinDialogListener) getArguments().getSerializable(JOIN_LISTENER_KEY);
-        } else {
-            dismiss();
-            return;
-        }
         setupView(view);
     }
 
@@ -108,7 +94,7 @@ public class JoinDialogFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
-    public interface JoinDialogListener extends Serializable {
+    public interface JoinDialogListener {
         void onJoinClicked();
 
         void onCancelClicked();
