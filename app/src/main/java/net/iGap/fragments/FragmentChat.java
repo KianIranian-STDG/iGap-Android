@@ -36,6 +36,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -3198,13 +3199,15 @@ public class FragmentChat extends BaseFragment
         imvSmileButton.setOnClickListener(v -> onEmojiButtonClick());
 
         edtChat.addTextChangedListener(new TextWatcher() {
+            boolean processChange = false;
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence text, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
 
                 if (text.length() > 0) {
                     HelperSetAction.setActionTyping(mRoomId, chatType);
@@ -3214,11 +3217,6 @@ public class FragmentChat extends BaseFragment
                 if (text.toString().endsWith(System.getProperty("line.separator"))) {
                     if (sendByEnter) imvSendButton.performClick();
                 }
-               /* if (text.toString().equals(messageEdit) && isEditMessage) {
-                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
-                } else {
-                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                }*/
 
                 messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH));
                 if (messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null) {
@@ -3226,22 +3224,36 @@ public class FragmentChat extends BaseFragment
                     Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message), Toast.LENGTH_SHORT).show();
                 }
 
+                if ((count - before) > 1) {
+                    processChange = true;
+                }
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (ll_attach_text.getVisibility() == View.GONE && hasForward == false) {
+                if (ll_attach_text.getVisibility() == View.GONE && !hasForward) {
 
-                    if (edtChat.getText().length() > 0) {
+                    if (edtChat.getText() != null && edtChat.getText().length() > 0) {
                         sendButtonVisibility(true);
                     } else {
                         if (!isEditMessage) {
                             sendButtonVisibility(false);
-                        } else {
-                            //imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                         }
                     }
+
+                    if (processChange) {
+                        ImageSpan[] spans = editable.getSpans(0, editable.length(), ImageSpan.class);
+
+                        for (ImageSpan span : spans) {
+                            editable.removeSpan(span);
+                        }
+
+                        EmojiManager.getInstance().replaceEmoji(editable, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(20), false);
+                        processChange = false;
+                    }
+
                 }
 
                 if (edtChat.getText() != null && !EmojiManager.getInstance().isValidEmoji(edtChat.getText()) && suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
@@ -3260,12 +3272,10 @@ public class FragmentChat extends BaseFragment
                 keyboardHeightLand = height;
                 if (emojiSharedPreferences != null)
                     emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, keyboardHeightLand).apply();
-                Log.i(TAG, "onScreenSizeChanged: set SHP value -> " + keyboardHeightLand + " in land");
             } else {
                 keyboardHeight = height;
                 if (emojiSharedPreferences != null)
                     emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, keyboardHeight).apply();
-                Log.i(TAG, "onScreenSizeChanged: set SHP value -> " + keyboardHeight + " in portrait");
             }
         }
 
@@ -3276,9 +3286,6 @@ public class FragmentChat extends BaseFragment
             if (layoutParams.width != AndroidUtils.displaySize.x || layoutParams.height != newHeight) {
                 layoutParams.width = AndroidUtils.displaySize.x;
                 layoutParams.height = newHeight;
-
-                Log.i(TAG, "onScreenSizeChanged: emoji popUp params layout -> " + newHeight);
-
                 keyboardView.setLayoutParams(layoutParams);
             }
         }
@@ -3298,7 +3305,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    public boolean isPopupShowing() {
+    private boolean isPopupShowing() {
         return keyboardViewVisible || keyboardView != null;
     }
 
