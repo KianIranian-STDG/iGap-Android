@@ -720,6 +720,7 @@ public class FragmentChat extends BaseFragment
         edtChat.setListener(this::chatMotionEvent);
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
 
         return attachToSwipeBack(notifyFrameLayout);
     }
@@ -1159,6 +1160,7 @@ public class FragmentChat extends BaseFragment
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
         if (compositeDisposable != null) {
@@ -1485,6 +1487,13 @@ public class FragmentChat extends BaseFragment
         return DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         });
+    }
+
+    private void invalidateViews() {
+        int childCount = recyclerView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            recyclerView.getChildAt(i).invalidate();
+        }
     }
 
     /**
@@ -9354,6 +9363,8 @@ public class FragmentChat extends BaseFragment
                 if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
                 if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
             });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.runOnUiThread(this::invalidateViews);
         }
     }
 
