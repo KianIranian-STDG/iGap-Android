@@ -161,7 +161,10 @@ public class PaymentViewModel extends BaseAPIViewModel {
     }
 
     public void onAcceptClick() {
-        goToWebPage.setValue(orderDetail.getRedirectUrl());
+        if (discountPlanPosition == -1)
+            goToWebPage.setValue(orderDetail.getRedirectUrl());
+        else
+            goToWebPage.setValue(orderDetail.getRedirectUrl() + "?feature=" + discountOption.getValue().get(discountPlanPosition).getTitle());
     }
 
     public void setPaymentResult(Payment payment) {
