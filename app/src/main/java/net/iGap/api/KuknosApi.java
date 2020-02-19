@@ -1,19 +1,19 @@
 package net.iGap.api;
 
-import net.iGap.kuknos.service.model.KuknosBankPayment;
-import net.iGap.kuknos.service.model.KuknosAsset;
-import net.iGap.kuknos.service.model.KuknosBalance;
-import net.iGap.kuknos.service.model.KuknosFederation;
-import net.iGap.kuknos.service.model.KuknosFeeModel;
-import net.iGap.kuknos.service.model.KuknosHash;
-import net.iGap.kuknos.service.model.KuknosOfferResponse;
-import net.iGap.kuknos.service.model.KuknosOperationResponse;
-import net.iGap.kuknos.service.model.KuknosPaymentResponse;
-import net.iGap.kuknos.service.model.KuknosResponseModel;
-import net.iGap.kuknos.service.model.KuknosTradeResponse;
-import net.iGap.kuknos.service.model.KuknosTransactionResult;
-import net.iGap.kuknos.service.model.KuknosUserInfo;
-import net.iGap.kuknos.service.model.KuknosUsernameStatus;
+import net.iGap.model.kuknos.KuknosPaymentResponse;
+import net.iGap.model.kuknos.Parsian.KuknosAsset;
+import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.model.kuknos.Parsian.KuknosBankPayment;
+import net.iGap.model.kuknos.Parsian.KuknosFederation;
+import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
+import net.iGap.model.kuknos.Parsian.KuknosHash;
+import net.iGap.model.kuknos.Parsian.KuknosOfferResponse;
+import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
+import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
+import net.iGap.model.kuknos.Parsian.KuknosTradeResponse;
+import net.iGap.model.kuknos.Parsian.KuknosTransactionResult;
+import net.iGap.model.kuknos.Parsian.KuknosUserInfo;
+import net.iGap.model.kuknos.Parsian.KuknosUsernameStatus;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
@@ -138,6 +138,7 @@ public interface KuknosApi {
 
     /**
      * this api returns all of closed trades for an account
+     *
      * @param publicKey
      * @param limit
      * @param cursor

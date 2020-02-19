@@ -14,7 +14,7 @@
 
         <variable
             name="callback"
-            type="net.iGap.dialog.BottomSheetItemClickCallback" />
+            type="net.iGap.module.dialog.BottomSheetItemClickCallback" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

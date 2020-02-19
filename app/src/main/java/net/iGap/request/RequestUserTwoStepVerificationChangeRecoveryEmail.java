@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.TwoStepVerificationChangeRecoveryEmailCallback;
+import net.iGap.observers.interfaces.TwoStepVerificationChangeRecoveryEmailCallback;
 import net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail;
 
 public class RequestUserTwoStepVerificationChangeRecoveryEmail {

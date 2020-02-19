@@ -35,10 +35,10 @@ import com.yalantis.ucrop.UCrop;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emojiKeyboard.EmojiView;
-import net.iGap.emojiKeyboard.KeyboardView;
-import net.iGap.emojiKeyboard.NotifyFrameLayout;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.libs.emojiKeyboard.EmojiView;
+import net.iGap.libs.emojiKeyboard.KeyboardView;
+import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
@@ -49,7 +49,7 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.view.EventEditText;
+import net.iGap.module.customView.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 

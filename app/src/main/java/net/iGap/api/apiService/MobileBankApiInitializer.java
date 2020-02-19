@@ -3,6 +3,8 @@ package net.iGap.api.apiService;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperLog;
+import net.iGap.observers.interfaces.MobileBankExpiredTokenCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 
 import org.jetbrains.annotations.NotNull;
 

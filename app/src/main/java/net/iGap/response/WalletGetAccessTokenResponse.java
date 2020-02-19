@@ -11,8 +11,8 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.eventbus.EventManager;
-import net.iGap.eventbus.socketMessages;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletGetAccessToken;
 

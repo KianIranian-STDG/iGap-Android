@@ -27,7 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import net.iGap.R;
-import net.iGap.interfaces.OnColorChangedListenerSelect;
+import net.iGap.observers.interfaces.OnColorChangedListenerSelect;
 
 /**
  * for show dialog select color and return the select color code

@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnUserProfileCheckUsername;
+import net.iGap.observers.interfaces.OnUserProfileCheckUsername;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 
 public class RequestUserProfileCheckUsername {

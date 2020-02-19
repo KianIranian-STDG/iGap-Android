@@ -11,7 +11,7 @@
 package net.iGap.request;
 
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnReceiveInfoLocation;
+import net.iGap.observers.interfaces.OnReceiveInfoLocation;
 import net.iGap.proto.ProtoInfoLocation;
 import net.iGap.proto.ProtoRequest;
 

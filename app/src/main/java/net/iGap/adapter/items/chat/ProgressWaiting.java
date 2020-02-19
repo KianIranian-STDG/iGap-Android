@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 

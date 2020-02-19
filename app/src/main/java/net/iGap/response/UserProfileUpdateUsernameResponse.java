@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnUserProfileUpdateUsername;
+import net.iGap.observers.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileUpdateUsername;
 import net.iGap.realm.RealmUserInfo;

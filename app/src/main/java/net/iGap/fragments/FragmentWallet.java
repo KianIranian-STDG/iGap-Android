@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentWalletBinding;
-import net.iGap.interfaces.IBackHandler;
+import net.iGap.observers.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentWalletViewModel;
 
 /**

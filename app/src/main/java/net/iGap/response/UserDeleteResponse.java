@@ -12,9 +12,7 @@ package net.iGap.response;
 
 import android.util.Log;
 
-import net.iGap.AccountHelper;
 import net.iGap.G;
-import net.iGap.helper.HelperLogout;
 import net.iGap.proto.ProtoError;
 
 import java.io.File;

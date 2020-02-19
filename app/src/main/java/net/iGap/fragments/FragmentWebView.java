@@ -32,9 +32,9 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.IOnBackPressed;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.IOnBackPressed;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.WebAppInterface;
 
 import java.io.IOException;

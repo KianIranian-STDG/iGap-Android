@@ -1,12 +1,11 @@
 package net.iGap.helper;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmList;
 
 public class ContactManager {

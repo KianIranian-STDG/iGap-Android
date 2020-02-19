@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.view.StickerView;
+import net.iGap.module.customView.StickerView;
 
 import java.util.List;
 

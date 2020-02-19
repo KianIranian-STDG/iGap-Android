@@ -27,10 +27,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.interfaces.OnChannelCreate;
-import net.iGap.interfaces.OnChatConvertToGroup;
-import net.iGap.interfaces.OnClientGetRoomResponse;
-import net.iGap.interfaces.OnGroupCreate;
+import net.iGap.observers.interfaces.OnChannelCreate;
+import net.iGap.observers.interfaces.OnChatConvertToGroup;
+import net.iGap.observers.interfaces.OnClientGetRoomResponse;
+import net.iGap.observers.interfaces.OnGroupCreate;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;

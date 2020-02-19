@@ -10,9 +10,8 @@
 
 package net.iGap.realm;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
-import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoGlobal;

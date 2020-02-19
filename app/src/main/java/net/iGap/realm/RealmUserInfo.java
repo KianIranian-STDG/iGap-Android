@@ -10,10 +10,9 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
-import net.iGap.kuknos.service.model.RealmKuknos;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
 

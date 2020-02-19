@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnGroupRevokeLink;
+import net.iGap.observers.interfaces.OnGroupRevokeLink;
 import net.iGap.proto.ProtoGroupRevokeLink;
 
 public class RequestGroupRevokeLink {

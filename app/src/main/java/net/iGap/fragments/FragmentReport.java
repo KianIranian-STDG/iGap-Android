@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.helper.HelperError;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.proto.ProtoClientRoomReport;

@@ -29,15 +29,14 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.databinding.ActivityChatBackgroundBinding;
-import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.ChatBackgroundViewModel;

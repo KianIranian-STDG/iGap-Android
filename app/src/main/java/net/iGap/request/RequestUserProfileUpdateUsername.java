@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnUserProfileUpdateUsername;
+import net.iGap.observers.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.proto.ProtoUserProfileUpdateUsername;
 
 public class RequestUserProfileUpdateUsername {

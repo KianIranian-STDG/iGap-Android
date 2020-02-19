@@ -13,13 +13,13 @@ package net.iGap.helper;
 import android.content.Context;
 import android.content.Intent;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.interfaces.OnUserInfoResponse;
+import net.iGap.observers.interfaces.OnChatGetRoom;
+import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;

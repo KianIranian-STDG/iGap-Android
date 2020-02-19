@@ -20,7 +20,7 @@ import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class GiftStickerMainFragment extends BaseFragment {
 

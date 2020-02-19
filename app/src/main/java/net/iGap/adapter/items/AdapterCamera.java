@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.R;
-import net.iGap.interfaces.OnClickCamera;
+import net.iGap.observers.interfaces.OnClickCamera;
 
 import org.jetbrains.annotations.NotNull;
 

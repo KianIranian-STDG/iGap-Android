@@ -13,13 +13,13 @@ package net.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperGetUserInfo;
 import net.iGap.helper.HelperLogMessage;
-import net.iGap.interfaces.OnGetUserInfo;
+import net.iGap.observers.interfaces.OnGetUserInfo;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;

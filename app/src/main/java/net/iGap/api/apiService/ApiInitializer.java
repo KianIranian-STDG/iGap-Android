@@ -3,7 +3,9 @@ package net.iGap.api.apiService;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperLog;
-import net.iGap.interfaces.OnRefreshToken;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.OnRefreshToken;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.request.RequestUserRefreshToken;
 
 import org.jetbrains.annotations.NotNull;

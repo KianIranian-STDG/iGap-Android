@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.realm.RealmStickerItem;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 import java.util.List;

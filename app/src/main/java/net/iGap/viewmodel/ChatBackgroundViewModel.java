@@ -9,13 +9,13 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.interfaces.OnGetWallpaper;
+import net.iGap.observers.interfaces.OnGetWallpaper;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;

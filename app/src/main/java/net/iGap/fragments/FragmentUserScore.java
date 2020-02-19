@@ -23,7 +23,7 @@ import net.iGap.databinding.FragmentUserScoreBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.viewmodel.UserScoreViewModel;
 

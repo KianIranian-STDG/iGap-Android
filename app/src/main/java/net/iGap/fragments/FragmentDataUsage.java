@@ -8,23 +8,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.DbManager;
-import net.iGap.G;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.adapter.DataUsageAdapter;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.DataUsageListener;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.DataUsageListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.structs.DataUsageStruct;
 import net.iGap.realm.RealmDataUsage;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class FragmentDataUsage extends Fragment implements DataUsageListener {

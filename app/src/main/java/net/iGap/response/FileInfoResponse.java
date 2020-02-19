@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.GeneralResponseCallBack;
-import net.iGap.interfaces.OnFileInfoCallBack;
+import net.iGap.observers.interfaces.GeneralResponseCallBack;
+import net.iGap.observers.interfaces.OnFileInfoCallBack;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoFileInfo;
 

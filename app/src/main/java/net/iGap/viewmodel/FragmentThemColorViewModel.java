@@ -18,7 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.databinding.FragmentThemColorBinding;
 import net.iGap.fragments.FragmentThemColor;
 import net.iGap.model.ChangeTheme;

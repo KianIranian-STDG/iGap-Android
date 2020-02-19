@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM" />
+            type="net.iGap.viewmodel.electricity_bill.ElectricityBillAddVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

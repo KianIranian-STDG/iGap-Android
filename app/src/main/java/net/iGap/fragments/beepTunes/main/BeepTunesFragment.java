@@ -18,7 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.api.beepTunes.PlayingSong;

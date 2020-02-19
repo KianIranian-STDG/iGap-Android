@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="net.iGap.mobileBank.viewmodel.MobileBankHomeTabViewModel" />
+            type="net.iGap.viewmodel.mobileBank.MobileBankHomeTabViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         style="@style/IGapRootViewStyle"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".mobileBank.view.MobileBankHomeTabFragment">
+        tools:context=".fragments.mobileBank.MobileBankHomeTabFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

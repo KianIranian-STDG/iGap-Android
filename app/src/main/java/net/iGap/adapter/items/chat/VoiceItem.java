@@ -24,15 +24,15 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.libs.audio.AudioWave;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;

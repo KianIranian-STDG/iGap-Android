@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosWHistoryVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosWHistoryVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -18,17 +18,17 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmMoneyTransfer;
+import net.iGap.observers.interfaces.RealmMoneyTransfer;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import org.jetbrains.annotations.NotNull;

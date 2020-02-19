@@ -25,7 +25,6 @@ import androidx.annotation.IntRange;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 
 
 /**

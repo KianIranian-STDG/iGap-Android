@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnUserProfileCheckUsername;
+import net.iGap.observers.interfaces.OnUserProfileCheckUsername;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 

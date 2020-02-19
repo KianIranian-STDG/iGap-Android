@@ -15,10 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
-import net.iGap.dialog.account.AccountDialogListener;
-import net.iGap.dialog.account.AccountsDialog;
+import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
@@ -26,10 +25,10 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.OnUnreadChange;
+import net.iGap.observers.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
-import net.iGap.news.view.NewsMainFrag;
+import net.iGap.fragments.news.NewsMainFrag;
 
 import java.util.ArrayList;
 import java.util.List;

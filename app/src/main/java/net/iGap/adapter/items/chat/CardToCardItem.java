@@ -26,7 +26,7 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
