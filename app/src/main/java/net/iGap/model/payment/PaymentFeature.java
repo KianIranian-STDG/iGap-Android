@@ -18,6 +18,7 @@ public class PaymentFeature {
     private String title;
     @SerializedName("priceWithFeature")
     private int price;
+    private boolean isChecked = false;
 
     public int getMax() {
         return max;
@@ -73,5 +74,17 @@ public class PaymentFeature {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    public void toggleCheck() {
+        isChecked = !isChecked;
     }
 }

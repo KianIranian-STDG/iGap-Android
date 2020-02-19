@@ -5,9 +5,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
@@ -22,6 +24,7 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
     private List<PaymentFeature> items = new ArrayList<>();
     private PlanListListener listener;
     private Context context;
+    private int lastChecked = -1;
 
     public PaymentPlansAdapter(List<PaymentFeature> items, PlanListListener listener) {
         this.items = items;
@@ -47,7 +50,6 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
     @Override
     public void onBindViewHolder(@NonNull ChequeListViewHolder holder, int position) {
         holder.bind(position);
-        holder.root.setOnClickListener(v -> listener.onPlanClicked(position));
     }
 
     @Override
@@ -57,16 +59,20 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
 
     class ChequeListViewHolder extends RecyclerView.ViewHolder {
 
-        private View root;
         private TextView title, userScore, spentScore, price;
+        private View click;
+        private CheckBox checkBox;
+        private Group detail;
 
         public ChequeListViewHolder(@NonNull View itemView) {
             super(itemView);
-            root = itemView.findViewById(R.id.cardHolder);
             title = itemView.findViewById(R.id.planTitle);
             userScore = itemView.findViewById(R.id.planUserScore);
             spentScore = itemView.findViewById(R.id.planSpentScore);
             price = itemView.findViewById(R.id.planPrice);
+            click = itemView.findViewById(R.id.planClick);
+            checkBox = itemView.findViewById(R.id.planCheckBox);
+            detail = itemView.findViewById(R.id.planGroup);
         }
 
         @SuppressLint("SetTextI18n")
@@ -77,15 +83,48 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
             spentScore.setText(getString(R.string.payment_spentScore) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getSpentScore()));
             price.setText(getString(R.string.payment_price) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getPrice()) + getString(R.string.rial));
 
+            click.setOnClickListener(null);
+            checkBox.setOnCheckedChangeListener(null);
+
+            // check for notify data set changed
+            if (items.get(position).isChecked()) {
+                detail.setVisibility(View.VISIBLE);
+                checkBox.setChecked(true);
+            } else {
+                detail.setVisibility(View.GONE);
+                checkBox.setChecked(false);
+            }
+
+            click.setOnClickListener(v -> checkBox.performClick());
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> toggleState(getAdapterPosition()));
+
         }
 
         private String getString(int id) {
             return context.getString(id);
         }
 
+        private void toggleState(int position) {
+
+            if (position == lastChecked) {
+                items.get(position).toggleCheck();
+                lastChecked = -1;
+            } else {
+                if (lastChecked != -1) {
+                    items.get(lastChecked).toggleCheck();
+                    listener.onPlanClicked(lastChecked, false);
+                }
+                items.get(position).toggleCheck();
+                lastChecked = position;
+            }
+            listener.onPlanClicked(position, checkBox.isChecked());
+            notifyDataSetChanged();
+        }
+
     }
 
     public interface PlanListListener {
-        void onPlanClicked(int position);
+        void onPlanClicked(int position, boolean state);
     }
+
 }

@@ -758,7 +758,7 @@ Want to get it?</string>
     <string name="completed">Completed</string>
     <string name="payment_userScore">Your Score: </string>
     <string name="payment_spentScore">Spending Score: </string>
-    <string name="payment_price">Final Price: </string>
+    <string name="payment_price">discount: </string>
     <!-- New String -->
     <string name="please_enter_channel_name">Please Enter Channel Name</string>
     <string name="new_channel">New Channel</string>
@@ -2558,5 +2558,6 @@ Want to get it?</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
     <string name="poll_dialog_question">Are you sure of your opinion?</string>
     <string name="delete_recent_emoji">Delete Recent Emoji</string>
+    <string name="payment_discount_plans_title">Discount Plans</string>
 
 </resources>

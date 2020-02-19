@@ -43,6 +43,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
     private FragmentUniversalPaymentBinding binding;
     private PaymentCallBack callBack;
     private PaymentViewModel paymentViewModel;
+    private PaymentPlansAdapter adapter;
 
     public static PaymentFragment getInstance(String type, String token, PaymentCallBack paymentCallBack) {
         PaymentFragment fragment = new PaymentFragment();
@@ -120,14 +121,13 @@ public class PaymentFragment extends BaseAPIViewFrag {
             @Override
             public void onChanged(List<PaymentFeature> paymentFeatures) {
                 if (paymentFeatures != null) {
-                    PaymentPlansAdapter adapter = new PaymentPlansAdapter(paymentFeatures, new PaymentPlansAdapter.PlanListListener() {
+                    adapter = new PaymentPlansAdapter(paymentFeatures, new PaymentPlansAdapter.PlanListListener() {
                         @Override
-                        public void onPlanClicked(int position) {
-                            Log.d("amini", "onPlanClicked: on click");
-                            if (paymentViewModel.getDiscountPlanPosition() == position)
-                                paymentViewModel.setDiscountPlanPosition(-1);
-                            else
+                        public void onPlanClicked(int position, boolean state) {
+                            if (state)
                                 paymentViewModel.setDiscountPlanPosition(position);
+                            else
+                                paymentViewModel.setDiscountPlanPosition(-1);
                         }
                     });
                     binding.paymentFeatureRC.setAdapter(adapter);

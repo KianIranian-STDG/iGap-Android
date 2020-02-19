@@ -156,9 +156,43 @@
             android:text="@{@string/payment_rrn_title(viewModel.paymentRRN)}"
             android:textColor="?iGapSubtitleTextColor"
             android:visibility="@{viewModel.showPaymentErrorMessage}"
-            app:layout_constraintBottom_toTopOf="@id/paymentFeatureRC"
+            app:layout_constraintBottom_toTopOf="@id/planDesc"
             app:layout_constraintEnd_toEndOf="@id/price"
             app:layout_constraintStart_toStartOf="@id/price" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/planGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.discountVisibility}"
+            app:constraint_referenced_ids="paymentFeatureRC,planDesc,planDivider" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/planDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp8"
+            android:text="@string/payment_discount_plans_title"
+            android:textSize="@dimen/smallTextSize"
+            android:textColor="?iGapSubtitleTextColor"
+            android:gravity="start"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/planDivider"
+            app:layout_constraintBottom_toTopOf="@+id/paymentFeatureRC" />
+
+        <View
+            android:id="@+id/planDivider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp1"
+            android:background="?iGapDividerLine"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            app:layout_constraintTop_toTopOf="@+id/planDesc"
+            app:layout_constraintBottom_toBottomOf="@+id/planDesc"
+            app:layout_constraintStart_toEndOf="@+id/planDesc"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

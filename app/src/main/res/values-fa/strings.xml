@@ -736,6 +736,10 @@
     <string name="your_login_code_is">"کد ورود شما هست: "</string>
     <string name="there_is_no_sheared_media">هیچ رسانه‌ای به اشتراک گذاشته نشده است.</string>
     <string name="pending">معلق</string>
+    <string name="payment_userScore">امتیاز شما:  </string>
+    <string name="payment_spentScore">امتیاز مصرفی: </string>
+    <string name="payment_price">تخفیف: </string>
+    <string name="payment_discount_plans_title">بسته های تخفیف</string>
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ پارسی</string>
     <string name="content_log_out">آیا از خروج از حساب کاربری خود اطمینان دارید؟</string>

@@ -44,7 +44,9 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
     private MutableLiveData<List<PaymentFeature>> discountOption = new MutableLiveData<>(null);
+    private ObservableInt discountVisibility = new ObservableInt(View.GONE);
     private int discountPlanPosition = -1;
+    private int originalPrice;
 
     private String token;
     private String orderId;
@@ -196,11 +198,15 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 showMainView.set(View.VISIBLE);
                 showButtons.set(View.VISIBLE);
                 description.set(data.getInfo().getProduct().getDescription());
+                originalPrice = data.getInfo().getPrice();
                 String tmp = String.valueOf(data.getInfo().getPrice());
                 price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
                 title.set(data.getInfo().getProduct().getTitle());
                 orderDetail = data;
                 discountOption.setValue(data.getDiscountOption());
+                if (data.getDiscountOption() != null && data.getDiscountOption().size() > 0) {
+                    discountVisibility.set(View.VISIBLE);
+                }
             }
 
             @Override
@@ -290,5 +296,17 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     public void setDiscountPlanPosition(int discountPlanPosition) {
         this.discountPlanPosition = discountPlanPosition;
+        if (discountPlanPosition != -1) {
+            int newPrice = originalPrice - discountOption.getValue().get(discountPlanPosition).getPrice();
+            String tmp = String.valueOf(newPrice);
+            price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+        } else {
+            String tmp = String.valueOf(originalPrice);
+            price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+        }
+    }
+
+    public ObservableInt getDiscountVisibility() {
+        return discountVisibility;
     }
 }
