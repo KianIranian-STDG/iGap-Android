@@ -34,6 +34,11 @@ public class EventEditText extends AppCompatEditText {
         if (listener != null)
             listener.onInternalTouchEvent(event);
 
-        return super.onTouchEvent(event);
+        try {
+            return super.onTouchEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
