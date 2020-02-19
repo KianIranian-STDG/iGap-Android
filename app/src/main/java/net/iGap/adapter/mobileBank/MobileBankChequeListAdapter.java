@@ -1,6 +1,5 @@
 package net.iGap.adapter.mobileBank;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.mobileBank.BankChequeSingle;
+import net.iGap.module.Theme;
 import net.iGap.module.mobileBank.JalaliCalendar;
 
 import java.text.DecimalFormat;
@@ -24,7 +23,6 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private List<BankChequeSingle> mdata;
     private OnItemClickListener blockBTN;
-    private Context context;
 
     public MobileBankChequeListAdapter(List<BankChequeSingle> mdata, OnItemClickListener blockBTN) {
         if (mdata != null)
@@ -38,7 +36,6 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
-        context = viewGroup.getContext();
         View singleVH = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mobile_bank_cheque_list_cell, viewGroup, false);
         viewHolder = new ViewHolder(singleVH);
         return viewHolder;
@@ -90,16 +87,16 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             chNumber.setText(CompatibleUnicode(mdata.get(position).getNumber()));
 
             if (mdata.get(position).getBalance() != null)
-                chValue.setText(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))) + context.getResources().getString(R.string.rial));
+                chValue.setText(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))) + itemView.getContext().getResources().getString(R.string.rial));
             else {
-                chValue.setText(context.getResources().getString(R.string.mobile_bank_balance_error_no_price));
+                chValue.setText(itemView.getContext().getResources().getString(R.string.mobile_bank_balance_error_no_price));
             }
 
             String date = mdata.get(position).getChangeStatusDate();
             if (date == null || date.equals("")) {
                 chDate.setVisibility(View.GONE);
             } else {
-                chDate.setText(context.getString(R.string.date) + ": " + JalaliCalendar.getPersianDate(date));
+                chDate.setText(itemView.getContext().getString(R.string.date) + ": " + JalaliCalendar.getPersianDate(date));
                 chDate.setVisibility(View.VISIBLE);
             }
             String status = mdata.get(position).getStatus();
@@ -124,23 +121,23 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
         private String getStatusText(String status) {
             switch (status) {
                 case "USED":
-                    return context.getString(R.string.USED);
+                    return itemView.getContext().getString(R.string.USED);
                 case "CASH":
-                    return context.getString(R.string.CASH);
+                    return itemView.getContext().getString(R.string.CASH);
                 case "REJECT":
-                    return context.getString(R.string.REJECT);
+                    return itemView.getContext().getString(R.string.REJECT);
                 case "RETURN":
-                    return context.getString(R.string.RETURN);
+                    return itemView.getContext().getString(R.string.RETURN);
                 case "PAY":
-                    return context.getString(R.string.PAY);
+                    return itemView.getContext().getString(R.string.PAY);
                 case "HOLD":
-                    return context.getString(R.string.HOLD);
+                    return itemView.getContext().getString(R.string.HOLD);
                 case "INTERBANK_BLOCK":
-                    return context.getString(R.string.INTERBANK_BLOCK);
+                    return itemView.getContext().getString(R.string.INTERBANK_BLOCK);
                 case "INVALID":
-                    return context.getString(R.string.INVALID_PARSIAN);
+                    return itemView.getContext().getString(R.string.INVALID_PARSIAN);
                 case "REGISTER":
-                    return context.getString(R.string.REGISTER);
+                    return itemView.getContext().getString(R.string.REGISTER);
                 default:
                     return status;
             }
