@@ -157,10 +157,12 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
 //            Log.i(TAG, "selected voice    id: " + holder.mMessageID + " status: " + playStatus);
 
-
-            G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
-
-            RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
+            if (!structMessage.isSenderMe() && structMessage.realmRoomMessage.getStatus() != null &&
+                    !structMessage.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
+            ) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+                RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
+            }
 
             if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                 MusicPlayer.onCompleteChat = holder.complete;

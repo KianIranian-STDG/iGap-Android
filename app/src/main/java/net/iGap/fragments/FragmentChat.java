@@ -4588,20 +4588,28 @@ public class FragmentChat extends BaseFragment
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (getFirstUnreadMessage() != null && getFirstUnreadMessage().isValid() && !getFirstUnreadMessage().isDeleted() && getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()) {
+        if (getFirstUnreadMessage() != null &&
+                getFirstUnreadMessage().isValid() &&
+                !getFirstUnreadMessage().isDeleted() &&
+                getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()
+        ) {
             setCountNewMessageZero();
         }
 
-        if (chatType != CHANNEL && (!messageInfo.isSenderMe() && messageInfo.realmRoomMessage.getStatus() != null && !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
+        if (!isPaused && chatType != CHANNEL &&
+                (
+                        !messageInfo.isSenderMe() &&
+                        messageInfo.realmRoomMessage.getStatus() != null &&
+                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) &&
+                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
+                )
+        ) {
             /**
              * set message status SEEN for avoid from run this block in each bindView
              */
 
             messageInfo.realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-            if (!isPaused)
-                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-
+            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
