@@ -71,7 +71,6 @@ public class FragmentNotificationAndSound extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragmentNotificationAndSoundViewModel(viewModel);
-
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setDefaultTitle(getString(R.string.notificaion_and_sound))
@@ -119,7 +118,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
         gradientDrawable.setColor(viewModel.ledColorMessage);
         viewModel.showMessageLedDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true).title(R.string.st_led_color).titleGravity(GravityEnum.START).positiveText(R.string.set).negativeText(R.string.DISCARD)
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true)
+                        .title(R.string.st_led_color).titleGravity(GravityEnum.START)
+                        .positiveText(R.string.B_ok).negativeText(R.string.B_cancel)
                         .onNegative((dialog1, which) -> dialog1.dismiss()).build();
                 View view = dialog.getCustomView();
                 ColorPicker picker = view.findViewById(R.id.picker);
@@ -143,7 +144,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
         gradientDrawableGroup.setColor(viewModel.ledColorGroup);
         viewModel.showGroupLedDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true).title(R.string.st_led_color).titleGravity(GravityEnum.START).positiveText(R.string.set).negativeText(R.string.DISCARD)
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true)
+                        .title(R.string.st_led_color).titleGravity(GravityEnum.START)
+                        .positiveText(R.string.B_ok).negativeText(R.string.B_cancel)
                         .onNegative((dialog1, which) -> dialog1.dismiss()).build();
                 View view = dialog.getCustomView();
                 ColorPicker picker = view.findViewById(R.id.picker);

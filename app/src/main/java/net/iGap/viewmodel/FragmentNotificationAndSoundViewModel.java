@@ -11,6 +11,7 @@ package net.iGap.viewmodel;
 
 
 import android.content.SharedPreferences;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
@@ -92,7 +93,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     }
 
-    private void setMessagePreview(Boolean isChecked) {
+    public void setMessagePreview(Boolean isChecked) {
         isMassagePreview.set(isChecked);
         if (isChecked) {
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1).apply();
@@ -101,7 +102,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         }
     }
 
-    private void setAlertGroup(Boolean isChecked) {
+    public void setAlertGroup(Boolean isChecked) {
         isAlertGroup.set(isChecked);
         if (isChecked) {
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1).apply();
@@ -111,7 +112,7 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
 
     }
 
-    private void setMessagePreviewGroup(Boolean isChecked) {
+    public void setMessagePreviewGroup(Boolean isChecked) {
         isGroupPreView.set(isChecked);
         if (isChecked) {
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1)
@@ -199,24 +200,12 @@ public class FragmentNotificationAndSoundViewModel extends ViewModel {
         isMassagePreview.set(!isMassagePreview.get());
     }
 
-    public void onCheckedChangedMassagePreview(boolean isChecked) {
-        setMessagePreview(isChecked);
-    }
-
     public void onClickAlertGroup() {
         isAlertGroup.set(!isAlertGroup.get());
     }
 
-    public void onCheckedChangedAlertGroup(boolean isChecked) {
-        setAlertGroup(isChecked);
-    }
-
     public void onClickMessagePreViewGroup() {
         isGroupPreView.set(!isGroupPreView.get());
-    }
-
-    public void onCheckedChangedMessagePreViewGroup(boolean isChecked) {
-        setMessagePreviewGroup(isChecked);
     }
 
     /**
