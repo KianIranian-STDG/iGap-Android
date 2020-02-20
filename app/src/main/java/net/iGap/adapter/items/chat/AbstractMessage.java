@@ -655,9 +655,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_channel_forward_light, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                    if (isAllowToForward(mMessage))
                         messageClickListener.onForwardClick(structMessage);
                 });
             }
@@ -666,9 +664,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                    if (isAllowToForward(mMessage))
                         messageClickListener.onForwardFromCloudClick(structMessage);
                 });
             }
@@ -718,6 +714,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else if (mMessage.isEdited()) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
         }
+    }
+
+    private boolean isAllowToForward(RealmRoomMessage message) {
+        return !FragmentChat.isInSelectionMode &&
+                message != null &&
+                !message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                !message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString());
     }
 
     /**

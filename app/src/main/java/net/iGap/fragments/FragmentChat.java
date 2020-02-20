@@ -5261,15 +5261,33 @@ public class FragmentChat extends BaseFragment
 
     private void deleteMassage(Realm realm, final StructMessageInfo message, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList list = new ArrayList();
-                list.add(message.realmRoomMessage.getMessageId());
-                deleteSelectedMessageFromAdapter(list);
-            }
+        G.handler.post(() -> {
+            ArrayList list1 = new ArrayList();
+            list1.add(message.realmRoomMessage.getMessageId());
+            deleteSelectedMessageFromAdapter(list1);
         });
         RealmRoomMessage.deleteSelectedMessages(realm, message.realmRoomMessage.getRoomId(), list, bothDeleteMessageId, chatType);
+    }
+
+    private void doForwardDialogMessage(StructMessageInfo message, boolean isMessage) {
+        if (message == null) {
+            mForwardMessages = getMessageStructFromSelectedItems();
+            deselectMessageAndShowPinIfNeeded();
+        } else {
+            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+        }
+
+        initAttachForward(isMessage);
+        itemAdapterBottomSheetForward();
+    }
+
+    private void deselectMessageAndShowPinIfNeeded() {
+        if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
+            mAdapter.deselect();
+            if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
+            ll_AppBarSelected.setVisibility(View.GONE);
+            clearReplyView();
+        }
     }
 
     @Override
@@ -5385,41 +5403,12 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onForwardClick(StructMessageInfo message) {
-        //finishChat();
-        if (message == null) {
-            mForwardMessages = getMessageStructFromSelectedItems();
-            if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
-                mAdapter.deselect();
-                if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
-                ll_AppBarSelected.setVisibility(View.GONE);
-                clearReplyView();
-            }
-        } else {
-            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
-        }
-
-        initAttachForward(false);
-        itemAdapterBottomSheetForward();
-
-        //new HelperFragment().removeAll(true);
+        doForwardDialogMessage(message, false);
     }
 
     @Override
     public void onForwardFromCloudClick(StructMessageInfo message) {
-        if (message == null) {
-            mForwardMessages = getMessageStructFromSelectedItems();
-            if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
-                mAdapter.deselect();
-                if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
-                ll_AppBarSelected.setVisibility(View.GONE);
-                clearReplyView();
-            }
-        } else {
-            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
-        }
-
-        initAttachForward(true);
-        itemAdapterBottomSheetForward();
+        doForwardDialogMessage(message, true);
     }
 
     @Override
