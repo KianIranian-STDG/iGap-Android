@@ -19,14 +19,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperMimeType;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructExplorerItem;
 
 import java.util.ArrayList;
 
 public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHolder> {
 
-    private HelperMimeType helperMimeType;
     private ArrayList<StructExplorerItem> item;
     private ViewHolder viewholder;
     private OnItemClickListenerExplorer onItemClickListener;
@@ -34,7 +33,6 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
     public AdapterExplorer(ArrayList<StructExplorerItem> items, OnItemClickListenerExplorer onItemClickListener) {
         item = items;
         this.onItemClickListener = onItemClickListener;
-        helperMimeType = new HelperMimeType();
     }
 
     @Override
@@ -48,10 +46,8 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
         holder.txtTitle.setText(rowItem.name);
         holder.imageView.setImageResource(rowItem.image);
 
-        if (rowItem.image == R.mipmap.j_pic) {
-            helperMimeType.LoadImageTumpnail(holder.imageView, rowItem.path);
-        } else if (rowItem.image == R.mipmap.j_video) {
-            helperMimeType.loadVideoThumbnail(holder.imageView, rowItem.path);
+        if (rowItem.image == R.mipmap.j_pic || rowItem.image == R.mipmap.j_video) {
+            ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.image);
         }
     }
 
