@@ -3173,12 +3173,21 @@ public class FragmentChat extends BaseFragment
             } else {
                 showCardToCard();
             }
+
+            if (keyboardViewVisible) {
+                hideKeyboard();
+            }
         });
 
 
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
+                if (keyboardViewVisible) {
+                    hideKeyboard();
+                }
+
                 if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
                         HelperPermission.getMicroPhonePermission(G.fragmentActivity, null);
