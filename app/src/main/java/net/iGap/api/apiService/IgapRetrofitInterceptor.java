@@ -15,11 +15,20 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class IgapRetrofitInterceptor implements Interceptor {
+    private static final int PERSIAN = 0;
+    private static final int ENGLISH = 1;
+    private static final int RUSSIAN = 2;
+    private static final int FRENCH = 3;
+    private static final int ARABIAN = 4;
+    private static final int KURDISH = 5;
+    private static final int AZERBAIJANI = 6;
+    private static final int UNKNOWN = -1;
+
     private String specifications;
-    private String lastLang;
+    private int lastLang;
 
     IgapRetrofitInterceptor() {
-        lastLang = G.selectedLanguage;
+        lastLang = getCurrentLang();
     }
 
     @NotNull
@@ -37,7 +46,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
     }
 
     private String getSpecifications() {
-        boolean needToReloadSpec = !G.selectedLanguage.equals(lastLang);
+        boolean needToReloadSpec = getCurrentLang() != lastLang;
 
         if (specifications == null || needToReloadSpec) {
             JsonObject jsonObject = new JsonObject();
@@ -47,11 +56,33 @@ public class IgapRetrofitInterceptor implements Interceptor {
 
             jsonObject.addProperty("id", appId);
             jsonObject.addProperty("version", appVersion);
-            jsonObject.addProperty("language", lastLang = G.selectedLanguage);
+            jsonObject.addProperty("language", lastLang = getCurrentLang());
+
 
             specifications = new Gson().toJson(jsonObject);
         }
 
         return specifications;
+    }
+
+    private int getCurrentLang() {
+        switch (G.selectedLanguage) {
+            case "fa":
+                return PERSIAN;
+            case "en":
+                return ENGLISH;
+            case "ru":
+                return RUSSIAN;
+            case "fr":
+                return FRENCH;
+            case "ar":
+                return ARABIAN;
+            case "ur":
+                return KURDISH;
+            case "iw":
+                return AZERBAIJANI;
+            default:
+                return UNKNOWN;
+        }
     }
 }
