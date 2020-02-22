@@ -16,14 +16,10 @@ import okhttp3.Response;
 
 public class IgapRetrofitInterceptor implements Interceptor {
     private String specifications;
+    private String lastLang;
 
     IgapRetrofitInterceptor() {
-        JsonObject jsonObject = new JsonObject();
-        String appId = "2";
-        jsonObject.addProperty("appId", appId);
-        String appVersion = String.valueOf(BuildConfig.VERSION_CODE);
-        jsonObject.addProperty("appVersion", appVersion);
-        specifications = new Gson().toJson(jsonObject);
+        lastLang = G.selectedLanguage;
     }
 
     @NotNull
@@ -32,11 +28,30 @@ public class IgapRetrofitInterceptor implements Interceptor {
         Request original = chain.request();
         Request request = original.newBuilder()
                 .header("Authorization", G.getApiToken())
-                .header("specifications", specifications)
+                .header("spec", getSpecifications())
                 .header("Content-Type", "application/json")
                 .method(original.method(), original.body())
                 .build();
 
         return chain.proceed(request);
+    }
+
+    private String getSpecifications() {
+        boolean needToReloadSpec = !G.selectedLanguage.equals(lastLang);
+
+        if (specifications == null || needToReloadSpec) {
+            JsonObject jsonObject = new JsonObject();
+
+            String appId = "2"; //android operating system app id in iGap core
+            String appVersion = String.valueOf(BuildConfig.VERSION_CODE);
+
+            jsonObject.addProperty("id", appId);
+            jsonObject.addProperty("version", appVersion);
+            jsonObject.addProperty("language", lastLang = G.selectedLanguage);
+
+            specifications = new Gson().toJson(jsonObject);
+        }
+
+        return specifications;
     }
 }
