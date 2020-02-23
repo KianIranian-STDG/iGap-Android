@@ -13,6 +13,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.model.payment.CheckOrderResponse;
 import net.iGap.model.payment.CheckOrderStatusResponse;
 import net.iGap.model.payment.Payment;
+import net.iGap.model.payment.PaymentFeature;
 import net.iGap.model.payment.PaymentResult;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.PaymentRepository;
@@ -20,6 +21,8 @@ import net.iGap.repository.PaymentRepository;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
+
+import java.util.List;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 
@@ -42,6 +45,10 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private ObservableDouble paymentRRN = new ObservableDouble();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
+    private MutableLiveData<List<PaymentFeature>> discountOption = new MutableLiveData<>(null);
+    private ObservableInt discountVisibility = new ObservableInt(View.GONE);
+    private int discountPlanPosition = -1;
+    private int originalPrice;
 
     private String token;
     private String orderId;
@@ -156,7 +163,10 @@ public class PaymentViewModel extends BaseAPIViewModel {
     }
 
     public void onAcceptClick() {
-        goToWebPage.setValue(orderDetail.getRedirectUrl());
+        if (discountPlanPosition == -1)
+            goToWebPage.setValue(orderDetail.getRedirectUrl());
+        else
+            goToWebPage.setValue(orderDetail.getRedirectUrl() + "?feature=" + discountOption.getValue().get(discountPlanPosition).getType());
     }
 
     public void setPaymentResult(Payment payment) {
@@ -193,10 +203,15 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 showMainView.set(View.VISIBLE);
                 showButtons.set(View.VISIBLE);
                 description.set(data.getInfo().getProduct().getDescription());
+                originalPrice = data.getInfo().getPrice();
                 String tmp = String.valueOf(data.getInfo().getPrice());
                 price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
                 title.set(data.getInfo().getProduct().getTitle());
                 orderDetail = data;
+                discountOption.setValue(data.getDiscountOption());
+                if (data.getDiscountOption() != null && data.getDiscountOption().size() > 0) {
+                    discountVisibility.set(View.VISIBLE);
+                }
             }
 
             @Override
@@ -216,6 +231,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         showLoadingView.set(View.VISIBLE);
         showButtons.set(View.INVISIBLE);
         showRetryView.set(View.GONE);
+        discountVisibility.set(View.GONE);
         repository.checkOrderStatus(orderId, this, new ResponseCallback<CheckOrderStatusResponse>() {
             @Override
             public void onSuccess(CheckOrderStatusResponse data) {
@@ -274,5 +290,28 @@ public class PaymentViewModel extends BaseAPIViewModel {
         paymentStatus.set("error");
         closeButtonColor.set(R.color.red);
         showRetryView.set(View.VISIBLE);
+    }
+
+    public MutableLiveData<List<PaymentFeature>> getDiscountOption() {
+        return discountOption;
+    }
+
+    public int getDiscountPlanPosition() {
+        return discountPlanPosition;
+    }
+
+    public void setDiscountPlanPosition(int discountPlanPosition) {
+        this.discountPlanPosition = discountPlanPosition;
+        if (discountPlanPosition != -1) {
+            String tmp = String.valueOf(discountOption.getValue().get(discountPlanPosition).getPrice());
+            price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+        } else {
+            String tmp = String.valueOf(originalPrice);
+            price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+        }
+    }
+
+    public ObservableInt getDiscountVisibility() {
+        return discountVisibility;
     }
 }

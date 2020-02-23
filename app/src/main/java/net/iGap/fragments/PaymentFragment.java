@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,11 +25,15 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.PaymentPlansAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
 import net.iGap.model.payment.Payment;
+import net.iGap.model.payment.PaymentFeature;
 import net.iGap.observers.interfaces.PaymentCallBack;
 import net.iGap.viewmodel.PaymentViewModel;
+
+import java.util.List;
 
 public class PaymentFragment extends BaseAPIViewFrag {
 
@@ -38,6 +43,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
     private FragmentUniversalPaymentBinding binding;
     private PaymentCallBack callBack;
     private PaymentViewModel paymentViewModel;
+    private PaymentPlansAdapter adapter;
 
     public static PaymentFragment getInstance(String type, String token, PaymentCallBack paymentCallBack) {
         PaymentFragment fragment = new PaymentFragment();
@@ -106,6 +112,25 @@ public class PaymentFragment extends BaseAPIViewFrag {
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), R.string.add_new_account, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        binding.paymentFeatureRC.setHasFixedSize(true);
+        paymentViewModel.getDiscountOption().observe(getViewLifecycleOwner(), new Observer<List<PaymentFeature>>() {
+            @Override
+            public void onChanged(List<PaymentFeature> paymentFeatures) {
+                if (paymentFeatures != null) {
+                    adapter = new PaymentPlansAdapter(paymentFeatures, new PaymentPlansAdapter.PlanListListener() {
+                        @Override
+                        public void onPlanClicked(int position, boolean state) {
+                            if (state)
+                                paymentViewModel.setDiscountPlanPosition(position);
+                            else
+                                paymentViewModel.setDiscountPlanPosition(-1);
+                        }
+                    });
+                    binding.paymentFeatureRC.setAdapter(adapter);
                 }
             }
         });
