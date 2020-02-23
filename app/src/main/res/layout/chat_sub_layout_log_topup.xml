@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/topUp_type"
+                android:text="@string/charge_type"
                 android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
@@ -180,7 +180,7 @@
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="17dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number"
