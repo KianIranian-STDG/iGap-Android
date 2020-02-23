@@ -33,8 +33,8 @@ import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentNotificationAndSoundViewModel;
 
 import org.jetbrains.annotations.NotNull;
