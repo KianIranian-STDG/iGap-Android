@@ -109,6 +109,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
                     bundle.putString("Authorization", G.getApiToken());
                     browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
                     startActivity(browserIntent);
+                    Log.e("abbasiApiToken", "intent to chrome -> " + bundle.getString("Authorization"));
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), R.string.add_new_account, Toast.LENGTH_LONG).show();
