@@ -323,7 +323,7 @@
     <string name="array_1_hour">1 Hour</string>
     <string name="array_2_hour">2 Hours</string>
     <string name="array_4_hour">4 Hours</string>
-    <string name="array_Default_Notification_tone">Default Notifications Tone</string>
+    <string name="Default_Notification_tone">Default Notifications Tone</string>
     <string name="replay_item_dialog">Reply</string>
     <string name="copy_item_dialog">Copy</string>
     <string name="share_item_dialog">Share</string>

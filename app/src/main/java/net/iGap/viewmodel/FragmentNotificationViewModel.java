@@ -116,7 +116,7 @@ public class FragmentNotificationViewModel {
 
     private void startSound() {
         if (realmIdSound == 0 || realmIdSound == -1) {
-            sound.set(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+            sound.set(G.fragmentActivity.getResources().getString(R.string.Default_Notification_tone));
         } else {
             sound.set(realmSound);
         }
@@ -272,7 +272,7 @@ public class FragmentNotificationViewModel {
 
     public void onLedColorClick(View view) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.popup_colorpicker, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -287,8 +287,8 @@ public class FragmentNotificationViewModel {
         View view1 = dialog.getCustomView();
         assert view1 != null;
         final ColorPicker picker = view1.findViewById(R.id.picker);
-        SVBar svBar = view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
+        SVBar svBar = view1.findViewById(R.id.svBar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacityBar);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 
@@ -298,7 +298,6 @@ public class FragmentNotificationViewModel {
                 dialog.dismiss();
                 GradientDrawable bgShape = (GradientDrawable) fragmentNotificationBinding.ntgImgLedColorMessage.getBackground();
                 bgShape.setColor(picker.getColor());
-
                 RealmNotificationSetting.ledColor(roomId, roomType, picker.getColor());
             }
         });

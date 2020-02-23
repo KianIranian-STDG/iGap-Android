@@ -329,7 +329,7 @@
     <string name="array_1_hour">"۱ ساعت"</string>
     <string name="array_2_hour">"۲ ساعت"</string>
     <string name="array_4_hour">"۴ ساعت"</string>
-    <string name="array_Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
+    <string name="Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
     <string name="replay_item_dialog">"پاسخ"</string>
     <string name="copy_item_dialog">"کپی"</string>
     <string name="share_item_dialog">"اشتراک"</string>
