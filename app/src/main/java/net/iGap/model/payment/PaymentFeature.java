@@ -16,8 +16,12 @@ public class PaymentFeature {
     private int userScore;
     @SerializedName("title")
     private String title;
+    @SerializedName("type")
+    private String type;
     @SerializedName("priceWithFeature")
     private int price;
+    @SerializedName("discount")
+    private int discount;
     private boolean isChecked = false;
 
     public int getMax() {
@@ -86,5 +90,21 @@ public class PaymentFeature {
 
     public void toggleCheck() {
         isChecked = !isChecked;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 }

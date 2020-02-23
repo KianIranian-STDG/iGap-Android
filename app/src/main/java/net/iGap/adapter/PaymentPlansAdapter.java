@@ -81,7 +81,7 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
             title.setText(items.get(position).getTitle());
             userScore.setText(getString(R.string.payment_userScore) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getUserScore()));
             spentScore.setText(getString(R.string.payment_spentScore) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getSpentScore()));
-            price.setText(getString(R.string.payment_price) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getPrice()) + getString(R.string.rial));
+            price.setText(getString(R.string.payment_price) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getDiscount()) + getString(R.string.rial));
 
             click.setOnClickListener(null);
             checkBox.setOnCheckedChangeListener(null);

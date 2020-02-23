@@ -164,7 +164,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         if (discountPlanPosition == -1)
             goToWebPage.setValue(orderDetail.getRedirectUrl());
         else
-            goToWebPage.setValue(orderDetail.getRedirectUrl() + "?feature=" + discountOption.getValue().get(discountPlanPosition).getTitle());
+            goToWebPage.setValue(orderDetail.getRedirectUrl() + "?feature=" + discountOption.getValue().get(discountPlanPosition).getType());
     }
 
     public void setPaymentResult(Payment payment) {
@@ -229,6 +229,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         showLoadingView.set(View.VISIBLE);
         showButtons.set(View.INVISIBLE);
         showRetryView.set(View.GONE);
+        discountVisibility.set(View.GONE);
         repository.checkOrderStatus(orderId, this, new ResponseCallback<CheckOrderStatusResponse>() {
             @Override
             public void onSuccess(CheckOrderStatusResponse data) {
@@ -300,8 +301,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
     public void setDiscountPlanPosition(int discountPlanPosition) {
         this.discountPlanPosition = discountPlanPosition;
         if (discountPlanPosition != -1) {
-            int newPrice = originalPrice - discountOption.getValue().get(discountPlanPosition).getPrice();
-            String tmp = String.valueOf(newPrice);
+            String tmp = String.valueOf(discountOption.getValue().get(discountPlanPosition).getPrice());
             price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
         } else {
             String tmp = String.valueOf(originalPrice);
