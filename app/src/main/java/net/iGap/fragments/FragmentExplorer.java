@@ -26,11 +26,11 @@ import net.iGap.R;
 import net.iGap.adapter.AdapterExplorer;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.FileUtils;
+import net.iGap.module.structs.StructExplorerItem;
 import net.iGap.observers.interfaces.IOnBackPressed;
 import net.iGap.observers.interfaces.IPickFile;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.module.FileUtils;
-import net.iGap.module.structs.StructExplorerItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -170,7 +170,7 @@ public class FragmentExplorer extends BaseFragment {
         if (new File(Environment.getExternalStorageDirectory().getAbsolutePath()).exists()) {
             x = new StructExplorerItem();
             x.name = "Device";
-            x.image = R.mipmap.j_device;
+            x.image = R.drawable.ic_fm_internal;
             x.path = Environment.getExternalStorageDirectory().getAbsolutePath();
             item.add(x);
             node.add(Environment.getExternalStorageDirectory().getAbsolutePath());
@@ -181,7 +181,7 @@ public class FragmentExplorer extends BaseFragment {
             if (new File(sdPath).exists()) {
                 x = new StructExplorerItem();
                 x.name = "SdCard";
-                x.image = R.mipmap.j_sdcard;
+                x.image = R.drawable.ic_fm_memory;
                 x.path = sdPath + "/";
                 item.add(x);
                 node.add(sdPath + "/");
@@ -193,7 +193,7 @@ public class FragmentExplorer extends BaseFragment {
             if (new File(G.DIR_SDCARD_EXTERNAL).exists()) {
                 x = new StructExplorerItem();
                 x.name = "iGap SdCard";
-                x.image = R.mipmap.actionbar_icon_myfiles;
+                x.image = R.drawable.ic_fm_folder;
                 x.path = G.DIR_SDCARD_EXTERNAL + "/";
                 item.add(x);
                 node.add(G.DIR_SDCARD_EXTERNAL + "/");
@@ -204,7 +204,7 @@ public class FragmentExplorer extends BaseFragment {
         if (new File(G.DIR_APP).exists()) {
             x = new StructExplorerItem();
             x.name = "iGap";
-            x.image = R.mipmap.actionbar_icon_myfiles;
+            x.image = R.drawable.ic_fm_folder;
             x.path = G.DIR_APP + "/";
             item.add(x);
             node.add(G.DIR_APP + "/");
@@ -285,7 +285,7 @@ public class FragmentExplorer extends BaseFragment {
                                 x.name = tmpname[i];
 
                                 if (tmp.isDirectory()) {
-                                    x.image = R.mipmap.actionbar_icon_myfiles;
+                                    x.image = R.drawable.ic_fm_folder;
                                 } else {
                                     x.image = HelperMimeType.getMimeResource(tmpname[i]);
                                 }

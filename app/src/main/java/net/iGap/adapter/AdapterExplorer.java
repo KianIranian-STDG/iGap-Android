@@ -24,6 +24,8 @@ import net.iGap.module.structs.StructExplorerItem;
 
 import java.util.ArrayList;
 
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
+
 public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHolder> {
 
     private ArrayList<StructExplorerItem> items;
@@ -45,9 +47,13 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
         holder.txtTitle.setText(rowItem.name);
         holder.imageView.setImageResource(rowItem.image);
 
-        if (rowItem.image == R.mipmap.j_pic || rowItem.image == R.mipmap.j_video) {
+        if (rowItem.image == R.drawable.ic_fm_image || rowItem.image == R.drawable.ic_fm_video) {
             holder.imageView.setBackgroundResource(0);
+            holder.imageView.setPadding(0, 0, 0, 0);
             ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.image);
+        } else {
+            int padding = i_Dp(R.dimen.dp14);
+            holder.imageView.setPadding(padding, padding, padding, padding);
         }
     }
 

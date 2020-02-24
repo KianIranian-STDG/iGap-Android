@@ -6,14 +6,14 @@
     android:orientation="horizontal"
     android:padding="@dimen/dp4">
 
-    <ImageView
+    <net.iGap.module.RadiusImageView
         android:id="@+id/sle_sub_imageView1"
-        android:layout_width="@dimen/dp60"
-        android:layout_height="@dimen/dp60"
-        android:padding="@dimen/dp4"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:padding="@dimen/dp14"
         android:layout_margin="@dimen/dp6"
-        android:background="?iGapAvatarBackground"
-        android:scaleType="centerCrop"
+        android:background="@drawable/shape_file_manager_file_bg"
+        app:srcCompat="@drawable/ic_fm_file"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
