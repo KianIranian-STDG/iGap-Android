@@ -49,17 +49,11 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.top.lib.mpl.view.PaymentInitiator;
 
-import net.iGap.module.accountManager.AccountHelper;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.module.dialog.SubmitScoreDialog;
-import net.iGap.observers.eventbus.EventListener;
-import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
@@ -70,8 +64,10 @@ import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.fragments.kuknos.KuknosSendFrag;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
@@ -87,6 +83,25 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
+import net.iGap.model.PassCode;
+import net.iGap.model.payment.Payment;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
+import net.iGap.module.AttachFile;
+import net.iGap.module.ContactUtils;
+import net.iGap.module.FileUtils;
+import net.iGap.module.LoginActions;
+import net.iGap.module.MusicPlayer;
+import net.iGap.module.MyPhonStateService;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.SubmitScoreDialog;
+import net.iGap.module.enums.ConnectionState;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.observers.interfaces.DataTransformerListener;
 import net.iGap.observers.interfaces.FinishActivity;
 import net.iGap.observers.interfaces.ITowPanModDesinLayout;
@@ -104,20 +119,6 @@ import net.iGap.observers.interfaces.OneFragmentIsOpen;
 import net.iGap.observers.interfaces.OpenFragment;
 import net.iGap.observers.interfaces.RefreshWalletBalance;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.fragments.kuknos.KuknosSendFrag;
-import net.iGap.model.PassCode;
-import net.iGap.module.AndroidUtils;
-import net.iGap.module.AppUtils;
-import net.iGap.module.AttachFile;
-import net.iGap.module.ContactUtils;
-import net.iGap.module.FileUtils;
-import net.iGap.module.LoginActions;
-import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyPhonStateService;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.enums.ConnectionState;
-import net.iGap.model.payment.Payment;
-import net.iGap.fragments.PaymentFragment;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmRoom;
@@ -138,7 +139,6 @@ import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
-import com.top.lib.mpl.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -346,7 +346,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
                         intent.getStringExtra("message"),
-                        intent.getStringExtra("order_id")
+                        intent.getStringExtra("order_id"),
+                        intent.getStringExtra("tax"),
+                        intent.getStringExtra("discount")
                 ));
             }
         }
