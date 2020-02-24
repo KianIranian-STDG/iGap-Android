@@ -20,9 +20,8 @@ import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-
 import java.util.List;
+import java.util.Locale;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 
@@ -182,6 +181,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             paymentStateIcon.set(R.string.close_icon);
             paymentStatusTextColor.set(R.color.red);
             paymentStatus.set(payment.getMessage());
+            discountVisibility.set(View.GONE);
             /*paymentOrderId.set(payment.getOrderId());*/
         }
     }

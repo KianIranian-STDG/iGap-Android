@@ -114,6 +114,13 @@ public class PaymentFragment extends BaseAPIViewFrag {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), R.string.add_new_account, Toast.LENGTH_LONG).show();
                 }
+                /*CustomTabsIntent intent = new CustomTabsIntent.Builder().build();
+                Bundle bundle = new Bundle();
+                bundle.putString("Authorization", G.getApiToken());
+                intent.intent.putExtra(Browser.EXTRA_HEADERS, bundle);
+                CustomTabsActivityHelper.openCustomTab(getActivity(), intent, Uri.parse(webLink), (activity, uri) -> {
+
+                });*/
             }
         });
 
