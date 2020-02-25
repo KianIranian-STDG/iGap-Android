@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.common.collect.Ordering;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterExplorer;
@@ -148,7 +150,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
 
         addItemToList(
                 "Musics",
-                R.drawable.ic_fm_music_file,
+                R.drawable.ic_fm_audio,
                 G.DIR_APP + "/",
                 "To send musics file",
                 R.drawable.shape_file_manager_file_2_bg,
@@ -165,39 +167,48 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
 
         if (folder != null) {
 
-            File file = new File(folder);
-            if (file.isDirectory()) {
-                String[] items = file.list();
-                for (String item : items) {
+            new Thread(() -> {
 
-                    //ignore hidden and temp files
-                    if (item.startsWith(".")) continue;
-                    if (item.endsWith(".tmp")) continue;
+                File file = new File(folder);
+                if (file.isDirectory()) {
+                    String[] items = file.list();
+                    for (String item : items) {
 
-                    String address = folder + "/" + item;
-                    File subFile = new File(address);
+                        //ignore hidden and temp files
+                        if (item.startsWith(".")) continue;
+                        if (item.endsWith(".tmp")) continue;
 
-                    addItemToList(
-                            item,
-                            subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
-                            address,
-                            getFileDescription(subFile),
-                            subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
-                            true
-                    );
+                        String address = folder + "/" + item;
+                        File subFile = new File(address);
+
+                        addItemToList(
+                                item,
+                                subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
+                                address,
+                                getFileDescription(subFile),
+                                subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
+                                true
+                        );
+                    }
+
+                    Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            mAdapter = new AdapterExplorer(mItems, this);
+                            binding.rvItems.setAdapter(mAdapter);
+                        });
+                    }
                 }
 
-                Collections.sort(mItems, new FileManager.SortFolder());
-                mAdapter = new AdapterExplorer(mItems, this);
-                binding.rvItems.setAdapter(mAdapter);
-            }
+            }).start();
+
         }
 
     }
 
     private String getFileDescription(File file) {
         if (file.isDirectory()) {
-            return file.list().length + " items";
+            return "Folder";
         } else {
             float kb, mb;
             kb = file.length() / 1024;

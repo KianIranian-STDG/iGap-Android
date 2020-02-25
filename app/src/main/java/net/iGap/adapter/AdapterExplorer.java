@@ -49,14 +49,13 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
         if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
 
         if (rowItem.isFolderOrFile && (rowItem.image == R.drawable.ic_fm_image || rowItem.image == R.drawable.ic_fm_video)) {
-            holder.imageView.setBackgroundResource(0);
             holder.imageView.setPadding(0, 0, 0, 0);
             ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.image);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
-            int padding = i_Dp(R.dimen.dp14);
+            int padding = i_Dp(R.dimen.dp10);
             holder.imageView.setPadding(padding, padding, padding, padding);
-            holder.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         }
 
         if (rowItem.description != null) {
