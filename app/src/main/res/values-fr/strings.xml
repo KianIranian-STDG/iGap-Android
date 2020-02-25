@@ -276,7 +276,7 @@
     <string name="array_1_hour">une heure</string>
     <string name="array_2_hour">2 heures</string>
     <string name="array_4_hour">4 heures</string>
-    <string name="array_Default_Notification_tone">sonnerie en défaut des notifications</string>
+    <string name="Default_Notification_tone">sonnerie en défaut des notifications</string>
     <string name="replay_item_dialog">réponse</string>
     <string name="copy_item_dialog">copie</string>
     <string name="share_item_dialog">partager</string>
@@ -1586,7 +1586,7 @@
     <string name="pay_bills_title">payer la facture</string>
     <string name="mobile_bills_title">facture de portable</string>
     <string name="bills">Factures et amendes</string>
-    <string name="charge_amount">somme de recharge</string>
+    <string name="charge_amount">somme de recharge(Rial)</string>
     <string name="buy_internet_package_title">achat des forfais d\'Internet</string>
     <string name="charity_title">charité</string>
     <string name="disk_and_network_usage">utilisation du stockage et de réseau</string>
@@ -2114,8 +2114,8 @@
     <string name="terminal_No">Numéro de terminal</string>
     <string name="rrn">Numéro de référence</string>
     <string name="bill_id">ID de facture</string>
-    <string name="topUp_title">Acheter en charge</string>
-    <string name="bill_title">Payer la facture</string>
+    <string name="topUp_title">Acheter En Charge</string>
+    <string name="bill_title">Payer La Facture</string>
     <string name="topUp_message">Message de Acheter en charge</string>
     <string name="bill_message">Message de paiement de facture</string>
     <string name="soon">Bientôt disponible...</string>

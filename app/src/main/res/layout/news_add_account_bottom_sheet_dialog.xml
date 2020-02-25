@@ -8,7 +8,7 @@
 
         <variable
             name="bottomSheetViewModel"
-            type="net.iGap.news.viewmodel.NewsAddCommentVM" />
+            type="net.iGap.viewmodel.news.NewsAddCommentVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

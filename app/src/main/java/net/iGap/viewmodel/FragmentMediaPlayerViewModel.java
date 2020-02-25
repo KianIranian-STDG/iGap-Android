@@ -20,13 +20,13 @@ import androidx.databinding.ObservableInt;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.libs.ripplesoundplayer.RippleVisualizerView;
 import net.iGap.libs.ripplesoundplayer.renderer.LineRenderer;
 import net.iGap.libs.ripplesoundplayer.util.PaintUtil;

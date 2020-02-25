@@ -36,15 +36,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;

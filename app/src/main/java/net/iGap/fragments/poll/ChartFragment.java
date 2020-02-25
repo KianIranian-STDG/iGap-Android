@@ -24,7 +24,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.poll.PollItem;
 import net.iGap.adapter.items.poll.PollItemField;
@@ -32,7 +32,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetPoll;
 
 import java.text.DecimalFormat;

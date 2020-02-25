@@ -12,14 +12,12 @@ package net.iGap.realm;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
-
-import io.realm.Realm;
 
 public class Room {
 

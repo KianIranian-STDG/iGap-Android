@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;

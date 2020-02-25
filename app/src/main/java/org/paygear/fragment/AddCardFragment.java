@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.WalletActivity;
 import org.paygear.model.Card;

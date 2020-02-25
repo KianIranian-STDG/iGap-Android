@@ -20,7 +20,7 @@ import net.iGap.adapter.items.poll.PollItem;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetPoll;
 
 import java.util.ArrayList;

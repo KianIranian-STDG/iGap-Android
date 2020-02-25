@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.igasht.provinceselect.IGashtProvinceViewModel" />
+            type="net.iGap.viewmodel.igasht.IGashtProvinceViewModel" />
     </data>
 
     <LinearLayout

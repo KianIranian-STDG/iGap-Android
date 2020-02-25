@@ -329,7 +329,7 @@
     <string name="array_1_hour">"۱ ساعت"</string>
     <string name="array_2_hour">"۲ ساعت"</string>
     <string name="array_4_hour">"۴ ساعت"</string>
-    <string name="array_Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
+    <string name="Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
     <string name="replay_item_dialog">"پاسخ"</string>
     <string name="copy_item_dialog">"کپی"</string>
     <string name="share_item_dialog">"اشتراک"</string>
@@ -736,6 +736,10 @@
     <string name="your_login_code_is">"کد ورود شما هست: "</string>
     <string name="there_is_no_sheared_media">هیچ رسانه‌ای به اشتراک گذاشته نشده است.</string>
     <string name="pending">معلق</string>
+    <string name="payment_userScore">امتیاز شما:  </string>
+    <string name="payment_spentScore">امتیاز مصرفی: </string>
+    <string name="payment_price">تخفیف: </string>
+    <string name="payment_discount_plans_title">بسته های تخفیف</string>
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ پارسی</string>
     <string name="content_log_out">آیا از خروج از حساب کاربری خود اطمینان دارید؟</string>
@@ -1810,7 +1814,7 @@
     <string name="pay_bills_title">پرداخت قبض</string>
     <string name="mobile_bills_title">قبض موبایل</string>
     <string name="bills">قبض و جریمه</string>
-    <string name="charge_amount">مبلغ شارژ</string>
+    <string name="charge_amount">مبلغ شارژ(ریال)</string>
     <string name="buy_internet_package_title">خرید بسته اینترنتی</string>
     <string name="charity_title">نیکوکاری</string>
     <string name="disk_and_network_usage">استفاده از حافظه و شبکه</string>

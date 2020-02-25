@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosRestoreVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosRestoreVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserPrivacyGetRule;
 import net.iGap.request.RequestUserPrivacySetRule;

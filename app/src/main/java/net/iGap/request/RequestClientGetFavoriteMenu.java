@@ -11,7 +11,7 @@
 package net.iGap.request;
 
 
-import net.iGap.interfaces.OnGetFavoriteMenu;
+import net.iGap.observers.interfaces.OnGetFavoriteMenu;
 import net.iGap.proto.ProtoClientGetFavoriteMenu;
 
 public class RequestClientGetFavoriteMenu {

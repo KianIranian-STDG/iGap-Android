@@ -20,18 +20,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentSettingBinding;
-import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;

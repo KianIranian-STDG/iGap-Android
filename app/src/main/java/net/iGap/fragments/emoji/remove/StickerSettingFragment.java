@@ -19,8 +19,8 @@ import net.iGap.R;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
-import net.iGap.rx.ObserverFragment;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.observers.rx.ObserverFragment;
 import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
 
 public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewModel> {

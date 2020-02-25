@@ -10,14 +10,12 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.request.RequestSignalingGetConfiguration;
-
-import io.realm.Realm;
 
 public class SignalingOfferResponse extends MessageHandler {
 

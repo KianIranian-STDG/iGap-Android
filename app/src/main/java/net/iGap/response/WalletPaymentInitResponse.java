@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletPaymentInit;
 

@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
-import net.iGap.internetpackage.MciInternetPackageFilter;
+import net.iGap.model.internetPackage.MciInternetPackageFilter;
 
 import org.jetbrains.annotations.NotNull;
 

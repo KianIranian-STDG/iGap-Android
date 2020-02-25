@@ -50,9 +50,9 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.IPickFile;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.IPickFile;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;

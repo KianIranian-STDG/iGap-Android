@@ -596,7 +596,7 @@
 
     <string name="array_4_hour">"۴ ساعات"</string>
 
-    <string name="array_Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
+    <string name="Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
 
     <string name="replay_item_dialog">"الردّ"</string>
 
@@ -2769,7 +2769,7 @@
     <string name="pay_bills_title">ادفع الفواتير</string>
     <string name="mobile_bills_title">فواتير المحمول</string>
     <string name="bills">فواتير</string>
-    <string name="charge_amount">مستوى الشحن</string>
+    <string name="charge_amount">مستوى الشحن(ریال)</string>
     <string name="buy_internet_package_title">شراء حزمة الإنترنت</string>
     <string name="charity_title">الاعمال الخيرية</string>
     <string name="item_selected">العنصر المحدد</string>

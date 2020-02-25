@@ -6,11 +6,11 @@
 
         <import type="net.iGap.G" />
 
-        <import type="net.iGap.igasht.locationlist.IGashtLocationItem" />
+        <import type="net.iGap.model.igasht.IGashtLocationItem" />
 
         <variable
             name="viewModel"
-            type="net.iGap.igasht.locationdetail.IGashtLocationDetailViewModel" />
+            type="net.iGap.viewmodel.igasht.IGashtLocationDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

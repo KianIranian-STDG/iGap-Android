@@ -10,8 +10,8 @@
 
 package net.iGap.helper;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;

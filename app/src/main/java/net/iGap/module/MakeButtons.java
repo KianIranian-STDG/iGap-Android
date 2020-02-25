@@ -23,12 +23,11 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.additionalData.ButtonEntity;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 
 import org.json.JSONArray;

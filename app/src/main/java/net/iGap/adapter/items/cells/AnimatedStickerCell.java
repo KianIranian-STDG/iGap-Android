@@ -8,8 +8,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 
 import net.iGap.G;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.module.structs.StructMessageInfo;
 
 import java.io.FileInputStream;

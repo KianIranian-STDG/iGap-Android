@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
@@ -33,7 +33,7 @@ public class RealmNotificationSetting extends RealmObject {
         RealmNotificationSetting realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
         realmNotificationSetting.setNotification(0);
         realmNotificationSetting.setVibrate(-1);
-        realmNotificationSetting.sound(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+        realmNotificationSetting.sound(G.fragmentActivity.getResources().getString(R.string.Default_Notification_tone));
         realmNotificationSetting.setIdRadioButtonSound(-1);
         realmNotificationSetting.setSmartNotification(G.fragmentActivity.getResources().getString(R.string.array_Default));
         realmNotificationSetting.setTimes(-1);

@@ -275,7 +275,7 @@
     <string name="array_1_hour">1 час</string>
     <string name="array_2_hour">2 часа</string>
     <string name="array_4_hour">4 часа</string>
-    <string name="array_Default_Notification_tone">Песня уведомлений по умолчанию</string>
+    <string name="Default_Notification_tone">Песня уведомлений по умолчанию</string>
     <string name="replay_item_dialog">Ответ</string>
     <string name="copy_item_dialog">Копия</string>
     <string name="share_item_dialog">Поделиться</string>
@@ -1586,7 +1586,7 @@
     <string name="pay_bills_title">Оплатить счет</string>
     <string name="mobile_bills_title">Квитанция за мобильный</string>
     <string name="bills">Счета и штрафы</string>
-    <string name="charge_amount">Сумма заряда</string>
+    <string name="charge_amount">Сумма заряда(Rial)</string>
     <string name="buy_internet_package_title">Купить интернет-пакет</string>
     <string name="charity_title">благотворительность</string>
     <string name="disk_and_network_usage">Использование памяти и сети</string>

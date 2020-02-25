@@ -47,7 +47,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.OnColorChangedListenerSelect;
+import net.iGap.observers.interfaces.OnColorChangedListenerSelect;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ColorPiker;
 

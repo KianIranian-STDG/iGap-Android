@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.TwoStepVerificationChangeHintCallback;
+import net.iGap.observers.interfaces.TwoStepVerificationChangeHintCallback;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserTwoStepVerificationChangeHint;
 

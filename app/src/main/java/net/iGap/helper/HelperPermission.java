@@ -25,7 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGetPermission;
 
 import java.io.IOException;
 import java.util.ArrayList;

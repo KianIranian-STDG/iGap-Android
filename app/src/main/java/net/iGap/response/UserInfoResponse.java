@@ -12,8 +12,8 @@ package net.iGap.response;
 
 import androidx.annotation.NonNull;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;

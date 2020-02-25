@@ -20,7 +20,7 @@
         android:text="@string/md_emoticon_with_happy_face" />
 
 
-    <net.iGap.view.EventEditText
+    <net.iGap.module.customView.EventEditText
         android:id="@+id/et_chatRoom_writeMessage"
         style="@style/iGapEditTextStyle"
         android:layout_width="0dp"

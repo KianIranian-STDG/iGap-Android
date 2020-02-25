@@ -23,7 +23,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
-            <net.iGap.view.SquareImageView
+            <net.iGap.module.customView.SquareImageView
                 android:id="@+id/iv_albumFragment_header"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

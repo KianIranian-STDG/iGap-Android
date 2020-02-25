@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnGetFavoriteMenu;
+import net.iGap.observers.interfaces.OnGetFavoriteMenu;
 import net.iGap.proto.ProtoClientGetFavoriteMenu;
 
 public class ClientGetFavoriteMenuResponse extends MessageHandler {

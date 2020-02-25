@@ -22,7 +22,7 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;

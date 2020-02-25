@@ -23,20 +23,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.Theme;
+import net.iGap.module.customView.ProgressButton;
+import net.iGap.module.customView.StickerView;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.view.ProgressButton;
-import net.iGap.view.StickerView;
+import net.iGap.repository.StickerRepository;
 
 import java.util.List;
 

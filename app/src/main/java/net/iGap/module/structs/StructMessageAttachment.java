@@ -15,7 +15,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;

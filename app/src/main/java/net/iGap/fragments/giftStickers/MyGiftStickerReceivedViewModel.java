@@ -8,9 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
+import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.observers.rx.ObserverViewModel;
 
 import java.util.List;
 

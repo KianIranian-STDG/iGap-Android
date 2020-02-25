@@ -10,14 +10,13 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserContactsGetList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.request.RequestUserContactsGetList;
 
 import io.realm.Realm;
 

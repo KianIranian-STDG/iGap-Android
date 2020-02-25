@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoSignalingGetLog;

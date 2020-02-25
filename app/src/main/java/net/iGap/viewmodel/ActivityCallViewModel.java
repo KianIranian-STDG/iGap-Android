@@ -21,17 +21,17 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.UserStatusController;
-import net.iGap.interfaces.ISignalingCallBack;
+import net.iGap.observers.interfaces.ISignalingCallBack;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SingleLiveEvent;
@@ -44,7 +44,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.webrtc.WebRTC;
+import net.iGap.module.webrtc.WebRTC;
 
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 

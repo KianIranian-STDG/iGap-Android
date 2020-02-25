@@ -111,7 +111,7 @@
                     android:paddingStart="@dimen/dp16">
 
                     <TextView
-                        android:id="@+id/stns_txt_alert"
+                        android:id="@+id/tv_alert"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -123,7 +123,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_alert"
+                        android:id="@+id/toggle_alert"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:gravity="start"
@@ -149,7 +149,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_messagePreview"
+                        android:id="@+id/tv_messagePreview"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -161,7 +161,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_messagePreview"
+                        android:id="@+id/toggle_messagePreview"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:textOff=""
@@ -176,7 +176,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_ledColorMessage"
+                    android:id="@+id/ll_led_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
@@ -197,7 +197,7 @@
 
 
                     <ImageView
-                        android:id="@+id/stns_img_ledColorMessage"
+                        android:id="@+id/iv_led_message"
                         android:layout_width="@dimen/dp24"
                         android:layout_height="@dimen/dp24"
                         android:layout_gravity="center_vertical"
@@ -214,7 +214,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_vibrate_message"
+                    android:id="@+id/rl_vibration_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -232,7 +232,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/stns_txt_vibrate_message_text"
+                        android:id="@+id/tv_vibration_message"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -250,7 +250,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_popupNotification_message"
+                    android:id="@+id/rl_pop_sound_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -268,7 +268,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/stns_txt_popupNotification_message_text"
+                        android:id="@+id/tv_pop_sound_message"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -286,7 +286,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_sound_message"
+                    android:id="@+id/rl_sound_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -304,7 +304,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/stns_txt_sound_text"
+                        android:id="@+id/tv_sound_message"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -352,7 +352,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_alert_group"
+                        android:id="@+id/tv_alert_group"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -365,7 +365,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_alert_group"
+                        android:id="@+id/toggle_alert_group"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:textOff=""
@@ -390,7 +390,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_messagePreview_group"
+                        android:id="@+id/tv_messagePreview_group"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -402,7 +402,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_messagePreview_group"
+                        android:id="@+id/toggle_messagePreview_group"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:textOff=""
@@ -416,7 +416,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_ledColor_group"
+                    android:id="@+id/ll_led_group"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
@@ -436,7 +436,7 @@
                         android:textStyle="normal" />
 
                     <ImageView
-                        android:id="@+id/stns_img_ledColor_group"
+                        android:id="@+id/iv_led_group"
                         android:layout_width="@dimen/dp24"
                         android:layout_height="@dimen/dp24"
                         android:layout_gravity="center_vertical"
@@ -453,7 +453,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_vibrate_group"
+                    android:id="@+id/rl_vibration_group"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -471,7 +471,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/stns_txt_vibrate_group_text"
+                        android:id="@+id/tv_vibration_group"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -489,7 +489,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_popupNotification_group"
+                    android:id="@+id/rl_pop_sound_group"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -507,7 +507,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/stns_txt_popupNotification_group_text"
+                        android:id="@+id/tv_pop_sound_group"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -525,7 +525,7 @@
                     android:background="@color/background_editText" />
 
                 <LinearLayout
-                    android:id="@+id/stns_layout_sound_group"
+                    android:id="@+id/rl_sound_group"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -543,7 +543,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/stns_txt_sound_group_text"
+                        android:id="@+id/tv_sound_group"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -591,7 +591,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_app_sound"
+                        android:id="@+id/tv_sound_app"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -603,7 +603,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_app_sound"
+                        android:id="@+id/toggle_sound_app"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:textOff=""
@@ -628,7 +628,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_app_vibrate"
+                        android:id="@+id/tv_vibration_app"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -640,7 +640,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_app_vibrate"
+                        android:id="@+id/toggle_vibration_app"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:textOff=""
@@ -666,7 +666,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_app_preview"
+                        android:id="@+id/tv_preview_app"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -679,7 +679,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_app_preview"
+                        android:id="@+id/toggle_preview_app"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:textOff=""
@@ -704,7 +704,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_chat_sound"
+                        android:id="@+id/tv_chatSound"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -716,7 +716,7 @@
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/stns_toggle_chat_sound"
+                        android:id="@+id/toggle_chatSound"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:textOff=""
@@ -759,7 +759,7 @@
 
 
                     <TextView
-                        android:id="@+id/stns_txt_Contact_joined"
+                        android:id="@+id/tv_joinContact"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -772,7 +772,7 @@
                         android:textStyle="normal" />
 
                     <ToggleButton
-                        android:id="@+id/stns_toggle_Contact_joined"
+                        android:id="@+id/toggle_joinContact"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:background="@drawable/st_switch_button"
@@ -804,7 +804,7 @@
                         android:layout_centerInParent="true">
 
                         <ToggleButton
-                            android:id="@+id/stns_toggle_pinned_message"
+                            android:id="@+id/toggle_pinMessage"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:background="@drawable/st_switch_button"
@@ -813,7 +813,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/stns_txt_pinned_message"
+                        android:id="@+id/tv_pinMessage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
@@ -851,7 +851,7 @@
 
 
                 <TextView
-                    android:id="@+id/stns_txt_title_keep_alive_service"
+                    android:id="@+id/tv_title_keepService"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingEnd="@dimen/dp16"
@@ -876,7 +876,7 @@
 
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        android:id="@+id/stns_txt_keep_alive_service"
+                        android:id="@+id/tv_detail_keepService"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -887,7 +887,7 @@
                         android:textStyle="normal" />
 
                     <ToggleButton
-                        android:id="@+id/stns_toggle_keep_alive_service"
+                        android:id="@+id/toggle_keepService"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
                         android:background="@drawable/st_switch_button"
@@ -924,7 +924,7 @@
                         android:layout_centerInParent="true">
 
                         <ToggleButton
-                            android:id="@+id/stns_toggle_background_connection"
+                            android:id="@+id/toggle_background_connection"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:background="@drawable/st_switch_button"
@@ -934,7 +934,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/stns_txt_title_background_connection"
+                        android:id="@+id/tv_title_background_connection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/st_background_connection"
@@ -943,10 +943,10 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/stns_txt_background_connection"
+                        android:id="@+id/tv_description_background_connection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/stns_txt_title_background_connection"
+                        android:layout_below="@+id/tv_title_background_connection"
                         android:paddingEnd="@dimen/dp52"
                         android:paddingRight="@dimen/dp52"
                         android:paddingTop="@dimen/dp4"
@@ -983,7 +983,7 @@
                         android:layout_centerInParent="true">
 
                         <ToggleButton
-                            android:id="@+id/stns_badge_counter"
+                            android:id="@+id/toggle_badge_pin"
                             android:layout_width="@dimen/toggles_width"
                             android:layout_height="@dimen/toggles_height"
                             android:background="@drawable/st_switch_button"
@@ -992,7 +992,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/stns_txt_badge_countent"
+                        android:id="@+id/tv_badge_pin"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
@@ -1015,7 +1015,7 @@
 
                 <!--this part is Gone-->
                 <LinearLayout
-                    android:id="@+id/st_layout_Repeat_Notifications"
+                    android:id="@+id/rl_sound_pinnedMessage"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
@@ -1034,7 +1034,7 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/st_txt_Repeat_Notifications"
+                        android:id="@+id/tv_sound_pinnedMessage"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -1069,7 +1069,7 @@
                     android:textStyle="normal" />
 
                 <LinearLayout
-                    android:id="@+id/st_layout_reset_all_notification"
+                    android:id="@+id/ll_reset_notifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

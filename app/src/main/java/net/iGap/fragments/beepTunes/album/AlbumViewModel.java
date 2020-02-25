@@ -10,12 +10,12 @@ import com.downloader.Error;
 import com.downloader.PRDownloader;
 import com.downloader.Progress;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.beepTunes.downloadQuality.DownloadQualityFragment;
 import net.iGap.helper.HelperDownloadFile;
-import net.iGap.interfaces.OnSongDownload;
+import net.iGap.observers.interfaces.OnSongDownload;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Albums;
 import net.iGap.module.api.beepTunes.DownloadSong;

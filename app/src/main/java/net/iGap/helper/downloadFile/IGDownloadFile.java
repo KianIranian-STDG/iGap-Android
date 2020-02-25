@@ -2,7 +2,7 @@ package net.iGap.helper.downloadFile;
 
 import android.util.Log;
 
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;

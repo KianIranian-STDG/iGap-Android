@@ -36,6 +36,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -93,12 +94,9 @@ import com.google.gson.JsonSyntaxException;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
-import net.iGap.AccountManager;
 import net.iGap.Config;
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
@@ -131,15 +129,6 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
-import net.iGap.dialog.ChatAttachmentPopup;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.emojiKeyboard.EmojiView;
-import net.iGap.emojiKeyboard.KeyboardView;
-import net.iGap.emojiKeyboard.NotifyFrameLayout;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -172,53 +161,12 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.helper.upload.UploadManager;
-import net.iGap.interfaces.IDispatchTochEvent;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.IOnBackPressed;
-import net.iGap.interfaces.IResendMessage;
-import net.iGap.interfaces.ISendPosition;
-import net.iGap.interfaces.IUpdateLogItem;
-import net.iGap.interfaces.LocationListener;
-import net.iGap.interfaces.OnActivityChatStart;
-import net.iGap.interfaces.OnBackgroundChanged;
-import net.iGap.interfaces.OnBotClick;
-import net.iGap.interfaces.OnChannelAddMessageReaction;
-import net.iGap.interfaces.OnChannelGetMessagesStats;
-import net.iGap.interfaces.OnChannelUpdateReactionStatus;
-import net.iGap.interfaces.OnChatClearMessageResponse;
-import net.iGap.interfaces.OnChatDelete;
-import net.iGap.interfaces.OnChatDeleteMessageResponse;
-import net.iGap.interfaces.OnChatEditMessageResponse;
-import net.iGap.interfaces.OnChatMessageRemove;
-import net.iGap.interfaces.OnChatMessageSelectionChanged;
-import net.iGap.interfaces.OnChatSendMessage;
-import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnChatUpdateStatusResponse;
-import net.iGap.interfaces.OnClearChatHistory;
-import net.iGap.interfaces.OnClientGetRoomMessage;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnConnectionChangeStateChat;
-import net.iGap.interfaces.OnDeleteChatFinishActivity;
-import net.iGap.interfaces.OnForwardBottomSheet;
-import net.iGap.interfaces.OnGetFavoriteMenu;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGroupAvatarResponse;
-import net.iGap.interfaces.OnHelperSetAction;
-import net.iGap.interfaces.OnLastSeenUpdateTiming;
-import net.iGap.interfaces.OnMessageReceive;
-import net.iGap.interfaces.OnPinedMessage;
-import net.iGap.interfaces.OnSetAction;
-import net.iGap.interfaces.OnUpdateUserOrRoomInfo;
-import net.iGap.interfaces.OnUpdateUserStatusInChangePage;
-import net.iGap.interfaces.OnUserContactsBlock;
-import net.iGap.interfaces.OnUserContactsUnBlock;
-import net.iGap.interfaces.OnUserInfoResponse;
-import net.iGap.interfaces.OnUserUpdateStatus;
-import net.iGap.interfaces.OnVoiceRecord;
-import net.iGap.interfaces.OpenBottomSheetItem;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
+import net.iGap.libs.emojiKeyboard.EmojiView;
+import net.iGap.libs.emojiKeyboard.KeyboardView;
+import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
@@ -241,9 +189,16 @@ import net.iGap.module.MyLinearLayoutManager;
 import net.iGap.module.ResendMessage;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
+import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.customView.EventEditText;
+import net.iGap.module.dialog.ChatAttachmentPopup;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -254,6 +209,53 @@ import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructWebView;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.IDispatchTochEvent;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.IOnBackPressed;
+import net.iGap.observers.interfaces.IResendMessage;
+import net.iGap.observers.interfaces.ISendPosition;
+import net.iGap.observers.interfaces.IUpdateLogItem;
+import net.iGap.observers.interfaces.LocationListener;
+import net.iGap.observers.interfaces.OnActivityChatStart;
+import net.iGap.observers.interfaces.OnBackgroundChanged;
+import net.iGap.observers.interfaces.OnBotClick;
+import net.iGap.observers.interfaces.OnChannelAddMessageReaction;
+import net.iGap.observers.interfaces.OnChannelGetMessagesStats;
+import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
+import net.iGap.observers.interfaces.OnChatClearMessageResponse;
+import net.iGap.observers.interfaces.OnChatDelete;
+import net.iGap.observers.interfaces.OnChatDeleteMessageResponse;
+import net.iGap.observers.interfaces.OnChatEditMessageResponse;
+import net.iGap.observers.interfaces.OnChatMessageRemove;
+import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
+import net.iGap.observers.interfaces.OnChatSendMessage;
+import net.iGap.observers.interfaces.OnChatSendMessageResponse;
+import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.observers.interfaces.OnClearChatHistory;
+import net.iGap.observers.interfaces.OnClientGetRoomMessage;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnConnectionChangeStateChat;
+import net.iGap.observers.interfaces.OnDeleteChatFinishActivity;
+import net.iGap.observers.interfaces.OnForwardBottomSheet;
+import net.iGap.observers.interfaces.OnGetFavoriteMenu;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGroupAvatarResponse;
+import net.iGap.observers.interfaces.OnHelperSetAction;
+import net.iGap.observers.interfaces.OnLastSeenUpdateTiming;
+import net.iGap.observers.interfaces.OnMessageReceive;
+import net.iGap.observers.interfaces.OnPinedMessage;
+import net.iGap.observers.interfaces.OnSetAction;
+import net.iGap.observers.interfaces.OnUpdateUserOrRoomInfo;
+import net.iGap.observers.interfaces.OnUpdateUserStatusInChangePage;
+import net.iGap.observers.interfaces.OnUserContactsBlock;
+import net.iGap.observers.interfaces.OnUserContactsUnBlock;
+import net.iGap.observers.interfaces.OnUserInfoResponse;
+import net.iGap.observers.interfaces.OnUserUpdateStatus;
+import net.iGap.observers.interfaces.OnVoiceRecord;
+import net.iGap.observers.interfaces.OpenBottomSheetItem;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoClientRoomReport;
@@ -283,7 +285,7 @@ import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmStickerItemFields;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelPinMessage;
 import net.iGap.request.RequestChannelUpdateDraft;
@@ -307,7 +309,6 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.view.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
@@ -719,6 +720,7 @@ public class FragmentChat extends BaseFragment
         edtChat.setListener(this::chatMotionEvent);
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
 
         return attachToSwipeBack(notifyFrameLayout);
     }
@@ -1158,6 +1160,7 @@ public class FragmentChat extends BaseFragment
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
         if (compositeDisposable != null) {
@@ -1484,6 +1487,13 @@ public class FragmentChat extends BaseFragment
         return DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         });
+    }
+
+    private void invalidateViews() {
+        int childCount = recyclerView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            recyclerView.getChildAt(i).invalidate();
+        }
     }
 
     /**
@@ -3163,12 +3173,21 @@ public class FragmentChat extends BaseFragment
             } else {
                 showCardToCard();
             }
+
+            if (keyboardViewVisible) {
+                hideKeyboard();
+            }
         });
 
 
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
+                if (keyboardViewVisible) {
+                    hideKeyboard();
+                }
+
                 if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
                         HelperPermission.getMicroPhonePermission(G.fragmentActivity, null);
@@ -3198,13 +3217,15 @@ public class FragmentChat extends BaseFragment
         imvSmileButton.setOnClickListener(v -> onEmojiButtonClick());
 
         edtChat.addTextChangedListener(new TextWatcher() {
+            boolean processChange = false;
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence text, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
 
                 if (text.length() > 0) {
                     HelperSetAction.setActionTyping(mRoomId, chatType);
@@ -3214,11 +3235,6 @@ public class FragmentChat extends BaseFragment
                 if (text.toString().endsWith(System.getProperty("line.separator"))) {
                     if (sendByEnter) imvSendButton.performClick();
                 }
-               /* if (text.toString().equals(messageEdit) && isEditMessage) {
-                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
-                } else {
-                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                }*/
 
                 messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH));
                 if (messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null) {
@@ -3226,22 +3242,36 @@ public class FragmentChat extends BaseFragment
                     Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message), Toast.LENGTH_SHORT).show();
                 }
 
+                if ((count - before) > 1) {
+                    processChange = true;
+                }
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (ll_attach_text.getVisibility() == View.GONE && hasForward == false) {
+                if (ll_attach_text.getVisibility() == View.GONE && !hasForward) {
 
-                    if (edtChat.getText().length() > 0) {
+                    if (edtChat.getText() != null && edtChat.getText().length() > 0) {
                         sendButtonVisibility(true);
                     } else {
                         if (!isEditMessage) {
                             sendButtonVisibility(false);
-                        } else {
-                            //imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                         }
                     }
+
+                    if (processChange) {
+                        ImageSpan[] spans = editable.getSpans(0, editable.length(), ImageSpan.class);
+
+                        for (ImageSpan span : spans) {
+                            editable.removeSpan(span);
+                        }
+
+                        EmojiManager.getInstance().replaceEmoji(editable, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(20), false);
+                        processChange = false;
+                    }
+
                 }
 
                 if (edtChat.getText() != null && !EmojiManager.getInstance().isValidEmoji(edtChat.getText()) && suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
@@ -3260,12 +3290,10 @@ public class FragmentChat extends BaseFragment
                 keyboardHeightLand = height;
                 if (emojiSharedPreferences != null)
                     emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, keyboardHeightLand).apply();
-                Log.i(TAG, "onScreenSizeChanged: set SHP value -> " + keyboardHeightLand + " in land");
             } else {
                 keyboardHeight = height;
                 if (emojiSharedPreferences != null)
                     emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, keyboardHeight).apply();
-                Log.i(TAG, "onScreenSizeChanged: set SHP value -> " + keyboardHeight + " in portrait");
             }
         }
 
@@ -3276,9 +3304,6 @@ public class FragmentChat extends BaseFragment
             if (layoutParams.width != AndroidUtils.displaySize.x || layoutParams.height != newHeight) {
                 layoutParams.width = AndroidUtils.displaySize.x;
                 layoutParams.height = newHeight;
-
-                Log.i(TAG, "onScreenSizeChanged: emoji popUp params layout -> " + newHeight);
-
                 keyboardView.setLayoutParams(layoutParams);
             }
         }
@@ -3298,7 +3323,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    public boolean isPopupShowing() {
+    private boolean isPopupShowing() {
         return keyboardViewVisible || keyboardView != null;
     }
 
@@ -4572,20 +4597,28 @@ public class FragmentChat extends BaseFragment
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (getFirstUnreadMessage() != null && getFirstUnreadMessage().isValid() && !getFirstUnreadMessage().isDeleted() && getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()) {
+        if (getFirstUnreadMessage() != null &&
+                getFirstUnreadMessage().isValid() &&
+                !getFirstUnreadMessage().isDeleted() &&
+                getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()
+        ) {
             setCountNewMessageZero();
         }
 
-        if (chatType != CHANNEL && (!messageInfo.isSenderMe() && messageInfo.realmRoomMessage.getStatus() != null && !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
+        if (!isPaused && chatType != CHANNEL &&
+                (
+                        !messageInfo.isSenderMe() &&
+                        messageInfo.realmRoomMessage.getStatus() != null &&
+                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) &&
+                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
+                )
+        ) {
             /**
              * set message status SEEN for avoid from run this block in each bindView
              */
 
             messageInfo.realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-            if (!isPaused)
-                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-
+            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -5245,15 +5278,33 @@ public class FragmentChat extends BaseFragment
 
     private void deleteMassage(Realm realm, final StructMessageInfo message, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList list = new ArrayList();
-                list.add(message.realmRoomMessage.getMessageId());
-                deleteSelectedMessageFromAdapter(list);
-            }
+        G.handler.post(() -> {
+            ArrayList list1 = new ArrayList();
+            list1.add(message.realmRoomMessage.getMessageId());
+            deleteSelectedMessageFromAdapter(list1);
         });
         RealmRoomMessage.deleteSelectedMessages(realm, message.realmRoomMessage.getRoomId(), list, bothDeleteMessageId, chatType);
+    }
+
+    private void doForwardDialogMessage(StructMessageInfo message, boolean isMessage) {
+        if (message == null) {
+            mForwardMessages = getMessageStructFromSelectedItems();
+            deselectMessageAndShowPinIfNeeded();
+        } else {
+            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+        }
+
+        initAttachForward(isMessage);
+        itemAdapterBottomSheetForward();
+    }
+
+    private void deselectMessageAndShowPinIfNeeded() {
+        if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
+            mAdapter.deselect();
+            if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
+            ll_AppBarSelected.setVisibility(View.GONE);
+            clearReplyView();
+        }
     }
 
     @Override
@@ -5369,41 +5420,12 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onForwardClick(StructMessageInfo message) {
-        //finishChat();
-        if (message == null) {
-            mForwardMessages = getMessageStructFromSelectedItems();
-            if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
-                mAdapter.deselect();
-                if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
-                ll_AppBarSelected.setVisibility(View.GONE);
-                clearReplyView();
-            }
-        } else {
-            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
-        }
-
-        initAttachForward(false);
-        itemAdapterBottomSheetForward();
-
-        //new HelperFragment().removeAll(true);
+        doForwardDialogMessage(message, false);
     }
 
     @Override
     public void onForwardFromCloudClick(StructMessageInfo message) {
-        if (message == null) {
-            mForwardMessages = getMessageStructFromSelectedItems();
-            if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
-                mAdapter.deselect();
-                if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
-                ll_AppBarSelected.setVisibility(View.GONE);
-                clearReplyView();
-            }
-        } else {
-            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
-        }
-
-        initAttachForward(true);
-        itemAdapterBottomSheetForward();
+        doForwardDialogMessage(message, true);
     }
 
     @Override
@@ -9347,6 +9369,8 @@ public class FragmentChat extends BaseFragment
                 if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
                 if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
             });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.runOnUiThread(this::invalidateViews);
         }
     }
 

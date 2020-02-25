@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnReceiveInfoLocation;
+import net.iGap.observers.interfaces.OnReceiveInfoLocation;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoInfoLocation;
 

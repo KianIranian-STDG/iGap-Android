@@ -1,6 +1,6 @@
 package net.iGap.helper;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmDataUsageFields;

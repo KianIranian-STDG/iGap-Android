@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnChannelEdit;
+import net.iGap.observers.interfaces.OnChannelEdit;
 import net.iGap.proto.ProtoChannelEdit;
 
 public class RequestChannelEdit {

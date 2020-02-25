@@ -571,7 +571,7 @@
     <string name="charge_5">50.000 ریال لیق</string>
     <string name="charge_50">500.000 ریال لیق</string>
     <string name="charge_5_ir">50.000 ریالی +  9%  ارزش افزوده = 54.500 ریال</string>
-    <string name="charge_amount">شارژ مبلغی</string>
+    <string name="charge_amount">شارژ مبلغی(ریال)</string>
     <string name="charge_balance">شارژین مقداری</string>
     <string name="charge_out">شارژ ائتمک</string>
     <string name="charge_paygear">پول کیفینی شارژ ائتمک </string>

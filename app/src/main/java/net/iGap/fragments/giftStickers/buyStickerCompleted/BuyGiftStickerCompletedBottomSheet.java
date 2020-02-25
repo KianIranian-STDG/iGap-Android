@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.R;
-import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.module.dialog.BaseBottomSheet;
 
 public class BuyGiftStickerCompletedBottomSheet extends BaseBottomSheet {
 

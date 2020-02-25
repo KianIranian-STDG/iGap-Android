@@ -24,15 +24,15 @@ import android.view.Display;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.interfaces.OnActivityChatStart;
+import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.libs.Tuple;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;

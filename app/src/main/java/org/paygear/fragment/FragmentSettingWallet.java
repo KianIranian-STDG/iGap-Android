@@ -20,7 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.R;
 import net.iGap.databinding.FragmentSettingWalletBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.model.Card;
 import org.paygear.model.Payment;

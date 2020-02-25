@@ -16,7 +16,7 @@ import net.iGap.databinding.FragmentCpayInquiryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayInquiryViewModel;
 
 public class FragmentCPayInquiry extends BaseFragment implements ToolbarListener {

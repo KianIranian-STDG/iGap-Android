@@ -8,7 +8,7 @@
 
         <variable
             name="topSheetViewModel"
-            type="net.iGap.dialog.topsheet.TopSheetViewModel" />
+            type="net.iGap.module.dialog.topsheet.TopSheetViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

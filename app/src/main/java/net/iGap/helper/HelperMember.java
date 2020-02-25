@@ -10,8 +10,7 @@
 
 package net.iGap.helper;
 
-import net.iGap.AccountManager;
-import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestClientGetRoom;

@@ -13,11 +13,11 @@ package net.iGap.module;
 import android.app.Activity;
 import android.content.Context;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.upload.UploadManager;
-import net.iGap.interfaces.IResendMessage;
+import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;

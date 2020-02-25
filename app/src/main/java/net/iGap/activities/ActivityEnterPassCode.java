@@ -35,7 +35,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
 import net.iGap.helper.HelperError;
-import net.iGap.interfaces.FingerPrint;
+import net.iGap.observers.interfaces.FingerPrint;
 import net.iGap.module.FingerprintHandler;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.ActivityEnterPassCodeViewModel;

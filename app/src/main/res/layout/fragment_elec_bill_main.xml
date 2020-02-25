@@ -6,11 +6,11 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.electricity_bill.viewmodel.ElectricityBillMainVM" />
+            type="net.iGap.viewmodel.electricity_bill.ElectricityBillMainVM" />
 
         <variable
             name="fragment"
-            type="net.iGap.electricity_bill.view.ElectricityBillMainFrag" />
+            type="net.iGap.fragments.electricity_bill.ElectricityBillMainFrag" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

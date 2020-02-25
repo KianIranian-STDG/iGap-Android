@@ -5,12 +5,12 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.rx.ObserverViewModel;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.observers.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
 
 import java.util.List;
 
