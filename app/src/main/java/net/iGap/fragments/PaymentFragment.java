@@ -3,7 +3,9 @@ package net.iGap.fragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Browser;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import net.iGap.G;
@@ -28,11 +31,14 @@ import net.iGap.R;
 import net.iGap.adapter.PaymentPlansAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
+import net.iGap.helper.HelperScreenShot;
 import net.iGap.model.payment.Payment;
 import net.iGap.model.payment.PaymentFeature;
 import net.iGap.observers.interfaces.PaymentCallBack;
 import net.iGap.viewmodel.PaymentViewModel;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 public class PaymentFragment extends BaseAPIViewFrag {
@@ -114,6 +120,13 @@ public class PaymentFragment extends BaseAPIViewFrag {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), R.string.add_new_account, Toast.LENGTH_LONG).show();
                 }
+                /*CustomTabsIntent intent = new CustomTabsIntent.Builder().build();
+                Bundle bundle = new Bundle();
+                bundle.putString("Authorization", G.getApiToken());
+                intent.intent.putExtra(Browser.EXTRA_HEADERS, bundle);
+                CustomTabsActivityHelper.openCustomTab(getActivity(), intent, Uri.parse(webLink), (activity, uri) -> {
+
+                });*/
             }
         });
 
@@ -135,6 +148,11 @@ public class PaymentFragment extends BaseAPIViewFrag {
                 }
             }
         });
+
+        binding.screenshotButton.setOnClickListener(v -> {
+            loadImage loadImage = new loadImage();
+            loadImage.execute();
+        });
     }
 
     public void setPaymentResult(Payment paymentModel) {
@@ -152,6 +170,51 @@ public class PaymentFragment extends BaseAPIViewFrag {
                     .content("برای استفاده از این بخش نیاز به گوگل سرویس است.").contentGravity(GravityEnum.CENTER)
                     .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
                     .show();
+        }
+    }
+
+    private class loadImage extends AsyncTask<String, String, Boolean> {
+
+        String filename;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            Date date = new Date();
+            filename = "receipt" + date.getTime() + ".jpeg";
+            return HelperScreenShot.takeScreenshotAndSaveIi(binding.v, filename);
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean s) {
+            if (s) {
+                Snackbar snackbar = Snackbar.make(binding.v, getResources().getString(R.string.picture_save_to_galary), Snackbar.LENGTH_LONG);
+                snackbar.setAction(getResources().getString(R.string.navigation_drawer_open), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Payment_Receipt/" + filename);
+                        Log.d("amini", "onClick: " + file.getAbsolutePath());
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse(file.getAbsolutePath()), "image/*");
+                        startActivity(intent);
+//                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(file.getAbsolutePath())));
+                    }
+                });
+                snackbar.show();
+            } else {
+                Snackbar snackbar = Snackbar.make(binding.v, getResources().getString(R.string.str_frag_sync_error), Snackbar.LENGTH_LONG);
+                snackbar.setAction(getResources().getString(R.string.ok), v -> snackbar.dismiss());
+                snackbar.show();
+            }
+
+            super.onPostExecute(s);
         }
     }
 }

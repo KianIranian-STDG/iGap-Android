@@ -14,7 +14,8 @@
         android:layout_height="match_parent"
         android:background="@color/greenStatus"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:layoutDirection="locale">
 
         <View
             android:id="@+id/v"
@@ -101,26 +102,42 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/price"
+            android:text="@{@string/payment_rial(viewModel.price)}"
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/price"
-            app:layout_constraintEnd_toEndOf="@id/paymentType"
-            app:layout_constraintStart_toStartOf="@id/paymentType" />
+            android:layout_marginEnd="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            app:layout_constraintBottom_toTopOf="@id/discountTitle"
+            app:layout_constraintEnd_toEndOf="@+id/paymentType"
+            app:layout_constraintStart_toStartOf="@+id/paymentType" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/price"
+            android:id="@+id/discountTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp8"
             android:gravity="center"
-            android:text="@{@string/payment_rial(viewModel.price)}"
+            android:text="@{@string/paymentDiscount(viewModel.discountReceiptAmount)}"
             android:textColor="?iGapTitleTextColor"
-            android:visibility="@{viewModel.showMainView}"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.discountReceiptVisibility}"
+            app:layout_constraintBottom_toTopOf="@id/taxTitle"
+            app:layout_constraintEnd_toEndOf="@+id/priceTitle"
+            app:layout_constraintStart_toStartOf="@id/priceTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/taxTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@{@string/paymentTax(viewModel.taxReceiptAmount)}"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.taxReceiptVisibility}"
+            android:layout_marginBottom="@dimen/dp4"
             app:layout_constraintBottom_toTopOf="@id/divider1"
-            app:layout_constraintEnd_toEndOf="@id/paymentType"
-            app:layout_constraintStart_toStartOf="@id/paymentType" />
+            app:layout_constraintEnd_toEndOf="@+id/priceTitle"
+            app:layout_constraintStart_toStartOf="@id/priceTitle" />
 
         <View
             android:id="@+id/divider1"
@@ -144,8 +161,8 @@
             android:textStyle="bold"
             android:visibility="@{viewModel.showPaymentStatus}"
             app:layout_constraintBottom_toTopOf="@id/paymentRRN"
-            app:layout_constraintEnd_toEndOf="@id/priceTitle"
-            app:layout_constraintStart_toStartOf="@id/priceTitle" />
+            app:layout_constraintEnd_toEndOf="@id/paymentType"
+            app:layout_constraintStart_toStartOf="@id/paymentType" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentRRN"
@@ -157,8 +174,8 @@
             android:textColor="?iGapSubtitleTextColor"
             android:visibility="@{viewModel.showPaymentErrorMessage}"
             app:layout_constraintBottom_toTopOf="@id/planDesc"
-            app:layout_constraintEnd_toEndOf="@id/price"
-            app:layout_constraintStart_toStartOf="@id/price" />
+            app:layout_constraintEnd_toEndOf="@id/paymentType"
+            app:layout_constraintStart_toStartOf="@id/paymentType" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/planGroup"
@@ -166,6 +183,19 @@
             android:layout_height="wrap_content"
             android:visibility="@{viewModel.discountVisibility}"
             app:constraint_referenced_ids="paymentFeatureRC,planDesc,planDivider" />
+        <!--@{viewModel.discountVisibility}-->
+
+        <View
+            android:id="@+id/planDivider2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp1"
+            android:background="?iGapDividerLine"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            app:layout_constraintTop_toTopOf="@+id/planDesc"
+            app:layout_constraintBottom_toBottomOf="@+id/planDesc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/planDesc" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/planDesc"
@@ -178,7 +208,7 @@
             android:textColor="?iGapSubtitleTextColor"
             android:gravity="start"
             android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/planDivider2"
             app:layout_constraintEnd_toStartOf="@+id/planDivider"
             app:layout_constraintBottom_toTopOf="@+id/paymentFeatureRC" />
 
@@ -243,8 +273,21 @@
             app:backgroundTint="@color/layout_background_top_connectivity"
             app:layout_constraintBottom_toBottomOf="@id/closeButton"
             app:layout_constraintEnd_toStartOf="@id/closeButton"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/screenshotButton"
             app:layout_constraintTop_toTopOf="@id/closeButton"
+            app:layout_constraintWidth_percent=".45" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/screenshotButton"
+            style="@style/iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp8"
+            android:text="@string/paymentScreenShot"
+            android:visibility="@{viewModel.showPaymentStatus}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/retryView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent=".45" />
 
         <com.google.android.material.button.MaterialButton
