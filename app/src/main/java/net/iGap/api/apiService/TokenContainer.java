@@ -74,6 +74,11 @@ public class TokenContainer {
             @Override
             public void onError(int majorCode, int minorCode) {
                 Log.i(getClass().getSimpleName(), "onError: " + majorCode + " " + minorCode);
+                try {
+                    delegate.onRefreshToken();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
