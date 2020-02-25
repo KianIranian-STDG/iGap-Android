@@ -10,9 +10,9 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
 
@@ -101,20 +101,6 @@ public class RealmUserInfo extends RealmObject {
             });
         }).start();
 
-    }
-
-    public static void insertAccessToken(final String accessToken) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.accessToken = accessToken;
-                    }
-                }
-            });
-        });
     }
 
     public static void sendPushNotificationToServer() {

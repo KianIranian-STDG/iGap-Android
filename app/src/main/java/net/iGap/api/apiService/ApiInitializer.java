@@ -33,6 +33,7 @@ public class ApiInitializer<T> {
                                 @Override
                                 public void onRefreshToken(String token) {
                                     initAPI(retrofitCall.clone(), handShakeCallback, retrofitCallback);
+                                    HelperLog.setErrorLog(new Exception("update jwt token from ApiInitializer"));
                                 }
 
                                 @Override

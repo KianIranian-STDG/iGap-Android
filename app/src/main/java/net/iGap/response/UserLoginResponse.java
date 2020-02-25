@@ -13,10 +13,11 @@ package net.iGap.response;
 import android.os.Looper;
 
 import net.iGap.Config;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.HelperConnectionState;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
@@ -90,6 +91,8 @@ public class UserLoginResponse extends MessageHandler {
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;
 
+        TokenContainer.getInstance().updateToken(builder.getAccessToken());
+
         /**
          * get Signaling Configuration
          * (( hint : call following request after set G.userLogin=true ))
@@ -116,7 +119,6 @@ public class UserLoginResponse extends MessageHandler {
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
-                realmUserInfo.setAccessToken(builder.getAccessToken());
                 realmUserInfo.setWalletActive(builder.getWalletActive());
                 realmUserInfo.setMplActive(builder.getMplActive());
                 realmUserInfo.setWalletRegister(builder.getWalletAgreementAccepted());

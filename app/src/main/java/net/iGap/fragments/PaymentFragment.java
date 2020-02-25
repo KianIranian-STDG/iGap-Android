@@ -23,10 +23,10 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.PaymentPlansAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
 import net.iGap.model.payment.Payment;
 import net.iGap.model.payment.PaymentFeature;
@@ -106,7 +106,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
                 try {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
                     Bundle bundle = new Bundle();
-                    bundle.putString("Authorization", G.getApiToken());
+                    bundle.putString("Authorization", TokenContainer.getInstance().getToken());
                     browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
                     startActivity(browserIntent);
                     Log.e("abbasiApiToken", "intent to chrome -> " + bundle.getString("Authorization"));
