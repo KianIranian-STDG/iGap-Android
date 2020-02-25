@@ -1586,7 +1586,7 @@
     <string name="pay_bills_title">payer la facture</string>
     <string name="mobile_bills_title">facture de portable</string>
     <string name="bills">Factures et amendes</string>
-    <string name="charge_amount">somme de recharge</string>
+    <string name="charge_amount">somme de recharge(Rial)</string>
     <string name="buy_internet_package_title">achat des forfais d\'Internet</string>
     <string name="charity_title">charité</string>
     <string name="disk_and_network_usage">utilisation du stockage et de réseau</string>
