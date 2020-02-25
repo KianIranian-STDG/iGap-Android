@@ -46,14 +46,17 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
         StructExplorerItem rowItem = items.get(position);
         holder.txtTitle.setText(rowItem.name);
         holder.imageView.setImageResource(rowItem.image);
+        if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
 
-        if (rowItem.image == R.drawable.ic_fm_image || rowItem.image == R.drawable.ic_fm_video) {
+        if (rowItem.isFolderOrFile && (rowItem.image == R.drawable.ic_fm_image || rowItem.image == R.drawable.ic_fm_video)) {
             holder.imageView.setBackgroundResource(0);
             holder.imageView.setPadding(0, 0, 0, 0);
             ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.image);
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
             int padding = i_Dp(R.dimen.dp14);
             holder.imageView.setPadding(padding, padding, padding, padding);
+            holder.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
 
         if (rowItem.description != null) {
@@ -63,7 +66,6 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
             holder.txtSubtitle.setVisibility(View.GONE);
         }
 
-        if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
     }
 
     @Override

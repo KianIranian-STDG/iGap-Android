@@ -131,11 +131,11 @@ public class HelperMimeType {
     /**
      * get a picture for this extension
      */
-    public static Integer getMimeResource(String extention) {
+    public static int getMimeResource(String extention) {
 
         Integer x = null;
 
-        if (extention == null) return null;
+        if (extention == null) return 0;
 
         extention = extention.toLowerCase();
 
