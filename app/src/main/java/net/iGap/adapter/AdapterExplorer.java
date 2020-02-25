@@ -22,16 +22,16 @@ import net.iGap.R;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructExplorerItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHolder> {
 
-    private ArrayList<StructExplorerItem> items;
+    private List<StructExplorerItem> items;
     private OnItemClickListenerExplorer onItemClickListener;
 
-    public AdapterExplorer(ArrayList<StructExplorerItem> list, OnItemClickListenerExplorer onItemClickListener) {
+    public AdapterExplorer(List<StructExplorerItem> list, OnItemClickListenerExplorer onItemClickListener) {
         items = list;
         this.onItemClickListener = onItemClickListener;
     }
@@ -55,6 +55,15 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
             int padding = i_Dp(R.dimen.dp14);
             holder.imageView.setPadding(padding, padding, padding, padding);
         }
+
+        if (rowItem.description != null) {
+            holder.txtSubtitle.setVisibility(View.VISIBLE);
+            holder.txtSubtitle.setText(rowItem.description);
+        } else {
+            holder.txtSubtitle.setVisibility(View.GONE);
+        }
+
+        if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
     }
 
     @Override
@@ -64,13 +73,14 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtTitle;
+        private TextView txtTitle, txtSubtitle;
         private ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             txtTitle = itemView.findViewById(R.id.sle_sub_textView1);
+            txtSubtitle = itemView.findViewById(R.id.sle_sub_textView2);
             imageView = itemView.findViewById(R.id.sle_sub_imageView1);
 
             itemView.setOnClickListener(view -> onItemClickListener.onItemClick(view, getAdapterPosition()));

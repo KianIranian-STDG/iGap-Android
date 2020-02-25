@@ -14,5 +14,7 @@ public class StructExplorerItem {
 
     public String name = "";
     public Integer image = null;
+    public int backColor;
     public String path = "";
+    public String description = null;
 }
