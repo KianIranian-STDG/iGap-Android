@@ -9,18 +9,24 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterExplorer;
 import net.iGap.databinding.FileManagerChildFragmentBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperPermission;
 import net.iGap.module.FileUtils;
 import net.iGap.module.structs.StructExplorerItem;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.FileManagerChildViewModel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileManagerChildFragment extends BaseFragment implements AdapterExplorer.OnItemClickListenerExplorer {
@@ -82,7 +88,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                     R.drawable.ic_fm_internal,
                     Environment.getExternalStorageDirectory().getAbsolutePath(),
                     "Browse your file system",
-                    R.drawable.shape_file_manager_file_bg
+                    R.drawable.shape_file_manager_file_bg,
+                    true
             );
         }
 
@@ -93,7 +100,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                         R.drawable.ic_fm_memory,
                         sdPath + "/",
                         "Browse your external storage",
-                        R.drawable.shape_file_manager_folder_bg
+                        R.drawable.shape_file_manager_folder_bg,
+                        true
                 );
             }
         }
@@ -105,7 +113,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                         R.drawable.ic_fm_folder,
                         G.DIR_SDCARD_EXTERNAL + "/",
                         "Browse the app's folder",
-                        R.drawable.shape_file_manager_folder_bg
+                        R.drawable.shape_file_manager_folder_bg,
+                        true
                 );
             }
         }
@@ -116,7 +125,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                     R.drawable.ic_fm_folder,
                     G.DIR_APP + "/",
                     "Browse the app's folder",
-                    R.drawable.shape_file_manager_file_bg
+                    R.drawable.shape_file_manager_file_bg,
+                    true
             );
         }
 
@@ -125,7 +135,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                 R.drawable.ic_fm_image,
                 null,
                 "To send images file",
-                R.drawable.shape_file_manager_file_1_bg
+                R.drawable.shape_file_manager_file_1_bg,
+                false
         );
 
         addItemToList(
@@ -133,7 +144,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                 R.drawable.ic_fm_video,
                 null,
                 "To send videos file",
-                R.drawable.shape_file_manager_file_1_bg
+                R.drawable.shape_file_manager_file_1_bg,
+                false
         );
 
         addItemToList(
@@ -141,7 +153,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                 R.drawable.ic_fm_music_file,
                 G.DIR_APP + "/",
                 "To send musics file",
-                R.drawable.shape_file_manager_file_2_bg
+                R.drawable.shape_file_manager_file_2_bg,
+                false
         );
 
         //setup adapter
@@ -158,13 +171,14 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
         mItems.add(item);
     }
 
-    private void addItemToList(String title, int image, String path, String desc, int background) {
+    private void addItemToList(String title, int image, String path, String desc, int background, boolean isFolderOrFile) {
         StructExplorerItem item = new StructExplorerItem();
         item.name = title;
         item.image = image;
         item.path = path;
         item.backColor = background;
         item.description = desc;
+        item.isFolderOrFile = isFolderOrFile;
         mItems.add(item);
     }
 
@@ -182,6 +196,144 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
 
     @Override
     public void onItemClick(View view, int position) {
+        if (mItems.size() > position) {
+            if (mItems.get(position).isFolderOrFile) {
+                openSubFolderOrSendFile(mItems.get(position).name);
+            } else {
+                //getOpenGallery(mItems.get(position).name);
+            }
+        }
+    }
+
+    private void openSubFolderOrSendFile(String name) {
 
     }
+
+    private void getOpenGallery(String name) {
+        switch (name) {
+            case "Pictures":
+                openPhotoGallery();
+                break;
+
+            case "Videos":
+                openVideoGallery();
+                break;
+
+            case "Musics":
+                openMusicGallery();
+                break;
+        }
+    }
+
+
+    private void openPhotoGallery() {
+        try {
+
+            HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
+                @Override
+                public void Allow() {
+
+                    if (getActivity() == null) return;
+                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
+                        @Override
+                        public void openOsGallery() {
+                        }
+
+                        @Override
+                        public void onGalleryResult(String path) {
+                            sendResultToParent(Arrays.asList(path));
+                            closeFileManager();
+                        }
+                    });
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                }
+
+                @Override
+                public void deny() {
+
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openVideoGallery() {
+        try {
+
+            HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    if (getActivity() == null) return;
+                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
+                        @Override
+                        public void openOsGallery() {
+
+                        }
+
+                        @Override
+                        public void onVideoPickerResult(List<String> videos) {
+                            sendResultToParent(videos);
+                            closeFileManager();
+                        }
+                    });
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                }
+
+                @Override
+                public void deny() {
+
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openMusicGallery() {
+        try {
+            HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    if (getActivity() == null) return;
+                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.MUSIC, new FragmentGallery.GalleryFragmentListener() {
+                        @Override
+                        public void openOsGallery() {
+
+                        }
+
+                        @Override
+                        public void onMusicPickerResult(String music) {
+                            sendResultToParent(Arrays.asList(music));
+                            closeFileManager();
+                        }
+                    });
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                }
+
+                @Override
+                public void deny() {
+
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendResultToParent(List<String> items) {
+        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            ((FileManagerFragment) getParentFragment()).sendResult(items);
+        }
+    }
+
+    private void closeFileManager() {
+        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            ((FileManagerFragment) getParentFragment()).closeFileManager();
+        }
+    }
+
 }

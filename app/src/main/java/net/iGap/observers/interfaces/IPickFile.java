@@ -11,9 +11,9 @@
 package net.iGap.observers.interfaces;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IPickFile extends Serializable {
 
-    void onPick(ArrayList<String> selectedPathList);
+    void onPick(List<String> selectedPathList);
 }

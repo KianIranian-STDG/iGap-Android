@@ -19,6 +19,7 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FileManagerViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static net.iGap.fragments.FileManagerChildFragment.ROOT_FILE_MANAGER;
 
@@ -133,6 +134,15 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
                 .addToBackStack(tag)
                 .add(R.id.frmFolders, fragment, tag)
                 .commit();
+    }
+
+    void sendResult(List<String> items) {
+        if (mListener != null) {
+            mListener.onPick(items);
+        }
+    }
+
+    void closeFileManager() {
     }
 
     @Override

@@ -9414,7 +9414,7 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onAttachPopupFilePicked(ArrayList<String> selectedPathList) {
+    public void onAttachPopupFilePicked(List<String> selectedPathList) {
         for (String path : selectedPathList) {
             Intent data = new Intent();
             data.setData(Uri.parse(path));

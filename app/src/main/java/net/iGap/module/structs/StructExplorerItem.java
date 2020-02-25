@@ -17,4 +17,5 @@ public class StructExplorerItem {
     public int backColor;
     public String path = "";
     public String description = null;
+    public boolean isFolderOrFile;
 }

@@ -899,7 +899,7 @@ public class ChatAttachmentPopup {
 
         void onAttachPopupLocation(String message);
 
-        void onAttachPopupFilePicked(ArrayList<String> selectedPathList);
+        void onAttachPopupFilePicked(List<String> selectedPathList);
 
         void onAttachPopupSendSelected();
     }

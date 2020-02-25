@@ -23,18 +23,18 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.adapter.AdapterGalleryVideo;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
-import net.iGap.observers.interfaces.GalleryItemListener;
-import net.iGap.observers.interfaces.OnRotateImage;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.GalleryItemListener;
+import net.iGap.observers.interfaces.OnRotateImage;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -142,9 +142,9 @@ public class FragmentGallery extends BaseFragment {
                             } else {
                                 checkVideoMultiSelectAndSendToEdit();
                             }
-                        } else {
+                        }/* else {
                             openAndroidOsGallery();
-                        }
+                        }*/
                     }
 
                     @Override
@@ -160,9 +160,9 @@ public class FragmentGallery extends BaseFragment {
 
         if (!isReturnResultDirectly) {
             if (mGalleryMode == GalleryMode.MUSIC) {
-                mHelperToolbar.setRightIcons(R.string.more_icon, R.string.sort_icon);
-            } else {
-                mHelperToolbar.setRightIcons(isSubFolder ? R.string.edit_icon : R.string.more_icon);
+                mHelperToolbar.setRightIcons(R.string.more_icon);
+            } else if (isSubFolder) {
+                mHelperToolbar.setRightIcons(R.string.edit_icon);
             }
         }
 
