@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
+import net.iGap.adapter.news.NewsFirstPageAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsMainPageBinding;
 import net.iGap.fragments.BottomNavigationFragment;
@@ -28,12 +29,11 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.model.news.NewsFPList;
 import net.iGap.model.news.NewsFirstPage;
 import net.iGap.model.news.NewsMainBTN;
-import net.iGap.adapter.news.NewsFirstPageAdapter;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.news.NewsMainVM;
 
 import java.util.ArrayList;
@@ -214,7 +214,18 @@ public class NewsMainFrag extends BaseAPIViewFrag<NewsMainVM> {
     }
 
     public void setSpecificNewsID(String specificNewsID) {
-        this.specificNewsID = specificNewsID;
+        if (specificNewsID != null && specificNewsID.startsWith("NG:")) {
+            this.specificGroupID = specificNewsID.replace("NG:", "");
+        } else
+            this.specificNewsID = specificNewsID;
+    }
+
+    public void setSpecificGroupOrNewsID(String specificNewsID) {
+        if (specificNewsID != null && specificNewsID.contains("/")) {
+            String[] temp = specificNewsID.split("/");
+            this.specificNewsID = temp[1];
+        } else
+            this.specificGroupID = specificNewsID;
     }
 
     public void setSpecificGroupID(String specificGroupID) {
