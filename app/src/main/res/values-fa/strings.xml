@@ -1817,7 +1817,7 @@
     <string name="pay_bills_title">پرداخت قبض</string>
     <string name="mobile_bills_title">قبض موبایل</string>
     <string name="bills">قبض و جریمه</string>
-    <string name="charge_amount">مبلغ شارژ</string>
+    <string name="charge_amount">مبلغ شارژ(ریال)</string>
     <string name="buy_internet_package_title">خرید بسته اینترنتی</string>
     <string name="charity_title">نیکوکاری</string>
     <string name="disk_and_network_usage">استفاده از حافظه و شبکه</string>

@@ -3,7 +3,6 @@ package net.iGap.response;
 import net.iGap.observers.interfaces.OnRefreshToken;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserRefreshToken;
-import net.iGap.realm.RealmUserInfo;
 
 public class UserRefreshTokenResponse extends MessageHandler {
 
@@ -28,7 +27,6 @@ public class UserRefreshTokenResponse extends MessageHandler {
         } else {
             throw new ClassCastException("identity must be : " + OnRefreshToken.class.getName());
         }
-        RealmUserInfo.insertAccessToken(builder.getAccessToken());
     }
 
     @Override

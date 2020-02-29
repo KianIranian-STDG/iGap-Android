@@ -11,8 +11,6 @@
 package net.iGap;
 
 import android.accounts.Account;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -391,21 +389,6 @@ public class G extends ApplicationContext {
         } else {
             return Color.parseColor(color);
         }
-    }
-
-    public static String getApiToken() {
-        String result = "Bearer ";
-        String tok;
-        result += tok = DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null) {
-                return realmUserInfo.getAccessToken();
-            }
-            return null;
-        });
-        if (BuildConfig.DEBUG)
-            Log.i("abbasiApiToken", "getApiToken: " + tok);
-        return result;
     }
 
     public static void refreshRealmUi() {
