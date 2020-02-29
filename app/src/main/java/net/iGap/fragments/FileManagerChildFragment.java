@@ -167,6 +167,9 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
 
         if (folder != null) {
 
+            //show loader
+            binding.loader.setVisibility(View.VISIBLE);
+
             new Thread(() -> {
 
                 File file = new File(folder);
@@ -194,6 +197,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                     Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> {
+                            binding.loader.setVisibility(View.GONE);
                             mAdapter = new AdapterExplorer(mItems, this);
                             binding.rvItems.setAdapter(mAdapter);
                         });
