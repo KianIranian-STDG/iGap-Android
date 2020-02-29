@@ -1,12 +1,8 @@
 package net.iGap.repository;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.api.MobileBankApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.api.apiService.MobileBankApiInitializer;
-import net.iGap.observers.interfaces.MobileBankExpiredTokenCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.model.mobileBank.BankAccountModel;
@@ -21,6 +17,10 @@ import net.iGap.model.mobileBank.BankShebaModel;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
 import net.iGap.model.mobileBank.LoanListModel;
 import net.iGap.model.mobileBank.LoginResponse;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.MobileBankExpiredTokenCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmUserInfo;
 
 import java.util.List;
@@ -92,6 +92,10 @@ public class MobileBankRepository {
 
     public void blockCheque(List<String> chequeNumbers, String depositNumber, String reason, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<BankBlockCheque>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<BankBlockCheque>>().initAPI(bankApi.blockCheque(getAccessToken(), chequeNumbers, depositNumber, reason), callback, responseCallback);
+    }
+
+    public void getRegisterCheque(String chequeNumber, String depositNumber, Long amount, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.registerCheque(getAccessToken(), depositNumber, chequeNumber, amount), callback, responseCallback);
     }
 
     public void getOTP(String cardNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<ErrorModel> responseCallback) {

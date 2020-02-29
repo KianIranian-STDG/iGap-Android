@@ -106,7 +106,7 @@ public class DialogParsian {
         mDialog.show();
     }
 
-    public void showInputDialog(String hint) {
+    public void showInputDialog(String hint, int inputType) {
 
         initDialog();
 
@@ -118,6 +118,7 @@ public class DialogParsian {
         etInput.setHintTextColor(Theme.getInstance().getSubTitleColor(mContext));
         etInput.setTypeface(ResourcesCompat.getFont(mContext, R.font.main_font));
         etInput.setHint(hint);
+        etInput.setInputType(inputType);
         etInput.setPadding(12, 0, 12, 0);
         etInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         etInput.setSingleLine();
@@ -125,7 +126,7 @@ public class DialogParsian {
         mActiveButton.setOnClickListener(v -> {
             mDialog.dismiss();
             if (mListener != null)
-                mListener.onInputDialogListener(mDialog, etInput.getText().toString());
+                mListener.onInputDialogListener(mDialog, etInput.getText() != null ? etInput.getText().toString() : null);
         });
 
         mContentLayout.addView(etInput, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 12f, 12f, 12f, 12f));

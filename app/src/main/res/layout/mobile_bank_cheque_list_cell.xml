@@ -81,7 +81,7 @@
             app:layout_constraintTop_toTopOf="@id/chequeStatus" />
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="@dimen/dp200"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/mobileBankButton"
             android:id="@+id/blockCheque"
@@ -89,9 +89,24 @@
             android:paddingRight="@dimen/dp16"
             android:layout_marginTop="@dimen/dp14"
             android:text="@string/block"
+            app:layout_constraintWidth_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/customizeCheque"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chequeDate" />
 
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/iGapButton"
+            android:id="@+id/customizeCheque"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            android:text="@string/inter_cheque_amount"
+            app:layout_constraintWidth_percent="0.52"
+            app:layout_constraintStart_toEndOf="@id/blockCheque"
+            app:layout_constraintTop_toTopOf="@+id/blockCheque" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>
