@@ -214,8 +214,8 @@ public class NewsMainFrag extends BaseAPIViewFrag<NewsMainVM> {
     }
 
     public void setSpecificNewsID(String specificNewsID) {
-        if (specificNewsID != null && specificNewsID.startsWith("NG:")) {
-            this.specificGroupID = specificNewsID.replace("NG:", "");
+        if (specificNewsID != null && specificNewsID.startsWith("CID:")) {
+            this.specificGroupID = specificNewsID.replace("CID:", "");
         } else
             this.specificNewsID = specificNewsID;
     }
