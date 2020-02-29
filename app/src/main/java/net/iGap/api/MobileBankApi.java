@@ -103,6 +103,13 @@ public interface MobileBankApi {
                                                               @Field("deposit_number") String depositNumber,
                                                               @Field("blocked_reason") String reason);
 
+    @POST("cheque/register-cheque")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse> registerCheque(@Header("Authorization") String token,
+                                                @Field("deposit_number") String depositNumber,
+                                                @Field("number") String number,
+                                                @Field("amount") Long amount);
+
     @POST("card/hot-card")
     @FormUrlEncoded
     Call<BaseMobileBankResponse> hotCard(@Header("Authorization") String token,

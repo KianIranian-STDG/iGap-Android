@@ -22,23 +22,20 @@ import java.util.List;
 public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<BankChequeSingle> mdata;
-    private OnItemClickListener blockBTN;
+    private OnItemClickListener listener;
 
-    public MobileBankChequeListAdapter(List<BankChequeSingle> mdata, OnItemClickListener blockBTN) {
+    public MobileBankChequeListAdapter(List<BankChequeSingle> mdata, OnItemClickListener listener) {
         if (mdata != null)
             this.mdata = mdata;
         else
             this.mdata = new ArrayList<>();
-        this.blockBTN = blockBTN;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
-        View singleVH = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mobile_bank_cheque_list_cell, viewGroup, false);
-        viewHolder = new ViewHolder(singleVH);
-        return viewHolder;
+        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mobile_bank_cheque_list_cell, viewGroup, false));
     }
 
     @Override
@@ -70,7 +67,7 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView chNumber, chValue, chStatus, chDate;
-        private Button block;
+        private Button block, customize;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,16 +77,19 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             chStatus = itemView.findViewById(R.id.chequeStatus);
             chDate = itemView.findViewById(R.id.chequeDate);
             block = itemView.findViewById(R.id.blockCheque);
+            customize = itemView.findViewById(R.id.customizeCheque);
 
         }
 
         void initView(int position) {
             chNumber.setText(CompatibleUnicode(mdata.get(position).getNumber()));
 
-            if (mdata.get(position).getBalance() != null)
+            if (mdata.get(position).getBalance() != null) {
                 chValue.setText(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))) + itemView.getContext().getResources().getString(R.string.rial));
-            else {
+                customize.setVisibility(View.GONE);
+            } else {
                 chValue.setText(itemView.getContext().getResources().getString(R.string.mobile_bank_balance_error_no_price));
+                customize.setVisibility(View.VISIBLE);
             }
 
             String date = mdata.get(position).getChangeStatusDate();
@@ -115,7 +115,8 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
                 chStatus.setTextColor(chStatus.getContext().getResources().getColor(R.color.brown));
             }
 
-            block.setOnClickListener(v -> blockBTN.onBlock(position));
+            block.setOnClickListener(v -> listener.onBlock(getAdapterPosition()));
+            customize.setOnClickListener(v -> listener.onCustomizeClicked(getAdapterPosition()));
         }
 
         private String getStatusText(String status) {
@@ -155,6 +156,8 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public interface OnItemClickListener {
         void onBlock(int position);
+
+        void onCustomizeClicked(int position);
     }
 
 }

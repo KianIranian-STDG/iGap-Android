@@ -2181,4 +2181,5 @@
     <string name="kuknos_send_token_error">Impossible d\'envoyer ce jeton.</string>
     <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?!
 Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
+    <string name="inter_cheque_amount">Entrer le montant</string>
 </resources>
