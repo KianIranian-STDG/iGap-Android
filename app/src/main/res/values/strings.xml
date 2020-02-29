@@ -1267,7 +1267,7 @@ Want to get it?</string>
     <string name="install_app">Install App</string>
     <string name="text_top">To use the service: to install the application for the card, buy a bus ticket, purchase a charge, pay bills, buy a package and other payment services.</string>
     <string name="text_paygear">Follow up, pick up your wallet and instant cash deposit, pay your gifts, buy from stores and pay tax limousines.</string>
-    <string name="customization">customization</string>
+    <string name="customization">Customization</string>
     <string name="Apply_colors_to_customize">Apply colors to customize</string>
     <string name="channel_name_notification">iGap Notification</string>
     <string name="payment">Payment</string>
@@ -2575,5 +2575,6 @@ Want to get it?</string>
     <string name="kuknos_send_token_error">Can Not send this token.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
+    <string name="inter_cheque_amount">Enter Amount</string>
 
 </resources>

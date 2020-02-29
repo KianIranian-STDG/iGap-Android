@@ -1,6 +1,7 @@
 package net.iGap.viewmodel.mobileBank;
 
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
@@ -10,13 +11,13 @@ import com.google.gson.Gson;
 
 import net.iGap.Config;
 import net.iGap.R;
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.repository.MobileBankRepository;
 import net.iGap.model.mobileBank.BankAuth;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
 import net.iGap.model.mobileBank.LoginResponse;
-import net.iGap.module.mobileBank.RSACipher;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.mobileBank.RSACipher;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.MobileBankRepository;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -71,6 +72,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
+                        Log.e("bank_token", data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
                         onLoginResponse.postValue(true);
                     }

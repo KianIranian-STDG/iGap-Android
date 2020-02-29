@@ -2519,4 +2519,5 @@
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
     <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟!
         توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
+    <string name="inter_cheque_amount">ثبت مبلغ </string>
 </resources>

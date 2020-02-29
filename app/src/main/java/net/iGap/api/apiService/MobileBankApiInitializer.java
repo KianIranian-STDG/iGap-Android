@@ -26,6 +26,7 @@ public class MobileBankApiInitializer<T> {
                 else {
                     if (response.code() == 401) { //must be 401
                         expiredToken.onExpired();
+                        retrofitCallback.onFailed();
                     } else {
                         try {
                             ErrorModel error = new ErrorHandler().getError(response.code(), response.errorBody().string());
