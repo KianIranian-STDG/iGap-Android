@@ -18,10 +18,13 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hanks.library.AnimateCheckBox;
+
 import net.iGap.R;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructExplorerItem;
 
+import java.io.File;
 import java.util.List;
 
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
@@ -44,6 +47,7 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         StructExplorerItem rowItem = items.get(position);
+        holder.checkBox.setChecked(rowItem.isSelected);
         holder.txtTitle.setText(rowItem.name);
         holder.imageView.setImageResource(rowItem.image);
         if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
@@ -65,6 +69,20 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
             holder.txtSubtitle.setVisibility(View.GONE);
         }
 
+        holder.itemView.setOnClickListener(view -> {
+            StructExplorerItem item = items.get(holder.getAdapterPosition());
+            if (item.isFolderOrFile) {
+                if (new File(item.path).isDirectory()) {
+                    onItemClickListener.onFolderClicked(item.path, holder.getAdapterPosition());
+                } else {
+                    items.get(holder.getAdapterPosition()).isSelected = true;
+                    onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition());
+                }
+            } else {
+                onItemClickListener.onGalleryClicked(item.name, holder.getAdapterPosition());
+            }
+        });
+
     }
 
     @Override
@@ -76,6 +94,7 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
 
         private TextView txtTitle, txtSubtitle;
         private ImageView imageView;
+        private AnimateCheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -83,13 +102,17 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
             txtTitle = itemView.findViewById(R.id.sle_sub_textView1);
             txtSubtitle = itemView.findViewById(R.id.sle_sub_textView2);
             imageView = itemView.findViewById(R.id.sle_sub_imageView1);
+            checkBox = itemView.findViewById(R.id.checkSelect);
 
-            itemView.setOnClickListener(view -> onItemClickListener.onItemClick(view, getAdapterPosition()));
         }
     }
 
     public interface OnItemClickListenerExplorer {
 
-        void onItemClick(View view, int position);
+        void onFileClicked(String path, int position);
+
+        void onFolderClicked(String path, int position);
+
+        void onGalleryClicked(String type, int position);
     }
 }

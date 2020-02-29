@@ -18,4 +18,5 @@ public class StructExplorerItem {
     public String path = "";
     public String description = null;
     public boolean isFolderOrFile;
+    transient public boolean isSelected;
 }

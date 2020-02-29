@@ -234,30 +234,31 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        if (mItems.size() > position) {
-            if (mItems.get(position).isFolderOrFile) {
-                openSubFolderOrSendFile(mItems.get(position).path);
-            } else {
-                //getOpenGallery(mItems.get(position).name);
-            }
-        }
+    public void onFileClicked(String path, int position) {
+        addItemToParentSelectedList(path);
+        mAdapter.notifyItemChanged(position);
     }
 
-    private void openSubFolderOrSendFile(String name) {
-        if (new File(name).isDirectory()) {
-            FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(name);
-            if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
-                ((FileManagerFragment) getParentFragment()).loadFragment(fragment, FileManagerChildFragment.class.getName());
-            }
-        } else {
-            //add to send list
-        }
-    }
-
-    private void sendResultToParent(List<String> items) {
+    @Override
+    public void onFolderClicked(String path, int position) {
+        FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(path);
         if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
-            ((FileManagerFragment) getParentFragment()).sendResult(items);
+            ((FileManagerFragment) getParentFragment()).loadFragment(fragment, FileManagerChildFragment.class.getName());
+        }
+    }
+
+    @Override
+    public void onGalleryClicked(String type, int position) {
+        //getOpenGallery(type);
+    }
+
+    private void checkListHasSelectedBefore() {
+
+    }
+
+    private void addItemToParentSelectedList(String item) {
+        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            ((FileManagerFragment) getParentFragment()).addItemToSelectedList(item);
         }
     }
 

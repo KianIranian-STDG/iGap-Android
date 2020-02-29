@@ -26,6 +26,7 @@ import static net.iGap.fragments.FileManagerChildFragment.ROOT_FILE_MANAGER;
 public class FileManagerFragment extends BaseFragment implements ToolbarListener {
 
     private static String LISTENER_KEY = "Listener";
+    private List<String> mSelectedList = new ArrayList<>();
     private FileManagerViewModel mViewModel;
     private FileManagerFragmentBinding binding;
     private HelperToolbar mHelperToolbar;
@@ -64,8 +65,9 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
 
     private void setupListeners() {
         mViewModel.getSendClickListener().observe(getViewLifecycleOwner(), state -> {
-            //todo: fill items
-            mListener.onPick(new ArrayList<>());
+            if (mListener != null) {
+                mListener.onPick(mSelectedList);
+            }
         });
     }
 
@@ -136,10 +138,8 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
                 .commit();
     }
 
-    void sendResult(List<String> items) {
-        if (mListener != null) {
-            mListener.onPick(items);
-        }
+    void addItemToSelectedList(String item) {
+        mSelectedList.add(item);
     }
 
     void closeFileManager() {

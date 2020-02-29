@@ -19,6 +19,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
+    <com.hanks.library.AnimateCheckBox
+        android:id="@+id/checkSelect"
+        android:layout_width="@dimen/dp24"
+        android:layout_height="@dimen/dp24"
+        android:layout_gravity="center"
+        android:clickable="false"
+        app:animDuration="50"
+        app:checkedColor="?attr/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@id/sle_sub_imageView1"
+        app:layout_constraintRight_toRightOf="@id/sle_sub_imageView1"
+        app:lineColor="#fff"
+        app:lineWidth="1.2dp"
+        app:unCheckColor="?attr/colorPrimary" />
+
     <TextView
         android:id="@+id/sle_sub_textView1"
         android:layout_width="0dp"
