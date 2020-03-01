@@ -596,7 +596,7 @@
 
     <string name="array_4_hour">"۴ ساعات"</string>
 
-    <string name="array_Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
+    <string name="Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
 
     <string name="replay_item_dialog">"الردّ"</string>
 
@@ -2769,7 +2769,7 @@
     <string name="pay_bills_title">ادفع الفواتير</string>
     <string name="mobile_bills_title">فواتير المحمول</string>
     <string name="bills">فواتير</string>
-    <string name="charge_amount">مستوى الشحن</string>
+    <string name="charge_amount">مستوى الشحن(ریال)</string>
     <string name="buy_internet_package_title">شراء حزمة الإنترنت</string>
     <string name="charity_title">الاعمال الخيرية</string>
     <string name="item_selected">العنصر المحدد</string>
@@ -3101,7 +3101,7 @@
     <string name="facilities">مرافق</string>
     <string name="services">خدمات</string>
     <string name="cheque_number">التحقق من الرقم :</string>
-    <string name="page_count">عدد الصفحات :</string>
+    <string name="page_count">الصفحه</string>
     <string name="reject_count">رفض :</string>
     <string name="pass_count">مرر :</string>
     <string name="cash_count">صرفه :</string>
@@ -3188,6 +3188,7 @@
     <string name="posted">نشر</string>
     <string name="gift_sticker_inquiry_and_activated">التحقيق وتفعيلها</string>
     <string name="kuknos_send_token_error">لا يمكن إرسال هذا الرمز المميز.</string>
-    <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟
-لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
+    <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟ لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
+    <string name="inter_cheque_amount">أدخل المبلغ</string>
+    <string name="take_turn">يأخذ منحى</string>
 </resources>

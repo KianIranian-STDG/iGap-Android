@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketViewModel" />
+            type="net.iGap.viewmodel.igasht.IGashtBuyTicketViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

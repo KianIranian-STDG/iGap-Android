@@ -24,10 +24,11 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnFileDownloadResponse;
-import net.iGap.interfaces.OnSongDownload;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.api.beepTunes.DownloadSong;
+import net.iGap.observers.interfaces.OnFileDownloadResponse;
+import net.iGap.observers.interfaces.OnSongDownload;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -444,7 +445,7 @@ public class HelperDownloadFile {
 
     public static void startDownloadManager(DownloadSong song, OnSongDownload onSongDownload) {
         song.setDownloadId(PRDownloader.download(song.getUrl(), song.getPath(), song.getSavedName())
-                .setHeader("Authorization", G.getApiToken())
+                .setHeader("Authorization", TokenContainer.getInstance().getToken())
                 .build()
                 .setOnStartOrResumeListener(() -> onSongDownload.startOrResume(song))
                 .setOnPauseListener(() -> onSongDownload.pauseDownload(song))

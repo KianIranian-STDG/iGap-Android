@@ -16,7 +16,7 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;

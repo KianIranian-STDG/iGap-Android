@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp8"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginTop="@dimen/dp4"
+        android:layout_marginBottom="@dimen/dp4"
+        app:cardCornerRadius="@dimen/dp8"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="?attr/iGapCardViewColor">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/IGapRootViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/planCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/check_box_background"
+                android:textColor="?attr/iGapTitleTextColor"
+                android:textColorLink="?attr/colorPrimary"
+                android:layout_marginStart="@dimen/dp4"
+                android:layout_marginLeft="@dimen/dp4"
+                app:layout_constraintTop_toTopOf="@+id/planTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/planTitle"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp4"
+                android:layout_marginEnd="@dimen/dp4"
+                android:layout_marginTop="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp8"
+                android:text="title"
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapTitleTextColor"
+                android:gravity="start"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/planDesc"
+                app:layout_constraintStart_toEndOf="@+id/planCheckBox"
+                app:layout_constraintEnd_toStartOf="@+id/planVerticalGuideline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
+                android:text="Price: 10000 Toman"
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapTitleTextColor"
+                android:gravity="start"
+                android:ellipsize="end"
+                app:layout_constraintStart_toEndOf="@+id/planVerticalGuideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/planTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/planTitle" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/planVerticalGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.45" />
+
+            <View
+                android:id="@+id/planClick"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/transparent"
+                app:layout_constraintStart_toStartOf="@+id/planTitle"
+                app:layout_constraintEnd_toEndOf="@+id/planPrice"
+                app:layout_constraintTop_toTopOf="@+id/planTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/planTitle" />
+
+            <View
+                android:layout_width="@dimen/dp1"
+                android:layout_height="0dp"
+                android:background="?iGapDividerLine"
+                app:layout_constraintStart_toStartOf="@+id/planVerticalGuideline"
+                app:layout_constraintTop_toTopOf="@+id/planTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/planTitle" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/planGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="planUserScore,planSpentScore,planDesc,planDivider" />
+
+            <!--<View
+                android:id="@+id/planDivider"
+                android:layout_width="@dimen/dp1"
+                android:layout_height="0dp"
+                android:background="?iGapDividerLine"
+                app:layout_constraintStart_toStartOf="@+id/planVerticalGuideline"
+                app:layout_constraintTop_toTopOf="@+id/planUserScore"
+                app:layout_constraintBottom_toBottomOf="@+id/planUserScore"/>-->
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp4"
+                android:text="@string/desc"
+                android:textSize="@dimen/smallTextSize"
+                android:textColor="?iGapSubtitleTextColor"
+                android:gravity="start"
+                android:ellipsize="end"
+                app:layout_constraintStart_toStartOf="@+id/planTitle"
+                app:layout_constraintTop_toBottomOf="@+id/planTitle"
+                app:layout_constraintBottom_toTopOf="@+id/planUserScore" />
+
+            <View
+                android:id="@+id/planDivider"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp1"
+                android:background="?iGapDividerLine"
+                android:layout_marginStart="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
+                app:layout_constraintTop_toTopOf="@+id/planDesc"
+                app:layout_constraintBottom_toBottomOf="@+id/planDesc"
+                app:layout_constraintStart_toEndOf="@+id/planDesc"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planUserScore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp8"
+                android:text="User Score: 1000"
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapTitleTextColor"
+                android:gravity="start"
+                android:ellipsize="end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/planTitle"
+                app:layout_constraintEnd_toStartOf="@+id/planVerticalGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/planDesc" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/planSpentScore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
+                android:text="Spent Score: 500"
+                android:textSize="@dimen/standardTextSize"
+                android:textColor="?iGapTitleTextColor"
+                android:gravity="start"
+                android:ellipsize="end"
+                app:layout_constraintStart_toEndOf="@+id/planVerticalGuideline"
+                app:layout_constraintTop_toTopOf="@+id/planUserScore"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/planUserScore" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

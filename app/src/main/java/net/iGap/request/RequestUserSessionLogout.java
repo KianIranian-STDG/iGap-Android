@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnUserSessionLogout;
+import net.iGap.observers.interfaces.OnUserSessionLogout;
 import net.iGap.proto.ProtoUserSessionLogout;
 
 public class RequestUserSessionLogout {

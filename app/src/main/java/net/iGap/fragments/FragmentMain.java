@@ -22,17 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -42,19 +42,19 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.interfaces.OnActivityChatStart;
-import net.iGap.interfaces.OnChannelDeleteInRoomList;
-import net.iGap.interfaces.OnChatDeleteInRoomList;
-import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnChatUpdateStatusResponse;
-import net.iGap.interfaces.OnClientGetRoomListResponse;
-import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
-import net.iGap.interfaces.OnDateChanged;
-import net.iGap.interfaces.OnGroupDeleteInRoomList;
-import net.iGap.interfaces.OnRemoveFragment;
-import net.iGap.interfaces.OnSetActionInRoom;
-import net.iGap.interfaces.OnVersionCallBack;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.OnActivityChatStart;
+import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
+import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
+import net.iGap.observers.interfaces.OnChatSendMessageResponse;
+import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.observers.interfaces.OnClientGetRoomListResponse;
+import net.iGap.observers.interfaces.OnClientGetRoomResponseRoomList;
+import net.iGap.observers.interfaces.OnDateChanged;
+import net.iGap.observers.interfaces.OnGroupDeleteInRoomList;
+import net.iGap.observers.interfaces.OnRemoveFragment;
+import net.iGap.observers.interfaces.OnSetActionInRoom;
+import net.iGap.observers.interfaces.OnVersionCallBack;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.model.MultiSelectStruct;
 import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
@@ -247,7 +247,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
-            MusicPlayer.playerStateChangeListener.observe(this, isVisible -> {
+            MusicPlayer.playerStateChangeListener.observe(getViewLifecycleOwner(), isVisible -> {
                 notifyChatRoomsList();
 
                 if (!mHelperToolbar.getmSearchBox().isShown()) {
@@ -257,6 +257,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -509,6 +510,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     }
 
+    private void invalidateViews() {
+        int count = mRecyclerView.getChildCount();
+        for (int i = 0; i < count; i++) {
+            mRecyclerView.getChildAt(i).invalidate();
+        }
+    }
+
     //***************************************************************************************************************************
 
 
@@ -739,6 +747,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         super.onDestroyView();
 
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
     }
@@ -1169,6 +1178,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
                 if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
             });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.handler.post(this::invalidateViews);
         }
 
     }

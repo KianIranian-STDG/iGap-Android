@@ -9,7 +9,7 @@
  */
 package net.iGap.response;
 
-import net.iGap.interfaces.OnGroupEdit;
+import net.iGap.observers.interfaces.OnGroupEdit;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupEdit;
 import net.iGap.realm.RealmRoom;

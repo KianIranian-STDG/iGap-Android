@@ -22,7 +22,7 @@ import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperWallet;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentWalletAgreementViewModel;
 
 import org.jetbrains.annotations.NotNull;

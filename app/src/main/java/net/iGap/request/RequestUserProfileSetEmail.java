@@ -11,7 +11,7 @@
 package net.iGap.request;
 
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnUserProfileSetEmailResponse;
+import net.iGap.observers.interfaces.OnUserProfileSetEmailResponse;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoUserProfileEmail;
 

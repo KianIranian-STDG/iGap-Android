@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.module.dialog.BaseBottomSheet;
 
 public class MainGiftStickerCardFragment extends BaseBottomSheet {
     public static final int ACTIVE_BY_ME = 0;

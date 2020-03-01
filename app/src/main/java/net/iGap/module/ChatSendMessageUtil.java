@@ -12,17 +12,18 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.interfaces.OnChatSendMessageResponse;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
@@ -316,6 +317,15 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         if (onChatSendMessageResponseRoom != null) {
             onChatSendMessageResponseRoom.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
         }
+
+        if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
+            EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, sticker.getGroupId());
+        } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
+            EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, sticker.getGroupId());
+        }
+
     }
 
     @Override

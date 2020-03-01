@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnUserProfileSetEmailResponse;
+import net.iGap.observers.interfaces.OnUserProfileSetEmailResponse;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileEmail;
 import net.iGap.realm.RealmUserInfo;

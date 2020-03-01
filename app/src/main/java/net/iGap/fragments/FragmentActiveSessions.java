@@ -27,11 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IAdapter;
-import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.mikepenz.fastadapter.listeners.OnClickListener;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -39,13 +35,11 @@ import net.iGap.adapter.items.AdapterActiveSessions;
 import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.OnUserSessionGetActiveList;
-import net.iGap.interfaces.OnUserSessionTerminate;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.OnUserSessionTerminate;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructSessions;
-import net.iGap.proto.ProtoUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionTerminate;
 

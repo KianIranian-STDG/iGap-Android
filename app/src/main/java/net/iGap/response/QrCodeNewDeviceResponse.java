@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnQrCodeNewDevice;
+import net.iGap.observers.interfaces.OnQrCodeNewDevice;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoQrCodeNewDevice;
 

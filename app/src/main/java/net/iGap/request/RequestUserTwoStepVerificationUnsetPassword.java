@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.UserTwoStepVerificationUnsetPasswordCallback;
+import net.iGap.observers.interfaces.UserTwoStepVerificationUnsetPasswordCallback;
 import net.iGap.proto.ProtoUserTwoStepVerificationUnsetPassword;
 
 public class RequestUserTwoStepVerificationUnsetPassword {

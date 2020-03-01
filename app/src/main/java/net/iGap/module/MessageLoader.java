@@ -11,11 +11,11 @@
 
 package net.iGap.module;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
-import net.iGap.interfaces.OnMessageReceive;
+import net.iGap.observers.interfaces.OnClientGetRoomHistoryResponse;
+import net.iGap.observers.interfaces.OnMessageReceive;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoGlobal;

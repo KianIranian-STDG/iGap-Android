@@ -1,24 +1,20 @@
 package net.iGap.api;
 
-import net.iGap.news.repository.model.NewsComment;
-import net.iGap.news.repository.model.NewsDetail;
-import net.iGap.news.repository.model.NewsFPList;
-import net.iGap.news.repository.model.NewsFirstPage;
-import net.iGap.news.repository.model.NewsGroup;
-import net.iGap.news.repository.model.NewsList;
-import net.iGap.news.repository.model.NewsPN;
-import net.iGap.news.repository.model.NewsPublisher;
-import net.iGap.news.repository.model.NewsSubmitComment;
+import net.iGap.model.news.NewsComment;
+import net.iGap.model.news.NewsDetail;
+import net.iGap.model.news.NewsFirstPage;
+import net.iGap.model.news.NewsGroup;
+import net.iGap.model.news.NewsList;
+import net.iGap.model.news.NewsPN;
+import net.iGap.model.news.NewsPublisher;
+import net.iGap.model.news.NewsSubmitComment;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface NewsApi {

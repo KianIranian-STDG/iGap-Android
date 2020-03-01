@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnGroupEdit;
+import net.iGap.observers.interfaces.OnGroupEdit;
 import net.iGap.proto.ProtoGroupEdit;
 
 public class RequestGroupEdit {

@@ -20,7 +20,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketState;
 
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.HelperConnectionState;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmRoom;

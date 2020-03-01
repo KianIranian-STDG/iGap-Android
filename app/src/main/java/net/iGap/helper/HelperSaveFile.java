@@ -25,7 +25,7 @@ import com.yalantis.ucrop.util.FileUtils;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 
 import java.io.File;

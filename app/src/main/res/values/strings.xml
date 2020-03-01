@@ -323,7 +323,7 @@
     <string name="array_1_hour">1 Hour</string>
     <string name="array_2_hour">2 Hours</string>
     <string name="array_4_hour">4 Hours</string>
-    <string name="array_Default_Notification_tone">Default Notifications Tone</string>
+    <string name="Default_Notification_tone">Default Notifications Tone</string>
     <string name="replay_item_dialog">Reply</string>
     <string name="copy_item_dialog">Copy</string>
     <string name="share_item_dialog">Share</string>
@@ -756,6 +756,9 @@ Want to get it?</string>
     <string name="there_is_no_sheared_media">There are no shared media</string>
     <string name="pending">Pending</string>
     <string name="completed">Completed</string>
+    <string name="payment_userScore">Your Score: </string>
+    <string name="payment_spentScore">Spending Score: </string>
+    <string name="payment_price">discount: </string>
     <!-- New String -->
     <string name="please_enter_channel_name">Please Enter Channel Name</string>
     <string name="new_channel">New Channel</string>
@@ -1264,7 +1267,7 @@ Want to get it?</string>
     <string name="install_app">Install App</string>
     <string name="text_top">To use the service: to install the application for the card, buy a bus ticket, purchase a charge, pay bills, buy a package and other payment services.</string>
     <string name="text_paygear">Follow up, pick up your wallet and instant cash deposit, pay your gifts, buy from stores and pay tax limousines.</string>
-    <string name="customization">customization</string>
+    <string name="customization">Customization</string>
     <string name="Apply_colors_to_customize">Apply colors to customize</string>
     <string name="channel_name_notification">iGap Notification</string>
     <string name="payment">Payment</string>
@@ -1328,7 +1331,7 @@ Want to get it?</string>
     <string name="pay">Pay</string>
     <string name="transfer_to_dialog">Transfer to :%s</string>
     <string name="am_money">money</string>
-    <string name="trace_number">Trace Number</string>
+    <string name="trace_number">Trace number</string>
     <string name="amount_2">amount :</string>
     <string name="payment_canceled">payment is canceled</string>
     <string name="PayGear_unavailable">PayGear is unavailable</string>
@@ -1336,7 +1339,7 @@ Want to get it?</string>
     <string name="bills_inquiry_telecom">Home phones bill inquiry</string>
     <string name="bills_inquiry">Bills inquiry mci and telecom</string>
     <string name="bills_inquiry_title">Bills inquiry</string>
-    <string name="bill_type">Bill Type</string>
+    <string name="bill_type">Bill type</string>
     <string name="telecom">Home phone</string>
     <string name="phone">Phone number</string>
     <string name="area_code">Area code</string>
@@ -1486,7 +1489,7 @@ Want to get it?</string>
     <string name="new_message_notif">New Message</string>
     <string name="card_to_card">Request card to card</string>
     <string name="your_device_is_root">Sorry! Your device is root.</string>
-    <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
+    <string name="top_sheet_behavior" translatable="false">net.iGap.module.dialog.topsheet.TopSheetBehavior</string>
     <string name="change_language_title">Change Language</string>
     <string name="terms_condition_title">Terms and Condition</string>
     <string name="warning">Warning</string>
@@ -1560,7 +1563,7 @@ Want to get it?</string>
     <string name="delete_card">Delete Card</string>
     <string name="add_new_card">Add New Card</string>
     <string name="delete_card_confirm">Are you sure you want to delete this card?</string>
-    <string name="card_number">Card Number</string>
+    <string name="card_number">Card number</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="edit">Edit</string>
@@ -1831,7 +1834,7 @@ Want to get it?</string>
     <string name="pay_bills_title">Pay Bills</string>
     <string name="mobile_bills_title">Mobile Bills</string>
     <string name="bills">Bills</string>
-    <string name="charge_amount">Charge amount</string>
+    <string name="charge_amount">Charge amount(Rial)</string>
     <string name="buy_internet_package_title">Buy Internet Package</string>
     <string name="charity_title">Charity</string>
     <string name="charity_confirm">You have set the %1$s Rial to help charity %2$s</string>
@@ -1979,8 +1982,8 @@ Want to get it?</string>
     <string name="message_decline_please_text_me">Please text me.</string>
     <string name="mpl_transaction_rrn">RRN</string>
     <string name="mpl_transaction_trace">Trace Number</string>
-    <string name="mpl_transaction_order_id">Order Id</string>
-    <string name="pay_id">Pay Id</string>
+    <string name="mpl_transaction_order_id">Order id</string>
+    <string name="pay_id">Pay id</string>
     <string name="mpl_transaction_merchent_name">Merchant Name</string>
     <string name="mpl_transaction_sales">Sales</string>
     <string name="mpl_transaction_topup">TopUp</string>
@@ -2431,7 +2434,7 @@ Want to get it?</string>
     <string name="facilities">Loans</string>
     <string name="services">Services</string>
     <string name="cheque_number">Cheque number :</string>
-    <string name="page_count">Page count :</string>
+    <string name="page_count">pages</string>
     <string name="reject_count">Reject :</string>
     <string name="pass_count">Passed :</string>
     <string name="cash_count"> Cashed :</string>
@@ -2521,11 +2524,11 @@ Want to get it?</string>
     <string name="requester_mobile_number">Requester mobile number</string>
     <string name="charger_mobile_number">Receiver\'s mobile number</string>
     <string name="topUp_type">TopUp type</string>
-    <string name="terminal_No">Terminal No</string>
-    <string name="rrn">Reference No</string>
+    <string name="terminal_No">Terminal no</string>
+    <string name="rrn">Reference no</string>
     <string name="bill_id">Bill id</string>
-    <string name="topUp_title">Buying the charge</string>
-    <string name="bill_title">Bill payment</string>
+    <string name="topUp_title">Buying The Charge</string>
+    <string name="bill_title">Bill Payment</string>
     <string name="topUp_message">Buying the charge message</string>
     <string name="bill_message">Bill payment message</string>
     <string name="soon">Coming soon...</string>
@@ -2568,5 +2571,8 @@ Want to get it?</string>
     <string name="gift_sticker_inquiry_and_activated">Inquiry and activated</string>
     <string name="kuknos_send_token_error">Can Not send this token.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="payment_discount_plans_title">Discount Plans</string>
+    <string name="inter_cheque_amount">Enter Amount</string>
+    <string name="take_turn">Take turn</string>
 
 </resources>

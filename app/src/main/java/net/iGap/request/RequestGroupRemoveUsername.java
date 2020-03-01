@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnGroupRemoveUsername;
+import net.iGap.observers.interfaces.OnGroupRemoveUsername;
 import net.iGap.proto.ProtoGroupRemoveUsername;
 
 public class RequestGroupRemoveUsername {

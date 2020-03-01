@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnClientGetRoomMessage;
+import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.proto.ProtoClientGetRoomMessage;
 
 public class RequestClientGetRoomMessage {

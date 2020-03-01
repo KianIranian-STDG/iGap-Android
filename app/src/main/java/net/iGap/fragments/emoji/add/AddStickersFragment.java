@@ -13,7 +13,7 @@ import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
-import net.iGap.rx.ObserverFragment;
+import net.iGap.observers.rx.ObserverFragment;
 import net.iGap.viewmodel.AddStickerViewModel;
 
 public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {

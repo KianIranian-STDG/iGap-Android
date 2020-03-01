@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class PurchaseFragment extends BaseFragment implements ToolbarListener {
 

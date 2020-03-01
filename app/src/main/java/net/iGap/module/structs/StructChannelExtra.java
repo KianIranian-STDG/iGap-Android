@@ -10,8 +10,7 @@
 
 package net.iGap.module.structs;
 
-import net.iGap.AccountManager;
-import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmRoom;
 

@@ -48,15 +48,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.helper.CardToCardHelper;
@@ -71,10 +65,8 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.UploadManager;
-import net.iGap.interfaces.IChatItemAttachment;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnProgressUpdate;
 import net.iGap.libs.Tuple;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
@@ -87,12 +79,20 @@ import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.IChatItemAttachment;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnProgressUpdate;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
@@ -183,7 +183,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     protected void setTextIfNeeded(TextView view) {
         if (!TextUtils.isEmpty(myText)) {
-            view.setText(EmojiManager.getInstance().replaceEmoji(myText, view.getPaint().getFontMetricsInt(), LayoutCreator.dp(16), false));
+            view.setText(EmojiManager.getInstance().replaceEmoji(myText, view.getPaint().getFontMetricsInt(), LayoutCreator.dp(20), false));
             // if this not work then use view.requestLayout();
             view.forceLayout();
             view.setVisibility(View.VISIBLE);
@@ -655,9 +655,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_channel_forward_light, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                    if (isAllowToForward(mMessage))
                         messageClickListener.onForwardClick(structMessage);
                 });
             }
@@ -666,9 +664,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                    if (!FragmentChat.isInSelectionMode && mMessage != null &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
-                            !mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))
+                    if (isAllowToForward(mMessage))
                         messageClickListener.onForwardFromCloudClick(structMessage);
                 });
             }
@@ -718,6 +714,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else if (mMessage.isEdited()) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
         }
+    }
+
+    private boolean isAllowToForward(RealmRoomMessage message) {
+        return !FragmentChat.isInSelectionMode &&
+                message != null &&
+                !message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                !message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString());
     }
 
     /**

@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.module.SerializationUtils;
 import net.iGap.module.TimeUtils;

@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnUserSessionLogout;
+import net.iGap.observers.interfaces.OnUserSessionLogout;
 
 public class UserSessionLogoutResponse extends MessageHandler {
 

@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnInfoCountryResponse;
+import net.iGap.observers.interfaces.OnInfoCountryResponse;
 import net.iGap.proto.ProtoInfoCountry;
 
 public class RequestInfoCountry {

@@ -25,12 +25,12 @@ import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.FragmentShowMember;
+import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentFragment;
+import net.iGap.observers.interfaces.PaymentCallBack;
 
 /**
  * this is helper class for open new fragment

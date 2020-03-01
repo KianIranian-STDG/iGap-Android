@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <net.iGap.view.StickerView
+        <net.iGap.module.customView.StickerView
             android:id="@+id/stickerView"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp60"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginLeft="8dp">
 
-        </net.iGap.view.StickerView>
+        </net.iGap.module.customView.StickerView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/giftStickerTitle"

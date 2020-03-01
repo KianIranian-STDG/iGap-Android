@@ -140,7 +140,7 @@
                 android:textSize="@dimen/dp26" />
 
 
-            <net.iGap.view.EventEditText
+            <net.iGap.module.customView.EventEditText
                 android:id="@+id/chl_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

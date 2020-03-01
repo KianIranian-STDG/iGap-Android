@@ -21,7 +21,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
 
-import net.iGap.interfaces.OnRotateImage;
+import net.iGap.observers.interfaces.OnRotateImage;
 
 import java.io.File;
 import java.io.FileInputStream;

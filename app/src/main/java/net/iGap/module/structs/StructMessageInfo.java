@@ -16,10 +16,10 @@ import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.interfaces.IChatItemAttachment;
+import net.iGap.observers.interfaces.IChatItemAttachment;
 import net.iGap.module.MyType;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -58,6 +58,9 @@ public class StructMessageInfo implements Parcelable {
     public long songLength;
     private String TAG = " abbasiAnimation";
 
+    public RealmRoomMessage getRealmRoomMessage() {
+        return realmRoomMessage.getForwardMessage() == null ? realmRoomMessage : realmRoomMessage.getForwardMessage();
+    }
 
     public void setSongArtist(String songArtist) {
         this.songArtist = songArtist;

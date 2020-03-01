@@ -571,7 +571,7 @@
     <string name="charge_5">50.000 ریال لیق</string>
     <string name="charge_50">500.000 ریال لیق</string>
     <string name="charge_5_ir">50.000 ریالی +  9%  ارزش افزوده = 54.500 ریال</string>
-    <string name="charge_amount">شارژ مبلغی</string>
+    <string name="charge_amount">شارژ مبلغی(ریال)</string>
     <string name="charge_balance">شارژین مقداری</string>
     <string name="charge_out">شارژ ائتمک</string>
     <string name="charge_paygear">پول کیفینی شارژ ائتمک </string>
@@ -2128,7 +2128,7 @@
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
     <string name="cheque_number">شماره دسته چک :</string>
-    <string name="page_count">تعداد برگه :</string>
+    <string name="page_count">برگه </string>
     <string name="reject_count">برگشتی :</string>
     <string name="pass_count">پاس شده :</string>
     <string name="cash_count">نقد شده :</string>
@@ -2217,4 +2217,6 @@
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="inter_cheque_amount">ثبت مبلغ </string>
+    <string name="take_turn">دریافت نوبت</string>
 </resources>

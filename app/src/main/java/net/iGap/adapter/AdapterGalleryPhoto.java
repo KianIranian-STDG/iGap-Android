@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import net.iGap.R;
-import net.iGap.interfaces.GalleryItemListener;
+import net.iGap.observers.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
 

@@ -274,7 +274,7 @@
     <string name="array_1_hour">١ کاتژمێر</string>
     <string name="array_2_hour">٢ کاتژمێر</string>
     <string name="array_4_hour">٤ کاتژمێر</string>
-    <string name="array_Default_Notification_tone">مووزیکی پێش­گریمانەی راگەیێندراوەکان</string>
+    <string name="Default_Notification_tone">مووزیکی پێش­گریمانەی راگەیێندراوەکان</string>
     <string name="replay_item_dialog">وەڵام</string>
     <string name="copy_item_dialog">کۆپی</string>
     <string name="share_item_dialog">شەیرکردن</string>
@@ -1591,7 +1591,7 @@
     <string name="pay_bills_title">پێدانی پارەی فیش</string>
     <string name="mobile_bills_title">فیشی مۆبایل</string>
     <string name="bills">فیش و سزا</string>
-    <string name="charge_amount">بڕی پارەی شارژ</string>
+    <string name="charge_amount">بڕی پارەی شارژ(ریال)</string>
     <string name="buy_internet_package_title">کڕینی بەستەی ئینتەرنێتی</string>
     <string name="charity_title">چاکەکاری</string>
     <string name="disk_and_network_usage">بەکارهێنانی بیرگە و تۆڕ</string>
@@ -2120,7 +2120,7 @@
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
     <string name="cheque_number">شماره دسته چک :</string>
-    <string name="page_count">تعداد برگه :</string>
+    <string name="page_count"> برگه</string>
     <string name="reject_count">برگشتی :</string>
     <string name="pass_count">پاس شده :</string>
     <string name="cash_count">نقد شده :</string>
@@ -2228,5 +2228,7 @@
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="inter_cheque_amount">ثبت مبلغ </string>
+    <string name="take_turn">دریافت نوبت</string>
 
 </resources>

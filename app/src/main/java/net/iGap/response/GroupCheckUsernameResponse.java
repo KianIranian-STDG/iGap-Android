@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnGroupCheckUsername;
+import net.iGap.observers.interfaces.OnGroupCheckUsername;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupCheckUsername;
 

@@ -24,15 +24,15 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.libs.audio.AudioWave;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
@@ -157,10 +157,12 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
 //            Log.i(TAG, "selected voice    id: " + holder.mMessageID + " status: " + playStatus);
 
-
-            G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
-
-            RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
+            if (!structMessage.isSenderMe() && structMessage.realmRoomMessage.getStatus() != null &&
+                    !structMessage.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
+            ) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+                RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
+            }
 
             if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                 MusicPlayer.onCompleteChat = holder.complete;

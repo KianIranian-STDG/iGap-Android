@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosEntryOptionVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosEntryOptionVM" />
     </data>
 
 

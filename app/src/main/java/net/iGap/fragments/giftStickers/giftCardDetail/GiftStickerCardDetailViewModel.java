@@ -4,15 +4,15 @@ import android.view.View;
 
 import androidx.databinding.ObservableInt;
 
-import net.iGap.AccountManager;
 import net.iGap.G;
-import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.rx.ObserverViewModel;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.observers.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
 
 public class GiftStickerCardDetailViewModel extends ObserverViewModel {
 

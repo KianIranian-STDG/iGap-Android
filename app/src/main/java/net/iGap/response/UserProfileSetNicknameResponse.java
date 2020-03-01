@@ -10,8 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
-import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.observers.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileNickname;
 import net.iGap.realm.RealmUserInfo;

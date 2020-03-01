@@ -22,7 +22,7 @@ import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentBillViewModel;
 
 import org.jetbrains.annotations.NotNull;

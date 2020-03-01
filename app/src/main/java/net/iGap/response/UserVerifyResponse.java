@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.helper.HelperTracker;
-import net.iGap.interfaces.OnUserVerification;
+import net.iGap.observers.interfaces.OnUserVerification;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserVerify;
 

@@ -32,17 +32,16 @@ import androidx.core.content.FileProvider;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperMimeType;
-import net.iGap.interfaces.IResendMessage;
+import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.CircleProgress.CircularProgressView;
 import net.iGap.module.structs.StructMessageInfo;

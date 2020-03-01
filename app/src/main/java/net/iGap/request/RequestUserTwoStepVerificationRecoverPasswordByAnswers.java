@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByAnswersCallback;
+import net.iGap.observers.interfaces.TwoStepVerificationRecoverPasswordByAnswersCallback;
 import net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByAnswers;
 
 public class RequestUserTwoStepVerificationRecoverPasswordByAnswers {

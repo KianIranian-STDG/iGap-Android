@@ -1,7 +1,7 @@
 package net.iGap.api;
 
-import net.iGap.payment.CheckOrderResponse;
-import net.iGap.payment.CheckOrderStatusResponse;
+import net.iGap.model.payment.CheckOrderResponse;
+import net.iGap.model.payment.CheckOrderStatusResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

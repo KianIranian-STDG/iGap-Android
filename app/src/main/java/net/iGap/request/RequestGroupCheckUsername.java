@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnGroupCheckUsername;
+import net.iGap.observers.interfaces.OnGroupCheckUsername;
 import net.iGap.proto.ProtoGroupCheckUsername;
 
 public class RequestGroupCheckUsername {

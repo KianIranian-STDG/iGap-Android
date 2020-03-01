@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.interfaces.GeneralResponseCallBack;
+import net.iGap.observers.interfaces.GeneralResponseCallBack;
 import net.iGap.model.OperatorType;
 import net.iGap.request.RequestBillInquiryMci;
 

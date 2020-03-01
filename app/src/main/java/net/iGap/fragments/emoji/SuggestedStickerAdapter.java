@@ -15,7 +15,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import net.iGap.G;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
-import net.iGap.eventbus.EventManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
