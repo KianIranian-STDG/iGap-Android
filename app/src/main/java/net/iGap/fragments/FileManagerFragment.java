@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FileManagerFragmentBinding;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.IPickFile;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -140,10 +141,12 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
 
     void addItemToSelectedList(String item) {
         mSelectedList.add(item);
+        checkShowOrHideSendLayout();
     }
 
     void removeItemFromSelectedList(String item) {
         mSelectedList.remove(item);
+        checkShowOrHideSendLayout();
     }
 
     void closeFileManager() {
@@ -151,6 +154,23 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
 
     List<String> getSelectedItemList() {
         return mSelectedList;
+    }
+
+    private void checkShowOrHideSendLayout(){
+        //set size to badge view counter
+        mViewModel.getSelectedCount().set(checkNumberInMultiLangs(mSelectedList.size() + ""));
+
+        if(mSelectedList.size() > 0){
+            //show send layout
+            mViewModel.getSendBoxVisibility().set(View.VISIBLE);
+        }else {
+            //hide send layout
+            mViewModel.getSendBoxVisibility().set(View.GONE);
+        }
+    }
+
+    private String checkNumberInMultiLangs(String number){
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(number) : number;
     }
 
     @Override
