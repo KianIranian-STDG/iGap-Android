@@ -195,6 +195,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                     }
 
                     Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
+                    checkListHasSelectedBefore();
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> {
                             binding.loader.setVisibility(View.GONE);
@@ -234,8 +235,12 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
     }
 
     @Override
-    public void onFileClicked(String path, int position) {
-        addItemToParentSelectedList(path);
+    public void onFileClicked(String path, int position , boolean isSelected) {
+        if(isSelected){
+            addItemToParentSelectedList(path);
+        }else {
+            removeItemFromParentSelectedList(path);
+        }
         mAdapter.notifyItemChanged(position);
     }
 
@@ -253,12 +258,26 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
     }
 
     private void checkListHasSelectedBefore() {
-
+        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            List<String> selectedList = ((FileManagerFragment) getParentFragment()).getSelectedItemList();
+            for (int i = 0 ; i < mItems.size() ; i++){
+                for(int j = 0 ; j < selectedList.size() ; j++){
+                    if(mItems.get(i).path.equals(selectedList.get(j)))
+                        mItems.get(i).isSelected = true;
+                }
+            }
+        }
     }
 
     private void addItemToParentSelectedList(String item) {
         if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
             ((FileManagerFragment) getParentFragment()).addItemToSelectedList(item);
+        }
+    }
+
+    private void removeItemFromParentSelectedList(String item) {
+        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            ((FileManagerFragment) getParentFragment()).removeItemFromSelectedList(item);
         }
     }
 

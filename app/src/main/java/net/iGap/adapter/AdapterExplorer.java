@@ -75,8 +75,12 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
                 if (new File(item.path).isDirectory()) {
                     onItemClickListener.onFolderClicked(item.path, holder.getAdapterPosition());
                 } else {
-                    items.get(holder.getAdapterPosition()).isSelected = true;
-                    onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition());
+                    if(items.get(holder.getAdapterPosition()).isSelected){
+                        items.get(holder.getAdapterPosition()).isSelected = false;
+                    }else {
+                        items.get(holder.getAdapterPosition()).isSelected = true;
+                    }
+                    onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition() , items.get(holder.getAdapterPosition()).isSelected);
                 }
             } else {
                 onItemClickListener.onGalleryClicked(item.name, holder.getAdapterPosition());
@@ -109,7 +113,7 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
 
     public interface OnItemClickListenerExplorer {
 
-        void onFileClicked(String path, int position);
+        void onFileClicked(String path, int position , boolean isSelected);
 
         void onFolderClicked(String path, int position);
 

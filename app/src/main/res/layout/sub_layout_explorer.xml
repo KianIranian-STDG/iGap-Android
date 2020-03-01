@@ -31,7 +31,7 @@
         app:layout_constraintRight_toRightOf="@id/sle_sub_imageView1"
         app:lineColor="#fff"
         app:lineWidth="1.2dp"
-        app:unCheckColor="?attr/colorPrimary" />
+        app:unCheckColor="@color/transparent" />
 
     <TextView
         android:id="@+id/sle_sub_textView1"

@@ -212,14 +212,14 @@ public class FragmentExplorer extends BaseFragment {
         }
 
         mHelperToolbar.setDefaultTitle("root");
-        recyclerView.setAdapter(new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
+       /* recyclerView.setAdapter(new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
 
             @Override
             public void onItemClick(View view, int position) {
 
                 onItemClickInernal(position);
             }
-        }));
+        }));*/
 
         if (first) {
 
@@ -296,14 +296,14 @@ public class FragmentExplorer extends BaseFragment {
                     }
                 }
 
-                recyclerView.setAdapter(new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
+               /* recyclerView.setAdapter(new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
 
                     @Override
                     public void onItemClick(View view, int position) {
 
                         onItemClickInernal(position);
                     }
-                }));
+                }));*/
                 mHelperToolbar.setDefaultTitle(nextnod);
 
                 node.add(nextnod);

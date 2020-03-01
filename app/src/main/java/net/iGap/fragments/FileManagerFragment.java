@@ -142,7 +142,15 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
         mSelectedList.add(item);
     }
 
+    void removeItemFromSelectedList(String item) {
+        mSelectedList.remove(item);
+    }
+
     void closeFileManager() {
+    }
+
+    List<String> getSelectedItemList() {
+        return mSelectedList;
     }
 
     @Override
