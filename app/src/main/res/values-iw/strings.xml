@@ -2218,4 +2218,5 @@
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="inter_cheque_amount">ثبت مبلغ </string>
+    <string name="take_turn">دریافت نوبت</string>
 </resources>

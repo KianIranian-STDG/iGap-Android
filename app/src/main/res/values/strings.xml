@@ -2573,5 +2573,6 @@ Want to get it?</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
     <string name="inter_cheque_amount">Enter Amount</string>
+    <string name="take_turn">Take turn</string>
 
 </resources>

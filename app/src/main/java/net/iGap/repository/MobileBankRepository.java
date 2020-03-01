@@ -98,6 +98,10 @@ public class MobileBankRepository {
         new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.registerCheque(getAccessToken(), depositNumber, chequeNumber, amount), callback, responseCallback);
     }
 
+    public void getTakeTurn(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.getTakeTurn(getAccessToken()), callback, responseCallback);
+    }
+
     public void getOTP(String cardNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<ErrorModel> responseCallback) {
         DbManager.getInstance().doRealmTask(realm -> {
             userInfo = realm.where(RealmUserInfo.class).findFirst();

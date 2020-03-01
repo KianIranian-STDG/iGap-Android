@@ -110,6 +110,10 @@ public interface MobileBankApi {
                                                 @Field("number") String number,
                                                 @Field("amount") Long amount);
 
+    //todo: set address of api
+    @POST("book-turn")
+    Call<BaseMobileBankResponse> getTakeTurn(@Header("Authorization") String token);
+
     @POST("card/hot-card")
     @FormUrlEncoded
     Call<BaseMobileBankResponse> hotCard(@Header("Authorization") String token,

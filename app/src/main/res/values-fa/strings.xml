@@ -2517,4 +2517,5 @@
     <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟!
         توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
     <string name="inter_cheque_amount">ثبت مبلغ </string>
+    <string name="take_turn">دریافت نوبت</string>
 </resources>
