@@ -2182,4 +2182,7 @@
     <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?! Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
     <string name="inter_cheque_amount">Entrer le montant</string>
     <string name="take_turn">Tour à tour</string>
+    <string name="secondary_password">Deuxième mot de passe</string>
+    <string name="default_deposit">Dépôt par défaut</string>
+    <string name="custom_deposit">Dépôt personnalisé</string>
 </resources>
