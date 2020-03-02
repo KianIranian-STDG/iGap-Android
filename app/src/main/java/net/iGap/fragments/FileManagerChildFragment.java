@@ -37,7 +37,6 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
     private FileManagerChildFragmentBinding binding;
     private FileManagerChildViewModel mViewModel;
     private AdapterExplorer mAdapter;
-    private List<StructExplorerItem> mItems = new ArrayList<>();
     private String mFolderName;
 
     public static FileManagerChildFragment newInstance(String folder) {
@@ -66,6 +65,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
             mFolderName = getArguments().getString(FOLDER_NAME);
+            getSelectedListAndSetToViewModel();
             setupRecyclerView();
         }
     }
@@ -80,85 +80,10 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
 
     private void fillRootAndShowRecent() {
 
-        List<String> storageList = FileUtils.getSdCardPathList();
-
-        if (new File(Environment.getExternalStorageDirectory().getAbsolutePath()).exists()) {
-            addItemToList(
-                    "Internal Storage",
-                    R.drawable.ic_fm_internal,
-                    Environment.getExternalStorageDirectory().getAbsolutePath(),
-                    "Browse your file system",
-                    R.drawable.shape_file_manager_file_bg,
-                    true
-            );
-        }
-
-        for (String sdPath : storageList) {
-            if (new File(sdPath).exists()) {
-                addItemToList(
-                        "External Storage",
-                        R.drawable.ic_fm_memory,
-                        sdPath + "/",
-                        "Browse your external storage",
-                        R.drawable.shape_file_manager_folder_bg,
-                        true
-                );
-            }
-        }
-
-        if (!G.DIR_SDCARD_EXTERNAL.equals("")) {
-            if (new File(G.DIR_SDCARD_EXTERNAL).exists()) {
-                addItemToList(
-                        "iGap SdCard",
-                        R.drawable.ic_fm_folder,
-                        G.DIR_SDCARD_EXTERNAL + "/",
-                        "Browse the app's folder",
-                        R.drawable.shape_file_manager_folder_bg,
-                        true
-                );
-            }
-        }
-
-        if (new File(G.DIR_APP).exists()) {
-            addItemToList(
-                    "iGap",
-                    R.drawable.ic_fm_folder,
-                    G.DIR_APP + "/",
-                    "Browse the app's folder",
-                    R.drawable.shape_file_manager_file_bg,
-                    true
-            );
-        }
-
-        addItemToList(
-                "Pictures",
-                R.drawable.ic_fm_image,
-                null,
-                "To send images file",
-                R.drawable.shape_file_manager_file_1_bg,
-                false
-        );
-
-        addItemToList(
-                "Videos",
-                R.drawable.ic_fm_video,
-                null,
-                "To send videos file",
-                R.drawable.shape_file_manager_file_1_bg,
-                false
-        );
-
-        addItemToList(
-                "Musics",
-                R.drawable.ic_fm_audio,
-                G.DIR_APP + "/",
-                "To send musics file",
-                R.drawable.shape_file_manager_file_2_bg,
-                false
-        );
+        List<StructExplorerItem> items = mViewModel.getRootItems();
 
         //setup adapter
-        mAdapter = new AdapterExplorer(mItems, this);
+        mAdapter = new AdapterExplorer(items, this);
         binding.rvItems.setAdapter(mAdapter);
 
     }
@@ -169,61 +94,17 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
 
             //show loader
             binding.loader.setVisibility(View.VISIBLE);
-
-            new Thread(() -> {
-
-                File file = new File(folder);
-                if (file.isDirectory()) {
-                    String[] items = file.list();
-                    for (String item : items) {
-
-                        //ignore hidden and temp files
-                        if (item.startsWith(".")) continue;
-                        if (item.endsWith(".tmp")) continue;
-
-                        String address = folder + "/" + item;
-                        File subFile = new File(address);
-
-                        addItemToList(
-                                item,
-                                subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
-                                address,
-                                getFileDescription(subFile),
-                                subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
-                                true
-                        );
-                    }
-
-                    Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
-                    checkListHasSelectedBefore();
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(() -> {
-                            binding.loader.setVisibility(View.GONE);
-                            mAdapter = new AdapterExplorer(mItems, this);
-                            binding.rvItems.setAdapter(mAdapter);
-                        });
-                    }
+            mViewModel.getFoldersSubItems(folder , items -> {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        binding.loader.setVisibility(View.GONE);
+                        mAdapter = new AdapterExplorer(items, this);
+                        binding.rvItems.setAdapter(mAdapter);
+                    });
                 }
-
-            }).start();
-
+            });
         }
 
-    }
-
-    private String getFileDescription(File file) {
-        if (file.isDirectory()) {
-            return "Folder";
-        } else {
-            float kb, mb;
-            kb = file.length() / 1024;
-            mb = kb / 1024;
-            if (mb == 0) {
-                return (new DecimalFormat("##.##").format(kb)) + " kb";
-            } else {
-                return (new DecimalFormat("##.##").format(mb)) + " mb";
-            }
-        }
     }
 
     void onToolbarClicked() {
@@ -257,15 +138,10 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
         //getOpenGallery(type);
     }
 
-    private void checkListHasSelectedBefore() {
+    private void getSelectedListAndSetToViewModel() {
         if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
             List<String> selectedList = ((FileManagerFragment) getParentFragment()).getSelectedItemList();
-            for (int i = 0 ; i < mItems.size() ; i++){
-                for(int j = 0 ; j < selectedList.size() ; j++){
-                    if(mItems.get(i).path.equals(selectedList.get(j)))
-                        mItems.get(i).isSelected = true;
-                }
-            }
+            mViewModel.setSelectedList(selectedList);
         }
     }
 
@@ -285,25 +161,6 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
         if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
             ((FileManagerFragment) getParentFragment()).closeFileManager();
         }
-    }
-
-    private void addItemToList(String title, int image, String path) {
-        StructExplorerItem item = new StructExplorerItem();
-        item.name = title;
-        item.image = image;
-        item.path = path;
-        mItems.add(item);
-    }
-
-    private void addItemToList(String title, int image, String path, String desc, int background, boolean isFolderOrFile) {
-        StructExplorerItem item = new StructExplorerItem();
-        item.name = title;
-        item.image = image;
-        item.path = path;
-        item.backColor = background;
-        item.description = desc;
-        item.isFolderOrFile = isFolderOrFile;
-        mItems.add(item);
     }
 
 }
