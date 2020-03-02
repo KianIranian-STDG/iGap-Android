@@ -4599,7 +4599,6 @@ public class FragmentChat extends BaseFragment
          */
         if (getFirstUnreadMessage() != null &&
                 getFirstUnreadMessage().isValid() &&
-                !getFirstUnreadMessage().isDeleted() &&
                 getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()
         ) {
             setCountNewMessageZero();
