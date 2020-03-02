@@ -56,7 +56,8 @@ public class IgapRetrofitInterceptor implements Interceptor {
 
         if (response.code() == 401) {
             synchronized (this) {
-                Log.e("refreshToken", "Failed " + request.toString() + " with token -> " + tokenContainer.getToken());
+                if (BuildConfig.DEBUG)
+                    Log.e(getClass().getSimpleName(), "Failed " + request.toString() + " with token -> " + tokenContainer.getToken());
 
                 String currentToken = tokenContainer.getToken();
 
@@ -71,15 +72,14 @@ public class IgapRetrofitInterceptor implements Interceptor {
                 if (tokenContainer.getToken() != null) {
                     builder.header("Authorization", tokenContainer.getToken());
                     request = builder.build();
-                    Log.e("refreshToken", "Send " + request.toString() + " again with new token -> " + tokenContainer.getToken());
-                    Log.e("refreshToken", "--------------------------------------------------------------------------------");
+
+                    if (BuildConfig.DEBUG)
+                        Log.e(getClass().getSimpleName(), "Send " + request.toString() + " again with new token -> " + tokenContainer.getToken());
+
                     return chain.proceed(request);
                 }
             }
         }
-
-        Log.i("refreshToken", "req " + request.toString() + " Success with token -> " + tokenContainer.getToken());
-
         return response;
     }
 
@@ -88,19 +88,22 @@ public class IgapRetrofitInterceptor implements Interceptor {
 
             isRefreshing = true;
 
-            Log.e("refreshToken", "Refreshing token...");
+            if (BuildConfig.DEBUG)
+                Log.e(getClass().getSimpleName(), "Refreshing token...");
+
             tokenContainer.getRefreshToken(() -> {
                 synchronized (IgapRetrofitInterceptor.this) {
                     isRefreshing = false;
-                    Log.e("refreshToken", "Proto response on success and token updated with token -> " + tokenContainer.getToken());
+                    if (BuildConfig.DEBUG)
+                        Log.e(getClass().getSimpleName(), "Proto response on success and token updated with token -> " + tokenContainer.getToken());
                     IgapRetrofitInterceptor.this.notifyAll();
                 }
             });
         }
 
-        Log.e("refreshToken", "lock thread -> " + android.os.Process.getThreadPriority(android.os.Process.myTid()) + this.toString());
+        Log.e(getClass().getSimpleName(), "lock thread -> " + android.os.Process.getThreadPriority(android.os.Process.myTid()) + this.toString());
         this.wait();
-        Log.e("refreshToken", "unlock thread -> " + android.os.Process.getThreadPriority(android.os.Process.myTid()) + this.toString());
+        Log.e(getClass().getSimpleName(), "unlock thread -> " + android.os.Process.getThreadPriority(android.os.Process.myTid()) + this.toString());
 
     }
 

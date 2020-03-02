@@ -2,11 +2,6 @@ package net.iGap.viewmodel;
 
 import android.view.View;
 
-import androidx.databinding.ObservableDouble;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -20,9 +15,13 @@ import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Locale;
 
-import java.util.List;
+import androidx.databinding.ObservableDouble;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 
@@ -45,8 +44,13 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private ObservableDouble paymentRRN = new ObservableDouble();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
+
     private MutableLiveData<List<PaymentFeature>> discountOption = new MutableLiveData<>(null);
     private ObservableInt discountVisibility = new ObservableInt(View.GONE);
+    private ObservableInt discountReceiptVisibility = new ObservableInt(View.GONE);
+    private ObservableField<String> discountReceiptAmount = new ObservableField<>("");
+    private ObservableInt taxReceiptVisibility = new ObservableInt(View.GONE);
+    private ObservableField<String> taxReceiptAmount = new ObservableField<>("");
     private int discountPlanPosition = -1;
     private int originalPrice;
 
@@ -172,6 +176,14 @@ public class PaymentViewModel extends BaseAPIViewModel {
     public void setPaymentResult(Payment payment) {
         if (payment.getStatus().equals("SUCCESS") || payment.getStatus().equals("PAID")) {
             checkOrderStatus(payment.getOrderId());
+            if (payment.getDiscount() != null && !payment.getDiscount().equals("null")) {
+                discountReceiptVisibility.set(View.VISIBLE);
+                discountReceiptAmount.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(payment.getDiscount()) : payment.getDiscount());
+            }
+            if (payment.getTax() != null && !payment.getTax().equals("null")) {
+                taxReceiptVisibility.set(View.VISIBLE);
+                taxReceiptAmount.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(payment.getTax()) : payment.getTax());
+            }
         } else {
             showRetryView.set(View.GONE);
             showLoadingView.set(View.GONE);
@@ -182,6 +194,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             paymentStateIcon.set(R.string.close_icon);
             paymentStatusTextColor.set(R.color.red);
             paymentStatus.set(payment.getMessage());
+            discountVisibility.set(View.GONE);
             /*paymentOrderId.set(payment.getOrderId());*/
         }
     }
@@ -313,5 +326,21 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     public ObservableInt getDiscountVisibility() {
         return discountVisibility;
+    }
+
+    public ObservableInt getDiscountReceiptVisibility() {
+        return discountReceiptVisibility;
+    }
+
+    public ObservableField<String> getDiscountReceiptAmount() {
+        return discountReceiptAmount;
+    }
+
+    public ObservableInt getTaxReceiptVisibility() {
+        return taxReceiptVisibility;
+    }
+
+    public ObservableField<String> getTaxReceiptAmount() {
+        return taxReceiptAmount;
     }
 }
