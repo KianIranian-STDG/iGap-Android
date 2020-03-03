@@ -4,6 +4,7 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankBlockCheque;
 import net.iGap.model.mobileBank.BankCardBalance;
+import net.iGap.model.mobileBank.BankCardDepositsModel;
 import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankChequeBookListModel;
 import net.iGap.model.mobileBank.BankChequeSingle;
@@ -41,6 +42,11 @@ public interface MobileBankApi {
     @FormUrlEncoded
     Call<BaseMobileBankResponse<List<BankAccountModel>>> getUserDeposits(@Header("Authorization") String token,
                                                                          @Field("deposit_numbers") String depositNumber);
+
+    @POST("card/get-deposits")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<BankCardDepositsModel>>> getCardsDeposits(@Header("Authorization") String token,
+                                                                             @Field("pan") String cardNumber);
 
     @POST("card/convert-card-to-iban")
     @FormUrlEncoded

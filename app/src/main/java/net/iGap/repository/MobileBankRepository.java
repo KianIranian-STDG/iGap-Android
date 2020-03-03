@@ -8,6 +8,7 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankBlockCheque;
 import net.iGap.model.mobileBank.BankCardBalance;
+import net.iGap.model.mobileBank.BankCardDepositsModel;
 import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankChequeBookListModel;
 import net.iGap.model.mobileBank.BankChequeSingle;
@@ -65,6 +66,10 @@ public class MobileBankRepository {
 
     public void getMobileBankAccounts(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankAccountModel>>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankAccountModel>>>().initAPI(bankApi.getUserDeposits(getAccessToken(), null), callback, responseCallback);
+    }
+
+    public void getCardDeposits(String pan, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankCardDepositsModel>>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankCardDepositsModel>>>().initAPI(bankApi.getCardsDeposits(getAccessToken(), pan), callback, responseCallback);
     }
 
     public void getShebaNumber(String pan, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<String>>> responseCallback) {
