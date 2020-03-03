@@ -133,7 +133,7 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
         }
 
         void initView(int position) {
-            //btnPay.setVisibility(View.GONE);
+            btnPay.setVisibility(View.GONE);
             String statusTemp = "";
             switch (mdata.get(position).getPayStatus()) {
                 case "PAID":

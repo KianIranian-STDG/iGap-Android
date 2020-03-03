@@ -136,7 +136,10 @@ public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<
 
     private void showPayLoanDialog(BankServiceLoanDetailModel.LoanItem item) {
         if(getActivity() == null) return;
-        MobileBankPayLoanBsFragment fragment = MobileBankPayLoanBsFragment.newInstance(mLoanNumber , item.getUnpaidAmount());
+        MobileBankPayLoanBsFragment fragment = MobileBankPayLoanBsFragment.newInstance(mLoanNumber , item.getUnpaidAmount() , ()->{
+            adapter.removeAll();
+            viewModel.init();
+        });
         fragment.show(getActivity().getSupportFragmentManager() , "PayLoanFragment");
     }
 
