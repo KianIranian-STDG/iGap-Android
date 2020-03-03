@@ -182,6 +182,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mHelperToolbar.registerTimerBroadcast();
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
 
+        if (results == null)
+            progressBar.setVisibility(View.VISIBLE);
 
         onChatCellClickedInEditMode = (item, position, status) -> {
             Room temp = new Room(item.getId(), item.getType().name(), item.getTitle(), "", "");

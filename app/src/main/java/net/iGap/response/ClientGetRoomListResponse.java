@@ -48,8 +48,6 @@ public class ClientGetRoomListResponse extends MessageHandler {
 
         final ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
 
-        EventManager.getInstance().postEvent(EventManager.ROOM_LIST_CHANGED, false);
-
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             FragmentMain.mOffset = 0;
@@ -83,6 +81,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
         if (clientGetRoomListResponse.getRoomsCount() == 0) {
             roomListFetched = true;
         }
+
+        EventManager.getInstance().postEvent(EventManager.ROOM_LIST_CHANGED, false);
 
         retryCountZeroOffset = 0;
     }

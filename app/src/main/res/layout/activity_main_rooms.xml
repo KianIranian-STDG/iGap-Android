@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:padding="@dimen/dp4"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/cl_recycler_view_contact"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
