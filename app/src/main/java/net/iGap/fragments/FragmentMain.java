@@ -25,7 +25,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
@@ -256,7 +255,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
@@ -749,7 +748,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
@@ -1170,7 +1169,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        if (id == ActivityCall.CALL_EVENT) {
+        if (id == EventManager.CALL_EVENT) {
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {

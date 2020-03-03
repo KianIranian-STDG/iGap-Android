@@ -21,21 +21,21 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.UserStatusController;
-import net.iGap.observers.interfaces.ISignalingCallBack;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
+import net.iGap.module.webrtc.WebRTC;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.ISignalingCallBack;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -44,7 +44,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.module.webrtc.WebRTC;
 
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
@@ -507,7 +506,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         Log.wtf(this.getClass().getName(), "endCall");
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
@@ -524,7 +523,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     private void endVoiceAndFinish() {
         Log.wtf(this.getClass().getName(), "endVoiceAndFinish");
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
         playRingTone.postValue(false);
         finishActivity.postValue(true);
         if (G.iCallFinishChat != null) {
@@ -641,7 +640,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     public void leaveCall() {
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
         if (isIncomingCall) {
             WebRTC.getInstance().leaveCall();
         }
@@ -655,7 +654,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         Log.wtf(this.getClass().getName(), "onCleared");
         super.onCleared();
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
         G.iSignalingCallBack = null;
         G.onCallLeaveView = null;
         setSpeakerphoneOn(false);

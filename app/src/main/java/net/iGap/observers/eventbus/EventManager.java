@@ -36,24 +36,27 @@ public class EventManager {
      * if you want heavy process in {@link EventListener#receivedMessage(int, Object...)} use your thread
      */
 
+    private static int eventId = 1;
 
-    public static final int ON_ACCESS_TOKEN_RECIVE = 1;
-    public static final int ON_INIT_PAY = 2;
-    public static final int ON_INIT_PAY_ERROR = 4;
-    public static final int ON_PAYMENT_RESULT_RECIEVED = 3;
+    public static final int ON_ACCESS_TOKEN_RECIVE = eventId++;
+    public static final int ON_INIT_PAY = eventId++;
+    public static final int ON_INIT_PAY_ERROR = eventId++;
+    public static final int ON_PAYMENT_RESULT_RECIEVED = eventId++;
 
-    public static final int ON_UPLOAD_PROGRESS = 5;
-    public static final int ON_UPLOAD_COMPRESS = 6;
+    public static final int ON_UPLOAD_PROGRESS = eventId++;
+    public static final int ON_UPLOAD_COMPRESS = eventId++;
 
-    public static final int SOCKET_CONNECT_DENY = 7;
-    public static final int SOCKET_CONNECT_OK = 8;
-    public static final int SOCKET_CONNECT_ERROR = 9;
-    public static final int SOCKET_DISCONNECT = 10;
+    public static final int CALL_EVENT = eventId++;
 
-    public static final int STICKER_DOWNLOAD = 20;
-    public static final int EMOJI_LOADED = 21;
-    public static final int IG_ERROR = 22;
-    public static final int STICKER_CHANGED = 23;
+    public static final int SOCKET_CONNECT_DENY = eventId++;
+    public static final int SOCKET_CONNECT_OK = eventId++;
+    public static final int SOCKET_CONNECT_ERROR = eventId++;
+    public static final int SOCKET_DISCONNECT = eventId++;
+
+    public static final int STICKER_DOWNLOAD = eventId++;
+    public static final int EMOJI_LOADED = eventId++;
+    public static final int IG_ERROR = eventId++;
+    public static final int STICKER_CHANGED = eventId++;
 
 
     private static EventManager eventListenerInstance;
