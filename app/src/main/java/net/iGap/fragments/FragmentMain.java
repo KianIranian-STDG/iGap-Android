@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -98,7 +99,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
-    private boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
     public static int mOffset = 0;
     private View viewById;
@@ -412,16 +412,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                if (isThereAnyMoreItemToLoad) {
-//                    if (mOffset > 0) {
-//                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-//                        if (lastVisiblePosition + 10 >= mOffset) {
-//                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-//                            if (send)
-//                                progressBar.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                }
+                if (!ClientGetRoomListResponse.roomListFetched)
+                    if (mOffset > 0) {
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        if (lastVisiblePosition + 10 >= mOffset) {
+                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                            if (send)
+                                progressBar.setVisibility(View.VISIBLE);
+                        }
+                    }
+
 
                 //check if music player was enable disable scroll detecting for search box
                 if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {

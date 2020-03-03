@@ -82,10 +82,10 @@ public class ClientGetRoomListResponse extends MessageHandler {
                 G.onClientGetRoomListResponse.onClientGetRoomList(null, null, null);
             }
             roomListFetched = true;
-        } else {
+        }/* else {
             boolean send = new RequestClientGetRoomList().clientGetRoomList(FragmentMain.mOffset, Config.LIMIT_LOAD_ROOM, "");
 
-        }
+        }*/
 
         retryCountZeroOffset = 0;
     }
