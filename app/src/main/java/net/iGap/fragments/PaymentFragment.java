@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Browser;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -200,9 +202,14 @@ public class PaymentFragment extends BaseAPIViewFrag {
                     public void onClick(View v) {
                         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Payment_Receipt/" + filename);
                         Log.d("amini", "onClick: " + file.getAbsolutePath());
-                        Intent intent = new Intent();
+                        /*Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(file.getAbsolutePath()), "image/*");
+                        intent.setDataAndType(Uri.fromFile(file), "image/*");*/
+                        Intent intent = new Intent(Intent.ACTION_VIEW).setDataAndType(
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
+                                        FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", file) :
+                                        Uri.fromFile(file), "image/*")
+                                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         startActivity(intent);
 //                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(file.getAbsolutePath())));
                     }
