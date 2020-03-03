@@ -12,16 +12,16 @@ package net.iGap.realm;
 
 import android.text.format.DateUtils;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
-import net.iGap.observers.interfaces.OnClientGetRoomMessage;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestChannelUpdateDraft;
 import net.iGap.request.RequestChatUpdateDraft;
@@ -29,7 +29,6 @@ import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -256,30 +255,30 @@ public class RealmRoom extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    if (offset == 0) {
-                        roomIds = new ArrayList<>();
-                    }
+//                    if (offset == 0) {
+//                        roomIds = new ArrayList<>();
+//                    }
 
                     for (int i = 0; i < rooms.size(); i++) {
                         RealmRoom.putOrUpdate(rooms.get(i), realm);
-                        roomIds.add(rooms.get(i).getId());
+//                        roomIds.add(rooms.get(i).getId());
                     }
 
-                    if (size == 0) {
-                        RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).not().in(RealmRoomFields.ID, roomIds.toArray(new Long[roomIds.size()])).findAll();
-
-                        for (RealmRoom item : deletedRoomsList) {
-                            /**
-                             * delete all message in deleted room
-                             *
-                             * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
-                             * transaction and client can't use a transaction inside another
-                             */
-                            RealmRoomMessage.deleteAllMessage(realm, item.getId());
-                            RealmClientCondition.deleteCondition(realm, item.getId());
-                            item.deleteFromRealm();
-                        }
-                    }
+//                    if (size == 0) {
+//                        RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).not().in(RealmRoomFields.ID, roomIds.toArray(new Long[roomIds.size()])).findAll();
+//
+//                        for (RealmRoom item : deletedRoomsList) {
+//                            /**
+//                             * delete all message in deleted room
+//                             *
+//                             * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
+//                             * transaction and client can't use a transaction inside another
+//                             */
+//                            RealmRoomMessage.deleteAllMessage(realm, item.getId());
+//                            RealmClientCondition.deleteCondition(realm, item.getId());
+//                            item.deleteFromRealm();
+//                        }
+//                    }
                 }
             });
         });

@@ -8,18 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
+import net.iGap.adapter.news.NewsFirstPageAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsMainPageBinding;
 import net.iGap.fragments.BottomNavigationFragment;
@@ -28,17 +20,25 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.model.news.NewsFPList;
 import net.iGap.model.news.NewsFirstPage;
 import net.iGap.model.news.NewsMainBTN;
-import net.iGap.adapter.news.NewsFirstPageAdapter;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.news.NewsMainVM;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class NewsMainFrag extends BaseAPIViewFrag<NewsMainVM> {
 
@@ -214,7 +214,10 @@ public class NewsMainFrag extends BaseAPIViewFrag<NewsMainVM> {
     }
 
     public void setSpecificNewsID(String specificNewsID) {
-        this.specificNewsID = specificNewsID;
+        if (specificNewsID != null && specificNewsID.startsWith("CID:")) {
+            this.specificGroupID = specificNewsID.replace("CID:", "");
+        } else
+            this.specificNewsID = specificNewsID;
     }
 
     public void setSpecificGroupID(String specificGroupID) {

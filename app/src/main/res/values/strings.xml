@@ -1267,7 +1267,7 @@ Want to get it?</string>
     <string name="install_app">Install App</string>
     <string name="text_top">To use the service: to install the application for the card, buy a bus ticket, purchase a charge, pay bills, buy a package and other payment services.</string>
     <string name="text_paygear">Follow up, pick up your wallet and instant cash deposit, pay your gifts, buy from stores and pay tax limousines.</string>
-    <string name="customization">customization</string>
+    <string name="customization">Customization</string>
     <string name="Apply_colors_to_customize">Apply colors to customize</string>
     <string name="channel_name_notification">iGap Notification</string>
     <string name="payment">Payment</string>
@@ -1380,7 +1380,7 @@ Want to get it?</string>
     <string name="wallet_toman">Toman</string>
     <string name="wallet_Your_credit">Your credit : </string>
     <string name="wallet_Reial">%d Rial </string>
-    <string name="payment_rial">%s ریال </string>
+    <string name="payment_rial">Price: %s Rial</string>
     <string name="wallet_error_server">Error communicating with server</string>
 
     <string name="IP_blocked">Due to overuse, your IP has been blocked for a while.</string>
@@ -1598,8 +1598,11 @@ Want to get it?</string>
     <string name="card_owner">Card Owner</string>
     <string name="total_price">Total Price</string>
     <string name="discount">Discount</string>
+    <string name="paymentDiscount">Discount: %S Rial</string>
+    <string name="paymentScreenShot">Save Receipt</string>
     <string name="service_price">Service</string>
     <string name="tax">Tax</string>
+    <string name="paymentTax">Tax: %S Rial</string>
     <string name="delivery_price">Delivery</string>
     <string name="payable_price_rial">Payable Price (Rial)</string>
     <string name="final_price_rial">Final Price (Rial)</string>
@@ -2572,5 +2575,7 @@ Want to get it?</string>
     <string name="kuknos_send_token_error">Can Not send this token.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
+    <string name="inter_cheque_amount">Enter Amount</string>
+    <string name="take_turn">Take turn</string>
 
 </resources>

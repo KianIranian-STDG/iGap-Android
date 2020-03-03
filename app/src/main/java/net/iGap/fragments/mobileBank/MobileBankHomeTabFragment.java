@@ -137,6 +137,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             case R.string.mobile_bank_hotCard:
                 openHotCard(getCurrentAccount());
                 break;
+
+            case R.string.take_turn:
+                onTakeTurnClicked();
+                break;
         }
     }
 
@@ -153,6 +157,21 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         if (getActivity() != null) {
             new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankChequesBookListFragment.newInstance(deposit)).setReplace(false).load();
         }
+    }
+
+    private void onTakeTurnClicked(){
+        if(getContext() == null) return;
+        new DialogParsian()
+                .setContext(getContext())
+                .setTitle(getString(R.string.take_turn))
+                .setButtonsText(getString(R.string.yes) , getString(R.string.close))
+                .setListener(new DialogParsian.ParsianDialogListener() {
+                    @Override
+                    public void onActiveButtonClicked(Dialog dialog) {
+                        showProgress();
+                        viewModel.getTakeTurnFromParsianBranches();
+                    }
+                }).showSimpleMessage(getString(R.string.are_you_sure_request));
     }
 
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
@@ -179,6 +198,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private List<MobileBankHomeItemsModel> getServiceRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
         items.add(new MobileBankHomeItemsModel(R.string.facilities, R.drawable.ic_mb_loan));
+        items.add(new MobileBankHomeItemsModel(R.string.take_turn, R.drawable.ic_mb_take_turn));
         return items;
     }
 
@@ -215,6 +235,12 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 showMessage(getString(R.string.attention), message);
             }
         });
+
+        viewModel.getTakeTurnListener().observe(getViewLifecycleOwner() , msg ->{
+            if(mDialogWait != null) mDialogWait.dismiss();
+            if(msg == null || getContext() == null) return;
+            showMessage(getString(R.string.take_turn) , msg);
+        });
     }
 
     private void showMessage(String title, String message) {
@@ -228,16 +254,18 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private void showProgress() {
         if (getActivity() != null) {
-            mDialogWait = new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.please_wait) + "..")
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    });
+            if(mDialogWait == null){
+                mDialogWait = new DialogParsian()
+                        .setContext(getActivity())
+                        .setTitle(getString(R.string.please_wait) + "..")
+                        .setButtonsText(null, getString(R.string.cancel))
+                        .setListener(new DialogParsian.ParsianDialogListener() {
+                            @Override
+                            public void onDeActiveButtonClicked(Dialog dialog) {
+                                mDialogWait.dismiss();
+                            }
+                        });
+            }
             mDialogWait.showLoaderDialog(false);
         }
     }

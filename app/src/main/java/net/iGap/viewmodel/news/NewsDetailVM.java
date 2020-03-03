@@ -2,20 +2,20 @@ package net.iGap.viewmodel.news;
 
 import android.view.View;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
-import net.iGap.repository.news.DetailRepo;
 import net.iGap.model.news.NewsComment;
 import net.iGap.model.news.NewsDetail;
 import net.iGap.model.news.NewsError;
 import net.iGap.model.news.NewsList;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.news.DetailRepo;
 
 import java.util.List;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class NewsDetailVM extends BaseAPIViewModel {
 
@@ -69,7 +69,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
         try {
             this.newsID = Integer.parseInt(newsID);
         } catch (Exception e) {
-            error.setValue(new NewsError(true, "", "API Input is NOT valid.", 0));
+            error.setValue(new NewsError(true, "", "API Input is NOT valid.", R.string.news_serverError));
             return;
         }
         progressStateContext.setValue(true);

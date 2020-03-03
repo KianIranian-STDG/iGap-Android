@@ -78,13 +78,14 @@ public class ClientGetRoomListResponse extends MessageHandler {
         FragmentMain.mOffset += clientGetRoomListResponse.getRoomsCount();
         isPendingGetRoomList = false;
         if (clientGetRoomListResponse.getRoomsCount() == 0) {
-            if (G.onClientGetRoomListResponse != null) {
-                G.onClientGetRoomListResponse.onClientGetRoomList(null, null, null);
-            }
             roomListFetched = true;
-        } else {
+        }/* else {
             boolean send = new RequestClientGetRoomList().clientGetRoomList(FragmentMain.mOffset, Config.LIMIT_LOAD_ROOM, "");
 
+        }*/
+
+        if (G.onClientGetRoomListResponse != null) {
+            G.onClientGetRoomListResponse.onClientGetRoomList(null, null, null);
         }
 
         retryCountZeroOffset = 0;

@@ -1,6 +1,8 @@
 package net.iGap.fragments.mobileBank;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.adapter.mobileBank.MobileBankChequeListAdapter;
 import net.iGap.databinding.MobileBankChequeListFragmentBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.model.mobileBank.BankChequeSingle;
-import net.iGap.adapter.mobileBank.MobileBankChequeListAdapter;
+import net.iGap.module.dialog.DialogParsian;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.mobileBank.MobileBankChequesListViewModel;
 
 import java.util.List;
@@ -26,6 +29,7 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
 
     private MobileBankChequeListFragmentBinding binding;
     private MobileBankChequeListAdapter adapter;
+    private DialogParsian mDialogWait;
 
     public static MobileBankChequesListFragment newInstance(String depositNumber, String bookNumber) {
         MobileBankChequesListFragment fragment = new MobileBankChequesListFragment();
@@ -84,15 +88,92 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         binding.rcCheque.setLayoutManager(layoutManager);
 
-        adapter = new MobileBankChequeListAdapter(null, position -> {
-            viewModel.blockCheques(adapter.getItem(position).getNumber());
+        adapter = new MobileBankChequeListAdapter(null, new MobileBankChequeListAdapter.OnItemClickListener() {
+            @Override
+            public void onBlock(int position) {
+                viewModel.blockCheques(adapter.getItem(position).getNumber());
+            }
+
+            @Override
+            public void onCustomizeClicked(int position) {
+                showDialogInputAmount(adapter.getItem(position).getNumber(), position);
+            }
         });
         binding.rcCheque.setAdapter(adapter);
+    }
+
+    private void showDialogInputAmount(String number, int position) {
+        final int pos = position;
+        if (getActivity() == null) return;
+        new DialogParsian()
+                .setContext(getActivity())
+                .setTitle(getString(R.string.inter_cheque_amount))
+                .setButtonsText(getString(R.string.confirm), getString(R.string.cancel))
+                .setListener(new DialogParsian.ParsianDialogListener() {
+                    @Override
+                    public void onDeActiveButtonClicked(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onInputDialogListener(Dialog dialog, String input) {
+                        if (input != null && !input.isEmpty() && Long.valueOf(input) > 1) {
+                            dialog.dismiss();
+                            viewModel.getRegisterCheque(number, Long.valueOf(input), pos);
+                        } else {
+                            viewModel.getShowRequestErrorMessage().postValue(getString(R.string.amount_not_valid));
+                        }
+                    }
+                }).showInputDialog(getString(R.string.amount), InputType.TYPE_CLASS_NUMBER);
+    }
+
+    private void showMessage(String title, String message) {
+        mDialogWait.dismiss();
+        new DialogParsian()
+                .setContext(getContext())
+                .setTitle(title)
+                .setButtonsText(getString(R.string.ok), null)
+                .showSimpleMessage(message);
+    }
+
+    private void showDialogLoading() {
+        if (getActivity() != null) {
+            mDialogWait = new DialogParsian()
+                    .setContext(getActivity())
+                    .setTitle(getString(R.string.please_wait) + "..")
+                    .setButtonsText(null, getString(R.string.cancel))
+                    .setListener(new DialogParsian.ParsianDialogListener() {
+                        @Override
+                        public void onDeActiveButtonClicked(Dialog dialog) {
+                            mDialogWait.dismiss();
+                        }
+                    });
+            mDialogWait.showLoaderDialog(false);
+        }
     }
 
     private void setupListeners() {
 
         viewModel.getResponseListener().observe(getViewLifecycleOwner(), this::setupRecyclerView);
+
+        viewModel.getRegisterChequeLoader().observe(getViewLifecycleOwner(), state -> {
+            if (state == null) return;
+            if (state) {
+                showDialogLoading();
+            } else {
+                if (mDialogWait != null) mDialogWait.dismiss();
+            }
+        });
+
+        viewModel.getRegisterChequeListener().observe(getViewLifecycleOwner(), msg -> {
+            if (msg == null) return;
+            if (mDialogWait != null) mDialogWait.dismiss();
+            showMessage(getString(R.string.attention), msg.first);
+            if (msg.second >= 0) {
+                adapter.removeAll();
+                viewModel.init();
+            }
+        });
     }
 
     private void setupRecyclerView(List<BankChequeSingle> chequeModels) {

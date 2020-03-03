@@ -1,15 +1,17 @@
 package net.iGap.viewmodel.mobileBank;
 
+import android.util.Pair;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.repository.MobileBankRepository;
 import net.iGap.model.mobileBank.BankBlockCheque;
 import net.iGap.model.mobileBank.BankChequeSingle;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.MobileBankRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
 
     private ObservableInt noItemVisibility = new ObservableInt(View.GONE);
     private ObservableInt progressVisibility = new ObservableInt(View.GONE);
+    private SingleLiveEvent<Pair<String, Integer>> registerChequeListener = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> registerChequeLoader = new SingleLiveEvent<>();
     private MutableLiveData<List<BankChequeSingle>> responseListener = new MutableLiveData<>();
     private String deposit, bookNumber;
 
@@ -79,6 +83,29 @@ public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
         });
     }
 
+    public void getRegisterCheque(String number, long amount, int position) {
+        registerChequeLoader.postValue(true);
+        MobileBankRepository.getInstance().getRegisterCheque(number, deposit, amount, this, new ResponseCallback<BaseMobileBankResponse>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse data) {
+                registerChequeLoader.postValue(false);
+                registerChequeListener.postValue(new Pair<>(data.getMessage(), position));
+
+            }
+
+            @Override
+            public void onError(String error) {
+                registerChequeLoader.postValue(false);
+                registerChequeListener.postValue(new Pair<>(error, -1));
+            }
+
+            @Override
+            public void onFailed() {
+                registerChequeLoader.postValue(false);
+            }
+        });
+    }
+
     public ObservableInt getNoItemVisibility() {
         return noItemVisibility;
     }
@@ -97,5 +124,13 @@ public class MobileBankChequesListViewModel extends BaseMobileBankViewModel {
 
     public void setBookNumber(String bookNumber) {
         this.bookNumber = bookNumber;
+    }
+
+    public SingleLiveEvent<Boolean> getRegisterChequeLoader() {
+        return registerChequeLoader;
+    }
+
+    public SingleLiveEvent<Pair<String, Integer>> getRegisterChequeListener() {
+        return registerChequeListener;
     }
 }

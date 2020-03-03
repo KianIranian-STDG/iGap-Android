@@ -1490,9 +1490,12 @@ public class FragmentChat extends BaseFragment
     }
 
     private void invalidateViews() {
-        int childCount = recyclerView.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            recyclerView.getChildAt(i).invalidate();
+//        int childCount = recyclerView.getChildCount();
+//        for (int i = 0; i < childCount; i++) {
+//            recyclerView.getChildAt(i).invalidate();
+//        }
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -4599,7 +4602,6 @@ public class FragmentChat extends BaseFragment
          */
         if (getFirstUnreadMessage() != null &&
                 getFirstUnreadMessage().isValid() &&
-                !getFirstUnreadMessage().isDeleted() &&
                 getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()
         ) {
             setCountNewMessageZero();
@@ -4608,9 +4610,9 @@ public class FragmentChat extends BaseFragment
         if (!isPaused && chatType != CHANNEL &&
                 (
                         !messageInfo.isSenderMe() &&
-                        messageInfo.realmRoomMessage.getStatus() != null &&
-                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) &&
-                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
+                                messageInfo.realmRoomMessage.getStatus() != null &&
+                                !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) &&
+                                !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
                 )
         ) {
             /**

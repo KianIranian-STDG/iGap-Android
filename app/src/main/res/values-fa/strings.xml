@@ -1344,7 +1344,10 @@
     <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">اعتبار شما: </string>
     <string name="wallet_Reial">%d ریال </string>
-    <string name="payment_rial">%s ریال </string>
+    <string name="payment_rial">قیمت: %S ریال</string>
+    <string name="paymentDiscount">تخفیف: %S ریال</string>
+    <string name="paymentTax">مالیات: %S ریال</string>
+    <string name="paymentScreenShot">ذخیره رسید</string>
     <string name="wallet_error_server">خطا در برقراری ارتباط با سرور</string>
 
     <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
@@ -2516,4 +2519,6 @@
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
     <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟!
         توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
+    <string name="inter_cheque_amount">ثبت مبلغ </string>
+    <string name="take_turn">دریافت نوبت</string>
 </resources>
