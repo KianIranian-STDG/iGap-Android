@@ -101,7 +101,7 @@
             android:layout_marginStart="@dimen/dp8"
             android:layout_marginTop="@dimen/dp4"
             android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp4"
             android:ellipsize="end"
             android:gravity="start"
             android:lines="1"
@@ -110,10 +110,23 @@
             android:text="@string/mobile_bank_detail_cell_paymentDate"
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnPay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/penaltyAmount" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/mobileBankButton"
+            android:text="@string/pay"
+            android:layout_margin="@dimen/dp4"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/paymentDate"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

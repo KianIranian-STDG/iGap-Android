@@ -31,8 +31,8 @@ public class MobileBankServiceLoanDetailViewModel extends BaseMobileBankViewMode
     public void getLoanDetail(int offset) {
         if (offset == 0) {
             loan.setValue(null);
+            showLoading.set(View.VISIBLE);
         }
-        showLoading.set(View.VISIBLE);
         // set bills
         MobileBankRepository.getInstance().getLoanDetail(loanNumber, offset, 30, this,
                 new ResponseCallback<BaseMobileBankResponse<BankServiceLoanDetailModel>>() {

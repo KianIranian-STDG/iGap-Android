@@ -37,8 +37,7 @@ public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<
     private boolean isLastPage = false;
     private int totalPage = 20;
     private boolean isLoading = false;
-
-    private static final String TAG = "Amini";
+    private String mLoanNumber;
 
     public static MobileBankServiceLoanDetailFragment newInstance(String loanNumber) {
         MobileBankServiceLoanDetailFragment frag = new MobileBankServiceLoanDetailFragment();
@@ -68,10 +67,14 @@ public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
+        setupToolbar();
+        initial();
+    }
 
-        HelperToolbar mHelperToolbar = HelperToolbar.create()
+    private void setupToolbar() {
+
+        HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
@@ -85,13 +88,13 @@ public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.Toolbar;
-        toolbarLayout.addView(mHelperToolbar.getView());
+        toolbarLayout.addView(toolbar.getView());
 
-        initial();
     }
 
     private void initial() {
-        viewModel.setLoanNumber(getArguments().getString("loanNumber"));
+        mLoanNumber = getArguments().getString("loanNumber");
+        viewModel.setLoanNumber(mLoanNumber);
         viewModel.init();
 
         // recycler view for bills of month
@@ -100,8 +103,16 @@ public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<
         layoutManager2.setAutoMeasureEnabled(true);
         binding.loansRecycler.setLayoutManager(layoutManager2);
         binding.loansRecycler.setNestedScrollingEnabled(false);
-        adapter = new MobileBankServiceLoanDetailAdapter(new ArrayList<>(), position -> {
-            // show detail in dialog
+        adapter = new MobileBankServiceLoanDetailAdapter(new ArrayList<>() , new MobileBankServiceLoanDetailAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                //show detail
+            }
+
+            @Override
+            public void onPayLoanClicked(int position , BankServiceLoanDetailModel.LoanItem item) {
+                showPayLoanDialog(item);
+            }
         });
         binding.loansRecycler.setAdapter(adapter);
         resetMainRecycler();
@@ -115,13 +126,18 @@ public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<
                 if (diff == 0) {
                     isLoading = true;
                     currentPage++;
-                    Log.d(TAG, "loadMoreItems: Load more Bitch!!!");
                     viewModel.getLoanDetail(currentPage * 30);
                 }
             }
         });
 
         onDateChangedListener();
+    }
+
+    private void showPayLoanDialog(BankServiceLoanDetailModel.LoanItem item) {
+        if(getActivity() == null) return;
+        MobileBankPayLoanBsFragment fragment = MobileBankPayLoanBsFragment.newInstance(mLoanNumber , item.getUnpaidAmount());
+        fragment.show(getActivity().getSupportFragmentManager() , "PayLoanFragment");
     }
 
     private void initMainRecycler(List<BankServiceLoanDetailModel.LoanItem> data) {

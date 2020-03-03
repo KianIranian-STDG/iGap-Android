@@ -325,17 +325,6 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     }
 
-    private void onLoanClicked() {
-
-        if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(),
-                    MobileBankServiceLoanDetailFragment.newInstance("58000001529602"))
-                    .setReplace(false)
-                    .load();
-        }
-
-    }
-
     private void onShebaClicked() {
         if (getActivity() != null) {
             MobileBankBottomSheetFragment fragment = MobileBankBottomSheetFragment.newInstance(getCurrentAccount(), mode == HomeTabMode.CARD);

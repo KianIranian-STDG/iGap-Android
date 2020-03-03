@@ -2422,7 +2422,7 @@
     <string name="remained_loan">اقساط باقیمانده:</string>
     <string name="state">وضعیت:</string>
     <string name="mobile_bank_detail_cell_payAmount">مبلغ پرداختی: %1$s %2$s</string>
-    <string name="mobile_bank_detail_cell_payStatus">حالة الدفع: %1$s</string>
+    <string name="mobile_bank_detail_cell_payStatus">وضعیت پرداخت: %1$s</string>
     <string name="mobile_bank_detail_cell_paymentDate">تاریخ پرداخت: %1$s</string>
     <string name="mobile_bank_detail_cell_penaltyAmount">مبلغ جریمه: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_unpaidAmount">مبلغ باقیمانده: %1$s %2$s</string>

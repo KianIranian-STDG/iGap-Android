@@ -26,12 +26,21 @@ import java.util.List;
 
 public class MobileBankPayLoanBsFragment extends BaseBottomSheet {
 
+    private final String LOAN_NUMBER_KEY = "LOAN";
+    private final String AMOUNT_KEY = "AMOUNT";
     private MobileBankPayLoanBsViewModel mViewModel;
     private MobileBankPayLoanBsFragmentBinding binding;
     private List<String> items = new ArrayList<>();
+    private int mAmount ;
+    private String mLoanNumber ;
 
-    public static MobileBankPayLoanBsFragment newInstance() {
-        return new MobileBankPayLoanBsFragment();
+    public static MobileBankPayLoanBsFragment newInstance( String loan , int amount) {
+        MobileBankPayLoanBsFragment fragment = new MobileBankPayLoanBsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(fragment.AMOUNT_KEY, amount);
+        bundle.putString(fragment.LOAN_NUMBER_KEY , loan);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -51,6 +60,10 @@ public class MobileBankPayLoanBsFragment extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view , @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view , savedInstanceState);
+        if(getArguments() != null){
+            mAmount = getArguments().getInt(AMOUNT_KEY);
+            mLoanNumber = getArguments().getString(LOAN_NUMBER_KEY);
+        }
         setupAccountsSpinner();
     }
 

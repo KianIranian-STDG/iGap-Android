@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+
 import net.iGap.R;
 import net.iGap.helper.HelperMobileBank;
 import net.iGap.model.mobileBank.BankServiceLoanDetailModel;
@@ -116,6 +118,7 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView status, payAmount, unpaidAmount, penaltyAmount, paymentDate;
+        private MaterialButton btnPay ;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -125,10 +128,12 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
             unpaidAmount = itemView.findViewById(R.id.unpaidAmount);
             penaltyAmount = itemView.findViewById(R.id.penaltyAmount);
             paymentDate = itemView.findViewById(R.id.paymentDate);
+            btnPay = itemView.findViewById(R.id.btnPay);
 
         }
 
         void initView(int position) {
+            //btnPay.setVisibility(View.GONE);
             String statusTemp = "";
             switch (mdata.get(position).getPayStatus()) {
                 case "PAID":
@@ -136,6 +141,7 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
                     break;
                 case "NOT_PAID_BEFORE_MATURITY":
                 case "NOT_PAID_AFTER_MATURITY":
+                    btnPay.setVisibility(View.VISIBLE);
                     statusTemp = context.getResources().getString(R.string.unpaid);
                     break;
                 case "UNKNOWN":
@@ -155,6 +161,8 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
                     HelperMobileBank.checkNumbersInMultiLangs(decimalFormatter(Double.parseDouble("" + mdata.get(position).getPenaltyAmount()))),
                     context.getResources().getString(R.string.rial)));
             paymentDate.setText(context.getResources().getString(R.string.mobile_bank_detail_cell_paymentDate, JalaliCalendar.getPersianDate(mdata.get(position).getPayDate())));
+
+            btnPay.setOnClickListener(v-> clickListener.onPayLoanClicked(getAdapterPosition() , mdata.get(getAdapterPosition())));
         }
 
         private String decimalFormatter(Double entry) {
@@ -177,6 +185,7 @@ public class MobileBankServiceLoanDetailAdapter extends RecyclerView.Adapter<Rec
 
     public interface OnItemClickListener {
         void onClick(int position);
+        void onPayLoanClicked(int position , BankServiceLoanDetailModel.LoanItem item);
     }
 
 }
