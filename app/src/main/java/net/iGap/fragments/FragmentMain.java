@@ -22,17 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
-import net.iGap.observers.eventbus.EventListener;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -42,6 +37,18 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.model.MultiSelectStruct;
+import net.iGap.model.PassCode;
+import net.iGap.module.AppUtils;
+import net.iGap.module.MusicPlayer;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.ConnectionState;
+import net.iGap.module.enums.GroupChatRole;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
@@ -55,13 +62,6 @@ import net.iGap.observers.interfaces.OnRemoveFragment;
 import net.iGap.observers.interfaces.OnSetActionInRoom;
 import net.iGap.observers.interfaces.OnVersionCallBack;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.model.MultiSelectStruct;
-import net.iGap.model.PassCode;
-import net.iGap.module.AppUtils;
-import net.iGap.module.MusicPlayer;
-import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.module.enums.ConnectionState;
-import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmRoom;
@@ -511,9 +511,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void invalidateViews() {
-        int count = mRecyclerView.getChildCount();
-        for (int i = 0; i < count; i++) {
-            mRecyclerView.getChildAt(i).invalidate();
+//        int count = mRecyclerView.getChildCount();
+//        for (int i = 0; i < count; i++) {
+//            mRecyclerView.getChildAt(i).invalidate();
+//        }
+        if (roomListAdapter != null) {
+            roomListAdapter.notifyDataSetChanged();
         }
     }
 
