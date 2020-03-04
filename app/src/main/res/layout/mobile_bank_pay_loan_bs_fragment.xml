@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="vm"
+            type="net.iGap.viewmodel.mobileBank.MobileBankPayLoanBsViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.mobileBank.MobileBankPayLoanBsFragment">
+
+        <View
+            android:id="@+id/lineViewTop"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:background="?attr/iGapBottomSheetHeaderLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".34" />
+
+        <TextView
+            android:id="@+id/lblAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp40"
+            android:gravity="center"
+            android:text="@string/amount"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintEnd_toEndOf="@id/edtAmount"
+            app:layout_constraintStart_toStartOf="@id/edtAmount"
+            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtAmount"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp44"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@drawable/shape_gray_round_stroke"
+            android:gravity="center"
+            android:inputType="number"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:singleLine="true"
+            android:text="@={vm.amountText}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblAmount"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <RadioGroup
+            android:id="@+id/rgRadios"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp24"
+            android:checkedButton="@id/chDefault"
+            android:onCheckedChanged="@{(group,checkId)->vm.onCheckedListener(checkId)}"
+            app:layout_constraintEnd_toEndOf="@id/edtAmount"
+            app:layout_constraintStart_toStartOf="@id/edtAmount"
+            app:layout_constraintTop_toBottomOf="@id/edtAmount">
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/chDefault"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/check_box_background_brown"
+                android:text="@string/default_deposit"
+                android:textColor="?iGapTitleTextColor"
+                android:fontFamily="@font/main_font"/>
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/chCustom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/check_box_background_brown"
+                android:text="@string/custom_deposit"
+                android:textColor="?iGapTitleTextColor"
+                android:fontFamily="@font/main_font"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/lblDeposit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:gravity="center"
+            android:text="@string/account"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            android:visibility="@{vm.isDefaultDeposit? View.GONE : View.VISIBLE , default = gone}"
+            app:layout_constraintEnd_toEndOf="@id/edtAmount"
+            app:layout_constraintStart_toStartOf="@id/edtAmount"
+            app:layout_constraintTop_toBottomOf="@id/rgRadios" />
+
+        <Spinner
+            android:id="@+id/spDeposits"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp44"
+            android:layout_marginTop="@dimen/dp10"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:background="@drawable/shape_gray_round_stroke"
+            android:visibility="@{vm.isDefaultDeposit? View.GONE : View.VISIBLE , default = gone}"
+            app:layout_constraintEnd_toEndOf="@id/edtAmount"
+            app:layout_constraintStart_toStartOf="@id/edtAmount"
+            app:layout_constraintTop_toBottomOf="@id/lblDeposit" />
+
+        <TextView
+            android:id="@+id/depositsArrow"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            android:text="@string/down_arrow_icon"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{vm.isDefaultDeposit? View.GONE : View.VISIBLE , default = gone}"
+            app:layout_constraintBottom_toBottomOf="@id/spDeposits"
+            app:layout_constraintEnd_toEndOf="@id/spDeposits"
+            app:layout_constraintTop_toTopOf="@id/spDeposits" />
+
+        <TextView
+            android:id="@+id/lblSecondaryPass"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp40"
+            android:gravity="center"
+            android:text="@string/secondary_password"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintEnd_toEndOf="@id/edtAmount"
+            app:layout_constraintStart_toStartOf="@id/edtAmount"
+            app:layout_constraintTop_toBottomOf="@id/spDeposits" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtSecondaryPass"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp44"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@drawable/shape_gray_round_stroke"
+            android:gravity="center"
+            android:inputType="numberPassword"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:singleLine="true"
+            android:text="@={vm.secondaryPass}"
+            app:layout_constraintEnd_toEndOf="@id/edtAmount"
+            app:layout_constraintStart_toStartOf="@id/edtAmount"
+            app:layout_constraintTop_toBottomOf="@id/lblSecondaryPass"  />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnInquiry"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            style="@style/mobileBankButton"
+            android:layout_margin="@dimen/dp16"
+            android:text="@string/kuknos_SetPassConf_submit"
+            android:onClick="@{()-> vm.onInquiryClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/edtAmount"
+            app:layout_constraintEnd_toEndOf="@id/edtAmount"
+            app:layout_constraintTop_toBottomOf="@id/edtSecondaryPass"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

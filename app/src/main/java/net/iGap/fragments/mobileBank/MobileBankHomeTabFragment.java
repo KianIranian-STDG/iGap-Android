@@ -110,11 +110,11 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
             case R.string.Inventory:
             case R.string.transactions:
-                if (mode == HomeTabMode.DEPOSIT) {
-                    onTransactionsClicked();
-                } else {
-                    showComingSoon();
-                }
+                //if (mode == HomeTabMode.DEPOSIT) {
+                    onTransactionsClicked(getCurrentAccount());
+               /* } else {
+                    getCardDepositAndOpenTransaction(getCurrentAccount());
+                }*/
                 break;
 
             case R.string.sheba_number:
@@ -142,6 +142,12 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 onTakeTurnClicked();
                 break;
         }
+    }
+
+    private void getCardDepositAndOpenTransaction(String card) {
+        if(card == null) return;
+        showProgress();
+        viewModel.getCardDeposits(card);
     }
 
     private void onFacilitiesClick() {
@@ -236,6 +242,13 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             }
         });
 
+        viewModel.getCardDepositResponse().observe(getViewLifecycleOwner() , deposit->{
+            mDialogWait.dismiss();
+            if(deposit != null && !deposit.equals("-1")){
+                onTransactionsClicked(deposit);
+            }
+        });
+
         viewModel.getTakeTurnListener().observe(getViewLifecycleOwner() , msg ->{
             if(mDialogWait != null) mDialogWait.dismiss();
             if(msg == null || getContext() == null) return;
@@ -315,21 +328,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 .load();
     }
 
-    private void onTransactionsClicked() {
+    private void onTransactionsClicked(String account) {
 
         if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(getCurrentAccount(), mode == HomeTabMode.CARD))
-                    .setReplace(false)
-                    .load();
-        }
-
-    }
-
-    private void onLoanClicked() {
-
-        if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(),
-                    MobileBankServiceLoanDetailFragment.newInstance("58000001529602"))
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(account, mode == HomeTabMode.CARD))
                     .setReplace(false)
                     .load();
         }
