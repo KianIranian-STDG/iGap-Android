@@ -67,7 +67,16 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
             mFolderName = getArguments().getString(FOLDER_NAME);
             getSelectedListAndSetToViewModel();
             setupRecyclerView();
+            setupListeners();
         }
+    }
+
+    private void setupListeners() {
+
+        binding.btnBack.setOnClickListener(v -> {
+            popBackStackFragment();
+        });
+
     }
 
     private void setupRecyclerView() {
@@ -100,6 +109,10 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                         binding.loader.setVisibility(View.GONE);
                         mAdapter = new AdapterExplorer(items, this);
                         binding.rvItems.setAdapter(mAdapter);
+
+                        if(items.size() == 0){
+                            binding.lytNothing.setVisibility(View.VISIBLE);
+                        }
                     });
                 }
             });

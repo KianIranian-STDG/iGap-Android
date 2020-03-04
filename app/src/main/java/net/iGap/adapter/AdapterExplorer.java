@@ -52,7 +52,8 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
         holder.imageView.setImageResource(rowItem.image);
         if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
 
-        if (rowItem.isFolderOrFile && (rowItem.image == R.drawable.ic_fm_image || rowItem.image == R.drawable.ic_fm_video)) {
+        if (rowItem.isFolderOrFile && (rowItem.image == R.drawable.ic_fm_image_small || rowItem.image == R.drawable.ic_fm_video_small)) {
+            if(rowItem.path.endsWith(".png")) holder.imageView.setImageResource(0);
             holder.imageView.setPadding(0, 0, 0, 0);
             ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.image);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

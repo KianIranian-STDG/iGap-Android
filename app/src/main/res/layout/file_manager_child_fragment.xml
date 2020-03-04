@@ -21,6 +21,33 @@
             android:visibility="gone"
             android:layout_gravity="center" />
 
+        <LinearLayout
+            android:id="@+id/lytNothing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:text="@string/no_item"/>
+
+            <TextView
+                android:id="@+id/btnBack"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp44"
+                android:background="@drawable/shape_file_manager_file_bg"
+                style="@style/myIconToolbarStyle"
+                android:text="@string/back_icon"
+                android:layout_marginTop="@dimen/dp6"/>
+
+        </LinearLayout>
+
     </FrameLayout>
 
 </layout>

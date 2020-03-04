@@ -140,13 +140,13 @@ public class HelperMimeType {
         extention = extention.toLowerCase();
 
         if (isFileImage(extention)) {
-            x = R.drawable.ic_fm_image;
+            x = R.drawable.ic_fm_image_small;
         } else if (extention.endsWith("ogg")) {
             x = R.drawable.ic_fm_voice;
         } else if (extention.endsWith("mp3") || extention.endsWith("wma")) {
             x = R.drawable.ic_fm_music_file;
         } else if (isFileVideo(extention)) {
-            x = R.drawable.ic_fm_video;
+            x = R.drawable.ic_fm_video_small;
         } else if (extention.endsWith("m4a") || extention.endsWith("amr") || extention.endsWith("wav")) {
             x = R.drawable.ic_fm_music_file;
         } else if (extention.endsWith("html") || extention.endsWith("htm")) {
