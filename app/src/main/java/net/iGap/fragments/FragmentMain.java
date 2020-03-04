@@ -1,9 +1,10 @@
 package net.iGap.fragments;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
@@ -38,6 +38,8 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.model.MultiSelectStruct;
 import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
@@ -55,7 +57,6 @@ import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
-import net.iGap.observers.interfaces.OnClientGetRoomListResponse;
 import net.iGap.observers.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.observers.interfaces.OnDateChanged;
 import net.iGap.observers.interfaces.OnGroupDeleteInRoomList;
@@ -64,7 +65,6 @@ import net.iGap.observers.interfaces.OnSetActionInRoom;
 import net.iGap.observers.interfaces.OnVersionCallBack;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -95,7 +95,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnClientGetRoomListResponse, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -118,6 +118,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private RecyclerView multiSelectRv;
     private SelectedItemAdapter multiSelectAdapter;
     private View selectedItemView;
+
+    private AnimatorSet progressAnimatorSet;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -180,6 +182,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mHelperToolbar.registerTimerBroadcast();
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
 
+        if (results == null)
+            progressBar.setVisibility(View.VISIBLE);
 
         onChatCellClickedInEditMode = (item, position, status) -> {
             Room temp = new Room(item.getId(), item.getType().name(), item.getTitle(), "", "");
@@ -256,8 +260,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -393,19 +398,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void initRecycleView() {
 
         if (results == null) {
-            Log.wtf(this.getClass().getName(), "initRecycleView");
             results = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(new String[]{RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList, this::disableMultiSelect);
         } else {
             pbLoading.setVisibility(View.GONE);
-        }
-
-        if (!ClientGetRoomListResponse.roomListFetched) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
         }
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -416,9 +414,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     if (mOffset > 0) {
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                         if (lastVisiblePosition + 10 >= mOffset) {
-                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                            if (send)
-                                progressBar.setVisibility(View.VISIBLE);
+                            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
                         }
                     }
 
@@ -696,44 +692,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
-    public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.wtf(this.getClass().getName(), "onClientGetRoomList: hide progress");
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    @Override
-    public void onClientGetRoomListError(int majorCode, int minorCode) {
-        /*if (majorCode == 9) {
-            if (G.currentActivity != null) {
-                G.currentActivity.finish();
-            }
-            Intent intent = new Intent(context, ActivityRegistration.class);
-            intent.putExtra(ActivityRegistration.showProfile, true);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        }*/
-
-    }
-
-    @Override
-    public void onClientGetRoomListTimeout() {
-
-//        G.handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                progressBar.setVisibility(View.GONE);
-//                getChatLists();
-//            }
-//        });
-    }
-
-
-    @Override
     public void onChatDeleteError(int majorCode, int minorCode) {
 
     }
@@ -749,8 +707,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance().removeEventListener(EventManager.ROOM_LIST_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
     }
@@ -764,8 +723,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         G.onVersionCallBack = this;
         if (G.isDepricatedApp)
             isDeprecated();
-
-        G.onClientGetRoomListResponse = this;
 
         if (progressBar != null) {
             AppUtils.setProgresColler(progressBar);
@@ -1170,7 +1127,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        if (id == ActivityCall.CALL_EVENT) {
+        if (id == EventManager.CALL_EVENT) {
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {
@@ -1183,8 +1140,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         } else if (id == EventManager.EMOJI_LOADED) {
             G.handler.post(this::invalidateViews);
+        } else if (id == EventManager.ROOM_LIST_CHANGED) {
+            G.runOnUiThread(() -> {
+                boolean show = (boolean) message[0];
+                changeRoomListProgress(show);
+            });
         }
-
     }
 
     public enum MainType {
@@ -1193,6 +1154,26 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private interface onChatCellClick {
         void onClicked(RealmRoom item, int pos, boolean status);
+    }
+
+    private void changeRoomListProgress(boolean show) {
+
+        if (show && progressBar.getTag() == null || !show && progressBar.getTag() != null) {
+            return;
+        }
+
+        if (progressAnimatorSet != null) {
+            progressAnimatorSet.cancel();
+            progressAnimatorSet = null;
+        }
+
+        progressBar.setTag(show ? null : 1);
+
+        progressAnimatorSet = new AnimatorSet();
+        progressAnimatorSet.playTogether(ObjectAnimator.ofFloat(progressBar, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(100)));
+        progressAnimatorSet.setDuration(200);
+        progressAnimatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        progressAnimatorSet.start();
     }
 
     @Override

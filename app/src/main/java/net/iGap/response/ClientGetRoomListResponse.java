@@ -15,6 +15,7 @@ import net.iGap.G;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.module.BotInit;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoClientGetRoomList;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmClientCondition;
@@ -79,14 +80,9 @@ public class ClientGetRoomListResponse extends MessageHandler {
         isPendingGetRoomList = false;
         if (clientGetRoomListResponse.getRoomsCount() == 0) {
             roomListFetched = true;
-        }/* else {
-            boolean send = new RequestClientGetRoomList().clientGetRoomList(FragmentMain.mOffset, Config.LIMIT_LOAD_ROOM, "");
-
-        }*/
-
-        if (G.onClientGetRoomListResponse != null) {
-            G.onClientGetRoomListResponse.onClientGetRoomList(null, null, null);
         }
+
+        EventManager.getInstance().postEvent(EventManager.ROOM_LIST_CHANGED, false);
 
         retryCountZeroOffset = 0;
     }

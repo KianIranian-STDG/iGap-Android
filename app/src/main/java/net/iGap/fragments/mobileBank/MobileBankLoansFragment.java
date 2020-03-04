@@ -27,8 +27,7 @@ public class MobileBankLoansFragment extends BaseMobileBankFragment<MobileBankLo
     private MobileBankLoansFragmentBinding binding;
 
     public static MobileBankLoansFragment newInstance() {
-        MobileBankLoansFragment fragment = new MobileBankLoansFragment();
-        return fragment;
+        return new MobileBankLoansFragment();
     }
 
     @Override
