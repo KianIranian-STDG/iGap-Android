@@ -946,6 +946,8 @@
 
     <string name="E_158">تدمير الحساب: المحاولة الكثيرة جداً</string>
 
+    <string name="E_4_14">ليس لديك حق الوصول!</string>
+
     <string name="time_out">عدم امكان الاتصال بمزود خدمة الانترنت</string>
 
     <string name="resend_all_messages">"‫إعادة ارسال %d الرسالة</string>

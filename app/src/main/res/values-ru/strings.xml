@@ -1960,4 +1960,5 @@
     <string name="default_deposit">Депозит по умолчанию</string>
     <string name="custom_deposit">Пользовательский депозит</string>
 
+    <string name="E_4_14">You do not have access!</string>
 </resources>

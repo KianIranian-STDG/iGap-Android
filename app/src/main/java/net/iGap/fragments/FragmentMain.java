@@ -1,5 +1,7 @@
 package net.iGap.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -183,7 +185,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
 
         if (results == null)
-            progressBar.setVisibility(View.VISIBLE);
+            changeRoomListProgress(true);
 
         onChatCellClickedInEditMode = (item, position, status) -> {
             Room temp = new Room(item.getId(), item.getType().name(), item.getTitle(), "", "");
@@ -1167,12 +1169,22 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             progressAnimatorSet = null;
         }
 
+        if (show)
+            progressBar.setVisibility(View.VISIBLE);
+
         progressBar.setTag(show ? null : 1);
 
         progressAnimatorSet = new AnimatorSet();
         progressAnimatorSet.playTogether(ObjectAnimator.ofFloat(progressBar, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(100)));
         progressAnimatorSet.setDuration(200);
         progressAnimatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        progressAnimatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
         progressAnimatorSet.start();
     }
 

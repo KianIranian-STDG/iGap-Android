@@ -2222,4 +2222,6 @@
     <string name="secondary_password">رمز دوم</string>
     <string name="default_deposit">حساب پیش فرض</string>
     <string name="custom_deposit">حساب دلخواه</string>
+
+    <string name="E_4_14">You do not have access!</string>
 </resources>
