@@ -534,6 +534,8 @@
     <string name="E_212_1">Bad payload: Invalid room ID</string>
     <string name="E_213">Internal Server Error</string>
     <string name="E_214">This operation is not permitted.</string>
+    <string name="E_4_14">You do not have access!</string>
+
     <string name="resend_all_messages" formatted="false">Resend %d messages</string>
     <string name="resend_chat_message" formatted="false">Resend messages</string>
     <string name="if_you_are_away_for">Away for</string>

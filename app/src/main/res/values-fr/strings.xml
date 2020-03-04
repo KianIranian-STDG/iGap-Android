@@ -450,6 +450,7 @@
     <string name="E_156">destruction de compte :  code n\'est pas correct</string>
     <string name="E_157">destruction de compte : code n\'est pas valable</string>
     <string name="E_158">destruction de compte : nombre des  essais plus que limite</string>
+    <string name="E_4_14">Vous n'y avez pas accès!</string>
     <string name="time_out">impossible de connexion au serveur</string>
     <string name="resend_all_messages">envoyer de nouveau le message</string>
     <string name="resend_chat_message">envoyer de nouveau le message</string>

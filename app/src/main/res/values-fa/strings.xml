@@ -519,6 +519,7 @@
     <string name="E_156">تخریب اکانت : کد اشتباه است</string>
     <string name="E_157">تخریب اکانت : کد اعتبار ندارد</string>
     <string name="E_158">تخریب اکانت : تلاش بیش از اندازه</string>
+    <string name="E_4_14">شما اجازه دسترسی ندارید!</string>
     <string name="time_out">عدم امکان اتصال به سرور</string>
     <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>‬‬‬‬‬‬
     <string name="resend_chat_message">"‫ارسال دوبارهٔ پیام"</string>‬‬‬‬‬‬
