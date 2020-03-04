@@ -90,10 +90,10 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         isCard = getArguments().getBoolean("isCard");
 
         setupToolbar();
-        setupSpinner();
         initial();
         setupListener();
         setupRecyclerItems();
+        setupSpinner();
     }
 
     private void setupSpinner() {
@@ -321,6 +321,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private void handleItemsAdapterClick(int position, int title) {
         switch (title) {
             case R.string.transfer_mony:
+            case R.string.cardToCardBtnText:
                 showComingSoon();
                 //onTransferMoneyClicked();
                 break;
