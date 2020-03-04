@@ -1956,5 +1956,8 @@
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="inter_cheque_amount">Введите сумму</string>
     <string name="take_turn">Принять поворот</string>
+    <string name="secondary_password">Второй пароль</string>
+    <string name="default_deposit">Депозит по умолчанию</string>
+    <string name="custom_deposit">Пользовательский депозит</string>
 
 </resources>

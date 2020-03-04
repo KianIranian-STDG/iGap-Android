@@ -54,7 +54,7 @@ public class AccountSpinnerAdapter extends BaseAdapter {
         }
 
         holder.txtTitle.setGravity(Gravity.CENTER);
-        holder.txtTitle.setText(isCard ? HelperMobileBank.getCardNumberPattern(items.get(position)) : HelperMobileBank.checkNumbersInMultiLangs(items.get(position)));
+        holder.txtTitle.setText(/*isCard ? HelperMobileBank.getCardNumberPattern(items.get(position)) :*/ HelperMobileBank.checkNumbersInMultiLangs(items.get(position)));
         return convertView;
     }
 

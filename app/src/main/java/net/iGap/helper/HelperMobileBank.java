@@ -134,12 +134,11 @@ public class HelperMobileBank {
     }
 
     public static String getCardNumberPattern(String cardNumber) {
-        String number = checkNumbersInMultiLangs(cardNumber);
         try {
-            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
-            return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
+            String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(cardNumber), String.class);
+            return checkNumbersInMultiLangs(tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3]);
         } catch (Exception e) {
-            return number;
+            return checkNumbersInMultiLangs(cardNumber);
         }
     }
 

@@ -3191,4 +3191,7 @@
     <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟ لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
     <string name="inter_cheque_amount">أدخل المبلغ</string>
     <string name="take_turn">يأخذ منحى</string>
+    <string name="secondary_password">كلمة المرور الثانية</string>
+    <string name="default_deposit">الودائع الافتراضية</string>
+    <string name="custom_deposit">إيداع مخصص</string>
 </resources>

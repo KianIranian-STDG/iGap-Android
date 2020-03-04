@@ -90,28 +90,32 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         isCard = getArguments().getBoolean("isCard");
 
         setupToolbar();
-        setupSpinner();
         initial();
         setupListener();
         setupRecyclerItems();
+        setupSpinner();
     }
 
     private void setupSpinner() {
-        AccountSpinnerAdapter adapter = new AccountSpinnerAdapter(getAccountsItem(), isCard);
+        List<String> itemsSpinner = getAccountsItem();
+        AccountSpinnerAdapter adapter = new AccountSpinnerAdapter(itemsSpinner, isCard);
         binding.spAccounts.setAdapter(adapter);
+        getCheckAndSetCurrentSelection(itemsSpinner);
         binding.spAccounts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String number = items.get(position);
+                binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(number, isCard));
+                viewModel.getBalance().set("...");
                 if (getArguments() != null) getArguments().putString("accountNum", number);
                 mCurrentNumber = number;
-
-                resetMainRecycler();
-                viewModel.getBalance().set("...");
-                viewModel.setDepositNumber(mCurrentNumber);
-                binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(mCurrentNumber, isCard));
-                viewModel.getAccountDataForMonth(0);
+                if(isCard){
+                    showProgress();
+                    viewModel.getCardDeposits(number);
+                    return;
+                }
+                reloadPage(number);
             }
 
             @Override
@@ -121,6 +125,22 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         });
         binding.lytAccounts.setOnClickListener(v -> binding.spAccounts.performClick());
 
+    }
+
+    private void getCheckAndSetCurrentSelection(List<String> accounts) {
+        for (int i = 0 ; i < accounts.size() ; i++){
+            if(mCurrentNumber.equals(accounts.get(i))){
+                binding.spAccounts.setSelection(i);
+               // binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(accounts.get(i) , isCard));
+                break;
+            }
+        }
+    }
+
+    private void reloadPage(String number) {
+        resetMainRecycler();
+        viewModel.setDepositNumber(number);
+        viewModel.getAccountDataForMonth(0);
     }
 
     private List<String> getAccountsItem() {
@@ -271,16 +291,17 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         String number = cardNumber;
         if (HelperCalander.isPersianUnicode)
             number = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
-        if (isCard) {
+        return number;
+     /*   if (isCard) {
             try {
-                String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(number), String.class);
-                return tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3];
+                String[] tempArray = Iterables.toArray(Splitter.fixedLength(4).split(cardNumber), String.class);
+                return HelperCalander.convertToUnicodeFarsiNumber( tempArray[0] + " - " + tempArray[1] + " - " + tempArray[2] + " - " + tempArray[3]);
             } catch (Exception e) {
                 return number;
             }
         } else {
             return number;
-        }
+        }*/
     }
 
 
@@ -300,6 +321,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private void handleItemsAdapterClick(int position, int title) {
         switch (title) {
             case R.string.transfer_mony:
+            case R.string.cardToCardBtnText:
                 showComingSoon();
                 //onTransferMoneyClicked();
                 break;
@@ -355,20 +377,31 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
                 showMessage(getString(R.string.attention), message);
             }
         });
+
+
+
+        viewModel.getCardDepositResponse().observe(getViewLifecycleOwner() , deposit->{
+            mDialogWait.dismiss();
+            if(deposit != null && !deposit.equals("-1")){
+                reloadPage(deposit);
+            }
+        });
     }
 
     private void showProgress() {
         if (getActivity() != null) {
-            mDialogWait = new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.please_wait) + "..")
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    });
+            if(mDialogWait == null) {
+                mDialogWait = new DialogParsian()
+                        .setContext(getActivity())
+                        .setTitle(getString(R.string.please_wait) + "..")
+                        .setButtonsText(null , getString(R.string.cancel))
+                        .setListener(new DialogParsian.ParsianDialogListener() {
+                            @Override
+                            public void onDeActiveButtonClicked(Dialog dialog) {
+                                mDialogWait.dismiss();
+                            }
+                        });
+            }
             mDialogWait.showLoaderDialog(false);
         }
     }

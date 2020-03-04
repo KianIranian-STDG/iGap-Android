@@ -41,7 +41,7 @@ public class WalletPaymentInitResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, null);
+        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, "");
     }
 
     @Override
@@ -51,7 +51,7 @@ public class WalletPaymentInitResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, null);
+        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, "");
     }
 }
 
