@@ -329,7 +329,7 @@ public class FileManager {
     /**
      * sorts based on the file date modify
      */
-    public class SortFileDate implements Comparator<StructExplorerItem> {
+    public static class SortFileDate implements Comparator<StructExplorerItem> {
         @Override
         public int compare(StructExplorerItem obj1, StructExplorerItem obj2) {
             File f1 = new File(obj1.path);

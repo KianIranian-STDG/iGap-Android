@@ -15,6 +15,7 @@ import net.iGap.R;
 import net.iGap.databinding.FileManagerFragmentBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.IPickFile;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FileManagerViewModel;
@@ -32,6 +33,7 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
     private FileManagerFragmentBinding binding;
     private HelperToolbar mHelperToolbar;
     private IPickFile mListener;
+    private Boolean isSortByDate = null;
 
     public static FileManagerFragment newInstance(IPickFile listener) {
         FileManagerFragment fragment = new FileManagerFragment();
@@ -93,11 +95,11 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
         if (mHelperToolbar != null) mHelperToolbar.setDefaultTitle(title);
     }
 
-    private void onSortClicked() {
+    private void onSortClicked(Boolean sortByData) {
         if (getActivity() == null) return;
         Fragment fragment = getTopFragment();
         if (fragment instanceof FileManagerChildFragment) {
-            ((FileManagerChildFragment) fragment).onSortClicked(true);
+            ((FileManagerChildFragment) fragment).onSortClicked(sortByData);
         }
     }
 
@@ -128,6 +130,35 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
             return getChildFragmentManager().getFragments().get(count - 1);
         }
         return null;
+    }
+
+    private void showSortDialog() {
+        if (getContext() == null) return;
+
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.default_theme_title));
+        items.add(getString(R.string.name));
+        items.add(getString(R.string.date));
+
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            switch (position) {
+                case 0:
+                    if(isSortByDate == null) return;
+                    isSortByDate = null;
+                    break;
+
+                case 1:
+                    if(isSortByDate != null && !isSortByDate) return;
+                    isSortByDate = false;
+                    break;
+
+                case 2:
+                    if(isSortByDate != null && isSortByDate) return;
+                    isSortByDate = true;
+                    break;
+            }
+            onSortClicked(isSortByDate);
+        }).show();
     }
 
     public void loadFragment(Fragment fragment, String tag) {
@@ -185,7 +216,7 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        onSortClicked();
+        showSortDialog();
     }
 
     @Override

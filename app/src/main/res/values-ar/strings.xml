@@ -2985,7 +2985,7 @@
     <string name="open_url">رابط مفتوح</string>
     <string name="copied">تم نسخ </string>
     <string name="charity_confirm">شما مبلغ %1$s ریال جهت کمک به خیریه %2$s در نظر گرفته اید.</string>
-    <string name="default_theme_title">السمة الافتراضية</string>
+    <string name="default_theme_title">إفتراضي</string>
     <string name="message_is_long">Your message is too long  Message will covert to</string>
 
     <string name="elecBill_Entry_lengthError">يجب أن يكون رقم الفاتورة 13 حرفًا.</string>

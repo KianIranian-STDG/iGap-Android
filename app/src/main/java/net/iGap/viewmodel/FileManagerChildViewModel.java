@@ -2,13 +2,11 @@ package net.iGap.viewmodel;
 
 
 import android.os.Environment;
-import android.view.View;
 
 import com.google.common.collect.Ordering;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.AdapterExplorer;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.module.FileUtils;
@@ -143,6 +141,16 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
         }).start();
 
+    }
+
+    public void sortList(Boolean isDate){
+        if(isDate == null){
+            Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
+        }else if(isDate){
+            Collections.sort(mItems, new FileManager.SortFileDate());
+        }else {
+            Collections.sort(mItems, new FileManager.SortFileName());
+        }
     }
 
     private void addItemToList(String title, int image, String path) {

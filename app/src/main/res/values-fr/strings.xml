@@ -1974,7 +1974,7 @@
     <string name="all_calls">des appels</string>
     <string name="open_url">ouvrir le lien</string>
     <string name="copied">copié</string>
-    <string name="default_theme_title">thème par défaut</string>
+    <string name="default_theme_title">Défaut</string>
     <string name="dark_theme_title">Thème sombre</string>
     <string name="message_is_long">Votre message est trop long. \n Le message sera converti en</string>
 

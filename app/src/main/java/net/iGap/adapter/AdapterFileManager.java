@@ -29,14 +29,24 @@ import java.util.List;
 
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
-public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHolder> {
+public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.ViewHolder> {
 
     private List<StructExplorerItem> items;
     private OnItemClickListenerExplorer onItemClickListener;
 
-    public AdapterExplorer(List<StructExplorerItem> list, OnItemClickListenerExplorer onItemClickListener) {
+    public AdapterFileManager(List<StructExplorerItem> list, OnItemClickListenerExplorer onItemClickListener) {
         items = list;
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public void removeAll(){
+        items.clear();
+        notifyDataSetChanged();
+    }
+
+    public void update(List<StructExplorerItem> items) {
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -53,9 +63,9 @@ public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHo
         if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
 
         if (rowItem.isFolderOrFile && (rowItem.image == R.drawable.ic_fm_image_small || rowItem.image == R.drawable.ic_fm_video_small)) {
-            if(rowItem.path.endsWith(".png")) holder.imageView.setImageResource(0);
+            if(rowItem.name.endsWith(".png")) holder.imageView.setImageResource(0);
             holder.imageView.setPadding(0, 0, 0, 0);
-            ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.image);
+            ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.name.endsWith(".png") ? 0 : rowItem.image);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
             int padding = i_Dp(R.dimen.dp10);

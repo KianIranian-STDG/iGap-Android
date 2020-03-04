@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,32 +10,22 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.common.collect.Ordering;
-
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.AdapterExplorer;
+import net.iGap.adapter.AdapterFileManager;
 import net.iGap.databinding.FileManagerChildFragmentBinding;
-import net.iGap.helper.FileManager;
-import net.iGap.helper.HelperMimeType;
-import net.iGap.module.FileUtils;
 import net.iGap.module.structs.StructExplorerItem;
 import net.iGap.viewmodel.FileManagerChildViewModel;
 
-import java.io.File;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class FileManagerChildFragment extends BaseFragment implements AdapterExplorer.OnItemClickListenerExplorer {
+public class FileManagerChildFragment extends BaseFragment implements AdapterFileManager.OnItemClickListenerExplorer {
 
     public static String ROOT_FILE_MANAGER = "ROOT_FILE_MANAGER";
     private static String FOLDER_NAME = "FOLDER";
 
     private FileManagerChildFragmentBinding binding;
     private FileManagerChildViewModel mViewModel;
-    private AdapterExplorer mAdapter;
+    private AdapterFileManager mAdapter;
     private String mFolderName;
 
     public static FileManagerChildFragment newInstance(String folder) {
@@ -92,7 +81,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
         List<StructExplorerItem> items = mViewModel.getRootItems();
 
         //setup adapter
-        mAdapter = new AdapterExplorer(items, this);
+        mAdapter = new AdapterFileManager(items, this);
         binding.rvItems.setAdapter(mAdapter);
 
     }
@@ -107,7 +96,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         binding.loader.setVisibility(View.GONE);
-                        mAdapter = new AdapterExplorer(items, this);
+                        mAdapter = new AdapterFileManager(items, this);
                         binding.rvItems.setAdapter(mAdapter);
 
                         if(items.size() == 0){
@@ -124,8 +113,11 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterExp
         binding.rvItems.smoothScrollToPosition(0);
     }
 
-    void onSortClicked(boolean sortByDate) {
-
+    void onSortClicked(Boolean sortByDate) {
+        if(mFolderName.equals(ROOT_FILE_MANAGER)) return;
+        mViewModel.sortList(sortByDate);
+        //mAdapter.removeAll();
+        mAdapter.update(mViewModel.getItems());
     }
 
     @Override

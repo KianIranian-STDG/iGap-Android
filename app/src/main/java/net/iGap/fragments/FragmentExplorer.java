@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.AdapterExplorer;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.module.FileUtils;
