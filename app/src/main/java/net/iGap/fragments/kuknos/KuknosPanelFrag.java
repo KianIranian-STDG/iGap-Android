@@ -14,16 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
@@ -36,7 +28,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
-import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosPanelVM;
@@ -45,6 +36,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
@@ -341,15 +342,19 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     }
 
     private void showDialog(int mode, int titleRes, int messageRes, int btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(titleRes));
-        defaultRoundDialog.setMessage(getResources().getString(messageRes));
-        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), (dialog, id) -> {
-            if (mode == 1) {
-                writeSeedKey();
-            }
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(titleRes))
+                .positiveText(getResources().getString(btnRes))
+                .content(getResources().getString(messageRes))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (mode == 1) {
+                            writeSeedKey();
+                        }
+                    }
+                })
+                .show();
     }
 
     private void writeSeedKey() {

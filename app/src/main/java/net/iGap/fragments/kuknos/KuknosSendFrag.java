@@ -10,14 +10,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.R;
@@ -27,12 +21,19 @@ import net.iGap.databinding.FragmentKuknosSendBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosSendVM;
 
 import java.io.IOException;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
 
@@ -151,23 +152,27 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
 
     private void onTransfer() {
         viewModel.getPayResult().observe(getViewLifecycleOwner(), errorM -> {
-            DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_send_dialogTitle));
+
+            MaterialDialog.Builder dialog = new MaterialDialog.Builder(getContext())
+                    .title(getResources().getString(R.string.kuknos_send_dialogTitle))
+                    .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack));
+
             if (errorM.getResID() == 0)
-                defaultRoundDialog.setMessage(errorM.getMessage());
+                dialog.content(errorM.getMessage());
             else
-                defaultRoundDialog.setMessage(getResources().getString(errorM.getResID()));
+                dialog.content(getResources().getString(errorM.getResID()));
             if (!errorM.getState()) {
                 // success
-                defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-                    //close frag
-                    popBackStackFragment();
+                dialog.onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //close frag
+                        popBackStackFragment();
+                    }
                 });
-            } else {
-                // error
-                defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), null);
             }
-            defaultRoundDialog.show();
+            dialog.show();
+
         });
     }
 

@@ -6,20 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
 import net.iGap.adapter.kuknos.WalletHistoryRAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosWHistoryBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosWHistoryVM;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
 
@@ -91,14 +93,18 @@ public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
     private void onError() {
         viewModel.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
-                DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-                defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
-                        .setMessage(getResources().getString(R.string.kuknos_wHistory_error));
-                defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-                    //close frag
-                    popBackStackFragment();
-                });
-                defaultRoundDialog.show();
+                new MaterialDialog.Builder(getContext())
+                        .title(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
+                        .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                        .content(getResources().getString(R.string.kuknos_wHistory_error))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                //close frag
+                                popBackStackFragment();
+                            }
+                        })
+                        .show();
             }
         });
     }

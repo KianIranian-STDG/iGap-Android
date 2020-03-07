@@ -1,9 +1,5 @@
 package net.iGap.viewmodel.kuknos;
 
-import androidx.core.text.HtmlCompat;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
@@ -22,6 +18,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import androidx.core.text.HtmlCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private ObservableField<String> amount = new ObservableField<>();
@@ -38,7 +38,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private MutableLiveData<Boolean> nextPage;
     private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
     private int PMNprice = -1;
-    private int maxAmount = 1000000;
+    private double maxAmount = 1000000;
     Double sumTemp;
     private PanelRepo panelRepo = new PanelRepo();
     private MutableLiveData<String> TandCAgree;

@@ -10,6 +10,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.R;
+import net.iGap.adapter.kuknos.WalletHistorySpinnerAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.databinding.FragmentKuknosTradeBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.viewmodel.kuknos.KuknosTradeVM;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -17,14 +27,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-
-import net.iGap.R;
-import net.iGap.adapter.kuknos.WalletHistorySpinnerAdapter;
-import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentKuknosTradeBinding;
-import net.iGap.helper.HelperFragment;
-import net.iGap.module.dialog.DefaultRoundDialog;
-import net.iGap.viewmodel.kuknos.KuknosTradeVM;
 
 public class KuknosTradeFrag extends BaseAPIViewFrag<KuknosTradeVM> {
 
@@ -131,26 +133,29 @@ public class KuknosTradeFrag extends BaseAPIViewFrag<KuknosTradeVM> {
     }
 
     private void showDialog(boolean state, int messageResource) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        MaterialDialog.Builder dialog = new MaterialDialog.Builder(getContext())
+                .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                .content(getResources().getString(messageResource))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (!state)
+                            popBackStackFragment();
+                    }
+                });
         if (!state)
-            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_changePIN_successTitle));
+            dialog.title(getResources().getString(R.string.kuknos_changePIN_successTitle));
         else
-            defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_changePIN_failTitle));
-        defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-            if (!state)
-                popBackStackFragment();
-        });
-        defaultRoundDialog.show();
+            dialog.title(getResources().getString(R.string.kuknos_changePIN_failTitle));
+        dialog.show();
     }
 
     private void showDialog(String messageResource) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_changePIN_failTitle));
-        defaultRoundDialog.setMessage(messageResource);
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(R.string.kuknos_changePIN_failTitle))
+                .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                .content(messageResource)
+                .show();
     }
 
     private void onProgress() {
