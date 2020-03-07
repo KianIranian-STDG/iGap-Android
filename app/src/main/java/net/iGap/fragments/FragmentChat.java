@@ -4242,6 +4242,7 @@ public class FragmentChat extends BaseFragment
 
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.GONE);
             ll_AppBarSelected.setVisibility(View.VISIBLE);
+            showPopup(-1);
         } else {
             FragmentChat.isInSelectionMode = false;
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
@@ -9248,10 +9249,9 @@ public class FragmentChat extends BaseFragment
                         initHash = true;
                         initHashView();
                     }
-//                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
 
                     showPopup(KeyboardView.MODE_KEYBOARD);
-                    AndroidUtils.showKeyboard(edtSearchMessage);
+                    G.handler.postDelayed(() -> editTextRequestFocus(edtSearchMessage), 200);
 
                 } else if (items.get(position).equals(getString(R.string.clear_history))) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
