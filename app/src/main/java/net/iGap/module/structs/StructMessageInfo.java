@@ -72,7 +72,7 @@ public class StructMessageInfo implements Parcelable {
 
     public MyType.SendType getSendType() {
         if (this.realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
-            return MyType.SendType.send;
+                return MyType.SendType.send;
         } else {
             return MyType.SendType.recvive;
         }
