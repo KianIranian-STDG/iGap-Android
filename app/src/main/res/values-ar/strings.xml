@@ -3196,4 +3196,5 @@
     <string name="secondary_password">كلمة المرور الثانية</string>
     <string name="default_deposit">الودائع الافتراضية</string>
     <string name="custom_deposit">إيداع مخصص</string>
+    <string name="mobile_bank_login_hint">استخدم اسم المستخدم وكلمة المرور للدخول إلى بنك پارسیان للجوال.</string>
 </resources>

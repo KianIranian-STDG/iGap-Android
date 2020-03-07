@@ -2186,4 +2186,5 @@
     <string name="secondary_password">Deuxième mot de passe</string>
     <string name="default_deposit">Dépôt par défaut</string>
     <string name="custom_deposit">Dépôt personnalisé</string>
+    <string name="mobile_bank_login_hint">Utilisez votre nom d\'utilisateur et votre mot de passe pour vous connecter à la banque mobile Parsian.</string>
 </resources>

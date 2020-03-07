@@ -2524,4 +2524,5 @@
     <string name="secondary_password">رمز دوم</string>
     <string name="default_deposit">حساب پیش فرض</string>
     <string name="custom_deposit">حساب دلخواه</string>
+    <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان ‌خود ‌را وارد نمایید</string>
 </resources>

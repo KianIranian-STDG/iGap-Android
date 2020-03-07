@@ -2235,5 +2235,6 @@
     <string name="custom_deposit">حساب دلخواه</string>
 
     <string name="E_4_14">You do not have access!</string>
+    <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان‌ خود ‌را وارد نمایید</string>
 
 </resources>
