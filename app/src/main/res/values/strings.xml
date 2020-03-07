@@ -2582,5 +2582,6 @@ Want to get it?</string>
     <string name="secondary_password">Secondary Password</string>
     <string name="default_deposit">Default Deposit</string>
     <string name="custom_deposit">Custom Deposit</string>
+    <string name="mobile_bank_login_hint">Use your username and password to login Parsian mobile bank.</string>
 
 </resources>

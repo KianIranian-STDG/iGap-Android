@@ -46,17 +46,30 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/lblHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:gravity="center"
+                    android:text="@string/mobile_bank_login_hint"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/verySmallTextSize"
+                    app:layout_constraintEnd_toEndOf="@id/edtUserName"
+                    app:layout_constraintStart_toStartOf="@id/edtUserName"
+                    app:layout_constraintTop_toBottomOf="@id/ivLogo" />
+
+                <TextView
                     android:id="@+id/lblUsername"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp40"
+                    android:layout_marginTop="@dimen/dp20"
                     android:gravity="start"
                     android:text="@string/user_name"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/edtUserName"
                     app:layout_constraintStart_toStartOf="@id/edtUserName"
-                    app:layout_constraintTop_toBottomOf="@id/ivLogo" />
+                    app:layout_constraintTop_toBottomOf="@id/lblHint" />
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edtUserName"
