@@ -14,12 +14,14 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.databinding.FileManagerFragmentBinding;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.IPickFile;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FileManagerViewModel;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
     private FileManagerViewModel mViewModel;
     private FileManagerFragmentBinding binding;
     private HelperToolbar mHelperToolbar;
-    private IPickFile mListener;
+    private WeakReference<IPickFile> mListener;
     private Boolean isSortByDate = null;
 
     public static FileManagerFragment newInstance(IPickFile listener) {
@@ -68,15 +70,16 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
 
     private void setupListeners() {
         mViewModel.getSendClickListener().observe(getViewLifecycleOwner(), state -> {
-            if (mListener != null) {
-                mListener.onPick(mSelectedList);
+            if (mListener != null && mListener.get() != null && getActivity() != null) {
+                mListener.get().onPick(mSelectedList , binding.edtMessage.getText() == null ? null : binding.edtMessage.getText().toString());
+                new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
             }
         });
     }
 
     private void getDataFromArguments() {
         if (getArguments() != null) {
-            mListener = (IPickFile) getArguments().getSerializable(LISTENER_KEY);
+            mListener = new WeakReference<>((IPickFile) getArguments().getSerializable(LISTENER_KEY));
         }
     }
 

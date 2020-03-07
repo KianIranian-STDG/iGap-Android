@@ -316,7 +316,7 @@ public class FragmentExplorer extends BaseFragment {
 
                     ArrayList<String> list = new ArrayList<>();
                     list.add(fileDir.getAbsolutePath());
-                    pickFile.onPick(list);
+                   // pickFile.onPick(list);
                 }
 
                 finish();
