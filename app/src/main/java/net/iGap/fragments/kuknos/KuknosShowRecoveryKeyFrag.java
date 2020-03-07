@@ -8,14 +8,6 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
@@ -28,6 +20,14 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosShowRecoveryKeyVM;
 
 import java.util.Arrays;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
@@ -51,6 +51,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_recovery_key, container, false);
         binding.setViewmodel(kuknosShowRecoveryKeyVM);
         binding.setLifecycleOwner(this);
+        isNeedResume = true;
         return binding.getRoot();
 
     }
@@ -59,8 +60,6 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        // disable screenshot.
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         kuknosShowRecoveryKeyVM.initMnemonic();
 
@@ -130,6 +129,19 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                 binding.fragKuknosRKSProgressV.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // disable screenshot.
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
     }
 
 }

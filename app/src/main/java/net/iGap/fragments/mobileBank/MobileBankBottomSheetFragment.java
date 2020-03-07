@@ -80,7 +80,9 @@ public class MobileBankBottomSheetFragment extends BaseBottomSheet {
         });
 
         mViewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner(), msg -> {
-            if (msg != null) HelperError.showSnackMessage(msg, false);
+            if (msg != null) {
+                dismiss();
+                HelperError.showSnackMessage(msg, false);}
         });
 
         binding.btnClose.setOnClickListener(v -> dismiss());

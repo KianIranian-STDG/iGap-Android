@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.R;
 import net.iGap.model.mobileBank.BankAuth;
@@ -72,7 +73,7 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
-                        Log.e("bank_token", data.getData().getAccessToken());
+                        if(BuildConfig.DEBUG) Log.e("bank_token", data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
                         onLoginResponse.postValue(true);
                     }

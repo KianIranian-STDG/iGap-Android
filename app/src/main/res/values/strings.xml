@@ -534,6 +534,8 @@
     <string name="E_212_1">Bad payload: Invalid room ID</string>
     <string name="E_213">Internal Server Error</string>
     <string name="E_214">This operation is not permitted.</string>
+    <string name="E_4_14">You do not have access!</string>
+
     <string name="resend_all_messages" formatted="false">Resend %d messages</string>
     <string name="resend_chat_message" formatted="false">Resend messages</string>
     <string name="if_you_are_away_for">Away for</string>
@@ -2577,5 +2579,9 @@ Want to get it?</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
     <string name="inter_cheque_amount">Enter Amount</string>
     <string name="take_turn">Take turn</string>
+    <string name="secondary_password">Secondary Password</string>
+    <string name="default_deposit">Default Deposit</string>
+    <string name="custom_deposit">Custom Deposit</string>
+    <string name="mobile_bank_login_hint">Use your username and password to login Parsian mobile bank.</string>
 
 </resources>

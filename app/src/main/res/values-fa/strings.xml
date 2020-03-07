@@ -519,6 +519,7 @@
     <string name="E_156">تخریب اکانت : کد اشتباه است</string>
     <string name="E_157">تخریب اکانت : کد اعتبار ندارد</string>
     <string name="E_158">تخریب اکانت : تلاش بیش از اندازه</string>
+    <string name="E_4_14">شما اجازه دسترسی ندارید!</string>
     <string name="time_out">عدم امکان اتصال به سرور</string>
     <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>‬‬‬‬‬‬
     <string name="resend_chat_message">"‫ارسال دوبارهٔ پیام"</string>‬‬‬‬‬‬
@@ -2425,7 +2426,7 @@
     <string name="remained_loan">اقساط باقیمانده:</string>
     <string name="state">وضعیت:</string>
     <string name="mobile_bank_detail_cell_payAmount">مبلغ پرداختی: %1$s %2$s</string>
-    <string name="mobile_bank_detail_cell_payStatus">حالة الدفع: %1$s</string>
+    <string name="mobile_bank_detail_cell_payStatus">وضعیت پرداخت: %1$s</string>
     <string name="mobile_bank_detail_cell_paymentDate">تاریخ پرداخت: %1$s</string>
     <string name="mobile_bank_detail_cell_penaltyAmount">مبلغ جریمه: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_unpaidAmount">مبلغ باقیمانده: %1$s %2$s</string>
@@ -2517,8 +2518,11 @@
     <string name="posted">ارسال شده</string>
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال‌سازی</string>
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
-    <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟!
-        توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
+    <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟! توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
     <string name="inter_cheque_amount">ثبت مبلغ </string>
     <string name="take_turn">دریافت نوبت</string>
+    <string name="secondary_password">رمز دوم</string>
+    <string name="default_deposit">حساب پیش فرض</string>
+    <string name="custom_deposit">حساب دلخواه</string>
+    <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان ‌خود ‌را وارد نمایید</string>
 </resources>

@@ -110,11 +110,11 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
             case R.string.Inventory:
             case R.string.transactions:
-                if (mode == HomeTabMode.DEPOSIT) {
-                    onTransactionsClicked();
-                } else {
-                    showComingSoon();
-                }
+                //if (mode == HomeTabMode.DEPOSIT) {
+                    onTransactionsClicked(getCurrentAccount());
+               /* } else {
+                    getCardDepositAndOpenTransaction(getCurrentAccount());
+                }*/
                 break;
 
             case R.string.sheba_number:
@@ -142,6 +142,12 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 onTakeTurnClicked();
                 break;
         }
+    }
+
+    private void getCardDepositAndOpenTransaction(String card) {
+        if(card == null) return;
+        showProgress();
+        viewModel.getCardDeposits(card);
     }
 
     private void onFacilitiesClick() {
@@ -179,7 +185,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         items.add(new MobileBankHomeItemsModel(R.string.cardToCardBtnText, R.drawable.ic_mb_card_to_card));
         items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.drawable.ic_mb_balance));
         items.add(new MobileBankHomeItemsModel(R.string.transactions, R.drawable.ic_mb_transaction));
-        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
+        //items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
         items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.drawable.ic_mb_pooya_pass));
         items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.drawable.ic_mb_block));
         return items;
@@ -233,6 +239,13 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 mDialogWait.dismiss();
             } else {
                 showMessage(getString(R.string.attention), message);
+            }
+        });
+
+        viewModel.getCardDepositResponse().observe(getViewLifecycleOwner() , deposit->{
+            mDialogWait.dismiss();
+            if(deposit != null && !deposit.equals("-1")){
+                onTransactionsClicked(deposit);
             }
         });
 
@@ -315,21 +328,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 .load();
     }
 
-    private void onTransactionsClicked() {
+    private void onTransactionsClicked(String account) {
 
         if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(getCurrentAccount(), mode == HomeTabMode.CARD))
-                    .setReplace(false)
-                    .load();
-        }
-
-    }
-
-    private void onLoanClicked() {
-
-        if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(),
-                    MobileBankServiceLoanDetailFragment.newInstance("58000001529602"))
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(account, mode == HomeTabMode.CARD))
                     .setReplace(false)
                     .load();
         }

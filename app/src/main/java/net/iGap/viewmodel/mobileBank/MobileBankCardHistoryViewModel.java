@@ -76,7 +76,7 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankMainAndHistory
             data.add(new BankDateModel(monthName.strMonth, temp, false, true));
         }
         calender.setValue(data);
-        getAccountDataForMonth(0);
+        //getAccountDataForMonth(0);
     }
 
     /*private void getCurrentTime() {
@@ -135,9 +135,9 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankMainAndHistory
     public void getAccountDataForMonth(int offset) {
         Log.d(TAG, "getAccountDataForMonth: " + calender.getValue().get(datePosition).getStartMonth());
         Log.d(TAG, "getAccountDataForMonth: " + calender.getValue().get(datePosition).getEndMonth());
+        noItemVisibility.set(View.GONE);
         if (offset == 0) {
             bills.setValue(null);
-            noItemVisibility.set(View.GONE);
         }
         // set bills
         MobileBankRepository.getInstance().getAccountHistory(depositNumber, offset,

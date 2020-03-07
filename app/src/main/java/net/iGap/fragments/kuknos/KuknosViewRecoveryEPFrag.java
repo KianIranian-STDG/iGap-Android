@@ -8,6 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.R;
+import net.iGap.databinding.FragmentKuknosViewRecoveryEpBinding;
+import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.kuknos.KuknosViewRecoveryEPVM;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -15,15 +25,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-
-import net.iGap.R;
-import net.iGap.databinding.FragmentKuknosViewRecoveryEpBinding;
-import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.module.dialog.DefaultRoundDialog;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.viewmodel.kuknos.KuknosViewRecoveryEPVM;
 
 public class KuknosViewRecoveryEPFrag extends BaseFragment {
 
@@ -92,13 +93,11 @@ public class KuknosViewRecoveryEPFrag extends BaseFragment {
     }
 
     private void showDialog(int messageResource) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
-        defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle))
+                .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                .content(getResources().getString(messageResource))
+                .show();
     }
 
     private void onProgress() {
