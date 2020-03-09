@@ -33,8 +33,8 @@ public class PanelRepo {
     }
 
     public String getUserInfo() {
-        return /*"\nSeed Key is: " + userRepo.getSeedKey()
-                + */"\nPublic Key is: " + userRepo.getAccountID()
+        return "\nSeed Key is: " + userRepo.getSeedKey()
+                + "\nPublic Key is: " + userRepo.getAccountID()
                 + "\nPIN is: " + userRepo.getPIN()
                 + "\nmnemonic is: " + userRepo.getMnemonic();
     }
