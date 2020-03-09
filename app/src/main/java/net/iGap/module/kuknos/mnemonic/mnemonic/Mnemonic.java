@@ -65,7 +65,7 @@ public class Mnemonic {
         byte[] salt = PrimitiveUtil.toBytes(saltChars);
 
         try {
-            KeySpec ks = new PBEKeySpec(mnemonic, salt, 2048, 512);
+            KeySpec ks = new PBEKeySpec(mnemonic, salt, 1024, 256);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             return skf.generateSecret(ks).getEncoded();
         } catch (Exception e) {
