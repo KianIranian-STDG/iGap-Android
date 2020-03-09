@@ -1,6 +1,7 @@
 package net.iGap.adapter.mobileBank;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +19,12 @@ import net.iGap.model.mobileBank.BankHistoryModel;
 import net.iGap.module.mobileBank.JalaliCalendar;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -31,7 +36,6 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public MobileBankHistoryAdapter(List<BankHistoryModel> dates, OnItemClickListener clickListener) {
         this.mdata = dates;
-//        createFakeData();
         this.clickListener = clickListener;
     }
 
@@ -139,7 +143,6 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         void initView(int position) {
-            Log.d("amini", "initView: " + position);
             if (mdata.get(position).getTransferAmount() < 0) {
                 title.setText("برداشت");
                 statusIcon.setText(R.string.bank_withdraw_ic);
@@ -153,12 +156,46 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             DecimalFormat df = new DecimalFormat(",###");
             value.setText(HelperMobileBank.checkNumbersInMultiLangs("" + df.format(mdata.get(position).getTransferAmount())) + " " + context.getString(R.string.rial));
-            date.setText(JalaliCalendar.getPersianDate(HelperMobileBank.checkNumbersInMultiLangs(mdata.get(position).getDate())));
+            date.setText(getDateTime(mdata.get(position).getDate()));
             container.setOnClickListener(v -> clickListener.onClick(position));
             if (HelperCalander.isPersianUnicode)
                 arrow.setRotation(90);
         }
     }
+
+    private String getDateTime(String entry){
+        try {
+            String [] dateTime = entry.split(" ");
+            String time = dateTime[1];
+
+            String convertDate , convertTime;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date mDate = sdf.parse(entry);
+            long timeInMilliseconds = mDate.getTime();
+            convertDate =  HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+            convertTime = convertTime(time);
+            if(HelperCalander.isPersianUnicode){
+                convertDate = HelperCalander.convertToUnicodeFarsiNumber(convertDate);
+            }
+            return convertDate + " | " + convertTime;
+        }catch (Exception e){
+            return JalaliCalendar.getPersianDate(entry);
+        }
+    }
+
+    private String convertTime(String dateStr){
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = null;
+        try {
+            date = df.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        df.setTimeZone(TimeZone.getTimeZone("GMT+3:30"));
+        return df.format(date);
+    }
+
 
     public class LoadViewHolder extends RecyclerView.ViewHolder {
 
