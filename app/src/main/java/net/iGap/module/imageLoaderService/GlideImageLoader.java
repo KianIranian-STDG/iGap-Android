@@ -20,6 +20,18 @@ public class GlideImageLoader implements ImageLoaderService {
         load(targetImageView, imageUrl, 0);
     }
 
+    @Override
+    public void loadImage(ImageView targetImageView, String imageUrl, boolean clear) {
+        if (clear)
+            clear(targetImageView);
+        load(targetImageView, imageUrl, 0);
+    }
+
+    @Override
+    public void clear(ImageView targetImageView) {
+        Glide.with(targetImageView.getContext()).clear(targetImageView);
+    }
+
     public void load(ImageView targetImageView, String imageUrl, int placeHolder) {
         if (targetImageView == null)
             throw new NullPointerException("targetImageView NULL");

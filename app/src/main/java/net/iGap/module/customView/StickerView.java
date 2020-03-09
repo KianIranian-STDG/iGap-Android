@@ -94,14 +94,14 @@ public class StickerView extends FrameLayout implements EventListener {
 
                     stickerIv = new AppCompatImageView(getContext());
                     addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
-                    ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath);
+                    ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath, true);
                 } else {
-                    ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath);
+                    ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath, true);
                 }
             }
         } else {
             if (type == StructIGSticker.NORMAL_STICKER) {
-                stickerIv.setBackgroundResource(0);
+                ImageLoadingServiceInjector.inject().clear(stickerIv);
             }
             IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(id, viewToken, fileSize, viewPath));
         }
