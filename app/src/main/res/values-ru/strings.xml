@@ -1954,5 +1954,14 @@
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
     <string name="kuknos_send_token_error">Не могу отправить этот токен.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="internal_desc">Просмотрите вашу файловую систему</string>
+    <string name="external_desc">Просмотрите ваше внешнее хранилище</string>
+    <string name="file_manager_app_desc">Просмотрите папку приложения</string>
+    <string name="file_manager_image_desc">Отправить файл изображений</string>
+    <string name="file_manager_video_desc">Отправить видео файл</string>
+    <string name="file_manager_music">Отправить аудиофайл</string>
+    <string name="folder">скоросшиватель</string>
+    <string name="internal_storage">Внутреннее хранилище</string>
+    <string name="external_storage">Внешнее хранилище</string>
 
 </resources>

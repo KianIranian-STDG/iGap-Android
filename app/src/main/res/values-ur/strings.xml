@@ -2228,5 +2228,14 @@
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="internal_desc">کاوش در حافظه داخلی دستگاه</string>
+    <string name="external_desc">کاوش در حافظه خارجی دستگاه</string>
+    <string name="file_manager_app_desc">کاوش در پوشه آیگپ</string>
+    <string name="file_manager_image_desc">ارسال فایل های تصویری</string>
+    <string name="file_manager_video_desc">ارسال فایل های ویدیویی</string>
+    <string name="file_manager_music">ارسال فایل های صوتی</string>
+    <string name="folder">پوشه</string>
+    <string name="internal_storage">حافظه داخلی</string>
+    <string name="external_storage">حافظه جانبی</string>
 
 </resources>

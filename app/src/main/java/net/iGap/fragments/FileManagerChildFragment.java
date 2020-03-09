@@ -139,7 +139,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     }
 
     @Override
-    public void onGalleryClicked(String type, int position) {
+    public void onGalleryClicked(int type, int position) {
         //getOpenGallery(type);
     }
 

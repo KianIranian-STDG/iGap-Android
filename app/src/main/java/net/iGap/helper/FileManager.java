@@ -322,7 +322,10 @@ public class FileManager {
     public static class SortFileName implements Comparator<StructExplorerItem> {
         @Override
         public int compare(StructExplorerItem f1, StructExplorerItem f2) {
-            return f1.name.compareTo(f2.name);
+            if(f1.nameStr == null)
+                return 1;
+            else
+                return f1.nameStr.compareTo(f2.nameStr);
         }
     }
 

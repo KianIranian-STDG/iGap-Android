@@ -33,10 +33,12 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
         if (new File(Environment.getExternalStorageDirectory().getAbsolutePath()).exists()) {
             addItemToList(
-                    "Internal Storage",
+                    R.string.internal_storage,
+                    null ,
                     R.drawable.ic_fm_internal,
                     Environment.getExternalStorageDirectory().getAbsolutePath(),
-                    "Browse your file system",
+                    R.string.internal_desc,
+                    null ,
                     R.drawable.shape_file_manager_file_bg,
                     true
             );
@@ -45,10 +47,12 @@ public class FileManagerChildViewModel extends BaseViewModel {
         for (String sdPath : storageList) {
             if (new File(sdPath).exists()) {
                 addItemToList(
-                        "External Storage",
+                        R.string.external_storage,
+                        null ,
                         R.drawable.ic_fm_memory,
                         sdPath + "/",
-                        "Browse your external storage",
+                        R.string.external_desc,
+                        null ,
                         R.drawable.shape_file_manager_folder_bg,
                         true
                 );
@@ -58,10 +62,12 @@ public class FileManagerChildViewModel extends BaseViewModel {
         if (!G.DIR_SDCARD_EXTERNAL.equals("")) {
             if (new File(G.DIR_SDCARD_EXTERNAL).exists()) {
                 addItemToList(
-                        "iGap SdCard",
+                        R.string.external_storage,
+                        null ,
                         R.drawable.ic_fm_folder,
                         G.DIR_SDCARD_EXTERNAL + "/",
-                        "Browse the app's folder",
+                        R.string.file_manager_app_desc,
+                        null ,
                         R.drawable.shape_file_manager_folder_bg,
                         true
                 );
@@ -70,38 +76,46 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
         if (new File(G.DIR_APP).exists()) {
             addItemToList(
-                    "iGap",
+                    R.string.app_name,
+                    null ,
                     R.drawable.ic_fm_folder,
                     G.DIR_APP + "/",
-                    "Browse the app's folder",
+                    R.string.file_manager_app_desc,
+                    null ,
                     R.drawable.shape_file_manager_file_bg,
                     true
             );
         }
 
         addItemToList(
-                "Pictures",
+                R.string.images,
+                null ,
                 R.drawable.ic_fm_image,
                 null,
-                "To send images file",
+                R.string.file_manager_image_desc,
+                null ,
                 R.drawable.shape_file_manager_file_1_bg,
                 false
         );
 
         addItemToList(
-                "Videos",
+                R.string.videos,
+                null ,
                 R.drawable.ic_fm_video,
                 null,
-                "To send videos file",
+                R.string.file_manager_video_desc,
+                null ,
                 R.drawable.shape_file_manager_file_1_bg,
                 false
         );
 
         addItemToList(
-                "Musics",
+                R.string.audios,
+                null ,
                 R.drawable.ic_fm_audio,
                 G.DIR_APP + "/",
-                "To send musics file",
+                R.string.file_manager_music,
+                null ,
                 R.drawable.shape_file_manager_file_2_bg,
                 false
         );
@@ -125,10 +139,12 @@ public class FileManagerChildViewModel extends BaseViewModel {
                     File subFile = new File(address);
 
                     addItemToList(
+                            0 ,
                             item,
                             subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
                             address,
-                            getFileDescription(subFile),
+                            subFile.isDirectory() ? R.string.folder : 0,
+                            subFile.isDirectory() ? null : getFileDescription(subFile),
                             subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
                             true
                     );
@@ -153,37 +169,27 @@ public class FileManagerChildViewModel extends BaseViewModel {
         }
     }
 
-    private void addItemToList(String title, int image, String path) {
+    private void addItemToList(int title ,String titleStr, int image, String path, int desc , String descStr, int background, boolean isFolderOrFile) {
         StructExplorerItem item = new StructExplorerItem();
         item.name = title;
-        item.image = image;
-        item.path = path;
-        mItems.add(item);
-    }
-
-    private void addItemToList(String title, int image, String path, String desc, int background, boolean isFolderOrFile) {
-        StructExplorerItem item = new StructExplorerItem();
-        item.name = title;
+        item.nameStr = titleStr;
         item.image = image;
         item.path = path;
         item.backColor = background;
         item.description = desc;
+        item.descriptionStr = descStr;
         item.isFolderOrFile = isFolderOrFile;
         mItems.add(item);
     }
 
     private String getFileDescription(File file) {
-        if (file.isDirectory()) {
-            return "Folder";
+        float kb, mb;
+        kb = file.length() / 1024;
+        mb = kb / 1024;
+        if(mb == 0) {
+            return (new DecimalFormat("##.##").format(kb)) + " kb";
         } else {
-            float kb, mb;
-            kb = file.length() / 1024;
-            mb = kb / 1024;
-            if (mb == 0) {
-                return (new DecimalFormat("##.##").format(kb)) + " kb";
-            } else {
-                return (new DecimalFormat("##.##").format(mb)) + " mb";
-            }
+            return (new DecimalFormat("##.##").format(mb)) + " mb";
         }
     }
 

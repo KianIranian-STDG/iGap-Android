@@ -58,14 +58,13 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
         StructExplorerItem rowItem = items.get(position);
         holder.checkBox.setChecked(rowItem.isSelected);
-        holder.txtTitle.setText(rowItem.name);
         holder.imageView.setImageResource(rowItem.image);
         if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
 
         if (rowItem.isFolderOrFile && (rowItem.image == R.drawable.ic_fm_image_small || rowItem.image == R.drawable.ic_fm_video_small)) {
-            if(rowItem.name.endsWith(".png")) holder.imageView.setImageResource(0);
+            if(rowItem.path.endsWith(".png")) holder.imageView.setImageResource(0);
             holder.imageView.setPadding(0, 0, 0, 0);
-            ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.name.endsWith(".png") ? 0 : rowItem.image);
+            ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.path.endsWith(".png") ? 0 : rowItem.image);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
             int padding = i_Dp(R.dimen.dp10);
@@ -73,11 +72,16 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         }
 
-        if (rowItem.description != null) {
-            holder.txtSubtitle.setVisibility(View.VISIBLE);
-            holder.txtSubtitle.setText(rowItem.description);
+        if(rowItem.nameStr == null) {
+            holder.txtTitle.setText(rowItem.name);
+        }else {
+            holder.txtTitle.setText(rowItem.nameStr);
+        }
+
+        if (rowItem.descriptionStr != null) {
+            holder.txtSubtitle.setText(rowItem.descriptionStr);
         } else {
-            holder.txtSubtitle.setVisibility(View.GONE);
+            holder.txtSubtitle.setText(rowItem.description);
         }
 
         holder.itemView.setOnClickListener(view -> {
@@ -128,6 +132,6 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
         void onFolderClicked(String path, int position);
 
-        void onGalleryClicked(String type, int position);
+        void onGalleryClicked(int type, int position);
     }
 }

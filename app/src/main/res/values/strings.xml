@@ -2568,5 +2568,14 @@ Want to get it?</string>
     <string name="gift_sticker_inquiry_and_activated">Inquiry and activated</string>
     <string name="kuknos_send_token_error">Can Not send this token.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="internal_desc">Browse your file system</string>
+    <string name="external_desc">Browse your external storage</string>
+    <string name="file_manager_app_desc">Browse the app\'s folder</string>
+    <string name="file_manager_image_desc">To send images file</string>
+    <string name="file_manager_video_desc">To send videos file</string>
+    <string name="file_manager_music">To send audios file</string>
+    <string name="folder">Folder</string>
+    <string name="internal_storage">Internal storage</string>
+    <string name="external_storage">External storage</string>
 
 </resources>
