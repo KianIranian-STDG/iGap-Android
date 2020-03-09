@@ -7561,6 +7561,8 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
+        showPopup(-1);
+
         if (isShowLayoutUnreadMessage) {
             removeLayoutUnreadMessage();
         }
@@ -9136,6 +9138,8 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onRightIconClickListener(View view) {
+
+        showPopup(-1);
 
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.Search));
