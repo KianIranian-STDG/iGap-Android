@@ -2,10 +2,6 @@ package net.iGap.viewmodel.kuknos;
 
 import android.util.Log;
 
-import androidx.core.text.HtmlCompat;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.gson.Gson;
 
 import net.iGap.G;
@@ -20,6 +16,10 @@ import net.iGap.repository.kuknos.PanelRepo;
 import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
+
+import androidx.core.text.HtmlCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosPanelVM extends BaseAPIViewModel {
 
@@ -114,7 +114,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     public void spinnerSelect(int position) {
         this.position = position;
         KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
-        DecimalFormat df = new DecimalFormat("#,##0.00");
+        DecimalFormat df = new DecimalFormat("#,###");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
         currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));
@@ -125,7 +125,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         if (asset == null || asset.getAssets().size() == 0)
             return;
         KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
-        DecimalFormat df = new DecimalFormat("#,##0.00");
+        DecimalFormat df = new DecimalFormat("#,###");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(
                         df.format(Double.valueOf(temp.getBalance()) * Double.valueOf(asset.getAssets().get(0).getSellRate()))) :
