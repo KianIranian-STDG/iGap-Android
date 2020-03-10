@@ -1,9 +1,12 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,12 +72,67 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
     }
 
     private void setupListeners() {
+
+        binding.btnRemoveSearch.setOnClickListener(v -> {
+            Editable searchText = binding.edtSearch.getText();
+            if (searchText == null || searchText.toString().isEmpty()) {
+                closeSearch();
+            } else {
+                binding.edtSearch.setText("");
+                doSearchInSubFragments(null);
+            }
+        });
+
+        binding.edtSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                closeKeyboard(v);
+            }
+            return false;
+        });
+
+        binding.edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count == 0) {
+                    doSearchInSubFragments(null);
+                } else {
+                    doSearchInSubFragments(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         mViewModel.getSendClickListener().observe(getViewLifecycleOwner(), state -> {
             if (mListener != null && mListener.get() != null && getActivity() != null) {
                 mListener.get().onPick(mSelectedList , binding.edtMessage.getText() == null ? null : binding.edtMessage.getText().toString());
                 new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
             }
         });
+    }
+
+    void closeSearch() {
+        binding.lytSearch.setVisibility(View.INVISIBLE);
+        binding.toolbar.setVisibility(View.VISIBLE);
+        binding.edtSearch.setText("");
+        doSearchInSubFragments(null);
+        closeKeyboard(binding.edtSearch);
+    }
+
+    private void doSearchInSubFragments(String text) {
+        if (getActivity() == null) return;
+        Fragment fragment = getTopFragment();
+        if (fragment instanceof FileManagerChildFragment) {
+            ((FileManagerChildFragment) fragment).doSearch(text);
+        }
     }
 
     private void getDataFromArguments() {
@@ -93,6 +151,17 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
                 .setRightIcons(R.string.search_icon, R.string.sort_icon)
                 .setListener(this);
         binding.toolbar.addView(mHelperToolbar.getView());
+        setToolbarIconVisibility(false);
+    }
+
+    void setToolbarIconVisibility(boolean state) {
+        if (state) {
+            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+        } else {
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+        }
     }
 
     public void setToolbarTitle(String title) {
@@ -116,15 +185,24 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
     }
 
     private void onSearchClicked() {
-
+        binding.toolbar.setVisibility(View.INVISIBLE);
+        binding.lytSearch.setVisibility(View.VISIBLE);
     }
 
     private boolean onBackClicked() {
+        if (binding.lytSearch.isShown()) {
+            closeSearch();
+            return true;
+        }
+
         int count = getChildFragmentManager().getBackStackEntryCount();
         if (count > 1) {
+            if (count == 2) setToolbarIconVisibility(false);
+            closeSearch();
             getChildFragmentManager().popBackStack();
             return true;
         }
+
         return false;
     }
 

@@ -16,6 +16,7 @@ import net.iGap.databinding.FileManagerChildFragmentBinding;
 import net.iGap.module.structs.StructExplorerItem;
 import net.iGap.viewmodel.FileManagerChildViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileManagerChildFragment extends BaseFragment implements AdapterFileManager.OnItemClickListenerExplorer {
@@ -63,6 +64,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     private void setupListeners() {
 
         binding.btnBack.setOnClickListener(v -> {
+            closeSearch();
             popBackStackFragment();
         });
 
@@ -120,6 +122,35 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         mAdapter.update(mViewModel.getItems());
     }
 
+    void doSearch(String text) {
+        if (text == null) {
+            binding.lytNothing.setVisibility(View.GONE);
+            binding.rvItems.setVisibility(View.VISIBLE);
+            mAdapter.update(mViewModel.getItems());
+            return;
+        }
+        List<StructExplorerItem> searchedResult;
+        searchedResult = getSearchResultFromMainList(text);
+        if (searchedResult.size() == 0) {
+            binding.lytNothing.setVisibility(View.VISIBLE);
+            binding.rvItems.setVisibility(View.GONE);
+        } else {
+            binding.lytNothing.setVisibility(View.GONE);
+            binding.rvItems.setVisibility(View.VISIBLE);
+            mAdapter.update(searchedResult);
+        }
+    }
+
+    private List<StructExplorerItem> getSearchResultFromMainList(String text) {
+        List<StructExplorerItem> result = new ArrayList<>();
+        for (int i = 0; i < mViewModel.getItems().size(); i++) {
+            if (mViewModel.getItems().get(i).nameStr != null && mViewModel.getItems().get(i).nameStr.toLowerCase().contains(text.toLowerCase().trim())) {
+                result.add(mViewModel.getItems().get(i));
+            }
+        }
+        return result;
+    }
+
     @Override
     public void onFileClicked(String path, int position , boolean isSelected) {
         if(isSelected){
@@ -132,9 +163,12 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
 
     @Override
     public void onFolderClicked(String path, int position) {
+        closeSearch();
         FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(path);
         if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
-            ((FileManagerFragment) getParentFragment()).loadFragment(fragment, FileManagerChildFragment.class.getName());
+            FileManagerFragment parent = ((FileManagerFragment) getParentFragment());
+            parent.setToolbarIconVisibility(true);
+            parent.loadFragment(fragment, FileManagerChildFragment.class.getName());
         }
     }
 
@@ -153,6 +187,12 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     private void addItemToParentSelectedList(String item) {
         if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
             ((FileManagerFragment) getParentFragment()).addItemToSelectedList(item);
+        }
+    }
+
+    private void closeSearch() {
+        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            ((FileManagerFragment) getParentFragment()).closeSearch();
         }
     }
 
