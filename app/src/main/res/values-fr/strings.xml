@@ -450,6 +450,7 @@
     <string name="E_156">destruction de compte :  code n\'est pas correct</string>
     <string name="E_157">destruction de compte : code n\'est pas valable</string>
     <string name="E_158">destruction de compte : nombre des  essais plus que limite</string>
+    <string name="E_4_14">Vous n\'y avez pas accès!</string>
     <string name="time_out">impossible de connexion au serveur</string>
     <string name="resend_all_messages">envoyer de nouveau le message</string>
     <string name="resend_chat_message">envoyer de nouveau le message</string>
@@ -2179,7 +2180,11 @@
     <string name="posted">Posted</string>
     <string name="gift_sticker_inquiry_and_activated">Enquête et activé</string>
     <string name="kuknos_send_token_error">Impossible d\'envoyer ce jeton.</string>
-    <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?!
-Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
+    <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?! Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
     <string name="inter_cheque_amount">Entrer le montant</string>
+    <string name="take_turn">Tour à tour</string>
+    <string name="secondary_password">Deuxième mot de passe</string>
+    <string name="default_deposit">Dépôt par défaut</string>
+    <string name="custom_deposit">Dépôt personnalisé</string>
+    <string name="mobile_bank_login_hint">Utilisez votre nom d\'utilisateur et votre mot de passe pour vous connecter à la banque mobile Parsian.</string>
 </resources>

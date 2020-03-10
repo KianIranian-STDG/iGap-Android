@@ -26,6 +26,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -1735,31 +1736,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        switch (id) {
-            case EventManager.ON_ACCESS_TOKEN_RECIVE:
-                int response = (int) message[0];
-                switch (response) {
-                    case socketMessages.SUCCESS:
-                        new android.os.Handler(getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                /*getUserCredit();*/
-                                retryConnectToWallet = 0;
-                            }
-                        });
-
-                        break;
-
-                    case socketMessages.FAILED:
-                        if (retryConnectToWallet < 3) {
-                            new RequestWalletGetAccessToken().walletGetAccessToken();
-                            retryConnectToWallet++;
+        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
+            int response = (int) message[0];
+            switch (response) {
+                case socketMessages.SUCCESS:
+                    new Handler(getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            /*getUserCredit();*/
+                            retryConnectToWallet = 0;
                         }
+                    });
 
-                        break;
-                }
-                // backthread
+                    break;
 
+                case socketMessages.FAILED:
+                    if (retryConnectToWallet < 3) {
+                        new RequestWalletGetAccessToken().walletGetAccessToken();
+                        retryConnectToWallet++;
+                    }
+
+                    break;
+            }
+            // backthread
         }
     }
 

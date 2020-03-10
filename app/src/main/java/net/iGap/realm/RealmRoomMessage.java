@@ -15,9 +15,7 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.Config;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -27,22 +25,25 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.upload.UploadManager;
-import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestChannelDeleteMessage;
 import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestGroupDeleteMessage;
 
+import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -734,14 +735,15 @@ public class RealmRoomMessage extends RealmObject {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm) {
+                public void execute(@NotNull Realm realm) {
 
                     /**
                      * if another account deleted this message set deleted true
                      * otherwise before this state was set
                      */
+
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                     if (response.getId().isEmpty()) {
-                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                         if (roomMessage != null) {
                             roomMessage.setDeleted(true);
                         }
@@ -749,6 +751,28 @@ public class RealmRoomMessage extends RealmObject {
 
                     if (G.onChatDeleteMessageResponse != null) {
                         G.onChatDeleteMessageResponse.onChatDeleteMessage(deleteVersion, messageId, roomId, response);
+                    }
+
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null) {
+                        if (realmRoom.getLastMessage().getMessageId() == messageId) {
+
+                            Number newLastMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                                    .notEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
+                                    .notEqualTo(RealmRoomMessageFields.DELETED, true)
+                                    .lessThan(RealmRoomMessageFields.MESSAGE_ID, messageId)
+                                    .max(RealmRoomMessageFields.MESSAGE_ID);
+
+                            if (newLastMessageId != null) {
+                                RealmRoomMessage newLastMessage = realm.where(RealmRoomMessage.class)
+                                        .equalTo(RealmRoomMessageFields.MESSAGE_ID, newLastMessageId.longValue())
+                                        .findFirst();
+
+                                realmRoom.setLastMessage(newLastMessage);
+                            } else {
+                                realmRoom.setLastMessage(null);
+                            }
+                        }
                     }
                 }
             });

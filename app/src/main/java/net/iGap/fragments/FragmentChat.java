@@ -97,7 +97,6 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterDrBot;
@@ -719,7 +718,7 @@ public class FragmentChat extends BaseFragment
 
         edtChat.setListener(this::chatMotionEvent);
 
-        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
 
         return attachToSwipeBack(notifyFrameLayout);
@@ -1159,7 +1158,7 @@ public class FragmentChat extends BaseFragment
         mAttachmentPopup = null;
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
@@ -1490,9 +1489,12 @@ public class FragmentChat extends BaseFragment
     }
 
     private void invalidateViews() {
-        int childCount = recyclerView.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            recyclerView.getChildAt(i).invalidate();
+//        int childCount = recyclerView.getChildCount();
+//        for (int i = 0; i < childCount; i++) {
+//            recyclerView.getChildAt(i).invalidate();
+//        }
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -4240,6 +4242,7 @@ public class FragmentChat extends BaseFragment
 
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.GONE);
             ll_AppBarSelected.setVisibility(View.VISIBLE);
+            showPopup(-1);
         } else {
             FragmentChat.isInSelectionMode = false;
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
@@ -4599,7 +4602,6 @@ public class FragmentChat extends BaseFragment
          */
         if (getFirstUnreadMessage() != null &&
                 getFirstUnreadMessage().isValid() &&
-                !getFirstUnreadMessage().isDeleted() &&
                 getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()
         ) {
             setCountNewMessageZero();
@@ -4608,9 +4610,9 @@ public class FragmentChat extends BaseFragment
         if (!isPaused && chatType != CHANNEL &&
                 (
                         !messageInfo.isSenderMe() &&
-                        messageInfo.realmRoomMessage.getStatus() != null &&
-                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) &&
-                        !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
+                                messageInfo.realmRoomMessage.getStatus() != null &&
+                                !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) &&
+                                !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
                 )
         ) {
             /**
@@ -7559,6 +7561,8 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
+        showPopup(-1);
+
         if (isShowLayoutUnreadMessage) {
             removeLayoutUnreadMessage();
         }
@@ -9135,6 +9139,8 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onRightIconClickListener(View view) {
 
+        showPopup(-1);
+
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.Search));
         items.add(getString(R.string.clear_history));
@@ -9247,10 +9253,9 @@ public class FragmentChat extends BaseFragment
                         initHash = true;
                         initHashView();
                     }
-//                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
 
                     showPopup(KeyboardView.MODE_KEYBOARD);
-                    AndroidUtils.showKeyboard(edtSearchMessage);
+                    G.handler.postDelayed(() -> editTextRequestFocus(edtSearchMessage), 200);
 
                 } else if (items.get(position).equals(getString(R.string.clear_history))) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -9361,7 +9366,7 @@ public class FragmentChat extends BaseFragment
      */
     @Override
     public void receivedMessage(int id, Object... message) {
-        if (id == ActivityCall.CALL_EVENT) {
+        if (id == EventManager.CALL_EVENT) {
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {

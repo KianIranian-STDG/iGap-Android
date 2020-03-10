@@ -101,12 +101,12 @@ public class UserRepo {
     }
 
     public void generateKeyPairWithMnemonicAndPIN() throws WalletException {
-//        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosMnemonic());
-//        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosPIN());
+        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosMnemonic());
+        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosPIN());
         KeyPair pair = Wallet.createKeyPair(realmKuknos.getKuknosMnemonic().toCharArray(), realmKuknos.getKuknosPIN().toCharArray(), 0);
         RealmKuknos.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
-//        Log.d("amini", "generateKeyPairWithMnemonic: seed :" + new String(pair.getSecretSeed()));
-//        Log.d("amini", "generateKeyPairWithMnemonic: public :" + pair.getAccountId());
+        Log.d("amini", "generateKeyPairWithMnemonic: seed :" + new String(pair.getSecretSeed()));
+        Log.d("amini", "generateKeyPairWithMnemonic: public :" + pair.getAccountId());
     }
 
     public void generateKeyPairWithSeed() {

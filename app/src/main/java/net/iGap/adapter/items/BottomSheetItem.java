@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
@@ -68,31 +69,9 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
     public void bindView(@NotNull final ViewHolder holder, @NotNull List payloads) {
         super.bindView(holder, payloads);
 
-        ImageHelper.correctRotateImage(mList.getPath(), true, new OnRotateImage() {
-            @Override
-            public void startProcess() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.prgBottomSheet.setVisibility(View.VISIBLE);
-                    }
-                });
-
-            }
-
-            @Override
-            public void success(String newPath) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.prgBottomSheet.setVisibility(View.GONE);
-                        G.imageLoader.displayImage("file://" + newPath, holder.imgSrc);
-                    }
-                });
-
-            }
-        }); //rotate image
-
+        Glide.with(holder.imgSrc.getContext())
+                .load("file://" + mList.getPath())
+                .into(holder.imgSrc);
 
         if (mList.isSelected) {
             holder.checkBoxSelect.setChecked(false);
@@ -123,7 +102,6 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         protected AppCompatCheckBox checkBoxSelect;
         private CardView cr;
         private ImageView imgSrc;
-        private ProgressBar prgBottomSheet;
 
         public ViewHolder(View view) {
             super(view);
@@ -131,7 +109,6 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
             cr = view.findViewById(R.id.card_view);
             imgSrc = view.findViewById(R.id.img_gallery);
             checkBoxSelect = view.findViewById(R.id.cig_checkBox_select_user);
-            prgBottomSheet = view.findViewById(R.id.prgBottomSheet);
         }
     }
 

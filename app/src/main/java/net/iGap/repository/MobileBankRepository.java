@@ -8,10 +8,12 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankBlockCheque;
 import net.iGap.model.mobileBank.BankCardBalance;
+import net.iGap.model.mobileBank.BankCardDepositsModel;
 import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankChequeBookListModel;
 import net.iGap.model.mobileBank.BankChequeSingle;
 import net.iGap.model.mobileBank.BankHistoryModel;
+import net.iGap.model.mobileBank.BankPayLoanModel;
 import net.iGap.model.mobileBank.BankServiceLoanDetailModel;
 import net.iGap.model.mobileBank.BankShebaModel;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
@@ -66,6 +68,10 @@ public class MobileBankRepository {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<BankAccountModel>>>().initAPI(bankApi.getUserDeposits(getAccessToken(), null), callback, responseCallback);
     }
 
+    public void getCardDeposits(String pan, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<BankCardDepositsModel>>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<List<BankCardDepositsModel>>>().initAPI(bankApi.getCardsDeposits(getAccessToken(), pan), callback, responseCallback);
+    }
+
     public void getShebaNumber(String pan, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<List<String>>> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse<List<String>>>().initAPI(bankApi.getShebaNumber(getAccessToken(), pan), callback, responseCallback);
     }
@@ -86,6 +92,10 @@ public class MobileBankRepository {
         new MobileBankApiInitializer<BaseMobileBankResponse<BankServiceLoanDetailModel>>().initAPI(bankApi.getLoanDetail(getAccessToken(), loanNumber, true, offset, length), callback, responseCallback);
     }
 
+    public void getPayLoan(String loanNumber , String customDeposit , String amount , String secondPass , String paymentMethod , boolean isSecPassNecessary, MobileBankExpiredTokenCallback callback , ResponseCallback<BaseMobileBankResponse<BankPayLoanModel>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<BankPayLoanModel>>().initAPI(bankApi.getPayLoan(getAccessToken(), loanNumber,customDeposit , paymentMethod , amount , secondPass , isSecPassNecessary ), callback, responseCallback);
+    }
+
     public void hotCard(String cardNumber, String reason, String auth, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.hotCard(getAccessToken(), cardNumber, reason, auth), callback, responseCallback);
     }
@@ -96,6 +106,10 @@ public class MobileBankRepository {
 
     public void getRegisterCheque(String chequeNumber, String depositNumber, Long amount, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.registerCheque(getAccessToken(), depositNumber, chequeNumber, amount), callback, responseCallback);
+    }
+
+    public void getTakeTurn(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.getTakeTurn(getAccessToken()), callback, responseCallback);
     }
 
     public void getOTP(String cardNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<ErrorModel> responseCallback) {

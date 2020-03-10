@@ -11,9 +11,8 @@
 package net.iGap.request;
 
 import net.iGap.G;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoClientGetRoomList;
-
-import java.util.HashSet;
 
 public class RequestClientGetRoomList {
     public static boolean isPendingGetRoomList = false;
@@ -39,6 +38,9 @@ public class RequestClientGetRoomList {
 
         IdentityGetRoomList identityGetRoomList = new IdentityGetRoomList(identity.equals("0"), offset, identity);
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identityGetRoomList);
+
+        EventManager.getInstance().postEvent(EventManager.ROOM_LIST_CHANGED, true);
+
         try {
 
             if (G.userLogin) {

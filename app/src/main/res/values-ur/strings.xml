@@ -2229,5 +2229,12 @@
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="inter_cheque_amount">ثبت مبلغ </string>
+    <string name="take_turn">دریافت نوبت</string>
+    <string name="secondary_password">رمز دوم</string>
+    <string name="default_deposit">حساب پیش فرض</string>
+    <string name="custom_deposit">حساب دلخواه</string>
+
+    <string name="E_4_14">You do not have access!</string>
+    <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان‌ خود ‌را وارد نمایید</string>
 
 </resources>

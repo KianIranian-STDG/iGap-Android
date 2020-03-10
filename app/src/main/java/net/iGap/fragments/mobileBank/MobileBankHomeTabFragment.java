@@ -110,11 +110,11 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
             case R.string.Inventory:
             case R.string.transactions:
-                if (mode == HomeTabMode.DEPOSIT) {
-                    onTransactionsClicked();
-                } else {
-                    showComingSoon();
-                }
+                //if (mode == HomeTabMode.DEPOSIT) {
+                    onTransactionsClicked(getCurrentAccount());
+               /* } else {
+                    getCardDepositAndOpenTransaction(getCurrentAccount());
+                }*/
                 break;
 
             case R.string.sheba_number:
@@ -137,7 +137,17 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             case R.string.mobile_bank_hotCard:
                 openHotCard(getCurrentAccount());
                 break;
+
+            case R.string.take_turn:
+                onTakeTurnClicked();
+                break;
         }
+    }
+
+    private void getCardDepositAndOpenTransaction(String card) {
+        if(card == null) return;
+        showProgress();
+        viewModel.getCardDeposits(card);
     }
 
     private void onFacilitiesClick() {
@@ -155,12 +165,27 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         }
     }
 
+    private void onTakeTurnClicked(){
+        if(getContext() == null) return;
+        new DialogParsian()
+                .setContext(getContext())
+                .setTitle(getString(R.string.take_turn))
+                .setButtonsText(getString(R.string.yes) , getString(R.string.close))
+                .setListener(new DialogParsian.ParsianDialogListener() {
+                    @Override
+                    public void onActiveButtonClicked(Dialog dialog) {
+                        showProgress();
+                        viewModel.getTakeTurnFromParsianBranches();
+                    }
+                }).showSimpleMessage(getString(R.string.are_you_sure_request));
+    }
+
     private List<MobileBankHomeItemsModel> getCardRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
         items.add(new MobileBankHomeItemsModel(R.string.cardToCardBtnText, R.drawable.ic_mb_card_to_card));
         items.add(new MobileBankHomeItemsModel(R.string.Inventory, R.drawable.ic_mb_balance));
         items.add(new MobileBankHomeItemsModel(R.string.transactions, R.drawable.ic_mb_transaction));
-        items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
+        //items.add(new MobileBankHomeItemsModel(R.string.sheba_number, R.drawable.ic_mb_sheba));
         items.add(new MobileBankHomeItemsModel(R.string.temporary_password, R.drawable.ic_mb_pooya_pass));
         items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_hotCard, R.drawable.ic_mb_block));
         return items;
@@ -179,6 +204,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private List<MobileBankHomeItemsModel> getServiceRecyclerItems() {
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
         items.add(new MobileBankHomeItemsModel(R.string.facilities, R.drawable.ic_mb_loan));
+        items.add(new MobileBankHomeItemsModel(R.string.take_turn, R.drawable.ic_mb_take_turn));
         return items;
     }
 
@@ -215,6 +241,19 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 showMessage(getString(R.string.attention), message);
             }
         });
+
+        viewModel.getCardDepositResponse().observe(getViewLifecycleOwner() , deposit->{
+            mDialogWait.dismiss();
+            if(deposit != null && !deposit.equals("-1")){
+                onTransactionsClicked(deposit);
+            }
+        });
+
+        viewModel.getTakeTurnListener().observe(getViewLifecycleOwner() , msg ->{
+            if(mDialogWait != null) mDialogWait.dismiss();
+            if(msg == null || getContext() == null) return;
+            showMessage(getString(R.string.take_turn) , msg);
+        });
     }
 
     private void showMessage(String title, String message) {
@@ -228,16 +267,18 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
 
     private void showProgress() {
         if (getActivity() != null) {
-            mDialogWait = new DialogParsian()
-                    .setContext(getActivity())
-                    .setTitle(getString(R.string.please_wait) + "..")
-                    .setButtonsText(null, getString(R.string.cancel))
-                    .setListener(new DialogParsian.ParsianDialogListener() {
-                        @Override
-                        public void onDeActiveButtonClicked(Dialog dialog) {
-                            mDialogWait.dismiss();
-                        }
-                    });
+            if(mDialogWait == null){
+                mDialogWait = new DialogParsian()
+                        .setContext(getActivity())
+                        .setTitle(getString(R.string.please_wait) + "..")
+                        .setButtonsText(null, getString(R.string.cancel))
+                        .setListener(new DialogParsian.ParsianDialogListener() {
+                            @Override
+                            public void onDeActiveButtonClicked(Dialog dialog) {
+                                mDialogWait.dismiss();
+                            }
+                        });
+            }
             mDialogWait.showLoaderDialog(false);
         }
     }
@@ -287,21 +328,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 .load();
     }
 
-    private void onTransactionsClicked() {
+    private void onTransactionsClicked(String account) {
 
         if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(getCurrentAccount(), mode == HomeTabMode.CARD))
-                    .setReplace(false)
-                    .load();
-        }
-
-    }
-
-    private void onLoanClicked() {
-
-        if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(),
-                    MobileBankServiceLoanDetailFragment.newInstance("58000001529602"))
+            new HelperFragment(getActivity().getSupportFragmentManager(), MobileBankCardHistoryFragment.newInstance(account, mode == HomeTabMode.CARD))
                     .setReplace(false)
                     .load();
         }

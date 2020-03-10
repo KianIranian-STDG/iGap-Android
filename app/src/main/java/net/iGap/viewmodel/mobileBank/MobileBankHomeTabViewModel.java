@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 import net.iGap.repository.MobileBankRepository;
@@ -23,6 +24,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
 
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
+    private SingleLiveEvent<String> takeTurnListener = new SingleLiveEvent<>();
     private MutableLiveData<String> balance = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
     public List<BankCardModel> cards;
@@ -114,6 +116,25 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
                 });
     }
 
+    public void getTakeTurnFromParsianBranches(){
+        MobileBankRepository.getInstance().getTakeTurn(this , new ResponseCallback<BaseMobileBankResponse>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse data) {
+                takeTurnListener.postValue(data.getMessage());
+            }
+
+            @Override
+            public void onError(String error) {
+                takeTurnListener.postValue(error);
+            }
+
+            @Override
+            public void onFailed() {
+                takeTurnListener.postValue(null);
+            }
+        });
+    }
+
     private String decimalFormatter(Double entry) {
         DecimalFormat df = new DecimalFormat(",###");
         return df.format(entry);
@@ -159,4 +180,7 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
         return balance;
     }
 
+    public SingleLiveEvent<String> getTakeTurnListener() {
+        return takeTurnListener;
+    }
 }

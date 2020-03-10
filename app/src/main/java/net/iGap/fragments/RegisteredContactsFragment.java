@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -37,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.module.AppUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
@@ -776,7 +778,14 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 }
 
                 viewHolder.title.setText(EmojiManager.getInstance().replaceEmoji(contact.getDisplay_name(), viewHolder.title.getPaint().getFontMetricsInt()));
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));
+                viewHolder.subtitle.setText(
+                        setUserStatus(
+                                viewHolder.subtitle.getContext(),
+                                contact.getStatus() == null ? null : AppUtils.getStatsForUser(contact.getStatus()) ,
+                                contact.getId(),
+                                contact.getLast_seen())
+                );
+
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
@@ -840,6 +849,19 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             } else if (viewHolder instanceof ViewHolderCall) {
                 ViewHolderCall holder = (ViewHolderCall) viewHolder;
                 avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, userId).avatarType(AvatarHandler.AvatarType.USER));
+            }
+        }
+
+        private String setUserStatus(Context context , String userStatus, long userId , long time ) {
+
+            if (userStatus != null) {
+                if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    return LastSeenTimeUtil.computeTime(context, userId, time, false);
+                } else {
+                    return userStatus;
+                }
+            }else {
+                return LastSeenTimeUtil.computeTime(context, userId, time, false);
             }
         }
 

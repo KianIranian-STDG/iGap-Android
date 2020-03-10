@@ -62,24 +62,46 @@ public class StickerView extends FrameLayout implements EventListener {
         if (viewPath == null || viewToken == null)
             return;
 
-        if (stickerIv == null && type == StructIGSticker.ANIMATED_STICKER) {
-            stickerIv = new AnimatedStickerCell(getContext());
-            ((AnimatedStickerCell) stickerIv).setFailureListener(Throwable::printStackTrace);
-            addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
-        } else if (stickerIv == null) {
-            stickerIv = new AppCompatImageView(getContext());
-            addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
+
+        if (stickerIv == null) {
+            if (type == StructIGSticker.ANIMATED_STICKER) {
+                stickerIv = new AnimatedStickerCell(getContext());
+                ((AnimatedStickerCell) stickerIv).setFailureListener(Throwable::printStackTrace);
+                addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
+            } else {
+                stickerIv = new AppCompatImageView(getContext());
+                addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
+            }
         }
 
         if (hasFileOnLocal()) {
-            if (type == StructIGSticker.ANIMATED_STICKER && stickerIv instanceof AnimatedStickerCell) {
-                ((AnimatedStickerCell) stickerIv).playAnimation(viewPath);
-            } else if (!(stickerIv instanceof AnimatedStickerCell)) {
-                ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath);
+            if (type == StructIGSticker.ANIMATED_STICKER) {
+                if (stickerIv instanceof AnimatedStickerCell)
+                    ((AnimatedStickerCell) stickerIv).playAnimation(viewPath);
+                else {
+                    removeView(stickerIv);
+                    stickerIv = null;
+
+                    stickerIv = new AnimatedStickerCell(getContext());
+                    ((AnimatedStickerCell) stickerIv).setFailureListener(Throwable::printStackTrace);
+                    addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
+                    ((AnimatedStickerCell) stickerIv).playAnimation(viewPath);
+                }
+            } else if (type == StructIGSticker.NORMAL_STICKER) {
+                if (stickerIv instanceof AnimatedStickerCell) {
+                    removeView(stickerIv);
+                    stickerIv = null;
+
+                    stickerIv = new AppCompatImageView(getContext());
+                    addView(stickerIv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
+                    ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath, true);
+                } else {
+                    ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath, true);
+                }
             }
         } else {
             if (type == StructIGSticker.NORMAL_STICKER) {
-                stickerIv.setBackgroundResource(0);
+                ImageLoadingServiceInjector.inject().clear(stickerIv);
             }
             IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(id, viewToken, fileSize, viewPath));
         }

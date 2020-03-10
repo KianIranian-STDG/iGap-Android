@@ -2,11 +2,6 @@ package net.iGap.viewmodel;
 
 import android.view.View;
 
-import androidx.databinding.ObservableDouble;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -22,6 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
+
+import androidx.databinding.ObservableDouble;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 

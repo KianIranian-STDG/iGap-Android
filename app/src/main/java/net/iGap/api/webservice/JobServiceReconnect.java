@@ -37,14 +37,10 @@ public class JobServiceReconnect extends JobService {
 
     private void addListener(JobParameters job) {
         eventListener = (id, message) -> {
-            switch (id) {
-                case EventManager.SOCKET_CONNECT_DENY:
-                case EventManager.SOCKET_CONNECT_ERROR:
-                case EventManager.SOCKET_CONNECT_OK:
-                    Log.d("bagi", "JobServiceReconnectStartFinish");
-                    removeListener();
-                    jobFinished(job, true);
-                    break;
+            if (id == EventManager.SOCKET_CONNECT_DENY || id == EventManager.SOCKET_CONNECT_ERROR || id == EventManager.SOCKET_CONNECT_OK) {
+                Log.d("bagi", "JobServiceReconnectStartFinish");
+                removeListener();
+                jobFinished(job, true);
             }
         };
 
