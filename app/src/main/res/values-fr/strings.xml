@@ -2190,4 +2190,5 @@ Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et
     <string name="folder">Dossier</string>
     <string name="internal_storage">Stockage interne</string>
     <string name="external_storage">Stockage externe</string>
+    <string name="file_manager">Gestionnaire de fichiers</string>
 </resources>

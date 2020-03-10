@@ -1963,5 +1963,6 @@
     <string name="folder">скоросшиватель</string>
     <string name="internal_storage">Внутреннее хранилище</string>
     <string name="external_storage">Внешнее хранилище</string>
+    <string name="file_manager">Файловый менеджер</string>
 
 </resources>

@@ -3199,4 +3199,5 @@
     <string name="folder">مجلد</string>
     <string name="internal_storage">التخزين الداخلي</string>
     <string name="external_storage">تخزين خارجي</string>
+    <string name="file_manager">مدير الملفات</string>
 </resources>

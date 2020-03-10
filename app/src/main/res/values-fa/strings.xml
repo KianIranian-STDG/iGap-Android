@@ -2521,4 +2521,5 @@
     <string name="folder">پوشه</string>
     <string name="internal_storage">حافظه داخلی</string>
     <string name="external_storage">حافظه جانبی</string>
+    <string name="file_manager">مدیریت فایل</string>
 </resources>

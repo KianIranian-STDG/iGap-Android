@@ -2577,5 +2577,6 @@ Want to get it?</string>
     <string name="folder">Folder</string>
     <string name="internal_storage">Internal storage</string>
     <string name="external_storage">External storage</string>
+    <string name="file_manager">File Manager</string>
 
 </resources>
