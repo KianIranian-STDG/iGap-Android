@@ -2200,6 +2200,7 @@
     <string name="kuknos_payment_assetPrice">قیمت دارایی: </string>
     <string name="kuknos_payment_totalAmount">قیمت کل: </string>
     <string name="kuknos_payment_hash">رسید ققنوس: </string>
+    <string name="kuknos_support_error">ققنوس برای دستگاه شما در دسترس نیست.</string>
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
     <string name="updated_version_title">نسخه شما به روز شده است</string>
