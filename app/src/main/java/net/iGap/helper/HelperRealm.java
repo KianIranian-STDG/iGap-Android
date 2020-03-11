@@ -29,20 +29,15 @@ public final class HelperRealm {
      */
 
     public static void realmTruncate() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.deleteAll();
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.deleteAll();
         });
     }
 
     public static <E extends RealmModel> void copyOrUpdateToRealm(E object) {
         new Thread(() -> {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(object));
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                realm.copyToRealmOrUpdate(object);
             });
         }).start();
     }

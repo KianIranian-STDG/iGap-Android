@@ -1837,8 +1837,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
 
                     new Thread(() -> {
-                        DbManager.getInstance().doRealmTask(realm12 -> {
-                            realm12.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
+                        DbManager.getInstance().doRealmTransaction(realm12 -> {
+                            realm12.copyToRealmOrUpdate(roomMessage);
                         });
                     }).start();
 

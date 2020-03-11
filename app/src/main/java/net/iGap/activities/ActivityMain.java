@@ -1554,22 +1554,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                    if (room != null && realmRoomMessage != null) {
-                        /**
-                         * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                         */
-                        if (room.getUnreadCount() <= 1) {
-                            realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                        }
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+            if (room != null && realmRoomMessage != null) {
+                /**
+                 * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                 */
+                if (room.getUnreadCount() <= 1) {
+                    realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
                 }
-            });
+            }
         });
 
         /**

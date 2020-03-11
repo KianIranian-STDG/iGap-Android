@@ -325,23 +325,20 @@ public final class ContactUtils {
                             .show();
 
                     new Thread(() -> {
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransaction(realm1 -> {
-
-                                final RealmResults<RealmContacts> realmContacts = realm1.where(RealmContacts.class).findAll();
-                                final int contactsSize = realmContacts.size();
-                                dialog[0].setMaxProgress(contactsSize);
-                                for (RealmContacts realmContacts1 : realmContacts) {
-                                    addContactToPhoneBook(realmContacts1);
-                                    if (dialog[0].isCancelled()) {
-                                        break;
-                                    }
-
-                                    G.handler.post(() -> dialog[0].incrementProgress(1));
+                        DbManager.getInstance().doRealmTransaction(realm1 -> {
+                            final RealmResults<RealmContacts> realmContacts = realm1.where(RealmContacts.class).findAll();
+                            final int contactsSize = realmContacts.size();
+                            dialog[0].setMaxProgress(contactsSize);
+                            for (RealmContacts realmContacts1 : realmContacts) {
+                                addContactToPhoneBook(realmContacts1);
+                                if (dialog[0].isCancelled()) {
+                                    break;
                                 }
 
-                                G.handler.postDelayed(() -> dialog[0].dismiss(), 500);
-                            });
+                                G.handler.post(() -> dialog[0].incrementProgress(1));
+                            }
+
+                            G.handler.postDelayed(() -> dialog[0].dismiss(), 500);
                         });
                     }).start();
                 }

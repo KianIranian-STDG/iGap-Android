@@ -40,13 +40,8 @@ public class UserAvatarAddResponse extends MessageHandler {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmAvatar.putOrUpdate(realm, AccountManager.getInstance().getCurrentUser().getId(), userAvatarAddResponse.getAvatar());
-                        }
-                    });
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmAvatar.putOrUpdate(realm, AccountManager.getInstance().getCurrentUser().getId(), userAvatarAddResponse.getAvatar());
                 });
             }
         }).start();

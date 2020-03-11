@@ -40,16 +40,12 @@ public final class HelperLogout {
      * truncate realm and go to ActivityIntroduce for register again
      */
     private void logout() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(@NotNull Realm realm) {
-                    realm.deleteAll();
-                }
-            });
-            AppUtils.cleanBadge();
-            new LoginActions();
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.deleteAll();
         });
+
+        AppUtils.cleanBadge();
+        new LoginActions();
     }
 
     public boolean logoutAllUser() {

@@ -152,30 +152,20 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public static void updateBio(long userId, final String bio) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRegisteredInfo.getRegistrationInfo(realm, userId).setBio(bio);
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRegisteredInfo.getRegistrationInfo(realm, userId).setBio(bio);
         });
     }
 
     public static void updateName(final long userId, final String firstName, final String lastName, final String initials) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-                    if (registeredInfo != null) {
-                        registeredInfo.setFirstName(firstName);
-                        registeredInfo.setLastName(lastName);
-                        registeredInfo.setDisplayName((firstName + " " + lastName).trim());
-                        registeredInfo.setInitials(initials);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+            if (registeredInfo != null) {
+                registeredInfo.setFirstName(firstName);
+                registeredInfo.setLastName(lastName);
+                registeredInfo.setDisplayName((firstName + " " + lastName).trim());
+                registeredInfo.setInitials(initials);
+            }
         });
     }
 
@@ -200,16 +190,11 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public static void updateMutual(final String phone, final boolean mutual) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phone + "").findFirst();
-                    if (realmRegisteredInfo != null) {
-                        realmRegisteredInfo.setMutual(mutual);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phone + "").findFirst();
+            if (realmRegisteredInfo != null) {
+                realmRegisteredInfo.setMutual(mutual);
+            }
         });
     }
 

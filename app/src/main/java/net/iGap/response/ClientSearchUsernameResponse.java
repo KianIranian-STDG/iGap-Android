@@ -37,25 +37,15 @@ public class ClientSearchUsernameResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builder = (ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder) message;
-        DbManager.getInstance().doRealmTask(realm -> {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             for (final ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item : builder.getResultList()) {
 
                 if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
-                        }
-                    });
+                    RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
                 } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
                     if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getRoom().getId()).findFirst() == null) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = RealmRoom.putOrUpdate(item.getRoom(), realm);
-                                realmRoom.setDeleted(true);
-                            }
-                        });
+                        RealmRoom realmRoom = RealmRoom.putOrUpdate(item.getRoom(), realm);
+                        realmRoom.setDeleted(true);
                     }
                 }
             }
