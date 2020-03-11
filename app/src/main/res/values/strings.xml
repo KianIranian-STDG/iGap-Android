@@ -2055,10 +2055,16 @@ Want to get it?</string>
     <string name="kuknos_Restore_Title">Please enter your account recovery keys.</string>
     <string name="kuknos_Restore_Message">By using these words, you will be able to retrieve your account.</string>
     <string name="kuknos_Restore_Btn">Retrieve</string>
-    <string name="kuknos_Restore_Hint">For example: water blue water ...</string>
+    <string name="kuknos_Restore_Hint">For example: water blue water …</string>
     <string name="kuknos_Restore_Error_empty_str">Enter your key stream</string>
     <string name="kuknos_Restore_Error_invalid_str">Your key stream length is not long enough.</string>
     <string name="kuknos_Restore_Error_Snack">Ok</string>
+    <string name="kuknos_RestoreSeed_Title">Please enter your account seed key.</string>
+    <string name="kuknos_RestoreSeed_Message">By using this key, you will be able to retrieve your account.</string>
+    <string name="kuknos_RestoreSeed_Hint">For example: SALSSCHD7TTEF…</string>
+    <string name="kuknos_RestoreSeed_Error_empty_str">Enter your Seed Key.</string>
+    <string name="kuknos_RestoreSeed_Error_invalid_str">Your seed key\'s length is not long enough.</string>
+    <string name="kuknos_RestoreSeed_Error_invalidStart_str">Your seed key must start with S.</string>
     <string name="kuknos_SignupInfo_title">User Information</string>
     <string name="kuknos_SignupInfo_desc">Please complete the fields:</string>
     <string name="kuknos_SignupInfo_username">Username *</string>
