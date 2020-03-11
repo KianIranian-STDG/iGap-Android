@@ -228,34 +228,31 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public RealmChannelExtra getChannelExtra() {
-        if (realmRoomMessage.getChannelExtra() != null) {
-            return realmRoomMessage.getChannelExtra();
+        if (realmRoomMessage.getForwardMessage() != null) {
+            return getRealmChannelExtraOfMessage(realmRoomMessage.getForwardMessage());
         } else {
-            //Todo: maybe use this code for instead create thread and to Db work in it (bagi check it :D)
-            /*DbManager.getInstance().doRealmTransactionLowPriorityAsync(new DbManager.RealmTransaction() {
-                @Override
-                public void doTransaction(Realm realm) {
-                    RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                    RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                    if (newMessage != null && channelExtra != null) {
-                        newMessage.setChannelExtra(channelExtra);
-                    }
+            return getRealmChannelExtraOfMessage(realmRoomMessage);
+        }
+    }
+
+    public RealmChannelExtra getChannelExtraWithoutForward() {
+        return getRealmChannelExtraOfMessage(realmRoomMessage);
+    }
+
+    private RealmChannelExtra getRealmChannelExtraOfMessage(RealmRoomMessage message) {
+        if (message.getChannelExtra() != null) {
+            return message.getChannelExtra();
+        } else {
+            DbManager.getInstance().doRealmTransactionLowPriorityAsync(realm -> {
+                RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
+                RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, message.getMessageId()).findFirst();
+                if (newMessage != null && channelExtra != null) {
+                    newMessage.setChannelExtra(channelExtra);
                 }
-            });*/
-            new Thread(() -> {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(realm1 -> {
-                        RealmRoomMessage newMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                        RealmChannelExtra channelExtra = realm1.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                        if (newMessage != null && channelExtra != null) {
-                            newMessage.setChannelExtra(channelExtra);
-                        }
-                    });
-                });
-            }).start();
+            });
 
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, message.getMessageId()).findFirst();
                 if (realmChannelExtra != null) {
                     realmChannelExtra = realm.copyFromRealm(realmChannelExtra);
                 }
