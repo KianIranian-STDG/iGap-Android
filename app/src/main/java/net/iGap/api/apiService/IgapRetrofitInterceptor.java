@@ -119,6 +119,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
             jsonObject.addProperty("id", appId);
             jsonObject.addProperty("version", appVersion);
             jsonObject.addProperty("language", lastLang = getCurrentLang());
+            jsonObject.addProperty("isDebug", BuildConfig.DEBUG);
 
             specifications = new Gson().toJson(jsonObject);
         }
