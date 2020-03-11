@@ -337,7 +337,12 @@ public class FileManager {
         public int compare(StructFileManager obj1, StructFileManager obj2) {
             File f1 = new File(obj1.path);
             File f2 = new File(obj2.path);
-            return (int) ((f1.lastModified() > f2.lastModified()) ? f1.lastModified() : f2.lastModified());
+            if((f1.lastModified() == f2.lastModified()) )
+                return 0 ;
+            else if(f1.lastModified() > f2.lastModified())
+                return -1;
+            else
+                return 1;
         }
     }
 
