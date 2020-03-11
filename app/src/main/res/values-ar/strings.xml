@@ -3197,8 +3197,6 @@
     <string name="default_deposit">الودائع الافتراضية</string>
     <string name="custom_deposit">إيداع مخصص</string>
     <string name="mobile_bank_login_hint">استخدم اسم المستخدم وكلمة المرور للدخول إلى بنك پارسیان للجوال.</string>
-    <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟
-لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
     <string name="internal_desc">تصفح نظام الملفات الخاص بك</string>
     <string name="external_desc">تصفح التخزين الخارجية الخاصة بك</string>
     <string name="file_manager_app_desc">تصفح مجلد التطبيق</string>

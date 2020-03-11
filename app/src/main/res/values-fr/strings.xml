@@ -2187,8 +2187,6 @@
     <string name="default_deposit">Dépôt par défaut</string>
     <string name="custom_deposit">Dépôt personnalisé</string>
     <string name="mobile_bank_login_hint">Utilisez votre nom d\'utilisateur et votre mot de passe pour vous connecter à la banque mobile Parsian.</string>
-    <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?!
-Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
     <string name="internal_desc">Parcourez votre système de fichiers</string>
     <string name="external_desc">Parcourez votre stockage externe</string>
     <string name="file_manager_app_desc">Parcourir le dossier de l\'application</string>
