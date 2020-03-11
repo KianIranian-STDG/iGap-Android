@@ -102,6 +102,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
                         binding.rvItems.setAdapter(mAdapter);
 
                         if(items.size() == 0){
+                            binding.btnBack.setVisibility(View.VISIBLE);
                             binding.lytNothing.setVisibility(View.VISIBLE);
                         }
                     });
@@ -127,11 +128,16 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
             binding.lytNothing.setVisibility(View.GONE);
             binding.rvItems.setVisibility(View.VISIBLE);
             mAdapter.update(mViewModel.getItems());
+            if(mViewModel.getItems().size() == 0){
+                binding.btnBack.setVisibility(View.VISIBLE);
+                binding.lytNothing.setVisibility(View.VISIBLE);
+            }
             return;
         }
         List<StructExplorerItem> searchedResult;
         searchedResult = getSearchResultFromMainList(text);
         if (searchedResult.size() == 0) {
+            binding.btnBack.setVisibility(View.GONE);
             binding.lytNothing.setVisibility(View.VISIBLE);
             binding.rvItems.setVisibility(View.GONE);
         } else {
