@@ -83,7 +83,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
                     R.string.app_name,
                     null ,
                     R.drawable.ic_fm_folder,
-                    G.DIR_APP + "/",
+                    G.DIR_APP ,
                     R.string.file_manager_app_desc,
                     null ,
                     R.drawable.shape_file_manager_file_bg,
