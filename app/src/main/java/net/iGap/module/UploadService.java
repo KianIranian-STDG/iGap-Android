@@ -46,11 +46,9 @@ public class UploadService extends Service {
 
         RealmRoomMessage roomMessage = RealmRoomMessage.makeVoiceMessage(mRoomId, chatType, savedPath, "");
         new Thread(() -> {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(realm1 -> {
-                    realm1.copyToRealmOrUpdate(roomMessage);
-                    RealmRoom.setLastMessageWithRoomMessage(realm1, mRoomId, roomMessage);
-                });
+            DbManager.getInstance().doRealmTransaction(realm1 -> {
+                realm1.copyToRealmOrUpdate(roomMessage);
+                RealmRoom.setLastMessageWithRoomMessage(realm1, mRoomId, roomMessage);
             });
         }).start();
 

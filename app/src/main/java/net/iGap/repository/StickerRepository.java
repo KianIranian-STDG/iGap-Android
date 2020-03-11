@@ -440,6 +440,8 @@ public class StickerRepository {
 
 
     public String getStickerPath(String token, String extension) {
+        if (token == null || extension == null)
+            return null;
 
         String mimeType = ".png";
         int index = extension.lastIndexOf(".");

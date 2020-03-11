@@ -122,15 +122,10 @@ public class RealmPhoneContacts extends RealmObject {
     }
 
     private static void addListToDB(final List<StructListOfContact> list) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (int i = 0; i < list.size(); i++) {
-                        addContactToDB(list.get(i), realm);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (int i = 0; i < list.size(); i++) {
+                addContactToDB(list.get(i), realm);
+            }
         });
     }
 
@@ -154,27 +149,22 @@ public class RealmPhoneContacts extends RealmObject {
             return notImportedList;
         }
 
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (int i = 0; i < list.size(); i++) {
-                        StructListOfContact _item = list.get(i);
-                        if (_item == null || _item.getPhone() == null || _item.getPhone().length() == 0) {
-                            continue;
-                        }
-
-                        try {
-                            if (realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, checkString(_item)).findFirst() == null) {
-                                notImportedList.add(_item);
-                            }
-                        } catch (IllegalArgumentException e) {
-                            HelperLog.setErrorLog(e);
-                        }
-
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (int i = 0; i < list.size(); i++) {
+                StructListOfContact _item = list.get(i);
+                if (_item == null || _item.getPhone() == null || _item.getPhone().length() == 0) {
+                    continue;
                 }
-            });
+
+                try {
+                    if (realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, checkString(_item)).findFirst() == null) {
+                        notImportedList.add(_item);
+                    }
+                } catch (IllegalArgumentException e) {
+                    HelperLog.setErrorLog(e);
+                }
+
+            }
         });
 
         return notImportedList;

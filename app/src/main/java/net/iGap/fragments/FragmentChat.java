@@ -4434,10 +4434,8 @@ public class FragmentChat extends BaseFragment
         }
 
         new Thread(() -> {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(realm1 -> {
-                    RealmRoom.setLastMessageWithRoomMessage(realm1, mRoomId, realm1.copyToRealmOrUpdate(roomMessage));
-                });
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmRoom.setLastMessageWithRoomMessage(realm, mRoomId, realm.copyToRealmOrUpdate(roomMessage));
             });
         }).start();
 
@@ -4624,11 +4622,9 @@ public class FragmentChat extends BaseFragment
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransaction(realm1 -> {
-                            RealmClientCondition.addOfflineSeen(realm1, mRoomId, messageInfo.realmRoomMessage.getMessageId());
-                            RealmRoomMessage.setStatusSeenInChat(realm1, messageInfo.realmRoomMessage.getMessageId());
-                        });
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        RealmClientCondition.addOfflineSeen(realm, mRoomId, messageInfo.realmRoomMessage.getMessageId());
+                        RealmRoomMessage.setStatusSeenInChat(realm, messageInfo.realmRoomMessage.getMessageId());
                     });
                 }
             }).start();
@@ -5391,12 +5387,10 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
                             G.handler.post(() -> {
-                                DbManager.getInstance().doRealmTask(realm -> {
-                                    realm.executeTransaction(realm1 -> {
-                                        for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-                                            onReplyClick(RealmRoomMessage.putOrUpdate(realm1, mRoomId, roomMessage, new StructMessageOption().setGap()));
-                                        }
-                                    });
+                                DbManager.getInstance().doRealmTransaction(realm1 -> {
+                                    for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                        onReplyClick(RealmRoomMessage.putOrUpdate(realm1, mRoomId, roomMessage, new StructMessageOption().setGap()));
+                                    }
                                 });
 
                             });
@@ -5843,13 +5837,8 @@ public class FragmentChat extends BaseFragment
      * @param fakeMessageId messageId that create when created this message
      */
     private void makeFailed(final long fakeMessageId) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
         });
     }
 
@@ -6227,8 +6216,8 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
+        new Thread(() -> DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.copyToRealmOrUpdate(roomMessage);
         })).start();
 
         DbManager.getInstance().doRealmTransaction(realm -> {
@@ -6900,14 +6889,11 @@ public class FragmentChat extends BaseFragment
             if (registeredInfo != null) {
                 long registeredInfoID = registeredInfo.getId();
                 new Thread(() -> {
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransaction(realm1 -> {
-                            RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfoID).findFirst();
-                            if (registeredInfo2 != null) {
-                                registeredInfo2.setDoNotshowSpamBar(true);
-                            }
-
-                        });
+                    DbManager.getInstance().doRealmTransaction(realm1 -> {
+                        RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfoID).findFirst();
+                        if (registeredInfo2 != null) {
+                            registeredInfo2.setDoNotshowSpamBar(true);
+                        }
                     });
 
                 }).start();
@@ -7786,14 +7772,13 @@ public class FragmentChat extends BaseFragment
         }
 
         new Thread(() -> {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(realm1 -> {
-                    RealmRoom room = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                    if (room != null) {
-                        room.setDeleted(false);
-                    }
-                    RealmRoom.setLastMessageWithRoomMessage(realm1, roomMessage.getRoomId(), realm1.copyToRealmOrUpdate(roomMessage));
-                });
+            DbManager.getInstance().doRealmTransaction(realm1 -> {
+                RealmRoom room = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                if (room != null) {
+                    room.setDeleted(false);
+                }
+                RealmRoom.setLastMessageWithRoomMessage(realm1, roomMessage.getRoomId(), realm1.copyToRealmOrUpdate(roomMessage));
+
             });
         }).start();
 
@@ -7883,14 +7868,9 @@ public class FragmentChat extends BaseFragment
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRoomMessage managedMessage = realm.copyToRealmOrUpdate(roomMessage);
-                            RealmRoom.setLastMessageWithRoomMessage(realm, mRoomId, managedMessage);
-                        }
-                    });
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmRoomMessage managedMessage = realm.copyToRealmOrUpdate(roomMessage);
+                    RealmRoom.setLastMessageWithRoomMessage(realm, mRoomId, managedMessage);
                 });
             }
         }).start();
@@ -9419,11 +9399,11 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onAttachPopupFilePicked(ArrayList<String> selectedPathList) {
+    public void onAttachPopupFilePicked(List<String> selectedPathList , String caption) {
+        if(caption != null) edtChat.setText(caption);
         for (String path : selectedPathList) {
-            Intent data = new Intent();
-            data.setData(Uri.parse(path));
-            onActivityResult(request_code_pic_file, Activity.RESULT_OK, data);
+            sendMessage(request_code_pic_file , path);
+            edtChat.setText("");
         }
     }
 

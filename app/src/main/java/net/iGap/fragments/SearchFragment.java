@@ -667,14 +667,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             new RequestChatGetRoom().chatGetRoom(id, new RequestChatGetRoom.OnChatRoomReady() {
                 @Override
                 public void onReady(ProtoGlobal.Room room) {
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
-                                room2.setDeleted(true);
-                            }
-                        });
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
+                        room2.setDeleted(true);
                     });
                     G.handler.post(new Runnable() {
                         @Override

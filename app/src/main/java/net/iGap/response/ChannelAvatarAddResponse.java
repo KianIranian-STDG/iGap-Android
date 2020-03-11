@@ -36,13 +36,8 @@ public class ChannelAvatarAddResponse extends MessageHandler {
         super.handler();
 
         final ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar.putOrUpdate(realm, builder.getRoomId(), builder.getAvatar());
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmAvatar.putOrUpdate(realm, builder.getRoomId(), builder.getAvatar());
         });
         G.handler.post(new Runnable() {
             @Override

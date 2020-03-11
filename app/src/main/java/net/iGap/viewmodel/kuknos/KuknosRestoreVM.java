@@ -87,6 +87,8 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         userRepo.setSeedKey(keys.get());
         try {
             userRepo.generateKeyPairWithSeed();
+            userRepo.setPIN(null);
+            userRepo.setMnemonic(null);
         } catch (Exception e) {
             error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();

@@ -104,6 +104,10 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         return panelRepo.isPinSet();
     }
 
+    public boolean isMnemonicAvailable() {
+        return panelRepo.isMnemonicAvailable();
+    }
+
     public String convertToJSON(int position) {
         if (kuknosWalletsM.getValue() == null)
             return "";
@@ -114,7 +118,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     public void spinnerSelect(int position) {
         this.position = position;
         KuknosBalance.Balance temp = kuknosWalletsM.getValue().getAssets().get(position);
-        DecimalFormat df = new DecimalFormat("#,###");
+        DecimalFormat df = new DecimalFormat("#,##0.00");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
         currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));
