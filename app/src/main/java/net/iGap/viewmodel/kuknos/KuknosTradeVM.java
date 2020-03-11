@@ -87,7 +87,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
     public void originSpinnerSelect(int position) {
         this.originPosition = position;
         KuknosBalance.Balance temp = Objects.requireNonNull(kuknosOriginWalletsM.getValue()).get(position);
-        DecimalFormat df = new DecimalFormat("#,###");
+        DecimalFormat df = new DecimalFormat("#,##0.00");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance())))
                 : df.format(Double.valueOf(temp.getBalance())));

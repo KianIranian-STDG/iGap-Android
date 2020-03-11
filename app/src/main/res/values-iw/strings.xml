@@ -2268,4 +2268,5 @@
     <string name="internal_storage">حافظه داخلی</string>
     <string name="external_storage">حافظه جانبی</string>
     <string name="file_manager">مدیریت فایل</string>
+    <string name="kuknos_Mnemonic_error">کلمات بازیابی یافت نشد.</string>
 </resources>
