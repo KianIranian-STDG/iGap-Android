@@ -190,6 +190,7 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
             if (integer == 0) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
+                viewModel.setAmountEnable(true);
             } else if (integer == 1) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
                 viewModel.setAmountEnable(false);

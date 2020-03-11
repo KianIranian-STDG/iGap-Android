@@ -2,9 +2,6 @@ package net.iGap.viewmodel.kuknos;
 
 import android.util.Log;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -21,6 +18,9 @@ import org.stellar.sdk.responses.SubmitTransactionResponse;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosTradeVM extends BaseAPIViewModel {
 
@@ -87,7 +87,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
     public void originSpinnerSelect(int position) {
         this.originPosition = position;
         KuknosBalance.Balance temp = Objects.requireNonNull(kuknosOriginWalletsM.getValue()).get(position);
-        DecimalFormat df = new DecimalFormat("#,##0.00");
+        DecimalFormat df = new DecimalFormat("#,###");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance())))
                 : df.format(Double.valueOf(temp.getBalance())));

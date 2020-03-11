@@ -4,7 +4,8 @@
     android:id="@+id/fragKuknosPconstraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="38dp">
+    android:minHeight="38dp"
+    android:background="?attr/iGapCardViewColor">
 
     <LinearLayout
         android:id="@+id/fragKuknosPLinear"
