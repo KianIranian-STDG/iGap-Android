@@ -9,7 +9,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperMimeType;
+import net.iGap.model.GalleryAlbumModel;
+import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryMusicModel;
+import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.FileUtils;
 import net.iGap.module.structs.StructExplorerItem;
 
@@ -114,7 +117,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
                 R.string.audios,
                 null ,
                 R.drawable.ic_fm_audio,
-                G.DIR_APP + "/",
+                null,
                 R.string.file_manager_music,
                 null ,
                 R.drawable.shape_file_manager_file_2_bg,
@@ -219,6 +222,72 @@ public class FileManagerChildViewModel extends BaseViewModel {
             item.nameStr = items.get(i).getTitle();
             item.path = items.get(i).getPath();
             item.image = R.drawable.ic_fm_music_file;
+            item.backColor = R.drawable.shape_file_manager_file_bg;
+            item.isFolderOrFile = true;
+            item.descriptionStr = getFileDescription(new File(item.path));
+            result.add(item);
+        }
+        return result;
+    }
+
+    public List<StructExplorerItem> convertAlbumGalleryItems(List<GalleryAlbumModel> items) {
+        List<StructExplorerItem> result = new ArrayList<>();
+        StructExplorerItem item ;
+        for (int i = 0 ; i < items.size() ; i++){
+            item = new StructExplorerItem();
+            item.nameStr = items.get(i).getCaption();
+            item.path = items.get(i).getId();
+            item.image = R.drawable.ic_fm_folder;
+            item.backColor = R.drawable.shape_file_manager_folder_bg;
+            item.isFolderOrFile = false;
+            item.description = R.string.folder;
+            result.add(item);
+        }
+        return result;
+    }
+
+    public List<StructExplorerItem> convertVideoAlbumGalleryItems(List<GalleryVideoModel> items) {
+        List<StructExplorerItem> result = new ArrayList<>();
+        StructExplorerItem item ;
+        for (int i = 0 ; i < items.size() ; i++){
+            item = new StructExplorerItem();
+            item.nameStr = items.get(i).getCaption();
+            item.path = items.get(i).getId();
+            item.image = R.drawable.ic_fm_folder;
+            item.backColor = R.drawable.shape_file_manager_folder_bg;
+            item.isFolderOrFile = false;
+            item.description = R.string.folder;
+            result.add(item);
+        }
+        return result;
+    }
+
+    public List<StructExplorerItem> convertImageGalleryItems(List<GalleryItemModel> items) {
+        List<StructExplorerItem> result = new ArrayList<>();
+        StructExplorerItem item ;
+        for (int i = 0 ; i < items.size() ; i++){
+            String[] splittedAddress = items.get(i).getAddress().split("/");
+            item = new StructExplorerItem();
+            item.nameStr = splittedAddress[splittedAddress.length -1];
+            item.path = items.get(i).getAddress();
+            item.image = R.drawable.ic_fm_image_small;
+            item.backColor = R.drawable.shape_file_manager_file_bg;
+            item.isFolderOrFile = true;
+            item.descriptionStr = getFileDescription(new File(item.path));
+            result.add(item);
+        }
+        return result;
+    }
+
+    public List<StructExplorerItem> convertVideoGalleryItems(List<GalleryVideoModel> items) {
+        List<StructExplorerItem> result = new ArrayList<>();
+        StructExplorerItem item ;
+        for (int i = 0 ; i < items.size() ; i++){
+            String[] splittedAddress = items.get(i).getPath().split("/");
+            item = new StructExplorerItem();
+            item.nameStr = splittedAddress[splittedAddress.length -1];
+            item.path = items.get(i).getPath();
+            item.image = R.drawable.ic_fm_image_small;
             item.backColor = R.drawable.shape_file_manager_file_bg;
             item.isFolderOrFile = true;
             item.descriptionStr = getFileDescription(new File(item.path));

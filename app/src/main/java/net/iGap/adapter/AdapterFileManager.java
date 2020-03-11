@@ -10,6 +10,7 @@
 
 package net.iGap.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.common.StringUtils;
 import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.R;
@@ -98,7 +100,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
                     onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition() , items.get(holder.getAdapterPosition()).isSelected);
                 }
             } else {
-                onItemClickListener.onGalleryClicked(item.name, holder.getAdapterPosition());
+                onItemClickListener.onGalleryClicked(item.name,item.path , holder.getAdapterPosition());
             }
         });
 
@@ -132,6 +134,6 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
         void onFolderClicked(String path, int position);
 
-        void onGalleryClicked(int type, int position);
+        void onGalleryClicked(int type, String path, int position);
     }
 }

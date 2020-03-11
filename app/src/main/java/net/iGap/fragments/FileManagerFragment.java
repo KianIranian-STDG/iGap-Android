@@ -164,6 +164,14 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
         }
     }
 
+    void setToolbarSortIconVisibility(boolean state) {
+        if (state) {
+            mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+        } else {
+            mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+        }
+    }
+
     public void setToolbarTitle(String title) {
         if (mHelperToolbar != null) mHelperToolbar.setDefaultTitle(title);
     }

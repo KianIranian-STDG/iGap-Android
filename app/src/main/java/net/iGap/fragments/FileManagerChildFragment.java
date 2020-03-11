@@ -16,6 +16,8 @@ import net.iGap.R;
 import net.iGap.adapter.AdapterFileManager;
 import net.iGap.databinding.FileManagerChildFragmentBinding;
 import net.iGap.helper.FileManager;
+import net.iGap.model.GalleryAlbumModel;
+import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryMusicModel;
 import net.iGap.module.structs.StructExplorerItem;
 import net.iGap.viewmodel.FileManagerChildViewModel;
@@ -26,12 +28,12 @@ import java.util.List;
 
 public class FileManagerChildFragment extends BaseFragment implements AdapterFileManager.OnItemClickListenerExplorer {
 
-    static String ROOT_FILE_MANAGER = "ROOT_FILE_MANAGER";
-    static String FILE_MANAGER_IMAGE = "FILE_MANAGER_GALLERY_IMAGE";
-    static String FILE_MANAGER_VIDEO = "FILE_MANAGER_GALLERY_VIDEO";
-    static String FILE_MANAGER_MUSIC = "FILE_MANAGER_GALLERY_MUSIC";
-    private static String FOLDER_NAME = "FOLDER";
-    private static String GALLERY_FOLDER_ID = "FOLDER_ID";
+    static final String ROOT_FILE_MANAGER = "ROOT_FILE_MANAGER";
+    private final static String FILE_MANAGER_IMAGE = "FILE_MANAGER_GALLERY_IMAGE";
+    private final static String FILE_MANAGER_VIDEO = "FILE_MANAGER_GALLERY_VIDEO";
+    private final static String FILE_MANAGER_MUSIC = "FILE_MANAGER_GALLERY_MUSIC";
+    private final static String FOLDER_NAME = "FOLDER";
+    private final static String GALLERY_FOLDER_ID = "FOLDER_ID";
 
     private FileManagerChildFragmentBinding binding;
     private FileManagerChildViewModel mViewModel;
@@ -91,28 +93,64 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     private void setupRecyclerView() {
         if (mFolderName.equals(ROOT_FILE_MANAGER)) {
             setupListItems(mViewModel.getRootItems());
-        }else if(mFolderName.equals(FILE_MANAGER_IMAGE)){
-            fillWithGalleryItems("image");
-        }else if(mFolderName.equals(FILE_MANAGER_VIDEO)){
-            fillWithGalleryItems("video");
-        }else if(mFolderName.equals(FILE_MANAGER_MUSIC)){
-            fillWithGalleryItems("music");
-        } else {
+        }else if(mFolderName.equals(FILE_MANAGER_IMAGE) || mFolderName.equals(FILE_MANAGER_VIDEO) || mFolderName.equals(FILE_MANAGER_MUSIC)){
+            fillWithGalleryItems(mFolderName);
+        }else {
             fillFoldersItems(mFolderName);
         }
     }
 
     private void fillWithGalleryItems(String type){
+
+        String folder_id = null;
+        if(getArguments() != null){
+            folder_id = getArguments().getString(GALLERY_FOLDER_ID);
+        }
+
+        if(folder_id != null){
+            if(type.equals(FILE_MANAGER_IMAGE)){
+                FileManager.getFolderPhotosById(getContext() , folder_id , result -> {
+                    mViewModel.setItems(mViewModel.convertImageGalleryItems(result));
+                    mViewModel.checkListHasSelectedBefore();
+                    if(getActivity() != null){
+                        getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
+                    }
+                });
+            }else if(type.equals(FILE_MANAGER_VIDEO)){
+                FileManager.getFolderVideosById(getContext() , folder_id , result -> {
+                    mViewModel.setItems(mViewModel.convertVideoGalleryItems(result));
+                    mViewModel.checkListHasSelectedBefore();
+                    if(getActivity() != null){
+                        getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
+                    }
+                });
+            }
+            return;
+        }
+
         binding.loader.setVisibility(View.VISIBLE);
         switch (type){
-            case "image":
-
+            case FILE_MANAGER_IMAGE:
+                FileManager.getDevicePhotoFolders(getContext() , result -> {
+                    mViewModel.setItems(mViewModel.convertAlbumGalleryItems(result));
+                    mViewModel.checkListHasSelectedBefore();
+                    if(getActivity() != null){
+                        getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
+                    }
+                });
                 break;
 
-            case "video":
+            case FILE_MANAGER_VIDEO:
+                FileManager.getDeviceVideoFolders(getContext() , result -> {
+                    mViewModel.setItems(mViewModel.convertVideoAlbumGalleryItems(result));
+                    mViewModel.checkListHasSelectedBefore();
+                    if(getActivity() != null){
+                        getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
+                    }
+                });
                 break;
 
-            case "music":
+            case FILE_MANAGER_MUSIC:
                 FileManager.getDeviceMusics(getContext() , false , result -> {
                     mViewModel.setItems(mViewModel.convertMusicGalleryItems(result));
                     mViewModel.checkListHasSelectedBefore();
@@ -219,7 +257,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     }
 
     @Override
-    public void onGalleryClicked(int type, int position) {
+    public void onGalleryClicked(int type , String path, int position) {
         String tempType = null ;
 
         switch (type){
@@ -236,12 +274,26 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
                 break;
         }
 
-        closeSearch();
-        FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(tempType);
-        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
-            FileManagerFragment parent = ((FileManagerFragment) getParentFragment());
-            parent.setToolbarIconVisibility(true);
-            parent.loadFragment(fragment, FileManagerChildFragment.class.getName());
+        if(tempType != null) {
+            closeSearch();
+            FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(tempType);
+            if(getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+                FileManagerFragment parent = ((FileManagerFragment) getParentFragment());
+                parent.setToolbarIconVisibility(true);
+                parent.setToolbarSortIconVisibility(false);
+                parent.loadFragment(fragment , FileManagerChildFragment.class.getName());
+            }
+        }else {
+            if(path != null){
+                closeSearch();
+                FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(mFolderName , path);
+                if(getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+                    FileManagerFragment parent = ((FileManagerFragment) getParentFragment());
+                    parent.setToolbarIconVisibility(true);
+                    parent.setToolbarSortIconVisibility(false);
+                    parent.loadFragment(fragment , FileManagerChildFragment.class.getName());
+                }
+            }
         }
 
     }
