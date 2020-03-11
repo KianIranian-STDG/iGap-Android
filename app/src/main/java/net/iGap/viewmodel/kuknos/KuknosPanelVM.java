@@ -145,6 +145,10 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         }
     }
 
+    public boolean isPmnActive() {
+        return currency.get().equals("PMN");
+    }
+
     public void getTermsAndCond() {
         if (TandCAgree.getValue() != null && !TandCAgree.getValue().equals("error")) {
             TandCAgree.postValue(TandCAgree.getValue());

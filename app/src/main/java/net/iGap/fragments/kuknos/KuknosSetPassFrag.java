@@ -106,7 +106,6 @@ public class KuknosSetPassFrag extends BaseFragment {
     private void onError() {
         kuknosSetPassVM.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
-                //TODO clear Log
                 if (errorM.getMessage().equals("0")) {
                     Snackbar snackbar = Snackbar.make(binding.fragKuknosSPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                     snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
