@@ -23,6 +23,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
@@ -176,12 +177,14 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                             fragment = KuknosViewRecoveryEPFrag.newInstance();
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         }
-                    } else {
+                    } else if (viewModel.isMnemonicAvailable()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosShowRecoveryKeySFrag.newInstance();
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         }
+                    } else {
+                        HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
                     }
                     break;
                 case 1:

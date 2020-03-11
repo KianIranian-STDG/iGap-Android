@@ -2271,5 +2271,6 @@
     <string name="kuknos_soon_error">مبادله توکن ها به زودی فعال میشود.</string>
     <string name="kuknos_support_error">ققنوس برای دستگاه شما در دسترس نیست.</string>
     <string name="kuknos_trade_price">قیمت</string>
+    <string name="kuknos_Mnemonic_error">کلمات بازیابی یافت نشد.</string>
 
 </resources>

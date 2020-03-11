@@ -2050,7 +2050,7 @@ Want to get it?</string>
     <string name="kuknos_login_error_server_str">Server Error: User already exists.</string>
     <string name="kuknos_login_progress_str">Checking...</string>
     <string name="kuknos_Entry_NT_str">New Wallet</string>
-    <string name="kuknos_Entry_RT_str">Retrieve Wallet</string>
+    <string name="kuknos_Entry_RT_str">Retrieve Wallet With Recovery Key</string>
     <string name="kuknos_Entry_Message">Please select one of the below options:</string>
     <string name="kuknos_Restore_Title">Please enter your account recovery keys.</string>
     <string name="kuknos_Restore_Message">By using these words, you will be able to retrieve your account.</string>
@@ -2267,7 +2267,7 @@ Want to get it?</string>
     <string name="kuknos_RestorePass_message">This 4 numeric PIN will be used to restore your secret key.</string>
     <string name="kuknos_RestorePass_btn">Retrieve</string>
     <string name="kuknos_Restore_checkBtn">Next</string>
-    <string name="kuknos_Entry_RTSeedKey_str">Retrieve With Seed Key</string>
+    <string name="kuknos_Entry_RTSeedKey_str">Retrieve Wallet With Seed Key</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
     <string name="kuknos_buyAsset">Buy Asset</string>
@@ -2284,6 +2284,7 @@ Want to get it?</string>
     <string name="kuknos_payment_totalAmount">Total Amount: </string>
     <string name="kuknos_payment_hash">Kuknos Hash: </string>
     <string name="kuknos_support_error">Kuknos platform is NOT available for your device.</string>
+    <string name="kuknos_Mnemonic_error">Recovery keys are NOT set.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>
