@@ -10,20 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.common.collect.Ordering;
-
 import net.iGap.R;
 import net.iGap.adapter.AdapterFileManager;
 import net.iGap.databinding.FileManagerChildFragmentBinding;
 import net.iGap.helper.FileManager;
-import net.iGap.model.GalleryAlbumModel;
-import net.iGap.model.GalleryItemModel;
-import net.iGap.model.GalleryMusicModel;
-import net.iGap.module.structs.StructExplorerItem;
+import net.iGap.module.structs.StructFileManager;
 import net.iGap.viewmodel.FileManagerChildViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class FileManagerChildFragment extends BaseFragment implements AdapterFileManager.OnItemClickListenerExplorer {
@@ -179,7 +173,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
 
     }
 
-    private void setupListItems(List<StructExplorerItem> items) {
+    private void setupListItems(List<StructFileManager> items) {
         binding.loader.setVisibility(View.GONE);
         mAdapter = new AdapterFileManager(items, this);
         binding.rvItems.setAdapter(mAdapter);
@@ -212,7 +206,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
             }
             return;
         }
-        List<StructExplorerItem> searchedResult;
+        List<StructFileManager> searchedResult;
         searchedResult = getSearchResultFromMainList(text);
         if (searchedResult.size() == 0) {
             binding.btnBack.setVisibility(View.GONE);
@@ -225,8 +219,8 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         }
     }
 
-    private List<StructExplorerItem> getSearchResultFromMainList(String text) {
-        List<StructExplorerItem> result = new ArrayList<>();
+    private List<StructFileManager> getSearchResultFromMainList(String text) {
+        List<StructFileManager> result = new ArrayList<>();
         for (int i = 0; i < mViewModel.getItems().size(); i++) {
             if (mViewModel.getItems().get(i).nameStr != null && mViewModel.getItems().get(i).nameStr.toLowerCase().contains(text.toLowerCase().trim())) {
                 result.add(mViewModel.getItems().get(i));

@@ -10,7 +10,7 @@
 
 package net.iGap.module.structs;
 
-public class StructExplorerItem {
+public class StructFileManager {
 
     public int name ;
     public String nameStr = null;

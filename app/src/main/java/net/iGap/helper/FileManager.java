@@ -10,7 +10,7 @@ import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryMusicModel;
 import net.iGap.model.GalleryVideoModel;
-import net.iGap.module.structs.StructExplorerItem;
+import net.iGap.module.structs.StructFileManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -319,9 +319,9 @@ public class FileManager {
     /**
      * sorts based on the files name
      */
-    public static class SortFileName implements Comparator<StructExplorerItem> {
+    public static class SortFileName implements Comparator<StructFileManager> {
         @Override
-        public int compare(StructExplorerItem f1, StructExplorerItem f2) {
+        public int compare(StructFileManager f1, StructFileManager f2) {
             if(f1.nameStr == null)
                 return 1;
             else
@@ -332,9 +332,9 @@ public class FileManager {
     /**
      * sorts based on the file date modify
      */
-    public static class SortFileDate implements Comparator<StructExplorerItem> {
+    public static class SortFileDate implements Comparator<StructFileManager> {
         @Override
-        public int compare(StructExplorerItem obj1, StructExplorerItem obj2) {
+        public int compare(StructFileManager obj1, StructFileManager obj2) {
             File f1 = new File(obj1.path);
             File f2 = new File(obj2.path);
             return (int) ((f1.lastModified() > f2.lastModified()) ? f1.lastModified() : f2.lastModified());
@@ -344,9 +344,9 @@ public class FileManager {
     /**
      * sorts based on a file or folder. folders will be listed first
      */
-    public static class SortFolder implements Comparator<StructExplorerItem> {
+    public static class SortFolder implements Comparator<StructFileManager> {
         @Override
-        public int compare(StructExplorerItem obj1, StructExplorerItem obj2) {
+        public int compare(StructFileManager obj1, StructFileManager obj2) {
             File f1 = new File(obj1.path);
             File f2 = new File(obj2.path);
             if (f1.isDirectory() == f2.isDirectory())

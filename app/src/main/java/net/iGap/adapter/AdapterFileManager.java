@@ -10,7 +10,6 @@
 
 package net.iGap.adapter;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.zxing.common.StringUtils;
 import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.R;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
-import net.iGap.module.structs.StructExplorerItem;
+import net.iGap.module.structs.StructFileManager;
 
 import java.io.File;
 import java.util.List;
@@ -33,10 +31,10 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.ViewHolder> {
 
-    private List<StructExplorerItem> items;
+    private List<StructFileManager> items;
     private OnItemClickListenerExplorer onItemClickListener;
 
-    public AdapterFileManager(List<StructExplorerItem> list, OnItemClickListenerExplorer onItemClickListener) {
+    public AdapterFileManager(List<StructFileManager> list, OnItemClickListenerExplorer onItemClickListener) {
         items = list;
         this.onItemClickListener = onItemClickListener;
     }
@@ -46,7 +44,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         notifyDataSetChanged();
     }
 
-    public void update(List<StructExplorerItem> items) {
+    public void update(List<StructFileManager> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -58,7 +56,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        StructExplorerItem rowItem = items.get(position);
+        StructFileManager rowItem = items.get(position);
         holder.checkBox.setChecked(rowItem.isSelected);
         holder.imageView.setImageResource(rowItem.image);
         if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
@@ -87,7 +85,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         }
 
         holder.itemView.setOnClickListener(view -> {
-            StructExplorerItem item = items.get(holder.getAdapterPosition());
+            StructFileManager item = items.get(holder.getAdapterPosition());
             if (item.isFolderOrFile) {
                 if (new File(item.path).isDirectory()) {
                     onItemClickListener.onFolderClicked(item.path, holder.getAdapterPosition());
@@ -108,7 +106,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int arg1) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_layout_explorer, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_layout_file_manager , parent, false));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

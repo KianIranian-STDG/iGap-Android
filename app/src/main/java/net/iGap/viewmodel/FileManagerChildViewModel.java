@@ -14,7 +14,7 @@ import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryMusicModel;
 import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.FileUtils;
-import net.iGap.module.structs.StructExplorerItem;
+import net.iGap.module.structs.StructFileManager;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -24,14 +24,14 @@ import java.util.List;
 
 public class FileManagerChildViewModel extends BaseViewModel {
 
-    private List<StructExplorerItem> mItems = new ArrayList<>();
+    private List<StructFileManager> mItems = new ArrayList<>();
     private List<String> mSelectedList = new ArrayList<>();
 
     public void setSelectedList(List<String> mSelectedList) {
         this.mSelectedList = mSelectedList;
     }
 
-    public List<StructExplorerItem> getRootItems() {
+    public List<StructFileManager> getRootItems() {
 
         List<String> storageList = FileUtils.getSdCardPathList();
 
@@ -174,7 +174,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
     }
 
     private void addItemToList(int title ,String titleStr, int image, String path, int desc , String descStr, int background, boolean isFolderOrFile) {
-        StructExplorerItem item = new StructExplorerItem();
+        StructFileManager item = new StructFileManager();
         item.name = title;
         item.nameStr = titleStr;
         item.image = image;
@@ -206,19 +206,19 @@ public class FileManagerChildViewModel extends BaseViewModel {
         }
     }
 
-    public List<StructExplorerItem> getItems() {
+    public List<StructFileManager> getItems() {
         return mItems;
     }
 
-    public void setItems(List<StructExplorerItem> mItems) {
+    public void setItems(List<StructFileManager> mItems) {
         this.mItems = mItems;
     }
 
-    public List<StructExplorerItem> convertMusicGalleryItems(List<GalleryMusicModel> items) {
-        List<StructExplorerItem> result = new ArrayList<>();
-        StructExplorerItem item ;
+    public List<StructFileManager> convertMusicGalleryItems(List<GalleryMusicModel> items) {
+        List<StructFileManager> result = new ArrayList<>();
+        StructFileManager item ;
         for (int i = 0 ; i < items.size() ; i++){
-            item = new StructExplorerItem();
+            item = new StructFileManager();
             item.nameStr = items.get(i).getTitle();
             item.path = items.get(i).getPath();
             item.image = R.drawable.ic_fm_music_file;
@@ -230,11 +230,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
         return result;
     }
 
-    public List<StructExplorerItem> convertAlbumGalleryItems(List<GalleryAlbumModel> items) {
-        List<StructExplorerItem> result = new ArrayList<>();
-        StructExplorerItem item ;
+    public List<StructFileManager> convertAlbumGalleryItems(List<GalleryAlbumModel> items) {
+        List<StructFileManager> result = new ArrayList<>();
+        StructFileManager item ;
         for (int i = 0 ; i < items.size() ; i++){
-            item = new StructExplorerItem();
+            item = new StructFileManager();
             item.nameStr = items.get(i).getCaption();
             item.path = items.get(i).getId();
             item.image = R.drawable.ic_fm_folder;
@@ -246,11 +246,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
         return result;
     }
 
-    public List<StructExplorerItem> convertVideoAlbumGalleryItems(List<GalleryVideoModel> items) {
-        List<StructExplorerItem> result = new ArrayList<>();
-        StructExplorerItem item ;
+    public List<StructFileManager> convertVideoAlbumGalleryItems(List<GalleryVideoModel> items) {
+        List<StructFileManager> result = new ArrayList<>();
+        StructFileManager item ;
         for (int i = 0 ; i < items.size() ; i++){
-            item = new StructExplorerItem();
+            item = new StructFileManager();
             item.nameStr = items.get(i).getCaption();
             item.path = items.get(i).getId();
             item.image = R.drawable.ic_fm_folder;
@@ -262,12 +262,12 @@ public class FileManagerChildViewModel extends BaseViewModel {
         return result;
     }
 
-    public List<StructExplorerItem> convertImageGalleryItems(List<GalleryItemModel> items) {
-        List<StructExplorerItem> result = new ArrayList<>();
-        StructExplorerItem item ;
+    public List<StructFileManager> convertImageGalleryItems(List<GalleryItemModel> items) {
+        List<StructFileManager> result = new ArrayList<>();
+        StructFileManager item ;
         for (int i = 0 ; i < items.size() ; i++){
             String[] splittedAddress = items.get(i).getAddress().split("/");
-            item = new StructExplorerItem();
+            item = new StructFileManager();
             item.nameStr = splittedAddress[splittedAddress.length -1];
             item.path = items.get(i).getAddress();
             item.image = R.drawable.ic_fm_image_small;
@@ -279,12 +279,12 @@ public class FileManagerChildViewModel extends BaseViewModel {
         return result;
     }
 
-    public List<StructExplorerItem> convertVideoGalleryItems(List<GalleryVideoModel> items) {
-        List<StructExplorerItem> result = new ArrayList<>();
-        StructExplorerItem item ;
+    public List<StructFileManager> convertVideoGalleryItems(List<GalleryVideoModel> items) {
+        List<StructFileManager> result = new ArrayList<>();
+        StructFileManager item ;
         for (int i = 0 ; i < items.size() ; i++){
             String[] splittedAddress = items.get(i).getPath().split("/");
-            item = new StructExplorerItem();
+            item = new StructFileManager();
             item.nameStr = splittedAddress[splittedAddress.length -1];
             item.path = items.get(i).getPath();
             item.image = R.drawable.ic_fm_image_small;
@@ -297,6 +297,6 @@ public class FileManagerChildViewModel extends BaseViewModel {
     }
 
     public interface FolderResultCallback{
-        void onResult(List<StructExplorerItem> items);
+        void onResult(List<StructFileManager> items);
     }
 }
