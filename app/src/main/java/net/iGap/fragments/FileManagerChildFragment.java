@@ -10,19 +10,28 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.common.collect.Ordering;
+
 import net.iGap.R;
 import net.iGap.adapter.AdapterFileManager;
 import net.iGap.databinding.FileManagerChildFragmentBinding;
+import net.iGap.helper.FileManager;
+import net.iGap.model.GalleryMusicModel;
 import net.iGap.module.structs.StructExplorerItem;
 import net.iGap.viewmodel.FileManagerChildViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FileManagerChildFragment extends BaseFragment implements AdapterFileManager.OnItemClickListenerExplorer {
 
-    public static String ROOT_FILE_MANAGER = "ROOT_FILE_MANAGER";
+    static String ROOT_FILE_MANAGER = "ROOT_FILE_MANAGER";
+    static String FILE_MANAGER_IMAGE = "FILE_MANAGER_GALLERY_IMAGE";
+    static String FILE_MANAGER_VIDEO = "FILE_MANAGER_GALLERY_VIDEO";
+    static String FILE_MANAGER_MUSIC = "FILE_MANAGER_GALLERY_MUSIC";
     private static String FOLDER_NAME = "FOLDER";
+    private static String GALLERY_FOLDER_ID = "FOLDER_ID";
 
     private FileManagerChildFragmentBinding binding;
     private FileManagerChildViewModel mViewModel;
@@ -33,6 +42,15 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         FileManagerChildFragment fragment = new FileManagerChildFragment();
         Bundle bundle = new Bundle();
         bundle.putString(FOLDER_NAME, folder);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static FileManagerChildFragment newInstance(String type , String id) {
+        FileManagerChildFragment fragment = new FileManagerChildFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(FOLDER_NAME, type);
+        bundle.putString(GALLERY_FOLDER_ID, id);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -72,20 +90,38 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
 
     private void setupRecyclerView() {
         if (mFolderName.equals(ROOT_FILE_MANAGER)) {
-            fillRootAndShowRecent();
+            setupListItems(mViewModel.getRootItems());
+        }else if(mFolderName.equals(FILE_MANAGER_IMAGE)){
+            fillWithGalleryItems("image");
+        }else if(mFolderName.equals(FILE_MANAGER_VIDEO)){
+            fillWithGalleryItems("video");
+        }else if(mFolderName.equals(FILE_MANAGER_MUSIC)){
+            fillWithGalleryItems("music");
         } else {
             fillFoldersItems(mFolderName);
         }
     }
 
-    private void fillRootAndShowRecent() {
+    private void fillWithGalleryItems(String type){
+        binding.loader.setVisibility(View.VISIBLE);
+        switch (type){
+            case "image":
 
-        List<StructExplorerItem> items = mViewModel.getRootItems();
+                break;
 
-        //setup adapter
-        mAdapter = new AdapterFileManager(items, this);
-        binding.rvItems.setAdapter(mAdapter);
+            case "video":
+                break;
 
+            case "music":
+                FileManager.getDeviceMusics(getContext() , false , result -> {
+                    mViewModel.setItems(mViewModel.convertMusicGalleryItems(result));
+                    mViewModel.checkListHasSelectedBefore();
+                    if(getActivity() != null){
+                        getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
+                    }
+                });
+                break;
+        }
     }
 
     private void fillFoldersItems(String folder) {
@@ -97,19 +133,23 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
             mViewModel.getFoldersSubItems(folder , items -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        binding.loader.setVisibility(View.GONE);
-                        mAdapter = new AdapterFileManager(items, this);
-                        binding.rvItems.setAdapter(mAdapter);
-
-                        if(items.size() == 0){
-                            binding.btnBack.setVisibility(View.VISIBLE);
-                            binding.lytNothing.setVisibility(View.VISIBLE);
-                        }
+                        setupListItems(items);
                     });
                 }
             });
         }
 
+    }
+
+    private void setupListItems(List<StructExplorerItem> items) {
+        binding.loader.setVisibility(View.GONE);
+        mAdapter = new AdapterFileManager(items, this);
+        binding.rvItems.setAdapter(mAdapter);
+
+        if(items.size() == 0){
+            binding.btnBack.setVisibility(View.VISIBLE);
+            binding.lytNothing.setVisibility(View.VISIBLE);
+        }
     }
 
     void onToolbarClicked() {
@@ -180,7 +220,30 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
 
     @Override
     public void onGalleryClicked(int type, int position) {
-        //getOpenGallery(type);
+        String tempType = null ;
+
+        switch (type){
+            case R.string.images:
+                tempType = FILE_MANAGER_IMAGE;
+                break;
+
+            case R.string.videos:
+                tempType = FILE_MANAGER_VIDEO;
+                break;
+
+            case R.string.audios:
+                tempType = FILE_MANAGER_MUSIC;
+                break;
+        }
+
+        closeSearch();
+        FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(tempType);
+        if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            FileManagerFragment parent = ((FileManagerFragment) getParentFragment());
+            parent.setToolbarIconVisibility(true);
+            parent.loadFragment(fragment, FileManagerChildFragment.class.getName());
+        }
+
     }
 
     private void getSelectedListAndSetToViewModel() {

@@ -9,6 +9,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperMimeType;
+import net.iGap.model.GalleryMusicModel;
 import net.iGap.module.FileUtils;
 import net.iGap.module.structs.StructExplorerItem;
 
@@ -193,7 +194,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
         }
     }
 
-    private void checkListHasSelectedBefore(){
+    public void checkListHasSelectedBefore(){
         for (int i = 0 ; i < mItems.size() ; i++){
             for(int j = 0 ; j < mSelectedList.size() ; j++){
                 if(mItems.get(i).path.equals(mSelectedList.get(j)))
@@ -204,6 +205,26 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public List<StructExplorerItem> getItems() {
         return mItems;
+    }
+
+    public void setItems(List<StructExplorerItem> mItems) {
+        this.mItems = mItems;
+    }
+
+    public List<StructExplorerItem> convertMusicGalleryItems(List<GalleryMusicModel> items) {
+        List<StructExplorerItem> result = new ArrayList<>();
+        StructExplorerItem item ;
+        for (int i = 0 ; i < items.size() ; i++){
+            item = new StructExplorerItem();
+            item.nameStr = items.get(i).getTitle();
+            item.path = items.get(i).getPath();
+            item.image = R.drawable.ic_fm_music_file;
+            item.backColor = R.drawable.shape_file_manager_file_bg;
+            item.isFolderOrFile = true;
+            item.descriptionStr = getFileDescription(new File(item.path));
+            result.add(item);
+        }
+        return result;
     }
 
     public interface FolderResultCallback{
