@@ -79,8 +79,11 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
 
         try {
             StructIGSticker structIGSticker = holder.structIGSticker = new Gson().fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
-            if (structIGSticker != null) {
+            if (structIGSticker != null && structIGSticker.getPath() != null) {
                 holder.stickerView.loadSticker(structIGSticker);
+            } else {
+                String path = StickerRepository.getInstance().getStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+                holder.stickerView.loadSticker(structMessage.getAttachment().getToken(), path, structMessage.getAttachment().getName(), String.valueOf(structMessage.getAttachment().getId()), structMessage.getAttachment().getSize());
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
