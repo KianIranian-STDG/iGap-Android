@@ -180,7 +180,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
-                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                     new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
                 } else {
                     HelperError.showSnackMessage("", true);
