@@ -9399,11 +9399,11 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onAttachPopupFilePicked(ArrayList<String> selectedPathList) {
+    public void onAttachPopupFilePicked(List<String> selectedPathList , String caption) {
+        if(caption != null) edtChat.setText(caption);
         for (String path : selectedPathList) {
-            Intent data = new Intent();
-            data.setData(Uri.parse(path));
-            onActivityResult(request_code_pic_file, Activity.RESULT_OK, data);
+            sendMessage(request_code_pic_file , path);
+            edtChat.setText("");
         }
     }
 

@@ -2271,5 +2271,15 @@
     <string name="kuknos_soon_error">مبادله توکن ها به زودی فعال میشود.</string>
     <string name="kuknos_support_error">ققنوس برای دستگاه شما در دسترس نیست.</string>
     <string name="kuknos_trade_price">قیمت</string>
+    <string name="internal_desc">کاوش در حافظه داخلی دستگاه</string>
+    <string name="external_desc">کاوش در حافظه خارجی دستگاه</string>
+    <string name="file_manager_app_desc">کاوش در پوشه آیگپ</string>
+    <string name="file_manager_image_desc">ارسال فایل های تصویری</string>
+    <string name="file_manager_video_desc">ارسال فایل های ویدیویی</string>
+    <string name="file_manager_music">ارسال فایل های صوتی</string>
+    <string name="folder">پوشه</string>
+    <string name="internal_storage">حافظه داخلی</string>
+    <string name="external_storage">حافظه جانبی</string>
+    <string name="file_manager">مدیریت فایل</string>
 
 </resources>

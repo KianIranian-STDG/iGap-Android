@@ -2525,6 +2525,18 @@
     <string name="posted">ارسال شده</string>
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال‌سازی</string>
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
+    <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟!
+        توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
+    <string name="internal_desc">کاوش در حافظه داخلی دستگاه</string>
+    <string name="external_desc">کاوش در حافظه خارجی دستگاه</string>
+    <string name="file_manager_app_desc">کاوش در پوشه آیگپ</string>
+    <string name="file_manager_image_desc">ارسال فایل های تصویری</string>
+    <string name="file_manager_video_desc">ارسال فایل های ویدیویی</string>
+    <string name="file_manager_music">ارسال فایل های صوتی</string>
+    <string name="folder">پوشه</string>
+    <string name="internal_storage">حافظه داخلی</string>
+    <string name="external_storage">حافظه جانبی</string>
+    <string name="file_manager">مدیریت فایل</string>
     <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟! توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
     <string name="inter_cheque_amount">ثبت مبلغ </string>
     <string name="take_turn">دریافت نوبت</string>

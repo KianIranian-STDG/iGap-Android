@@ -1289,12 +1289,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            if (G.onBackPressedExplorer != null) {
-                Log.wtf(this.getClass().getName(), "onBackPressedExplorer");
-                if (G.onBackPressedExplorer.onBack()) {
-                    return;
-                }
-            } else if (G.onBackPressedChat != null) {
+            if (G.onBackPressedChat != null) {
                 Log.wtf(this.getClass().getName(), "onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
