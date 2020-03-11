@@ -88,20 +88,15 @@ public class RealmChannelExtra extends RealmObject {
     }
 
     public static void updateMessageStats(final List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> statsArrayList) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsArrayList) {
-                        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
-                        if (realmChannelExtra != null) {
-                            realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
-                            realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
-                            realmChannelExtra.setViewsLabel(stats.getViewsLabel());
-                        }
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsArrayList) {
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
+                if (realmChannelExtra != null) {
+                    realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
+                    realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
+                    realmChannelExtra.setViewsLabel(stats.getViewsLabel());
                 }
-            });
+            }
         });
     }
 

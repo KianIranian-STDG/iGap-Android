@@ -281,7 +281,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     break;
                 case 1:
                     fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
-                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("")) {
+                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("") && viewModel.isPmnActive()) {
                         fragment = KuknosSendFrag.newInstance();
                         Bundle b = new Bundle();
                         b.putString("balanceClientInfo", viewModel.convertToJSON(viewModel.getPosition()));

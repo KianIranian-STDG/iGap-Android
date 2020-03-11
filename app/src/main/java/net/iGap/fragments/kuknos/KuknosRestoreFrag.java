@@ -8,14 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -27,12 +19,24 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosRestoreVM;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+
 public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
 
     private FragmentKuknosRestoreBinding binding;
 
-    public static KuknosRestoreFrag newInstance() {
-        return new KuknosRestoreFrag();
+    public static KuknosRestoreFrag newInstance(boolean isSeedMode) {
+        KuknosRestoreFrag frag = new KuknosRestoreFrag();
+        Bundle data = new Bundle();
+        data.putBoolean("mode", isSeedMode);
+        frag.setArguments(data);
+        return frag;
     }
 
     @Override
@@ -72,6 +76,13 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
         LinearLayout toolbarLayout = binding.fragKuknosRToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
         binding.fragKuknosIdPINCheck.setChecked(false);
+
+        if (getArguments().getBoolean("mode")) {
+            viewModel.setSeedMode(true);
+            binding.fragKuknosRMessage.setText(getResources().getString(R.string.kuknos_RestoreSeed_Title));
+            binding.fragKuknosRDescription.setText(getResources().getString(R.string.kuknos_RestoreSeed_Message));
+            binding.fragKuknosRkeysET.setHint(getResources().getString(R.string.kuknos_RestoreSeed_Hint));
+        }
 
         onErrorObserver();
         onNextObserver();

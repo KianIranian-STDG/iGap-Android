@@ -38,11 +38,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -137,8 +132,11 @@ import org.paygear.fragment.PaymentHistoryFragment;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 import io.realm.Realm;
 
 import static net.iGap.G.context;
@@ -1364,11 +1362,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
-                        List fragmentList = getSupportFragmentManager().getFragments();
+//                        List fragmentList = getSupportFragmentManager().getFragments();
                         boolean handled = false;
                         try {
                             // because some of our fragments are NOT extended from BaseFragment
-                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
+//                            Log.wtf("amini", "onBackPressed: " + fragmentList.get(fragmentList.size() - 1).getClass().getName());
+                            Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
+//                            Log.wtf("amini", "on back frag H " + frag.getClass().getName());
+                            handled = ((BaseFragment) frag).onBackPressed();
+//                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
