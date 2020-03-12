@@ -19,6 +19,7 @@ import net.iGap.databinding.FileManagerFragmentBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.IPickFile;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -113,8 +114,8 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
 
         mViewModel.getSendClickListener().observe(getViewLifecycleOwner(), state -> {
             if (mListener != null && mListener.get() != null && getActivity() != null) {
-                mListener.get().onPick(mSelectedList , binding.edtMessage.getText() == null ? null : binding.edtMessage.getText().toString());
-                new HelperFragment(getActivity().getSupportFragmentManager() , this).remove();
+                mListener.get().onPick(mSelectedList, binding.edtMessage.getText() == null ? null : binding.edtMessage.getText().toString());
+                new HelperFragment(getActivity().getSupportFragmentManager(), this).remove();
             }
         });
     }
@@ -233,17 +234,17 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
         new TopSheetDialog(getContext()).setListData(items, -1, position -> {
             switch (position) {
                 case 0:
-                    if(isSortByDate == null) return;
+                    if (isSortByDate == null) return;
                     isSortByDate = null;
                     break;
 
                 case 1:
-                    if(isSortByDate != null && !isSortByDate) return;
+                    if (isSortByDate != null && !isSortByDate) return;
                     isSortByDate = false;
                     break;
 
                 case 2:
-                    if(isSortByDate != null && isSortByDate) return;
+                    if (isSortByDate != null && isSortByDate) return;
                     isSortByDate = true;
                     break;
             }
@@ -277,20 +278,20 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
         return mSelectedList;
     }
 
-    private void checkShowOrHideSendLayout(){
+    private void checkShowOrHideSendLayout() {
         //set size to badge view counter
         mViewModel.getSelectedCount().set(checkNumberInMultiLangs(mSelectedList.size() + ""));
 
-        if(mSelectedList.size() > 0){
+        if (mSelectedList.size() > 0) {
             //show send layout
             mViewModel.getSendBoxVisibility().set(View.VISIBLE);
-        }else {
+        } else {
             //hide send layout
             mViewModel.getSendBoxVisibility().set(View.GONE);
         }
     }
 
-    private String checkNumberInMultiLangs(String number){
+    private String checkNumberInMultiLangs(String number) {
         return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(number) : number;
     }
 
@@ -319,4 +320,15 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
         return onBackClicked();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
+    }
 }
