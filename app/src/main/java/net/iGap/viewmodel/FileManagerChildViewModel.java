@@ -43,7 +43,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
                     Environment.getExternalStorageDirectory().getAbsolutePath(),
                     R.string.internal_desc,
                     null ,
-                    R.drawable.shape_file_manager_file_bg,
+                    R.drawable.shape_file_manager_folder_bg,
                     true
             );
         }
@@ -57,7 +57,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
                         sdPath + "/",
                         R.string.external_desc,
                         null ,
-                        R.drawable.shape_file_manager_folder_bg,
+                        R.drawable.shape_file_manager_file_bg,
                         true
                 );
             }
@@ -72,7 +72,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
                         G.DIR_SDCARD_EXTERNAL + "/",
                         R.string.file_manager_app_desc,
                         null ,
-                        R.drawable.shape_file_manager_folder_bg,
+                        R.drawable.shape_file_manager_file_bg,
                         true
                 );
             }
@@ -86,7 +86,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
                     G.DIR_APP ,
                     R.string.file_manager_app_desc,
                     null ,
-                    R.drawable.shape_file_manager_file_bg,
+                    R.drawable.shape_file_manager_folder_bg,
                     true
             );
         }

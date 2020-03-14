@@ -21,6 +21,8 @@ import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserInfo;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -199,24 +201,22 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public static boolean updateStatus(long userId, final int lastSeen, final String userStatus) {
-        return DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        AtomicBoolean result = new AtomicBoolean(true);
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
             if (realmRegisteredInfo != null) {
-                if (userStatus.toLowerCase().equals("offline") && !realmRegisteredInfo.getStatus().toLowerCase().equals("online")) {
-                    return false;
+                if (userStatus.toLowerCase().equals("offline") && !realmRegisteredInfo.getOriginalStatus().toLowerCase().equals("online")) {
+                    result.set(false);
                 }
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmRegisteredInfo.setStatus(userStatus);
-                        realmRegisteredInfo.setLastSeen(lastSeen);
-                    }
-                });
+                realmRegisteredInfo.setStatus(userStatus);
+                realmRegisteredInfo.setLastSeen(lastSeen);
             }
 
-            return true;
+            result.set(true);
         });
+
+        return result.get();
     }
 
     public static long getUserInfo(Realm realm, String phoneNumber) {
@@ -309,6 +309,10 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public String getStatus() {
         return AppUtils.getStatsForUser(status);
+    }
+
+    public String getOriginalStatus() {
+        return status;
     }
 
     public void setStatus(String status) {

@@ -217,7 +217,6 @@ import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.observers.interfaces.ISendPosition;
 import net.iGap.observers.interfaces.IUpdateLogItem;
 import net.iGap.observers.interfaces.LocationListener;
-import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.observers.interfaces.OnBackgroundChanged;
 import net.iGap.observers.interfaces.OnBotClick;
 import net.iGap.observers.interfaces.OnChannelAddMessageReaction;
@@ -611,6 +610,7 @@ public class FragmentChat extends BaseFragment
     private int keyboardHeightLand = -1;
 
     private boolean keyboardVisible;
+    private boolean showKeyboardOnResume;
     private boolean keyboardViewVisible;
     private int currentKeyboardViewContent;
 
@@ -686,7 +686,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyboardViewVisible) {
+                    if (topFragmentIsChat() && keyboardViewVisible) {
                         showPopup(-1);
                         return true;
                     }
@@ -871,56 +871,14 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    RealmRoomMessage.fetchMessages(realm, mRoomId, new OnActivityChatStart() {
-                        @Override
-                        public void resendMessage(final RealmRoomMessage message) {
-                            if (!allowResendMessage(message.getMessageId())) {
-                                return;
-                            }
-                            chatSendMessageUtil.build(chatType, message.getRoomId(), message);
-                        }
-
-                        @Override
-                        public void resendMessageNeedsUpload(final RealmRoomMessage message, final long messageId) {
-                            if (!allowResendMessage(message.getMessageId())) {
-                                return;
-                            }
-                            UploadManager.getInstance().uploadMessageAndSend(chatType, message);
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(messageId));
-                                }
-                            }, 300);
-                        }
-
-                        @Override
-                        public void sendSeenStatus(RealmRoomMessage message) {
-
-                            if (!isNotJoin) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                            }
-                        }
-                    });
-
-                });
-
-
-            }
-        }, 500);
-    }
-
-    @Override
     public void onResume() {
         isPaused = false;
         super.onResume();
+
+        if (showKeyboardOnResume) {
+            showPopup(KeyboardView.MODE_KEYBOARD);
+            openKeyboardInternal();
+        }
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
@@ -2299,23 +2257,20 @@ public class FragmentChat extends BaseFragment
     }
 
     public boolean onBackPressed() {
-        if (mAttachmentPopup != null) mAttachmentPopup.directDismiss();
+        if (mAttachmentPopup != null)
+            mAttachmentPopup.directDismiss();
+
         boolean stopSuperPress = true;
+
         try {
-
             if (webViewChatPage != null) {
-
                 closeWebViewForSpecialUrlChat(false);
-                return stopSuperPress;
+                return true;
             }
 
-            /*FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
-            if (fragment != null) {
-                removeFromBaseFragment(fragment);
-            } else*/
             if (mAdapter != null && mAdapter.getSelections().size() > 0) {
                 mAdapter.deselect();
-            } else if (keyboardView != null && keyboardViewVisible) {
+            } else if (topFragmentIsChat() && keyboardView != null && keyboardViewVisible) {
                 hideKeyboardView();
             } else if (ll_Search != null && ll_Search.isShown()) {
                 goneSearchBox(edtSearchMessage);
@@ -2327,6 +2282,8 @@ public class FragmentChat extends BaseFragment
                 stopSuperPress = false;
             }
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return stopSuperPress;
@@ -2342,6 +2299,20 @@ public class FragmentChat extends BaseFragment
                 //        if (!isStopBot) popBackStackFragment();
             }
         }
+    }
+
+    private boolean topFragmentIsChat() {
+        boolean topFragmentIsChat = false;
+        if (getActivity() != null) {
+            int i = getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1;
+            String topFragmentName = getActivity().getSupportFragmentManager().getBackStackEntryAt(i).getName();
+
+            if (topFragmentName != null)
+                topFragmentIsChat = topFragmentName.equals(FragmentChat.class.getName());
+
+            showKeyboardOnResume = keyboardViewVisible && keyboardView.getCurrentMode() == KeyboardView.MODE_KEYBOARD;
+        }
+        return topFragmentIsChat;
     }
 
     private void makeWebViewGone() {
@@ -4515,8 +4486,10 @@ public class FragmentChat extends BaseFragment
         StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, isChatReadOnly);
         dialogFragment.setListener(this::sendStickerAsMessage);
 
-        if (getFragmentManager() != null)
+        if (getFragmentManager() != null) {
+            showPopup(-1);
             dialogFragment.show(getFragmentManager(), "dialogFragment");
+        }
 
     }
 
@@ -4618,13 +4591,13 @@ public class FragmentChat extends BaseFragment
              */
 
             messageInfo.realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     DbManager.getInstance().doRealmTransaction(realm -> {
                         RealmClientCondition.addOfflineSeen(realm, mRoomId, messageInfo.realmRoomMessage.getMessageId());
                         RealmRoomMessage.setStatusSeenInChat(realm, messageInfo.realmRoomMessage.getMessageId());
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                     });
                 }
             }).start();
@@ -8596,8 +8569,6 @@ public class FragmentChat extends BaseFragment
                             isWaitingForHistoryDown = false;
                         }
 
-                        MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN);
-
                         //                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
                         //                        getOnlineMessage(oldMessageId, direction);
                         //                        return;
@@ -9399,10 +9370,10 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onAttachPopupFilePicked(List<String> selectedPathList , String caption) {
-        if(caption != null) edtChat.setText(caption);
+    public void onAttachPopupFilePicked(List<String> selectedPathList, String caption) {
+        if (caption != null) edtChat.setText(caption);
         for (String path : selectedPathList) {
-            sendMessage(request_code_pic_file , path);
+            sendMessage(request_code_pic_file, path);
             edtChat.setText("");
         }
     }
