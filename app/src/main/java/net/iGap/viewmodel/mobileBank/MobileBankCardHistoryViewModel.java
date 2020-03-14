@@ -150,7 +150,7 @@ public class MobileBankCardHistoryViewModel extends BaseMobileBankMainAndHistory
                         if (offset == 0) {
                             if (data.getData() != null && data.getData().size() > 0) {
                                 DecimalFormat df = new DecimalFormat(",###");
-                                balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(data.getData().size() - 1).getBalance()))));
+                                balance.set(compatibleUnicode(df.format(Double.parseDouble(data.getData().get(0).getBalance()))));
                             } else {
                                 noItemVisibility.set(View.VISIBLE);
                             }

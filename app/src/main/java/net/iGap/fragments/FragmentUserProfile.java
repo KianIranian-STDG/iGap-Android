@@ -188,6 +188,11 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 getChildFragmentManager().popBackStack();
             }
         });
+
+        viewModel.editCompleteListener.observe(getViewLifecycleOwner() , state->{
+            if(state == null) return;
+            closeKeyboard(binding.getRoot());
+        });
     }
 
     private void openAccountsDialog() {
