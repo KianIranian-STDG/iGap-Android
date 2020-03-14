@@ -871,53 +871,6 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    RealmRoomMessage.fetchMessages(realm, mRoomId, new OnActivityChatStart() {
-                        @Override
-                        public void resendMessage(final RealmRoomMessage message) {
-                            if (!allowResendMessage(message.getMessageId())) {
-                                return;
-                            }
-                            chatSendMessageUtil.build(chatType, message.getRoomId(), message);
-                        }
-
-                        @Override
-                        public void resendMessageNeedsUpload(final RealmRoomMessage message, final long messageId) {
-                            if (!allowResendMessage(message.getMessageId())) {
-                                return;
-                            }
-                            UploadManager.getInstance().uploadMessageAndSend(chatType, message);
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(messageId));
-                                }
-                            }, 300);
-                        }
-
-                        @Override
-                        public void sendSeenStatus(RealmRoomMessage message) {
-
-                            if (!isNotJoin) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                            }
-                        }
-                    });
-
-                });
-
-
-            }
-        }, 500);
-    }
-
-    @Override
     public void onResume() {
         isPaused = false;
         super.onResume();
@@ -4618,13 +4571,13 @@ public class FragmentChat extends BaseFragment
              */
 
             messageInfo.realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     DbManager.getInstance().doRealmTransaction(realm -> {
                         RealmClientCondition.addOfflineSeen(realm, mRoomId, messageInfo.realmRoomMessage.getMessageId());
                         RealmRoomMessage.setStatusSeenInChat(realm, messageInfo.realmRoomMessage.getMessageId());
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                     });
                 }
             }).start();
@@ -8595,8 +8548,6 @@ public class FragmentChat extends BaseFragment
                             startFutureMessageIdDown = endMessageId;
                             isWaitingForHistoryDown = false;
                         }
-
-                        MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN);
 
                         //                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
                         //                        getOnlineMessage(oldMessageId, direction);

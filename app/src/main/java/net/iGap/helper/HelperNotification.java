@@ -887,22 +887,7 @@ public class HelperNotification {
 
                                         DbManager.getInstance().doRealmTask(realm2 -> {
                                             if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-                                                RealmRoomMessage.fetchMessages(realm2, roomId, new OnActivityChatStart() {
-                                                    @Override
-                                                    public void sendSeenStatus(RealmRoomMessage message1) {
-                                                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message1.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                                    }
-
-                                                    @Override
-                                                    public void resendMessage(RealmRoomMessage message1) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void resendMessageNeedsUpload(RealmRoomMessage message1, long messageId1) {
-
-                                                    }
-                                                });
+                                                RealmRoomMessage.makeSeenAllMessageOfRoom(roomId);
                                             }
                                             AppUtils.updateBadgeOnly(realm2, roomId);
                                         });
