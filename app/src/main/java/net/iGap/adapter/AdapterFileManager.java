@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.R;
+import net.iGap.module.customView.CheckBox;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructFileManager;
 
@@ -113,7 +114,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
         private TextView txtTitle, txtSubtitle;
         private ImageView imageView;
-        private AnimateCheckBox checkBox;
+        private CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -122,6 +123,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
             txtSubtitle = itemView.findViewById(R.id.sle_sub_textView2);
             imageView = itemView.findViewById(R.id.sle_sub_imageView1);
             checkBox = itemView.findViewById(R.id.checkSelect);
+            checkBox.setVisibility(View.VISIBLE);
 
         }
     }

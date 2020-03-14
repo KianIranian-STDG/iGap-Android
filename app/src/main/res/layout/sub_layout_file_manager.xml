@@ -19,19 +19,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <com.hanks.library.AnimateCheckBox
+    <net.iGap.module.customView.CheckBox
         android:id="@+id/checkSelect"
-        android:layout_width="@dimen/dp24"
-        android:layout_height="@dimen/dp24"
-        android:layout_gravity="center"
+        android:layout_width="@dimen/dp20"
+        android:layout_height="@dimen/dp20"
+        android:visibility="visible"
         android:clickable="false"
-        app:animDuration="50"
-        app:checkedColor="?attr/colorAccent"
+        android:focusable="false"
         app:layout_constraintBottom_toBottomOf="@id/sle_sub_imageView1"
-        app:layout_constraintRight_toRightOf="@id/sle_sub_imageView1"
-        app:lineColor="#fff"
-        app:lineWidth="1.2dp"
-        app:unCheckColor="@color/transparent" />
+        app:layout_constraintRight_toRightOf="@id/sle_sub_imageView1" />
 
     <TextView
         android:id="@+id/sle_sub_textView1"
