@@ -173,6 +173,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> openAccountsDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> editCompleteListener = new SingleLiveEvent<>();
 
     private int phoneMax = 10;
     private boolean sendReferral = false;
@@ -776,12 +777,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else if (currentGender != gender.get()) {
             sendRequestSetGender();
         } else if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
-            Log.wtf(this.getClass().getName(), "setReferral");
             setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);
             isEditProfile = false;
             editProfileIcon.set(R.string.edit_icon);
+            editCompleteListener.postValue(true);
         }
     }
 
