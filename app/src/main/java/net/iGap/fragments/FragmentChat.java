@@ -686,7 +686,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyboardViewVisible) {
+                    if (topFragmentIsChat() && keyboardViewVisible) {
                         showPopup(-1);
                         return true;
                     }
@@ -2259,8 +2259,8 @@ public class FragmentChat extends BaseFragment
     public boolean onBackPressed() {
         if (mAttachmentPopup != null)
             mAttachmentPopup.directDismiss();
+
         boolean stopSuperPress = true;
-        boolean topFragmentIsChat = false;
 
         try {
             if (webViewChatPage != null) {
@@ -2268,19 +2268,9 @@ public class FragmentChat extends BaseFragment
                 return true;
             }
 
-            if (getActivity() != null) {
-                int i = getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1;
-                topFragmentIsChat = getActivity().getSupportFragmentManager().getBackStackEntryAt(i).getName().equals(FragmentChat.class.getName());
-                showKeyboardOnResume = keyboardViewVisible && keyboardView.getCurrentMode() == KeyboardView.MODE_KEYBOARD;
-            }
-
-            /*FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
-            if (fragment != null) {
-                removeFromBaseFragment(fragment);
-            } else*/
             if (mAdapter != null && mAdapter.getSelections().size() > 0) {
                 mAdapter.deselect();
-            } else if (topFragmentIsChat && keyboardView != null && keyboardViewVisible) {
+            } else if (topFragmentIsChat() && keyboardView != null && keyboardViewVisible) {
                 hideKeyboardView();
             } else if (ll_Search != null && ll_Search.isShown()) {
                 goneSearchBox(edtSearchMessage);
@@ -2292,6 +2282,8 @@ public class FragmentChat extends BaseFragment
                 stopSuperPress = false;
             }
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return stopSuperPress;
@@ -2307,6 +2299,20 @@ public class FragmentChat extends BaseFragment
                 //        if (!isStopBot) popBackStackFragment();
             }
         }
+    }
+
+    private boolean topFragmentIsChat() {
+        boolean topFragmentIsChat = false;
+        if (getActivity() != null) {
+            int i = getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1;
+            String topFragmentName = getActivity().getSupportFragmentManager().getBackStackEntryAt(i).getName();
+
+            if (topFragmentName != null)
+                topFragmentIsChat = topFragmentName.equals(FragmentChat.class.getName());
+
+            showKeyboardOnResume = keyboardViewVisible && keyboardView.getCurrentMode() == KeyboardView.MODE_KEYBOARD;
+        }
+        return topFragmentIsChat;
     }
 
     private void makeWebViewGone() {
