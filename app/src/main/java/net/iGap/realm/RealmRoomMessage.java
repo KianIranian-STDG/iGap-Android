@@ -716,6 +716,19 @@ public class RealmRoomMessage extends RealmObject {
              */
 
             RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (
+                    realmRoom != null && roomMessage != null && !roomMessage.isDeleted()
+                            && !roomMessage.isSenderMe() && realmRoom.getFirstUnreadMessage() != null
+                            && realmRoom.getFirstUnreadMessage().getMessageId() <= messageId
+                            && realmRoom.getUnreadCount() > 0
+            ) {
+                realmRoom.setUnreadCount(realmRoom.getUnreadCount() - 1);
+                if (realmRoom.getUnreadCount() == 0) {
+                    realmRoom.setFirstUnreadMessage(null);
+                }
+            }
+
             if (response.getId().isEmpty()) {
                 if (roomMessage != null) {
                     roomMessage.setDeleted(true);
@@ -726,7 +739,6 @@ public class RealmRoomMessage extends RealmObject {
                 G.onChatDeleteMessageResponse.onChatDeleteMessage(deleteVersion, messageId, roomId, response);
             }
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getLastMessage().getMessageId() == messageId) {
 
