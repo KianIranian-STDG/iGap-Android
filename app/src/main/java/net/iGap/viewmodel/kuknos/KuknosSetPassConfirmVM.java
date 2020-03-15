@@ -11,7 +11,8 @@ import net.iGap.repository.kuknos.UserRepo;
 public class KuknosSetPassConfirmVM extends ViewModel {
 
     private MutableLiveData<KuknosError> error;
-    private MutableLiveData<Boolean> nextPage;
+    private MutableLiveData<Boolean> nextPageSignup;
+    private MutableLiveData<Boolean> nextPagePanel;
     private MutableLiveData<Boolean> progressState;
     private String selectedPin;
     private String PIN;
@@ -21,11 +22,14 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private String PIN4;
     private boolean completePin = false;
     private UserRepo userRepo = new UserRepo();
+    private int mode;
 
     public KuknosSetPassConfirmVM() {
         error = new MutableLiveData<>();
-        nextPage = new MutableLiveData<>();
-        nextPage.setValue(false);
+        nextPageSignup = new MutableLiveData<>();
+        nextPageSignup.setValue(false);
+        nextPagePanel = new MutableLiveData<>();
+        nextPagePanel.setValue(false);
         progressState = new MutableLiveData<>();
     }
 
@@ -53,13 +57,19 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private void registerUser() {
         progressState.setValue(true);
         userRepo.setPIN(PIN);
-        try {
-            userRepo.generateKeyPairWithMnemonic();
-        } catch (WalletException e) {
-            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
-            e.printStackTrace();
+        if (mode == 0) {
+            try {
+                userRepo.generateKeyPairWithMnemonic();
+            } catch (WalletException e) {
+                error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+                e.printStackTrace();
+            }
+            nextPageSignup.setValue(true);
+        } else if (mode == 2) {
+            nextPagePanel.setValue(true);
+        } else {
+            nextPageSignup.setValue(true);
         }
-        nextPage.setValue(true);
     }
 
     // setter and getter
@@ -104,12 +114,12 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         this.error = error;
     }
 
-    public MutableLiveData<Boolean> getNextPage() {
-        return nextPage;
+    public MutableLiveData<Boolean> getNextPageSignup() {
+        return nextPageSignup;
     }
 
-    public void setNextPage(MutableLiveData<Boolean> nextPage) {
-        this.nextPage = nextPage;
+    public void setNextPageSignup(MutableLiveData<Boolean> nextPageSignup) {
+        this.nextPageSignup = nextPageSignup;
     }
 
     public void setCompletePin(boolean completePin) {
@@ -140,5 +150,13 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     }
 
     public void setUsername(String username) {
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public MutableLiveData<Boolean> getNextPagePanel() {
+        return nextPagePanel;
     }
 }
