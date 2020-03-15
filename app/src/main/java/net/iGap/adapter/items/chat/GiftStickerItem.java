@@ -89,7 +89,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             e.printStackTrace();
         }
 
-        if (structMessage.isSenderMe()) {
+        if (structMessage.isSenderMe() && !mAdapter.roomIsMyCloud()) {
             holder.progressButton.setVisibility(View.GONE);
         } else {
             holder.progressButton.setVisibility(View.VISIBLE);

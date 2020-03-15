@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.observers.eventbus.EventManager;
@@ -294,6 +295,14 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
 
+            boolean roomIsMyCloud = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null)
+                    return realmRoom.getChatRoom().getPeerId() > 0 && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
+                else
+                    return false;
+            });
+
             String userId = DbManager.getInstance().doRealmTask(realm -> {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && realmRoom.getChatRoom() != null) {
@@ -302,7 +311,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
                 return null;
             });
 
-            if (sticker != null && userId != null) {
+            if (sticker != null && userId != null && !roomIsMyCloud) {
                 StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
             }
         }

@@ -33,11 +33,11 @@ import net.iGap.adapter.items.chat.LogWalletCardToCard;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.module.AppUtils;
+import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
-import net.iGap.module.AppUtils;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -53,6 +53,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
     public AvatarHandler avatarHandler;
+    private boolean roomIsCloud;
 
     public CompositeDisposable compositeDisposable;
 
@@ -83,12 +84,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
-    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler, CompositeDisposable compositeDisposable) {
+    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler, CompositeDisposable compositeDisposable, boolean roomIsCloud) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         this.compositeDisposable = compositeDisposable;
         iMessageItem = iMessageItemListener;
         onChatMessageRemove = chatMessageRemoveListener;
         this.avatarHandler = avatarHandler;
+        this.roomIsCloud = roomIsCloud;
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
         setHasStableIds(true);
 
@@ -211,7 +213,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  */
                 if (
                         messageInfo.mMessage.getMessageId() == messageId &&
-                        (forwardedMessageId != 0 || messageInfo.mMessage.getRoomId() == roomId)
+                                (forwardedMessageId != 0 || messageInfo.mMessage.getRoomId() == roomId)
                 ) {
                     int pos = items.indexOf(messageInfo);
                     if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
@@ -238,7 +240,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  */
                 if (
                         (messageInfo.mMessage.getForwardMessage() == null && messageInfo.mMessage.getMessageId() == messageId)
-                        || (messageInfo.mMessage.getForwardMessage() != null && (messageInfo.mMessage.getForwardMessage().getMessageId() * (-1)) == messageId)
+                                || (messageInfo.mMessage.getForwardMessage() != null && (messageInfo.mMessage.getForwardMessage().getMessageId() * (-1)) == messageId)
                 ) {
                     int pos = items.indexOf(messageInfo);
                     if (messageInfo.structMessage.getChannelExtra() != null) {
@@ -468,5 +470,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public CompositeDisposable getCompositeDisposable() {
         return compositeDisposable;
+    }
+
+    public boolean roomIsMyCloud() {
+        return roomIsCloud;
     }
 }
