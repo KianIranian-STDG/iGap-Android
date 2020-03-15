@@ -3249,6 +3249,8 @@ public class FragmentChat extends BaseFragment
                 if (edtChat.getText() != null && !EmojiManager.getInstance().isValidEmoji(edtChat.getText()) && suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
                     suggestedLayout.setVisibility(View.GONE);
                     lastChar = null;
+                } else if (lastChar != null) {
+                    lastChar = null;
                 }
 
             }
