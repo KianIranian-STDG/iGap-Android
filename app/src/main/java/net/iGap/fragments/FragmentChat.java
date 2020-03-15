@@ -612,7 +612,6 @@ public class FragmentChat extends BaseFragment
     private boolean keyboardVisible;
     private boolean showKeyboardOnResume;
     private boolean keyboardViewVisible;
-    private int currentKeyboardViewContent;
 
     private StickerRepository stickerRepository;
     private CompositeDisposable compositeDisposable;
@@ -3462,6 +3461,8 @@ public class FragmentChat extends BaseFragment
         } else {
             if (keyboardView != null)
                 keyboardView.setCurrentMode(mode, -1);
+
+            showKeyboardOnResume = false;
 
             closeKeyboard();
             G.handler.postDelayed(this::hideKeyboardView, 100);
