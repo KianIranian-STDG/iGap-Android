@@ -54,7 +54,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         progressState.setValue(true);
         userRepo.setPIN(PIN);
         try {
-            userRepo.generateKeyPairWithMnemonicAndPIN();
+            userRepo.generateKeyPairWithMnemonic();
         } catch (WalletException e) {
             error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();

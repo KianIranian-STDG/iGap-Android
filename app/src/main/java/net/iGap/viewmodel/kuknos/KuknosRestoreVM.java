@@ -2,6 +2,9 @@ package net.iGap.viewmodel.kuknos;
 
 import android.text.TextUtils;
 
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
@@ -11,9 +14,6 @@ import net.iGap.model.kuknos.Parsian.KuknosUserInfo;
 import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.UserRepo;
-
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
 
 public class KuknosRestoreVM extends BaseAPIViewModel {
 
@@ -63,7 +63,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         } else if (!keys.get().startsWith("S")) {
             error.setValue(new KuknosError(true, "Invalid Entry", "0", R.string.kuknos_RestoreSeed_Error_invalidStart_str));
         } else {
-            if (/*pinCheck.getValue()*/false)
+            if (/*pinCheck.getValue()*/true)
                 nextPage.setValue(1);
             else
                 generateKeypairWithSeed();
