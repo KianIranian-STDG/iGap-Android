@@ -52,8 +52,6 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        // disable screenshot.
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -92,6 +90,19 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
                 popBackStackFragment();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // disable screenshot.
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
     }
 
 }

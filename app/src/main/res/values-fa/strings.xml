@@ -2030,8 +2030,8 @@
     <string name="kuknos_RecoverySK_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_RecoverySK_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
     <string name="kuknos_RecoverySK_Error_Snack">باشه</string>
-    <string name="kuknos_SetPass_title">ساخت رمز ورودی</string>
-    <string name="kuknos_SetPass_message">رمز ورودی (چهار رقمی) جهت رمزنگاری کلید خصوصی شما مورد استفاده قرار می گیرد. لطفا رمز را به گونه ای انتخاب نمایید که به راحتی قابل حدس زدن نباشد.</string>
+    <string name="kuknos_SetPass_title">ساخت رمز ورودی داخلی</string>
+    <string name="kuknos_SetPass_message">رمز ورودی (چهار رقمی) جهت ورود به کیف پول و تایید فعالیت های شما مورد استفاده قرار می گیرد. لطفا رمز را به گونه ای انتخاب نمایید که به راحتی قابل حدس زدن نباشد.</string>
     <string name="kuknos_SetPass_submit">ثبت</string>
     <string name="kuknos_SetPass_error">لطفا رمز ورودی خود را وارد نمایید.</string>
     <string name="kuknos_SetPassConf_title">تایید رمز ورودی</string>
