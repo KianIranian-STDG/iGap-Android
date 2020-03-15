@@ -16,12 +16,13 @@ import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.module.MyType;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.observers.interfaces.IChatItemAttachment;
-import net.iGap.module.MyType;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IChatItemAttachment;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
@@ -72,7 +73,7 @@ public class StructMessageInfo implements Parcelable {
 
     public MyType.SendType getSendType() {
         if (this.realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
-                return MyType.SendType.send;
+            return MyType.SendType.send;
         } else {
             return MyType.SendType.recvive;
         }
@@ -269,6 +270,10 @@ public class StructMessageInfo implements Parcelable {
     public boolean isTimeOrLogMessage() {
         return realmRoomMessage.getUserId() == -1L;
         // or roomMessage.getLogs() != null
+    }
+
+    public boolean isGiftSticker() {
+        return getRealmRoomMessage().getMessageType() == ProtoGlobal.RoomMessageType.STICKER && getAdditional() != null && getAdditional().getAdditionalType() == AdditionalType.GIFT_STICKER;
     }
 
     public boolean hasAttachment() {
