@@ -460,15 +460,10 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void run() {
 
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                                RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
-                            }
-                        }
-                    });
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                        RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
+                    }
                 });
             }
         });

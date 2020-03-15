@@ -1084,22 +1084,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void markAsRead(Realm realm, ProtoGlobal.Room.Type chatType, long roomId) {
         //ToDo: Check it for update badge after update sen status in db
         if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-            RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
-                @Override
-                public void sendSeenStatus(RealmRoomMessage message) {
-                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                }
-
-                @Override
-                public void resendMessage(RealmRoomMessage message) {
-
-                }
-
-                @Override
-                public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
-
-                }
-            });
+            RealmRoomMessage.makeSeenAllMessageOfRoom(roomId);
         }
 
         RealmRoom.setCount(realm, roomId, 0);

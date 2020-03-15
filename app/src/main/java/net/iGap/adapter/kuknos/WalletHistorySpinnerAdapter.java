@@ -32,6 +32,21 @@ public class WalletHistorySpinnerAdapter extends BaseAdapter {
 
         if (layout == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            layout = inflater.inflate(R.layout.fragment_kuknos_panel_spin_cell_dd, parent, false);
+        }
+
+        TextView walletName = layout.findViewById(R.id.fragKuknosPtextCell);
+        walletName.setText("" + (wallets.get(position).getAsset().getType().equals("native") ? "PMN" : wallets.get(position).getAssetCode()));
+
+        return layout;
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        View layout = convertView;
+
+        if (layout == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             layout = inflater.inflate(R.layout.fragment_kuknos_panel_spin_cell, parent, false);
         }
 

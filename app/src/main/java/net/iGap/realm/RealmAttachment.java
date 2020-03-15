@@ -69,13 +69,11 @@ public class RealmAttachment extends RealmObject {
 
     public static void updateFileSize(final long messageId, final long fileSize) {
         new Thread(() -> {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(realm1 -> {
-                    RealmAttachment attachment = realm1.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
-                    if (attachment != null) {
-                        attachment.setSize(fileSize);
-                    }
-                });
+            DbManager.getInstance().doRealmTransaction(realm1 -> {
+                RealmAttachment attachment = realm1.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+                if (attachment != null) {
+                    attachment.setSize(fileSize);
+                }
             });
         }).start();
 
@@ -215,31 +213,21 @@ public class RealmAttachment extends RealmObject {
     }
 
     public static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(@NonNull Realm realm) {
-                    RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
-                    for (RealmAttachment attachment : attachments) {
-                        attachment.setLocalThumbnailPath(path);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+            for (RealmAttachment attachment : attachments) {
+                attachment.setLocalThumbnailPath(path);
+            }
         });
     }
 
     public static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
 
-                    for (RealmAttachment attachment : attachments) {
-                        attachment.setLocalFilePath(path);
-                    }
-                }
-            });
+            for (RealmAttachment attachment : attachments) {
+                attachment.setLocalFilePath(path);
+            }
         });
     }
 

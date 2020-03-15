@@ -8,14 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.google.gson.Gson;
 
 import net.iGap.R;
@@ -26,6 +18,14 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.model.kuknos.KuknosSignupM;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosEntryOptionVM;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosEntryOptionFrag extends BaseAPIViewFrag<KuknosEntryOptionVM> {
 
@@ -123,7 +123,7 @@ public class KuknosEntryOptionFrag extends BaseAPIViewFrag<KuknosEntryOptionVM> 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosRestoreFrag.newInstance();
+                    fragment = KuknosRestoreFrag.newInstance(false);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
@@ -132,8 +132,17 @@ public class KuknosEntryOptionFrag extends BaseAPIViewFrag<KuknosEntryOptionVM> 
     }
 
     private void onRestoreSeedObserver() {
-        viewModel.getGoRestoreSeedPage().observe(getViewLifecycleOwner(), aBoolean -> {
-
+        viewModel.getGoRestoreSeedPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosRestoreFrag.newInstance(true);
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
         });
     }
 }

@@ -206,14 +206,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 new RequestChatGetRoom().chatGetRoom(userId, new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
                     public void onReady(ProtoGlobal.Room room) {
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                    realmRoom1.setDeleted(true);
-                                }
-                            });
+                        DbManager.getInstance().doRealmTransaction(realm -> {
+                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                            realmRoom1.setDeleted(true);
                         });
                         G.handler.post(new Runnable() {
                             @Override

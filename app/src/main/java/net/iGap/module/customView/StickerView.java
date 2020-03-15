@@ -21,6 +21,7 @@ import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
+import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 
@@ -33,35 +34,48 @@ public class StickerView extends FrameLayout implements EventListener {
     private int viewType;
     private boolean needToShowEmoji;
 
+    public void loadSticker(String token, String path, String fileName, String id, long fileSize) {
+        int type;
+        this.needToShowEmoji = false;
+
+        if (path == null || path.equals(""))
+            type = 100;
+        else if (path.endsWith(".json")) {
+            type = StructIGSticker.ANIMATED_STICKER;
+        } else {
+            type = StructIGSticker.NORMAL_STICKER;
+        }
+
+        load(token, path, fileName, type, "", id, fileSize);
+    }
+
     public void loadSticker(StructIGSticker structIGSticker, boolean needToShowEmoji) {
         this.needToShowEmoji = needToShowEmoji;
-        load(structIGSticker.getToken(), structIGSticker.getPath(), structIGSticker.getType(), structIGSticker.getName(), structIGSticker.getId(), structIGSticker.getFileSize());
+        load(structIGSticker.getToken(), structIGSticker.getPath(), structIGSticker.getFileName(), structIGSticker.getType(), structIGSticker.getName(), structIGSticker.getId(), structIGSticker.getFileSize());
     }
 
     public void loadSticker(StructIGSticker structIGSticker) {
         this.needToShowEmoji = false;
-        load(structIGSticker.getToken(), structIGSticker.getPath(), structIGSticker.getType(), structIGSticker.getName(), structIGSticker.getId(), structIGSticker.getFileSize());
+        load(structIGSticker.getToken(), structIGSticker.getPath(), structIGSticker.getFileName(), structIGSticker.getType(), structIGSticker.getName(), structIGSticker.getId(), structIGSticker.getFileSize());
     }
 
     public void loadStickerGroup(StructIGStickerGroup stickerGroup, boolean needToShowEmoji) {
         this.needToShowEmoji = needToShowEmoji;
-        load(stickerGroup.getAvatarToken(), stickerGroup.getAvatarPath(), stickerGroup.getAvatarType(), stickerGroup.getAvatarName(), stickerGroup.getGroupId(), stickerGroup.getAvatarSize());
+        load(stickerGroup.getAvatarToken(), stickerGroup.getAvatarPath(), stickerGroup.getAvatarName(), stickerGroup.getAvatarType(), stickerGroup.getAvatarName(), stickerGroup.getGroupId(), stickerGroup.getAvatarSize());
     }
 
     public void loadStickerGroup(StructIGStickerGroup stickerGroup) {
         this.needToShowEmoji = false;
-        load(stickerGroup.getAvatarToken(), stickerGroup.getAvatarPath(), stickerGroup.getAvatarType(), stickerGroup.getAvatarName(), stickerGroup.getGroupId(), stickerGroup.getAvatarSize());
+        load(stickerGroup.getAvatarToken(), stickerGroup.getAvatarPath(), stickerGroup.getAvatarName(), stickerGroup.getAvatarType(), stickerGroup.getAvatarName(), stickerGroup.getGroupId(), stickerGroup.getAvatarSize());
     }
 
-
-    private void load(String token, String path, int type, String emoji, String id, long fileSize) {
-        viewPath = path;
+    private void load(String token, String path, String fileName, int type, String emoji, String id, long fileSize) {
+        viewPath = path == null ? StickerRepository.getInstance().getStickerPath(token, fileName) : path;
         viewToken = token;
         viewType = type;
 
-        if (viewPath == null || viewToken == null)
+        if (viewPath == null || viewToken == null || viewType == -1)
             return;
-
 
         if (stickerIv == null) {
             if (type == StructIGSticker.ANIMATED_STICKER) {

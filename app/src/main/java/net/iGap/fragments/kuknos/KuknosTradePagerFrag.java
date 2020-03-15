@@ -8,12 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.R;
@@ -23,6 +17,12 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.viewpager.widget.ViewPager;
 
 public class KuknosTradePagerFrag extends BaseFragment {
 
@@ -73,7 +73,7 @@ public class KuknosTradePagerFrag extends BaseFragment {
 
         ViewPager viewPager = binding.kuknosTradePager;
         tabLayout = binding.kuknosTradePagerTabLayout;
-        TabAdapter adapter = new TabAdapter(getFragmentManager());
+        TabAdapter adapter = new TabAdapter(getChildFragmentManager());
         adapter.addFragment(new KuknosTradeFrag(), getResources().getString(R.string.kuknos_tradePager_trade));
         adapter.addFragment(new KuknosTradeActiveFrag(), getResources().getString(R.string.kuknos_tradePager_active));
         adapter.addFragment(new KuknosTradeHistoryFrag(), getResources().getString(R.string.kuknos_tradePager_history));

@@ -104,13 +104,8 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         mRecyclerView = view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
         });
 
         mAdapter = new MapUserAdapter(DbManager.getInstance().doRealmTask(realm -> {

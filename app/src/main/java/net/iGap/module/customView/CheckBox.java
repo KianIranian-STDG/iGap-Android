@@ -11,11 +11,15 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextPaint;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.Keep;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import net.iGap.R;
 import net.iGap.module.Theme;
@@ -49,11 +53,36 @@ public class CheckBox extends View {
     private int checkOffset;
     private int color;
     private String checkedText;
+    private int checkResId = R.drawable.round_check ;
 
     private final static float progressBounceDiff = 0.2f;
 
+    public CheckBox(Context context) {
+        this(context , null);
+    }
+
+    public CheckBox(Context context , @Nullable AttributeSet attrs) {
+        this(context , attrs , 0);
+    }
+
+    public CheckBox(Context context , @Nullable AttributeSet attrs , int defStyleAttr) {
+        super(context , attrs , defStyleAttr);
+        init();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public CheckBox(Context context , @Nullable AttributeSet attrs , int defStyleAttr , int defStyleRes) {
+        super(context , attrs , defStyleAttr , defStyleRes);
+        init();
+    }
+
     public CheckBox(Context context, int resId) {
         super(context);
+        checkResId = resId ;
+        init();
+    }
+
+    private void init(){
         if (paint == null) {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -72,8 +101,9 @@ public class CheckBox extends View {
 
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(LayoutCreator.dp(18));
-        checkDrawable = context.getResources().getDrawable(resId).mutate();
-        setColor(Theme.getInstance().getButtonColor(context), getResources().getColor(R.color.whit_background));
+        checkDrawable = getContext().getResources().getDrawable(checkResId).mutate();
+        setColor(Theme.getInstance().getButtonColor(getContext()), getResources().getColor(R.color.whit_background));
+
     }
 
     @Override
@@ -185,6 +215,10 @@ public class CheckBox extends View {
 
     public void setChecked(boolean checked, boolean animated) {
         setChecked(-1, checked, animated);
+    }
+
+    public void setChecked(boolean checked) {
+        setChecked(-1, checked, true);
     }
 
     public void setNum(int num) {

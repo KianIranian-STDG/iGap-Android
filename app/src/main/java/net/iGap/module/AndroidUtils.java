@@ -788,7 +788,7 @@ public final class AndroidUtils {
         if (activity == null || G.twoPaneMode) {
             return;
         }
-        if (adjustOwnerClassname.equals(className)) {
+        if (adjustOwnerClassname != null && adjustOwnerClassname.equals(className)) {
             activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         }
     }
@@ -797,7 +797,7 @@ public final class AndroidUtils {
         if (activity == null || G.twoPaneMode) {
             return;
         }
-        if (adjustOwnerClassname.equals(className)) {
+        if (adjustOwnerClassname != null && adjustOwnerClassname.equals(className)) {
             activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         }
     }

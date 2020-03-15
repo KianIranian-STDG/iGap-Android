@@ -2,7 +2,6 @@ package net.iGap.helper;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 
@@ -11,8 +10,11 @@ import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryMusicModel;
 import net.iGap.model.GalleryVideoModel;
+import net.iGap.module.structs.StructFileManager;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class FileManager {
@@ -312,5 +314,52 @@ public class FileManager {
 
     public interface FetchListener<T> {
         void onFetch(T result);
+    }
+
+    /**
+     * sorts based on the files name
+     */
+    public static class SortFileName implements Comparator<StructFileManager> {
+        @Override
+        public int compare(StructFileManager f1, StructFileManager f2) {
+            if(f1.nameStr == null)
+                return 1;
+            else
+                return f1.nameStr.compareTo(f2.nameStr);
+        }
+    }
+
+    /**
+     * sorts based on the file date modify
+     */
+    public static class SortFileDate implements Comparator<StructFileManager> {
+        @Override
+        public int compare(StructFileManager obj1, StructFileManager obj2) {
+            File f1 = new File(obj1.path);
+            File f2 = new File(obj2.path);
+            if((f1.lastModified() == f2.lastModified()) )
+                return 0 ;
+            else if(f1.lastModified() > f2.lastModified())
+                return -1;
+            else
+                return 1;
+        }
+    }
+
+    /**
+     * sorts based on a file or folder. folders will be listed first
+     */
+    public static class SortFolder implements Comparator<StructFileManager> {
+        @Override
+        public int compare(StructFileManager obj1, StructFileManager obj2) {
+            File f1 = new File(obj1.path);
+            File f2 = new File(obj2.path);
+            if (f1.isDirectory() == f2.isDirectory())
+                return 0;
+            else if (f1.isDirectory() && !f2.isDirectory())
+                return -1;
+            else
+                return 1;
+        }
     }
 }

@@ -47,18 +47,13 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction = identityParams.direction;
 
             final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
-                            if (roomMessage.getAuthor().hasUser()) {
-                                RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                            }
-                            RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
-                        }
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
+                    if (roomMessage.getAuthor().hasUser()) {
+                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     }
-                });
+                    RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
+                }
             });
             G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory, direction);
 
