@@ -44,6 +44,7 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
         super.onCreate(savedInstanceState);
         kuknosSetPassConfirmVM = ViewModelProviders.of(this).get(KuknosSetPassConfirmVM.class);
         kuknosSetPassConfirmVM.setSelectedPin(getArguments().getString("selectedPIN"));
+        kuknosSetPassConfirmVM.setMode(getArguments().getInt("mode"));
     }
 
     @Nullable
@@ -93,13 +94,26 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
     }
 
     private void onNext() {
-        kuknosSetPassConfirmVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+        kuknosSetPassConfirmVM.getNextPageSignup().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
                 if (fragment == null) {
                     fragment = KuknosSignupInfoFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+        });
+
+        kuknosSetPassConfirmVM.getNextPagePanel().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosPanelFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
