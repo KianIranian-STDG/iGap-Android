@@ -4229,11 +4229,11 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
-        if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
-            //RealmRoom.setLastMessageAfterLocalDelete(mRoomId, parseLong(messageInfo.messageID));
-
-            RealmRoom.setLastMessage(mRoomId);
-        }
+//        if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
+//            //RealmRoom.setLastMessageAfterLocalDelete(mRoomId, parseLong(messageInfo.messageID));
+//
+//            RealmRoom.setLastMessage(mRoomId);
+//        }
     }
 
     @Override
