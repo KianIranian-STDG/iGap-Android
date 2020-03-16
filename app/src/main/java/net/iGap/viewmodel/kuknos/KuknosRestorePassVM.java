@@ -1,7 +1,5 @@
 package net.iGap.viewmodel.kuknos;
 
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
@@ -11,6 +9,8 @@ import net.iGap.model.kuknos.Parsian.KuknosUserInfo;
 import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.UserRepo;
+
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosRestorePassVM extends BaseAPIViewModel {
 
@@ -144,9 +144,6 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
 
     public void setKeyPhrase(String keyPhrase) {
         this.keyPhrase = keyPhrase;
-    }
-
-    public void setToken(String token) {
     }
 
     public MutableLiveData<Boolean> getProgressState() {

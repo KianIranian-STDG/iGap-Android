@@ -1,12 +1,12 @@
 package net.iGap.viewmodel.kuknos;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import net.iGap.R;
 import net.iGap.model.kuknos.KuknosError;
 import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.repository.kuknos.UserRepo;
+
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 public class KuknosSetPassConfirmVM extends ViewModel {
 
@@ -144,12 +144,6 @@ public class KuknosSetPassConfirmVM extends ViewModel {
 
     public void setProgressState(MutableLiveData<Boolean> progressState) {
         this.progressState = progressState;
-    }
-
-    public void setToken(String token) {
-    }
-
-    public void setUsername(String username) {
     }
 
     public void setMode(int mode) {
