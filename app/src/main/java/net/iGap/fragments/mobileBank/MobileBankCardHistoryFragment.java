@@ -23,6 +23,7 @@ import net.iGap.adapter.mobileBank.MobileBankDateAdapter;
 import net.iGap.adapter.mobileBank.MobileBankHistoryAdapter;
 import net.iGap.databinding.MobileBankHistoryBinding;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.mobileBank.BankHistoryModel;
@@ -130,7 +131,6 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         for (int i = 0 ; i < accounts.size() ; i++){
             if(mCurrentNumber.equals(accounts.get(i))){
                 binding.spAccounts.setSelection(i);
-               // binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(accounts.get(i) , isCard));
                 break;
             }
         }
@@ -287,6 +287,11 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         });
 
         viewModel.getBills().observe(getViewLifecycleOwner(), this::initMainRecycler);
+
+        viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner() , msg ->{
+            if(msg == null) return;
+            HelperError.showSnackMessage(msg , false);
+        });
     }
 
     private String checkAndSetPersianNumberIfNeeded(String cardNumber, boolean isCard) {
