@@ -171,7 +171,25 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     }
                     break;*/
                 case 0:
-                    if (viewModel.isPinSet()) {
+                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                    if (fragment == null) {
+                        if (!viewModel.isMnemonicAvailable()) {
+                            HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
+                            return;
+                        }
+                        fragment = KuknosEnterPinFrag.newInstance(() -> {
+                            FragmentManager fragmentManager1 = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
+                            Fragment fragment1 = fragmentManager1.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+                            if (fragment1 == null) {
+                                fragment1 = KuknosShowRecoveryKeySFrag.newInstance();
+                                fragmentTransaction1.addToBackStack(fragment1.getClass().getName());
+                            }
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load();
+                        }, false);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    /*if (viewModel.isPinSet()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosViewRecoveryEPFrag.newInstance();
@@ -185,11 +203,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                         }
                     } else {
                         HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
-                    }
+                    }*/
                     break;
                 case 1:
-                    showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
-                    return;
+                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosEnterPinFrag.newInstance(
+                                () -> showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn),
+                                false);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
                 case 2:
                     HelperUrl.openWebBrowser(getContext(), "http://d.igap.net/kuknus");
 //                    viewModel.getTermsAndCond();

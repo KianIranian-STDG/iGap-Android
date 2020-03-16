@@ -1,23 +1,12 @@
 package net.iGap.fragments.kuknos;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
@@ -26,6 +15,14 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosRestoreVM;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
 
@@ -88,12 +85,6 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
         onNextObserver();
         progressState();
         onPINCheck();
-        getCachedData();
-    }
-
-    private void getCachedData() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        viewModel.setToken(sharedpreferences.getString("Token", ""));
     }
 
     private void onPINCheck() {
@@ -150,13 +141,6 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
             }*/
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
-    }
-
-    private void saveRegisterInfo() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("RegisterInfo", new Gson().toJson(viewModel.getKuknosSignupM()));
-        editor.apply();
     }
 
     private void progressState() {
