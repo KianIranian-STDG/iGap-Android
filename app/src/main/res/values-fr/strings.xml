@@ -2197,4 +2197,6 @@
     <string name="internal_storage">Stockage interne</string>
     <string name="external_storage">Stockage externe</string>
     <string name="file_manager">Gestionnaire de fichiers</string>
+    <string name="gift_card_already_in_use">Cette carte-cadeau est déjà utilisée!</string>
+    <string name="gift_carde_sended">Vous avez déjà envoyé une carte-cadeau à quelqu\'un d'autre!</string>
 </resources>

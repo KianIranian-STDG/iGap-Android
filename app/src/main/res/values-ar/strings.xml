@@ -3207,4 +3207,6 @@
     <string name="internal_storage">التخزين الداخلي</string>
     <string name="external_storage">تخزين خارجي</string>
     <string name="file_manager">مدير الملفات</string>
+    <string name="gift_card_already_in_use">بطاقة الهدايا هذه قيد الاستخدام بالفعل!</string>
+    <string name="gift_carde_sended">لقد أرسلت بالفعل بطاقة هدايا لشخص آخر!</string>
 </resources>
