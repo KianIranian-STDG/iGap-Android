@@ -1089,6 +1089,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onPause() {
         isPaused = true;
+        showKeyboardOnResume = false;
         storingLastPosition();
         showPopup(-1);
         super.onPause();
@@ -1125,6 +1126,8 @@ public class FragmentChat extends BaseFragment
 
         if (notifyFrameLayout != null)
             notifyFrameLayout.setListener(null);
+
+        showKeyboardOnResume = false;
     }
 
     @Override
