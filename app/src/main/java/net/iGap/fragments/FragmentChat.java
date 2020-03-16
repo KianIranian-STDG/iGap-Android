@@ -1089,6 +1089,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onPause() {
         isPaused = true;
+        showKeyboardOnResume = false;
         storingLastPosition();
         showPopup(-1);
         super.onPause();
@@ -1125,6 +1126,8 @@ public class FragmentChat extends BaseFragment
 
         if (notifyFrameLayout != null)
             notifyFrameLayout.setListener(null);
+
+        showKeyboardOnResume = false;
     }
 
     @Override
@@ -3249,6 +3252,8 @@ public class FragmentChat extends BaseFragment
                 if (edtChat.getText() != null && !EmojiManager.getInstance().isValidEmoji(edtChat.getText()) && suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
                     suggestedLayout.setVisibility(View.GONE);
                     lastChar = null;
+                } else if (lastChar != null) {
+                    lastChar = null;
                 }
 
             }
@@ -4224,11 +4229,11 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
-        if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
-            //RealmRoom.setLastMessageAfterLocalDelete(mRoomId, parseLong(messageInfo.messageID));
-
-            RealmRoom.setLastMessage(mRoomId);
-        }
+//        if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
+//            //RealmRoom.setLastMessageAfterLocalDelete(mRoomId, parseLong(messageInfo.messageID));
+//
+//            RealmRoom.setLastMessage(mRoomId);
+//        }
     }
 
     @Override

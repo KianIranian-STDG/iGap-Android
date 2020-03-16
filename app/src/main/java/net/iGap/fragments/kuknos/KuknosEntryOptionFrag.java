@@ -1,21 +1,16 @@
 package net.iGap.fragments.kuknos;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.google.gson.Gson;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosEntryOptionBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.model.kuknos.KuknosSignupM;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosEntryOptionVM;
 
@@ -73,16 +68,24 @@ public class KuknosEntryOptionFrag extends BaseAPIViewFrag<KuknosEntryOptionVM> 
         LinearLayout toolbarLayout = binding.fragKuknosEToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        if (viewModel.loginStatus() && isRegisteredSharesPref()) {
+        if (viewModel.loginStatus()/* && isRegisteredSharesPref()*/) {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+            Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
             if (fragment == null) {
-                fragment = KuknosPanelFrag.newInstance();
+                fragment = KuknosEnterPinFrag.newInstance(() -> {
+                    FragmentManager fragmentManager1 = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
+                    Fragment fragment1 = fragmentManager1.findFragmentByTag(KuknosPanelFrag.class.getName());
+                    if (fragment1 == null) {
+                        fragment1 = KuknosPanelFrag.newInstance();
+                        fragmentTransaction1.addToBackStack(fragment1.getClass().getName());
+                    }
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load();
+                }, true);
                 fragmentTransaction.addToBackStack(fragment.getClass().getName());
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            popBackStackFragment();
         }
 
         onNewTObserver();
@@ -90,13 +93,13 @@ public class KuknosEntryOptionFrag extends BaseAPIViewFrag<KuknosEntryOptionVM> 
         onRestoreSeedObserver();
     }
 
-    private boolean isRegisteredSharesPref() {
+    /*private boolean isRegisteredSharesPref() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         KuknosSignupM temp = new Gson().fromJson(sharedpreferences.getString("RegisterInfo", null), KuknosSignupM.class);
         if (temp == null)
             return false;
         return temp.isRegistered();
-    }
+    }*/
 
     private void onNewTObserver() {
 

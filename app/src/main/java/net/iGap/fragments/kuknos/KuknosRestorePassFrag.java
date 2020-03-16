@@ -1,7 +1,5 @@
 package net.iGap.fragments.kuknos;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
@@ -84,18 +81,12 @@ public class KuknosRestorePassFrag extends BaseAPIViewFrag<KuknosRestorePassVM> 
         onError();
         onProgress();
         textInputManager();
-        getCachedData();
-    }
-
-    private void getCachedData() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        viewModel.setToken(sharedpreferences.getString("Token", ""));
     }
 
     private void onNext() {
         viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage == 1) {
-                saveRegisterInfo();
+//                saveRegisterInfo();
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
@@ -117,12 +108,12 @@ public class KuknosRestorePassFrag extends BaseAPIViewFrag<KuknosRestorePassVM> 
         });
     }
 
-    private void saveRegisterInfo() {
+    /*private void saveRegisterInfo() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("RegisterInfo", new Gson().toJson(viewModel.getKuknosSignupM()));
         editor.apply();
-    }
+    }*/
 
     private void onError() {
         viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {

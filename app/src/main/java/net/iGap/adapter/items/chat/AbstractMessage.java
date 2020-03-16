@@ -345,7 +345,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         MessageProgress _Progress = ((IProgress) holder).getProgress();
                         if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
                             int progress = (int) message[1];
-                            Log.d("bagi", "receivedMessage" + progress);
                             if (progress >= 1 && progress != 100) {
                                 _Progress.withProgress(progress);
                             }
@@ -1663,8 +1662,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
-                    Log.i("abbasiAnimation", "On Progress  " + progress);
-
                     if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
@@ -1896,7 +1893,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    Log.wtf(this.getClass().getName(), "tag: " + ((ArrayList<String>) v.getTag()).get(0));
                     RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
                     long peerId;
                     if (room != null && room.getChatRoom() != null) {

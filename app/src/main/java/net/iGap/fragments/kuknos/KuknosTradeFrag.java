@@ -223,7 +223,7 @@ public class KuknosTradeFrag extends BaseAPIViewFrag<KuknosTradeVM> {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosEnterPinFrag.newInstance(() -> viewModel.sendDataServer());
+                    fragment = KuknosEnterPinFrag.newInstance(() -> viewModel.sendDataServer(), false);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

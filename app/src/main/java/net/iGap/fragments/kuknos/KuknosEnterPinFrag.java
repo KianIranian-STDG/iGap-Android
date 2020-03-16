@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosEnterPinBinding;
 import net.iGap.helper.HelperToolbar;
@@ -26,13 +27,15 @@ public class KuknosEnterPinFrag extends BaseAPIViewFrag<KuknosEnterPinVM> {
 
     private FragmentKuknosEnterPinBinding binding;
     private OnPinEntered pinEntered;
+    private boolean isLogin;
 
-    public static KuknosEnterPinFrag newInstance(OnPinEntered pinEntered) {
-        return new KuknosEnterPinFrag(pinEntered);
+    public static KuknosEnterPinFrag newInstance(OnPinEntered pinEntered, boolean isLogin) {
+        return new KuknosEnterPinFrag(pinEntered, isLogin);
     }
 
-    public KuknosEnterPinFrag(OnPinEntered pinEntered) {
+    public KuknosEnterPinFrag(OnPinEntered pinEntered, boolean isLogin) {
         this.pinEntered = pinEntered;
+        this.isLogin = isLogin;
     }
 
     @Override
@@ -65,7 +68,10 @@ public class KuknosEnterPinFrag extends BaseAPIViewFrag<KuknosEnterPinVM> {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
+                        if (isLogin)
+                            ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                        else
+                            popBackStackFragment();
                     }
                 })
                 .setLogoShown(true);
@@ -79,6 +85,14 @@ public class KuknosEnterPinFrag extends BaseAPIViewFrag<KuknosEnterPinVM> {
         entryListener();
     }
 
+    @Override
+    public boolean onBackPressed() {
+        if (isLogin) {
+            ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+            return true;
+        } else
+            return super.onBackPressed();
+    }
 
     private void onError() {
         viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
@@ -135,7 +149,8 @@ public class KuknosEnterPinFrag extends BaseAPIViewFrag<KuknosEnterPinVM> {
     private void onNextPage() {
         viewModel.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                popBackStackFragment();
+                if (!isLogin)
+                    popBackStackFragment();
                 pinEntered.correctPin();
             }
         });
