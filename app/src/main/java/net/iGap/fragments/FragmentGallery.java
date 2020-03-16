@@ -420,28 +420,10 @@ public class FragmentGallery extends BaseFragment {
 
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
             fragmentEditImage.setIsReOpenChatAttachment(false);
-
-            G.handler.post(() -> {
-                FragmentEditImage.insertItemList(path, "", false);
-                if (getActivity() != null)
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-            });
-
-            //rotate and send image for edit
-//            ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
-//                @Override
-//                public void startProcess() {
-//                    //nothing
-//                    Log.i("abbasiBitmap", "startProcess: ");
-//                }
-//
-//                @Override
-//                public void success(String newPath) {
-//                    Log.i("abbasiBitmap", "success: " + newPath);
-//
-//                }
-//            });
-
+            FragmentEditImage.insertItemList(path , "" , false);
+            if(getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager() , fragmentEditImage).setReplace(false).load();
+            }
             fragmentEditImage.setGalleryListener(() -> {
                 if (getActivity() != null) {
                     getActivity().getSupportFragmentManager().popBackStack(FragmentGallery.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
