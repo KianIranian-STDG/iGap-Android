@@ -57,7 +57,6 @@ public class StructMessageInfo implements Parcelable {
 
     public String songArtist;
     public long songLength;
-    private String TAG = " abbasiAnimation";
 
     public RealmRoomMessage getRealmRoomMessage() {
         return realmRoomMessage.getForwardMessage() == null ? realmRoomMessage : realmRoomMessage.getForwardMessage();
@@ -193,7 +192,6 @@ public class StructMessageInfo implements Parcelable {
                     }
                     setAttachment(realm.copyFromRealm(realmAttachment));
                     abstractMessage.onProgressFinish(holder, messageType);
-                    Log.d("bagi", "onProgressFinish: " + realmAttachment.getLocalFilePath());
 
                     if (realmAttachment.isFileExistsOnLocalAndIsImage()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
@@ -205,7 +203,6 @@ public class StructMessageInfo implements Parcelable {
                         }
                     }
 
-                    changeLog(changeSet != null ? changeSet.getChangedFields() : new String[0], identifier);
                     //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
                 }
 
@@ -219,12 +216,6 @@ public class StructMessageInfo implements Parcelable {
             liverRealmAttachment.removeChangeListener(realmAttachmentRealmChangeListener);
             liverRealmAttachment = null;
             realmAttachmentRealmChangeListener = null;
-        }
-    }
-
-    private void changeLog(String[] strings, long identifier) {
-        for (String string : strings) {
-            Log.i(TAG, "changeLog: " + string + " id -> " + identifier);
         }
     }
 
