@@ -56,7 +56,7 @@ public class AccountManager {
         getUserAccountListFromSharedPreferences();
         if (userAccountList == null) {
             userAccountList = new ArrayList<>();
-            AccountUser accountUser = new AccountUser(false, "test");
+            AccountUser accountUser = new AccountUser("test");
             accountUser.setDbName(getDbName());
             userAccountList.add(accountUser);
             currentUser = 0;

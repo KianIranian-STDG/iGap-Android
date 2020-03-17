@@ -42,6 +42,9 @@ public class AccountUser {
 
     private transient RealmConfiguration realmConfiguration;
 
+    /**
+     create real account
+     **/
     public AccountUser(long id, String dbName, String name, String phoneNumber, int unReadMessageCount, boolean isAssigned) {
         this.id = id;
         this.dbName = dbName;
@@ -51,9 +54,12 @@ public class AccountUser {
         this.isAssigned = isAssigned;
     }
 
-    public AccountUser(boolean isAddNew, String name) {
+    /**
+        create test account
+     **/
+    public AccountUser(String name) {
         this.name = name;
-        this.isAssigned = isAddNew;
+        this.isAssigned = false;
     }
 
     public String getDbName() {
