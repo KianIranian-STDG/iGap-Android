@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -919,13 +920,14 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
-            if (mContact.status != null) {
-                if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(holder.subtitle.getContext(), mContact.peerId, mContact.lastSeen, false));
-                } else {
-                    holder.subtitle.setText(mContact.status);
-                }
-            }
+            holder.subtitle.setText(
+                    setUserStatus(
+                            holder.subtitle.getContext() ,
+                            mContact.status ,
+                            mContact.peerId ,
+                            mContact.lastSeen
+                    )
+            );
 
             if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                 holder.btnMenu.setVisibility(View.INVISIBLE);
@@ -957,6 +959,19 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             if (showMemberMode != ShowMemberMode.NONE) {
                 holder.btnMenu.setVisibility(View.GONE);
+            }
+        }
+
+        private String setUserStatus(Context context , String userStatus, long userId , long time ) {
+
+            if (userStatus != null) {
+                if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    return LastSeenTimeUtil.computeTime(context, userId, time, false);
+                } else {
+                    return userStatus;
+                }
+            }else {
+                return LastSeenTimeUtil.computeTime(context, userId, time, false);
             }
         }
 
