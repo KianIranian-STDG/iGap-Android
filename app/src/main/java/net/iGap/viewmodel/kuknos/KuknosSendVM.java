@@ -2,9 +2,6 @@ package net.iGap.viewmodel.kuknos;
 
 import android.view.View;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.gson.Gson;
 
 import net.iGap.R;
@@ -20,6 +17,9 @@ import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.PanelRepo;
 
 import org.stellar.sdk.KeyPair;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosSendVM extends BaseAPIViewModel {
 
@@ -151,7 +151,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         kuknosSendM.setDest(walletID.get());
         kuknosSendM.setAssetCode(balanceInfoM.getAssetCode());
         kuknosSendM.setAssetInssuer(balanceInfoM.getAssetIssuer());
-        kuknosSendM.setMemo((text.get() == null ? "" : text.get()));
+        kuknosSendM.setMemo("TRANSFER: " + (text.get() == null ? "" : text.get()));
 
         progressState.setValue(true);
         panelRepo.paymentUser(kuknosSendM, this, new ResponseCallback<KuknosResponseModel<KuknosHash>>() {

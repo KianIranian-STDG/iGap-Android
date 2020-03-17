@@ -40,9 +40,9 @@ public class KuknosAsset {
         @SerializedName("label")
         private String label;
         @SerializedName("remain_amount")
-        private int remainAmount;
+        private double remainAmount;
         @SerializedName("issued_amount")
-        private int initialAmount;
+        private double initialAmount;
         @SerializedName("buy_rate")
         private int buyRate;
         @SerializedName("sell_rate")
@@ -124,7 +124,7 @@ public class KuknosAsset {
             this.label = label;
         }
 
-        public int getRemainAmount() {
+        public double getRemainAmount() {
             return remainAmount;
         }
 
@@ -132,7 +132,7 @@ public class KuknosAsset {
             this.remainAmount = remainAmount;
         }
 
-        public int getInitialAmount() {
+        public double getInitialAmount() {
             return initialAmount;
         }
 

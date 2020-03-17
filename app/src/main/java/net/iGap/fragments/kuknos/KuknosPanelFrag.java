@@ -14,6 +14,30 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
+
+import net.iGap.R;
+import net.iGap.activities.ActivityMain;
+import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.databinding.FragmentKuknosPanelBinding;
+import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
+import net.iGap.helper.PermissionHelper;
+import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.kuknos.KuknosPanelVM;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -23,28 +47,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import net.iGap.R;
-import net.iGap.activities.ActivityMain;
-import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
-import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentKuknosPanelBinding;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.HelperUrl;
-import net.iGap.helper.PermissionHelper;
-import net.iGap.model.kuknos.Parsian.KuknosBalance;
-import net.iGap.module.dialog.DefaultRoundDialog;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.viewmodel.kuknos.KuknosPanelVM;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
@@ -169,23 +171,49 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     }
                     break;*/
                 case 0:
-                    if (viewModel.isPinSet()) {
+                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                    if (fragment == null) {
+                        if (!viewModel.isMnemonicAvailable()) {
+                            HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
+                            return;
+                        }
+                        fragment = KuknosEnterPinFrag.newInstance(() -> {
+                            FragmentManager fragmentManager1 = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
+                            Fragment fragment1 = fragmentManager1.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+                            if (fragment1 == null) {
+                                fragment1 = KuknosShowRecoveryKeySFrag.newInstance();
+                                fragmentTransaction1.addToBackStack(fragment1.getClass().getName());
+                            }
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load();
+                        }, false);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    /*if (viewModel.isPinSet()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosViewRecoveryEPFrag.newInstance();
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         }
-                    } else {
+                    } else if (viewModel.isMnemonicAvailable()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosShowRecoveryKeySFrag.newInstance();
                             fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         }
-                    }
+                    } else {
+                        HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
+                    }*/
                     break;
                 case 1:
-                    showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
-                    return;
+                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosEnterPinFrag.newInstance(
+                                () -> showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn),
+                                false);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
                 case 2:
                     HelperUrl.openWebBrowser(getContext(), "http://d.igap.net/kuknus");
 //                    viewModel.getTermsAndCond();
@@ -280,7 +308,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     break;
                 case 1:
                     fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
-                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("")) {
+                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("") && viewModel.isPmnActive()) {
                         fragment = KuknosSendFrag.newInstance();
                         Bundle b = new Bundle();
                         b.putString("balanceClientInfo", viewModel.convertToJSON(viewModel.getPosition()));
@@ -341,15 +369,19 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     }
 
     private void showDialog(int mode, int titleRes, int messageRes, int btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(titleRes));
-        defaultRoundDialog.setMessage(getResources().getString(messageRes));
-        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), (dialog, id) -> {
-            if (mode == 1) {
-                writeSeedKey();
-            }
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(titleRes))
+                .positiveText(getResources().getString(btnRes))
+                .content(getResources().getString(messageRes))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (mode == 1) {
+                            writeSeedKey();
+                        }
+                    }
+                })
+                .show();
     }
 
     private void writeSeedKey() {

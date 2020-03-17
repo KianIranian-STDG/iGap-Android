@@ -2,9 +2,6 @@ package net.iGap.viewmodel.kuknos;
 
 import android.util.Log;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -21,6 +18,9 @@ import org.stellar.sdk.responses.SubmitTransactionResponse;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosTradeVM extends BaseAPIViewModel {
 

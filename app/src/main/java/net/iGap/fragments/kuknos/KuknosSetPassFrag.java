@@ -10,6 +10,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
@@ -20,22 +29,25 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosSetPassVM;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
 public class KuknosSetPassFrag extends BaseFragment {
 
     private FragmentKuknosSetpasswordBinding binding;
     private KuknosSetPassVM kuknosSetPassVM;
 
-    public static KuknosSetPassFrag newInstance() {
-        return new KuknosSetPassFrag();
+    /**
+     * @param mode is for after setting the pass
+     *             0: make new wallet
+     *             1: -
+     *             2: account already exists
+     *             3: need to sign up
+     * @return
+     */
+    public static KuknosSetPassFrag newInstance(int mode) {
+        KuknosSetPassFrag frag = new KuknosSetPassFrag();
+        Bundle data = new Bundle();
+        data.putInt("mode", mode);
+        frag.setArguments(data);
+        return frag;
     }
 
 
@@ -97,6 +109,7 @@ public class KuknosSetPassFrag extends BaseFragment {
                 }
                 Bundle bundle = new Bundle();
                 bundle.putString("selectedPIN", kuknosSetPassVM.getPIN());
+                bundle.putInt("mode", getArguments().getInt("mode"));
                 fragment.setArguments(bundle);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
@@ -106,7 +119,6 @@ public class KuknosSetPassFrag extends BaseFragment {
     private void onError() {
         kuknosSetPassVM.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
-                //TODO clear Log
                 if (errorM.getMessage().equals("0")) {
                     Snackbar snackbar = Snackbar.make(binding.fragKuknosSPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                     snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());

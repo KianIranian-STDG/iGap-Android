@@ -20,11 +20,24 @@ public class GlideImageLoader implements ImageLoaderService {
         load(targetImageView, imageUrl, 0);
     }
 
+    @Override
+    public void loadImage(ImageView targetImageView, String imageUrl, boolean clear) {
+        if (clear)
+            clear(targetImageView);
+        load(targetImageView, imageUrl, 0);
+    }
+
+    @Override
+    public void clear(ImageView targetImageView) {
+        Glide.with(targetImageView.getContext()).clear(targetImageView);
+    }
+
     public void load(ImageView targetImageView, String imageUrl, int placeHolder) {
         if (targetImageView == null)
             throw new NullPointerException("targetImageView NULL");
 
         if (imageUrl != null) {
+            targetImageView.setImageBitmap(null);
             if (placeHolder == 0) {
                 Glide.with(G.context).load(imageUrl)
                         .transition(DrawableTransitionOptions.withCrossFade(FADE_TIME_MS))

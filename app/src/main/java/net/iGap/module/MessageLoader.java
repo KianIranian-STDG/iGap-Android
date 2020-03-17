@@ -429,19 +429,6 @@ public final class MessageLoader {
     }
 
 
-    /**
-     * send message status to server
-     */
-    public static void sendMessageStatus(long roomId, List<RealmRoomMessage> roomMessages, ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageStatus status) {
-        /**
-         * send seen status to server when get message from server
-         */
-        for (RealmRoomMessage realmRoomMessage : roomMessages) {
-            if (realmRoomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId() && !realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, realmRoomMessage.getMessageId(), status);
-            }
-        }
-    }
 
 
     /**

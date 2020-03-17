@@ -155,13 +155,8 @@ public class UploadManager {
 
                 HelperSetAction.sendCancel(message.getMessageId());
 
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmAttachment.updateToken(message.getMessageId(), token);
-                        }
-                    });
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmAttachment.updateToken(message.getMessageId(), token);
                 });
 
                 /**
@@ -219,24 +214,19 @@ public class UploadManager {
             return;
         }
 
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-                    if (message != null) {
-                        message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                        long finalRoomId = message.getRoomId();
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.refreshRealmUi();
-                                G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identity));
-                            }
-                        });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+            if (message != null) {
+                message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                long finalRoomId = message.getRoomId();
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        G.refreshRealmUi();
+                        G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identity));
                     }
-                }
-            });
+                });
+            }
         });
     }
 

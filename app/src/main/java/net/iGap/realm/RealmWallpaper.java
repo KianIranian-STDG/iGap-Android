@@ -32,45 +32,39 @@ public class RealmWallpaper extends RealmObject {
     private RealmList<RealmWallpaperProto> realmWallpaperProto;
 
     public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath, int type_) {
-        DbManager.getInstance().doRealmTask(realm -> {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, type_).findFirst();
 
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+            RealmWallpaper item;
 
-                    RealmWallpaper item;
+            if (realmWallpaper == null) {
+                final RealmWallpaper rw = new RealmWallpaper();
+                item = realm.copyToRealm(rw);
+            } else {
+                item = realmWallpaper;
+            }
 
-                    if (realmWallpaper == null) {
-                        final RealmWallpaper rw = new RealmWallpaper();
-                        item = realm.copyToRealm(rw);
-                    } else {
-                        item = realmWallpaper;
-                    }
+            item.setType(type_);
 
-                    item.setType(type_);
+            if (protoList != null) {
+                item.setWallPaperList(realm, protoList);
+                item.setLastTimeGetList(TimeUtils.currentLocalTime());
+            }
 
-                    if (protoList != null) {
-                        item.setWallPaperList(realm, protoList);
-                        item.setLastTimeGetList(TimeUtils.currentLocalTime());
-                    }
+            if (localPath.length() > 0) {
 
-                    if (localPath.length() > 0) {
+                ArrayList<String> localList = item.getLocalList();
 
-                        ArrayList<String> localList = item.getLocalList();
+                if (localList == null) {
 
-                        if (localList == null) {
-
-                            localList = new ArrayList<>();
-                            localList.add(localPath);
-                            item.setLocalList(localList);
-                        } else if (localList.indexOf(localPath) == -1) {
-                            localList.add(0, localPath);
-                            item.setLocalList(localList);
-                        }
-                    }
+                    localList = new ArrayList<>();
+                    localList.add(localPath);
+                    item.setLocalList(localList);
+                } else if (localList.indexOf(localPath) == -1) {
+                    localList.add(0, localPath);
+                    item.setLocalList(localList);
                 }
-            });
+            }
         });
     }
 
@@ -79,16 +73,11 @@ public class RealmWallpaper extends RealmObject {
     }
 
     public static void updateWallpaper(List<ProtoGlobal.Wallpaper> wallpaperList) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
-                    if (realmWallpaper != null) {
-                        realmWallpaper.setWallPaperList(realm, wallpaperList);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+            if (realmWallpaper != null) {
+                realmWallpaper.setWallPaperList(realm, wallpaperList);
+            }
         });
     }
 

@@ -1,7 +1,5 @@
 package net.iGap.repository;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -388,7 +386,6 @@ public class StickerRepository {
                                 stickers.add(sticker);
                             }
                         }
-                        Log.i(TAG, "getStickerByEmoji: " + stickers.size());
                         return stickers;
                     });
         });
@@ -440,6 +437,8 @@ public class StickerRepository {
 
 
     public String getStickerPath(String token, String extension) {
+        if (token == null || extension == null)
+            return null;
 
         String mimeType = ".png";
         int index = extension.lastIndexOf(".");
@@ -504,9 +503,6 @@ public class StickerRepository {
                     List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
                     for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
                         StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
-                        Log.i(TAG, "getMyGiftStickerBuy: " + userGiftStickersDataModel.getData().get(i).getFromUserId());
-                        Log.i(TAG, "getMyGiftStickerBuy: " + userGiftStickersDataModel.getData().get(i).getToUserId());
-                        Log.i(TAG, "----------------------------------------");
                         structIGGiftStickers.add(giftSticker);
                     }
                     return structIGGiftStickers;

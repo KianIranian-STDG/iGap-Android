@@ -2987,7 +2987,7 @@
     <string name="open_url">رابط مفتوح</string>
     <string name="copied">تم نسخ </string>
     <string name="charity_confirm">شما مبلغ %1$s ریال جهت کمک به خیریه %2$s در نظر گرفته اید.</string>
-    <string name="default_theme_title">السمة الافتراضية</string>
+    <string name="default_theme_title">إفتراضي</string>
     <string name="message_is_long">Your message is too long  Message will covert to</string>
 
     <string name="elecBill_Entry_lengthError">يجب أن يكون رقم الفاتورة 13 حرفًا.</string>
@@ -3196,4 +3196,17 @@
     <string name="secondary_password">كلمة المرور الثانية</string>
     <string name="default_deposit">الودائع الافتراضية</string>
     <string name="custom_deposit">إيداع مخصص</string>
+    <string name="mobile_bank_login_hint">استخدم اسم المستخدم وكلمة المرور للدخول إلى بنك پارسیان للجوال.</string>
+    <string name="internal_desc">تصفح نظام الملفات الخاص بك</string>
+    <string name="external_desc">تصفح التخزين الخارجية الخاصة بك</string>
+    <string name="file_manager_app_desc">تصفح مجلد التطبيق</string>
+    <string name="file_manager_image_desc">لإرسال ملف الصور</string>
+    <string name="file_manager_video_desc">لإرسال ملف الفيديو</string>
+    <string name="file_manager_music">لإرسال ملف صوتيات</string>
+    <string name="folder">مجلد</string>
+    <string name="internal_storage">التخزين الداخلي</string>
+    <string name="external_storage">تخزين خارجي</string>
+    <string name="file_manager">مدير الملفات</string>
+    <string name="gift_card_already_in_use">بطاقة الهدايا هذه قيد الاستخدام بالفعل!</string>
+    <string name="gift_carde_sended">لقد أرسلت بالفعل بطاقة هدايا لشخص آخر!</string>
 </resources>

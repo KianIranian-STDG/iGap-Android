@@ -998,20 +998,12 @@ public class HelperUrl {
                                     }
                                 });
                             } else {
-                                DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
-                                    @Override
-                                    public void doTask(Realm realm) {
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-                                                    if (roomMessage.getAuthor().hasUser()) {
-                                                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                                                    }
-                                                    RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
-                                                }
-                                            }
-                                        });
+                                DbManager.getInstance().doRealmTransaction(realm -> {
+                                   for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                        if (roomMessage.getAuthor().hasUser()) {
+                                            RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                        }
+                                        RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
                                     }
                                 });
 
@@ -1090,20 +1082,12 @@ public class HelperUrl {
                                 G.onChatGetRoom = new OnChatGetRoom() {
                                     @Override
                                     public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                        DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
-                                            @Override
-                                            public void doTask(Realm realm1) {
-                                                realm1.executeTransaction(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm realm) {
-                                                        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
-                                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                                            realmRoom1.setDeleted(true);
-                                                        } else {
-                                                            RealmRoom.putOrUpdate(room, realm);
-                                                        }
-                                                    }
-                                                });
+                                        DbManager.getInstance().doRealmTransaction(realm2 -> {
+                                            if (realm2.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm2);
+                                                realmRoom1.setDeleted(true);
+                                            } else {
+                                                RealmRoom.putOrUpdate(room, realm2);
                                             }
                                         });
                                         G.handler.postDelayed(new Runnable() {

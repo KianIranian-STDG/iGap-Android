@@ -2,22 +2,26 @@ package net.iGap.adapter.kuknos;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.repository.kuknos.UserRepo;
 import net.iGap.model.kuknos.Parsian.KuknosCreateAccountOpResponse;
 import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
 import net.iGap.model.kuknos.Parsian.KuknosPaymentOpResponse;
+import net.iGap.module.mobileBank.JalaliCalendar;
+import net.iGap.repository.kuknos.UserRepo;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAdapter.ViewHolder> {
 
@@ -75,13 +79,22 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
 
         public void initView(KuknosPaymentOpResponse model) {
             String[] temp = model.getCreatedAt().split("T");
-            date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[0]) : temp[0]);
+            date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(getDateTime(model.getCreatedAt())) : getDateTime(model.getCreatedAt()));
             time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0, 5)) : temp[1].substring(0, 5));
-            DecimalFormat df = new DecimalFormat("#,###.00");
-            amount.setText(HelperCalander.isPersianUnicode ?
-                    HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getAmount())))
-                    : df.format(Double.valueOf(model.getAmount())));
-            if (accountID.equals(model.getFrom())) {
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            if (model.getType() != null && model.getType().equals("create_account")) {
+                amount.setText(HelperCalander.isPersianUnicode ?
+                        HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getStartingBalance())))
+                        : df.format(Double.valueOf(model.getStartingBalance())));
+            } else {
+                amount.setText(HelperCalander.isPersianUnicode ?
+                        HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getAmount())))
+                        : df.format(Double.valueOf(model.getAmount())));
+            }
+            if (model.getType() != null && model.getType().equals("create_account")) {
+                desc.setText(context.getResources().getString(R.string.kuknos_wHistory_receive));
+                icon.setText(context.getResources().getString(R.string.download_ic));
+            } else if (accountID.equals(model.getFrom())) {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_sent));
                 icon.setText(context.getResources().getString(R.string.upload_ic));
                 icon.setTextColor(Color.RED);
@@ -89,6 +102,29 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_receive));
                 icon.setText(context.getResources().getString(R.string.download_ic));
 //                icon.setTextColor(context.getResources().getColor(R.color.buttonColor));
+            }
+        }
+
+        private String getDateTime(String entry) {
+            entry = entry.replace("T", " ");
+            entry = entry.replace("Z", "");
+            try {
+                /*String [] dateTime = entry.split(" ");
+                String time = dateTime[1];*/
+
+                String convertDate, convertTime;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date mDate = sdf.parse(entry);
+                long timeInMilliseconds = mDate.getTime();
+                convertDate = HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+//                convertTime = convertTime(time);
+                if (HelperCalander.isPersianUnicode) {
+                    convertDate = HelperCalander.convertToUnicodeFarsiNumber(convertDate);
+                }
+                return convertDate /*+ " | " + convertTime*/;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return JalaliCalendar.getPersianDate(entry);
             }
         }
 

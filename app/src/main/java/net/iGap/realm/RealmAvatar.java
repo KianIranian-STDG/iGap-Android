@@ -98,16 +98,11 @@ public class RealmAvatar extends RealmObject {
 
     public static void deleteAvatarWithOwnerId(final long ownerId) {
         AvatarHandler.clearCacheForOwnerId(ownerId);
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findFirst();
-                    if (realmAvatar != null) {
-                        realmAvatar.deleteFromRealm();
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findFirst();
+            if (realmAvatar != null) {
+                realmAvatar.deleteFromRealm();
+            }
         });
     }
 

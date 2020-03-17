@@ -35,16 +35,11 @@ public class UserAvatarGetListResponse extends MessageHandler {
         super.handler();
         final ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder builder = (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
         final long ownerId = Long.parseLong(identity);
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar.deleteAllAvatars(ownerId, realm);
-                    for (ProtoGlobal.Avatar avatar : builder.getAvatarList()) {
-                        RealmAvatar.putOrUpdate(realm, ownerId, avatar);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmAvatar.deleteAllAvatars(ownerId, realm);
+            for (ProtoGlobal.Avatar avatar : builder.getAvatarList()) {
+                RealmAvatar.putOrUpdate(realm, ownerId, avatar);
+            }
         });
     }
 

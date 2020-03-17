@@ -10,11 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.res.ResourcesCompat;
-
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
@@ -22,6 +17,11 @@ import net.iGap.model.kuknos.Parsian.KuknosBalance;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 
 public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balance> {
 
@@ -136,7 +136,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
 
     @Override
     public int getCount() {
-        if (wallets.get(0).getAssetCode().equals("-1"))
+        if (wallets.get(0).getAssetCode() != null && wallets.get(0).getAssetCode().equals("-1"))
             return wallets.size();
         else
             return wallets.size() + 1;

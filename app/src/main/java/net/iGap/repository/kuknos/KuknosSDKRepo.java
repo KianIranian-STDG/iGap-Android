@@ -27,7 +27,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         PAYMENT_SEND, CHANGE_TRUST, MANAGE_OFFER
     }
 
-    private static final String KUKNOS_Horizan_Server = "https://horizon.kuknos.org" /*"https://horizon-testnet.stellar.org"*/;
+    private static final String KUKNOS_Horizon_Server = "https://horizon.kuknos.org" /*"https://horizon-testnet.stellar.org"*/;
     private static final String PASS_PHRASE = "Kuknos Foundation, Feb 2019" /*"https://horizon-testnet.stellar.org"*/;
     private API apiEnum;
     private callBack response;
@@ -68,7 +68,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     }
 
     private String paymentToOtherXDR(String sourceS, String destinationS, String tokenCode, String tokenIssuer, String amount, String memo) {
-        Server server = new Server(KUKNOS_Horizan_Server);
+        Server server = new Server(KUKNOS_Horizon_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
         KeyPair destination = KeyPair.fromAccountId(destinationS);
 
@@ -110,7 +110,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     }
 
     private String chargeWalletXDR(String sourceS, String amount, String receiptNumber, String memo) {
-        Server server = new Server(KUKNOS_Horizan_Server);
+        Server server = new Server(KUKNOS_Horizon_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
 
         // load up-to-date information on your account.
@@ -140,7 +140,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     }
 
     private String chargeWalletOtherCurrencyXDR(String sourceS, String amount, String receiptNumber, String assetCode, String assetType, String memo) {
-        Server server = new Server(KUKNOS_Horizan_Server);
+        Server server = new Server(KUKNOS_Horizon_Server);
         KeyPair source = KeyPair.fromSecretSeed(sourceS);
 
         // load up-to-date information on your account.
@@ -172,7 +172,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
     }
 
     private String trustlineXDR(String AccountSeed, String code, String issuer) {
-        Server server = new Server(KUKNOS_Horizan_Server);
+        Server server = new Server(KUKNOS_Horizon_Server);
         Network network = new Network(PASS_PHRASE);
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
         Asset asset = new AssetTypeCreditAlphaNum4(code, issuer);
@@ -190,7 +190,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
                 .addOperation(new ChangeTrustOperation.Builder(asset, "" + Integer.MAX_VALUE).build())
                 .addMemo(Memo.text(""))
                 .setTimeout(60)
-                .setOperationFee(1000)
+                .setOperationFee(50000)
                 .build();
         // Sign the transaction to prove you are actually the person sending it.
         transaction.sign(source);
@@ -199,7 +199,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
 
     private String manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
                                String counterCode, String counterIssuer, String amount, String price, long offerID) {
-        Server server = new Server(KUKNOS_Horizan_Server);
+        Server server = new Server(KUKNOS_Horizon_Server);
         Network network = new Network(PASS_PHRASE);
         KeyPair source = KeyPair.fromSecretSeed(accountSeed);
         Asset sourceAsset;

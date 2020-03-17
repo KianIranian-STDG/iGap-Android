@@ -17,7 +17,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class AnimatedStickerCell extends LottieAnimationView implements EventListener {
-    private String TAG = "abbasiAnimation";
 
     public boolean animatedLoaded;
     private String path;
@@ -70,7 +69,6 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventLis
             String loadingCashId = (String) getTag();
             setAnimation(inputStream, loadingCashId);
             animatedLoaded = true;
-            Log.i(TAG, "loadAnimation: " + path);
             playAnimation();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -81,7 +79,6 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventLis
     @Override
     public void playAnimation() {
         super.playAnimation();
-        Log.i(TAG, "playAnimation: " + path);
         playing = true;
     }
 

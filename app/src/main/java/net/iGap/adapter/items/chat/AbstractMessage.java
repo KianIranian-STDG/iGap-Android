@@ -22,7 +22,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +101,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
@@ -346,7 +344,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         MessageProgress _Progress = ((IProgress) holder).getProgress();
                         if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
                             int progress = (int) message[1];
-                            Log.d("bagi", "receivedMessage" + progress);
                             if (progress >= 1 && progress != 100) {
                                 _Progress.withProgress(progress);
                             }
@@ -583,8 +580,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (mMessage.isEdited())
-            if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature() != null && structMessage.getChannelExtra().getSignature().length() > 0)
-                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + structMessage.getChannelExtra().getSignature());
+            if (structMessage.getChannelExtraWithoutForward() != null && structMessage.getChannelExtraWithoutForward().getSignature() != null && structMessage.getChannelExtraWithoutForward().getSignature().length() > 0)
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + structMessage.getChannelExtraWithoutForward().getSignature());
             else {
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
             }
@@ -660,7 +657,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
             }
 
-            if (type == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+            if (type == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId() && !structMessage.isGiftSticker()) {
                 mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
@@ -709,7 +706,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature() != null && structMessage.getChannelExtra().getSignature().length() > 0) {
+        if (structMessage.getChannelExtraWithoutForward() != null && structMessage.getChannelExtraWithoutForward().getSignature() != null && structMessage.getChannelExtraWithoutForward().getSignature().length() > 0) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
         } else if (mMessage.isEdited()) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
@@ -813,35 +810,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * because for chat and group userId will be set
          */
 
-        if ((mMessage.getForwardMessage() != null)) {
-            if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                if (realmChannelExtra != null) {
-                    mHolder.getVoteUpTv().setText(realmChannelExtra.getThumbsUp());
-                    mHolder.getVoteDownTv().setText(realmChannelExtra.getThumbsDown());
-                    mHolder.getViewsLabelTv().setText(realmChannelExtra.getViewsLabel());
-                    if (mMessage.isEdited())
-                        mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + realmChannelExtra.getSignature());
-                    else
-                        mHolder.getSignatureTv().setText(realmChannelExtra.getSignature());
-                }
-            } else {
-                mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
-                mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
-                mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
-                if (mMessage.isEdited())
-                    mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + structMessage.getChannelExtra().getSignature());
-                else
-                    mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
-            }
-        } else {
-            mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
-            mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
-            mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
-            if (mMessage.isEdited())
-                mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + structMessage.getChannelExtra().getSignature());
-            else
-                mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
-        }
+        mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
+        mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
+        mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
+        if (mMessage.isEdited())
+            mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + (structMessage.getChannelExtra() != null ? structMessage.getChannelExtra().getSignature() : ""));
+        else
+            mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
+
 
         if (mHolder.getSignatureTv().getText().length() > 0) {
             mHolder.getSignatureTv().setVisibility(View.VISIBLE);
@@ -882,48 +858,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @param reaction Up or Down
      */
     private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
-        long authorRoomId = 0;
-        long messageId = 0;
-        if (mMessage.getForwardMessage() != null) {
-            authorRoomId = mMessage.getForwardMessage().getAuthorRoomId();
-            messageId = mMessage.getForwardMessage().getMessageId();
-        }
+        if ((mMessage.getForwardMessage() != null)) {
+            long forwardMessageId = mMessage.getForwardMessage().getMessageId();
 
-        if (messageId < 0) {
-            messageId = messageId * (-1);
-        }
-
-        long finalAuthorRoomId = authorRoomId;
-        long finalMessageId = messageId;
-        new Thread(() -> {
-            DbManager.getInstance().doRealmTask(realm1 -> {
-                realm1.executeTransaction(realm -> {
-
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst();
-                    if (realmRoomMessage != null) {
-                        /**
-                         * userId != 0 means that this message is from channel
-                         * because for chat and group userId will be set
-                         */
-
-                        if ((mMessage.getForwardMessage() != null)) {
-                            ProtoGlobal.Room.Type roomType = null;
-                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, finalAuthorRoomId).findFirst();
-                            if (realmRoom != null) {
-                                roomType = realmRoom.getType();
-                            }
-                            if ((roomType == ProtoGlobal.Room.Type.CHANNEL)) {
-                                G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReactionForward(finalAuthorRoomId, mMessage.getMessageId(), reaction, finalMessageId));
-                            } else {
-                                G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.getRoomId(), mMessage.getMessageId(), reaction));
-                            }
-                        } else {
-                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.getRoomId(), mMessage.getMessageId(), reaction));
-                        }
-                    }
-                });
+            if (forwardMessageId < 0) {
+                forwardMessageId = forwardMessageId * (-1);
+            }
+            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
             });
-        }).start();
+            if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId(), reaction, forwardMessageId);
+            } else {
+                new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.getRoomId(), mMessage.getMessageId(), reaction);
+            }
+        } else {
+            new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.getRoomId(), mMessage.getMessageId(), reaction);
+        }
     }
 
     @CallSuper
@@ -1408,6 +1359,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (_with == 0) {
                     _with = (int) G.context.getResources().getDimension(R.dimen.dp200);
+                }
+
+                if (_hight == 0) {
                     _hight = (int) G.context.getResources().getDimension(R.dimen.dp200);
                 }
 
@@ -1710,8 +1664,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
-                    Log.i("abbasiAnimation", "On Progress  " + progress);
-
                     if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
@@ -1883,8 +1835,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
 
                     new Thread(() -> {
-                        DbManager.getInstance().doRealmTask(realm12 -> {
-                            realm12.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
+                        DbManager.getInstance().doRealmTransaction(realm12 -> {
+                            realm12.copyToRealmOrUpdate(roomMessage);
                         });
                     }).start();
 
@@ -1943,7 +1895,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    Log.wtf(this.getClass().getName(), "tag: " + ((ArrayList<String>) v.getTag()).get(0));
                     RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
                     long peerId;
                     if (room != null && room.getChatRoom() != null) {

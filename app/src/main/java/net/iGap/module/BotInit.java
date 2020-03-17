@@ -145,25 +145,17 @@ public class BotInit implements MakeButtons.OnClickListener {
                                     @Override
                                     public void onChatGetRoom(final ProtoGlobal.Room room) {
                                         G.onChatGetRoom = null;
-                                        DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
-                                            @Override
-                                            public void doTask(Realm realm1) {
-                                                realm1.executeTransaction(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm mRealm) {
-                                                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, mRealm);
-                                                        realmRoom1.setFromPromote(true);
-                                                        realmRoom1.setPromoteId(realmRoom1.getChatRoom().getPeerId());
-                                                    }
-                                                });
-
-                                                new RequestClientPinRoom().pinRoom(room.getId(), true);
-
-
-                                                //  RealmRoom.setPromote(2297310L, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER);
-                                                ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
-                                            }
+                                        DbManager.getInstance().doRealmTransaction(realm1 -> {
+                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm1);
+                                            realmRoom1.setFromPromote(true);
+                                            realmRoom1.setPromoteId(realmRoom1.getChatRoom().getPeerId());
+                                            //  RealmRoom.setPromote(2297310L, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER);
                                         });
+
+                                        new RequestClientPinRoom().pinRoom(room.getId(), true);
+
+                                        ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
+
                                     }
 
 

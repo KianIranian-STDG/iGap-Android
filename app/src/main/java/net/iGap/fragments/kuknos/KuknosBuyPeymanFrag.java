@@ -16,6 +16,19 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.model.kuknos.KuknosPaymentResponse;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.kuknos.KuknosBuyPeymanVM;
+
+import org.jetbrains.annotations.NotNull;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -25,18 +38,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.model.kuknos.KuknosPaymentResponse;
-import net.iGap.module.dialog.DefaultRoundDialog;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.viewmodel.kuknos.KuknosBuyPeymanVM;
-
-import org.jetbrains.annotations.NotNull;
 
 public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
 
@@ -170,23 +171,18 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
     }
 
     private void showDialog(int messageResource) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle));
-        defaultRoundDialog.setMessage(getResources().getString(messageResource));
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(R.string.kuknos_viewRecoveryEP_failTitle)
+                .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                .content(getResources().getString(messageResource)).show();
     }
 
     private void showDialog(String title, String message) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(title);
-        defaultRoundDialog.setMessage(message);
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), (dialog, id) -> {
-
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(title)
+                .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                .content(message)
+                .show();
     }
 
     private void onProgress() {
@@ -194,6 +190,7 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
             if (integer == 0) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
+                viewModel.setAmountEnable(true);
             } else if (integer == 1) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
                 viewModel.setAmountEnable(false);
@@ -268,7 +265,7 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosEnterPinFrag.newInstance(() -> viewModel.sendDataServer());
+                    fragment = KuknosEnterPinFrag.newInstance(() -> viewModel.sendDataServer(), false);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

@@ -35,7 +35,7 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
     }
 
     public void onInquiryButtonClick(String nationalCode) {
-        if (nationalCode.length() != 0) {
+        if (nationalCode != null && nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
                 String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
@@ -52,7 +52,7 @@ public class EnterNationalCodeViewModel extends BaseAPIViewModel {
                     G.nationalCode = nationalCode;
                 }
 
-                if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
+                if (phoneNumber != null && phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
                     phoneNumber = "0" + phoneNumber.substring(2);
                     showLoading.set(View.VISIBLE);
                     isEnabled.set(false);

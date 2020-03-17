@@ -52,21 +52,16 @@ public class RealmCallLog extends RealmObject {
     }
 
     public static void addLogList(final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
-                        addLog(item, realm);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
+                addLog(item, realm);
+            }
         });
     }
 
     public static void clearCallLog(final long clearId) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(realm1 -> realm1.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm());
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
         });
     }
 
@@ -76,13 +71,8 @@ public class RealmCallLog extends RealmObject {
      * should be check state of call and clear should be execute synchronise
      */
     private static void clearAllCallLog() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmCallLog.class).findAll().deleteAllFromRealm();
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.where(RealmCallLog.class).findAll().deleteAllFromRealm();
         });
     }
 

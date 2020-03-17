@@ -33,10 +33,10 @@ public class PanelRepo {
     }
 
     public String getUserInfo() {
-        return /*"\nSeed Key is: " + userRepo.getSeedKey()
-                + */"\nPublic Key is: " + userRepo.getAccountID()
-                + "\nPIN is: " + userRepo.getPIN()
-                + "\nmnemonic is: " + userRepo.getMnemonic();
+        return "\nSeed Key is: " + userRepo.getSeedKey()
+                + "\nPublic Key is: " + userRepo.getAccountID()
+                /*+ "\nPIN is: " + (userRepo.getPIN() != null ? userRepo.getPIN() : "")*/
+                + "\nmnemonic is: " + (userRepo.getMnemonic() != null ? userRepo.getMnemonic() : "");
     }
 
     public void getAccountInfo(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBalance>> apiResponse) {
@@ -77,6 +77,10 @@ public class PanelRepo {
 
     public boolean isPinSet() {
         return userRepo.getPIN() != null && userRepo.getPIN().length() == 4;
+    }
+
+    public boolean isMnemonicAvailable() {
+        return userRepo.getMnemonic() != null;
     }
 
     public UserRepo getUserRepo() {

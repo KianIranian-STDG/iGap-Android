@@ -9,13 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
-
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
@@ -23,6 +16,7 @@ import net.iGap.adapter.kuknos.AddAssetAdvAdapter;
 import net.iGap.adapter.kuknos.AddAssetCurrentAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosAddAssetBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
@@ -32,6 +26,13 @@ import net.iGap.viewmodel.kuknos.KuknosAddAssetVM;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 
 public class KuknosAddAssetFrag extends BaseAPIViewFrag<KuknosAddAssetVM> {
 
@@ -137,6 +138,10 @@ public class KuknosAddAssetFrag extends BaseAPIViewFrag<KuknosAddAssetVM> {
     }
 
     private void initNewAssetBS(KuknosAsset response) {
+        if (response == null || response.getAssets() == null || response.getAssets().size() == 0) {
+            HelperError.showSnackMessage(getResources().getString(R.string.no_item), false);
+            return;
+        }
         List<String> items = new ArrayList<>();
         for (KuknosAsset.Asset temp : response.getAssets()) {
             items.add(temp.getLabel());

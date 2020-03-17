@@ -19,6 +19,8 @@ public class KuknosPaymentOpResponse extends KuknosOperationResponse.OperationRe
     protected String from;
     @SerializedName("to")
     protected String to;
+    @SerializedName("starting_balance")
+    protected String startingBalance;
 
     public String getAmount() {
         return amount;
@@ -38,5 +40,21 @@ public class KuknosPaymentOpResponse extends KuknosOperationResponse.OperationRe
 
     public String getTo() {
         return to;
+    }
+
+    public String getAssetType() {
+        return assetType;
+    }
+
+    public String getAssetCode() {
+        return assetCode;
+    }
+
+    public String getAssetIssuer() {
+        return assetIssuer;
+    }
+
+    public String getStartingBalance() {
+        return startingBalance;
     }
 }

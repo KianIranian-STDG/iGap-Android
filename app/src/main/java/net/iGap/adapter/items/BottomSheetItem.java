@@ -12,7 +12,6 @@ package net.iGap.adapter.items;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.cardview.widget.CardView;
@@ -20,12 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.ImageHelper;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
-import net.iGap.observers.interfaces.OnRotateImage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -67,32 +64,12 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
     @Override
     public void bindView(@NotNull final ViewHolder holder, @NotNull List payloads) {
         super.bindView(holder, payloads);
+//
+//        Glide.with(holder.imgSrc.getContext())
+//                .load("file://" + mList.getPath())
+//                .into(holder.imgSrc);
 
-        ImageHelper.correctRotateImage(mList.getPath(), true, new OnRotateImage() {
-            @Override
-            public void startProcess() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.prgBottomSheet.setVisibility(View.VISIBLE);
-                    }
-                });
-
-            }
-
-            @Override
-            public void success(String newPath) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.prgBottomSheet.setVisibility(View.GONE);
-                        G.imageLoader.displayImage("file://" + newPath, holder.imgSrc);
-                    }
-                });
-
-            }
-        }); //rotate image
-
+        ImageLoadingServiceInjector.inject().loadImage(holder.imgSrc, mList.getPath(), true);
 
         if (mList.isSelected) {
             holder.checkBoxSelect.setChecked(false);
@@ -123,7 +100,6 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         protected AppCompatCheckBox checkBoxSelect;
         private CardView cr;
         private ImageView imgSrc;
-        private ProgressBar prgBottomSheet;
 
         public ViewHolder(View view) {
             super(view);
@@ -131,7 +107,6 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
             cr = view.findViewById(R.id.card_view);
             imgSrc = view.findViewById(R.id.img_gallery);
             checkBoxSelect = view.findViewById(R.id.cig_checkBox_select_user);
-            prgBottomSheet = view.findViewById(R.id.prgBottomSheet);
         }
     }
 

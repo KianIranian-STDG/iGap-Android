@@ -41,19 +41,14 @@ public class SignalingClearLogResponse extends MessageHandler {
         if (builderRequest.getClearId() != 0) {
             RealmCallLog.clearCallLog(builder.getClearId());
         } else {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        for (int i = 0; i < builder.getLogIdCount(); i++) {
-                            try {
-                                realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, builderRequest.getLogIdList().get(i)).findFirst().deleteFromRealm();
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                for (int i = 0; i < builder.getLogIdCount(); i++) {
+                    try {
+                        realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, builderRequest.getLogIdList().get(i)).findFirst().deleteFromRealm();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                });
+                }
             });
         }
 

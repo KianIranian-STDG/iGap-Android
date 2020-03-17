@@ -44,7 +44,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPaint;
-import net.iGap.fragments.FragmentExplorer;
+import net.iGap.fragments.FileManagerFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
@@ -629,11 +629,7 @@ public class AttachFile {
         HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                FragmentExplorer fragment = new FragmentExplorer();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", listener);
-                fragment.setArguments(bundle);
-                new HelperFragment(context.getSupportFragmentManager(), fragment).setReplace(false).load();
+                new HelperFragment(context.getSupportFragmentManager(), FileManagerFragment.newInstance(listener)).setReplace(false).load();
             }
 
             @Override
@@ -655,12 +651,12 @@ public class AttachFile {
                 //    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
                 //}
 
-                FragmentExplorer fragment = new FragmentExplorer();
+                /*FragmentExplorer fragment = new FragmentExplorer();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Listener", listener);
                 bundle.putString("Mode", "documnet");
                 fragment.setArguments(bundle);
-
+*/
                 /*new HelperFragment(fragment).setReplace(false).load();*/
             }
 

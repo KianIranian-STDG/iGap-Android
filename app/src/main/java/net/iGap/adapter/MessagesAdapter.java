@@ -33,11 +33,11 @@ import net.iGap.adapter.items.chat.LogWalletCardToCard;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.module.AppUtils;
+import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
-import net.iGap.module.AppUtils;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -53,6 +53,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
     public AvatarHandler avatarHandler;
+    private boolean roomIsCloud;
 
     public CompositeDisposable compositeDisposable;
 
@@ -83,12 +84,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
-    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler, CompositeDisposable compositeDisposable) {
+    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler, CompositeDisposable compositeDisposable, boolean roomIsCloud) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         this.compositeDisposable = compositeDisposable;
         iMessageItem = iMessageItemListener;
         onChatMessageRemove = chatMessageRemoveListener;
         this.avatarHandler = avatarHandler;
+        this.roomIsCloud = roomIsCloud;
         // as we provide id's for the items we want the hasStableIds enabled to speed up things
         setHasStableIds(true);
 
@@ -209,23 +211,17 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  * if not forwarded message update structure otherwise just notify position
                  * mainMessageId == 0 means that this message not forwarded
                  */
-                if (forwardedMessageId == 0) {
-                    if (messageInfo.mMessage.getRoomId() == roomId && messageInfo.mMessage.getMessageId() == messageId) {
-                        int pos = items.indexOf(messageInfo);
-                        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                            messageInfo.structMessage.getChannelExtra().setThumbsUp(vote);
-                        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-                            messageInfo.structMessage.getChannelExtra().setThumbsDown(vote);
-                        }
-                        set(pos, messageInfo);
-                        break;
+                if (
+                        messageInfo.mMessage.getMessageId() == messageId &&
+                                (forwardedMessageId != 0 || messageInfo.mMessage.getRoomId() == roomId)
+                ) {
+                    int pos = items.indexOf(messageInfo);
+                    if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                        messageInfo.structMessage.getChannelExtra().setThumbsUp(vote);
+                    } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+                        messageInfo.structMessage.getChannelExtra().setThumbsDown(vote);
                     }
-                } else {
-                    if (messageInfo.mMessage.getMessageId() == messageId) {
-                        int pos = items.indexOf(messageInfo);
-                        set(pos, messageInfo);
-                        break;
-                    }
+                    set(pos, messageInfo);
                 }
             }
         }
@@ -242,10 +238,10 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
                  * so i need to (replyMessageId * (-1)) again for use this messageId
                  */
-                if (messageInfo.mMessage.getForwardMessage() != null && messageInfo.mMessage.getForwardMessage().isValid() && (messageInfo.mMessage.getForwardMessage().getMessageId() * (-1)) == messageId) {
-                    int pos = items.indexOf(messageInfo);
-                    set(pos, messageInfo);
-                } else if (messageInfo.mMessage.getMessageId() == messageId) {
+                if (
+                        (messageInfo.mMessage.getForwardMessage() == null && messageInfo.mMessage.getMessageId() == messageId)
+                                || (messageInfo.mMessage.getForwardMessage() != null && (messageInfo.mMessage.getForwardMessage().getMessageId() * (-1)) == messageId)
+                ) {
                     int pos = items.indexOf(messageInfo);
                     if (messageInfo.structMessage.getChannelExtra() != null) {
                         messageInfo.structMessage.getChannelExtra().setThumbsUp(voteUp);
@@ -474,5 +470,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public CompositeDisposable getCompositeDisposable() {
         return compositeDisposable;
+    }
+
+    public boolean roomIsMyCloud() {
+        return roomIsCloud;
     }
 }

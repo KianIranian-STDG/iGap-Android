@@ -1975,7 +1975,7 @@
     <string name="all_calls">des appels</string>
     <string name="open_url">ouvrir le lien</string>
     <string name="copied">copié</string>
-    <string name="default_theme_title">thème par défaut</string>
+    <string name="default_theme_title">Défaut</string>
     <string name="dark_theme_title">Thème sombre</string>
     <string name="message_is_long">Votre message est trop long. \n Le message sera converti en</string>
 
@@ -2186,4 +2186,17 @@
     <string name="secondary_password">Deuxième mot de passe</string>
     <string name="default_deposit">Dépôt par défaut</string>
     <string name="custom_deposit">Dépôt personnalisé</string>
+    <string name="mobile_bank_login_hint">Utilisez votre nom d\'utilisateur et votre mot de passe pour vous connecter à la banque mobile Parsian.</string>
+    <string name="internal_desc">Parcourez votre système de fichiers</string>
+    <string name="external_desc">Parcourez votre stockage externe</string>
+    <string name="file_manager_app_desc">Parcourir le dossier de l\'application</string>
+    <string name="file_manager_image_desc">Pour envoyer un fichier d\'images</string>
+    <string name="file_manager_video_desc">Pour envoyer un fichier vidéo</string>
+    <string name="file_manager_music">Pour envoyer un fichier audio</string>
+    <string name="folder">Dossier</string>
+    <string name="internal_storage">Stockage interne</string>
+    <string name="external_storage">Stockage externe</string>
+    <string name="file_manager">Gestionnaire de fichiers</string>
+    <string name="gift_card_already_in_use">Cette carte-cadeau est déjà utilisée!</string>
+    <string name="gift_carde_sended">Vous avez déjà envoyé une carte-cadeau à quelqu autre!</string>
 </resources>

@@ -66,7 +66,7 @@ public class Mnemonic {
 
         try {
             KeySpec ks = new PBEKeySpec(mnemonic, salt, 2048, 512);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
             return skf.generateSecret(ks).getEncoded();
         } catch (Exception e) {
             e.printStackTrace();

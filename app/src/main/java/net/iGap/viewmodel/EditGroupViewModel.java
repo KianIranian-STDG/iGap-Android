@@ -303,11 +303,8 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public void setChatHistoryStatus(int status) {
         //ToDo: move this code to repository
         new Thread(() -> {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(realm1 -> {
-                    //ToDo: improve this code
-                    realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().getGroupRoom().setStartFrom(status);
-                });
+            DbManager.getInstance().doRealmTransaction(realm1 -> {
+                realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().getGroupRoom().setStartFrom(status);
             });
         }).start();
 
