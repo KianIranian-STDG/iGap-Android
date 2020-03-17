@@ -102,6 +102,7 @@ public class AccountUser {
         isAssigned = assigned;
     }
 
+    @Nullable
     public String getPhoneNumber() {
         return phoneNumber;
     }

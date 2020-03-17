@@ -35,7 +35,7 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
         showLoadingView.set(View.VISIBLE);
         String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
-        if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
+        if (phoneNumber != null && phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
             phoneNumber = "0" + phoneNumber.substring(2);
             if (mode == MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_FORWARD || mode == MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_OUT_FORWARD) {
                 StickerRepository.getInstance().getActiveGiftCard(structIGSticker.getGiftId(), G.getNationalCode(), phoneNumber)
