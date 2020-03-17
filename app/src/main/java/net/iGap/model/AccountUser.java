@@ -42,10 +42,6 @@ public class AccountUser {
 
     private transient RealmConfiguration realmConfiguration;
 
-    public AccountUser(long id) {
-        this.id = id;
-    }
-
     public AccountUser(long id, String dbName, String name, String phoneNumber, int unReadMessageCount, boolean isAssigned) {
         this.id = id;
         this.dbName = dbName;
