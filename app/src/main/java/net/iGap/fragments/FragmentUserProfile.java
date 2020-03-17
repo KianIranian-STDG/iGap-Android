@@ -89,10 +89,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.getCloseKeyboard().observe(getViewLifecycleOwner(), isClose -> {
-            hideKeyboard();
-        });
-
         viewModel.openAccountsDialog.observe(getViewLifecycleOwner(), show -> {
             if (show == null) return;
             if (show) {
@@ -193,7 +189,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.editCompleteListener.observe(getViewLifecycleOwner() , state->{
+        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner() , state->{
             if(state == null) return;
             closeKeyboard(binding.getRoot());
         });

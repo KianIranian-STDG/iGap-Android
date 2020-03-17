@@ -174,10 +174,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
     private MutableLiveData<Boolean> cancelIconClick = new MutableLiveData<>();
-    private SingleLiveEvent<Boolean> closeKeyboard = new SingleLiveEvent<>();
     private ObservableInt checkProfileShow = new ObservableInt(View.GONE);
     private ObservableInt cancelProfileShow = new ObservableInt(View.GONE);
-    public SingleLiveEvent<Boolean> editCompleteListener = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> editCompleteListener = new SingleLiveEvent<>();
 
     private int phoneMax = 10;
     private boolean sendReferral = false;
@@ -302,8 +301,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return cancelIconClick;
     }
 
-    public SingleLiveEvent<Boolean> getCloseKeyboard() {
-        return closeKeyboard;
+    public SingleLiveEvent<Boolean> getEditCompleteListener() {
+        return editCompleteListener;
     }
 
     private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
@@ -461,7 +460,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         cancelProfileShow.set(View.GONE);
         editProfileIcon.set(View.VISIBLE);
         checkEditModeForOnBackPressed();
-        closeKeyboard.setValue(true);
+        editCompleteListener.postValue(true);
     }
 
     public void onCheckClick() {
@@ -792,7 +791,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);
-            editCompleteListener.postValue(true);
         }
     }
 
