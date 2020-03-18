@@ -9,18 +9,16 @@ import net.iGap.helper.LayoutCreator;
 
 public class EmojiSpan extends ImageSpan {
     private Paint.FontMetricsInt fontMetrics;
-    private int size;
+    private int size = LayoutCreator.dp(20);
 
     public EmojiSpan(EmojiManager.EmojiDrawable d, int verticalAlignment, int s, Paint.FontMetricsInt original) {
         super(d, verticalAlignment);
         fontMetrics = original;
-        if (original != null && s == 0) {
+        if (original != null) {
             size = Math.abs(fontMetrics.descent) + Math.abs(fontMetrics.ascent);
             if (size == 0) {
                 size = LayoutCreator.dp(20);
             }
-        } else if (original != null) {
-            size = s;
         }
     }
 

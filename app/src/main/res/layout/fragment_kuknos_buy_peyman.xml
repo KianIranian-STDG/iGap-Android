@@ -84,7 +84,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:afterTextChanged="@{()->viewmodel.updateSum()}"
-                        android:digits="0123456789"
+                        android:digits="0123456789."
                         android:ems="10"
                         android:gravity="center"
                         android:hint="@string/kuknos_buyP_amount"

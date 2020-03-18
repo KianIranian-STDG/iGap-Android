@@ -56,7 +56,7 @@ public class AccountManager {
         getUserAccountListFromSharedPreferences();
         if (userAccountList == null) {
             userAccountList = new ArrayList<>();
-            AccountUser accountUser = new AccountUser(false, "test");
+            AccountUser accountUser = new AccountUser("test");
             accountUser.setDbName(getDbName());
             userAccountList.add(accountUser);
             currentUser = 0;
@@ -85,7 +85,7 @@ public class AccountManager {
     }
 
     public AccountUser getUser(long userId) {
-        int i = userAccountList.indexOf(new AccountUser(userId));
+        int i = indexOfUser(userId);
         if (i >= 0)
             return userAccountList.get(i);
         return null;
@@ -137,7 +137,7 @@ public class AccountManager {
     }
 
     public boolean isExistThisAccount(long userId) {
-        return userAccountList.contains(new AccountUser(userId));
+        return indexOfUser(userId) != -1;
     }
 
     public boolean isExistThisAccount(String phoneNumber) {
@@ -156,13 +156,23 @@ public class AccountManager {
 
     public void changeCurrentUserAccount(long userId) {
         clearSomeStaticValue();
-        int t = userAccountList.indexOf(new AccountUser(userId));
+        int t = indexOfUser(userId);
         if (t != -1) {
             currentUser = t;
             setCurrentUserInSharedPreferences();
         } else {
             throw new IllegalArgumentException("not exist this user");
         }
+    }
+
+    private int indexOfUser(long userId) {
+        for (int i = 0; i < userAccountList.size(); i++) {
+            if (userAccountList.get(i).getId() == userId) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     // return true if have current user after remove accountUser

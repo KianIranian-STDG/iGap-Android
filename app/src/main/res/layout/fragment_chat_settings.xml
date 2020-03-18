@@ -190,7 +190,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/sendChatItem"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp8"
                     android:background="@drawable/chat_item_sent_bg_light"
@@ -201,11 +201,12 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/senderMessage"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp4"
-                        android:text="yes it is"
+                        android:text="yes it is &#129335;&#8205;&#9794;&#65039;"
                         android:textColor="?iGapSendMessageTextColor"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -222,7 +223,7 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/sendTime"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:padding="@dimen/dp4"

@@ -37,6 +37,7 @@ public class GlideImageLoader implements ImageLoaderService {
             throw new NullPointerException("targetImageView NULL");
 
         if (imageUrl != null) {
+            targetImageView.setImageBitmap(null);
             if (placeHolder == 0) {
                 Glide.with(G.context).load(imageUrl)
                         .transition(DrawableTransitionOptions.withCrossFade(FADE_TIME_MS))

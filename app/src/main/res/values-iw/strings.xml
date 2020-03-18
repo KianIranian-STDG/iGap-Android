@@ -2269,4 +2269,7 @@
     <string name="external_storage">حافظه جانبی</string>
     <string name="file_manager">مدیریت فایل</string>
     <string name="kuknos_Mnemonic_error">کلمات بازیابی یافت نشد.</string>
+    <string name="gift_card_already_in_use">بو هدیه کارتی ایستیفاده الونوب!</string>
+    <string name="gift_carde_sended">آرتیق باسقاسیندا هدیه کارتینی گوندرمیشیز!</string>
+    <string name="kuknos_Currency">نام ارز</string>
 </resources>

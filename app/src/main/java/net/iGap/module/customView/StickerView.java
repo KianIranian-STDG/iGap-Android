@@ -165,7 +165,7 @@ public class StickerView extends FrameLayout implements EventListener {
                     if (viewType == StructIGSticker.ANIMATED_STICKER && stickerIv instanceof AnimatedStickerCell) {
                         ((AnimatedStickerCell) stickerIv).playAnimation(filePath);
                     } else if (filePath.equals(viewPath)) {
-                        ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath);
+                        ImageLoadingServiceInjector.inject().loadImage(stickerIv, viewPath, true);
                     }
                 }
             } else if (id == EventManager.EMOJI_LOADED) {

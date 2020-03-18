@@ -22,7 +22,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -673,7 +672,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set message time
          */
 
-        String time = HelperCalander.getClocktime(mMessage.getUpdateOrCreateTime(), false);
+        String time = HelperCalander.getClocktime(mMessage.getCreateTime(), false);
         if (HelperCalander.isPersianUnicode) {
             mHolder.getMessageTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(time));
         } else {
@@ -1360,6 +1359,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (_with == 0) {
                     _with = (int) G.context.getResources().getDimension(R.dimen.dp200);
+                }
+
+                if (_hight == 0) {
                     _hight = (int) G.context.getResources().getDimension(R.dimen.dp200);
                 }
 

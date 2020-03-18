@@ -14,13 +14,6 @@ import android.bluetooth.BluetoothProfile;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.StringRes;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -51,6 +44,12 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.StringRes;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import io.realm.Realm;
 
 public class ActivityCallViewModel extends ViewModel implements BluetoothProfile.ServiceListener {
@@ -324,6 +323,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                 //G.handler(new Runnable() {
                 //    @Override
                 //    public void run() {
+                Log.d("amini", "onStatusChanged: " + callState.name());
                 callBackTxtStatus.set(getTextString(callState));
                 switch (callState) {
                     case RINGING:
@@ -356,14 +356,18 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                             changeViewState.postValue(false);
                             playSound.postValue(R.raw.igap_connect);
                             setPhoneSpeaker();
+                            startTimer();
                             if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
                                 showRendererSurface.set(View.VISIBLE);
-                                showUserAvatar.set(View.GONE);
-                                showSwitchCamera.set(View.VISIBLE);
                                 showPeerSurface.set(View.VISIBLE);
+
+                                showUserAvatar.set(View.INVISIBLE);
+                                showSwitchCamera.set(View.INVISIBLE);
+                                showChatButton.set(View.INVISIBLE);
+                                txtTimerVisibility.set(View.INVISIBLE);
+                                isHiddenButtons = true;
                             }
                             playRingTone.postValue(false);
-                            startTimer();
                             /*G.handler.postDelayed(() -> {
 
                             }, 350);*/

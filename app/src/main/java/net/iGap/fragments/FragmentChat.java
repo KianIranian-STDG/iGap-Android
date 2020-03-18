@@ -364,6 +364,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
+import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
@@ -866,6 +867,14 @@ public class FragmentChat extends BaseFragment
                 Log.i(TAG, "soundPool error: " + e.getMessage());
             }
 
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!isNotJoin) {
+            makeSeenAllMessageOfRoom(mRoomId);
         }
     }
 
@@ -3679,6 +3688,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, StructMessageInfo structMessage) {
+        showPopup(-1);
         new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, v -> forwardSelectedMessageToOutOfChat(structMessage), mode);
     }
 

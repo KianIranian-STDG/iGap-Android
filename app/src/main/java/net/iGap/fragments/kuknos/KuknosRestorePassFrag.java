@@ -36,7 +36,6 @@ public class KuknosRestorePassFrag extends BaseAPIViewFrag<KuknosRestorePassVM> 
         return new KuknosRestorePassFrag();
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

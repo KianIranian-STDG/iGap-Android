@@ -141,7 +141,7 @@ public class RoomListCell extends FrameLayout {
         }
 
         if (haveName) {
-            roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt()));
+            roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt(), -1, false));
         }
 
         if (room.getType() == ProtoGlobal.Room.Type.CHANNEL && room.getChannelRoom().isVerified() || room.getType() == CHAT && room.getChatRoom().isVerified()) {
@@ -191,7 +191,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getType() == ProtoGlobal.Room.Type.CHANNEL || room.getType() == ProtoGlobal.Room.Type.GROUP) {
             if (!haveChatIcon) {
                 chatIconTv = new FontIconTextView(getContext());
-                setTextSize(chatIconTv, R.dimen.standardTextSize);
+                setTextSize(chatIconTv, R.dimen.dp15);
                 addView(chatIconTv);
                 chatIconTv.setTextColor(Theme.getInstance().getSendMessageTextColor(chatIconTv.getContext()));
                 haveChatIcon = true;
@@ -211,10 +211,10 @@ public class RoomListCell extends FrameLayout {
         if (room.getTitle() != null && !haveName) {
             roomNameTv = new AppCompatTextView(getContext());
             roomNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
-            setTextSize(roomNameTv, R.dimen.dp13);
+            setTextSize(roomNameTv, R.dimen.dp15);
             roomNameTv.setSingleLine(true);
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
-            roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt()));
+            roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt(), -1, false));
             roomNameTv.setTextColor(Theme.getInstance().getSendMessageTextColor(roomNameTv.getContext()));
             roomNameTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
             addView(roomNameTv);
@@ -228,7 +228,7 @@ public class RoomListCell extends FrameLayout {
                 lastMessageTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 lastMessageTv.setSingleLine(true);
                 setTypeFace(lastMessageTv);
-                setTextSize(lastMessageTv, R.dimen.dp12);
+                setTextSize(lastMessageTv, R.dimen.dp14);
                 addView(lastMessageTv);
                 haveLastMessage = true;
             }
@@ -732,7 +732,7 @@ public class RoomListCell extends FrameLayout {
                 }
             }
         }
-        lastMessageTv.setText(EmojiManager.getInstance().replaceEmoji(builder, lastMessageTv.getPaint().getFontMetricsInt()), TextView.BufferType.SPANNABLE);
+        lastMessageTv.setText(EmojiManager.getInstance().replaceEmoji(builder, lastMessageTv.getPaint().getFontMetricsInt(), -1, false), TextView.BufferType.SPANNABLE);
     }
 
     private int dpToPx(int dp) {
