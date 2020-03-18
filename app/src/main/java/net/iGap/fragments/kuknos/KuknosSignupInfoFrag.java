@@ -1,6 +1,8 @@
 package net.iGap.fragments.kuknos;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
@@ -155,12 +158,12 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
         }
     }
 
-    /*private void saveRegisterInfo() {
+    private void saveRegisterInfo() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("RegisterInfo", new Gson().toJson(viewModel.getKuknosSignupM()));
         editor.apply();
-    }*/
+    }
 
     private void onError() {
 
@@ -205,7 +208,7 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
 
         viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
-//                saveRegisterInfo();
+                saveRegisterInfo();
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());

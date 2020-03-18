@@ -2285,6 +2285,7 @@ Want to get it?</string>
     <string name="kuknos_payment_hash">Kuknos Hash: </string>
     <string name="kuknos_support_error">Kuknos platform is NOT available for your device.</string>
     <string name="kuknos_Mnemonic_error">Recovery keys are NOT set.</string>
+    <string name="kuknos_Currency">Currency</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

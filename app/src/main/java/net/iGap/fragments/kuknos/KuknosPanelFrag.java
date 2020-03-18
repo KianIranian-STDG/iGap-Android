@@ -23,6 +23,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -129,7 +130,6 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
             }
         });
 
-        viewModel.getDataFromServer();
         onErrorObserver();
         openPage();
         onDataChanged();
@@ -267,6 +267,18 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 noItem.add(temp);
                 WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), noItem);
                 walletSpinner.setAdapter(adapter);
+            }
+        });
+
+        viewModel.getBAndCState().observe(getViewLifecycleOwner(), state -> {
+            switch (state) {
+                case 0:
+                    viewModel.setBalance(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber("0.0") : "0.0");
+                    viewModel.setCurrency(getResources().getString(R.string.kuknos_Currency));
+                    break;
+                case 1:
+                    viewModel.setCurrency(getResources().getString(R.string.rial));
+                    break;
             }
         });
     }
