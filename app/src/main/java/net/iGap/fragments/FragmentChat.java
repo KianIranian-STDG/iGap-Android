@@ -3688,6 +3688,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, StructMessageInfo structMessage) {
+        showPopup(-1);
         new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, v -> forwardSelectedMessageToOutOfChat(structMessage), mode);
     }
 
