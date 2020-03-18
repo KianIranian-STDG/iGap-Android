@@ -22,15 +22,16 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
-import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
-import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
+
+import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
 
@@ -84,8 +85,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 //            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-//        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        ImageLoadingServiceInjector.inject().loadImage(holder.image, localPath, true);
+        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override
