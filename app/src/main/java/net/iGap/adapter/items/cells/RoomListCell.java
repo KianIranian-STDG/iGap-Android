@@ -191,7 +191,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getType() == ProtoGlobal.Room.Type.CHANNEL || room.getType() == ProtoGlobal.Room.Type.GROUP) {
             if (!haveChatIcon) {
                 chatIconTv = new FontIconTextView(getContext());
-                setTextSize(chatIconTv, R.dimen.dp15);
+                setTextSize(chatIconTv, R.dimen.dp14);
                 addView(chatIconTv);
                 chatIconTv.setTextColor(Theme.getInstance().getSendMessageTextColor(chatIconTv.getContext()));
                 haveChatIcon = true;
@@ -211,7 +211,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getTitle() != null && !haveName) {
             roomNameTv = new AppCompatTextView(getContext());
             roomNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
-            setTextSize(roomNameTv, R.dimen.dp15);
+            setTextSize(roomNameTv, R.dimen.dp14);
             roomNameTv.setSingleLine(true);
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
             roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt(), -1, false));
@@ -228,7 +228,7 @@ public class RoomListCell extends FrameLayout {
                 lastMessageTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 lastMessageTv.setSingleLine(true);
                 setTypeFace(lastMessageTv);
-                setTextSize(lastMessageTv, R.dimen.dp14);
+                setTextSize(lastMessageTv, R.dimen.dp13);
                 addView(lastMessageTv);
                 haveLastMessage = true;
             }
