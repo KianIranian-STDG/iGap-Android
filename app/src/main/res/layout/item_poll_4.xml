@@ -25,7 +25,7 @@
             android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards" />
 
-        <net.iGap.module.MaterialDesignTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type4_tick0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -33,8 +33,8 @@
             android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/md_tick"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/check_icon"
+            style="@style/myIconToolbarStyle"
             android:textColor="@color/white"
             android:visibility="gone" />
 
@@ -60,7 +60,7 @@
             android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards" />
 
-        <net.iGap.module.MaterialDesignTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type4_tick1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -68,8 +68,8 @@
             android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/md_tick"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/check_icon"
+            style="@style/myIconToolbarStyle"
             android:textColor="@color/white"
             android:visibility="gone" />
     </androidx.cardview.widget.CardView>
