@@ -49,7 +49,6 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.customView.EventEditText;
-import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructBottomSheet;
 
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +60,7 @@ import java.util.HashMap;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
+import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout.Listener {
 
@@ -747,10 +747,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, container, false);
             final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
             if (itemGalleryList.get(position).path != null) {
-//                G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
-
-                ImageLoadingServiceInjector.inject().loadImage(imgPlay, itemGalleryList.get(position).path);
-
+                G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
             }
 
             imgPlay.setOnClickListener(new View.OnClickListener() {

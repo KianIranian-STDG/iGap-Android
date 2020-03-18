@@ -40,6 +40,7 @@ import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
@@ -49,6 +50,7 @@ import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnClickCamera;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
+import net.iGap.observers.interfaces.OnRotateImage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -400,7 +402,23 @@ public class ChatAttachmentPopup {
 
             if (isEdit) {
                 dismiss();
-                new HelperFragment(mFrgActivity.getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
+                ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
+                    @Override
+                    public void startProcess() {
+                        //nothing
+                    }
+
+                    @Override
+                    public void success(String newPath) {
+                        G.handler.post(() -> {
+                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, id);
+                            FragmentEditImage.insertItemList(newPath, "", false);
+                            new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+
+                        });
+
+                    }
+                });
             } else {
                 if (isCheck) {
                     StructBottomSheet item = new StructBottomSheet();
