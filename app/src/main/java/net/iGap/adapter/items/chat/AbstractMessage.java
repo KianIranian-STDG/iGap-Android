@@ -672,7 +672,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set message time
          */
 
-        String time = HelperCalander.getClocktime(mMessage.getUpdateOrCreateTime(), false);
+        String time = HelperCalander.getClocktime(mMessage.getCreateTime(), false);
         if (HelperCalander.isPersianUnicode) {
             mHolder.getMessageTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(time));
         } else {
