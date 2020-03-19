@@ -172,19 +172,15 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
                 switch (errorM.getMessage()) {
                     case "0":
                         binding.fragKuknosSIUsernameHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIUsername.requestFocus();
                         break;
                     case "1":
                         binding.fragKuknosSIEmailHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIEmail.requestFocus();
                         break;
                     case "2":
                         binding.fragKuknosSINameHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIName.requestFocus();
                         break;
                     case "3":
                         binding.fragKuknosSINIDHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSINID.requestFocus();
                         break;
                     case "4":
                         Snackbar.make(binding.pageContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG)
