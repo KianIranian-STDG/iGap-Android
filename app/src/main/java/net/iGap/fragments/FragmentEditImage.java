@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -60,7 +59,6 @@ import java.util.HashMap;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
-import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout.Listener {
 
@@ -104,9 +102,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     private int emojiPadding;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
+    private AttachFile attachFile = new AttachFile(G.fragmentActivity);
 
     private SharedPreferences emojiSharedPreferences;
-    private String TAG = "abbasiEditImage";
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
@@ -388,13 +386,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         if (!keyboardVisible) {
             size -= emojiPadding;
         }
-
-        Log.i(TAG, "onWindowSizeChanged: -> " + size);
     }
 
     private void showPopup(int show) {
-
-        Log.i(TAG, "showPopup: " + show);
 
         if (show == KeyboardView.MODE_EMOJI) {
             if (emojiView == null) {
@@ -747,7 +741,13 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, container, false);
             final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
             if (itemGalleryList.get(position).path != null) {
-                G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+                new Thread(() -> {
+                    String finalPath = attachFile.saveGalleryPicToLocal(itemGalleryList.get(position).path);
+                    G.runOnUiThread(() -> {
+                        itemGalleryList.get(position).path = finalPath;
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), imgPlay);
+                    });
+                }).start();
             }
 
             imgPlay.setOnClickListener(new View.OnClickListener() {
