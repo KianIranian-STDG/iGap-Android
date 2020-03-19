@@ -78,7 +78,7 @@ public class RegisterRepository {
 
     }
 
-    public static RegisterRepository getInstance() {
+    public synchronized static RegisterRepository getInstance() {
         if (instance == null) {
             instance = new RegisterRepository();
         }
