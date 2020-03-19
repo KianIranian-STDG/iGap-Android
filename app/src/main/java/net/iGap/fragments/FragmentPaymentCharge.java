@@ -128,8 +128,10 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag<FragmentPaymentCharge
     }
 
     private void goBack() {
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
+        G.handler.post(() -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 }

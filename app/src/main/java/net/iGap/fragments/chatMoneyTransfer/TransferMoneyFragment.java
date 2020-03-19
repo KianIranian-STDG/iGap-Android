@@ -165,10 +165,10 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
 
     @Override
     public void receivedMessage(int id, Object... message) {
-        G.handler.post(() -> confirmBtn.setEnabled(true));
-        if (id == EventManager.ON_INIT_PAY) {
-            if (message[0].equals("")) {
-                G.handler.post(() -> {
+        G.handler.post(() -> {
+            confirmBtn.setEnabled(true);
+            if (id == EventManager.ON_INIT_PAY) {
+                if (message[0].equals("")) {
                     dismissProgress();
                     if (isAdded())
                         try {
@@ -176,86 +176,78 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                });
-                return;
-            }
+                    return;
+                }
 
-            final ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse
-                    = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message[0];
+                final ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse
+                        = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message[0];
 
-            new android.os.Handler(getContext().getMainLooper()).post(() ->
-                    Web.getInstance().getWebService()
-                            .getCards(null, false, true)
-                            .enqueue(new Callback<ArrayList<Card>>() {
-                                @Override
-                                public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
-                                    dismissProgress();
-                                    if (getActivity() == null || getActivity().isFinishing())
-                                        return;
-                                    if (response.body() != null) {
-                                        selectedCard = null;
+                Web.getInstance().getWebService()
+                        .getCards(null, false, true)
+                        .enqueue(new Callback<ArrayList<Card>>() {
+                            @Override
+                            public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
+                                dismissProgress();
+                                if (getActivity() == null || getActivity().isFinishing())
+                                    return;
+                                if (response.body() != null) {
+                                    selectedCard = null;
 
-                                        for (Card card : response.body()) {
-                                            if (card.isRaadCard()) {
-                                                selectedCard = card;
-                                                break;
-                                            }
+                                    for (Card card : response.body()) {
+                                        if (card.isRaadCard()) {
+                                            selectedCard = card;
+                                            break;
                                         }
+                                    }
 
-                                        if (selectedCard != null) {
-                                            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
-                                                if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
-                                                    if (!selectedCard.isProtected) {
-                                                        ((ParentChatMoneyTransferFragment) getParentFragment()).setWalletPassword();
-                                                    } else {
-                                                        ((ParentChatMoneyTransferFragment) getParentFragment()).showPasswordFragment(initPayResponse, selectedCard);
-                                                    }
+                                    if (selectedCard != null) {
+                                        if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                                            if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
+                                                if (!selectedCard.isProtected) {
+                                                    ((ParentChatMoneyTransferFragment) getParentFragment()).setWalletPassword();
                                                 } else {
-                                                    dismissProgress();
-                                                    ((ParentChatMoneyTransferFragment) getParentFragment()).showWalletActivity(initPayResponse, Long.parseLong(mPrice[0]));
+                                                    ((ParentChatMoneyTransferFragment) getParentFragment()).showPasswordFragment(initPayResponse, selectedCard);
                                                 }
+                                            } else {
+                                                dismissProgress();
+                                                ((ParentChatMoneyTransferFragment) getParentFragment()).showWalletActivity(initPayResponse, Long.parseLong(mPrice[0]));
                                             }
                                         }
                                     }
                                 }
+                            }
 
-                                @Override
-                                public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
-                                    if (confirmBtn != null)
-                                        confirmBtn.setEnabled(true);
-                                    dismissProgress();
-                                    HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
-                                }
-                            }));
-        } else if (id == EventManager.ON_PAYMENT_RESULT_RECIEVED) {
-            dismissProgress();
-            int response = (int) message[0];
-            switch (response) {
-                case socketMessages.PaymentResultRecievedSuccess:
-                    new android.os.Handler(getContext().getMainLooper()).post(() -> {
+                            @Override
+                            public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
+                                if (confirmBtn != null)
+                                    confirmBtn.setEnabled(true);
+                                dismissProgress();
+                                HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
+                            }
+                        });
+            } else if (id == EventManager.ON_PAYMENT_RESULT_RECIEVED) {
+                dismissProgress();
+                int response = (int) message[0];
+                switch (response) {
+                    case socketMessages.PaymentResultRecievedSuccess:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.result_4), false);
-                    });
+                        break;
 
-                    break;
-
-                case socketMessages.PaymentResultRecievedFailed:
-                    new android.os.Handler(getContext().getMainLooper()).post(() -> {
+                    case socketMessages.PaymentResultRecievedFailed:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.not_success_2), false);
-                    });
-                    break;
+                        break;
 
-                case socketMessages.PaymentResultNotRecieved:
-                    new android.os.Handler(getContext().getMainLooper()).post(() -> {
+                    case socketMessages.PaymentResultNotRecieved:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.result_3), false);
-                    });
-                    break;
+                        break;
+                }
+            } else if (id == EventManager.ON_INIT_PAY_ERROR) {
+                dismissProgress();
             }
-        } else if (id == EventManager.ON_INIT_PAY_ERROR) {
-            dismissProgress();
-        }
+        });
     }
 
     @Override
