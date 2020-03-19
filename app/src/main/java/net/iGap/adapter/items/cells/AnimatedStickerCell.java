@@ -2,15 +2,14 @@ package net.iGap.adapter.items.cells;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 
 import net.iGap.G;
+import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.module.structs.StructMessageInfo;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -71,6 +70,9 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventLis
             animatedLoaded = true;
             playAnimation();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            animatedLoaded = false;
+        } catch (ClassCastException e) {
             e.printStackTrace();
             animatedLoaded = false;
         }
