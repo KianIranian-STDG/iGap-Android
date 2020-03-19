@@ -143,20 +143,17 @@ public class FragmentGallery extends BaseFragment {
                             } else {
                                 checkVideoMultiSelectAndSendToEdit();
                             }
-                        }/* else {
+                        }else if(mGalleryMode == GalleryMode.MUSIC){
+                            if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
+                                showSortDialog();
+                            } else {
+                                if (getContext() != null) Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+                            }
+                        } /* else {
                             openAndroidOsGallery();
                         }*/
                     }
 
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
-                            showSortDialog();
-                        } else {
-                            if (getContext() != null)
-                                Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
-                        }
-                    }
                 });
 
         if (!isReturnResultDirectly) {
