@@ -72,7 +72,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     private void generateKeypairWithMnemonic() {
         progressState.setValue(true);
-        userRepo.setMnemonic(keys.get());
+        userRepo.setMnemonic(keys.get().trim());
         try {
             userRepo.generateKeyPairWithMnemonic();
         } catch (WalletException e) {

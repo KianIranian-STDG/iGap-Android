@@ -897,88 +897,72 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (getActivity() == null || getActivity().isFinishing() || !isAdded()) {
+                    return;
+                }
 
                 initLayoutHashNavigationCallback();
                 showSpamBar();
 
                 updateShowItemInScreen();
 
-
                 if (isGoingFromUserLink) {
                     new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
                 }
 
                 DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransactionAsync(new Realm.Transaction() {//ASYNC
-                        @Override
-                        public void execute(Realm realm) {
-                            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                            if (room != null) {
-                                if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-                                    setConnectionText(G.connectionState);
-                                } else {
-                                    if (room.getType() != CHAT) {
-                                        /**
-                                         * set member count
-                                         * set this code in onResume for update this value when user
-                                         * come back from profile activities
-                                         */
+                    final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    if (room != null) {
+                        if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                            setConnectionText(G.connectionState);
+                        } else {
+                            if (room.getType() != CHAT) {
+                                /**
+                                 * set member count
+                                 * set this code in onResume for update this value when user
+                                 * come back from profile activities
+                                 */
 
-                                        String members = null;
-                                        if (room.getType() == GROUP && room.getGroupRoom() != null) {
-                                            members = room.getGroupRoom().getParticipantsCountLabel();
-                                        } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
-                                            members = room.getChannelRoom().getParticipantsCountLabel();
-                                        }
+                                String members = null;
+                                if (room.getType() == GROUP && room.getGroupRoom() != null) {
+                                    members = room.getGroupRoom().getParticipantsCountLabel();
+                                } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
+                                    members = room.getChannelRoom().getParticipantsCountLabel();
+                                }
 
-                                        final String finalMembers = members;
-                                        if (finalMembers != null) {
-                                            G.handler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
-                                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
-                                                    } else {
-                                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
-                                                    }
-                                                    //    avi.setVisibility(View.GONE);
-
-                                                    if (HelperCalander.isPersianUnicode)
-                                                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-                                                }
-                                            });
-                                        }
+                                final String finalMembers = members;
+                                if (finalMembers != null) {
+                                    if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
+                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                                     } else {
-                                        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
-                                        if (realmRegisteredInfo != null) {
-                                            setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
-                                        }
+                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                                     }
+                                    //    avi.setVisibility(View.GONE);
 
+                                    if (HelperCalander.isPersianUnicode)
+                                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                }
+                            } else {
+                                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
+                                if (realmRegisteredInfo != null) {
+                                    setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
                                 }
                             }
                         }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            /**
-                             * hint: should use from this method here because we need checkAction
-                             * changeState after set members count for avoid from hide action if exist
-                             */
-                            checkAction();
-                            RealmRoom room = DbManager.getInstance().doRealmTask(realm1 -> {
-                                return realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                            });
+                    }
+                    /**
+                     * hint: should use from this method here because we need checkAction
+                     * changeState after set members count for avoid from hide action if exist
+                     */
+                    checkAction();
 
-                            if (room != null) {
-                                if (txtName == null) {
-                                    txtName = mHelperToolbar.getTextViewChatUserName();
-                                }
-                                txtName.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), txtName.getPaint().getFontMetricsInt()));
-                                checkToolbarNameSize();
-                            }
+                    if (room != null) {
+                        if (txtName == null) {
+                            txtName = mHelperToolbar.getTextViewChatUserName();
                         }
-                    });
+                        txtName.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), txtName.getPaint().getFontMetricsInt()));
+                        checkToolbarNameSize();
+                    }
                 });
 
                 try {

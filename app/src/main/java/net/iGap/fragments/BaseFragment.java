@@ -128,18 +128,23 @@ public class BaseFragment extends SwipeBackFragment {
     }
 
     public void popBackStackFragment() {
-        try {
-            if (getActivity() != null) {
-                Log.wtf(this.getClass().getName(),"popBackStackFragment");
-                getActivity().onBackPressed();
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (getActivity() != null) {
+                        Log.wtf(this.getClass().getName(),"popBackStackFragment");
+                        getActivity().onBackPressed();
 
-                if (G.iTowPanModDesinLayout != null) {
-                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                        if (G.iTowPanModDesinLayout != null) {
+                            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                        }
+                    }
+                } catch (Exception empty) {
+                    empty.printStackTrace();
                 }
             }
-        } catch (Exception empty) {
-            empty.printStackTrace();
-        }
+        });
     }
 
     public void removeFromBaseFragment() {

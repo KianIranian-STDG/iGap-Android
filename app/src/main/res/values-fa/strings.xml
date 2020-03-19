@@ -2546,4 +2546,5 @@
     <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان ‌خود ‌را وارد نمایید</string>
     <string name="gift_card_already_in_use">این کارت هدیه قبلا استفاده شده است!</string>
     <string name="gift_carde_sended">شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
 </resources>

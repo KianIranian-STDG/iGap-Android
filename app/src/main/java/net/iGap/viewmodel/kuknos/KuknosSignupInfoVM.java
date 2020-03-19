@@ -97,6 +97,8 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         } else if (username.get().isEmpty()) {
             error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
+        } else if (!username.get().matches("^[A-Za-z][A-Za-z0-9]*")) {
+            error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameRegularExp));
         } else {
             // TODO: fetch data from server for valid username
             checkUsernameServer(isCallFromBTN);

@@ -2272,4 +2272,5 @@
     <string name="gift_card_already_in_use">بو هدیه کارتی ایستیفاده الونوب!</string>
     <string name="gift_carde_sended">آرتیق باسقاسیندا هدیه کارتینی گوندرمیشیز!</string>
     <string name="kuknos_Currency">نام ارز</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
 </resources>
