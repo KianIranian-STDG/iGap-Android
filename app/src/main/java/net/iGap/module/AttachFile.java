@@ -793,33 +793,26 @@ public class AttachFile {
         isInAttach = true;
     }
 
-    public String saveGalleryPicToLocal(String originalPath) {
+    public String saveGalleryPicToLocal(String galleryPath) {
 
-        if (originalPath == null)
-            return "";
+        String result = "";
+        if (galleryPath == null) return "";
 
-        String finalPath = getOutputMediaFileUri(new File(originalPath).getName().replaceFirst("[.][^.]+$", "")).getPath();
+        if (ImageHelper.isRotateNeed(galleryPath) || ImageHelper.isNeedToCompress(new File(galleryPath))) {
 
-        if (checkExistFile(finalPath))
-            return finalPath;
-
-        if (ImageHelper.isNeedToCompress(new File(originalPath)) || ImageHelper.isRotateNeed(originalPath)) {
-
-            Bitmap bitmap = ImageHelper.decodeFile(new File(originalPath));
-            bitmap = ImageHelper.correctRotate(originalPath, bitmap);
+            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
+            bitmap = ImageHelper.correctRotate(galleryPath, bitmap);
 
             if (bitmap != null) {
-                ImageHelper.SaveBitmapToFile(finalPath, bitmap);
+                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
+                ImageHelper.SaveBitmapToFile(result, bitmap);
             }
 
-            return finalPath;
+            return result;
         } else {
-            return originalPath;
-        }
-    }
 
-    private boolean checkExistFile(String path) {
-        return new File(path).exists() && new File(path).canRead();
+            return galleryPath;
+        }
     }
 
     private Uri getOutputMediaFileUri(int type, int camera) {
@@ -828,10 +821,6 @@ public class AttachFile {
         } else {
             return Uri.fromFile(getOutputMediaFile(type));
         }
-    }
-
-    private Uri getOutputMediaFileUri(String originalFileName) {
-        return Uri.fromFile(getOutputMediaFile(AttachFile.MEDIA_TYPE_IMAGE, originalFileName));
     }
 
     private File getOutputMediaFile(int type) {
@@ -855,24 +844,6 @@ public class AttachFile {
 
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
-        } else {
-            return null;
-        }
-        return mediaFile;
-    }
-
-    private File getOutputMediaFile(int type, String originalFileName) {
-
-        File mediaStorageDir = new File(G.DIR_IMAGES);
-
-        if (!mediaStorageDir.exists()) {
-            mediaStorageDir.mkdirs();
-        }
-
-        File mediaFile;
-
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "image_" + originalFileName + ".jpg");
         } else {
             return null;
         }
