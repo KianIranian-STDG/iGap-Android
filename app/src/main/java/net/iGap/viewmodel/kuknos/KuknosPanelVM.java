@@ -16,6 +16,8 @@ import net.iGap.repository.kuknos.PanelRepo;
 import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
@@ -56,7 +58,17 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
-                kuknosWalletsM.setValue(data.getData());
+                List<KuknosBalance.Balance> tempBalanceList = new ArrayList<>();
+                for (KuknosBalance.Balance tmp : data.getData().getAssets()) {
+                    if (tmp.getAsset().getType().equals("native")) {
+                        tempBalanceList.add(0, tmp);
+                    } else {
+                        tempBalanceList.add(tmp);
+                    }
+                }
+                KuknosBalance temp = new KuknosBalance();
+                temp.setAssets(tempBalanceList);
+                kuknosWalletsM.setValue(temp);
                 spinnerSelect(0);
                 progressState.setValue(false);
             }
