@@ -2101,7 +2101,7 @@
     <string name="kuknos_viewRecoveryEP_wrongPINE">رمز ورودی صحیح نمیباشد. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_viewRecoveryEP_failTitle">خطا</string>
     <string name="kuknos_logout_title">خروج از کیف پول</string>
-    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد باید حساب باید از فرایند بازیابی حساب استفاده کنید. (در صورت نداشتن رمز، 0000 را وارد کنید.)</string>
+    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد به حساب باید از فرایند بازیابی حساب استفاده کنید. (در صورت نداشتن رمز، 0000 را وارد کنید.)</string>
     <string name="kuknos_logout_pin">رمز ورودی</string>
     <string name="kuknos_logout_btn">خروج از کیف پول</string>
     <string name="kuknos_logout_load">خروج...</string>
@@ -2166,7 +2166,7 @@
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_recieve_walletCopy">آدرس کیف پول من: \n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
-    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت یا خرید پیمان استفاده کنید.</string>
+    <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error2">خطای سرور. لطفا دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error3">شماره تراکنش اشتباه است. لطفا دوباره تلاش کنید.</string>
