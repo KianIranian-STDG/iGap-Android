@@ -385,6 +385,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (NewChatItemHolder) holder;
         } else if (holder instanceof LogItem.ViewHolder ||
                 holder instanceof LogWalletCardToCard.ViewHolder ||
+                holder instanceof LogWalletBill.ViewHolder ||
+                holder instanceof LogWalletTopup.ViewHolder ||
                 holder instanceof LogWallet.ViewHolder) {
             messageClickListener.onItemShowingMessageId(structMessage);
             return;

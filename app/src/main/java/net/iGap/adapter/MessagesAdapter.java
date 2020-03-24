@@ -29,7 +29,9 @@ import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.GiftStickerItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
+import net.iGap.adapter.items.chat.LogWalletBill;
 import net.iGap.adapter.items.chat.LogWalletCardToCard;
+import net.iGap.adapter.items.chat.LogWalletTopup;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -63,7 +65,10 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard || item instanceof CardToCardItem || item instanceof GiftStickerItem) {
+            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet ||
+                    item instanceof LogWalletCardToCard || item instanceof CardToCardItem ||
+                    item instanceof GiftStickerItem || item instanceof LogWalletTopup ||
+                    item instanceof LogWalletBill) {
                 if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && item.mMessage != null && item.mMessage.getUserId() != -1) {

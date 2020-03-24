@@ -60,7 +60,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             return;
         }
 
-        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), username.get(), false);
+        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replaceFirst("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), username.get(), false);
         sendDataToServer();
 
     }
