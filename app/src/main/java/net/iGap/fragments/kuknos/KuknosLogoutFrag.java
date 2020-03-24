@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentKuknosLogoutBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -139,8 +140,7 @@ public class KuknosLogoutFrag extends BaseFragment {
         viewModel.getNextPage().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 updateRegisterInfo();
-                popBackStackFragment();
-                popBackStackFragment();
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosEntryOptionFrag.class.getName());

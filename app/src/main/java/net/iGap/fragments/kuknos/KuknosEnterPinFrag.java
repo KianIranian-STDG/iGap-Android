@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.api.apiService.BaseAPIViewFrag;
@@ -151,7 +152,12 @@ public class KuknosEnterPinFrag extends BaseAPIViewFrag<KuknosEnterPinVM> {
             if (aBoolean) {
                 if (!isLogin)
                     popBackStackFragment();
-                pinEntered.correctPin();
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pinEntered.correctPin();
+                    }
+                }, 500);
             }
         });
     }

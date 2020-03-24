@@ -171,24 +171,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     }
                     break;*/
                 case 0:
-                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
-                    if (fragment == null) {
+//                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+//                    if (fragment == null) {
                         if (!viewModel.isMnemonicAvailable()) {
                             HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
                             return;
                         }
                         fragment = KuknosEnterPinFrag.newInstance(() -> {
-                            FragmentManager fragmentManager1 = getChildFragmentManager();
-                            FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
-                            Fragment fragment1 = fragmentManager1.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
-                            if (fragment1 == null) {
-                                fragment1 = KuknosShowRecoveryKeySFrag.newInstance();
-                                fragmentTransaction1.addToBackStack(fragment1.getClass().getName());
-                            }
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load();
+                            goToShowRecovery();
                         }, false);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
+//                    }
                     /*if (viewModel.isPinSet()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
                         if (fragment == null) {
@@ -230,6 +223,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         });
         bottomSheetFragment.setTitle(getResources().getString(R.string.kuknos_setting_title));
         bottomSheetFragment.show(getFragmentManager(), "SettingBottomSheet");
+    }
+
+    private void goToShowRecovery() {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+        if (fragment == null) {
+            fragment = KuknosShowRecoveryKeySFrag.newInstance();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
     }
 
     private void onTermsDownload() {
