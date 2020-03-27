@@ -1,27 +1,26 @@
 package net.iGap.viewmodel.mobileBank;
 
-import android.util.Log;
 import android.view.View;
 
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
-
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperCalander;
-import net.iGap.repository.MobileBankRepository;
 import net.iGap.model.mobileBank.BankDateModel;
 import net.iGap.model.mobileBank.BankHistoryModel;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
-import net.iGap.module.mobileBank.JalaliCalendar;
 import net.iGap.module.CalendarShamsi;
+import net.iGap.module.mobileBank.JalaliCalendar;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.MobileBankRepository;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 
 public class MobileBankCardHistoryViewModel extends BaseMobileBankMainAndHistoryViewModel {
 
