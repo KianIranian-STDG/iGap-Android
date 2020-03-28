@@ -1148,7 +1148,7 @@
     <string name="unblock_the_user_text">آیا از رفع مسدودیت ارتباط این مخاطب اطمینان دارید؟</string>
     <string name="PIN">پین</string>
     <string name="password">رمز</string>
-    <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
+    <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نقشه خود را فعال نکرده است</string>
     <string name="send_message_to">ارسال پیام به  </string>
     <string name="send_forward_to">آیا شما مطمئنید میخواهید انتقال دهید به </string>
 
@@ -2101,7 +2101,7 @@
     <string name="kuknos_viewRecoveryEP_wrongPINE">رمز ورودی صحیح نمیباشد. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_viewRecoveryEP_failTitle">خطا</string>
     <string name="kuknos_logout_title">خروج از کیف پول</string>
-    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد باید حساب باید از فرایند بازیابی حساب استفاده کنید. (در صورت نداشتن رمز، 0000 را وارد کنید.)</string>
+    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد به حساب باید از فرایند بازیابی حساب استفاده کنید. (در صورت نداشتن رمز، 0000 را وارد کنید.)</string>
     <string name="kuknos_logout_pin">رمز ورودی</string>
     <string name="kuknos_logout_btn">خروج از کیف پول</string>
     <string name="kuknos_logout_load">خروج...</string>
@@ -2166,7 +2166,7 @@
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_recieve_walletCopy">آدرس کیف پول من: \n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
-    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت یا خرید پیمان استفاده کنید.</string>
+    <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error2">خطای سرور. لطفا دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error3">شماره تراکنش اشتباه است. لطفا دوباره تلاش کنید.</string>
@@ -2208,6 +2208,7 @@
     <string name="kuknos_payment_hash">رسید ققنوس: </string>
     <string name="kuknos_support_error">ققنوس برای دستگاه شما در دسترس نیست.</string>
     <string name="kuknos_Mnemonic_error">کلمات بازیابی یافت نشد.</string>
+    <string name="kuknos_Currency">نام ارز</string>
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
     <string name="updated_version_title">نسخه شما به روز شده است</string>
@@ -2545,4 +2546,6 @@
     <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان ‌خود ‌را وارد نمایید</string>
     <string name="gift_card_already_in_use">این کارت هدیه قبلا استفاده شده است!</string>
     <string name="gift_carde_sended">شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
+    <string name="kuknos_AddAsset_nullEntry">امکان اضافه شدن این دارایی به حساب شما وجود ندارد.</string>
 </resources>

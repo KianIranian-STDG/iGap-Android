@@ -2,13 +2,13 @@ package net.iGap.viewmodel.kuknos;
 
 import android.os.Handler;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
 import net.iGap.repository.kuknos.UserRepo;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosEnterPinVM extends BaseAPIViewModel {
 
@@ -58,7 +58,8 @@ public class KuknosEnterPinVM extends BaseAPIViewModel {
             return false;
         }
         if (!PIN.get().equals(userRepo.getPIN())) {
-            error.setValue(new KuknosError(true, "wrong length pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
+            PIN.set("");
+            error.setValue(new KuknosError(true, "wrong pin", "1", R.string.kuknos_viewRecoveryEP_wrongPINE));
             return false;
         }
         return true;

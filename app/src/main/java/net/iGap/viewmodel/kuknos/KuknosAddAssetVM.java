@@ -1,7 +1,5 @@
 package net.iGap.viewmodel.kuknos;
 
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
@@ -12,6 +10,8 @@ import net.iGap.model.kuknos.Parsian.KuknosTransactionResult;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.PanelRepo;
 import net.iGap.repository.kuknos.TradeRepo;
+
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosAddAssetVM extends BaseAPIViewModel {
 
@@ -87,6 +87,10 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
 
     public void addAsset(int position) {
         KuknosAsset.Asset temp = assetPageMutableLiveData.getValue().getAssets().get(position);
+        if (temp.getAssetIssuer() == null || temp.getAssetCode() == null || temp.getAssetIssuer().length() == 0 || temp.getAssetCode().length() == 0) {
+            error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_AddAsset_nullEntry));
+            return;
+        }
         progressState.setValue(false);
         tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
             @Override

@@ -6,6 +6,7 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.internetPackage.InternetPackage;
@@ -162,9 +163,11 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
             repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType), this, new ResponseCallback<MciPurchaseResponse>() {
                 @Override
                 public void onSuccess(MciPurchaseResponse data) {
-                    showLoadingView.set(View.INVISIBLE);
-                    enabledPaymentButton.set(true);
-                    goToPaymentPage.setValue(data.getToken());
+                    G.handler.post(() -> {
+                        showLoadingView.set(View.INVISIBLE);
+                        enabledPaymentButton.set(true);
+                        goToPaymentPage.setValue(data.getToken());
+                    });
                 }
 
                 @Override

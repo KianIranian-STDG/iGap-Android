@@ -137,7 +137,10 @@ public class UserRepo {
     }
 
     public String getAccountID() {
-        return realmKuknos.getKuknosPublicKey();
+        if (realmKuknos.isValid())
+            return realmKuknos.getKuknosPublicKey();
+        else
+            return "-1";
     }
 
     public void setPIN(String pin) {

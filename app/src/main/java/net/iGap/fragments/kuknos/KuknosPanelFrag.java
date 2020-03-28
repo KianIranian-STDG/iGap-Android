@@ -23,6 +23,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -129,7 +130,6 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
             }
         });
 
-        viewModel.getDataFromServer();
         onErrorObserver();
         openPage();
         onDataChanged();
@@ -171,24 +171,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     }
                     break;*/
                 case 0:
-                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
-                    if (fragment == null) {
+//                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+//                    if (fragment == null) {
                         if (!viewModel.isMnemonicAvailable()) {
                             HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
                             return;
                         }
                         fragment = KuknosEnterPinFrag.newInstance(() -> {
-                            FragmentManager fragmentManager1 = getChildFragmentManager();
-                            FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
-                            Fragment fragment1 = fragmentManager1.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
-                            if (fragment1 == null) {
-                                fragment1 = KuknosShowRecoveryKeySFrag.newInstance();
-                                fragmentTransaction1.addToBackStack(fragment1.getClass().getName());
-                            }
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load();
+                            goToShowRecovery();
                         }, false);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
+//                    }
                     /*if (viewModel.isPinSet()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
                         if (fragment == null) {
@@ -232,6 +225,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         bottomSheetFragment.show(getFragmentManager(), "SettingBottomSheet");
     }
 
+    private void goToShowRecovery() {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+        if (fragment == null) {
+            fragment = KuknosShowRecoveryKeySFrag.newInstance();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+    }
+
     private void onTermsDownload() {
         viewModel.getTandCAgree().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -267,6 +271,18 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 noItem.add(temp);
                 WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), noItem);
                 walletSpinner.setAdapter(adapter);
+            }
+        });
+
+        viewModel.getBAndCState().observe(getViewLifecycleOwner(), state -> {
+            switch (state) {
+                case 0:
+                    viewModel.setBalance(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber("0.0") : "0.0");
+                    viewModel.setCurrency(getResources().getString(R.string.kuknos_Currency));
+                    break;
+                case 1:
+                    viewModel.setCurrency(getResources().getString(R.string.rial));
+                    break;
             }
         });
     }

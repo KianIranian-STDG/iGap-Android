@@ -27,12 +27,14 @@ import net.iGap.adapter.AdapterGalleryVideo;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.ImageHelper;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.GalleryItemListener;
+import net.iGap.observers.interfaces.OnRotateImage;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.io.Serializable;
@@ -141,20 +143,17 @@ public class FragmentGallery extends BaseFragment {
                             } else {
                                 checkVideoMultiSelectAndSendToEdit();
                             }
-                        }/* else {
+                        }else if(mGalleryMode == GalleryMode.MUSIC){
+                            if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
+                                showSortDialog();
+                            } else {
+                                if (getContext() != null) Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+                            }
+                        } /* else {
                             openAndroidOsGallery();
                         }*/
                     }
 
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
-                            showSortDialog();
-                        } else {
-                            if (getContext() != null)
-                                Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
-                        }
-                    }
                 });
 
         if (!isReturnResultDirectly) {
@@ -420,10 +419,22 @@ public class FragmentGallery extends BaseFragment {
 
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
             fragmentEditImage.setIsReOpenChatAttachment(false);
-            FragmentEditImage.insertItemList(path , "" , false);
-            if(getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager() , fragmentEditImage).setReplace(false).load();
-            }
+            ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
+                @Override
+                public void startProcess() {
+
+                }
+
+                @Override
+                public void success(String newPath) {
+                    G.handler.post(() -> {
+                        FragmentEditImage.insertItemList(newPath, "", false);
+                        if (getActivity() != null)
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                    });
+                }
+            });
+
             fragmentEditImage.setGalleryListener(() -> {
                 if (getActivity() != null) {
                     getActivity().getSupportFragmentManager().popBackStack(FragmentGallery.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);

@@ -2083,6 +2083,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers.</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
     <string name="kuknos_RecoverySK_Btn">Okay, I have written it down.</string>
@@ -2238,7 +2239,7 @@ Want to get it?</string>
     <string name="kuknos_recieve_walletCopy">My Kuknos wallet address is: \n</string>
     <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
     <string name="kuknos_soon_error">Trade will be active soon.</string>
-    <string name="kuknos_panelStr_firstUser">Account was not found or it has no credits. Use Receive or Buy Peyman menu to get credits.</string>
+    <string name="kuknos_panelStr_firstUser">Your account is not active. Use Receive or Buy Peyman menu to get credits.</string>
     <string name="Kuknos_transaction_error1">Transaction is not successful. Please try again later.</string>
     <string name="Kuknos_transaction_error2">Server Error. Please try again later.</string>
     <string name="Kuknos_transaction_error3">Transaction Sequence has NOT found. Please try again later.</string>
@@ -2285,6 +2286,8 @@ Want to get it?</string>
     <string name="kuknos_payment_hash">Kuknos Hash: </string>
     <string name="kuknos_support_error">Kuknos platform is NOT available for your device.</string>
     <string name="kuknos_Mnemonic_error">Recovery keys are NOT set.</string>
+    <string name="kuknos_Currency">Currency</string>
+    <string name="kuknos_AddAsset_nullEntry">This asset can NOT be added.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

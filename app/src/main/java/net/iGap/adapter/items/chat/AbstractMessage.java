@@ -385,6 +385,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (NewChatItemHolder) holder;
         } else if (holder instanceof LogItem.ViewHolder ||
                 holder instanceof LogWalletCardToCard.ViewHolder ||
+                holder instanceof LogWalletBill.ViewHolder ||
+                holder instanceof LogWalletTopup.ViewHolder ||
                 holder instanceof LogWallet.ViewHolder) {
             messageClickListener.onItemShowingMessageId(structMessage);
             return;
@@ -672,7 +674,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set message time
          */
 
-        String time = HelperCalander.getClocktime(mMessage.getUpdateOrCreateTime(), false);
+        String time = HelperCalander.getClocktime(mMessage.getCreateTime(), false);
         if (HelperCalander.isPersianUnicode) {
             mHolder.getMessageTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(time));
         } else {

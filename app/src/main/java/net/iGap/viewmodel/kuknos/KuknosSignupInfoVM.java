@@ -1,9 +1,5 @@
 package net.iGap.viewmodel.kuknos;
 
-import androidx.core.text.HtmlCompat;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
@@ -16,6 +12,10 @@ import net.iGap.repository.kuknos.UserRepo;
 import net.iGap.request.RequestInfoPage;
 
 import java.util.Objects;
+
+import androidx.core.text.HtmlCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
@@ -60,7 +60,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             return;
         }
 
-        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replace("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), username.get(), true);
+        kuknosSignupM = new KuknosSignupM(name.get(), phoneNum.get().replaceFirst("98", "0"), email.get(), NID.get(), userRepo.getAccountID(), username.get(), false);
         sendDataToServer();
 
     }
@@ -70,6 +70,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
         userRepo.registerUser(kuknosSignupM, this, new ResponseCallback<KuknosResponseModel>() {
             @Override
             public void onSuccess(KuknosResponseModel data) {
+                kuknosSignupM.setRegistered(true);
                 nextPage.setValue(true);
                 progressSendDServerState.setValue(false);
             }
@@ -96,6 +97,8 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         } else if (username.get().isEmpty()) {
             error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
+        } else if (!username.get().matches("^[A-Za-z][A-Za-z0-9]*")) {
+            error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameRegularExp));
         } else {
             // TODO: fetch data from server for valid username
             checkUsernameServer(isCallFromBTN);
