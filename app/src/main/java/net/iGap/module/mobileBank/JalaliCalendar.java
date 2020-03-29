@@ -544,7 +544,7 @@ public class JalaliCalendar extends Calendar {
                 super.set(MONTH, amount % 12);
             } else {
                 add(YEAR, -1);
-                amount = 11 + amount;
+                amount = 12 + amount;
                 super.set(MONTH, amount);
             }
             if (get(DAY_OF_MONTH) > jalaliDaysInMonth[amount % 12]) {
