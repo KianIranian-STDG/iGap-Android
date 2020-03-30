@@ -2143,7 +2143,7 @@
     <string name="kuknos_tradeDialogDelete_message">آیا از حذف این مبادله اطمینان دارید؟</string>
     <string name="kuknos_tradeDialogDelete_btn">بله</string>
     <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
-    <string name="kuknos_setting_sepid">سپیدنامه</string>
+    <string name="kuknos_setting_sepid">سپیدنامه پیمان</string>
     <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
     <string name="kuknos_setting_fileContent">توجه: این اطلاعات تنها راه دسترسی شما به حساب کاربری تان است. \nلطفا در حقظ و نگهداری این اطلاعات کوشا باشید و این اطلاعات را با کسی به اشتراک نگزارید. \n</string>
@@ -2164,7 +2164,7 @@
     <string name="kuknos_login_error_server_ErrorStr">خطای سرور: عدم جواب. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateMn">عدم امکان تولید زنجیره کلمات. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
-    <string name="kuknos_recieve_walletCopy">آدرس کیف پول من: \n</string>
+    <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
     <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
@@ -2175,7 +2175,7 @@
     <string name="Kuknos_transaction_error6">اعتبار برای کارمزد تراکنش کافی نیست.</string>
     <string name="Kuknos_transaction_error7">اعتبار شما کافی نیست.</string>
     <string name="Kuknos_transaction_error8">خطای داخلی: لطفا دقایقی دیگر دوباره تلاش کنید.</string>
-    <string name="kuknos_send_walletIDError2">آدرس کیف پول معتبر نیست.</string>
+    <string name="kuknos_send_walletIDError2">آدرس کیف توکن معتبر نیست.</string>
     <string name="kuknos_wHistory_sent">ارسال</string>
     <string name="kuknos_wHistory_receive">دریافت</string>
     <string name="kuknos_wHistory_time">زمان</string>
@@ -2208,7 +2208,7 @@
     <string name="kuknos_payment_hash">رسید ققنوس: </string>
     <string name="kuknos_support_error">ققنوس برای دستگاه شما در دسترس نیست.</string>
     <string name="kuknos_Mnemonic_error">کلمات بازیابی یافت نشد.</string>
-    <string name="kuknos_Currency">نام ارز</string>
+    <string name="kuknos_Currency">نام توکن</string>
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
     <string name="updated_version_title">نسخه شما به روز شده است</string>
