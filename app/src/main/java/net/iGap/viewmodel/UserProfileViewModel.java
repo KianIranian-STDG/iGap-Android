@@ -439,10 +439,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onEditProfileClick() {
         unShowEditIcon();
         isEditProfile = true;
-        String tmp = referralNumberObservableField.get();
-        if (tmp == null || tmp.isEmpty()) {
-            getReferral();
+        if (isEditProfile) {
+            String tmp = referralNumberObservableField.get();
+            if (tmp == null || tmp.isEmpty()) {
+                getReferral();
+            }
         }
+
         setCurrentFragment.setValue(isEditProfile);
         showAddAvatarButton.set(isEditProfile ? View.VISIBLE : View.GONE);
         accountArrowVisibility.set(!isEditProfile ? View.VISIBLE : View.GONE);
@@ -614,7 +617,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showDialogChooseImage.setValue(true);
     }
 
-    public void nameTextChangeListener(String newName) {
+   /* public void nameTextChangeListener(String newName) {
         if (isEditProfile) {
             if (!newName.equals(currentName)) {
                 editProfileIcon.set(R.string.check_icon);
@@ -624,7 +627,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
         }
-    }
+    }*/
 
     public void usernameTextChangeListener(String newUsername) {
         if (!newUsername.equals(currentUserName)) {
@@ -672,7 +675,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         referralNumberObservableField.set(phoneNumber);
     }
 
-    public void bioTextChangeListener(String newBio) {
+    /*public void bioTextChangeListener(String newBio) {
         if (isEditProfile) {
             if (!currentBio.equals(newBio)) {
                 editProfileIcon.set(R.string.check_icon);
@@ -682,7 +685,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
         }
-    }
+    }*/
 
     public void genderCheckedListener(int checkedId) {
         if (currentGender != checkedId) {
@@ -970,9 +973,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             isEditProfile = false;
             getEditProfileIcon().set(R.string.edit_icon);
             accountArrowVisibility.set(View.VISIBLE);
-            showAddAvatarButton.set(View.GONE);
             popBackStack.setValue(true);
             showAddAvatarButton.set(View.GONE);
+            cancelProfileShow.set(View.GONE);
+            checkProfileShow.set(View.GONE);
+            editProfileIcon.set(View.VISIBLE);
             return false;
         } else {
             return true;

@@ -11,13 +11,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="@style/IGapRootViewStyle">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/IGapRootViewStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name"
                 android:layout_width="0dp"
@@ -190,7 +189,7 @@
 
                 <RadioButton
                     android:id="@+id/female"
-                    android:layout_width="wrap_content"
+                    android:layout_width="125dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:button="@drawable/check_box_background"
