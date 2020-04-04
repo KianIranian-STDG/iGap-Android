@@ -10,10 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.animation.ValueAnimator;
-import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,11 +55,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     private static final String PAUSE = "pause";
     private static final String UPDATE = "updateTime";
 
-    private static final String TAG = "aabolfazlPlayer";
-
-    private int playStatus = MusicPlayer.STOP;
-
-
     public VoiceItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
     }
@@ -96,15 +88,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         holder.waveView.setTag(mMessage.getMessageId());
 
-        ValueAnimator anim = ValueAnimator.ofInt(0, 100);
-        anim.setDuration((long) ((structMessage.getAttachment().getDuration()) / 0.001));
-        anim.addUpdateListener(animation -> {
-            int animProgress = (Integer) animation.getAnimatedValue();
-            holder.waveView.setProgress(animProgress);
-        });
-
         holder.mMessageID = mMessage.getMessageId() + "";
-        animationPlayer(holder, anim);
 
         holder.complete = (result, messageOne, MessageTow) -> {
             if (holder.waveView.getTag().equals(mMessage.getMessageId()) && (mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
@@ -118,8 +102,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         break;
                     case UPDATE:
                         if (result) {
-                            G.handler.post(() -> {
 
+                            G.handler.post(() -> {
+                                holder.waveView.setProgress(MusicPlayer.musicProgress);
                                 if ((mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
                                     holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
                                     if (HelperCalander.isPersianUnicode) {
@@ -155,8 +140,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             if (holder.mFilePath.length() < 1)
                 return;
 
-//            Log.i(TAG, "selected voice    id: " + holder.mMessageID + " status: " + playStatus);
-
             if (!structMessage.isSenderMe() && structMessage.realmRoomMessage.getStatus() != null &&
                     !structMessage.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
             ) {
@@ -181,7 +164,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 holder.mTimeMusic = MusicPlayer.musicTime;
             }
             MusicPlayer.messageId = mMessage.getMessageId() + "";
-            animationPlayer(holder, anim);
         });
 
         holder.waveView.setOnTouchListener((v, event) -> {
@@ -222,6 +204,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         if (holder.waveView.getTag().equals(mMessage.getMessageId()) && MusicPlayer.messageId.equals(mMessage.getMessageId() + "")) {
             MusicPlayer.onCompleteChat = holder.complete;
 
+            holder.waveView.setProgress(MusicPlayer.musicProgress);
             if (MusicPlayer.musicProgress > 0) {
                 holder.txt_Timer.setText(MusicPlayer.strTimer + holder.getContext().getString(R.string.forward_slash) + MusicPlayer.musicTime);
             }
@@ -246,59 +229,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
 
     }
-
-    private void animationPlayer(ViewHolder holder, ValueAnimator anim) {
-        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-            MusicPlayer.playerStatusObservable.observe(G.fragmentActivity, playerStatus -> {
-                if (playerStatus != null) {
-                    if (playerStatus == MusicPlayer.PLAY)
-                        voiceIsPlaying(holder, anim);
-
-                    if (playerStatus == MusicPlayer.PAUSE)
-                        voiceIsPause(holder, anim);
-
-                    if (playerStatus == MusicPlayer.STOP)
-                        voiceIsStop(holder, anim);
-                } else
-                    Log.d("voicePlayer", "play status: " + playStatus);
-            });
-        }
-    }
-
-    private void voiceIsStop(ViewHolder holder, ValueAnimator anim) {
-        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-            voiceIsPause(holder, anim);
-            holder.waveView.setProgress(0);
-            playStatus = MusicPlayer.STOP;
-        }
-    }
-
-    private void voiceIsPause(ViewHolder holder, ValueAnimator anim) {
-        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                anim.pause();
-            else
-                anim.cancel();
-            playStatus = MusicPlayer.PAUSE;
-        }
-    }
-
-    private void voiceIsPlaying(ViewHolder holder, ValueAnimator anim) {
-        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-            if (playStatus == MusicPlayer.PAUSE) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    anim.resume();
-                    playStatus = MusicPlayer.PAUSE;
-                }
-            } else {
-                if (playStatus == MusicPlayer.STOP) {
-                    anim.start();
-                }
-                playStatus = MusicPlayer.PLAY;
-            }
-        }
-    }
-
 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {

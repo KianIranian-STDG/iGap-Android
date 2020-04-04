@@ -2083,6 +2083,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers.</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
     <string name="kuknos_RecoverySK_Btn">Okay, I have written it down.</string>
@@ -2092,8 +2093,8 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_Error_empty_str">Enter your key stream</string>
     <string name="kuknos_RecoverySK_Error_invalid_str">Your key stream length is not long enough.</string>
     <string name="kuknos_RecoverySK_Error_Snack">Ok</string>
-    <string name="kuknos_SetPass_title">Create a 4 digit PIN</string>
-    <string name="kuknos_SetPass_message">This 4 numeric PIN will be used to encrypt your secret keys. Please make sure you choose a PIN that is difficult to guess for others.</string>
+    <string name="kuknos_SetPass_title">Create a 4 digit local PIN</string>
+    <string name="kuknos_SetPass_message">This 4 numeric PIN will be used for future login and confirmations. Please make sure you choose a PIN that is difficult to guess for others.</string>
     <string name="kuknos_SetPass_submit">Submit</string>
     <string name="kuknos_SetPass_error">Please enter your PIN code.</string>
     <string name="kuknos_SetPassConf_title">Confirm your PIN code</string>
@@ -2169,16 +2170,16 @@ Want to get it?</string>
     <string name="kuknos_logout_pin">PIN</string>
     <string name="kuknos_logout_btn">Logout</string>
     <string name="kuknos_logout_load">Loging out...</string>
-    <string name="kuknos_buyP_title">Buy Peyman</string>
-    <string name="kuknos_buyP_message">Kuknos is a multi-token platform that provides issues of any assets.
-        In Kuknos platform we have an assets called Paymon (PMN) which is the native assets for Kuknos.</string>
+    <string name="kuknos_buyP_title">Buy Peymon</string>
+    <string name="kuknos_buyP_message">Kuknus is a multi-token platform that provides issues of any assets.
+        In Kuknos platform we have an assets called Paymon (PMN) which is the native assets for Kuknus.</string>
     <string name="kuknos_buyP_amount">Number of Peymen (PMN)* :</string>
     <string name="kuknos_buyP_btn">Buy</string>
     <string name="kuknos_buyP_btn_server">Checking...</string>
     <string name="kuknos_buyP_btn_server2">Finilizing...</string>
     <string name="kuknos_buyP_btn_server3">Fetching data...</string>
     <string name="kuknos_buyP_desc">PS:\n
-        - Rest of the assets in kuknos is valuated by this Paymon\n
+        - Rest of the assets in kuknus is valuated by this Paymon\n
         - Since Paymon has been backed by gold (one unit of PMN is equal to 30 mg 24-karat gold)\n
         - will be used as transactions fee\n
         - Consider as a gauge for assessing minimum balances\n</string>
@@ -2213,9 +2214,9 @@ Want to get it?</string>
     <string name="kuknos_tradeDialogDelete_message">Are you sure you want to delete this trade?</string>
     <string name="kuknos_tradeDialogDelete_btn">OK</string>
     <string name="kuknos_setting_copySeedKey">Copy Seed Key</string>
-    <string name="kuknos_setting_sepid">Sepid Nameh Regulations</string>
-    <string name="kuknos_setting_Directory">IGap - Kuknos</string>
-    <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
+    <string name="kuknos_setting_sepid">Paymon Regulations</string>
+    <string name="kuknos_setting_Directory">IGap - Kuknus</string>
+    <string name="kuknos_setting_fileName">Kuknus_Seed_Key.txt</string>
     <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.
         Do NOT share it with others. </string>
     <string name="kuknos_setting_copySKeyTitel">Save Seed Key</string>
@@ -2235,10 +2236,10 @@ Want to get it?</string>
     <string name="kuknos_login_error_server_ErrorStr">Server Error: No response. please try again later.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateMn">Can NOT generate recovery key. make contact with support.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateKey">Can NOT generate seed key. make contact with support.</string>
-    <string name="kuknos_recieve_walletCopy">My Kuknos wallet address is: \n</string>
+    <string name="kuknos_recieve_walletCopy">My Kuknus wallet address is: \n</string>
     <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
     <string name="kuknos_soon_error">Trade will be active soon.</string>
-    <string name="kuknos_panelStr_firstUser">Account was not found or it has no credits. Use Receive or Buy Peyman menu to get credits.</string>
+    <string name="kuknos_panelStr_firstUser">Your account is not active. Use Receive or Buy Peyman menu to get credits.</string>
     <string name="Kuknos_transaction_error1">Transaction is not successful. Please try again later.</string>
     <string name="Kuknos_transaction_error2">Server Error. Please try again later.</string>
     <string name="Kuknos_transaction_error3">Transaction Sequence has NOT found. Please try again later.</string>
@@ -2282,9 +2283,11 @@ Want to get it?</string>
     <string name="kuknos_payment_assetCount">Asset Amount: </string>
     <string name="kuknos_payment_assetPrice">Asset Price: </string>
     <string name="kuknos_payment_totalAmount">Total Amount: </string>
-    <string name="kuknos_payment_hash">Kuknos Hash: </string>
-    <string name="kuknos_support_error">Kuknos platform is NOT available for your device.</string>
+    <string name="kuknos_payment_hash">Kuknus Hash: </string>
+    <string name="kuknos_support_error">Kuknus platform is NOT available for your device.</string>
     <string name="kuknos_Mnemonic_error">Recovery keys are NOT set.</string>
+    <string name="kuknos_Currency">Token</string>
+    <string name="kuknos_AddAsset_nullEntry">This asset can NOT be added.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>
@@ -2601,5 +2604,7 @@ Want to get it?</string>
     <string name="internal_storage">Internal storage</string>
     <string name="external_storage">External storage</string>
     <string name="file_manager">File Manager</string>
+    <string name="gift_card_already_in_use">This gift card is already in use!</string>
+    <string name="gift_carde_sended">You already sent a gift card to someone else!</string>
 
 </resources>

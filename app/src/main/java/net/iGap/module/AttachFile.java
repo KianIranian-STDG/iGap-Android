@@ -798,7 +798,7 @@ public class AttachFile {
         String result = "";
         if (galleryPath == null) return "";
 
-        if (ImageHelper.isNeedToCompress(new File(galleryPath)) || ImageHelper.isRotateNeed(galleryPath)) {
+        if (ImageHelper.isRotateNeed(galleryPath) || ImageHelper.isNeedToCompress(new File(galleryPath))) {
 
             Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
             bitmap = ImageHelper.correctRotate(galleryPath, bitmap);

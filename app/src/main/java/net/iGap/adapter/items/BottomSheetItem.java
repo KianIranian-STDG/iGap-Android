@@ -12,21 +12,17 @@ package net.iGap.adapter.items;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.ImageHelper;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
-import net.iGap.observers.interfaces.OnRotateImage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,10 +64,12 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
     @Override
     public void bindView(@NotNull final ViewHolder holder, @NotNull List payloads) {
         super.bindView(holder, payloads);
+//
+//        Glide.with(holder.imgSrc.getContext())
+//                .load("file://" + mList.getPath())
+//                .into(holder.imgSrc);
 
-        Glide.with(holder.imgSrc.getContext())
-                .load("file://" + mList.getPath())
-                .into(holder.imgSrc);
+        ImageLoadingServiceInjector.inject().loadImage(holder.imgSrc, mList.getPath(), true);
 
         if (mList.isSelected) {
             holder.checkBoxSelect.setChecked(false);

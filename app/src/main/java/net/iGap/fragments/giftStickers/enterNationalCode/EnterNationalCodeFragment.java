@@ -19,7 +19,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEnterNationalCodeBinding;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.giftStickers.GiftStickerHomeFragment;
-import net.iGap.helper.HelperError;
 
 public class EnterNationalCodeFragment extends Fragment {
     private EnterNationalCodeViewModel viewModel;
@@ -77,7 +76,7 @@ public class EnterNationalCodeFragment extends Fragment {
 
         viewModel.getRequestError().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null) {
-                HelperError.showSnackMessage(errorMessage, false);
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -189,7 +189,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.editCompleteListener.observe(getViewLifecycleOwner() , state->{
+        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner() , state->{
             if(state == null) return;
             closeKeyboard(binding.getRoot());
         });

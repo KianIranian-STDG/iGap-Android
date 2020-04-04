@@ -65,7 +65,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         if (checkEntry()) {
             return false;
         }
-        if (Integer.parseInt(amount.get()) > maxAmount) {
+        if (Double.parseDouble(amount.get()) > maxAmount) {
             error.setValue(new KuknosError(true, "", "1", R.string.kuknos_buyP_MaxAmount));
             return false;
         }
@@ -162,7 +162,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             error.setValue(new KuknosError(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
             return true;
         }
-        if (Integer.parseInt(amount.get()) == 0) {
+        if (Double.parseDouble(amount.get()) == 0) {
             error.setValue(new KuknosError(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
             return true;
         }
@@ -185,7 +185,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             error.setValue(new KuknosError(true, "empty amount", "0", R.string.kuknos_buyP_emptyAmount));
             return true;
         }
-        if (Integer.parseInt(amount.get()) == 0) {
+        if (Double.parseDouble(amount.get()) == 0) {
             error.setValue(new KuknosError(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
             return true;
         }

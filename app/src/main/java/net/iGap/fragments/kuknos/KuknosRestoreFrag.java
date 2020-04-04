@@ -16,6 +16,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosRestoreBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.kuknos.KuknosSignupM;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosRestoreVM;
 
@@ -88,12 +89,6 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
         onNextObserver();
         progressState();
         onPINCheck();
-        getCachedData();
-    }
-
-    private void getCachedData() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        viewModel.setToken(sharedpreferences.getString("Token", ""));
     }
 
     private void onPINCheck() {
@@ -120,21 +115,31 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
         });
     }
 
+    private void saveRegisterInfo() {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("RegisterInfo", new Gson().toJson(new KuknosSignupM(true)));
+        editor.apply();
+    }
+
     private void onNextObserver() {
-        viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPageMode -> {
+            if (nextPageMode == 2) {
+                saveRegisterInfo();
+            }
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = null;
-            if (nextPage == 1) {
-                fragment = fragmentManager.findFragmentByTag(KuknosRestorePassFrag.class.getName());
-                if (fragment == null) {
-                    fragment = KuknosRestorePassFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-                Bundle bundle = new Bundle();
+//            if (nextPage == 1) {
+            fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
+            if (fragment == null) {
+                fragment = KuknosSetPassFrag.newInstance(nextPageMode);
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
+                /*Bundle bundle = new Bundle();
                 bundle.putString("key_phrase", viewModel.getKeys().get());
-                fragment.setArguments(bundle);
-            } else if (nextPage == 2) {
+                fragment.setArguments(bundle);*/
+            /*} else if (nextPage == 2) {
                 saveRegisterInfo();
                 fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
                 if (fragment == null) {
@@ -147,16 +152,9 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
                     fragment = KuknosSignupInfoFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-            }
+            }*/
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
-    }
-
-    private void saveRegisterInfo() {
-        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("RegisterInfo", new Gson().toJson(viewModel.getKuknosSignupM()));
-        editor.apply();
     }
 
     private void progressState() {

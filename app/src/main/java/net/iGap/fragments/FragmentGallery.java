@@ -143,20 +143,17 @@ public class FragmentGallery extends BaseFragment {
                             } else {
                                 checkVideoMultiSelectAndSendToEdit();
                             }
-                        }/* else {
+                        }else if(mGalleryMode == GalleryMode.MUSIC){
+                            if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
+                                showSortDialog();
+                            } else {
+                                if (getContext() != null) Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+                            }
+                        } /* else {
                             openAndroidOsGallery();
                         }*/
                     }
 
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
-                            showSortDialog();
-                        } else {
-                            if (getContext() != null)
-                                Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
-                        }
-                    }
                 });
 
         if (!isReturnResultDirectly) {
@@ -422,20 +419,18 @@ public class FragmentGallery extends BaseFragment {
 
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
             fragmentEditImage.setIsReOpenChatAttachment(false);
-
-            //rotate and send image for edit
             ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
                 @Override
                 public void startProcess() {
-                    //nothing
+
                 }
 
                 @Override
                 public void success(String newPath) {
-                    FragmentEditImage.insertItemList(newPath, "", false);
                     G.handler.post(() -> {
-                        if (getActivity() == null) return;
-                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                        FragmentEditImage.insertItemList(newPath, "", false);
+                        if (getActivity() != null)
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     });
                 }
             });

@@ -23,6 +23,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -129,7 +130,6 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
             }
         });
 
-        viewModel.getDataFromServer();
         onErrorObserver();
         openPage();
         onDataChanged();
@@ -171,7 +171,18 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     }
                     break;*/
                 case 0:
-                    if (viewModel.isPinSet()) {
+//                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+//                    if (fragment == null) {
+                        if (!viewModel.isMnemonicAvailable()) {
+                            HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
+                            return;
+                        }
+                        fragment = KuknosEnterPinFrag.newInstance(() -> {
+                            goToShowRecovery();
+                        }, false);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+//                    }
+                    /*if (viewModel.isPinSet()) {
                         fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
                         if (fragment == null) {
                             fragment = KuknosViewRecoveryEPFrag.newInstance();
@@ -185,11 +196,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                         }
                     } else {
                         HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
-                    }
+                    }*/
                     break;
                 case 1:
-                    showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn);
-                    return;
+                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosEnterPinFrag.newInstance(
+                                () -> showDialog(1, R.string.kuknos_setting_copySKeyTitel, R.string.kuknos_setting_copySKeyMessage, R.string.kuknos_setting_copySKeyBtn),
+                                false);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    break;
                 case 2:
                     HelperUrl.openWebBrowser(getContext(), "http://d.igap.net/kuknus");
 //                    viewModel.getTermsAndCond();
@@ -206,6 +223,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         });
         bottomSheetFragment.setTitle(getResources().getString(R.string.kuknos_setting_title));
         bottomSheetFragment.show(getFragmentManager(), "SettingBottomSheet");
+    }
+
+    private void goToShowRecovery() {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+        if (fragment == null) {
+            fragment = KuknosShowRecoveryKeySFrag.newInstance();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
     }
 
     private void onTermsDownload() {
@@ -243,6 +271,18 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 noItem.add(temp);
                 WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), noItem);
                 walletSpinner.setAdapter(adapter);
+            }
+        });
+
+        viewModel.getBAndCState().observe(getViewLifecycleOwner(), state -> {
+            switch (state) {
+                case 0:
+                    viewModel.setBalance(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber("0.0") : "0.0");
+                    viewModel.setCurrency(getResources().getString(R.string.kuknos_Currency));
+                    break;
+                case 1:
+                    viewModel.setCurrency(getResources().getString(R.string.rial));
+                    break;
             }
         });
     }

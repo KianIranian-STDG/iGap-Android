@@ -16,6 +16,8 @@ import net.iGap.repository.kuknos.PanelRepo;
 import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
@@ -33,14 +35,15 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
+    /**
+     * different states: 0 = initial / 1 = To Rial Mode
+     */
+    private MutableLiveData<Integer> BAndCState = new MutableLiveData<>();
     private int position = 0;
     private boolean inRialMode = false;
 
     public KuknosPanelVM() {
-        //TODO clear Hard Code
-        balance.set("...");
-        currency.set("PMN");
-
+        BAndCState.postValue(0);
         kuknosWalletsM = new MutableLiveData<>();
         //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
         error = new MutableLiveData<>();
@@ -55,15 +58,24 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
-                kuknosWalletsM.setValue(data.getData());
+                List<KuknosBalance.Balance> tempBalanceList = new ArrayList<>();
+                for (KuknosBalance.Balance tmp : data.getData().getAssets()) {
+                    if (tmp.getAsset().getType().equals("native")) {
+                        tempBalanceList.add(0, tmp);
+                    } else {
+                        tempBalanceList.add(tmp);
+                    }
+                }
+                KuknosBalance temp = new KuknosBalance();
+                temp.setAssets(tempBalanceList);
+                kuknosWalletsM.setValue(temp);
                 spinnerSelect(0);
                 progressState.setValue(false);
             }
 
             @Override
             public void onError(String errorM) {
-                balance.set("0.0");
-                currency.set("currency");
+                BAndCState.postValue(0);
                 error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
                 kuknosWalletsM.setValue(null);
@@ -71,8 +83,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                balance.set("0.0");
-                currency.set("currency");
+                BAndCState.postValue(0);
                 error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);
                 kuknosWalletsM.setValue(null);
@@ -122,6 +133,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
         currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));
+        inRialMode = false;
         getAssetData(currency.get());
     }
 
@@ -134,7 +146,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
                 HelperCalander.convertToUnicodeFarsiNumber(
                         df.format(Double.valueOf(temp.getBalance()) * Double.valueOf(asset.getAssets().get(0).getSellRate()))) :
                 (df.format(Double.valueOf(temp.getBalance()) * Double.valueOf(asset.getAssets().get(0).getSellRate()))));
-        currency.set("Rial");
+        BAndCState.postValue(1);
     }
 
     public void togglePrice() {
@@ -241,16 +253,16 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         return balance;
     }
 
-    public void setBalance(ObservableField<String> balance) {
-        this.balance = balance;
+    public void setBalance(String balance) {
+        this.balance.set(balance);
     }
 
     public ObservableField<String> getCurrency() {
         return currency;
     }
 
-    public void setCurrency(ObservableField<String> currency) {
-        this.currency = currency;
+    public void setCurrency(String currency) {
+        this.currency.set(currency);
     }
 
     public int getPosition() {
@@ -271,5 +283,9 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     public void setTandCAgree(MutableLiveData<String> tandCAgree) {
         TandCAgree = tandCAgree;
+    }
+
+    public MutableLiveData<Integer> getBAndCState() {
+        return BAndCState;
     }
 }

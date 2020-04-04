@@ -30,8 +30,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 169
-        versionName "2.1.2.beta12"
+        versionCode 176
+        versionName "2.1.3.beta2"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -185,7 +185,6 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.larswerkman:HoloColorPicker:1.5'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-
     implementation 'me.leolin:ShortcutBadger:1.1.18@aar'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -211,7 +210,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'org.parceler:parceler-api:1.1.12'
     annotationProcessor 'org.parceler:parceler:1.1.12'
-
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
     compileOnly 'androidx.annotation:annotation:1.1.0'
     implementation 'com.github.msarhan:ummalqura-calendar:1.1.7'
@@ -229,7 +227,6 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
-
     releaseImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
     release_IranImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
     release_MyketImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
@@ -238,11 +235,11 @@ dependencies {
     release_GooglePlayImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
     release_BazaarImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
     debugImplementation "com.github.KianIranian-STDG:Proto:$project.protoBetaVersion"
-
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1' // don't upgrade this lib
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    // don't upgrade this lib
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -257,35 +254,30 @@ dependencies {
     implementation project(':paygearcore')
     implementation project(':pecpayment-release')
     implementation project(':Ref')
-
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'ir.metrix:metrix:0.11.0'
     implementation 'com.android.installreferrer:installreferrer:1.1.1'
-
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     annotationProcessor 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
-//  this lib is used for MPL
+    //  this lib is used for MPL
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.github.smarteist:autoimageslider:1.3.2'
-    implementation "com.github.YarikSOffice:lingver:1.1.0"
+    implementation 'com.github.YarikSOffice:lingver:1.1.0'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
-
     implementation 'com.airbnb.android:lottie:3.3.0'
-
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
-    implementation("com.google.guava:guava:28.1-android")
-
+    implementation 'com.google.guava:guava:28.1-android'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
     implementation 'com.android.support:cardview-v7:28.0.0'
-
     /*implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'*/
+    implementation files('src/main/java/net/iGap/libs/bouncy.jar')
 }
 
 configurations.all {

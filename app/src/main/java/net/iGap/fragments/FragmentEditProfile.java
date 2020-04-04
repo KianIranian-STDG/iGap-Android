@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +80,44 @@ public class FragmentEditProfile extends BaseFragment {
             if (isShow != null && isShow) {
                 showCountryDialog();
             }
+        });
+        viewModel.getCancelIconClick().observe(getViewLifecycleOwner(), isClick -> {
+            String currentName = viewModel.getUserInfo().getUserInfo().getDisplayName() != null ? viewModel.getUserInfo().getUserInfo().getDisplayName() : "";
+            String currentUserName = viewModel.getUserInfo().getUserInfo().getUsername() != null ? viewModel.getUserInfo().getUserInfo().getUsername() : "";
+            String currentBio = viewModel.getUserInfo().getUserInfo().getBio() != null ? viewModel.getUserInfo().getUserInfo().getBio() : "";
+            binding.nameEditText.setText(currentName);
+            binding.userNameEditText.setText(currentUserName);
+            binding.bioEditText.setText(currentBio);
+        });
+
+        binding.userNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.usernameTextChangeListener(binding.userNameEditText.getText().toString());
+
+            }
+        });
+
+        binding.emailEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            viewModel.emailTextChangeListener(binding.emailEditText.getText().toString());
+        });
+
+        binding.countryCode.setOnFocusChangeListener((v, hasFocus) -> {
+            viewModel.onCountryCodeClick();
+        });
+
+        binding.referralEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            viewModel.referralTextChangeListener(binding.referralEditText.getText().toString());
         });
     }
 

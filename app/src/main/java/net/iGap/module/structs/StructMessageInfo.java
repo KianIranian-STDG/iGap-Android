@@ -16,12 +16,13 @@ import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.module.MyType;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.observers.interfaces.IChatItemAttachment;
-import net.iGap.module.MyType;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IChatItemAttachment;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
@@ -56,7 +57,6 @@ public class StructMessageInfo implements Parcelable {
 
     public String songArtist;
     public long songLength;
-    private String TAG = " abbasiAnimation";
 
     public RealmRoomMessage getRealmRoomMessage() {
         return realmRoomMessage.getForwardMessage() == null ? realmRoomMessage : realmRoomMessage.getForwardMessage();
@@ -72,7 +72,7 @@ public class StructMessageInfo implements Parcelable {
 
     public MyType.SendType getSendType() {
         if (this.realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
-                return MyType.SendType.send;
+            return MyType.SendType.send;
         } else {
             return MyType.SendType.recvive;
         }
@@ -192,7 +192,6 @@ public class StructMessageInfo implements Parcelable {
                     }
                     setAttachment(realm.copyFromRealm(realmAttachment));
                     abstractMessage.onProgressFinish(holder, messageType);
-                    Log.d("bagi", "onProgressFinish: " + realmAttachment.getLocalFilePath());
 
                     if (realmAttachment.isFileExistsOnLocalAndIsImage()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
@@ -204,7 +203,6 @@ public class StructMessageInfo implements Parcelable {
                         }
                     }
 
-                    changeLog(changeSet != null ? changeSet.getChangedFields() : new String[0], identifier);
                     //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
                 }
 
@@ -218,12 +216,6 @@ public class StructMessageInfo implements Parcelable {
             liverRealmAttachment.removeChangeListener(realmAttachmentRealmChangeListener);
             liverRealmAttachment = null;
             realmAttachmentRealmChangeListener = null;
-        }
-    }
-
-    private void changeLog(String[] strings, long identifier) {
-        for (String string : strings) {
-            Log.i(TAG, "changeLog: " + string + " id -> " + identifier);
         }
     }
 
@@ -269,6 +261,10 @@ public class StructMessageInfo implements Parcelable {
     public boolean isTimeOrLogMessage() {
         return realmRoomMessage.getUserId() == -1L;
         // or roomMessage.getLogs() != null
+    }
+
+    public boolean isGiftSticker() {
+        return getRealmRoomMessage().getMessageType() == ProtoGlobal.RoomMessageType.STICKER && getAdditional() != null && getAdditional().getAdditionalType() == AdditionalType.GIFT_STICKER;
     }
 
     public boolean hasAttachment() {

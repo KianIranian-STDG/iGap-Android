@@ -8,6 +8,14 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
@@ -20,14 +28,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosShowRecoveryKeyVM;
 
 import java.util.Arrays;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
@@ -109,7 +109,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                 Fragment fragment;
                 fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
                 if (fragment == null) {
-                    fragment = KuknosSetPassFrag.newInstance();
+                    fragment = KuknosSetPassFrag.newInstance(0);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

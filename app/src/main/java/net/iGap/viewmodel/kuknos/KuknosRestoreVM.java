@@ -8,6 +8,7 @@ import net.iGap.model.kuknos.KuknosError;
 import net.iGap.model.kuknos.KuknosSignupM;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.model.kuknos.Parsian.KuknosUserInfo;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.UserRepo;
@@ -18,7 +19,7 @@ import androidx.lifecycle.MutableLiveData;
 public class KuknosRestoreVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosError> error;
-    private MutableLiveData<Integer> nextPage;
+    private SingleLiveEvent<Integer> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> keys = new ObservableField<>();
     private MutableLiveData<Boolean> pinCheck;
@@ -27,8 +28,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
     private boolean isSeedMode = false;
 
     public KuknosRestoreVM() {
-        nextPage = new MutableLiveData<>();
-        nextPage.setValue(0);
+        nextPage = new SingleLiveEvent<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         progressState.setValue(false);
@@ -48,7 +48,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         } else if (keys.get().split(" ").length < 12) {
             error.setValue(new KuknosError(true, "Invalid Entry", "0", R.string.kuknos_Restore_Error_invalid_str));
         } else {
-            if (/*pinCheck.getValue()*/true)
+            if (/*pinCheck.getValue()*/false)
                 nextPage.setValue(1);
             else
                 generateKeypairWithMnemonic();
@@ -72,7 +72,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     private void generateKeypairWithMnemonic() {
         progressState.setValue(true);
-        userRepo.setMnemonic(keys.get());
+        userRepo.setMnemonic(keys.get().trim());
         try {
             userRepo.generateKeyPairWithMnemonic();
         } catch (WalletException e) {
@@ -158,17 +158,6 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         return pinCheck;
     }
 
-    public void setToken(String token) {
-    }
-
-    public MutableLiveData<Integer> getNextPage() {
-        return nextPage;
-    }
-
-    public void setNextPage(MutableLiveData<Integer> nextPage) {
-        this.nextPage = nextPage;
-    }
-
     public UserRepo getUserRepo() {
         return userRepo;
     }
@@ -183,5 +172,13 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     public void setSeedMode(boolean seedMode) {
         isSeedMode = seedMode;
+    }
+
+    public SingleLiveEvent<Integer> getNextPage() {
+        return nextPage;
+    }
+
+    public void setNextPage(SingleLiveEvent<Integer> nextPage) {
+        this.nextPage = nextPage;
     }
 }

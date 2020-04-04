@@ -19,10 +19,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import net.iGap.G;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.observers.eventbus.EventManager;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -294,7 +294,8 @@ public class EmojiManager {
                     CharSequence code = emojiCode.subSequence(0, emojiCode.length());
                     drawable = getEmojiDrawable(code);
                     if (drawable != null) {
-                        span = new EmojiSpan(drawable, DynamicDrawableSpan.ALIGN_BOTTOM, size, fontMetrics);
+                        // -1 undefined size just for set ALIGN_BASELINE to improve when use staticLayout for caption on message
+                        span = new EmojiSpan(drawable, size == -1 ? DynamicDrawableSpan.ALIGN_BASELINE : DynamicDrawableSpan.ALIGN_BOTTOM, size, fontMetrics);
                         s.setSpan(span, startIndex, startIndex + startLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         emojiCount++;
                     }

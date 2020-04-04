@@ -22,7 +22,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +101,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
@@ -346,7 +344,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         MessageProgress _Progress = ((IProgress) holder).getProgress();
                         if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
                             int progress = (int) message[1];
-                            Log.d("bagi", "receivedMessage" + progress);
                             if (progress >= 1 && progress != 100) {
                                 _Progress.withProgress(progress);
                             }
@@ -388,6 +385,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (NewChatItemHolder) holder;
         } else if (holder instanceof LogItem.ViewHolder ||
                 holder instanceof LogWalletCardToCard.ViewHolder ||
+                holder instanceof LogWalletBill.ViewHolder ||
+                holder instanceof LogWalletTopup.ViewHolder ||
                 holder instanceof LogWallet.ViewHolder) {
             messageClickListener.onItemShowingMessageId(structMessage);
             return;
@@ -660,7 +659,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
             }
 
-            if (type == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+            if (type == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId() && !structMessage.isGiftSticker()) {
                 mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
@@ -675,7 +674,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set message time
          */
 
-        String time = HelperCalander.getClocktime(mMessage.getUpdateOrCreateTime(), false);
+        String time = HelperCalander.getClocktime(mMessage.getCreateTime(), false);
         if (HelperCalander.isPersianUnicode) {
             mHolder.getMessageTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(time));
         } else {
@@ -1362,6 +1361,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (_with == 0) {
                     _with = (int) G.context.getResources().getDimension(R.dimen.dp200);
+                }
+
+                if (_hight == 0) {
                     _hight = (int) G.context.getResources().getDimension(R.dimen.dp200);
                 }
 
@@ -1664,8 +1666,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
-                    Log.i("abbasiAnimation", "On Progress  " + progress);
-
                     if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
@@ -1897,7 +1897,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    Log.wtf(this.getClass().getName(), "tag: " + ((ArrayList<String>) v.getTag()).get(0));
                     RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
                     long peerId;
                     if (room != null && room.getChatRoom() != null) {

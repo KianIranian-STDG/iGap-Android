@@ -687,7 +687,6 @@ public final class AndroidUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("abbasiKeyboard", "getViewInset: ", e);
         }
         return 0;
     }

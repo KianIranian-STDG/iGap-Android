@@ -16,24 +16,22 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-
 import net.iGap.R;
-import net.iGap.databinding.MobileBankHistoryBinding;
-import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.module.dialog.DialogParsian;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.realm.RealmMobileBankAccounts;
-import net.iGap.realm.RealmMobileBankCards;
-import net.iGap.model.mobileBank.BankHistoryModel;
-import net.iGap.model.mobileBank.MobileBankHomeItemsModel;
 import net.iGap.adapter.mobileBank.AccountSpinnerAdapter;
 import net.iGap.adapter.mobileBank.BankHomeItemAdapter;
 import net.iGap.adapter.mobileBank.MobileBankDateAdapter;
 import net.iGap.adapter.mobileBank.MobileBankHistoryAdapter;
+import net.iGap.databinding.MobileBankHistoryBinding;
+import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.model.mobileBank.BankHistoryModel;
+import net.iGap.model.mobileBank.MobileBankHomeItemsModel;
+import net.iGap.module.dialog.DialogParsian;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.realm.RealmMobileBankAccounts;
+import net.iGap.realm.RealmMobileBankCards;
 import net.iGap.viewmodel.mobileBank.MobileBankCardHistoryViewModel;
 
 import java.util.ArrayList;
@@ -53,6 +51,8 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private boolean isCard;
     private DialogParsian mDialogWait;
     private List<String> items = new ArrayList<>();
+    private ViewTreeObserver.OnScrollChangedListener listener;
+    private int lastPos = -1;
 
     public static MobileBankCardHistoryFragment newInstance(String accountNumber, boolean isCard) {
         MobileBankCardHistoryFragment frag = new MobileBankCardHistoryFragment();
@@ -131,7 +131,6 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         for (int i = 0 ; i < accounts.size() ; i++){
             if(mCurrentNumber.equals(accounts.get(i))){
                 binding.spAccounts.setSelection(i);
-               // binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(accounts.get(i) , isCard));
                 break;
             }
         }
@@ -212,18 +211,20 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         resetMainRecycler();
 
         // scroll listener for recycler view lazy loading
-        binding.container.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+        listener = new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
                 View view = binding.container.getChildAt(binding.container.getChildCount() - 1);
                 int diff = (view.getBottom() - (binding.container.getHeight() + binding.container.getScrollY()));
-                if (diff == 0) {
+                if (diff == 0 && binding.container.getScrollY() != 0 && lastPos != view.getBottom()) {
                     isLoading = true;
-                    currentPage++;
+                    currentPage = currentPage + 1;
                     viewModel.getAccountDataForMonth(currentPage * 30);
+                    lastPos = view.getBottom();
                 }
             }
-        });
+        };
+        binding.container.getViewTreeObserver().addOnScrollChangedListener(listener);
 
         // open page for reports
         binding.reportBtn.setOnClickListener(v -> {
@@ -267,6 +268,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         adapter.removeAll();
         adapter.addLoading();
         currentPage = 0;
+        lastPos = -1;
         isLastPage = false;
 
     }
@@ -285,6 +287,11 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         });
 
         viewModel.getBills().observe(getViewLifecycleOwner(), this::initMainRecycler);
+
+        viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner() , msg ->{
+            if(msg == null) return;
+            HelperError.showSnackMessage(msg , false);
+        });
     }
 
     private String checkAndSetPersianNumberIfNeeded(String cardNumber, boolean isCard) {
@@ -470,4 +477,9 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         frag.show(getParentFragmentManager(), "CardBalanceBottomSheet");
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        binding.container.getViewTreeObserver().removeOnScrollChangedListener(listener);
+    }
 }

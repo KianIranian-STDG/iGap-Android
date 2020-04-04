@@ -18,16 +18,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -40,6 +30,16 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosSignupInfoVM;
 
 import org.jetbrains.annotations.NotNull;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
 
@@ -172,19 +172,15 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
                 switch (errorM.getMessage()) {
                     case "0":
                         binding.fragKuknosSIUsernameHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIUsername.requestFocus();
                         break;
                     case "1":
                         binding.fragKuknosSIEmailHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIEmail.requestFocus();
                         break;
                     case "2":
                         binding.fragKuknosSINameHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSIName.requestFocus();
                         break;
                     case "3":
                         binding.fragKuknosSINIDHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSINID.requestFocus();
                         break;
                     case "4":
                         Snackbar.make(binding.pageContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG)
@@ -209,7 +205,6 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
         viewModel.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
                 saveRegisterInfo();
-
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());

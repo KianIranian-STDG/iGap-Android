@@ -7,9 +7,9 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import net.iGap.G;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.G;
 import net.iGap.realm.RealmUserInfo;
 
 public class SplashActivity extends ActivityEnhanced {
@@ -38,7 +38,12 @@ public class SplashActivity extends ActivityEnhanced {
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
                 if (AccountManager.getInstance().haveAccount()) {//Todo: this is fucking code and must find cause of this bug
-                    startActivity(new Intent(this, ActivityMain.class));
+                    Intent intent = new Intent(this, ActivityMain.class);
+
+                    if (getIntent().getStringExtra(ActivityMain.DEEP_LINK) != null)
+                        intent.putExtra(ActivityMain.DEEP_LINK, getIntent().getStringExtra(ActivityMain.DEEP_LINK));
+
+                    startActivity(intent);
                     finish();
                 } else {
                     Intent intent = new Intent(this, ActivityRegistration.class);
@@ -52,7 +57,12 @@ public class SplashActivity extends ActivityEnhanced {
                 startActivity(intent);
                 finish();
             } else {
-                startActivity(new Intent(this, ActivityMain.class));
+                Intent intent = new Intent(this, ActivityMain.class);
+
+                if (getIntent().getStringExtra(ActivityMain.DEEP_LINK) != null)
+                    intent.putExtra(ActivityMain.DEEP_LINK, getIntent().getStringExtra(ActivityMain.DEEP_LINK));
+
+                startActivity(intent);
                 finish();
             }
         }

@@ -39,7 +39,7 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
 
                 String phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber();
 
-                if (phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
+                if (phoneNumber != null && phoneNumber.length() > 2 && phoneNumber.substring(0, 2).equals("98")) {
                     phoneNumber = "0" + phoneNumber.substring(2);
                     new ApiInitializer<CheckNationalCodeResponse>().initAPI(new RetrofitFactory().getShahkarRetrofit().checkNationalCode(nationalCode, phoneNumber), this, new ResponseCallback<CheckNationalCodeResponse>() {
                         @Override

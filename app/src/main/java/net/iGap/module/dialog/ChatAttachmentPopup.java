@@ -355,7 +355,7 @@ public class ChatAttachmentPopup {
         file.setOnClickListener(v -> {
             dismiss();
             try {
-                attachFile.requestPickFile((selectedPathList , caption)-> {
+                attachFile.requestPickFile((selectedPathList, caption) -> {
                     mPopupListener.onAttachPopupFilePicked(selectedPathList, caption);
                 });
             } catch (IOException e) {
@@ -899,7 +899,7 @@ public class ChatAttachmentPopup {
 
         void onAttachPopupLocation(String message);
 
-        void onAttachPopupFilePicked(List<String> selectedPathList , String caption);
+        void onAttachPopupFilePicked(List<String> selectedPathList, String caption);
 
         void onAttachPopupSendSelected();
     }

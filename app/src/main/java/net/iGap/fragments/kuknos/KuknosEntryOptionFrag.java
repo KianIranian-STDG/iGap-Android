@@ -76,13 +76,21 @@ public class KuknosEntryOptionFrag extends BaseAPIViewFrag<KuknosEntryOptionVM> 
         if (viewModel.loginStatus() && isRegisteredSharesPref()) {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+            Fragment fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
             if (fragment == null) {
-                fragment = KuknosPanelFrag.newInstance();
+                fragment = KuknosEnterPinFrag.newInstance(() -> {
+                    FragmentManager fragmentManager1 = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
+                    Fragment fragment1 = fragmentManager1.findFragmentByTag(KuknosPanelFrag.class.getName());
+                    if (fragment1 == null) {
+                        fragment1 = KuknosPanelFrag.newInstance();
+                        fragmentTransaction1.addToBackStack(fragment1.getClass().getName());
+                    }
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load();
+                }, true);
                 fragmentTransaction.addToBackStack(fragment.getClass().getName());
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            popBackStackFragment();
         }
 
         onNewTObserver();
