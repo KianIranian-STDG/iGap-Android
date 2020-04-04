@@ -1986,8 +1986,8 @@
     <string name="igasht_service_title">سرویس</string>
 
     <string name="kuknos_login_messge_str">لطفا کد ملی خود را وارد نمایید.</string>
-    <string name="kuknos_login_id_str">کد ملی</string>
-    <string name="kuknos_login_tel_str">تلفن</string>
+    <string name="kuknos_login_id_str">کد ملی *</string>
+    <string name="kuknos_login_tel_str">تلفن *</string>
     <string name="kuknos_login_submit_str">ثبت</string>
     <string name="kuknos_login_error_empty_str">کد ملی خود را وارد نمایید.</string>
     <string name="kuknos_login_error_invalid_str">کد ملی نامعتبر میباشد.</string>
@@ -2014,7 +2014,7 @@
     <string name="kuknos_SignupInfo_username">نام کاربری*</string>
     <string name="kuknos_SignupInfo_name">نام *</string>
     <string name="kuknos_SignupInfo_family">نام خانوادگی *</string>
-    <string name="kuknos_SignupInfo_email">آدرس ایمیل</string>
+    <string name="kuknos_SignupInfo_email">آدرس ایمیل *</string>
     <string name="kuknos_SignupInfo_submitBtn">ثبت</string>
     <string name="kuknos_SignupInfo_checkUsername">در حال بررسی...</string>
     <string name="kuknos_SignupInfo_submitConnecting">ذخیره...</string>
@@ -2142,7 +2142,7 @@
     <string name="kuknos_tradeDialogDelete_title">حذف مبادله</string>
     <string name="kuknos_tradeDialogDelete_message">آیا از حذف این مبادله اطمینان دارید؟</string>
     <string name="kuknos_tradeDialogDelete_btn">بله</string>
-    <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
+    <string name="kuknos_setting_copySeedKey">ذخیره اطلاعات حساب کاربری</string>
     <string name="kuknos_setting_sepid">سپیدنامه پیمان</string>
     <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
@@ -2164,7 +2164,7 @@
     <string name="kuknos_login_error_server_ErrorStr">خطای سرور: عدم جواب. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateMn">عدم امکان تولید زنجیره کلمات. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
-    <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n</string>
+    <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n\n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
     <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
