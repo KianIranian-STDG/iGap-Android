@@ -97,7 +97,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(backgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), LayoutCreator.dpToPx((int) cornerRadius), LayoutCreator.dpToPx((int) cornerRadius), true), paint);
+            canvas.drawPath(roundedRect(0, getWidth(), getHeight(), LayoutCreator.dpToPx((int) cornerRadius), LayoutCreator.dpToPx((int) cornerRadius), true), paint);
             super.dispatchDraw(canvas);
         } else {
             super.dispatchDraw(canvas);
@@ -105,11 +105,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private Path roundedRect(float left, float top, float right, float bottom, float rx, float ry, boolean justTop) {
+    private Path roundedRect(float top, float right, float bottom, float rx, float ry, boolean justTop) {
         Path path = new Path();
         if (rx < 0) rx = 0;
         if (ry < 0) ry = 0;
-        float width = right - left;
+        float width = right - (float) 0;
         float height = bottom - top;
         if (rx > width / 2) rx = width / 2;
         if (ry > height / 2) ry = height / 2;
@@ -218,7 +218,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
             onLongClickListener.onLongClick(v);
             AppUtils.setVibrator(15);
         }
-        return false;
+        return true;
     }
 
     public void setProfileOnLongClickListener(OnLongClickListener onLongClickListener) {
