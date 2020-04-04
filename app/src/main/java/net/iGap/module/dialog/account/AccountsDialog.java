@@ -2,7 +2,6 @@ package net.iGap.module.dialog.account;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
-import net.iGap.module.accountManager.AccountHelper;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
-import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.dialog.BaseBottomSheet;
 
 import org.paygear.RaadApp;
 
@@ -42,10 +41,8 @@ public class AccountsDialog extends BaseBottomSheet {
             if (isAssigned) {
                 if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
                     new AccountHelper().changeAccount(id);
-                    Log.wtf(this.getClass().getName(), "updateUiForChangeAccount");
                     ((ActivityMain) getActivity()).updateUiForChangeAccount();
                     RaadApp.onCreate(getContext());
-                    Log.wtf(this.getClass().getName(), "updateUiForChangeAccount");
                 }
                 dismiss();
             } else {

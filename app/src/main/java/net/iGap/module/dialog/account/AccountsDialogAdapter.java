@@ -10,13 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.model.AccountUser;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.request.RequestUserInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +51,8 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
 
     @Override
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
+        holder.getOtherAccountUserId(mAccountsList.get(position).getId());
+
         holder.username.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
         if (currentUserPosition == position) {
             holder.currentUserView.setVisibility(View.VISIBLE);
@@ -81,7 +85,7 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
 
     @Override
     public int getItemCount() {
-        return mAccountsList.size() > 3 ? 3 : mAccountsList.size();
+        return Math.min(mAccountsList.size(), 3);
     }
 
     class AccountViewHolder extends RecyclerView.ViewHolder {
@@ -91,13 +95,24 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
         private AppCompatTextView messageUnreadCount;
         private View currentUserView;
 
-        public AccountViewHolder(@NonNull View itemView) {
+        AccountViewHolder(@NonNull View itemView) {
             super(itemView);
 
             userAvatar = itemView.findViewById(R.id.avatar);
             username = itemView.findViewById(R.id.name);
             messageUnreadCount = itemView.findViewById(R.id.unreadMessageCount);
             currentUserView = itemView.findViewById(R.id.checked);
+        }
+
+        private void getOtherAccountUserId(long userId) {
+            if (userId != AccountManager.getInstance().getCurrentUser().getId()) {
+                new RequestUserInfo().userInfoWithCallBack(new OnComplete() {
+                    @Override
+                    public void complete(boolean result, String messageOne, String MessageTow) {
+                        mAvatarHandler.getAvatar(new ParamWithAvatarType(userAvatar, userId).avatarType(AvatarHandler.AvatarType.USER).showMain(), false);
+                    }
+                }, userId, userId + "");
+            }
         }
     }
 }
