@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import net.iGap.api.errorhandler.ErrorModel;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import retrofit2.HttpException;
 
@@ -28,8 +29,14 @@ public class ExceptionMessageFactory {
                     e.printStackTrace();
                 }
             }
-        } else
+        } else if (throwable instanceof SocketTimeoutException) {
+            errorResponse.setMessage("اتمام زمان درخواست");
+        } else {
             errorResponse.setMessage("خطای نامشخص");
+        }
+
+        HelperLog.setErrorLog(new Exception(throwable.getMessage()));
+
         return errorResponse;
     }
 }
