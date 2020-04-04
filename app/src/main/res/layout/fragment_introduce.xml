@@ -13,7 +13,7 @@
         android:id="@+id/ai_layout_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/introduction_background">
+        style="@style/IGapRootViewStyle">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/int_viewPager_introduce"
