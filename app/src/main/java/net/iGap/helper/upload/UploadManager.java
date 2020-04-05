@@ -5,15 +5,14 @@ import android.util.Log;
 
 import androidx.collection.ArrayMap;
 
-import com.lalongooo.videocompressor.CompressTask;
-import com.lalongooo.videocompressor.OnCompress;
-
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.videocompressor.CompressTask;
+import net.iGap.module.videocompressor.OnCompress;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
@@ -23,8 +22,6 @@ import java.io.File;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -87,7 +84,6 @@ public class UploadManager {
             return;
         }
 
-        Log.d("bagi", "uploadMessageAndSend222");
         String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + message.getMessageId() + ".mp4";
         File compressFile = new File(savePathVideoCompress);
         File CompletedCompressFile = new File(savePathVideoCompress.replace(".mp4", "_finish.mp4"));
@@ -96,18 +92,14 @@ public class UploadManager {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
-            Log.d("bagi", "uploadMessageAndSend33");
             CompressTask compressTask = new CompressTask(message.getMessageId() + "", message.getAttachment().getLocalFilePath(), savePathVideoCompress, new OnCompress() {
                 @Override
                 public void onCompressProgress(String id, int percent) {
-                    Log.d("bagi", "onCompressProgress" + percent);
                     EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent);
                 }
 
                 @Override
                 public void onCompressFinish(String id, boolean compress) {
-
-                    Log.d("bagi", "onCompressFinish" + message.getMessageId());
                     if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {
                         compressFile.renameTo(CompletedCompressFile);
                         EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
@@ -182,7 +174,6 @@ public class UploadManager {
 
             @Override
             public void onError(String id) {
-                Log.d("bagi", "uploadMessageAndSendError");
                 pendingUploadTasks.remove(id);
                 HelperSetAction.sendCancel(Long.parseLong(id));
                 makeFailed(id);
