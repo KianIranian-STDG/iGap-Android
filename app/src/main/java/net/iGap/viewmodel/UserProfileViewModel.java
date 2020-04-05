@@ -124,7 +124,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableLong currentCredit = new ObservableLong(0);
     private ObservableField<String> currentScore = new ObservableField<>("0");
     private ObservableBoolean isDarkMode = new ObservableBoolean(false);
-    private ObservableInt editProfileIcon = new ObservableInt(R.string.edit_icon);
+    private ObservableInt editProfileIcon = new ObservableInt(View.VISIBLE);
     private ObservableField<String> name = new ObservableField<>("");
     private ObservableField<String> userName = new ObservableField<>("");
     private ObservableField<String> bio = new ObservableField<>("");
@@ -138,7 +138,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableInt showLoading = new ObservableInt(View.GONE);
     private ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
     private ObservableBoolean showReferralErrorLiveData = new ObservableBoolean(false);
-    private ObservableInt referralError = new ObservableInt(R.string.already_registered);
+    private ObservableInt referralError = new ObservableInt(R.string.waiting_for_network);
     private ObservableInt showAddAvatarButton = new ObservableInt(View.GONE);
     private ObservableInt accountArrowVisibility = new ObservableInt(View.VISIBLE);
 
@@ -439,11 +439,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onEditProfileClick() {
         unShowEditIcon();
         isEditProfile = true;
-        if (isEditProfile) {
-            String tmp = referralNumberObservableField.get();
-            if (tmp == null || tmp.isEmpty()) {
-                getReferral();
-            }
+        String tmp = referralNumberObservableField.get();
+        if (referralNumberObservableField == null || tmp.isEmpty()) {
+            getReferral();
         }
 
         setCurrentFragment.setValue(isEditProfile);
@@ -971,7 +969,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public boolean checkEditModeForOnBackPressed() {
         if (isEditProfile) {
             isEditProfile = false;
-            getEditProfileIcon().set(R.string.edit_icon);
             accountArrowVisibility.set(View.VISIBLE);
             popBackStack.setValue(true);
             showAddAvatarButton.set(View.GONE);
@@ -1231,7 +1228,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
         });
-        editProfileIcon.set(R.string.check_icon);
     }
 
     private void countryReader() {
