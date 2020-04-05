@@ -15,7 +15,8 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.Config;
+import com.google.gson.JsonObject;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -24,7 +25,6 @@ import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.upload.UploadManager;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
@@ -36,14 +36,12 @@ import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
-import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestChannelDeleteMessage;
 import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestGroupDeleteMessage;
 
-import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -1000,8 +998,17 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
         roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
-        if (additionalData != null)
-            roomMessage.setRealmAdditional(RealmAdditional.put(realm, additionalData, additionalTaype));
+
+        if (additionalData != null) {
+
+            JsonObject rootObject = new JsonObject();
+            rootObject.addProperty("label", "");
+            rootObject.addProperty("imageUrl", "");
+            rootObject.addProperty("actionType", "9");
+            rootObject.addProperty("value", additionalData);
+
+            roomMessage.setRealmAdditional(RealmAdditional.put(realm, rootObject.toString(), additionalTaype));
+        }
 
         return roomMessage;
     }

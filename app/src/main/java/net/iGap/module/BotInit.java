@@ -26,17 +26,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperUrl;
-import net.iGap.observers.interfaces.Ipromote;
-import net.iGap.observers.interfaces.OnChatGetRoom;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
+import net.iGap.observers.interfaces.Ipromote;
+import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -566,7 +566,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                                     @Override
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                         G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
                                         if (G.onBotClick != null) {
                                             G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
