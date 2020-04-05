@@ -37,11 +37,13 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
     private static final int CONTACT_FRAGMENT = 0;
     private static final int CALL_FRAGMENT = 1;
-    private static final int CHAT_FRAGMENT = 2;
-    private static final int DISCOVERY_FRAGMENT = 3;
-    private static final int PROFILE_FRAGMENT = 4;
+    public static final int CHAT_FRAGMENT = 2;
+    public static final int DISCOVERY_FRAGMENT = 3;
+    public static final int PROFILE_FRAGMENT = 4;
     private static final int POPULAR_CHANNEL_FRAGMENT = 5;
     private static final int NEWS_FRAGMENT = 6;
+
+    public static final int START_TAB = CHAT_FRAGMENT;
 
     public static final String DEEP_LINK_DISCOVERY = "discovery";
     public static final String DEEP_LINK_CONTACT = "contact";
@@ -92,7 +94,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         super.onViewCreated(view, savedInstanceState);
 
         bottomNavigation = view.findViewById(R.id.bn_main_bottomNavigation);
-        bottomNavigation.setDefaultItem(currentTab == -1 ? 2 : currentTab);
+        bottomNavigation.setDefaultItem(currentTab == -1 ? START_TAB : currentTab);
         bottomNavigation.setOnItemChangeListener(new OnItemChangeListener() {
             @Override
             public void onSelectedItemChanged(int i) {
@@ -133,7 +135,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
         switch (position) {
-            case 0:
+            case CONTACT_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
                 if (fragment == null) {
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
@@ -141,7 +143,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
-            case 1:
+            case CALL_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
                 if (fragment == null) {
                     fragment = FragmentCall.newInstance(true);
@@ -149,7 +151,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
-            case 2:
+            case CHAT_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
                 if (fragment == null) {
                     fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
@@ -157,7 +159,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
-            case 3:
+            case DISCOVERY_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(DiscoveryFragment.class.getName());
                 if (fragment == null) {
                     fragment = DiscoveryFragment.newInstance(0);
@@ -169,7 +171,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
-            case 4:
+            case PROFILE_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
                 if (fragment == null) {
                     fragment = new FragmentUserProfile();
@@ -188,19 +190,19 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
     @Override
     public void onChange(int unreadTotal) {
-        bottomNavigation.setOnBottomNavigationBadge(unreadTotal, 0);
+        bottomNavigation.setOnBottomNavigationBadge(unreadTotal);
     }
 
     public void goToUserProfile() {
-        bottomNavigation.setCurrentItem(4);
+        bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
     }
 
 
     public boolean isFirstTabItem() {
-        if (bottomNavigation.getSelectedItemPosition() == 2) {
+        if (bottomNavigation.getSelectedItemPosition() == START_TAB) {
             return true;
         } else {
-            bottomNavigation.setCurrentItem(2);
+            bottomNavigation.setCurrentItem(START_TAB);
             return false;
         }
     }
