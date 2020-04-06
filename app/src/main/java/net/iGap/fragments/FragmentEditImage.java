@@ -742,8 +742,17 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
             if (itemGalleryList.get(position).path != null) {
                 new Thread(() -> {
-                    String finalPath = attachFile.saveGalleryPicToLocal(itemGalleryList.get(position).path);
+                    String oldPath = itemGalleryList.get(position).path;
+                    String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
                     G.runOnUiThread(() -> {
+                        //check if old path available in selected list , replace new path with that
+                        if (!oldPath.equals(finalPath)) {
+                            StructBottomSheet item = textImageList.get(oldPath);
+                            if (item != null) {
+                                textImageList.remove(oldPath);
+                                textImageList.put(finalPath, item);
+                            }
+                        }
                         itemGalleryList.get(position).path = finalPath;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), imgPlay);
                     });
