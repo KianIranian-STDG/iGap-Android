@@ -275,7 +275,7 @@
     <string name="array_1_hour">1 час</string>
     <string name="array_2_hour">2 часа</string>
     <string name="array_4_hour">4 часа</string>
-    <string name="array_Default_Notification_tone">Песня уведомлений по умолчанию</string>
+    <string name="Default_Notification_tone">Песня уведомлений по умолчанию</string>
     <string name="replay_item_dialog">Ответ</string>
     <string name="copy_item_dialog">Копия</string>
     <string name="share_item_dialog">Поделиться</string>
@@ -1586,7 +1586,7 @@
     <string name="pay_bills_title">Оплатить счет</string>
     <string name="mobile_bills_title">Квитанция за мобильный</string>
     <string name="bills">Счета и штрафы</string>
-    <string name="charge_amount">Сумма заряда</string>
+    <string name="charge_amount">Сумма заряда(Rial)</string>
     <string name="buy_internet_package_title">Купить интернет-пакет</string>
     <string name="charity_title">благотворительность</string>
     <string name="disk_and_network_usage">Использование памяти и сети</string>
@@ -1866,7 +1866,7 @@
     <string name="facilities">оборудование</string>
     <string name="services">Сервисы</string>
     <string name="cheque_number">Номер чека :</string>
-    <string name="page_count">Количество страниц :</string>
+    <string name="page_count">страниц</string>
     <string name="reject_count">отклонять :</string>
     <string name="pass_count">прошло :</string>
     <string name="cash_count">обналичить :</string>
@@ -1954,5 +1954,24 @@
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
     <string name="kuknos_send_token_error">Не могу отправить этот токен.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="inter_cheque_amount">Введите сумму</string>
+    <string name="take_turn">Принять поворот</string>
+    <string name="secondary_password">Второй пароль</string>
+    <string name="default_deposit">Депозит по умолчанию</string>
+    <string name="custom_deposit">Пользовательский депозит</string>
+    <string name="internal_desc">Просмотрите вашу файловую систему</string>
+    <string name="external_desc">Просмотрите ваше внешнее хранилище</string>
+    <string name="file_manager_app_desc">Просмотрите папку приложения</string>
+    <string name="file_manager_image_desc">Отправить файл изображений</string>
+    <string name="file_manager_video_desc">Отправить видео файл</string>
+    <string name="file_manager_music">Отправить аудиофайл</string>
+    <string name="folder">скоросшиватель</string>
+    <string name="internal_storage">Внутреннее хранилище</string>
+    <string name="external_storage">Внешнее хранилище</string>
+    <string name="file_manager">Файловый менеджер</string>
 
+    <string name="E_4_14">You do not have access!</string>
+    <string name="mobile_bank_login_hint">Используйте логин и пароль для входа в мобильный банк Parsian.</string>
+    <string name="gift_card_already_in_use">Эта подарочная карта уже используется!</string>
+    <string name="gift_carde_sended">Вы уже отправили подарочную карту кому-то еще!</string>
 </resources>

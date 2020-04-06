@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="net.iGap.mobileBank.viewmodel.MobileBankTransferCtcStep2ViewModel" />
+            type="net.iGap.viewmodel.mobileBank.MobileBankTransferCtcStep2ViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".mobileBank.view.MobileBankTransferCtcStep2Fragment">
+        tools:context=".fragments.mobileBank.MobileBankTransferCtcStep2Fragment">
 
         <LinearLayout
             android:id="@+id/toolbar"

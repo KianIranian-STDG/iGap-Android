@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.helper.HelperLog;
 import net.iGap.proto.ProtoError;

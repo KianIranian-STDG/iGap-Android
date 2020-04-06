@@ -26,6 +26,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -37,11 +38,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -49,17 +45,11 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.top.lib.mpl.view.PaymentInitiator;
 
-import net.iGap.AccountHelper;
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.dialog.SubmitScoreDialog;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
-import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
@@ -70,8 +60,10 @@ import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.fragments.kuknos.KuknosSendFrag;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
@@ -87,25 +79,8 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
-import net.iGap.interfaces.DataTransformerListener;
-import net.iGap.interfaces.FinishActivity;
-import net.iGap.interfaces.ITowPanModDesinLayout;
-import net.iGap.interfaces.OnChatClearMessageResponse;
-import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGroupAvatarResponse;
-import net.iGap.interfaces.OnMapRegisterState;
-import net.iGap.interfaces.OnMapRegisterStateMain;
-import net.iGap.interfaces.OnPayment;
-import net.iGap.interfaces.OnUpdating;
-import net.iGap.interfaces.OnUserInfoMyClient;
-import net.iGap.interfaces.OnVerifyNewDevice;
-import net.iGap.interfaces.OneFragmentIsOpen;
-import net.iGap.interfaces.OpenFragment;
-import net.iGap.interfaces.RefreshWalletBalance;
-import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.view.KuknosSendFrag;
 import net.iGap.model.PassCode;
+import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -115,9 +90,31 @@ import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.SubmitScoreDialog;
 import net.iGap.module.enums.ConnectionState;
-import net.iGap.payment.Payment;
-import net.iGap.payment.PaymentFragment;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.interfaces.DataTransformerListener;
+import net.iGap.observers.interfaces.FinishActivity;
+import net.iGap.observers.interfaces.ITowPanModDesinLayout;
+import net.iGap.observers.interfaces.OnChatClearMessageResponse;
+import net.iGap.observers.interfaces.OnChatSendMessageResponse;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGroupAvatarResponse;
+import net.iGap.observers.interfaces.OnMapRegisterState;
+import net.iGap.observers.interfaces.OnMapRegisterStateMain;
+import net.iGap.observers.interfaces.OnPayment;
+import net.iGap.observers.interfaces.OnUpdating;
+import net.iGap.observers.interfaces.OnUserInfoMyClient;
+import net.iGap.observers.interfaces.OnVerifyNewDevice;
+import net.iGap.observers.interfaces.OneFragmentIsOpen;
+import net.iGap.observers.interfaces.OpenFragment;
+import net.iGap.observers.interfaces.RefreshWalletBalance;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmRoom;
@@ -135,10 +132,12 @@ import org.paygear.fragment.PaymentHistoryFragment;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 import io.realm.Realm;
-import com.top.lib.mpl.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -1290,12 +1289,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            if (G.onBackPressedExplorer != null) {
-                Log.wtf(this.getClass().getName(), "onBackPressedExplorer");
-                if (G.onBackPressedExplorer.onBack()) {
-                    return;
-                }
-            } else if (G.onBackPressedChat != null) {
+            if (G.onBackPressedChat != null) {
                 Log.wtf(this.getClass().getName(), "onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
@@ -1363,11 +1357,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
-                        List fragmentList = getSupportFragmentManager().getFragments();
+//                        List fragmentList = getSupportFragmentManager().getFragments();
                         boolean handled = false;
                         try {
                             // because some of our fragments are NOT extended from BaseFragment
-                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
+//                            Log.wtf("amini", "onBackPressed: " + fragmentList.get(fragmentList.size() - 1).getClass().getName());
+                            Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
+//                            Log.wtf("amini", "on back frag H " + frag.getClass().getName());
+                            handled = ((BaseFragment) frag).onBackPressed();
+//                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1551,22 +1549,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                    if (room != null && realmRoomMessage != null) {
-                        /**
-                         * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                         */
-                        if (room.getUnreadCount() <= 1) {
-                            realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                        }
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+            if (room != null && realmRoomMessage != null) {
+                /**
+                 * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                 */
+                if (room.getUnreadCount() <= 1) {
+                    realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
                 }
-            });
+            }
         });
 
         /**
@@ -1733,31 +1726,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        switch (id) {
-            case EventManager.ON_ACCESS_TOKEN_RECIVE:
-                int response = (int) message[0];
-                switch (response) {
-                    case socketMessages.SUCCESS:
-                        new android.os.Handler(getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                /*getUserCredit();*/
-                                retryConnectToWallet = 0;
-                            }
-                        });
-
-                        break;
-
-                    case socketMessages.FAILED:
-                        if (retryConnectToWallet < 3) {
-                            new RequestWalletGetAccessToken().walletGetAccessToken();
-                            retryConnectToWallet++;
+        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
+            int response = (int) message[0];
+            switch (response) {
+                case socketMessages.SUCCESS:
+                    new Handler(getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            /*getUserCredit();*/
+                            retryConnectToWallet = 0;
                         }
+                    });
 
-                        break;
-                }
-                // backthread
+                    break;
 
+                case socketMessages.FAILED:
+                    if (retryConnectToWallet < 3) {
+                        new RequestWalletGetAccessToken().walletGetAccessToken();
+                        retryConnectToWallet++;
+                    }
+
+                    break;
+            }
+            // backthread
         }
     }
 

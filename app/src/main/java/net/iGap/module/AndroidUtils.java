@@ -37,9 +37,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emojiKeyboard.emoji.DispatchQueue;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
+import net.iGap.libs.emojiKeyboard.emoji.DispatchQueue;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -202,7 +202,7 @@ public final class AndroidUtils {
      * get n bytes from file, starts from beginning
      *
      * @param fileChannel fileChannel
-     * @param bytesCount      total bytes
+     * @param bytesCount  total bytes
      * @return bytes
      * @throws IOException
      */
@@ -255,7 +255,7 @@ public final class AndroidUtils {
      * get n bytes from file, starts from end
      *
      * @param fileChannel fileChannel
-     * @param bytesCount      total bytes
+     * @param bytesCount  total bytes
      * @return bytes
      * @throws IOException
      */
@@ -277,8 +277,8 @@ public final class AndroidUtils {
      * get n bytes from specified offset
      *
      * @param fileChannel fileChannel
-     * @param offset          start reading from
-     * @param bytesCount      total reading bytes
+     * @param offset      start reading from
+     * @param bytesCount  total reading bytes
      * @return bytes
      * @throws IOException
      */
@@ -301,7 +301,7 @@ public final class AndroidUtils {
      * note: our server needs 32 bytes, so always pass true as second parameter.
      *
      * @param fileChannel fileChannel
-     * @param fileSize fileSize
+     * @param fileSize    fileSize
      */
     public static byte[] getFileHash(FileChannel fileChannel, long fileSize) throws NoSuchAlgorithmException, IOException {
         try {
@@ -687,7 +687,6 @@ public final class AndroidUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("abbasiKeyboard", "getViewInset: ", e);
         }
         return 0;
     }
@@ -739,6 +738,7 @@ public final class AndroidUtils {
 
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");
+    private static String adjustOwnerClassname;
 
     public static Integer parseInt(CharSequence value) {
         if (value == null) {
@@ -772,6 +772,33 @@ public final class AndroidUtils {
 
         }
         return val;
+    }
+
+
+    public static void requestAdjustResize(Activity activity, String className) {
+        if (activity == null || G.twoPaneMode) {
+            return;
+        }
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        adjustOwnerClassname = className;
+    }
+
+    public static void setAdjustResizeToNothing(Activity activity, String className) {
+        if (activity == null || G.twoPaneMode) {
+            return;
+        }
+        if (adjustOwnerClassname != null && adjustOwnerClassname.equals(className)) {
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        }
+    }
+
+    public static void removeAdjustResize(Activity activity, String className) {
+        if (activity == null || G.twoPaneMode) {
+            return;
+        }
+        if (adjustOwnerClassname != null && adjustOwnerClassname.equals(className)) {
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        }
     }
 
     public static String compatibleUnicode(String entry) {

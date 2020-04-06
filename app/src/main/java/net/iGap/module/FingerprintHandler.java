@@ -19,7 +19,7 @@ import android.os.CancellationSignal;
 
 import androidx.core.app.ActivityCompat;
 
-import net.iGap.interfaces.FingerPrint;
+import net.iGap.observers.interfaces.FingerPrint;
 
 @TargetApi(Build.VERSION_CODES.M)
 public class FingerprintHandler extends FingerprintManager.AuthenticationCallback {

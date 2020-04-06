@@ -19,10 +19,9 @@ import com.yariksoffice.lingver.Lingver;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityEnhanced;
-import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentLanguageBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentLanguageViewModel;
 

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.iGap.viewmodel.FileManagerViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/IGapRootViewStyle"
+        android:layoutDirection="ltr"
+        tools:context=".fragments.FileManagerFragment">
+
+        <LinearLayout
+            android:id="@+id/lytSearch"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="?attr/iGapToolbarBackground"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dp8"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <net.iGap.module.customView.EventEditText
+                android:id="@+id/edtSearch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layoutDirection="locale"
+                android:background="@null"
+                android:hint="@string/search"
+                android:imeOptions="actionSearch"
+                android:padding="@dimen/dp8"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#FDFDFD"
+                android:textCursorDrawable="@drawable/white_cursor_color"
+                android:textSize="@dimen/standardTextSize" />
+
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/btnRemoveSearch"
+                style="@style/myIconToolbarStyle"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="@string/md_close_button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/frmFolders"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toTopOf="@id/edtMessage" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:minHeight="@dimen/toolbar_height"
+            android:visibility="@{vm.sendBoxVisibility}"
+            android:afterTextChanged="@{(s)-> vm.onCaptionChanged(s.toString())}"
+            style="@style/iGapEditTextStyle"
+            android:maxLines="2"
+            android:textSize="@dimen/standardTextSize"
+            android:hint="@string/type_message"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp100"
+            android:background="?iGapChatSendMessageBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/btnSend"
+            android:layout_width="@dimen/dp70"
+            android:layout_height="@dimen/dp70"
+            android:layout_margin="@dimen/dp16"
+            android:background="?iGapAvatarBackground"
+            android:visibility="@{vm.sendBoxVisibility}"
+            android:onClick="@{()-> vm.OnSendClick()}"
+            style="@style/myIconToolbarStyle"
+            android:text="@string/md_send_button"
+            app:layout_constraintRight_toRightOf="@id/edtMessage"
+            app:layout_constraintTop_toTopOf="@id/edtMessage"
+            app:layout_constraintBottom_toTopOf="@id/edtMessage" />
+
+        <TextView
+            android:id="@+id/tvCounter"
+            android:layout_width="@dimen/dp28"
+            android:layout_height="@dimen/dp28"
+            android:textSize="@dimen/verySmallTextSize"
+            android:textColor="@color/white"
+            android:visibility="@{vm.sendBoxVisibility}"
+            android:text="@{vm.selectedCount}"
+            android:padding="@dimen/dp6"
+            android:maxLength="3"
+            android:gravity="center"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintRight_toRightOf="@id/btnSend"
+            app:layout_constraintTop_toTopOf="@id/btnSend"
+            android:background="@drawable/oval_red" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

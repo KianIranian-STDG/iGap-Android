@@ -21,14 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentSyncRegisteredContactsBinding;
-import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.ContactManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
@@ -36,19 +32,23 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnContactsGetList;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnPhoneContact;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.observers.interfaces.OnContactsGetList;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnPhoneContact;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
@@ -441,9 +441,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         @NotNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
-
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact_chat, viewGroup, false);
-            return new ViewHolder(v);
+            return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact_chat, viewGroup, false));
         }
 
         @Override
@@ -461,9 +459,6 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 if (contact == null) {
                     return;
                 }
-
-                viewHolder.title.setTextColor(getResources().getColor(R.color.black));
-                viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
 
                 viewHolder.title.setText(EmojiManager.getInstance().replaceEmoji(contact.getDisplay_name(), viewHolder.title.getPaint().getFontMetricsInt()));
                 viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));

@@ -31,8 +31,8 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -180,18 +180,26 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             }
         });
 
-        holder.seekBar.setOnTouchListener((v, event) -> {
-
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (FragmentChat.isInSelectionMode) {
-                    holder.itemView.performLongClick();
-                    return true;
-                }
-                if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+        holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar , int progress , boolean fromUser) {
+                if(!fromUser) return;
+                if(holder.mMessageID.equals(MusicPlayer.messageId)) {
                     MusicPlayer.setMusicProgress(holder.seekBar.getProgress());
                 }
             }
-            return false;
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if(!holder.mMessageID.equals(MusicPlayer.messageId)) return;
+                MusicPlayer.pauseSound();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(!holder.mMessageID.equals(MusicPlayer.messageId)) return;
+                MusicPlayer.playAndPause();
+            }
         });
 
         super.bindView(holder, payloads);

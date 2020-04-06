@@ -17,7 +17,7 @@ import net.iGap.databinding.FragmentPaymentChargeBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentChargeViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -128,8 +128,10 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag<FragmentPaymentCharge
     }
 
     private void goBack() {
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
+        G.handler.post(() -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 }

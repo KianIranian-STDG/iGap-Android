@@ -15,15 +15,13 @@ import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.DbManager;
-import net.iGap.G;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperLogout;

@@ -11,11 +11,11 @@
 
 package net.iGap.module;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
-import net.iGap.interfaces.OnMessageReceive;
+import net.iGap.observers.interfaces.OnClientGetRoomHistoryResponse;
+import net.iGap.observers.interfaces.OnMessageReceive;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoGlobal;
@@ -429,19 +429,6 @@ public final class MessageLoader {
     }
 
 
-    /**
-     * send message status to server
-     */
-    public static void sendMessageStatus(long roomId, List<RealmRoomMessage> roomMessages, ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageStatus status) {
-        /**
-         * send seen status to server when get message from server
-         */
-        for (RealmRoomMessage realmRoomMessage : roomMessages) {
-            if (realmRoomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId() && !realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, realmRoomMessage.getMessageId(), status);
-            }
-        }
-    }
 
 
     /**

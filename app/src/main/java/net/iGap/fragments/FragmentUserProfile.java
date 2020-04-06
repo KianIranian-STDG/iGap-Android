@@ -25,11 +25,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
-import net.iGap.dialog.account.AccountDialogListener;
-import net.iGap.dialog.account.AccountsDialog;
+import net.iGap.module.dialog.account.AccountDialogListener;
+import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
@@ -187,6 +187,11 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             if (isPopBackStack != null && isPopBackStack) {
                 getChildFragmentManager().popBackStack();
             }
+        });
+
+        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner() , state->{
+            if(state == null) return;
+            closeKeyboard(binding.getRoot());
         });
     }
 

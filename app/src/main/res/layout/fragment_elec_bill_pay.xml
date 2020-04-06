@@ -5,11 +5,11 @@
     <data>
         <variable
             name="viewmodel"
-            type="net.iGap.electricity_bill.viewmodel.ElectricityBillPayVM" />
+            type="net.iGap.viewmodel.electricity_bill.ElectricityBillPayVM" />
 
         <variable
             name="fragment"
-            type="net.iGap.electricity_bill.view.ElectricityBillPayFrag" />
+            type="net.iGap.fragments.electricity_bill.ElectricityBillPayFrag" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

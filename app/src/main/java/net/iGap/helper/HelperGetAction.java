@@ -11,7 +11,7 @@
 package net.iGap.helper;
 
 import net.iGap.Config;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
@@ -20,8 +20,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import io.realm.Realm;
 
 import static net.iGap.helper.HelperConvertEnumToString.convertActionEnum;
 

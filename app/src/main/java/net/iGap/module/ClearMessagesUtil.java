@@ -10,7 +10,7 @@
 
 package net.iGap.module;
 
-import net.iGap.interfaces.OnChatClearMessageResponse;
+import net.iGap.observers.interfaces.OnChatClearMessageResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestChatClearMessage;
 import net.iGap.request.RequestGroupClearMessage;

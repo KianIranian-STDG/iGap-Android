@@ -39,10 +39,10 @@ import com.yariksoffice.lingver.Lingver;
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
+import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
-import net.iGap.interfaces.*;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
@@ -50,11 +50,13 @@ import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.observers.interfaces.*;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
-import net.iGap.webservice.JobServiceReconnect;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
@@ -322,7 +324,6 @@ public class G extends ApplicationContext {
     public static ISendPosition iSendPositionChat;
     public static ITowPanModDesinLayout iTowPanModDesinLayout;
     public static OnDateChanged onDateChanged;
-    public static IOnBackPressed onBackPressedExplorer;
     public static OnLocationChanged onLocationChanged;
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;
     public static OnGeoGetComment onGeoGetComment;
@@ -387,20 +388,6 @@ public class G extends ApplicationContext {
         } else {
             return Color.parseColor(color);
         }
-    }
-
-    public static String getApiToken() {
-        String result = "Bearer ";
-        String tok;
-        result += tok = DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null) {
-                return realmUserInfo.getAccessToken();
-            }
-            return null;
-        });
-        Log.i("abbasiApiToken", "getApiToken: " + tok);
-        return result;
     }
 
     public static void refreshRealmUi() {

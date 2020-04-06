@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnChannelEdit;
+import net.iGap.observers.interfaces.OnChannelEdit;
 import net.iGap.proto.ProtoChannelEdit;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmRoom;

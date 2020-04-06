@@ -10,16 +10,13 @@ package net.iGap.viewmodel;
  */
 
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.AccountHelper;
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
 import net.iGap.module.SHP_SETTING;

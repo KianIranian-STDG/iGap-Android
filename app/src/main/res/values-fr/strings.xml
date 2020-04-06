@@ -276,7 +276,7 @@
     <string name="array_1_hour">une heure</string>
     <string name="array_2_hour">2 heures</string>
     <string name="array_4_hour">4 heures</string>
-    <string name="array_Default_Notification_tone">sonnerie en défaut des notifications</string>
+    <string name="Default_Notification_tone">sonnerie en défaut des notifications</string>
     <string name="replay_item_dialog">réponse</string>
     <string name="copy_item_dialog">copie</string>
     <string name="share_item_dialog">partager</string>
@@ -450,6 +450,7 @@
     <string name="E_156">destruction de compte :  code n\'est pas correct</string>
     <string name="E_157">destruction de compte : code n\'est pas valable</string>
     <string name="E_158">destruction de compte : nombre des  essais plus que limite</string>
+    <string name="E_4_14">Vous n\'y avez pas accès!</string>
     <string name="time_out">impossible de connexion au serveur</string>
     <string name="resend_all_messages">envoyer de nouveau le message</string>
     <string name="resend_chat_message">envoyer de nouveau le message</string>
@@ -1586,7 +1587,7 @@
     <string name="pay_bills_title">payer la facture</string>
     <string name="mobile_bills_title">facture de portable</string>
     <string name="bills">Factures et amendes</string>
-    <string name="charge_amount">somme de recharge</string>
+    <string name="charge_amount">somme de recharge(Rial)</string>
     <string name="buy_internet_package_title">achat des forfais d\'Internet</string>
     <string name="charity_title">charité</string>
     <string name="disk_and_network_usage">utilisation du stockage et de réseau</string>
@@ -1974,7 +1975,7 @@
     <string name="all_calls">des appels</string>
     <string name="open_url">ouvrir le lien</string>
     <string name="copied">copié</string>
-    <string name="default_theme_title">thème par défaut</string>
+    <string name="default_theme_title">Défaut</string>
     <string name="dark_theme_title">Thème sombre</string>
     <string name="message_is_long">Votre message est trop long. \n Le message sera converti en</string>
 
@@ -2092,7 +2093,7 @@
     <string name="facilities">Installations</string>
     <string name="services">Service</string>
     <string name="cheque_number">Numéro de chèque :</string>
-    <string name="page_count">nombre de pages :</string>
+    <string name="page_count">pages </string>
     <string name="reject_count">rejeter :</string>
     <string name="pass_count">réussi :</string>
     <string name="cash_count">encaissé :</string>
@@ -2114,8 +2115,8 @@
     <string name="terminal_No">Numéro de terminal</string>
     <string name="rrn">Numéro de référence</string>
     <string name="bill_id">ID de facture</string>
-    <string name="topUp_title">Acheter en charge</string>
-    <string name="bill_title">Payer la facture</string>
+    <string name="topUp_title">Acheter En Charge</string>
+    <string name="bill_title">Payer La Facture</string>
     <string name="topUp_message">Message de Acheter en charge</string>
     <string name="bill_message">Message de paiement de facture</string>
     <string name="soon">Bientôt disponible...</string>
@@ -2179,6 +2180,23 @@
     <string name="posted">Posted</string>
     <string name="gift_sticker_inquiry_and_activated">Enquête et activé</string>
     <string name="kuknos_send_token_error">Impossible d\'envoyer ce jeton.</string>
-    <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?!
-Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
+    <string name="active_gift_card_note">Êtes-vous sûr de vouloir activer votre carte-cadeau?! Notez qu\'une fois activé, il ne sera pas possible de l\'envoyer à un autre et les informations de la carte cadeau ne seront visibles que sur votre compte.</string>
+    <string name="inter_cheque_amount">Entrer le montant</string>
+    <string name="take_turn">Tour à tour</string>
+    <string name="secondary_password">Deuxième mot de passe</string>
+    <string name="default_deposit">Dépôt par défaut</string>
+    <string name="custom_deposit">Dépôt personnalisé</string>
+    <string name="mobile_bank_login_hint">Utilisez votre nom d\'utilisateur et votre mot de passe pour vous connecter à la banque mobile Parsian.</string>
+    <string name="internal_desc">Parcourez votre système de fichiers</string>
+    <string name="external_desc">Parcourez votre stockage externe</string>
+    <string name="file_manager_app_desc">Parcourir le dossier de l\'application</string>
+    <string name="file_manager_image_desc">Pour envoyer un fichier d\'images</string>
+    <string name="file_manager_video_desc">Pour envoyer un fichier vidéo</string>
+    <string name="file_manager_music">Pour envoyer un fichier audio</string>
+    <string name="folder">Dossier</string>
+    <string name="internal_storage">Stockage interne</string>
+    <string name="external_storage">Stockage externe</string>
+    <string name="file_manager">Gestionnaire de fichiers</string>
+    <string name="gift_card_already_in_use">Cette carte-cadeau est déjà utilisée!</string>
+    <string name="gift_carde_sended">Vous avez déjà envoyé une carte-cadeau à quelqu autre!</string>
 </resources>

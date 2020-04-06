@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosPanelVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosPanelVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -113,7 +113,7 @@
                     android:gravity="center"
                     android:text="@{viewmodel.balance}"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/dp28"
+                    android:textSize="@dimen/dp22"
                     android:textStyle="bold"
                     android:onClick="@{()->viewmodel.togglePrice()}"
                     app:layout_constraintBottom_toTopOf="@id/fragKuknosPCurrency"

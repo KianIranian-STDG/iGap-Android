@@ -9,7 +9,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.module.FileUtils;
 import net.iGap.module.MusicPlayer;
@@ -22,8 +22,6 @@ import net.iGap.realm.RealmRoomMessage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-
-import io.realm.Realm;
 
 public class DataStorageViewModel extends ViewModel {
 

@@ -33,7 +33,6 @@ import com.google.android.gms.tasks.Task;
 import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
-import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
@@ -91,7 +90,7 @@ public class FragmentActivation extends BaseFragment {
         });
         viewModel.showEnteredCodeError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && getContext() != null && aBoolean) {
-                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.Toast_Enter_Code).setPositiveButton(R.string.B_ok, null).show();
+                showMessageDialog(R.string.error, R.string.Toast_Enter_Code);
             }
         });
         viewModel.currentTimePosition.observe(getViewLifecycleOwner(), integer -> {
@@ -120,7 +119,7 @@ public class FragmentActivation extends BaseFragment {
         });
         viewModel.showEnteredCodeErrorServer.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null && integer > 0 && getContext() != null) {
-                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(integer).setPositiveButton(R.string.ok, null).show();
+                showMessageDialog(R.string.error, integer);
             }
         });
         viewModel.clearActivationCode.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -137,13 +136,13 @@ public class FragmentActivation extends BaseFragment {
 
         viewModel.showDialogUserBlocked.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
-                new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+                showMessageDialog(R.string.USER_VERIFY_BLOCKED_USER, R.string.Toast_Number_Block);
             }
         });
 
         viewModel.showDialogVerificationCodeExpired.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
-                new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_EXPIRED).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+                showMessageDialog(R.string.USER_VERIFY_EXPIRED, R.string.Toast_Number_Block);
             }
         });
 
@@ -154,6 +153,15 @@ public class FragmentActivation extends BaseFragment {
         });
 
         initialActivationCodeEditor();
+    }
+
+    private void showMessageDialog(int title, int msg) {
+        if (getActivity() == null) return;
+        new MaterialDialog.Builder(getActivity())
+                .title(title)
+                .content(msg)
+                .positiveText(R.string.ok)
+                .show();
     }
 
     @Override

@@ -10,10 +10,10 @@
 
 package net.iGap.helper;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.interfaces.OnClientGetRoomResponse;
-import net.iGap.interfaces.OnUserInfoResponse;
+import net.iGap.observers.interfaces.OnClientGetRoomResponse;
+import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -21,8 +21,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
-
-import io.realm.Realm;
 
 public class HelperGetOwnerInfo {
 

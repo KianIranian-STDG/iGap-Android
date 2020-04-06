@@ -329,7 +329,7 @@
     <string name="array_1_hour">"۱ ساعت"</string>
     <string name="array_2_hour">"۲ ساعت"</string>
     <string name="array_4_hour">"۴ ساعت"</string>
-    <string name="array_Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
+    <string name="Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
     <string name="replay_item_dialog">"پاسخ"</string>
     <string name="copy_item_dialog">"کپی"</string>
     <string name="share_item_dialog">"اشتراک"</string>
@@ -519,6 +519,7 @@
     <string name="E_156">تخریب اکانت : کد اشتباه است</string>
     <string name="E_157">تخریب اکانت : کد اعتبار ندارد</string>
     <string name="E_158">تخریب اکانت : تلاش بیش از اندازه</string>
+    <string name="E_4_14">شما اجازه دسترسی ندارید!</string>
     <string name="time_out">عدم امکان اتصال به سرور</string>
     <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>‬‬‬‬‬‬
     <string name="resend_chat_message">"‫ارسال دوبارهٔ پیام"</string>‬‬‬‬‬‬
@@ -736,6 +737,10 @@
     <string name="your_login_code_is">"کد ورود شما هست: "</string>
     <string name="there_is_no_sheared_media">هیچ رسانه‌ای به اشتراک گذاشته نشده است.</string>
     <string name="pending">معلق</string>
+    <string name="payment_userScore">امتیاز شما:  </string>
+    <string name="payment_spentScore">امتیاز مصرفی: </string>
+    <string name="payment_price">تخفیف: </string>
+    <string name="payment_discount_plans_title">بسته های تخفیف</string>
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ پارسی</string>
     <string name="content_log_out">آیا از خروج از حساب کاربری خود اطمینان دارید؟</string>
@@ -1143,7 +1148,7 @@
     <string name="unblock_the_user_text">آیا از رفع مسدودیت ارتباط این مخاطب اطمینان دارید؟</string>
     <string name="PIN">پین</string>
     <string name="password">رمز</string>
-    <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
+    <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نقشه خود را فعال نکرده است</string>
     <string name="send_message_to">ارسال پیام به  </string>
     <string name="send_forward_to">آیا شما مطمئنید میخواهید انتقال دهید به </string>
 
@@ -1340,14 +1345,17 @@
     <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">اعتبار شما: </string>
     <string name="wallet_Reial">%d ریال </string>
-    <string name="payment_rial">%s ریال </string>
+    <string name="payment_rial">قیمت: %S ریال</string>
+    <string name="paymentDiscount">تخفیف: %S ریال</string>
+    <string name="paymentTax">مالیات: %S ریال</string>
+    <string name="paymentScreenShot">ذخیره رسید</string>
     <string name="wallet_error_server">خطا در برقراری ارتباط با سرور</string>
 
     <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
     <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
-    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
+    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">کاربر گرامی شما به تازگی بروزرسانی کرده اید لطفا منتظر بمانید</string>
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
     <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
     <string name="E_373">GROUP_REVOKE_LINK_BAD_PAYLOAD</string>
@@ -1810,7 +1818,7 @@
     <string name="pay_bills_title">پرداخت قبض</string>
     <string name="mobile_bills_title">قبض موبایل</string>
     <string name="bills">قبض و جریمه</string>
-    <string name="charge_amount">مبلغ شارژ</string>
+    <string name="charge_amount">مبلغ شارژ(ریال)</string>
     <string name="buy_internet_package_title">خرید بسته اینترنتی</string>
     <string name="charity_title">نیکوکاری</string>
     <string name="disk_and_network_usage">استفاده از حافظه و شبکه</string>
@@ -1986,7 +1994,7 @@
     <string name="kuknos_login_error_server_str">خطای سرور</string>
     <string name="kuknos_login_progress_str">بررسی...</string>
     <string name="kuknos_Entry_NT_str">کیف توکن جدید</string>
-    <string name="kuknos_Entry_RT_str">بازیابی کیف توکن</string>
+    <string name="kuknos_Entry_RT_str">ورود با کلمات بازیابی</string>
     <string name="kuknos_Entry_Message">لطفا یکی از گزینه های زیر را انتخاب نمایید.</string>
     <string name="kuknos_Restore_Title">لطفا کلمات بازیابی حساب خود را وارد نمایید.</string>
     <string name="kuknos_Restore_Message">با استفاده از این کلمات، شما میتوانید حساب خود را مجددا بازیابی نمایید.</string>
@@ -1995,6 +2003,12 @@
     <string name="kuknos_Restore_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_Restore_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
     <string name="kuknos_Restore_Error_Snack">باشه</string>
+    <string name="kuknos_RestoreSeed_Title">لطفا کلید خصوصی خود را وارد کنید.</string>
+    <string name="kuknos_RestoreSeed_Message">با استفاده از این کلید، شما میتوانید حساب خود را مجددا بازیابی نمایید.</string>
+    <string name="kuknos_RestoreSeed_Hint">برای مثال: SALSSCHD7TTEF…</string>
+    <string name="kuknos_RestoreSeed_Error_empty_str">کلید خصوصی حساب خود را وارد نمایید.</string>
+    <string name="kuknos_RestoreSeed_Error_invalid_str">طول کلید خصوصی وارد شده کافی نمیباشد.</string>
+    <string name="kuknos_RestoreSeed_Error_invalidStart_str">کلید خصوصی شما باید با حرف S آغاز شود.</string>
     <string name="kuknos_SignupInfo_title">اطلاعات کاربر</string>
     <string name="kuknos_SignupInfo_desc">لطفا موارد زیر را کامل نمایید.</string>
     <string name="kuknos_SignupInfo_username">نام کاربری*</string>
@@ -2016,8 +2030,8 @@
     <string name="kuknos_RecoverySK_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_RecoverySK_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
     <string name="kuknos_RecoverySK_Error_Snack">باشه</string>
-    <string name="kuknos_SetPass_title">ساخت رمز ورودی</string>
-    <string name="kuknos_SetPass_message">رمز ورودی (چهار رقمی) جهت رمزنگاری کلید خصوصی شما مورد استفاده قرار می گیرد. لطفا رمز را به گونه ای انتخاب نمایید که به راحتی قابل حدس زدن نباشد.</string>
+    <string name="kuknos_SetPass_title">ساخت رمز ورودی داخلی</string>
+    <string name="kuknos_SetPass_message">رمز ورودی (چهار رقمی) جهت ورود به کیف پول و تایید فعالیت های شما مورد استفاده قرار می گیرد. لطفا رمز را به گونه ای انتخاب نمایید که به راحتی قابل حدس زدن نباشد.</string>
     <string name="kuknos_SetPass_submit">ثبت</string>
     <string name="kuknos_SetPass_error">لطفا رمز ورودی خود را وارد نمایید.</string>
     <string name="kuknos_SetPassConf_title">تایید رمز ورودی</string>
@@ -2087,7 +2101,7 @@
     <string name="kuknos_viewRecoveryEP_wrongPINE">رمز ورودی صحیح نمیباشد. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_viewRecoveryEP_failTitle">خطا</string>
     <string name="kuknos_logout_title">خروج از کیف پول</string>
-    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد باید حساب باید از فرایند بازیابی حساب استفاده کنید.</string>
+    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد به حساب باید از فرایند بازیابی حساب استفاده کنید. (در صورت نداشتن رمز، 0000 را وارد کنید.)</string>
     <string name="kuknos_logout_pin">رمز ورودی</string>
     <string name="kuknos_logout_btn">خروج از کیف پول</string>
     <string name="kuknos_logout_load">خروج...</string>
@@ -2129,7 +2143,7 @@
     <string name="kuknos_tradeDialogDelete_message">آیا از حذف این مبادله اطمینان دارید؟</string>
     <string name="kuknos_tradeDialogDelete_btn">بله</string>
     <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
-    <string name="kuknos_setting_sepid">سپیدنامه</string>
+    <string name="kuknos_setting_sepid">سپیدنامه پیمان</string>
     <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
     <string name="kuknos_setting_fileContent">توجه: این اطلاعات تنها راه دسترسی شما به حساب کاربری تان است. \nلطفا در حقظ و نگهداری این اطلاعات کوشا باشید و این اطلاعات را با کسی به اشتراک نگزارید. \n</string>
@@ -2150,9 +2164,9 @@
     <string name="kuknos_login_error_server_ErrorStr">خطای سرور: عدم جواب. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateMn">عدم امکان تولید زنجیره کلمات. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
-    <string name="kuknos_recieve_walletCopy">آدرس کیف پول من: \n</string>
+    <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
-    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت یا خرید پیمان استفاده کنید.</string>
+    <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error2">خطای سرور. لطفا دوباره تلاش کنید.</string>
     <string name="Kuknos_transaction_error3">شماره تراکنش اشتباه است. لطفا دوباره تلاش کنید.</string>
@@ -2161,7 +2175,7 @@
     <string name="Kuknos_transaction_error6">اعتبار برای کارمزد تراکنش کافی نیست.</string>
     <string name="Kuknos_transaction_error7">اعتبار شما کافی نیست.</string>
     <string name="Kuknos_transaction_error8">خطای داخلی: لطفا دقایقی دیگر دوباره تلاش کنید.</string>
-    <string name="kuknos_send_walletIDError2">آدرس کیف پول معتبر نیست.</string>
+    <string name="kuknos_send_walletIDError2">آدرس کیف توکن معتبر نیست.</string>
     <string name="kuknos_wHistory_sent">ارسال</string>
     <string name="kuknos_wHistory_receive">دریافت</string>
     <string name="kuknos_wHistory_time">زمان</string>
@@ -2177,7 +2191,7 @@
     <string name="kuknos_RestorePass_message">این رمز 4 رقمی برای تولید کلید عمومی و خصوصی شما مورد استفاده قرار میگیرد.</string>
     <string name="kuknos_RestorePass_btn">بازیابی</string>
     <string name="kuknos_Restore_checkBtn">بعدی</string>
-    <string name="kuknos_Entry_RTSeedKey_str">بازیابی از طریق کلید خصوصی</string>
+    <string name="kuknos_Entry_RTSeedKey_str">ورود با کلید خصوصی</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">تمایل دارم برای ساخت حساب رمز 4 رقمی داشته باشم.</string>
     <string name="kuknos_recoveryKey_fa">فارسی</string>
@@ -2192,6 +2206,9 @@
     <string name="kuknos_payment_assetPrice">قیمت دارایی: </string>
     <string name="kuknos_payment_totalAmount">قیمت کل: </string>
     <string name="kuknos_payment_hash">رسید ققنوس: </string>
+    <string name="kuknos_support_error">ققنوس برای دستگاه شما در دسترس نیست.</string>
+    <string name="kuknos_Mnemonic_error">کلمات بازیابی یافت نشد.</string>
+    <string name="kuknos_Currency">نام توکن</string>
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
     <string name="updated_version_title">نسخه شما به روز شده است</string>
@@ -2382,7 +2399,7 @@
     <string name="facilities">تسهیلات</string>
     <string name="services">خدمات</string>
     <string name="cheque_number">شماره دسته چک :</string>
-    <string name="page_count">تعداد برگه :</string>
+    <string name="page_count">برگه</string>
     <string name="reject_count">برگشتی :</string>
     <string name="pass_count">پاس شده :</string>
     <string name="cash_count">نقد شده :</string>
@@ -2418,7 +2435,7 @@
     <string name="remained_loan">اقساط باقیمانده:</string>
     <string name="state">وضعیت:</string>
     <string name="mobile_bank_detail_cell_payAmount">مبلغ پرداختی: %1$s %2$s</string>
-    <string name="mobile_bank_detail_cell_payStatus">حالة الدفع: %1$s</string>
+    <string name="mobile_bank_detail_cell_payStatus">وضعیت پرداخت: %1$s</string>
     <string name="mobile_bank_detail_cell_paymentDate">تاریخ پرداخت: %1$s</string>
     <string name="mobile_bank_detail_cell_penaltyAmount">مبلغ جریمه: %1$s %2$s</string>
     <string name="mobile_bank_detail_cell_unpaidAmount">مبلغ باقیمانده: %1$s %2$s</string>
@@ -2456,7 +2473,7 @@
     <string name="INTERBANK_BLOCK">مسدود از اینترنت بانک</string>
     <string name="INVALID_PARSIAN">ابطالی</string>
     <string name="REGISTER">ثبت مبلغ شده</string>
-    <string name="mobile_bank_balance_error_no_price">بدون قیمت</string>
+    <string name="mobile_bank_balance_error_no_price">بدون مبلغ</string>
     <string name="mobile_bank_balance_error_no_tran">موجودی شما در دسترس نیست. لطفا به نزدیک ترین شعبه مراجعه کنید.</string>
     <string name="paid">پرداخت شده</string>
     <string name="mobile_bank_load_detail_loadInfo">اطلاعات وام</string>
@@ -2510,6 +2527,25 @@
     <string name="posted">ارسال شده</string>
     <string name="gift_sticker_inquiry_and_activated">استعلام و فعال‌سازی</string>
     <string name="kuknos_send_token_error">امکان ارسال این توکن نیست</string>
-    <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟!
-        توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
+    <string name="internal_desc">کاوش در حافظه داخلی دستگاه</string>
+    <string name="external_desc">کاوش در حافظه خارجی دستگاه</string>
+    <string name="file_manager_app_desc">کاوش در پوشه آیگپ</string>
+    <string name="file_manager_image_desc">ارسال فایل های تصویری</string>
+    <string name="file_manager_video_desc">ارسال فایل های ویدیویی</string>
+    <string name="file_manager_music">ارسال فایل های صوتی</string>
+    <string name="folder">پوشه</string>
+    <string name="internal_storage">حافظه داخلی</string>
+    <string name="external_storage">حافظه جانبی</string>
+    <string name="file_manager">مدیریت فایل</string>
+    <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟! توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
+    <string name="inter_cheque_amount">ثبت مبلغ </string>
+    <string name="take_turn">دریافت نوبت</string>
+    <string name="secondary_password">رمز دوم</string>
+    <string name="default_deposit">حساب پیش فرض</string>
+    <string name="custom_deposit">حساب دلخواه</string>
+    <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان ‌خود ‌را وارد نمایید</string>
+    <string name="gift_card_already_in_use">این کارت هدیه قبلا استفاده شده است!</string>
+    <string name="gift_carde_sended">شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
+    <string name="kuknos_AddAsset_nullEntry">امکان اضافه شدن این دارایی به حساب شما وجود ندارد.</string>
 </resources>

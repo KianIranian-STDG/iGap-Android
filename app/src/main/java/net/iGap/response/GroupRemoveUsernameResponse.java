@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnGroupRemoveUsername;
+import net.iGap.observers.interfaces.OnGroupRemoveUsername;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupRemoveUsername;
 import net.iGap.realm.RealmRoom;

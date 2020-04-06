@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.interfaces.OnGroupRevokeLink;
+import net.iGap.observers.interfaces.OnGroupRevokeLink;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupRevokeLink;
 import net.iGap.realm.RealmGroupRoom;

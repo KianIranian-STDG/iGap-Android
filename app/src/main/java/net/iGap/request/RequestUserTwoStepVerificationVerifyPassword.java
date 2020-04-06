@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.TwoStepVerificationVerifyPassword;
+import net.iGap.observers.interfaces.TwoStepVerificationVerifyPassword;
 import net.iGap.proto.ProtoUserTwoStepVerificationVerifyPassword;
 
 public class RequestUserTwoStepVerificationVerifyPassword {

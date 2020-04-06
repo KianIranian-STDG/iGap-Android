@@ -3,7 +3,7 @@ package net.iGap.fragments.emoji.struct;
 import net.iGap.fragments.emoji.apiModels.StickerDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
 import net.iGap.realm.RealmStickerGroup;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 import java.util.ArrayList;

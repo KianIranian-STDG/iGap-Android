@@ -9,10 +9,6 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -20,17 +16,14 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.HandShakeCallback;
-import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.electricity_bill.view.ElectricityBillMainFrag;
+import net.iGap.fragments.BuyInternetPackageFragment;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -43,10 +36,14 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.LocalContactFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
+import net.iGap.fragments.electricity_bill.ElectricityBillMainFrag;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
+import net.iGap.fragments.kuknos.KuknosEntryOptionFrag;
+import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
+import net.iGap.fragments.news.NewsMainFrag;
 import net.iGap.fragments.poll.ChartFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
@@ -58,16 +55,15 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
-import net.iGap.interfaces.OnGeoGetConfiguration;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.internetpackage.BuyInternetPackageFragment;
-import net.iGap.kuknos.view.KuknosEntryOptionFrag;
-import net.iGap.mobileBank.view.MobileBankLoginFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.news.view.NewsMainFrag;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.OnGeoGetConfiguration;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.repository.sticker.StickerRepository;
+import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.viewmodel.UserScoreViewModel;
@@ -77,6 +73,10 @@ import org.json.JSONObject;
 import org.paygear.WalletActivity;
 
 import java.io.IOException;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
@@ -179,7 +179,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
-                new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
+//                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                    new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
+//                } else {
+//                    HelperError.showSnackMessage("", true);
+//                }
                 break;
             case VIRTUAL_GIFT_CARD:
                 new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();

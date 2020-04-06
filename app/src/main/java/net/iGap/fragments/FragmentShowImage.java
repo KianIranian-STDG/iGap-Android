@@ -38,20 +38,21 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -68,8 +69,6 @@ import java.util.List;
 
 import io.realm.RealmResults;
 import io.realm.Sort;
-
-import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShowImage extends BaseFragment {
 
@@ -575,7 +574,8 @@ public class FragmentShowImage extends BaseFragment {
                 }
                 if (file.exists()) {
                     progress.setVisibility(View.GONE);
-                    G.imageLoader.displayImage(suitablePath(path), zoomableImageView);
+//                    G.imageLoader.displayImage(suitablePath(path), zoomableImageView);
+                    ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path, true);
                     zoomableImageView.setZoomable(true);
                     if (rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                         zoomableImageView.setVisibility(View.VISIBLE);
@@ -598,7 +598,8 @@ public class FragmentShowImage extends BaseFragment {
                     zoomableImageView.setVisibility(View.VISIBLE);
                     file = new File(path);
                     if (file.exists()) {
-                        G.imageLoader.displayImage(suitablePath(path), zoomableImageView);
+//                        G.imageLoader.displayImage(suitablePath(path), zoomableImageView);
+                        ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
                     } else if (rm.getAttachment() != null) {
                         // if thumpnail not exist download it
                         ProtoFileDownload.FileDownload.Selector selector = null;
@@ -624,7 +625,8 @@ public class FragmentShowImage extends BaseFragment {
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), zoomableImageView);
+//                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), zoomableImageView);
+                                                ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
                                             }
                                         });
                                     }
@@ -771,7 +773,8 @@ public class FragmentShowImage extends BaseFragment {
                     G.currentActivity.runOnUiThread(() -> {
                         progress.withProgress(progres);
                         if (progres == 100) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ZoomableImageView);
+//                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ZoomableImageView);
+                            ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, path);
                             ZoomableImageView.setZoomable(true);
                         }
                     });

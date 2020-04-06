@@ -1,14 +1,14 @@
 package net.iGap.api;
 
-import net.iGap.igasht.BaseIGashtResponse;
-import net.iGap.igasht.barcodescaner.TicketQRCodeResponse;
-import net.iGap.igasht.historylocation.IGashtTicketDetail;
-import net.iGap.igasht.historylocation.TicketHistoryListResponse;
-import net.iGap.igasht.locationdetail.RegisterTicketResponse;
-import net.iGap.igasht.locationdetail.buyticket.IGashtLocationService;
-import net.iGap.igasht.locationdetail.buyticket.IGashtOrder;
-import net.iGap.igasht.locationlist.IGashtLocationItem;
-import net.iGap.igasht.provinceselect.IGashtProvince;
+import net.iGap.model.igasht.BaseIGashtResponse;
+import net.iGap.model.igasht.TicketQRCodeResponse;
+import net.iGap.model.igasht.IGashtTicketDetail;
+import net.iGap.model.igasht.TicketHistoryListResponse;
+import net.iGap.model.igasht.RegisterTicketResponse;
+import net.iGap.model.igasht.IGashtLocationService;
+import net.iGap.model.igasht.IGashtOrder;
+import net.iGap.model.igasht.IGashtLocationItem;
+import net.iGap.model.igasht.IGashtProvince;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

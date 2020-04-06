@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoUserAvatarDelete;
 import net.iGap.realm.RealmAvatar;
@@ -39,13 +39,8 @@ public class UserAvatarDeleteResponse extends MessageHandler {
         if (G.onUserAvatarDelete != null) {
             G.onUserAvatarDelete.onUserAvatarDelete(userAvatarDeleteResponse.getId(), identity);
         } else {
-            DbManager.getInstance().doRealmTask(realm -> {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAvatar.deleteAvatar(realm, userAvatarDeleteResponse.getId());
-                    }
-                });
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmAvatar.deleteAvatar(realm, userAvatarDeleteResponse.getId());
             });
         }
 

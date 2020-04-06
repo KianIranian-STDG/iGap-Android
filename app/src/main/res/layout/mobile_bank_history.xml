@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="net.iGap.mobileBank.viewmodel.MobileBankCardHistoryViewModel" />
+            type="net.iGap.viewmodel.mobileBank.MobileBankCardHistoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

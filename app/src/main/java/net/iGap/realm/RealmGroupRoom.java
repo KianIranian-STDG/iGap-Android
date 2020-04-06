@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
@@ -70,18 +70,13 @@ public class RealmGroupRoom extends RealmObject {
     }
 
     public static void revokeLink(long roomId, final String inviteLink, final String inviteToken) {
-        DbManager.getInstance().doRealmTask(realm -> {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
                 final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                 if (realmGroupRoom != null) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            realmGroupRoom.setInvite_link(inviteLink);
-                            realmGroupRoom.setInvite_token(inviteToken);
-                        }
-                    });
+                    realmGroupRoom.setInvite_link(inviteLink);
+                    realmGroupRoom.setInvite_token(inviteToken);
                 }
             }
         });

@@ -5,11 +5,11 @@
 
         <import type="net.iGap.G" />
 
-        <import type="net.iGap.Theme" />
+        <import type="net.iGap.module.Theme" />
 
         <variable
             name="viewmodel"
-            type="net.iGap.news.viewmodel.NewsDetailVM" />
+            type="net.iGap.viewmodel.news.NewsDetailVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

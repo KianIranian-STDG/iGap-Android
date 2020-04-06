@@ -55,19 +55,19 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityCallBinding;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.eventbus.EventManager;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.interfaces.OnCallLeaveView;
-import net.iGap.interfaces.OnVideoCallFrame;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.webrtc.WebRTC;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.OnCallLeaveView;
+import net.iGap.observers.interfaces.OnVideoCallFrame;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.ActivityCallViewModel;
-import net.iGap.webrtc.WebRTC;
 
 import org.webrtc.EglBase;
 import org.webrtc.VideoFrame;
@@ -79,7 +79,6 @@ import static android.bluetooth.BluetoothProfile.HEADSET;
 
 public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame, BluetoothProfile.ServiceListener {
 
-    public static final int CALL_EVENT = 77;
     public static final String CALL_TIMER_BROADCAST = "CALL_TIMER_BROADCAST";
     public static final String TIMER_TEXT = "timer";
     public static final String USER_ID_STR = "USER_ID";
@@ -211,7 +210,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             if (isGoingfromApp) {
                 isGoingfromApp = false;
             } else {
-                EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
+                EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
                 G.isInCall = false;
                 Intent intent = new Intent(this, ActivityMain.class);
                 startActivity(intent);
@@ -222,7 +221,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
         G.isInCall = true;
         viewModel.callTimerListener.postValue("");
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, true);
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
         ActivityCall.allowOpenCall = true;
 
         PermissionHelper permissionHelper = new PermissionHelper(this);

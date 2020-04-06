@@ -5,12 +5,12 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
-import net.iGap.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.rx.ObserverViewModel;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.observers.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
 
 public class StickerDialogViewModel extends ObserverViewModel {
     private static final String TAG = "abbasiSticker ViewModel";
@@ -79,11 +79,12 @@ public class StickerDialogViewModel extends ObserverViewModel {
     }
 
     public void onRetryViewClicked() {
-        retryViewLiveData.setValue(View.VISIBLE);
+        retryViewLiveData.setValue(View.GONE);
         getSticker();
     }
 
     private void addStickerToMyStickers(StructIGStickerGroup stickerGroup) {
+        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
         repository.addStickerGroupToMyStickers(stickerGroup)
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
                     @Override
@@ -103,6 +104,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
     }
 
     private void removeStickerToMyStickers(StructIGStickerGroup stickerGroup) {
+        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
         repository.removeStickerGroupFromMyStickers(stickerGroup)
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
                     @Override

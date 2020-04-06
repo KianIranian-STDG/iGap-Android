@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,17 +16,18 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import net.iGap.AccountManager;
+import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.module.CircleImageView;
-import net.iGap.view.TextBadge;
+import net.iGap.module.customView.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 
@@ -43,6 +43,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     private int position;
     private int text;
     public boolean haveAvatarImage;
+    public boolean hasUnreadBadge;
     private ImageView imageView;
     private TextBadge badgeView;
     private AppCompatTextView textView;
@@ -118,10 +119,10 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         int w = r - l;
         int h = b - t;
 
-        int viewWidth = LayoutCreator.dpToPx(position == 3 ? 32 : 26);
+        int viewWidth = LayoutCreator.dpToPx(position == BottomNavigationFragment.DISCOVERY_FRAGMENT ? 32 : 26);
         imageView.measure(LayoutCreator.manageSpec(viewWidth, MeasureSpec.EXACTLY), LayoutCreator.manageSpec(viewWidth, MeasureSpec.EXACTLY));
         int viewLeft = (w - viewWidth) / 2;
-        int viewTop = position == 3 ? LayoutCreator.dpToPx(2) : (h - viewWidth) / 4;
+        int viewTop = position == BottomNavigationFragment.DISCOVERY_FRAGMENT ? LayoutCreator.dpToPx(2) : (h - viewWidth) / 4;
         int viewHeight;
         imageView.layout(viewLeft, viewTop, w - viewLeft, viewTop + viewWidth);
 
@@ -129,7 +130,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         viewHeight = LayoutCreator.getTextHeight(textView);
         textView.measure(LayoutCreator.manageSpec(viewWidth, MeasureSpec.EXACTLY), LayoutCreator.manageSpec(viewHeight, MeasureSpec.EXACTLY));
         viewLeft = (w - viewWidth) / 2;
-        viewTop = imageView.getBottom() + (position == 3 ? LayoutCreator.dpToPx(1) : LayoutCreator.dpToPx(2));
+        viewTop = imageView.getBottom() + (position == BottomNavigationFragment.DISCOVERY_FRAGMENT ? LayoutCreator.dpToPx(1) : LayoutCreator.dpToPx(2));
         textView.layout(viewLeft, viewTop, w - viewLeft, viewTop + viewHeight);
 
         if (badgeView != null) {
@@ -186,6 +187,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
                 darkUnSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
                 text = typedArray.getResourceId(R.styleable.TabItem_item_text, R.string.error);
                 haveAvatarImage = typedArray.getBoolean(R.styleable.TabItem_haveAvatarImage, false);
+                hasUnreadBadge = typedArray.getBoolean(R.styleable.TabItem_hasUnreadBadge, false);
             } finally {
                 typedArray.recycle();
             }
@@ -199,7 +201,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     public void setPosition(int position) {
         this.position = position;
 
-        if (position == 2) {
+        if (hasUnreadBadge) {
             badgeView = new TextBadge(getContext());
             postDelayed(() -> addView(badgeView), 150);
         }
@@ -263,19 +265,6 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         this.imageView = imageView;
     }
 
-
-    public void setBadgeCount(int count) {
-        if (badgeView != null) {
-            badgeView.setText(getUnreadCount(count));
-            badgeView.getTextView().setTextSize(9);
-            badgeView.getTextView().setSingleLine(true);
-            if (count == 0) {
-                badgeView.setVisibility(GONE);
-            } else
-                badgeView.setVisibility(VISIBLE);
-        }
-    }
-
     private String getUnreadCount(int unreadCount) {
         if (unreadCount > 99) {
             if (isRtl)
@@ -292,12 +281,20 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    public void setBadgeColor(int color) {
-        if (badgeView != null)
-            badgeView.setBadgeColor(color);
-    }
-
     public boolean isActive() {
         return active;
+    }
+
+    public void updateBadge(int unreadTotal) {
+        if (badgeView != null) {
+            badgeView.setBadgeColor(getContext().getResources().getColor(R.color.red));
+            badgeView.setText(getUnreadCount(unreadTotal));
+            badgeView.getTextView().setTextSize(9);
+            badgeView.getTextView().setSingleLine(true);
+            if (unreadTotal == 0) {
+                badgeView.setVisibility(GONE);
+            } else
+                badgeView.setVisibility(VISIBLE);
+        }
     }
 }

@@ -6,7 +6,7 @@
     <data>
 
         <import type="net.iGap.G" />
-        <import type="net.iGap.Theme" />
+        <import type="net.iGap.module.Theme" />
 
     </data>
 

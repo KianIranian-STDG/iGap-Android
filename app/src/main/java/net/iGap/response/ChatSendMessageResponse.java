@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperMessageResponse;
 import net.iGap.proto.ProtoChatSendMessage;
@@ -18,8 +18,6 @@ import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-
-import io.realm.Realm;
 
 import static net.iGap.realm.RealmRoomMessage.makeFailed;
 

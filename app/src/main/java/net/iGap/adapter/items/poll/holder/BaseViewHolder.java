@@ -67,10 +67,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         public void onSet() {
                             pollField.clicked = true;
                             pollField.sum += 1;
-                            pollAdapter.notifyChangeData();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    pollAdapter.notifyChangeData();
                                     showDialog(activity, activity.getString(R.string.poll_ok));
                                 }
                             });

@@ -51,12 +51,11 @@ import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
-import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.dialog.WaitingDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
+import net.iGap.module.dialog.WaitingDialog;
 import net.iGap.viewmodel.FragmentRegisterViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
 
@@ -147,10 +146,11 @@ public class FragmentRegister extends BaseFragment {
 
         fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(getViewLifecycleOwner(), phoneNumber -> {
             if (getActivity() != null && phoneNumber != null) {
-                new DefaultRoundDialog(getActivity()).setMessage(getString(R.string.Re_dialog_verify_number_part1) + "\n" +
-                        phoneNumber + "\n" + getString(R.string.Re_dialog_verify_number_part2))
-                        .setPositiveButton(R.string.B_ok, (dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber())
-                        .setNegativeButton(R.string.B_edit, null)
+                new MaterialDialog.Builder(getActivity())
+                        .content(getString(R.string.Re_dialog_verify_number_part1) + "\n" + phoneNumber + "\n" + getString(R.string.Re_dialog_verify_number_part2))
+                        .positiveText(R.string.B_ok)
+                        .negativeText(R.string.B_edit)
+                        .onPositive((dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber())
                         .show();
             }
         });
@@ -158,16 +158,16 @@ public class FragmentRegister extends BaseFragment {
         fragmentRegisterViewModel.showEnteredPhoneNumberError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getContext() != null && aBoolean != null) {
                 if (aBoolean) {
-                    new DefaultRoundDialog(getContext()).setTitle(R.string.phone_number).setMessage(R.string.please_enter_correct_phone_number).setPositiveButton(R.string.B_ok, null).show();
+                    showMessageDialog(R.string.phone_number, R.string.please_enter_correct_phone_number);
                 } else {
-                    new DefaultRoundDialog(getContext()).setTitle(R.string.phone_number).setMessage(R.string.Toast_Minimum_Characters).setPositiveButton(R.string.B_ok, null).show();
+                    showMessageDialog(R.string.phone_number, R.string.Toast_Minimum_Characters);
                 }
             }
         });
 
         fragmentRegisterViewModel.showConnectionErrorDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getContext() != null && aBoolean != null && aBoolean) {
-                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.please_check_your_connenction).setPositiveButton(R.string.ok, null).show();
+                showMessageDialog(R.string.error, R.string.please_check_your_connenction);
             }
         });
 
@@ -179,7 +179,7 @@ public class FragmentRegister extends BaseFragment {
 
         fragmentRegisterViewModel.showErrorMessageEmptyErrorPhoneNumberDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (getContext() != null && isShow != null && isShow) {
-                new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(R.string.phone_number_is_not_valid).setPositiveButton(R.string.ok, null).show();
+                showMessageDialog(R.string.error, R.string.phone_number_is_not_valid);
             }
         });
 
@@ -216,7 +216,7 @@ public class FragmentRegister extends BaseFragment {
 
         fragmentRegisterViewModel.showDialogUserBlock.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
-                new DefaultRoundDialog(getActivity()).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+                showMessageDialog(R.string.USER_VERIFY_BLOCKED_USER, R.string.Toast_Number_Block);
             }
         });
 
@@ -231,6 +231,15 @@ public class FragmentRegister extends BaseFragment {
                 showDialogTermAndCondition(termsAndConditionText);
             }
         });
+    }
+
+    private void showMessageDialog(int title, int msg) {
+        if (getActivity() == null) return;
+        new MaterialDialog.Builder(getActivity())
+                .title(title)
+                .content(msg)
+                .positiveText(R.string.ok)
+                .show();
     }
 
     private void showCountryDialog() {
@@ -354,13 +363,7 @@ public class FragmentRegister extends BaseFragment {
 
     private void showDialogConditionError() {
         if (getContext() != null) {
-            new DefaultRoundDialog(getContext())
-                    .setTitle(R.string.warning)
-                    .setMessage(R.string.accept_terms_and_condition_error_message)
-                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                    // The dialog is automatically dismissed when a dialog button is clicked.
-                    .setPositiveButton(R.string.dialog_ok, null)
-                    .show();
+            showMessageDialog(R.string.warning, R.string.accept_terms_and_condition_error_message);
         }
     }
 

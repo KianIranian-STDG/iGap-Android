@@ -32,7 +32,7 @@ import net.iGap.databinding.FragmentCreateChannelBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.viewmodel.FragmentCreateChannelViewModel;
 

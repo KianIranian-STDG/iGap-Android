@@ -10,7 +10,7 @@
 package net.iGap.helper;
 
 import net.iGap.Config;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -20,8 +20,6 @@ import net.iGap.request.RequestGroupSetAction;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-
-import io.realm.Realm;
 
 public class HelperSetAction {
 

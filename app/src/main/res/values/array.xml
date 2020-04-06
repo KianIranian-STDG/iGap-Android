@@ -185,7 +185,7 @@
     </string-array>
 
     <string-array name="sound_message">
-        <item>@string/array_Default_Notification_tone</item>
+        <item>@string/Default_Notification_tone</item>
         <item>aooow</item>
         <item>bbalert</item>
         <item>boom</item>

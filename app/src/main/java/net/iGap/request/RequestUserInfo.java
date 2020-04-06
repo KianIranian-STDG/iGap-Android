@@ -13,8 +13,8 @@ package net.iGap.request;
 import android.text.format.DateUtils;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnInfo;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserInfo;
 
 import java.util.HashMap;

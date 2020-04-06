@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="net.iGap.mobileBank.viewmodel.MobileBankChequesListViewModel" />
+            type="net.iGap.viewmodel.mobileBank.MobileBankChequesListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

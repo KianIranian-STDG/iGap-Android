@@ -17,7 +17,7 @@ import net.iGap.adapter.cPay.AdapterCPayHistory;
 import net.iGap.databinding.FragmentCpayHistoryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayHistoryViewModel;
 
 public class FragmentCPayHistory extends BaseFragment implements ToolbarListener {

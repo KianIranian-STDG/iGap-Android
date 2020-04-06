@@ -5,7 +5,7 @@
     <data>
         <variable
             name="bottomSheetViewModel"
-            type="net.iGap.dialog.bottomsheet.BottomSheetViewModel" />
+            type="net.iGap.module.dialog.bottomsheet.BottomSheetViewModel" />
     </data>
 
     <LinearLayout

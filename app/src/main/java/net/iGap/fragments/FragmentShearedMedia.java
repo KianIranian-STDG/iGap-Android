@@ -50,22 +50,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
-import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.OnClientSearchRoomHistory;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
@@ -996,12 +996,10 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(realm1 -> {
-                for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                    RealmRoomMessage.putOrUpdate(realm1, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm1 -> {
+            for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                RealmRoomMessage.putOrUpdate(realm1, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
+            }
         });
     }
 

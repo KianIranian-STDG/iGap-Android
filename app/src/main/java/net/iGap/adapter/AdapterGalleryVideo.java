@@ -1,7 +1,6 @@
 package net.iGap.adapter;
 
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import net.iGap.R;
-import net.iGap.helper.HelperThumbnail;
-import net.iGap.interfaces.GalleryItemListener;
+import net.iGap.observers.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryVideoModel;
 
 import java.io.File;

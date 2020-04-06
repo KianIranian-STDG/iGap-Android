@@ -12,7 +12,7 @@ package net.iGap.response;
 
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingSessionHold;
-import net.iGap.webrtc.WebRTC;
+import net.iGap.module.webrtc.WebRTC;
 
 public class SignalingSessionHoldResponse extends MessageHandler {
 

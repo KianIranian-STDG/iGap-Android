@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosEntryOptionVM" />
+            type="net.iGap.viewmodel.kuknos.KuknosEntryOptionVM" />
     </data>
 
 
@@ -99,7 +99,7 @@
                     android:onClick="@{()->viewmodel.onRestoreSeedClick()}"
                     android:text="@string/kuknos_Entry_RTSeedKey_str"
                     android:textSize="@dimen/dp16"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

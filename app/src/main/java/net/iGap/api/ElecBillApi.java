@@ -1,14 +1,14 @@
 package net.iGap.api;
 
-import net.iGap.electricity_bill.repository.model.BillData;
-import net.iGap.electricity_bill.repository.model.BranchData;
-import net.iGap.electricity_bill.repository.model.BranchDebit;
-import net.iGap.electricity_bill.repository.model.CompanyList;
-import net.iGap.electricity_bill.repository.model.ElectricityResponseList;
-import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
-import net.iGap.electricity_bill.repository.model.LastBillData;
-import net.iGap.electricity_bill.repository.model.PaidBill;
-import net.iGap.electricity_bill.repository.model.SaleBill;
+import net.iGap.model.electricity_bill.BillData;
+import net.iGap.model.electricity_bill.BranchData;
+import net.iGap.model.electricity_bill.BranchDebit;
+import net.iGap.model.electricity_bill.CompanyList;
+import net.iGap.model.electricity_bill.ElectricityResponseList;
+import net.iGap.model.electricity_bill.ElectricityResponseModel;
+import net.iGap.model.electricity_bill.LastBillData;
+import net.iGap.model.electricity_bill.PaidBill;
+import net.iGap.model.electricity_bill.SaleBill;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

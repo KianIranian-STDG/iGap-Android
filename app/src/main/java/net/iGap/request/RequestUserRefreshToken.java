@@ -1,6 +1,6 @@
 package net.iGap.request;
 
-import net.iGap.interfaces.OnRefreshToken;
+import net.iGap.observers.interfaces.OnRefreshToken;
 import net.iGap.proto.ProtoUserRefreshToken;
 
 public class RequestUserRefreshToken {

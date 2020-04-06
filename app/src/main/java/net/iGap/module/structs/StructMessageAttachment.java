@@ -15,7 +15,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
@@ -142,24 +142,14 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalFilePath(final long messageId, @Nullable final String path) {
         this.localFilePath = path;
-        DbManager.getInstance().doRealmTask(realm -> {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
             if (realmAttachment == null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
-                        messageAttachment.setLocalFilePath(path);
-                    }
-                });
+                RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
+                messageAttachment.setLocalFilePath(path);
             } else {
                 if (realmAttachment.getLocalFilePath() == null) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            realmAttachment.setLocalFilePath(path);
-                        }
-                    });
+                    realmAttachment.setLocalFilePath(path);
                 }
             }
         });
@@ -172,23 +162,13 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalThumbnailPath(final long messageId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
-        DbManager.getInstance().doRealmTask(realm -> {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
             if (realmAttachment == null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
-                        messageAttachment.setLocalThumbnailPath(localPath);
-                    }
-                });
+                RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
+                messageAttachment.setLocalThumbnailPath(localPath);
             } else {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmAttachment.setLocalThumbnailPath(localPath);
-                    }
-                });
+                realmAttachment.setLocalThumbnailPath(localPath);
             }
         });
     }

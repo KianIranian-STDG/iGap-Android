@@ -58,7 +58,34 @@
                     android:layout_gravity="end"
                     android:layout_margin="8dp"
                     android:onClick="@{()->viewModel.onEditProfileClick()}"
-                    android:text="@{viewModel.editProfileIcon}"
+                    android:text="@string/edit_icon"
+                    android:visibility="@{viewModel.editProfileIcon}"
+                    app:layout_anchor="@id/toolbar_layout_collapse"
+                    app:layout_collapseMode="pin" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/checkProfile"
+                    style="@style/myIconToolbarStyle"
+                    android:layout_width="@dimen/toolbar_icon_size"
+                    android:layout_height="@dimen/toolbar_icon_size"
+                    android:layout_gravity="start"
+                    android:layout_margin="8dp"
+                    android:onClick="@{()->viewModel.onCheckClick()}"
+                    android:text="@string/check_icon"
+                    android:visibility="@{viewModel.checkProfileShow}"
+                    app:layout_anchor="@id/toolbar_layout_collapse"
+                    app:layout_collapseMode="pin" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/cancelProfile"
+                    style="@style/myIconToolbarStyle"
+                    android:layout_width="@dimen/toolbar_icon_size"
+                    android:layout_height="@dimen/toolbar_icon_size"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:onClick="@{()->viewModel.onCancelClick()}"
+                    android:text="@string/close_icon"
+                    android:visibility="@{viewModel.cancelProfileShow}"
                     app:layout_anchor="@id/toolbar_layout_collapse"
                     app:layout_collapseMode="pin" />
 
@@ -203,6 +230,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="@{viewModel.showLoading}" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

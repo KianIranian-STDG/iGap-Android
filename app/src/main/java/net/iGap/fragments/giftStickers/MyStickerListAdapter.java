@@ -18,7 +18,7 @@ import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.view.StickerView;
+import net.iGap.module.customView.StickerView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

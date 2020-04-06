@@ -1,18 +1,20 @@
 package net.iGap.api;
 
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.mobileBank.repository.model.BankAccountModel;
-import net.iGap.mobileBank.repository.model.BankBlockCheque;
-import net.iGap.mobileBank.repository.model.BankCardBalance;
-import net.iGap.mobileBank.repository.model.BankCardModel;
-import net.iGap.mobileBank.repository.model.BankChequeBookListModel;
-import net.iGap.mobileBank.repository.model.BankChequeSingle;
-import net.iGap.mobileBank.repository.model.BankHistoryModel;
-import net.iGap.mobileBank.repository.model.BankServiceLoanDetailModel;
-import net.iGap.mobileBank.repository.model.BankShebaModel;
-import net.iGap.mobileBank.repository.model.BaseMobileBankResponse;
-import net.iGap.mobileBank.repository.model.LoanListModel;
-import net.iGap.mobileBank.repository.model.LoginResponse;
+import net.iGap.model.mobileBank.BankAccountModel;
+import net.iGap.model.mobileBank.BankBlockCheque;
+import net.iGap.model.mobileBank.BankCardBalance;
+import net.iGap.model.mobileBank.BankCardDepositsModel;
+import net.iGap.model.mobileBank.BankCardModel;
+import net.iGap.model.mobileBank.BankChequeBookListModel;
+import net.iGap.model.mobileBank.BankChequeSingle;
+import net.iGap.model.mobileBank.BankHistoryModel;
+import net.iGap.model.mobileBank.BankPayLoanModel;
+import net.iGap.model.mobileBank.BankServiceLoanDetailModel;
+import net.iGap.model.mobileBank.BankShebaModel;
+import net.iGap.model.mobileBank.BaseMobileBankResponse;
+import net.iGap.model.mobileBank.LoanListModel;
+import net.iGap.model.mobileBank.LoginResponse;
 
 import java.util.List;
 
@@ -40,6 +42,11 @@ public interface MobileBankApi {
     @FormUrlEncoded
     Call<BaseMobileBankResponse<List<BankAccountModel>>> getUserDeposits(@Header("Authorization") String token,
                                                                          @Field("deposit_numbers") String depositNumber);
+
+    @POST("card/get-deposits")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<List<BankCardDepositsModel>>> getCardsDeposits(@Header("Authorization") String token,
+                                                                             @Field("pan") String cardNumber);
 
     @POST("card/convert-card-to-iban")
     @FormUrlEncoded
@@ -96,12 +103,32 @@ public interface MobileBankApi {
                                                                            @Field("offset") Integer offset,
                                                                            @Field("length") Integer length);
 
+    @POST("loan/pay-loan")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse<BankPayLoanModel>> getPayLoan(@Header("Authorization") String token,
+                                                              @Field("loan_number") String loanNumber,
+                                                              @Field("custom_deposit_number") String customDeposit,
+                                                              @Field("payment_method") String paymentMethod,
+                                                              @Field("amount") String amount,
+                                                              @Field("second_password") String secondPassword,
+                                                              @Field("second_password_necessity") Boolean secondaryPassNecessary);
+
     @POST("cheque/block-cheque")
     @FormUrlEncoded
     Call<BaseMobileBankResponse<BankBlockCheque>> blockCheque(@Header("Authorization") String token,
                                                               @Field("cheque_numbers") List<String> chequeNumbers,
                                                               @Field("deposit_number") String depositNumber,
                                                               @Field("blocked_reason") String reason);
+
+    @POST("cheque/register-cheque")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse> registerCheque(@Header("Authorization") String token,
+                                                @Field("deposit_number") String depositNumber,
+                                                @Field("number") String number,
+                                                @Field("amount") Long amount);
+
+    @POST("book-turn")
+    Call<BaseMobileBankResponse> getTakeTurn(@Header("Authorization") String token);
 
     @POST("card/hot-card")
     @FormUrlEncoded

@@ -13,13 +13,13 @@ package net.iGap.helper;
 import android.content.Context;
 import android.content.Intent;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.interfaces.OnUserInfoResponse;
+import net.iGap.observers.interfaces.OnChatGetRoom;
+import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -53,11 +53,9 @@ public class HelperPublicMethod {
                         if (onError != null) {
                             onError.error();
                         }
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransaction(realm1 -> {
-                                RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
-                                room1.setDeleted(true);
-                            });
+                        DbManager.getInstance().doRealmTransaction(realm1 -> {
+                            RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                            room1.setDeleted(true);
                         });
                         getUserInfo(peerId, room.getId(), onComplete, onError);
 
@@ -114,12 +112,10 @@ public class HelperPublicMethod {
                         if (onError != null) {
                             onError.error();
                         }
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransaction(realm1 -> {
-                                RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
-                                room1.setDeleted(true);
-                                goToRoomWithTextMessage(context, room1.getId(), message, room1.getType(), -1);
-                            });
+                        DbManager.getInstance().doRealmTransaction(realm1 -> {
+                            RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                            room1.setDeleted(true);
+                            goToRoomWithTextMessage(context, room1.getId(), message, room1.getType(), -1);
                         });
                         getUserInfo(peerId, room.getId(), onComplete, onError);
 
@@ -170,11 +166,9 @@ public class HelperPublicMethod {
                 G.onChatGetRoom = new OnChatGetRoom() {
                     @Override
                     public void onChatGetRoom(final ProtoGlobal.Room room) {
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransaction(realm1 -> {
-                                RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
-                                room1.setDeleted(true);
-                            });
+                        DbManager.getInstance().doRealmTransaction(realm1 -> {
+                            RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                            room1.setDeleted(true);
                         });
                         getUserInfo(peerId, room.getId(), onComplete, onError);
 

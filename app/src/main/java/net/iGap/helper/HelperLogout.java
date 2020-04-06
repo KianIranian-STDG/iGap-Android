@@ -14,29 +14,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import net.iGap.AccountHelper;
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.Theme;
-import net.iGap.WebSocketClient;
-import net.iGap.fragments.FragmentMain;
-import net.iGap.interfaces.OnUserSessionLogout;
+import net.iGap.module.Theme;
+import net.iGap.observers.interfaces.OnUserSessionLogout;
 import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestUserSessionLogout;
-import net.iGap.response.ClientGetRoomListResponse;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import io.realm.Realm;
-
-import static org.paygear.utils.Utils.signOutWallet;
 
 
 /**
@@ -48,16 +40,12 @@ public final class HelperLogout {
      * truncate realm and go to ActivityIntroduce for register again
      */
     private void logout() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(@NotNull Realm realm) {
-                    realm.deleteAll();
-                }
-            });
-            AppUtils.cleanBadge();
-            new LoginActions();
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.deleteAll();
         });
+
+        AppUtils.cleanBadge();
+        new LoginActions();
     }
 
     public boolean logoutAllUser() {

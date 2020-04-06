@@ -10,7 +10,6 @@ package net.iGap.viewmodel;
  */
 
 import android.net.Uri;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -23,12 +22,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 
-import net.iGap.AccountManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.interfaces.OnQrCodeNewDevice;
+import net.iGap.observers.interfaces.OnQrCodeNewDevice;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;

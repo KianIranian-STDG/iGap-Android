@@ -4,20 +4,23 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+
+import java.util.List;
 
 public class GoToChatActivity {
 
@@ -70,7 +73,7 @@ public class GoToChatActivity {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
 
                 if (realmRoom != null) {
-                    if (realmRoom.getReadOnly() || (realmRoom.getType() != ProtoGlobal.Room.Type.CHAT && FragmentChat.structIGSticker != null)) {
+                    if (realmRoom.getReadOnly() || (realmRoom.getType() != ProtoGlobal.Room.Type.CHAT && FragmentChat.structIGSticker != null) || (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null && RealmRoom.isBot(realmRoom.getChatRoom().getPeerId()))) {
                         if (activity != null && !(activity).isFinishing()) {
                             new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
                         }
@@ -104,6 +107,7 @@ public class GoToChatActivity {
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat fragmentChat = new FragmentChat();
                     fragmentChat.setArguments(getBundle());
+                    fragmentChatBackStack(activity);
                     new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
                 }
             }).onNegative((dialog, which) -> {
@@ -122,6 +126,7 @@ public class GoToChatActivity {
             MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive((dialog, which) -> {
                 FragmentChat fragmentChat = new FragmentChat();
                 fragmentChat.setArguments(getBundle());
+                fragmentChatBackStack(activity);
                 new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
             }).onNegative((dialog, which) -> {
                 FragmentChat.structIGSticker = null;
@@ -167,6 +172,7 @@ public class GoToChatActivity {
     private void loadChatFragment(FragmentActivity activity) {
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
+        fragmentChatBackStack(activity);
         if (G.twoPaneMode) {
             if (activity instanceof ActivityMain) {
                 ((ActivityMain) activity).goToChatPage(fragmentChat);
@@ -209,5 +215,19 @@ public class GoToChatActivity {
         }
 
         return bundle;
+    }
+
+    private void fragmentChatBackStack(FragmentActivity activity) {
+        if (activity != null) {
+            for (int i = 0; i < activity.getSupportFragmentManager().getFragments().size(); i++) {
+                List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
+                if (fragments.get(i) instanceof FragmentChat) {
+                    FragmentChat fragmentChat = (FragmentChat) fragments.get(i);
+                    if (fragmentChat.getRoomId() == roomid) {
+                        activity.getSupportFragmentManager().beginTransaction().remove(fragmentChat).commit();
+                    }
+                }
+            }
+        }
     }
 }

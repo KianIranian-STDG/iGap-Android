@@ -17,7 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.module.CircleImageView;

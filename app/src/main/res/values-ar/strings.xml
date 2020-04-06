@@ -596,7 +596,7 @@
 
     <string name="array_4_hour">"۴ ساعات"</string>
 
-    <string name="array_Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
+    <string name="Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
 
     <string name="replay_item_dialog">"الردّ"</string>
 
@@ -945,6 +945,8 @@
     <string name="E_157">تدمير الحساب: الرمز غير صالح </string>
 
     <string name="E_158">تدمير الحساب: المحاولة الكثيرة جداً</string>
+
+    <string name="E_4_14">ليس لديك حق الوصول!</string>
 
     <string name="time_out">عدم امكان الاتصال بمزود خدمة الانترنت</string>
 
@@ -2293,7 +2295,7 @@
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
     <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
-    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
+    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">عزيزي المستخدم ، لقد قمت للتو بالتحديث ، يرجى الانتظار</string>
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
     <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
 
@@ -2769,7 +2771,7 @@
     <string name="pay_bills_title">ادفع الفواتير</string>
     <string name="mobile_bills_title">فواتير المحمول</string>
     <string name="bills">فواتير</string>
-    <string name="charge_amount">مستوى الشحن</string>
+    <string name="charge_amount">مستوى الشحن(ریال)</string>
     <string name="buy_internet_package_title">شراء حزمة الإنترنت</string>
     <string name="charity_title">الاعمال الخيرية</string>
     <string name="item_selected">العنصر المحدد</string>
@@ -2985,7 +2987,7 @@
     <string name="open_url">رابط مفتوح</string>
     <string name="copied">تم نسخ </string>
     <string name="charity_confirm">شما مبلغ %1$s ریال جهت کمک به خیریه %2$s در نظر گرفته اید.</string>
-    <string name="default_theme_title">السمة الافتراضية</string>
+    <string name="default_theme_title">إفتراضي</string>
     <string name="message_is_long">Your message is too long  Message will covert to</string>
 
     <string name="elecBill_Entry_lengthError">يجب أن يكون رقم الفاتورة 13 حرفًا.</string>
@@ -3101,7 +3103,7 @@
     <string name="facilities">مرافق</string>
     <string name="services">خدمات</string>
     <string name="cheque_number">التحقق من الرقم :</string>
-    <string name="page_count">عدد الصفحات :</string>
+    <string name="page_count">الصفحه</string>
     <string name="reject_count">رفض :</string>
     <string name="pass_count">مرر :</string>
     <string name="cash_count">صرفه :</string>
@@ -3188,6 +3190,23 @@
     <string name="posted">نشر</string>
     <string name="gift_sticker_inquiry_and_activated">التحقيق وتفعيلها</string>
     <string name="kuknos_send_token_error">لا يمكن إرسال هذا الرمز المميز.</string>
-    <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟
-لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
+    <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟ لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
+    <string name="inter_cheque_amount">أدخل المبلغ</string>
+    <string name="take_turn">يأخذ منحى</string>
+    <string name="secondary_password">كلمة المرور الثانية</string>
+    <string name="default_deposit">الودائع الافتراضية</string>
+    <string name="custom_deposit">إيداع مخصص</string>
+    <string name="mobile_bank_login_hint">استخدم اسم المستخدم وكلمة المرور للدخول إلى بنك پارسیان للجوال.</string>
+    <string name="internal_desc">تصفح نظام الملفات الخاص بك</string>
+    <string name="external_desc">تصفح التخزين الخارجية الخاصة بك</string>
+    <string name="file_manager_app_desc">تصفح مجلد التطبيق</string>
+    <string name="file_manager_image_desc">لإرسال ملف الصور</string>
+    <string name="file_manager_video_desc">لإرسال ملف الفيديو</string>
+    <string name="file_manager_music">لإرسال ملف صوتيات</string>
+    <string name="folder">مجلد</string>
+    <string name="internal_storage">التخزين الداخلي</string>
+    <string name="external_storage">تخزين خارجي</string>
+    <string name="file_manager">مدير الملفات</string>
+    <string name="gift_card_already_in_use">بطاقة الهدايا هذه قيد الاستخدام بالفعل!</string>
+    <string name="gift_carde_sended">لقد أرسلت بالفعل بطاقة هدايا لشخص آخر!</string>
 </resources>

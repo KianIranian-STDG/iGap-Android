@@ -11,7 +11,7 @@
 package net.iGap.request;
 
 import net.iGap.fragments.inquiryBill.BillInquiryResponse;
-import net.iGap.interfaces.GeneralResponseCallBack;
+import net.iGap.observers.interfaces.GeneralResponseCallBack;
 import net.iGap.proto.ProtoBillInquiryMci;
 
 public class RequestBillInquiryMci {

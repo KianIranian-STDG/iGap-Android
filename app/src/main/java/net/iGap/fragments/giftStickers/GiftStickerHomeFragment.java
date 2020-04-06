@@ -10,8 +10,8 @@ import androidx.annotation.Nullable;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragment;
-import net.iGap.rx.ObserverFragment;
-import net.iGap.services.imageLoaderService.ImageLoadingServiceInjector;
+import net.iGap.observers.rx.ObserverFragment;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 
 public class GiftStickerHomeFragment extends ObserverFragment<GiftStickerHomeViewModel> {
     private ImageView sliderIv;

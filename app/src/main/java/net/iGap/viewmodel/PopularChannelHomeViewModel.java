@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.adapter.items.popularChannel.PopularChannelHomeAdapter;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Category;

@@ -30,42 +30,35 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.dialog.BottomSheetItemClickCallback;
-import net.iGap.dialog.JoinDialogFragment;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.BottomSheetItemClickCallback;
+import net.iGap.module.dialog.JoinDialogFragment;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.interfaces.OnClientCheckInviteLink;
-import net.iGap.interfaces.OnClientGetRoomResponse;
-import net.iGap.interfaces.OnClientJoinByInviteLink;
-import net.iGap.interfaces.OnClientResolveUsername;
+import net.iGap.observers.interfaces.OnChatGetRoom;
+import net.iGap.observers.interfaces.OnClientCheckInviteLink;
+import net.iGap.observers.interfaces.OnClientGetRoomResponse;
+import net.iGap.observers.interfaces.OnClientJoinByInviteLink;
+import net.iGap.observers.interfaces.OnClientResolveUsername;
 import net.iGap.libs.Tuple;
-import net.iGap.module.CircleImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoom;
@@ -1005,20 +998,12 @@ public class HelperUrl {
                                     }
                                 });
                             } else {
-                                DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
-                                    @Override
-                                    public void doTask(Realm realm) {
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-                                                    if (roomMessage.getAuthor().hasUser()) {
-                                                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                                                    }
-                                                    RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
-                                                }
-                                            }
-                                        });
+                                DbManager.getInstance().doRealmTransaction(realm -> {
+                                   for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                        if (roomMessage.getAuthor().hasUser()) {
+                                            RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                        }
+                                        RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
                                     }
                                 });
 
@@ -1097,20 +1082,12 @@ public class HelperUrl {
                                 G.onChatGetRoom = new OnChatGetRoom() {
                                     @Override
                                     public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                        DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
-                                            @Override
-                                            public void doTask(Realm realm1) {
-                                                realm1.executeTransaction(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm realm) {
-                                                        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
-                                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                                            realmRoom1.setDeleted(true);
-                                                        } else {
-                                                            RealmRoom.putOrUpdate(room, realm);
-                                                        }
-                                                    }
-                                                });
+                                        DbManager.getInstance().doRealmTransaction(realm2 -> {
+                                            if (realm2.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm2);
+                                                realmRoom1.setDeleted(true);
+                                            } else {
+                                                RealmRoom.putOrUpdate(room, realm2);
                                             }
                                         });
                                         G.handler.postDelayed(new Runnable() {

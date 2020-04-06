@@ -18,10 +18,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.Config;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
@@ -34,7 +33,7 @@ import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.webrtc.CallObserver;
+import net.iGap.module.webrtc.CallObserver;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -584,7 +583,7 @@ public final class StartupActions {
         RealmConfiguration newConfig;
         Log.wtf(this.getClass().getName(), "state true");
         newConfig = new RealmConfiguration.Builder()
-                .name(net.iGap.AccountManager.defaultDBName)
+                .name(net.iGap.module.accountManager.AccountManager.defaultDBName)
                 .encryptionKey(mKey)
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override

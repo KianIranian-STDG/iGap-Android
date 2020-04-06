@@ -44,6 +44,11 @@ public class HelperError {
                 break;
             case 3: //Error 3 - NEW_CLIENT_IN_SESSION (New client connected in this session , so you will be kicked out)
                 break;
+            case 4:
+                if (minorCode == 14) {
+                    error = G.fragmentActivity.getResources().getString(R.string.E_4_14);
+                }
+                break;
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
                 break;

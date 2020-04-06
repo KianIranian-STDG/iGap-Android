@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,8 +31,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperFragment;
@@ -39,13 +40,13 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnChannelGetMemberList;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGroupGetMemberList;
-import net.iGap.interfaces.OnGroupKickMember;
-import net.iGap.interfaces.OnSelectedList;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.OnChannelGetMemberList;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGroupGetMemberList;
+import net.iGap.observers.interfaces.OnGroupKickMember;
+import net.iGap.observers.interfaces.OnSelectedList;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
@@ -919,13 +920,14 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
-            if (mContact.status != null) {
-                if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(holder.subtitle.getContext(), mContact.peerId, mContact.lastSeen, false));
-                } else {
-                    holder.subtitle.setText(mContact.status);
-                }
-            }
+            holder.subtitle.setText(
+                    setUserStatus(
+                            holder.subtitle.getContext() ,
+                            mContact.status ,
+                            mContact.peerId ,
+                            mContact.lastSeen
+                    )
+            );
 
             if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                 holder.btnMenu.setVisibility(View.INVISIBLE);
@@ -957,6 +959,19 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             if (showMemberMode != ShowMemberMode.NONE) {
                 holder.btnMenu.setVisibility(View.GONE);
+            }
+        }
+
+        private String setUserStatus(Context context , String userStatus, long userId , long time ) {
+
+            if (userStatus != null) {
+                if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    return LastSeenTimeUtil.computeTime(context, userId, time, false);
+                } else {
+                    return userStatus;
+                }
+            }else {
+                return LastSeenTimeUtil.computeTime(context, userId, time, false);
             }
         }
 

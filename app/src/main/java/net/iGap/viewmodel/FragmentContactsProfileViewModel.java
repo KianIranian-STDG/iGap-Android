@@ -9,17 +9,17 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.interfaces.OnUserContactDelete;
-import net.iGap.interfaces.OnUserContactEdit;
-import net.iGap.interfaces.OnUserInfoResponse;
-import net.iGap.interfaces.OnUserUpdateStatus;
+import net.iGap.observers.interfaces.OnUserContactDelete;
+import net.iGap.observers.interfaces.OnUserContactEdit;
+import net.iGap.observers.interfaces.OnUserInfoResponse;
+import net.iGap.observers.interfaces.OnUserUpdateStatus;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LastSeenTimeUtil;
@@ -206,14 +206,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 new RequestChatGetRoom().chatGetRoom(userId, new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
                     public void onReady(ProtoGlobal.Room room) {
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                    realmRoom1.setDeleted(true);
-                                }
-                            });
+                        DbManager.getInstance().doRealmTransaction(realm -> {
+                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                            realmRoom1.setDeleted(true);
                         });
                         G.handler.post(new Runnable() {
                             @Override

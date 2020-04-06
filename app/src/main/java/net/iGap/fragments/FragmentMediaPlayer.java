@@ -17,7 +17,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,15 +36,14 @@ import com.mikepenz.fastadapter_extensions.items.ProgressItem;
 import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
 import net.iGap.databinding.ActivityMediaPlayerLandBinding;
 import net.iGap.helper.HelperDownloadFile;
-import net.iGap.interfaces.OnClientSearchRoomHistory;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
@@ -462,15 +460,10 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void run() {
 
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                                RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
-                            }
-                        }
-                    });
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                        RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
+                    }
                 });
             }
         });

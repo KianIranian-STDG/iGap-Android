@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
 
@@ -58,46 +58,31 @@ public class RealmContacts extends RealmObject {
     }
 
     public static void deleteContact(final String phone) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
-                    if (contact != null) {
-                        contact.deleteFromRealm();
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
+            if (contact != null) {
+                contact.deleteFromRealm();
+            }
         });
     }
 
     public static void updateName(final long userId, final String firstName, final String lastName, final String initials) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-                    if (contact != null) {
-                        contact.setFirst_name(firstName);
-                        contact.setLast_name(lastName);
-                        contact.setDisplay_name((firstName + " " + lastName).trim());
-                        contact.setInitials(initials);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+            if (contact != null) {
+                contact.setFirst_name(firstName);
+                contact.setLast_name(lastName);
+                contact.setDisplay_name((firstName + " " + lastName).trim());
+                contact.setInitials(initials);
+            }
         });
     }
 
     public static void updateBlock(final long userId, final boolean block) {
-        DbManager.getInstance().doRealmTask(realm -> {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
             if (realmContacts != null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmContacts.setBlockUser(block);
-                    }
-                });
+                realmContacts.setBlockUser(block);
             }
         });
     }

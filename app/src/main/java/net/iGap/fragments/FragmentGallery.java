@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,18 +24,18 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.adapter.AdapterGalleryVideo;
-import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.GalleryItemListener;
-import net.iGap.interfaces.OnRotateImage;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.GalleryItemListener;
+import net.iGap.observers.interfaces.OnRotateImage;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -142,27 +143,24 @@ public class FragmentGallery extends BaseFragment {
                             } else {
                                 checkVideoMultiSelectAndSendToEdit();
                             }
-                        } else {
+                        }else if(mGalleryMode == GalleryMode.MUSIC){
+                            if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
+                                showSortDialog();
+                            } else {
+                                if (getContext() != null) Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+                            }
+                        } /* else {
                             openAndroidOsGallery();
-                        }
+                        }*/
                     }
 
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (mGalleryMusicAdapter.getMusicsItem().size() != 0) {
-                            showSortDialog();
-                        } else {
-                            if (getContext() != null)
-                                Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
-                        }
-                    }
                 });
 
         if (!isReturnResultDirectly) {
             if (mGalleryMode == GalleryMode.MUSIC) {
-                mHelperToolbar.setRightIcons(R.string.more_icon, R.string.sort_icon);
-            } else {
-                mHelperToolbar.setRightIcons(isSubFolder ? R.string.edit_icon : R.string.more_icon);
+                mHelperToolbar.setRightIcons(R.string.more_icon);
+            } else if (isSubFolder) {
+                mHelperToolbar.setRightIcons(R.string.edit_icon);
             }
         }
 
@@ -421,27 +419,26 @@ public class FragmentGallery extends BaseFragment {
 
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
             fragmentEditImage.setIsReOpenChatAttachment(false);
-
-            //rotate and send image for edit
             ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
                 @Override
                 public void startProcess() {
-                    //nothing
+
                 }
 
                 @Override
                 public void success(String newPath) {
-                    FragmentEditImage.insertItemList(newPath, "", false);
                     G.handler.post(() -> {
-                        if (getActivity() == null) return;
-                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                        FragmentEditImage.insertItemList(newPath, "", false);
+                        if (getActivity() != null)
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     });
                 }
             });
 
             fragmentEditImage.setGalleryListener(() -> {
-                popBackStackFragment();
-                popBackStackFragment();
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager().popBackStack(FragmentGallery.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
             });
         } else {
             if (mGalleryListener != null) {

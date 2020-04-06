@@ -44,15 +44,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPaint;
-import net.iGap.fragments.FragmentExplorer;
+import net.iGap.fragments.FileManagerFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.IPickFile;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.IPickFile;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -629,11 +629,7 @@ public class AttachFile {
         HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                FragmentExplorer fragment = new FragmentExplorer();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", listener);
-                fragment.setArguments(bundle);
-                new HelperFragment(context.getSupportFragmentManager(), fragment).setReplace(false).load();
+                new HelperFragment(context.getSupportFragmentManager(), FileManagerFragment.newInstance(listener)).setReplace(false).load();
             }
 
             @Override
@@ -655,12 +651,12 @@ public class AttachFile {
                 //    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
                 //}
 
-                FragmentExplorer fragment = new FragmentExplorer();
+                /*FragmentExplorer fragment = new FragmentExplorer();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Listener", listener);
                 bundle.putString("Mode", "documnet");
                 fragment.setArguments(bundle);
-
+*/
                 /*new HelperFragment(fragment).setReplace(false).load();*/
             }
 
@@ -802,7 +798,7 @@ public class AttachFile {
         String result = "";
         if (galleryPath == null) return "";
 
-        if (ImageHelper.isNeedToCompress(new File(galleryPath)) || ImageHelper.isRotateNeed(galleryPath)) {
+        if (ImageHelper.isRotateNeed(galleryPath) || ImageHelper.isNeedToCompress(new File(galleryPath))) {
 
             Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
             bitmap = ImageHelper.correctRotate(galleryPath, bitmap);

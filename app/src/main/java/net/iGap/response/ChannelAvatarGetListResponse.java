@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoChannelAvatarGetList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -36,16 +36,11 @@ public class ChannelAvatarGetListResponse extends MessageHandler {
         super.handler();
         final ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder builder = (ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder) message;
         final long ownerId = Long.parseLong(identity);
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar.deleteAllAvatars(ownerId, realm);
-                    for (ProtoGlobal.Avatar avatar : builder.getAvatarList()) {
-                        RealmAvatar.putOrUpdate(realm, ownerId, avatar);
-                    }
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmAvatar.deleteAllAvatars(ownerId, realm);
+            for (ProtoGlobal.Avatar avatar : builder.getAvatarList()) {
+                RealmAvatar.putOrUpdate(realm, ownerId, avatar);
+            }
         });
     }
 

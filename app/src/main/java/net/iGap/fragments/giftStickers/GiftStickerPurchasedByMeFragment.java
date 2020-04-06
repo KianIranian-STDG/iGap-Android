@@ -11,7 +11,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperError;
-import net.iGap.rx.ObserverFragment;
+import net.iGap.observers.rx.ObserverFragment;
 
 public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftStickerBuyViewModel> {
 

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import net.iGap.R;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
@@ -30,12 +31,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
     private int backgroundColor;
-    private int badgeColor;
     private OnLongClickListener onLongClickListener;
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        badgeColor = context.getResources().getColor(R.color.red);
         init(attrs);
     }
 
@@ -43,7 +42,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         parseAttr(attributeSet);
         setMinimumHeight(Utils.dpToPx(50));
         setOrientation(HORIZONTAL);
-        setWeightSum(5);
     }
 
     private void parseAttr(AttributeSet attributeSet) {
@@ -97,7 +95,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(backgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), LayoutCreator.dpToPx((int) cornerRadius), LayoutCreator.dpToPx((int) cornerRadius), true), paint);
+            canvas.drawPath(roundedRect(0, getWidth(), getHeight(), LayoutCreator.dpToPx((int) cornerRadius), LayoutCreator.dpToPx((int) cornerRadius), true), paint);
             super.dispatchDraw(canvas);
         } else {
             super.dispatchDraw(canvas);
@@ -105,11 +103,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private Path roundedRect(float left, float top, float right, float bottom, float rx, float ry, boolean justTop) {
+    private Path roundedRect(float top, float right, float bottom, float rx, float ry, boolean justTop) {
         Path path = new Path();
         if (rx < 0) rx = 0;
         if (ry < 0) ry = 0;
-        float width = right - left;
+        float width = right - (float) 0;
         float height = bottom - top;
         if (rx > width / 2) rx = width / 2;
         if (ry > height / 2) ry = height / 2;
@@ -195,10 +193,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         this.backgroundColor = backgroundColor;
     }
 
-    public void setOnBottomNavigationBadge(int unreadCount, int callCount) {
-        TabItem tabItem = ((TabItem) getChildAt(2));
-        tabItem.setBadgeColor(badgeColor);
-        tabItem.setBadgeCount(unreadCount);
+    public void setOnBottomNavigationBadge(int unreadCount) {
+        for (int i = 0; i < getChildCount(); i++) {
+            TabItem tabItem = (TabItem) getChildAt(i);
+            tabItem.updateBadge(unreadCount);
+        }
     }
 
     public int getCurrentTab() {
@@ -207,10 +206,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
 
     @Override
     public void onClick(View v) {
-        if (selectedItemPosition != 4) {
+        if (selectedItemPosition != BottomNavigationFragment.PROFILE_FRAGMENT) {
             v.setSelected(!v.isSelected());
         }
-        selectedTabItem(4);
+        selectedTabItem(BottomNavigationFragment.PROFILE_FRAGMENT);
     }
 
     public boolean onLongClick(View v) {
@@ -218,7 +217,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
             onLongClickListener.onLongClick(v);
             AppUtils.setVibrator(15);
         }
-        return false;
+        return true;
     }
 
     public void setProfileOnLongClickListener(OnLongClickListener onLongClickListener) {

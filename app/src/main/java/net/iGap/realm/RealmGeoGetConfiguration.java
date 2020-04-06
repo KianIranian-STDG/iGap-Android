@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.fragments.FragmentiGapMap;
 
 import io.realm.Realm;
@@ -20,21 +20,16 @@ public class RealmGeoGetConfiguration extends RealmObject {
     private String mapCache;
 
     public static void putOrUpdate(final String mapCache) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmGeoGetConfiguration realmGeoGetConfiguration = realm.where(RealmGeoGetConfiguration.class).findFirst();
-                    if (realmGeoGetConfiguration == null) {
-                        realmGeoGetConfiguration = realm.createObject(RealmGeoGetConfiguration.class);
-                    } else {
-                        if (realmGeoGetConfiguration.getMapCache() != null && !realmGeoGetConfiguration.getMapCache().equals(mapCache)) {
-                            FragmentiGapMap.deleteMapFileCash();
-                        }
-                    }
-                    realmGeoGetConfiguration.setMapCache(mapCache);
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmGeoGetConfiguration realmGeoGetConfiguration = realm.where(RealmGeoGetConfiguration.class).findFirst();
+            if (realmGeoGetConfiguration == null) {
+                realmGeoGetConfiguration = realm.createObject(RealmGeoGetConfiguration.class);
+            } else {
+                if (realmGeoGetConfiguration.getMapCache() != null && !realmGeoGetConfiguration.getMapCache().equals(mapCache)) {
+                    FragmentiGapMap.deleteMapFileCash();
                 }
-            });
+            }
+            realmGeoGetConfiguration.setMapCache(mapCache);
         });
     }
 

@@ -16,15 +16,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.LooperThreadHelper;
-import net.iGap.interfaces.OnAvatarAdd;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnDownload;
-import net.iGap.interfaces.OnFileDownloaded;
+import net.iGap.observers.interfaces.OnAvatarAdd;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnDownload;
+import net.iGap.observers.interfaces.OnFileDownloaded;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -217,24 +217,19 @@ public class AvatarHandler {
         LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
             @Override
             public void run() {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            if (src == null) {
-                                return;
-                            }
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    if (src == null) {
+                        return;
+                    }
 
-                            String avatarPath = copyAvatar(src, avatar);
-                            RealmAvatar a = RealmAvatar.putOrUpdate(realm, ownerId, avatar);
-                            a.getFile().setLocalFilePath(avatarPath);
+                    String avatarPath = copyAvatar(src, avatar);
+                    RealmAvatar a = RealmAvatar.putOrUpdate(realm, ownerId, avatar);
+                    a.getFile().setLocalFilePath(avatarPath);
 
-                            if (onAvatarAdd != null && avatarPath != null) {
-                                onAvatarAdd.onAvatarAdd(avatarPath);
-                            }
-                            AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId(), a.getId());
-                        }
-                    });
+                    if (onAvatarAdd != null && avatarPath != null) {
+                        onAvatarAdd.onAvatarAdd(avatarPath);
+                    }
+                    AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId(), a.getId());
                 });
             }
         });
@@ -410,18 +405,13 @@ public class AvatarHandler {
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
                         final ArrayList<Long> fileIdList = new ArrayList<>();
                         final ArrayList<Long> avatarIdList = new ArrayList<>();
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
-                                        realmAvatar1.getFile().setLocalThumbnailPath(filepath);
-                                        ownerIdList.add(realmAvatar1.getOwnerId());
-                                        fileIdList.add(realmAvatar1.getFile().getId());
-                                        avatarIdList.add(realmAvatar1.getId());
-                                    }
-                                }
-                            });
+                        DbManager.getInstance().doRealmTransaction(realm -> {
+                            for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
+                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
+                                ownerIdList.add(realmAvatar1.getOwnerId());
+                                fileIdList.add(realmAvatar1.getFile().getId());
+                                avatarIdList.add(realmAvatar1.getId());
+                            }
                         });
                         for (int i = 0; i < ownerIdList.size(); i++) {
                             AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i), avatarIdList.get(i));

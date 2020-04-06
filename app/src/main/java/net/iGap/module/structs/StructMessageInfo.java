@@ -16,12 +16,13 @@ import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
 import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.module.MyType;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IChatItemAttachment;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
@@ -56,8 +57,10 @@ public class StructMessageInfo implements Parcelable {
 
     public String songArtist;
     public long songLength;
-    private String TAG = " abbasiAnimation";
 
+    public RealmRoomMessage getRealmRoomMessage() {
+        return realmRoomMessage.getForwardMessage() == null ? realmRoomMessage : realmRoomMessage.getForwardMessage();
+    }
 
     public void setSongArtist(String songArtist) {
         this.songArtist = songArtist;
@@ -189,7 +192,6 @@ public class StructMessageInfo implements Parcelable {
                     }
                     setAttachment(realm.copyFromRealm(realmAttachment));
                     abstractMessage.onProgressFinish(holder, messageType);
-                    Log.d("bagi", "onProgressFinish: " + realmAttachment.getLocalFilePath());
 
                     if (realmAttachment.isFileExistsOnLocalAndIsImage()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
@@ -201,7 +203,6 @@ public class StructMessageInfo implements Parcelable {
                         }
                     }
 
-                    changeLog(changeSet != null ? changeSet.getChangedFields() : new String[0], identifier);
                     //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
                 }
 
@@ -218,41 +219,32 @@ public class StructMessageInfo implements Parcelable {
         }
     }
 
-    private void changeLog(String[] strings, long identifier) {
-        for (String string : strings) {
-            Log.i(TAG, "changeLog: " + string + " id -> " + identifier);
+    public RealmChannelExtra getChannelExtra() {
+        if (realmRoomMessage.getForwardMessage() != null) {
+            return getRealmChannelExtraOfMessage(realmRoomMessage.getForwardMessage());
+        } else {
+            return getRealmChannelExtraOfMessage(realmRoomMessage);
         }
     }
 
-    public RealmChannelExtra getChannelExtra() {
-        if (realmRoomMessage.getChannelExtra() != null) {
-            return realmRoomMessage.getChannelExtra();
+    public RealmChannelExtra getChannelExtraWithoutForward() {
+        return getRealmChannelExtraOfMessage(realmRoomMessage);
+    }
+
+    private RealmChannelExtra getRealmChannelExtraOfMessage(RealmRoomMessage message) {
+        if (message.getChannelExtra() != null) {
+            return message.getChannelExtra();
         } else {
-            //Todo: maybe use this code for instead create thread and to Db work in it (bagi check it :D)
-            /*DbManager.getInstance().doRealmTransactionLowPriorityAsync(new DbManager.RealmTransaction() {
-                @Override
-                public void doTransaction(Realm realm) {
-                    RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                    RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                    if (newMessage != null && channelExtra != null) {
-                        newMessage.setChannelExtra(channelExtra);
-                    }
+            DbManager.getInstance().doRealmTransactionLowPriorityAsync(realm -> {
+                RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
+                RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, message.getMessageId()).findFirst();
+                if (newMessage != null && channelExtra != null) {
+                    newMessage.setChannelExtra(channelExtra);
                 }
-            });*/
-            new Thread(() -> {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransaction(realm1 -> {
-                        RealmRoomMessage newMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                        RealmChannelExtra channelExtra = realm1.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                        if (newMessage != null && channelExtra != null) {
-                            newMessage.setChannelExtra(channelExtra);
-                        }
-                    });
-                });
-            }).start();
+            });
 
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, message.getMessageId()).findFirst();
                 if (realmChannelExtra != null) {
                     realmChannelExtra = realm.copyFromRealm(realmChannelExtra);
                 }
@@ -269,6 +261,10 @@ public class StructMessageInfo implements Parcelable {
     public boolean isTimeOrLogMessage() {
         return realmRoomMessage.getUserId() == -1L;
         // or roomMessage.getLogs() != null
+    }
+
+    public boolean isGiftSticker() {
+        return getRealmRoomMessage().getMessageType() == ProtoGlobal.RoomMessageType.STICKER && getAdditional() != null && getAdditional().getAdditionalType() == AdditionalType.GIFT_STICKER;
     }
 
     public boolean hasAttachment() {

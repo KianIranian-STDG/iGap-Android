@@ -1,9 +1,12 @@
 package net.iGap.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +25,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
-import net.iGap.activities.ActivityCall;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -42,28 +40,33 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.interfaces.OnActivityChatStart;
-import net.iGap.interfaces.OnChannelDeleteInRoomList;
-import net.iGap.interfaces.OnChatDeleteInRoomList;
-import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnChatUpdateStatusResponse;
-import net.iGap.interfaces.OnClientGetRoomListResponse;
-import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
-import net.iGap.interfaces.OnDateChanged;
-import net.iGap.interfaces.OnGroupDeleteInRoomList;
-import net.iGap.interfaces.OnRemoveFragment;
-import net.iGap.interfaces.OnSetActionInRoom;
-import net.iGap.interfaces.OnVersionCallBack;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.model.MultiSelectStruct;
 import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.OnActivityChatStart;
+import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
+import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
+import net.iGap.observers.interfaces.OnChatSendMessageResponse;
+import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.observers.interfaces.OnClientGetRoomResponseRoomList;
+import net.iGap.observers.interfaces.OnDateChanged;
+import net.iGap.observers.interfaces.OnGroupDeleteInRoomList;
+import net.iGap.observers.interfaces.OnRemoveFragment;
+import net.iGap.observers.interfaces.OnSetActionInRoom;
+import net.iGap.observers.interfaces.OnVersionCallBack;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -94,11 +97,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnClientGetRoomListResponse, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
-    private boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
     public static int mOffset = 0;
     private View viewById;
@@ -118,6 +120,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private RecyclerView multiSelectRv;
     private SelectedItemAdapter multiSelectAdapter;
     private View selectedItemView;
+
+    private AnimatorSet progressAnimatorSet;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -180,6 +184,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mHelperToolbar.registerTimerBroadcast();
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
 
+        if (results == null)
+            changeRoomListProgress(true);
 
         onChatCellClickedInEditMode = (item, position, status) -> {
             Room temp = new Room(item.getId(), item.getType().name(), item.getTitle(), "", "");
@@ -247,7 +253,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
-            MusicPlayer.playerStateChangeListener.observe(this, isVisible -> {
+            MusicPlayer.playerStateChangeListener.observe(getViewLifecycleOwner(), isVisible -> {
                 notifyChatRoomsList();
 
                 if (!mHelperToolbar.getmSearchBox().isShown()) {
@@ -256,7 +262,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -392,7 +400,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void initRecycleView() {
 
         if (results == null) {
-            Log.wtf(this.getClass().getName(), "initRecycleView");
             results = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(new String[]{RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
@@ -401,26 +408,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             pbLoading.setVisibility(View.GONE);
         }
 
-        if (!ClientGetRoomListResponse.roomListFetched) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
-
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                if (isThereAnyMoreItemToLoad) {
-//                    if (mOffset > 0) {
-//                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-//                        if (lastVisiblePosition + 10 >= mOffset) {
-//                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-//                            if (send)
-//                                progressBar.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                }
+                if (!ClientGetRoomListResponse.roomListFetched)
+                    if (mOffset > 0) {
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        if (lastVisiblePosition + 10 >= mOffset) {
+                            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                        }
+                    }
+
 
                 //check if music player was enable disable scroll detecting for search box
                 if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
@@ -507,6 +506,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
         });
 
+    }
+
+    private void invalidateViews() {
+//        int count = mRecyclerView.getChildCount();
+//        for (int i = 0; i < count; i++) {
+//            mRecyclerView.getChildAt(i).invalidate();
+//        }
+        if (roomListAdapter != null) {
+            roomListAdapter.notifyDataSetChanged();
+        }
     }
 
     //***************************************************************************************************************************
@@ -685,44 +694,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
-    public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.wtf(this.getClass().getName(), "onClientGetRoomList: hide progress");
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    @Override
-    public void onClientGetRoomListError(int majorCode, int minorCode) {
-        /*if (majorCode == 9) {
-            if (G.currentActivity != null) {
-                G.currentActivity.finish();
-            }
-            Intent intent = new Intent(context, ActivityRegistration.class);
-            intent.putExtra(ActivityRegistration.showProfile, true);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        }*/
-
-    }
-
-    @Override
-    public void onClientGetRoomListTimeout() {
-
-//        G.handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                progressBar.setVisibility(View.GONE);
-//                getChatLists();
-//            }
-//        });
-    }
-
-
-    @Override
     public void onChatDeleteError(int majorCode, int minorCode) {
 
     }
@@ -738,7 +709,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance().removeEventListener(EventManager.ROOM_LIST_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
     }
@@ -752,8 +725,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         G.onVersionCallBack = this;
         if (G.isDepricatedApp)
             isDeprecated();
-
-        G.onClientGetRoomListResponse = this;
 
         if (progressBar != null) {
             AppUtils.setProgresColler(progressBar);
@@ -1113,22 +1084,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void markAsRead(Realm realm, ProtoGlobal.Room.Type chatType, long roomId) {
         //ToDo: Check it for update badge after update sen status in db
         if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-            RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
-                @Override
-                public void sendSeenStatus(RealmRoomMessage message) {
-                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                }
-
-                @Override
-                public void resendMessage(RealmRoomMessage message) {
-
-                }
-
-                @Override
-                public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
-
-                }
-            });
+            RealmRoomMessage.makeSeenAllMessageOfRoom(roomId);
         }
 
         RealmRoom.setCount(realm, roomId, 0);
@@ -1158,7 +1114,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        if (id == ActivityCall.CALL_EVENT) {
+        if (id == EventManager.CALL_EVENT) {
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {
@@ -1169,8 +1125,14 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
                 if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
             });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.handler.post(this::invalidateViews);
+        } else if (id == EventManager.ROOM_LIST_CHANGED) {
+            G.runOnUiThread(() -> {
+                boolean show = (boolean) message[0];
+                changeRoomListProgress(show);
+            });
         }
-
     }
 
     public enum MainType {
@@ -1179,6 +1141,36 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private interface onChatCellClick {
         void onClicked(RealmRoom item, int pos, boolean status);
+    }
+
+    private void changeRoomListProgress(boolean show) {
+
+        if (show && progressBar.getTag() == null || !show && progressBar.getTag() != null) {
+            return;
+        }
+
+        if (progressAnimatorSet != null) {
+            progressAnimatorSet.cancel();
+            progressAnimatorSet = null;
+        }
+
+        if (show)
+            progressBar.setVisibility(View.VISIBLE);
+
+        progressBar.setTag(show ? null : 1);
+
+        progressAnimatorSet = new AnimatorSet();
+        progressAnimatorSet.playTogether(ObjectAnimator.ofFloat(progressBar, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(100)));
+        progressAnimatorSet.setDuration(200);
+        progressAnimatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        progressAnimatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+        progressAnimatorSet.start();
     }
 
     @Override

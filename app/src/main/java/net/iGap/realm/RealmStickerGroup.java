@@ -1,7 +1,5 @@
 package net.iGap.realm;
 
-import android.util.Log;
-
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 
@@ -44,8 +42,6 @@ public class RealmStickerGroup extends RealmObject {
             stickerItems.add(RealmStickerItem.put(realm, stickerGroup.getStickers().get(i)));
         }
         realmStickerGroup.setStickerItems(stickerItems);
-
-        Log.i("abbasiNewSticker", "put -> \n " + stickerGroup.getGroupId() + " \n with stickers size -> " + stickerGroup.getStickersSize());
 
         return realmStickerGroup;
     }

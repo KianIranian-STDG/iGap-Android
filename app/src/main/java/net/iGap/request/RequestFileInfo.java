@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.interfaces.OnFileInfoCallBack;
+import net.iGap.observers.interfaces.OnFileInfoCallBack;
 import net.iGap.proto.ProtoFileInfo;
 
 public class RequestFileInfo {

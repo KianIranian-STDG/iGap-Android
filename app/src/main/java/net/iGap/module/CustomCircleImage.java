@@ -17,7 +17,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import net.iGap.R;
-import net.iGap.Theme;
 
 /**
  * circle button for indicate current page in fragment Introduce

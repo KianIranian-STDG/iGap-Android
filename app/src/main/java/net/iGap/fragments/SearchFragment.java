@@ -32,7 +32,7 @@ import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.SearchItem;
@@ -41,8 +41,8 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.IClientSearchUserName;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.IClientSearchUserName;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -667,14 +667,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             new RequestChatGetRoom().chatGetRoom(id, new RequestChatGetRoom.OnChatRoomReady() {
                 @Override
                 public void onReady(ProtoGlobal.Room room) {
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
-                                room2.setDeleted(true);
-                            }
-                        });
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
+                        room2.setDeleted(true);
                     });
                     G.handler.post(new Runnable() {
                         @Override

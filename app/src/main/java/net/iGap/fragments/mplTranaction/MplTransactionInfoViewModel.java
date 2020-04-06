@@ -3,7 +3,7 @@ package net.iGap.fragments.mplTranaction;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnMplTransactionInfo;
+import net.iGap.observers.interfaces.OnMplTransactionInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestMplTransactionInfo;
 import net.iGap.viewmodel.BaseViewModel;

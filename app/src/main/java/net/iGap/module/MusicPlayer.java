@@ -49,8 +49,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -60,8 +60,8 @@ import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
-import net.iGap.interfaces.OnAudioFocusChangeListener;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnAudioFocusChangeListener;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -76,7 +76,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 

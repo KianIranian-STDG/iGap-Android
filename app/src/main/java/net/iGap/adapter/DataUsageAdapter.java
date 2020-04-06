@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
-import net.iGap.interfaces.DataUsageListener;
+import net.iGap.observers.interfaces.DataUsageListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.structs.DataUsageStruct;
 

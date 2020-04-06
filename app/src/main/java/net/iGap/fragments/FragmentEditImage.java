@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -35,21 +34,21 @@ import com.yalantis.ucrop.UCrop;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emojiKeyboard.EmojiView;
-import net.iGap.emojiKeyboard.KeyboardView;
-import net.iGap.emojiKeyboard.NotifyFrameLayout;
-import net.iGap.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.emojiKeyboard.EmojiView;
+import net.iGap.libs.emojiKeyboard.KeyboardView;
+import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.customView.EventEditText;
 import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.view.EventEditText;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +59,6 @@ import java.util.HashMap;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
-import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout.Listener {
 
@@ -104,9 +102,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     private int emojiPadding;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
+    private AttachFile attachFile = new AttachFile(G.fragmentActivity);
 
     private SharedPreferences emojiSharedPreferences;
-    private String TAG = "abbasiEditImage";
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
@@ -388,13 +386,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         if (!keyboardVisible) {
             size -= emojiPadding;
         }
-
-        Log.i(TAG, "onWindowSizeChanged: -> " + size);
     }
 
     private void showPopup(int show) {
-
-        Log.i(TAG, "showPopup: " + show);
 
         if (show == KeyboardView.MODE_EMOJI) {
             if (emojiView == null) {
@@ -747,7 +741,13 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, container, false);
             final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
             if (itemGalleryList.get(position).path != null) {
-                G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+                new Thread(() -> {
+                    String finalPath = attachFile.saveGalleryPicToLocal(itemGalleryList.get(position).path);
+                    G.runOnUiThread(() -> {
+                        itemGalleryList.get(position).path = finalPath;
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), imgPlay);
+                    });
+                }).start();
             }
 
             imgPlay.setOnClickListener(new View.OnClickListener() {

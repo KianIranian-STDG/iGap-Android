@@ -23,20 +23,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.giftStickers.giftCardDetail.MainGiftStickerCardFragment;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.Theme;
+import net.iGap.module.customView.ProgressButton;
+import net.iGap.module.customView.StickerView;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.view.ProgressButton;
-import net.iGap.view.StickerView;
+import net.iGap.repository.StickerRepository;
 
 import java.util.List;
 
@@ -79,14 +79,17 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
 
         try {
             StructIGSticker structIGSticker = holder.structIGSticker = new Gson().fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
-            if (structIGSticker != null) {
+            if (structIGSticker != null && structIGSticker.getPath() != null) {
                 holder.stickerView.loadSticker(structIGSticker);
+            } else {
+                String path = StickerRepository.getInstance().getStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+                holder.stickerView.loadSticker(structMessage.getAttachment().getToken(), path, structMessage.getAttachment().getName(), String.valueOf(structMessage.getAttachment().getId()), structMessage.getAttachment().getSize());
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
 
-        if (structMessage.isSenderMe()) {
+        if (structMessage.isSenderMe() && !mAdapter.roomIsMyCloud()) {
             holder.progressButton.setVisibility(View.GONE);
         } else {
             holder.progressButton.setVisibility(View.VISIBLE);
@@ -145,9 +148,9 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                                     if (giftSticker.isActive() && giftSticker.isCardOwner()) {
                                         messageClickListener.onActiveGiftStickerClick(structIGSticker, MainGiftStickerCardFragment.ACTIVE_BY_ME, structMessage);
                                     } else if (giftSticker.isForward()) {
-                                        Toast.makeText(getContext(), "شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.gift_carde_sended, Toast.LENGTH_SHORT).show();
                                     } else if (giftSticker.isActive()) {
-                                        Toast.makeText(getContext(), "این کارت هدیه قبلا استفاده شده است!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.gift_card_already_in_use, Toast.LENGTH_SHORT).show();
                                     } else {
                                         messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward() ? MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_OUT_FORWARD : MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_FORWARD, structMessage);
                                     }
@@ -159,7 +162,6 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                                 @Override
                                 public void onError(Throwable e) {
                                     super.onError(e);
-                                    Toast.makeText(getContext(), "خطا در دریافت وضعیت کارت هدیه!", Toast.LENGTH_SHORT).show();
                                     progressButton.changeProgressTo(View.GONE);
                                     progressButton.setText(itemView.getContext().getResources().getString(R.string.gift_sticker_visit));
                                 }

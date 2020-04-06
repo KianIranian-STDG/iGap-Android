@@ -20,7 +20,7 @@ import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentTwoStepVerificationBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.TwoStepVerificationViewModel;
 
 import java.util.Locale;

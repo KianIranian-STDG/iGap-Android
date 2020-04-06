@@ -151,7 +151,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onError(String message) {
-        onBackPressed();
+        G.handler.post(this::onBackPressed);
     }
 
     private String getRealPathFromURI(Uri contentURI) {

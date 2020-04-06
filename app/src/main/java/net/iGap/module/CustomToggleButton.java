@@ -1,7 +1,6 @@
 package net.iGap.module;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -9,11 +8,9 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import net.iGap.R;
-import net.iGap.Theme;
 
 public class CustomToggleButton extends ToggleButton {
 

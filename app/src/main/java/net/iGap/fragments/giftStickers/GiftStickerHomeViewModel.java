@@ -5,9 +5,9 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.fragments.emoji.apiModels.SliderDataModel;
-import net.iGap.repository.sticker.StickerRepository;
-import net.iGap.rx.IGSingleObserver;
-import net.iGap.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
+import net.iGap.observers.rx.IGSingleObserver;
+import net.iGap.observers.rx.ObserverViewModel;
 
 public class GiftStickerHomeViewModel extends ObserverViewModel {
     private StickerRepository stickerRepository = StickerRepository.getInstance();

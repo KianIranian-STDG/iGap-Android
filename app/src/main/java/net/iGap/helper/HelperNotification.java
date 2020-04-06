@@ -24,15 +24,15 @@ import android.view.Display;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.interfaces.OnActivityChatStart;
+import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.libs.Tuple;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
@@ -887,22 +887,7 @@ public class HelperNotification {
 
                                         DbManager.getInstance().doRealmTask(realm2 -> {
                                             if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-                                                RealmRoomMessage.fetchMessages(realm2, roomId, new OnActivityChatStart() {
-                                                    @Override
-                                                    public void sendSeenStatus(RealmRoomMessage message1) {
-                                                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message1.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                                    }
-
-                                                    @Override
-                                                    public void resendMessage(RealmRoomMessage message1) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void resendMessageNeedsUpload(RealmRoomMessage message1, long messageId1) {
-
-                                                    }
-                                                });
+                                                RealmRoomMessage.makeSeenAllMessageOfRoom(roomId);
                                             }
                                             AppUtils.updateBadgeOnly(realm2, roomId);
                                         });

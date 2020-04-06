@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.AccountManager;
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.proto.ProtoGroupSetAction;
@@ -36,26 +36,21 @@ public class GroupSetActionResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
-        DbManager.getInstance().doRealmTask(realm -> {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             if (AccountManager.getInstance().getCurrentUser().getId() != builder.getUserId()) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        if (AccountManager.getInstance().getCurrentUser().getId() != builder.getUserId()) {
-                            HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                        }
-                    }
-                });
-                if (G.onSetAction != null) {
-                    G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                }
-
-                if (G.onSetActionInRoom != null) {
-                    G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                if (AccountManager.getInstance().getCurrentUser().getId() != builder.getUserId()) {
+                    HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
                 }
             }
         });
+
+        if (G.onSetAction != null) {
+            G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        }
+
+        if (G.onSetActionInRoom != null) {
+            G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        }
     }
 
     @Override

@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoWalletRegister;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWalletGetAccessToken;

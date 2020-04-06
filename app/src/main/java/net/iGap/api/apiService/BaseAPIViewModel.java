@@ -3,6 +3,8 @@ package net.iGap.api.apiService;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.observers.interfaces.HandShakeCallback;
+
 // base view model implements callback for repository and handle on fail and base onError.
 // in other view model extends this you should override onSuccess and if have custom onError override it
 public abstract class BaseAPIViewModel extends ViewModel implements HandShakeCallback {

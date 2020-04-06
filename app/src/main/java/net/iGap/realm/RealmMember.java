@@ -15,7 +15,7 @@ import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.DbManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.module.SUID;
 import net.iGap.proto.ProtoChannelGetMemberList;
@@ -91,75 +91,60 @@ public class RealmMember extends RealmObject {
     }
 
     public static void addMember(final long roomId, final long userId, final String role) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                    if (realmRoom != null) {
-                        RealmList<RealmMember> members = new RealmList<>();
-                        if (realmRoom.getType() == GROUP) {
-                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                            if (realmGroupRoom != null) {
-                                members = realmGroupRoom.getMembers();
-                            }
-                        } else {
-                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                            if (realmChannelRoom != null) {
-                                members = realmChannelRoom.getMembers();
-                            }
-                        }
-                        members.add(RealmMember.put(realm, userId, role));
+            if (realmRoom != null) {
+                RealmList<RealmMember> members = new RealmList<>();
+                if (realmRoom.getType() == GROUP) {
+                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    if (realmGroupRoom != null) {
+                        members = realmGroupRoom.getMembers();
+                    }
+                } else {
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    if (realmChannelRoom != null) {
+                        members = realmChannelRoom.getMembers();
                     }
                 }
-            });
+                members.add(RealmMember.put(realm, userId, role));
+            }
         });
     }
 
     public static void updateMemberRole(final long roomId, final long memberId, final String role) {
         //TODO [Saeed Mozaffari] [2017-10-24 6:05 PM] - Can Write Better Code?
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        RealmList<RealmMember> realmMemberRealmList = null;
-                        if (realmRoom.getType() == GROUP) {
-                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                            if (realmGroupRoom != null) {
-                                realmMemberRealmList = realmGroupRoom.getMembers();
-                            }
-                        } else {
-                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                            if (realmChannelRoom != null) {
-                                realmMemberRealmList = realmChannelRoom.getMembers();
-                            }
-                        }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                RealmList<RealmMember> realmMemberRealmList = null;
+                if (realmRoom.getType() == GROUP) {
+                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    if (realmGroupRoom != null) {
+                        realmMemberRealmList = realmGroupRoom.getMembers();
+                    }
+                } else {
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    if (realmChannelRoom != null) {
+                        realmMemberRealmList = realmChannelRoom.getMembers();
+                    }
+                }
 
-                        if (realmMemberRealmList != null) {
-                            for (RealmMember member : realmMemberRealmList) {
-                                if (member.getPeerId() == memberId) {
-                                    member.setRole(role);
-                                    break;
-                                }
-                            }
+                if (realmMemberRealmList != null) {
+                    for (RealmMember member : realmMemberRealmList) {
+                        if (member.getPeerId() == memberId) {
+                            member.setRole(role);
+                            break;
                         }
                     }
                 }
-            });
+            }
         });
     }
 
     public static void kickMember(final long roomId, final long userId) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    kickMember(realm, roomId, userId);
-                }
-            });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            kickMember(realm, roomId, userId);
         });
     }
 

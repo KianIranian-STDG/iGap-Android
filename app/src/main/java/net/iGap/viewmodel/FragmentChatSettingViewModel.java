@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
