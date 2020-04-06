@@ -2,10 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/FileListerItemColor">
+    android:layout_height="wrap_content">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -18,8 +17,8 @@
             android:layout_height="wrap_content"
             android:text="@string/folder_icon"
             android:textSize="@dimen/dp28"
-            android:padding="@dimen/dp6"
-            android:textColor="@color/green" />
+            android:padding="@dimen/dp10"
+            android:textColor="?iGapPrimaryIconTextColor" />
 
         <TextView
             android:id="@+id/name"
@@ -29,6 +28,7 @@
             android:layout_marginStart="@dimen/dp10"
             android:layout_weight="0.9"
             android:gravity="center_vertical"
+            android:textColor="?iGapTitleTextColor"
             android:text="Folder"
             android:singleLine="true"
             android:textSize="15sp" />

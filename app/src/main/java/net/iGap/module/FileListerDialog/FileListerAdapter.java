@@ -1,8 +1,6 @@
 package net.iGap.module.FileListerDialog;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -12,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -249,35 +249,26 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
             if (data.get(getPosition()) == null) {
                 View view = View.inflate(getContext(), R.layout.dialog_create_folder, null);
                 final AppCompatEditText editText = view.findViewById(R.id.edittext);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setView(view)
-                        .setTitle("Enter the folder name")
-                        .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext())
+                        .customView(view, false)
+                        .title("Enter the folder name")
+                        .positiveText("Create")
+                        .onPositive((dialog, which) -> {
+                            String name = editText.getText().toString();
+                            if (TextUtils.isEmpty(name)) {
+                                M.T(getContext(), G.context.getResources().getString(R.string.Please_enter_valid_folder_name));
+                            } else {
+                                File file = new File(selectedFile, name);
+                                if (file.exists()) {
+                                    M.T(getContext(), G.context.getResources().getString(R.string.This_folder_already_exists));
+                                } else {
+                                    dialog.dismiss();
+                                    file.mkdirs();
+                                    fileLister(file);
+                                }
                             }
                         });
-                final AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String name = editText.getText().toString();
-                        if (TextUtils.isEmpty(name)) {
-                            M.T(getContext(), G.context.getResources().getString(R.string.Please_enter_valid_folder_name));
-                        } else {
-                            File file = new File(selectedFile, name);
-                            if (file.exists()) {
-                                M.T(getContext(), G.context.getResources().getString(R.string.This_folder_already_exists));
-                            } else {
-                                dialog.dismiss();
-                                file.mkdirs();
-                                fileLister(file);
-                            }
-                        }
-                    }
-                });
+                builder.show();
             } else {
                 File f = data.get(getPosition());
                 selectedFile = f;
