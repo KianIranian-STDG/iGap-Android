@@ -78,6 +78,12 @@ public class MainGiftStickerCardFragment extends BaseBottomSheet {
         return R.style.BaseBottomSheetDialog;
     }
 
+    public void closeFragment(boolean hasError) {
+        if (hasError)
+            Toast.makeText(getContext(), R.string.normal_error, Toast.LENGTH_SHORT).show();
+        dismiss();
+    }
+
     private void loadEnterNationalCodeForActivatePage(boolean canForward) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
