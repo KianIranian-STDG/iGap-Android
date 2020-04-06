@@ -956,6 +956,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         super.onDestroy();
         if (rootView != null)
             rootView.setListener(null);
+
+        updateImage = null;
     }
 
     public interface GalleryListener {
