@@ -10,11 +10,11 @@
     </data>
 
     <ScrollView
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/IGapRootViewStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -124,7 +124,7 @@
                 android:text="@{viewModel.referralCountryCodeObservableField}"
                 android:textColor="?iGapTitleTextColor"
                 app:layout_constraintBottom_toBottomOf="@id/referralView"
-                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintEnd_toEndOf="@id/name"
                 app:layout_constraintTop_toTopOf="@id/referralView" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -136,8 +136,8 @@
                 android:textColorHint="?iGapHintTextColor"
                 app:errorEnabled="@{viewModel.showReferralErrorLiveData}"
                 app:errorText="@{viewModel.referralError}"
-                app:layout_constraintEnd_toEndOf="@id/name"
-                app:layout_constraintStart_toEndOf="@id/countryCode"
+                app:layout_constraintEnd_toStartOf="@id/countryCode"
+                app:layout_constraintStart_toStartOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/email">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -190,7 +190,7 @@
 
                 <RadioButton
                     android:id="@+id/female"
-                    android:layout_width="wrap_content"
+                    android:layout_width="125dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:button="@drawable/check_box_background"

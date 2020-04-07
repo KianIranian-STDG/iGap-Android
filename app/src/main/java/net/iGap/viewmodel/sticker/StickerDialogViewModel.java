@@ -79,11 +79,12 @@ public class StickerDialogViewModel extends ObserverViewModel {
     }
 
     public void onRetryViewClicked() {
-        retryViewLiveData.setValue(View.VISIBLE);
+        retryViewLiveData.setValue(View.GONE);
         getSticker();
     }
 
     private void addStickerToMyStickers(StructIGStickerGroup stickerGroup) {
+        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
         repository.addStickerGroupToMyStickers(stickerGroup)
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
                     @Override
@@ -103,6 +104,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
     }
 
     private void removeStickerToMyStickers(StructIGStickerGroup stickerGroup) {
+        addOrRemoveProgressLiveData.postValue(View.VISIBLE);
         repository.removeStickerGroupFromMyStickers(stickerGroup)
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
                     @Override

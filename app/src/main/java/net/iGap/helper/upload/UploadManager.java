@@ -8,12 +8,12 @@ import androidx.collection.ArrayMap;
 import com.lalongooo.videocompressor.CompressTask;
 import com.lalongooo.videocompressor.OnCompress;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
@@ -23,8 +23,6 @@ import java.io.File;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 

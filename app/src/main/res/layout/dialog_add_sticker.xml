@@ -102,8 +102,8 @@
     <TextView
         android:id="@+id/tv_stickerDialog_add"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"
-        android:background="?attr/iGapTopRoundButtonPrimary"
+        android:layout_height="@dimen/dp52"
+        android:background="?attr/iGapButtonColor"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/largeTextSize"

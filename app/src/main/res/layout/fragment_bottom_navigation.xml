@@ -57,6 +57,7 @@
             app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
             app:haveAvatarImage="false"
+            app:hasUnreadBadge="true"
             app:item_text="@string/chat"
             app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />

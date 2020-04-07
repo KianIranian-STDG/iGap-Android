@@ -261,7 +261,7 @@
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_JOINED">آیگپه قوشولدو</string>
-    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
+    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">Dear user, you have just updated, please wait</string>
     <string name="USER_VERIFY_BLOCK">استفاده چی درخواستی اوچون مسدود اولونموشدور</string>
     <string name="USER_VERIFY_BLOCKED_USER">استقاده چی مسدود اولموش و اونو تایید ائتمک ممکن دئییل</string>
     <string name="USER_VERIFY_EXPIRED">تایید کدو منقضی اولموشدور</string>

@@ -835,6 +835,10 @@ public class FragmentChat extends BaseFragment
         setupIntentReceiverForGetDataInTwoPanMode();
     }
 
+    public long getRoomId() {
+        return mRoomId;
+    }
+
     private void setupIntentReceiverForGetDataInTwoPanMode() {
         //todo://fix chat fragment back stack and remove this code
         if (getActivity() instanceof ActivityMain) {

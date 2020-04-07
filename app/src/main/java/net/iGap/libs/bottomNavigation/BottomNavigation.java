@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import net.iGap.R;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
@@ -30,12 +31,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private int selectedItemPosition = defaultItem;
     private float cornerRadius;
     private int backgroundColor;
-    private int badgeColor;
     private OnLongClickListener onLongClickListener;
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        badgeColor = context.getResources().getColor(R.color.red);
         init(attrs);
     }
 
@@ -43,7 +42,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         parseAttr(attributeSet);
         setMinimumHeight(Utils.dpToPx(50));
         setOrientation(HORIZONTAL);
-        setWeightSum(5);
     }
 
     private void parseAttr(AttributeSet attributeSet) {
@@ -195,10 +193,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         this.backgroundColor = backgroundColor;
     }
 
-    public void setOnBottomNavigationBadge(int unreadCount, int callCount) {
-        TabItem tabItem = ((TabItem) getChildAt(2));
-        tabItem.setBadgeColor(badgeColor);
-        tabItem.setBadgeCount(unreadCount);
+    public void setOnBottomNavigationBadge(int unreadCount) {
+        for (int i = 0; i < getChildCount(); i++) {
+            TabItem tabItem = (TabItem) getChildAt(i);
+            tabItem.updateBadge(unreadCount);
+        }
     }
 
     public int getCurrentTab() {
@@ -207,10 +206,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
 
     @Override
     public void onClick(View v) {
-        if (selectedItemPosition != 4) {
+        if (selectedItemPosition != BottomNavigationFragment.PROFILE_FRAGMENT) {
             v.setSelected(!v.isSelected());
         }
-        selectedTabItem(4);
+        selectedTabItem(BottomNavigationFragment.PROFILE_FRAGMENT);
     }
 
     public boolean onLongClick(View v) {
