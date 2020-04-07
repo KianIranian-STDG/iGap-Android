@@ -87,7 +87,7 @@
     <!-- Destruction -->
     <string name="sure_delete_account">Are you sure you want to delete your account?</string>
     <string name="Destruction_Code">Destruction Code</string>
-    <string name="Destruction_Des">Now you are deleting your account; your phone number is : </string>
+    <string name="destroy_description">Now you are deleting your account; your phone number is : </string>
     <string name="iGap_autofill_Destruction_Code">iGap automatically fills the field of Deletion Code; otherwise, fill it manually .</string>
 
     <!-- Message Type and Status -->
@@ -402,7 +402,7 @@
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User is blocked, no possibility to verify</string>
-    <string name="Enter_Code">Destruction Code</string>
+    <string name="destroy_enter_code">Destruction Code</string>
     <string name="E_2">Need to Log in</string>
     <string name="E_335">Bad payload</string>
     <string name="E_336">Internal Server Error</string>

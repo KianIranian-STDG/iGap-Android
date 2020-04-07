@@ -144,7 +144,7 @@
 
     <string name="Destruction_Code">التدمير</string>
 
-    <string name="Destruction_Des">أنت الآن في حال تدمير حسابك، رقم هاتفك هو  : </string>
+    <string name="destroy_description">أنت الآن في حال تدمير حسابك، رقم هاتفك هو  : </string>
 
     <string name="iGap_autofill_Destruction_Code">آیکب يعرف الرمز بشكل آلي ويقوم بملء الفراغ، في حال عدم ملء الفراغ قُم بملئها يدوياً.</string>
 
@@ -748,7 +748,7 @@
 
     <string name="USER_VERIFY_BLOCKED_USER">"تمّ حظر هذه الجهة للاتصال و لايمكن تأييدها"</string>
 
-    <string name="Enter_Code">"رمز التدمير "</string>
+    <string name="destroy_enter_code">"رمز التدمير "</string>
 
     <string name="E_2">الحاجة إلى الدخول إلى النظام </string>
 

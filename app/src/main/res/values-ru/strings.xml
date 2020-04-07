@@ -62,7 +62,7 @@
     <string name="sure_delete_account">Вы уверены, что захотите удалить свой аккаунт?</string>
     <string name="delete_account_text_desc">(Если вы удалите свою аккуант, все файлы, которые вы получали как сообщение, также будут удалены без возможности восстановления.)</string>
     <string name="Destruction_Code">Уничтожение</string>
-    <string name="Destruction_Des">В данный момент вы пытаетесь уничтожить свой аккаунт, ваш номер телефона:</string>
+    <string name="destroy_description">В данный момент вы пытаетесь уничтожить свой аккаунт, ваш номер телефона:</string>
     <string name="iGap_autofill_Destruction_Code">Если вы не можете ввести код вручную, iGap автоматически обнаруживает код и заполняет пробел</string>
     <string name="video_message">Видео сообщение</string>
     <string name="file_message">Файл сообщений</string>
@@ -348,7 +348,7 @@
     <string name="desc_public_channel">Пользователи могут присоединиться к каналу, выполнив поиск имени пользователя или получив ссылку приглашения.</string>
     <string name="last_msg_format_chat" formatted="false">%s</string>
     <string name="USER_VERIFY_BLOCKED_USER">Пользователь был заблокирован и не может быть проверен.</string>
-    <string name="Enter_Code">Код уничтожения</string>
+    <string name="destroy_enter_code">Код уничтожения</string>
     <string name="E_2">Требуется логин</string>
     <string name="E_335">Ошибка клиента</string>
     <string name="E_336">Внутренняя ошибка сервера</string>

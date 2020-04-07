@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootDeleteAccount"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,13 +14,14 @@
 
 
     <TextView
+        android:id="@+id/description_authentication"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp20"
         android:layout_marginTop="@dimen/dp20"
         android:layout_marginRight="@dimen/dp20"
         android:gravity="center"
-        android:text="@string/Destruction_Des"
+        android:text="@string/destroy_description"
         android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp15" />
 
@@ -44,13 +44,13 @@
         android:layout_margin="@dimen/dp20">
 
         <net.iGap.module.EditTextAdjustPan
-            android:id="@+id/stda_edt_dleteAccount"
+            android:id="@+id/smsCodeEditText"
             style="@style/iGapEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:hint="@string/Enter_Code"
+            android:hint="@string/destroy_enter_code"
             android:maxLength="10"
             android:singleLine="true"
             android:textSize="@dimen/dp15" />
@@ -106,15 +106,5 @@
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15" />
     </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/stda_prgWaiting_addContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="gone" />
-
 
 </LinearLayout>

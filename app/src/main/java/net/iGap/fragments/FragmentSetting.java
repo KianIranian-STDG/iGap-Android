@@ -222,7 +222,7 @@ public class FragmentSetting extends BaseFragment {
             inDialog.show();
 
             TextView txtTitle = v.findViewById(R.id.txtDialogTitle);
-            txtTitle.setText(getString(R.string.log_out));
+            txtTitle.setText(R.string.log_out);
 
             TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
             iconTitle.setText(R.string.md_exit_app);
@@ -252,7 +252,7 @@ public class FragmentSetting extends BaseFragment {
             inDialog.show();
 
             TextView txtTitle = v.findViewById(R.id.txtDialogTitle);
-            txtTitle.setText(getString(R.string.delete_account));
+            txtTitle.setText(R.string.delete_account);
 
             TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
             iconTitle.setText(R.string.md_delete_acc);
@@ -268,10 +268,7 @@ public class FragmentSetting extends BaseFragment {
             txtOk.setOnClickListener(v1 -> {
                 inDialog.dismiss();
                 if (getActivity() != null) {
-                    FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("PHONE", AccountManager.getInstance().getCurrentUser().getPhoneNumber());
-                    fragmentDeleteAccount.setArguments(bundle);
+                    FragmentDeleteAccount fragmentDeleteAccount = FragmentDeleteAccount.getInstance(AccountManager.getInstance().getCurrentUser().getPhoneNumber());
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragmentDeleteAccount).setReplace(false).load();
                 }
             });
