@@ -60,7 +60,6 @@ public class RealmRoom extends RealmObject {
     private RealmRoomDraft draft;
     private RealmDraftFile draftFile;
     private RealmAvatar avatar;
-    private RealmRoomAccess roomAccess;
     private long updatedTime;
     private String sharedMediaCount = "";
     //if it was needed in the future we can combine this two under fields in RealmAction (actionStateUserId and actionState).
@@ -173,7 +172,6 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getChannelRoom().setPrivate(room.getChannelRoomExtra().hasPrivateExtra());
                 realmRoom.getChannelRoom().setVerified(room.getChannelRoomExtra().getVerified());
                 realmRoom.getChannelRoom().setReactionStatus(room.getChannelRoomExtra().getReactionStatus());
-                realmRoom.setRoomAccess(RealmRoomAccess.convert(room.getPermission(), realmRoom.getRoomAccess(), realm));
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
@@ -197,7 +195,6 @@ public class RealmRoom extends RealmObject {
                 }
                 realmRoom.getGroupRoom().setUsername(room.getGroupRoomExtra().getPublicExtra().getUsername());
                 realmRoom.getGroupRoom().setPrivate(room.getGroupRoomExtra().hasPrivateExtra());
-                realmRoom.setRoomAccess(RealmRoomAccess.convert(room.getPermission(), realmRoom.getRoomAccess(), realm));
                 break;
         }
 
@@ -1345,14 +1342,6 @@ public class RealmRoom extends RealmObject {
             }
             return ar;
         });
-    }
-
-    public void setRoomAccess(RealmRoomAccess roomAccess) {
-        this.roomAccess = roomAccess;
-    }
-
-    public RealmRoomAccess getRoomAccess() {
-        return roomAccess;
     }
 
     public static boolean isPromote(Long id) {
