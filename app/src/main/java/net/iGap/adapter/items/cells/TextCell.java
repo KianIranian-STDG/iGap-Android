@@ -48,7 +48,7 @@ public class TextCell extends FrameLayout {
         addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_VERTICAL | (isRtl ? Gravity.RIGHT : Gravity.LEFT), isRtl ? 72 : padding, 0, isRtl ? padding : 72, 0));
     }
 
-    public void setText(CharSequence text) {
+    public void setValue(CharSequence text) {
         textView.setText(text);
     }
 

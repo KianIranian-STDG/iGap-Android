@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,33 +30,35 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.cells.TextCell;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnChannelGetMemberList;
-import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.OnGroupGetMemberList;
-import net.iGap.observers.interfaces.OnGroupKickMember;
-import net.iGap.observers.interfaces.OnSelectedList;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
-import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.PreCachingLayoutManager;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
+import net.iGap.observers.interfaces.OnChannelGetMemberList;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGroupGetMemberList;
+import net.iGap.observers.interfaces.OnGroupKickMember;
+import net.iGap.observers.interfaces.OnSelectedList;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoChannelGetMemberList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
@@ -68,13 +69,9 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddMember;
-import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelGetMemberList;
-import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddMember;
-import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
@@ -82,7 +79,6 @@ import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -281,7 +277,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                     }
                                 });
                             });
-                    }});
+                        }
+                    });
                 } else {
                     mCurrentUpdateCount++;
                 }
@@ -796,50 +793,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        if (getActivity() != null) {
-                            HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
-                                @Override
-                                public void Allow() {
-                                    switch (showMemberMode) {
-                                        case NONE:
-                                            if (mContact.peerId == userID) {
-                                            } else {
-                                                long roomId = RealmRoom.getRoomIdByPeerId(mContact.peerId);
-                                                if (roomId != 0) {
-                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(roomId, mContact.peerId, GROUP.toString())).setReplace(false).load();
-                                                }else {
-                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, mContact.peerId, "Others")).setReplace(false).load();
-                                                }
-                                            }
-                                            break;
-                                        case SELECT_FOR_ADD_MODERATOR:
-                                            if (isGroup) {
-                                                new RequestGroupAddModerator().groupAddModerator(mRoomID, mContact.peerId);
-                                            } else {
-                                                new RequestChannelAddModerator().channelAddModerator(mRoomID, mContact.peerId);
-                                            }
-                                            getActivity().onBackPressed();
-                                            break;
-                                        case SELECT_FOR_ADD_ADMIN:
-                                            if (isGroup) {
-                                                new RequestGroupAddAdmin().groupAddAdmin(mRoomID, mContact.peerId);
-                                            } else {
-                                                new RequestChannelAddAdmin().channelAddAdmin(mRoomID, mContact.peerId);
-                                            }
-                                            getActivity().onBackPressed();
-                                            break;
-                                    }
-                                }
-
-                                @Override
-                                public void deny() {
-
-                                }
-                            });
+                    if (getActivity() != null) {
+                        if (mContact.peerId != userID) {
+                            long roomId = RealmRoom.getRoomIdByPeerId(mContact.peerId);
+                            if (roomId != 0) {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(roomId, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                            } else {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, mContact.peerId, "Others")).setReplace(false).load();
+                            }
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
             });
@@ -848,61 +810,63 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 @Override
                 public boolean onLongClick(View v) {
 
-                    if (fragment instanceof FragmentGroupProfile) {
+//                    if (fragment instanceof FragmentGroupProfile) {
+//
+//                        if (role.equals(GroupChatRole.OWNER.toString())) {
+//
+//                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+//
+//                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
+//                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+//
+//                                ((FragmentGroupProfile) fragment).kickAdmin(mContact.peerId);
+//                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+//
+//                                ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
+//                            }
+//                        } else if (role.equals(GroupChatRole.ADMIN.toString())) {
+//
+//                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+//                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
+//                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+//                                ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
+//                            }
+//                        } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
+//
+//                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+//                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
+//                            }
+//                        }
+//                    } else if (fragment instanceof FragmentChannelProfile) {
+//
+//                        if (role.equals(GroupChatRole.OWNER.toString())) {
+//
+//                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+//
+//                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
+//                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+//
+//                                ((FragmentChannelProfile) fragment).kickAdmin(mContact.peerId);
+//                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+//
+//                                ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
+//                            }
+//                        } else if (role.equals(GroupChatRole.ADMIN.toString())) {
+//
+//                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+//                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
+//                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+//                                ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
+//                            }
+//                        } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
+//
+//                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+//                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
+//                            }
+//                        }
+//                    }
 
-                        if (role.equals(GroupChatRole.OWNER.toString())) {
-
-                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-
-                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
-                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-
-                                ((FragmentGroupProfile) fragment).kickAdmin(mContact.peerId);
-                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-
-                                ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
-                            }
-                        } else if (role.equals(GroupChatRole.ADMIN.toString())) {
-
-                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
-                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                                ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
-                            }
-                        } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
-
-                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
-                            }
-                        }
-                    } else if (fragment instanceof FragmentChannelProfile) {
-
-                        if (role.equals(GroupChatRole.OWNER.toString())) {
-
-                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-
-                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
-                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-
-                                ((FragmentChannelProfile) fragment).kickAdmin(mContact.peerId);
-                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-
-                                ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
-                            }
-                        } else if (role.equals(GroupChatRole.ADMIN.toString())) {
-
-                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
-                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                                ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
-                            }
-                        } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
-
-                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
-                            }
-                        }
-                    }
+                    showMemberDialog(mContact.peerId);
 
                     return true;
                 }
@@ -915,46 +879,38 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
 
             holder.title.setText(mContact.displayName);
-
-            setRoleStarColor(holder.roleStar, mContact);
-
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
-            holder.subtitle.setText(
-                    setUserStatus(
-                            holder.subtitle.getContext() ,
-                            mContact.status ,
-                            mContact.peerId ,
-                            mContact.lastSeen
-                    )
-            );
+            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+                holder.subtitle.setText("Owner");
+            } else {
+                holder.subtitle.setText(setUserStatus(holder.subtitle.getContext(), mContact.status, mContact.peerId, mContact.lastSeen));
+            }
 
             if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                holder.btnMenu.setVisibility(View.INVISIBLE);
+                holder.btnMenu.setVisibility(View.GONE);
             } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
                 if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString()))) {
-                    holder.btnMenu.setVisibility(View.INVISIBLE);
+                    holder.btnMenu.setVisibility(View.GONE);
                 } else {
-                    showPopup(holder, mContact);
+                    holder.btnMenu.setVisibility(View.VISIBLE);
                 }
             } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
                 if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString()))) {
-                    holder.btnMenu.setVisibility(View.INVISIBLE);
+                    holder.btnMenu.setVisibility(View.GONE);
                 } else {
-                    showPopup(holder, mContact);
+                    holder.btnMenu.setVisibility(View.VISIBLE);
                 }
             } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-                showPopup(holder, mContact);
+                holder.btnMenu.setVisibility(View.VISIBLE);
             }
 
-            /**
-             * don't allow for use dialog if this item
-             * is for own user
-             */
+            holder.btnMenu.setOnClickListener(v -> showMemberDialog(mContact.peerId));
+
             if (mContact.peerId == mContact.userID) {
-                holder.btnMenu.setVisibility(View.INVISIBLE);
+                holder.btnMenu.setVisibility(View.GONE);
             }
 
             if (showMemberMode != ShowMemberMode.NONE) {
@@ -962,7 +918,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
         }
 
-        private String setUserStatus(Context context , String userStatus, long userId , long time ) {
+        private String setUserStatus(Context context, String userStatus, long userId, long time) {
 
             if (userStatus != null) {
                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -970,7 +926,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 } else {
                     return userStatus;
                 }
-            }else {
+            } else {
                 return LastSeenTimeUtil.computeTime(context, userId, time, false);
             }
         }
@@ -1000,22 +956,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             });
         }
 
-        private void setRoleStarColor(TextView view, StructContactInfo mContact) {
-
-            view.setVisibility(View.GONE);
-
-            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                view.setVisibility(View.VISIBLE);
-                view.setTextColor(Color.CYAN);
-            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-                view.setVisibility(View.VISIBLE);
-                view.setTextColor(Color.GREEN);
-            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-                view.setVisibility(View.VISIBLE);
-                view.setTextColor(Color.BLUE);
-            }
-        }
-
         StructContactInfo convertRealmToStruct(RealmMember realmMember) {
             return DbManager.getInstance().doRealmTask(realm -> {
                 String role = realmMember.getRole();
@@ -1037,28 +977,44 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             });
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
+            private CircleImageView image;
+            private TextView title;
+            private TextView subtitle;
+            private View topLine;
+            private TextView btnMenu;
 
-            protected CircleImageView image;
-            protected CustomTextViewMedium title;
-            protected CustomTextViewMedium subtitle;
-            protected View topLine;
-            protected TextView txtNumberOfSharedMedia;
-            protected TextView roleStar;
-            protected TextView btnMenu;
-
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
 
                 image = itemView.findViewById(R.id.cigp_imv_contact_avatar);
                 title = itemView.findViewById(R.id.cigp_txt_contact_name);
                 subtitle = itemView.findViewById(R.id.cigp_txt_contact_lastseen);
                 topLine = itemView.findViewById(R.id.cigp_view_topLine);
-                txtNumberOfSharedMedia = itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
-                roleStar = itemView.findViewById(R.id.cigp_txt_member_role);
                 btnMenu = itemView.findViewById(R.id.cigp_moreButton);
             }
         }
+    }
+
+    private void showMemberDialog(long peerId) {
+
+        LinearLayout dialogRootView = new LinearLayout(getContext());
+        dialogRootView.setOrientation(LinearLayout.VERTICAL);
+        dialogRootView.setBackgroundColor(Theme.getInstance().getRootColor(dialogRootView.getContext()));
+
+        TextCell adminRights = new TextCell(dialogRootView.getContext(), true);
+        adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
+        adminRights.setValue("Add to admin");
+        dialogRootView.addView(adminRights, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+
+        TextCell removeView = new TextCell(dialogRootView.getContext(), true);
+        removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
+        removeView.setValue("Remove From Channel");
+        dialogRootView.addView(removeView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+
+        new MaterialDialog.Builder(dialogRootView.getContext())
+                .customView(dialogRootView, false)
+                .show();
     }
 
     @Override

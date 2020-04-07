@@ -103,7 +103,7 @@ public class ChatRightsEditFragment extends BaseFragment implements ToolbarListe
         linearLayout.addView(emptyCell2);
 
         TextCell dismissAdminCell = new TextCell(getContext(), true);
-        dismissAdminCell.setText("Dismiss admin");
+        dismissAdminCell.setValue("Dismiss admin");
         dismissAdminCell.setTextColor(getContext().getResources().getColor(R.color.red));
         linearLayout.addView(dismissAdminCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
