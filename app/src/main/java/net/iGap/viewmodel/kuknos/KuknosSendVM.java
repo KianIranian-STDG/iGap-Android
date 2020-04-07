@@ -2,6 +2,9 @@ package net.iGap.viewmodel.kuknos;
 
 import android.view.View;
 
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.gson.Gson;
 
 import net.iGap.R;
@@ -18,8 +21,7 @@ import net.iGap.repository.kuknos.PanelRepo;
 
 import org.stellar.sdk.KeyPair;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
+import java.nio.charset.StandardCharsets;
 
 public class KuknosSendVM extends BaseAPIViewModel {
 
@@ -53,11 +55,20 @@ public class KuknosSendVM extends BaseAPIViewModel {
 
     public void sendCredit() {
 
-        if (!checkWalletID() || !checkAmount()) {
+        if (!checkWalletID() || !checkAmount() || !checkMemo()) {
             return;
         }
         goToPin.setValue(true);
 
+    }
+
+    private boolean checkMemo() {
+        String memo = "TRANSFER: " + (text.get() == null ? "" : text.get());
+        if (memo.getBytes(StandardCharsets.UTF_8).length > 28) {
+            errorM.setValue(new KuknosError(true, "Invalid Memo", "2", R.string.kuknos_send_memoError));
+            return false;
+        }
+        return true;
     }
 
     private boolean checkWalletID() {

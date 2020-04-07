@@ -2123,6 +2123,7 @@ Want to get it?</string>
     <string name="kuknos_send_successServer">Transfer is successfully done.</string>
     <string name="kuknos_send_errorServer">Something went wrong. Please try again.</string>
     <string name="kuknos_send_walletIDError">Wallet Address must not be empty.</string>
+    <string name="kuknos_send_memoError">Memo is too long.</string>
     <string name="kuknos_send_AmountError">Amount must not be empty.</string>
     <string name="kuknos_send_CreditError">NOT enough credit.</string>
     <string name="kuknos_send_AmountFromatError">Amount format is wrong. please only use . and digits.</string>

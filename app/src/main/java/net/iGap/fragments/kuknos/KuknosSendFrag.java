@@ -10,6 +10,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -26,14 +34,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosSendVM;
 
 import java.io.IOException;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
 
@@ -142,8 +142,9 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
                         binding.fragKuknosSAmountHolder.requestFocus();
                         break;
                     case "2":
-                        //server related errors
-
+                        //memo
+                        binding.fragKuknosSTextHolder.setError("" + getString(errorM.getResID()));
+                        binding.fragKuknosSTextHolder.requestFocus();
                         break;
                 }
             }

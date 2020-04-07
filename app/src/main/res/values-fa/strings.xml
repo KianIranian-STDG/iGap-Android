@@ -2554,4 +2554,5 @@
     <string name="kuknos_parsianTerms_term2">من موافقت میکنم تا آدرس دامنه پارسیان که در ادامه ذکر شده است به عنوان دامنه اصلی کیف پول من تنظیم شود. \nآدرس: https://www.pdpco.ir</string>
     <string name="kuknos_parsianTerms_term3">من به ایجاد کننده توکن SKYC اعتماد دارم.</string>
     <string name="kuknos_parsianTerms_errorTermAndCondition">اگه شما مایل به ادامه و استفاده از امکانات کیف پول پارسیان هستید، باید تمامی مفاد را تایید کنید.</string>
+    <string name="kuknos_send_memoError">طول متن یادداشت بیش از حد مجاز است.</string>
 </resources>
