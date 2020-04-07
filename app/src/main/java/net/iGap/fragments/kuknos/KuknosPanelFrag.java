@@ -34,7 +34,6 @@ import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
@@ -174,10 +173,10 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 case 0:
 //                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
 //                    if (fragment == null) {
-                        if (!viewModel.isMnemonicAvailable()) {
-                            HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
-                            return;
-                        }
+//                        if (!viewModel.isMnemonicAvailable()) {
+//                            HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
+//                            return;
+//                        }
                         fragment = KuknosEnterPinFrag.newInstance(() -> {
                             goToShowRecovery();
                         }, false);

@@ -188,4 +188,8 @@ public class UserRepo {
             new RequestUserProfileGetEmail().userProfileGetEmail();
     }
 
+    public boolean isMnemonicAvailable() {
+        return realmKuknos.getKuknosMnemonic() != null;
+    }
+
 }

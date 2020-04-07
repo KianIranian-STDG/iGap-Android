@@ -2093,6 +2093,13 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_Error_empty_str">Enter your key stream</string>
     <string name="kuknos_RecoverySK_Error_invalid_str">Your key stream length is not long enough.</string>
     <string name="kuknos_RecoverySK_Error_Snack">Ok</string>
+    <string name="kuknos_accountInfo_title">Account Info</string>
+    <string name="kuknos_accountInfo_desc">Here is all of the information related to your account in Kuknos platform.</string>
+    <string name="kuknos_accountInfo_recoveryKey_title">1. Recovery keys</string>
+    <string name="kuknos_accountInfo_publicKey_title">3. Public Key</string>
+    <string name="kuknos_accountInfo_publicKey_desc">This key is for you to share with others in order to get currencies from them.</string>
+    <string name="kuknos_accountInfo_privateKey_title">2. Private Key</string>
+    <string name="kuknos_accountInfo_privateKey_desc">This key is private and with this key, you can access to your account and restore your wallet. Please be notified that this key MUST not be shared with others.</string>
     <string name="kuknos_SetPass_title">Create a 4 digit local PIN</string>
     <string name="kuknos_SetPass_message">This 4 numeric PIN will be used for future login and confirmations. Please make sure you choose a PIN that is difficult to guess for others.</string>
     <string name="kuknos_SetPass_submit">Submit</string>
@@ -2135,7 +2142,7 @@ Want to get it?</string>
     <string name="kuknos_wHistory_error">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_setting_title">Setting</string>
     <string name="kuknos_setting_changePin">Change PIN</string>
-    <string name="kuknos_setting_viewRecoveryP">View Recovery Phrase</string>
+    <string name="kuknos_setting_viewRecoveryP">Show Account Info</string>
     <string name="kuknos_setting_logout">Logout</string>
     <string name="kuknos_changePIN_title">Change PIN code</string>
     <string name="kuknos_changePIN_message">This 4-numeric PIN will used to encrypt your secret keys.

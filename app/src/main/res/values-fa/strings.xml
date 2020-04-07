@@ -2071,7 +2071,7 @@
     <string name="kuknos_wHistory_error">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_setting_title">تنظیمات</string>
     <string name="kuknos_setting_changePin">تغییر رمز ورودی</string>
-    <string name="kuknos_setting_viewRecoveryP">نمایش زنجیره کلمات بازیابی</string>
+    <string name="kuknos_setting_viewRecoveryP">نمایش اطلاعات حساب کاربری</string>
     <string name="kuknos_setting_logout">خروج از کیف پول</string>
     <string name="kuknos_changePIN_title">تغییر رمز ورودی</string>
     <string name="kuknos_changePIN_message">رمز ورودی (چهار رقمی) جهت رمزنگاری کلید خصوصی شما مورد استفاده قرار می گیرد. لطفا رمز را به گونه ای انتخاب نمایید که به راحتی قابل حدس زدن نباشد.</string>
@@ -2555,4 +2555,11 @@
     <string name="kuknos_parsianTerms_term3">من به ایجاد کننده توکن SKYC اعتماد دارم.</string>
     <string name="kuknos_parsianTerms_errorTermAndCondition">اگه شما مایل به ادامه و استفاده از امکانات کیف پول پارسیان هستید، باید تمامی مفاد را تایید کنید.</string>
     <string name="kuknos_send_memoError">طول متن یادداشت بیش از حد مجاز است.</string>
+    <string name="kuknos_accountInfo_title">اطلاعات اکانت</string>
+    <string name="kuknos_accountInfo_desc">"تمامی اطلاعات مربوط به اکانت شما در سامانه ققنوس "</string>
+    <string name="kuknos_accountInfo_recoveryKey_title">1- رشته کلید بازگردانی حساب</string>
+    <string name="kuknos_accountInfo_publicKey_title">3- کلید عمومی</string>
+    <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
+    <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال ارز کنید.</string>
+    <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
 </resources>
