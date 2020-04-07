@@ -802,9 +802,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 //setAvatar();
                 RealmRoom.updateChatTitle(userId, nickName);
                 AccountManager.getInstance().updateCurrentUserName(nickName);
-                currentName = nickName;
-                showLoading.set(View.GONE);
-                submitData();
+                G.handler.post(() -> {
+                    currentName = nickName;
+                    showLoading.set(View.GONE);
+                });
             }
 
             @Override
@@ -827,7 +828,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 G.handler.post(() -> {
                     showLoading.set(View.GONE);
                     currentUserName = username;
-                    submitData();
                 });
             }
 
@@ -856,7 +856,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 G.handler.post(() -> {
                     showLoading.set(View.GONE);
                     currentUserEmail = email;
-                    submitData();
                 });
             }
 
@@ -884,7 +883,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private void sendRequestSetBio() {
         new RequestUserProfileSetBio().setBio(bio.get());
         currentBio = bio.get();
-        submitData();
     }
 
     private void sendRequestSetGender() {
@@ -895,7 +893,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 G.handler.post(() -> {
                     showLoading.set(View.GONE);
                     currentGender = gender == ProtoGlobal.Gender.MALE ? R.id.male : R.id.female;
-                    submitData();
                 });
             }
 
@@ -1204,7 +1201,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onSetRepresentative(String phone) {
                 referralEnableLiveData.postValue(false);
                 referralNumberObservableField.set("");
-                G.handler.post(() -> submitData());
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                });
             }
 
             @Override
