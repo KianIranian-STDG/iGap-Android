@@ -15,6 +15,8 @@ import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 
+import org.stellar.sdk.responses.SubmitTransactionResponse;
+
 public class PanelRepo {
 
     private UserRepo userRepo = new UserRepo();
@@ -73,6 +75,10 @@ public class PanelRepo {
 
     public void getPaymentData(String RRA, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosPaymentResponse>> apiResponse) {
         kuknosAPIRepository.getPaymentData(RRA, handShakeCallback, apiResponse);
+    }
+
+    public void setOptions(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
+        kuknosAPIRepository.setOptions(userRepo.getSeedKey(), handShakeCallback, apiResponse);
     }
 
     public boolean isPinSet() {

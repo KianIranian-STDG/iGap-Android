@@ -14,6 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,16 +48,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
@@ -135,6 +135,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         onDataChanged();
         onProgress();
         onTermsDownload();
+        goToParsianTerms();
     }
 
     @Override
@@ -231,6 +232,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
         if (fragment == null) {
             fragment = KuknosShowRecoveryKeySFrag.newInstance();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+    }
+
+    private void goToParsianTerms() {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentByTag(KuknosParsianTermsFrag.class.getName());
+        if (fragment == null) {
+            fragment = KuknosParsianTermsFrag.newInstance();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

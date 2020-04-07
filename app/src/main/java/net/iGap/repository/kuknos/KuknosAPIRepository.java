@@ -96,6 +96,12 @@ class KuknosAPIRepository {
                         , handShakeCallback, apiResponse);*/
     }
 
+    void setOptions(String accountSeed, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
+        new KuknosSDKRepo(KuknosSDKRepo.API.SET_OPTION, XDR -> new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
+                .initAPI(apiService.setOption(XDR), handShakeCallback, apiResponse))
+                .execute(accountSeed);
+    }
+
     /*void changeTrust(String accountSeed, String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.CHANGE_TRUST);
         temp.execute(accountSeed, code, issuer);

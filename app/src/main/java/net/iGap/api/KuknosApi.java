@@ -173,6 +173,16 @@ public interface KuknosApi {
     Call<KuknosResponseModel<KuknosUserInfo>> accountStatus(@Field("public_key") String publicKey);
 
     /**
+     * this api sets Home domain and Inflation destination
+     *
+     * @param XDR
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("set-options")
+    Call<KuknosResponseModel<SubmitTransactionResponse>> setOption(@Field("xdr") String XDR);
+
+    /**
      * this api creates a buy offer.
      *
      * @param XDR
