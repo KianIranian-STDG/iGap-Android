@@ -1,5 +1,9 @@
 package net.iGap.viewmodel.kuknos;
 
+import androidx.core.text.HtmlCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
@@ -18,10 +22,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import androidx.core.text.HtmlCompat;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private ObservableField<String> amount = new ObservableField<>();
@@ -37,12 +37,13 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     //go to bank
     private MutableLiveData<Boolean> nextPage;
     private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
-    private int PMNprice = -1;
-    private double maxAmount = 1000000;
+    //    private int PMNprice = -1;
+//    private double maxAmount = 1000000;
     Double sumTemp;
     private PanelRepo panelRepo = new PanelRepo();
     private MutableLiveData<String> TandCAgree;
     private boolean termsAndConditionIsChecked = false;
+    private KuknosAsset.Asset requestedAsset = null;
 
     public KuknosBuyPeymanVM() {
         error = new MutableLiveData<>();
@@ -65,13 +66,16 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         if (checkEntry()) {
             return false;
         }
-        if (Double.parseDouble(amount.get()) > maxAmount) {
+        if (requestedAsset == null)
+            return false;
+        if (Double.parseDouble(amount.get()) > requestedAsset.getRemainAmount()
+                || Double.parseDouble(amount.get()) > requestedAsset.getiGapTransferLimit()) {
             error.setValue(new KuknosError(true, "", "1", R.string.kuknos_buyP_MaxAmount));
             return false;
         }
-        if (PMNprice == -1)
-            return false;
-        sumTemp = Double.parseDouble(amount.get()) * PMNprice;
+//        if (requestedAsset.getBuyRate() == -1)
+//            return false;
+        sumTemp = Double.parseDouble(amount.get()) * requestedAsset.getBuyRate();
         BigDecimal tmp = new BigDecimal(sumTemp).setScale(0, RoundingMode.UP);
         sumTemp = Double.parseDouble(tmp.toString());
         DecimalFormat df = new DecimalFormat(",###");
@@ -84,9 +88,10 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         panelRepo.getSpecificAssets("PMN", this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
-                PMNprice = data.getData().getAssets().get(0).getBuyRate();
-                maxAmount = data.getData().getAssets().get(0).getRemainAmount();
-                assetPrice.set("قیمت هر پیمان: " + PMNprice + " ریال");
+                requestedAsset = data.getData().getAssets().get(0);
+//                PMNprice = data.getData().getAssets().get(0).getBuyRate();
+//                maxAmount = data.getData().getAssets().get(0).getRemainAmount();
+                assetPrice.set("قیمت هر پیمان: " + requestedAsset.getBuyRate() + " ریال");
                 progressState.setValue(0);
                 amountEnable.set(true);
 //                getFees();

@@ -47,6 +47,8 @@ public class KuknosAsset {
         private int buyRate;
         @SerializedName("sell_rate")
         private int sellRate;
+        @SerializedName("transfer_limit")
+        private double iGapTransferLimit;
 
         public org.stellar.sdk.Asset getAsset() {
             return org.stellar.sdk.Asset.create(this.assetType, this.assetCode, this.assetIssuer);
@@ -154,6 +156,10 @@ public class KuknosAsset {
 
         public void setSellRate(int sellRate) {
             this.sellRate = sellRate;
+        }
+
+        public double getiGapTransferLimit() {
+            return iGapTransferLimit;
         }
     }
 }
