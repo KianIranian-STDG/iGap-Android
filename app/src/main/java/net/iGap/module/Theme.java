@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.TypedValue;
@@ -46,8 +47,8 @@ public class Theme {
 
     private static Theme theme;
 
-    public static Theme getInstance(){
-        if (theme == null){
+    public static Theme getInstance() {
+        if (theme == null) {
             theme = new Theme();
         }
         return theme;
@@ -80,6 +81,7 @@ public class Theme {
     public static String default_grey_appBarColor = "#616161";
     public static String default_blueGrey_appBarColor = "#455A64";
 
+    private static Paint paint;
 
     public static void setThemeColor() {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -179,6 +181,7 @@ public class Theme {
     public int getUserProfileTabSelector(Context context) {
         return getDrawableAttr(context, R.attr.iGapProfileStroke);
     }
+
     public int getSendMessageOtherTextColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapSendMessageOtherTextColor);
     }
@@ -247,8 +250,8 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapLinkColor);
     }
 
-    public int getSendReplayUserColor(Context context){
-        return getColorFromAttr(context,R.attr.iGapSendReplayColor);
+    public int getSendReplayUserColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapSendReplayColor);
     }
 
     private int getColorFromAttr(@NotNull Context context, int attrResId) {
@@ -315,4 +318,12 @@ public class Theme {
     }
     // for under lollipop
 
+
+    public Paint getDividerPaint(Context context) {
+        if (paint == null) {
+            paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(getDividerColor(context));
+        }
+        return paint;
+    }
 }

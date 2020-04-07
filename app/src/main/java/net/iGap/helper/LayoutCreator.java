@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.DimenRes;
+
 import net.iGap.G;
 
 public class LayoutCreator {
@@ -150,5 +152,9 @@ public class LayoutCreator {
 
     public static int getTextWidth(TextView textView) {
         return (int) textView.getPaint().measureText(textView.getText().toString());
+    }
+
+    public static int getDimen(@DimenRes int dimension) {
+        return pxToDp((int) context.getResources().getDimension(dimension));
     }
 }
