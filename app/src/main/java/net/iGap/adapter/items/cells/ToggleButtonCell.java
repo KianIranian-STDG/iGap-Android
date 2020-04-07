@@ -1,14 +1,17 @@
 package net.iGap.adapter.items.cells;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
@@ -17,9 +20,11 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.module.CustomToggleButton;
 import net.iGap.module.Theme;
 
+@SuppressLint("ViewConstructor")
 public class ToggleButtonCell extends FrameLayout {
     private CustomToggleButton toggleButton;
     private TextView textView;
+    private CompoundButton.OnCheckedChangeListener checkedChangeListener;
 
     private boolean needDivider;
     private boolean isRtl = G.isAppRtl;
@@ -35,7 +40,6 @@ public class ToggleButtonCell extends FrameLayout {
         setWillNotDraw(!needDivider);
 
         textView = new TextView(getContext());
-        textView.setText("Salam Bar Man");
         textView.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
@@ -47,7 +51,15 @@ public class ToggleButtonCell extends FrameLayout {
         addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_VERTICAL | (isRtl ? Gravity.RIGHT : Gravity.LEFT), isRtl ? 72 : padding, 0, isRtl ? padding : 72, 0));
 
         toggleButton = new CustomToggleButton(getContext());
+        toggleButton.setClickable(true);
         addView(toggleButton, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER_VERTICAL | (isRtl ? Gravity.LEFT : Gravity.RIGHT), isRtl ? 24 : 0, 0, isRtl ? 0 : 24, 0));
+
+        setOnClickListener(v -> toggleButton.setChecked(!toggleButton.isChecked()));
+
+        toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (checkedChangeListener != null)
+                checkedChangeListener.onCheckedChanged(buttonView, isChecked);
+        });
 
     }
 
@@ -72,5 +84,7 @@ public class ToggleButtonCell extends FrameLayout {
         }
     }
 
-
+    public void setOnCheckedChangeListener(@Nullable CompoundButton.OnCheckedChangeListener checkedChangeListener) {
+        this.checkedChangeListener = checkedChangeListener;
+    }
 }
