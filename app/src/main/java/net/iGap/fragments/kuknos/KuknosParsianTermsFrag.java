@@ -18,7 +18,6 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosParsianTermsBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosParsianTermsVM;
 
 public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM> {
@@ -56,13 +55,13 @@ public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                /*.setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
                         popBackStackFragment();
                     }
-                })
+                })*/
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosBuyPToolbar;
@@ -119,5 +118,10 @@ public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server));
             }
         });
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return true;
     }
 }

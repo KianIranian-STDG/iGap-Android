@@ -2059,6 +2059,7 @@ Want to get it?</string>
     <string name="kuknos_Restore_Error_empty_str">Enter your key stream</string>
     <string name="kuknos_Restore_Error_invalid_str">Your key stream length is not long enough.</string>
     <string name="kuknos_Restore_Error_Snack">Ok</string>
+    <string name="kuknos_Restore_ErrorNoAccount_Snack">There is no existing account in Kuknos.</string>
     <string name="kuknos_RestoreSeed_Title">Please enter your account seed key.</string>
     <string name="kuknos_RestoreSeed_Message">By using this key, you will be able to retrieve your account.</string>
     <string name="kuknos_RestoreSeed_Hint">For example: SALSSCHD7TTEF…</string>

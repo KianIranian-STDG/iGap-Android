@@ -11,6 +11,7 @@ import net.iGap.model.kuknos.Parsian.KuknosFederation;
 import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
 import net.iGap.model.kuknos.Parsian.KuknosHash;
 import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
+import net.iGap.model.kuknos.Parsian.KuknosOptionStatus;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
@@ -79,6 +80,10 @@ public class PanelRepo {
 
     public void setOptions(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
         kuknosAPIRepository.setOptions(userRepo.getSeedKey(), handShakeCallback, apiResponse);
+    }
+
+    public void getAccountOptionsStatus(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOptionStatus>> apiResponse) {
+        kuknosAPIRepository.getAccountOptionsStatus(userRepo.getAccountID(), handShakeCallback, apiResponse);
     }
 
     public boolean isPinSet() {

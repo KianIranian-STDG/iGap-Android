@@ -9,6 +9,7 @@ import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
 import net.iGap.model.kuknos.Parsian.KuknosHash;
 import net.iGap.model.kuknos.Parsian.KuknosOfferResponse;
 import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
+import net.iGap.model.kuknos.Parsian.KuknosOptionStatus;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.model.kuknos.Parsian.KuknosTradeResponse;
 import net.iGap.model.kuknos.Parsian.KuknosTransactionResult;
@@ -171,6 +172,16 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("account-status")
     Call<KuknosResponseModel<KuknosUserInfo>> accountStatus(@Field("public_key") String publicKey);
+
+    /**
+     * this api returns the user status for options: home domain and inflation add
+     *
+     * @param publicKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("is-member")
+    Call<KuknosResponseModel<KuknosOptionStatus>> accountOptionsStatus(@Field("public_key") String publicKey);
 
     /**
      * this api sets Home domain and Inflation destination

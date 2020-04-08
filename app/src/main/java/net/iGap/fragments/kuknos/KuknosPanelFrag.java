@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,12 +133,11 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         onDataChanged();
         onProgress();
         onTermsDownload();
-        goToParsianTerms();
     }
 
     @Override
     public void onResume() {
-        viewModel.getDataFromServer();
+        viewModel.initApis();
         super.onResume();
     }
 
@@ -202,17 +200,6 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
         if (fragment == null) {
             fragment = KuknosShowRecoveryKeySFrag.newInstance();
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        }
-        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-    }
-
-    private void goToParsianTerms() {
-        FragmentManager fragmentManager = getChildFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment = fragmentManager.findFragmentByTag(KuknosParsianTermsFrag.class.getName());
-        if (fragment == null) {
-            fragment = KuknosParsianTermsFrag.newInstance();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
@@ -335,13 +322,19 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     }
                     break;
                 case 5:
-                    Log.d("amini", "openPage: open trade");
                     fragment = fragmentManager.findFragmentByTag(KuknosTradePagerFrag.class.getName());
                     if (fragment == null) {
                         fragment = KuknosTradePagerFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     break;
+                case 6:
+                    fragment = fragmentManager.findFragmentByTag(KuknosParsianTermsFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosParsianTermsFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    return;
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             viewModel.getOpenPage().setValue(-1);
