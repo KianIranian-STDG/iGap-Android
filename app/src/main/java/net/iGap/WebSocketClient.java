@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketCloseCode;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
@@ -242,6 +243,6 @@ public class WebSocketClient {
 
     public void disconnectSocket(boolean autoConnect) {
         this.autoConnect = autoConnect;
-        webSocketClient.disconnect();
+        webSocketClient.disconnect(WebSocketCloseCode.NORMAL, null, 0);
     }
 }
