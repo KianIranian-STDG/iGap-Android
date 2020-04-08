@@ -1069,7 +1069,11 @@
     <string name="content_import_contact_limit">Извините, ваши контакты слишком много. Авторизованный номер перезагружен.</string>
     <string name="another_room">Другая комната</string>
     <string name="filter_cancel_content">Вы отказались от внесенных изменений?</string>
-    <string name="lbl_brightness">Освещение</string>
+    <string name="lbl_brightness">Регулировка цвета</string>
+
+    <string name="dsgn_on_photo_title">проектирование</string>
+    <string name="clr_adjust">Réglage des couleurs</string>
+    <string name="lbl_magnify">Увеличить</string>
     <string name="lbl_contrast">контраст</string>
     <string name="lbl_saturation">насыщенность</string>
     <string name="tab_filters">Цветовой фильтр</string>

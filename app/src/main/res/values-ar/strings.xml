@@ -2149,6 +2149,8 @@
 
     <string name="filter_cancel_content">هل تخليت عن التغييرات؟</string>
     <string name="lbl_brightness">سطوع</string>
+    <string name="clr_adjust">تعديل اللون</string>
+    <string name="lbl_magnify">تكبير</string>
     <string name="lbl_contrast">تباين</string>
     <string name="lbl_saturation">التشبع</string>
     <string name="tab_filters">مرشح اللون</string>

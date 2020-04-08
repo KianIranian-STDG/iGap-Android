@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
-                    android:text="Filter Image"
+                    android:text="@string/dsgn_on_photo_title"
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/dp16"
                     android:textStyle="bold"
@@ -101,7 +101,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
 
-                    android:text="@string/lbl_brightness"
+                    android:text="@string/lbl_magnify"
                     android:textColor="?attr/colorAccent"
                     app:layout_constraintBottom_toBottomOf="@+id/seekbar_brushSize"
                     app:layout_constraintStart_toStartOf="parent"
@@ -129,9 +129,11 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
 
-                    android:text="@string/lbl_brightness"
+                    android:text="@string/clr_adjust"
                     android:textColor="?attr/colorAccent"
                     app:layout_constraintBottom_toBottomOf="@+id/color_seek_bar"
+                    app:layout_constraintEnd_toStartOf="@+id/color_seek_bar"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/color_seek_bar" />
 

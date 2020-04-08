@@ -1071,6 +1071,9 @@
     <string name="another_room">Autres fichiers</string>
     <string name="filter_cancel_content">Avez-vous abandonné les modifications que vous avez apportées?</string>
     <string name="lbl_brightness">Luminosité</string>
+    <string name="lbl_magnify">Grossissement</string>
+    <string name="dsgn_on_photo_title">La conception</string>
+    <string name="clr_adjust">Réglage des couleurs</string>
     <string name="lbl_contrast">contraste</string>
     <string name="lbl_saturation">Saturation</string>
     <string name="tab_filters">Les filtres de couleur</string>

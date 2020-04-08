@@ -1245,6 +1245,9 @@ Want to get it?</string>
 
     <string name="filter_cancel_content">Are you discarding changes?</string>
     <string name="lbl_brightness">Brightness</string>
+    <string name="clr_adjust">Color</string>
+    <string name="dsgn_on_photo_title">Designing</string>
+    <string name="lbl_magnify">Magnification</string>
     <string name="lbl_contrast">Contrast</string>
     <string name="lbl_saturation">Saturation</string>
     <string name="tab_filters">Filters</string>
