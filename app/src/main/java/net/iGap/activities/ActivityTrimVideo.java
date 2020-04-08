@@ -18,9 +18,11 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -133,10 +135,20 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     @Override
     public void getResult(final Uri uri) {
 
-        Intent data = new Intent();
-        data.setData(uri);
-        setResult(Activity.RESULT_OK, data);
-        finish();
+        File file = new File(uri.getPath());
+        //when file was not correct length is between digit 1082
+        if (file.length() <= 1082) {
+            runOnUiThread(() -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(this.getApplicationContext(), R.string.trim_error, Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            Intent data = new Intent();
+            data.setData(uri);
+            setResult(Activity.RESULT_OK, data);
+            finish();
+        }
+
     }
 
     @Override
@@ -151,6 +163,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onError(String message) {
+        Log.e("nazariii", "onError: " + message);
         G.handler.post(this::onBackPressed);
     }
 

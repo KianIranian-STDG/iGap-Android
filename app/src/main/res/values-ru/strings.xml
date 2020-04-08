@@ -1974,4 +1974,5 @@
     <string name="mobile_bank_login_hint">Используйте логин и пароль для входа в мобильный банк Parsian.</string>
     <string name="gift_card_already_in_use">Эта подарочная карта уже используется!</string>
     <string name="gift_carde_sended">Вы уже отправили подарочную карту кому-то еще!</string>
+    <string name="trim_error">Обрезка слишком короткая, пожалуйста, попробуйте с действительной продолжительностью.</string>
 </resources>
