@@ -163,40 +163,11 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = null;
             switch (position) {
-                /*case 0:
-                    fragment = fragmentManager.findFragmentByTag(KuknosChangePassFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosChangePassFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    break;*/
                 case 0:
-//                    fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
-//                    if (fragment == null) {
-//                        if (!viewModel.isMnemonicAvailable()) {
-//                            HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
-//                            return;
-//                        }
-                        fragment = KuknosEnterPinFrag.newInstance(() -> {
-                            goToShowRecovery();
-                        }, false);
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-//                    }
-                    /*if (viewModel.isPinSet()) {
-                        fragment = fragmentManager.findFragmentByTag(KuknosViewRecoveryEPFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosViewRecoveryEPFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                    } else if (viewModel.isMnemonicAvailable()) {
-                        fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosShowRecoveryKeySFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                    } else {
-                        HelperError.showSnackMessage(getResources().getString(R.string.kuknos_Mnemonic_error), false);
-                    }*/
+                    fragment = KuknosEnterPinFrag.newInstance(() -> {
+                        goToShowRecovery();
+                    }, false);
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     break;
                 case 1:
                     fragment = fragmentManager.findFragmentByTag(KuknosEnterPinFrag.class.getName());
