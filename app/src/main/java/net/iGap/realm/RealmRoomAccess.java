@@ -5,9 +5,12 @@ import net.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class RealmRoomAccess extends RealmObject {
 
+    @PrimaryKey
+    private String id;
     private long userId;
     private long roomId;
     private boolean canModifyRoom;
@@ -24,12 +27,12 @@ public class RealmRoomAccess extends RealmObject {
 
         RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
             return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
-                    .equalTo(RealmRoomAccessFields.USER_ID, userId)
+                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
                     .findFirst();
         });
 
         if (realmRoomAccess == null) {
-            realmRoomAccess = realm.createObject(RealmRoomAccess.class);
+            realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
         }
 
         realmRoomAccess.setUserId(userId);
@@ -46,6 +49,40 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanAddNewAdmin(roomAccess.getAddAdmin());
 
         return realmRoomAccess;
+    }
+
+    public static void getAccess(long userId, long roomId, Realm asyncRealm) {
+        RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
+            return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
+                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
+                    .findFirst();
+        });
+
+        if (realmRoomAccess == null) {
+            realmRoomAccess = asyncRealm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
+        }
+
+        realmRoomAccess.setUserId(userId);
+        realmRoomAccess.setRoomId(roomId);
+
+        realmRoomAccess.setCanModifyRoom(false);
+        realmRoomAccess.setCanPostMessage(false);
+        realmRoomAccess.setCanEditMessage(false);
+        realmRoomAccess.setCanDeleteMessage(false);
+        realmRoomAccess.setCanPinMessage(false);
+        realmRoomAccess.setCanAddNewMember(false);
+        realmRoomAccess.setCanBanMember(false);
+        realmRoomAccess.setCanGetMemberList(false);
+        realmRoomAccess.setCanAddNewAdmin(false);
+
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public boolean isCanModifyRoom() {

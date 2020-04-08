@@ -168,17 +168,30 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
         addNewMemberCell.setText("Add members");
         linearLayout.addView(addNewMemberCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
-        banMemberCell = new ToggleButtonCell(getContext(), true);
-        banMemberCell.setText("Ban members");
-        linearLayout.addView(banMemberCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
-
         showMemberListCell = new ToggleButtonCell(getContext(), true);
         showMemberListCell.setText("Show members");
         linearLayout.addView(showMemberListCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
+        banMemberCell = new ToggleButtonCell(getContext(), true);
+        banMemberCell.setText("Ban members");
+        linearLayout.addView(banMemberCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+
         addNewAdminCell = new ToggleButtonCell(getContext(), false);
-        addNewAdminCell.setText("Add admin");
+        addNewAdminCell.setText("Add new admin");
         linearLayout.addView(addNewAdminCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+
+
+        showMemberListCell.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isChecked) {
+                banMemberCell.setChecked(false);
+                addNewAdminCell.setChecked(false);
+                banMemberCell.setEnabled(false);
+                addNewAdminCell.setEnabled(false);
+            } else {
+                banMemberCell.setEnabled(true);
+                addNewAdminCell.setEnabled(true);
+            }
+        });
 
         if (isAdmin) {
             EmptyCell emptyCell2 = new EmptyCell(getContext(), 12);
@@ -209,6 +222,10 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
             showMemberListCell.setChecked(currentRealmAccess.isCanGetMemberList());
             addNewAdminCell.setChecked(currentRealmAccess.isCanAddNewAdmin());
         }
+
+        addNewAdminCell.setEnabled(showMemberListCell.isChecked());
+        banMemberCell.setEnabled(showMemberListCell.isChecked());
+
 
         return rootView;
     }
@@ -287,6 +304,10 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
                                     HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
 
                                     G.runOnUiThread(() -> onLeftIconClickListener(null));
+
+                                    DbManager.getInstance().doRealmTask(realm -> {
+                                        realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.getAccess(userId, roomId, asyncRealm));
+                                    });
                                 }
                             });
                         } else {
@@ -296,6 +317,10 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
                                     HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
 
                                     G.runOnUiThread(() -> onLeftIconClickListener(null));
+
+                                    DbManager.getInstance().doRealmTask(realm -> {
+                                        realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.getAccess(userId, roomId, asyncRealm));
+                                    });
                                 }
                             });
                         }
