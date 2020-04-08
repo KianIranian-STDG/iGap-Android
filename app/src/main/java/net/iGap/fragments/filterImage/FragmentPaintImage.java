@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -56,6 +57,7 @@ public class FragmentPaintImage extends Fragment {
     // to backup image with filter applied
     private Bitmap filteredImage;
 
+    private LinearLayout paintLinearLayout;
     public boolean isChange = false;
     boolean onstartPainting = false;
     ////
@@ -113,8 +115,13 @@ public class FragmentPaintImage extends Fragment {
         //  tvBrushSize = view.findViewById(R.id.textView_brush_size);
         colorSeekBar = view.findViewById(R.id.color_seek_bar);
 //        colorSeekBar.set
-
-
+        paintLinearLayout=view.findViewById(R.id.paint_root_ll);
+paintLinearLayout.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Log.e("empting","empty clicking");
+    }
+});
         colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @Override
             public void onColorChangeListener(int i) {

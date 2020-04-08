@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/paint_root_ll"
     tools:context=".fragments.filterImage.FragmentPaintImage"  android:background="@color/rg_text_dark_verify"
     android:orientation="vertical">
 
@@ -81,6 +82,7 @@
 
         android:layoutDirection="ltr" />
     <androidx.cardview.widget.CardView
+        android:clickable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/toolbar_transparent">
