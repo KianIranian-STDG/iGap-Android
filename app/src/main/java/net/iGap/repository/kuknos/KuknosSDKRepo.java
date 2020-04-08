@@ -254,8 +254,8 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
 
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
                 .addOperation(new SetOptionsOperation.Builder()
-                        .setHomeDomain("https://pdpco.ir/")
-                        .setInflationDestination("GALOLMASACBA6PGXV6DOJ7O42OAJS7XJLNG6EYEE2KTXZO2KTYAJWVFD")
+                        .setHomeDomain("https://pdpco.ir")
+                        .setInflationDestination("GAG75QOJLNDST4G7TDGHX6RVJAZJ2IOMRS4BJK4EVKYQYCKILXB5JVJ6")
                         .build())
                 .addMemo(Memo.text(""))
                 .setTimeout(60)

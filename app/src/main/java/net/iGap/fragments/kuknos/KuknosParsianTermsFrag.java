@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -67,8 +68,20 @@ public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM
         LinearLayout toolbarLayout = binding.fragKuknosBuyPToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        onNext();
         onError();
         onProgress();
+    }
+
+    private void onNext() {
+        viewModel.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean goNext) {
+                if (goNext) {
+                    popBackStackFragment();
+                }
+            }
+        });
     }
 
     private void onError() {
