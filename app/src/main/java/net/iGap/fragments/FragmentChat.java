@@ -9317,9 +9317,11 @@ public class FragmentChat extends BaseFragment
         } else if (id == EventManager.EMOJI_LOADED) {
             G.runOnUiThread(this::invalidateViews);
         } else if (id == EventManager.CHAT_BACKGROUND_CHANGED) {
-            String path = (String) message[0];
-            if (new File(path).exists())
-                ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
+            G.handler.post(() -> {
+                String path = (String) message[0];
+                if (new File(path).exists())
+                    ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
+            });
         }
     }
 
