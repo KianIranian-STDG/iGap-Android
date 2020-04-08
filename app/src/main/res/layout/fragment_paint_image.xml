@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.filterImage.FragmentPaintImage"  android:background="@color/rg_text_dark_verify"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_transparent"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/stfaq_allLayout_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/pu_txt_agreeImage"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/md_close_button"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@color/whit_background" />
+
+                <TextView
+                    android:id="@+id/stfaq_txt_titleToolbar"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="Filter Image"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/dp16"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+
+
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/pu_txt_ok"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/check_icon"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@color/whit_background" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/imageFilter"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/dp6"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+
+    <FrameLayout
+
+        android:id="@+id/framexx"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.95"
+
+        android:layoutDirection="ltr" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/toolbar_transparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="140dp">
+
+                <TextView
+                    android:id="@+id/sizeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+
+                    android:text="@string/lbl_brightness"
+                    android:textColor="?attr/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="@+id/seekbar_brushSize"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/seekbar_brushSize" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_brushSize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/sizeTv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/colorTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+
+                    android:text="@string/lbl_brightness"
+                    android:textColor="?attr/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="@+id/color_seek_bar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/color_seek_bar" />
+
+                <com.divyanshu.colorseekbar.ColorSeekBar
+                    app:thumbBorderColor="@android:color/white"
+                    android:outlineAmbientShadowColor="@color/white"
+                    android:id="@+id/color_seek_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/seekbar_brushSize"
+                    app:layout_constraintStart_toStartOf="@id/seekbar_brushSize"
+                    app:layout_constraintTop_toBottomOf="@id/seekbar_brushSize" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>
