@@ -1,6 +1,5 @@
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 
@@ -16,16 +15,16 @@ public class RealmRoomAccess extends RealmObject {
     private boolean canEditMessage;
     private boolean canDeleteMessage;
     private boolean canPinMessage;
-    private boolean canAddMember;
+    private boolean canAddNewMember;
     private boolean canBanMember;
     private boolean canGetMemberList;
     private boolean canAddNewAdmin;
 
-    public static RealmRoomAccess putOrUpdate(ProtoGlobal.Room room, Realm realm) {
+    public static RealmRoomAccess putOrUpdate(ProtoGlobal.RoomAccess roomAccess, long userId, long roomId, Realm realm) {
 
         RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
-            return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, room.getId())
-                    .equalTo(RealmRoomAccessFields.USER_ID, String.valueOf(AccountManager.getInstance().getCurrentUser()))
+            return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
+                    .equalTo(RealmRoomAccessFields.USER_ID, userId)
                     .findFirst();
         });
 
@@ -33,18 +32,18 @@ public class RealmRoomAccess extends RealmObject {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class);
         }
 
-        realmRoomAccess.setUserId(AccountManager.getInstance().getCurrentUser().getId());
-        realmRoomAccess.setRoomId(room.getId());
+        realmRoomAccess.setUserId(userId);
+        realmRoomAccess.setRoomId(roomId);
 
-        realmRoomAccess.setCanModifyRoom(room.getPermission().getModifyRoom());
-        realmRoomAccess.setCanPostMessage(room.getPermission().getPostMessage());
-        realmRoomAccess.setCanEditMessage(room.getPermission().getEditMessage());
-        realmRoomAccess.setCanDeleteMessage(room.getPermission().getDeleteMessage());
-        realmRoomAccess.setCanPinMessage(room.getPermission().getPinMessage());
-        realmRoomAccess.setCanAddMember(room.getPermission().getAddMember());
-        realmRoomAccess.setCanBanMember(room.getPermission().getBanMember());
-        realmRoomAccess.setCanGetMemberList(room.getPermission().getGetMember());
-        realmRoomAccess.setCanAddNewAdmin(room.getPermission().getAddAdmin());
+        realmRoomAccess.setCanModifyRoom(roomAccess.getModifyRoom());
+        realmRoomAccess.setCanPostMessage(roomAccess.getPostMessage());
+        realmRoomAccess.setCanEditMessage(roomAccess.getEditMessage());
+        realmRoomAccess.setCanDeleteMessage(roomAccess.getDeleteMessage());
+        realmRoomAccess.setCanPinMessage(roomAccess.getPinMessage());
+        realmRoomAccess.setCanAddNewMember(roomAccess.getAddMember());
+        realmRoomAccess.setCanBanMember(roomAccess.getBanMember());
+        realmRoomAccess.setCanGetMemberList(roomAccess.getGetMember());
+        realmRoomAccess.setCanAddNewAdmin(roomAccess.getAddAdmin());
 
         return realmRoomAccess;
     }
@@ -89,12 +88,12 @@ public class RealmRoomAccess extends RealmObject {
         this.canPinMessage = canPinMessage;
     }
 
-    public boolean isCanAddMember() {
-        return canAddMember;
+    public boolean isCanAddNewMember() {
+        return canAddNewMember;
     }
 
-    private void setCanAddMember(boolean canAddMember) {
-        this.canAddMember = canAddMember;
+    private void setCanAddNewMember(boolean canAddNewMember) {
+        this.canAddNewMember = canAddNewMember;
     }
 
     public boolean isCanBanMember() {

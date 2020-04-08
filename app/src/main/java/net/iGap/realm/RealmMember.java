@@ -15,9 +15,9 @@ import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.module.SUID;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoChannelGetMemberList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
@@ -208,6 +208,8 @@ public class RealmMember extends RealmObject {
                                 members.clear();
                                 newMembers.clear();
                                 for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
+
+                                    RealmRoomAccess.putOrUpdate(member.getPermission(), member.getUserId(), realmRoom.getId(), realm);
 
                                     final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
                                     if (realmRegisteredInfo != null) {

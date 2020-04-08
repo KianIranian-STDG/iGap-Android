@@ -10,6 +10,8 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupAddAdmin;
 
 public class RequestGroupAddAdmin {
@@ -21,6 +23,21 @@ public class RequestGroupAddAdmin {
         builder.setMemberId(memberId);
 
         RequestWrapper requestWrapper = new RequestWrapper(302, builder);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void groupAddAdmin(long roomId, long memberId, ProtoGlobal.RoomAccess roomAccess, OnResponse onResponse) {
+
+        ProtoGroupAddAdmin.GroupAddAdmin.Builder builder = ProtoGroupAddAdmin.GroupAddAdmin.newBuilder();
+        builder.setRoomId(roomId);
+        builder.setMemberId(memberId);
+        builder.setPermission(roomAccess);
+
+        RequestWrapper requestWrapper = new RequestWrapper(302, builder, onResponse);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

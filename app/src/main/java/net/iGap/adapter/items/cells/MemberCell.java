@@ -13,6 +13,8 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.Theme;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -28,7 +30,6 @@ public class MemberCell extends FrameLayout {
         super(context);
 
         avatarImage = new CircleImageView(getContext());
-        avatarImage.setImageResource(R.drawable.ic_cloud_space_blue);
         addView(avatarImage, LayoutCreator.createFrame(45, 45, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 16, 8, isRtl ? 16 : 0, 8));
 
         memberNameView = new TextView(getContext());
@@ -40,7 +41,6 @@ public class MemberCell extends FrameLayout {
         memberNameView.setSingleLine(true);
         memberNameView.setEllipsize(TextUtils.TruncateAt.END);
         memberNameView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
-        memberNameView.setText("Abolfazl Abbasi");
         addView(memberNameView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 77, 12, isRtl ? 77 : 0, 0));
 
         memberStatusView = new TextView(getContext());
@@ -52,7 +52,16 @@ public class MemberCell extends FrameLayout {
         memberStatusView.setSingleLine(true);
         memberStatusView.setEllipsize(TextUtils.TruncateAt.END);
         memberStatusView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
-        memberStatusView.setText("Last Seen Recently");
         addView(memberStatusView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 77, 32, isRtl ? 77 : 0, 0));
+    }
+
+    public void setInfo(AvatarHandler avatarHandler, long userId, CharSequence name, String status) {
+        loadInfo(avatarHandler, userId, name, status);
+    }
+
+    private void loadInfo(AvatarHandler avatarHandler, long userId, CharSequence name, String status) {
+        avatarHandler.getAvatar(new ParamWithAvatarType(avatarImage, userId).avatarType(AvatarHandler.AvatarType.USER).showMain(), true);
+        memberNameView.setText(name);
+        memberStatusView.setText(status);
     }
 }

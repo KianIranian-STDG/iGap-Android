@@ -52,6 +52,7 @@ public class ToggleButtonCell extends FrameLayout {
 
         toggleButton = new CustomToggleButton(getContext());
         toggleButton.setClickable(true);
+        toggleButton.setGravity(Gravity.CENTER);
         addView(toggleButton, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER_VERTICAL | (isRtl ? Gravity.LEFT : Gravity.RIGHT), isRtl ? 24 : 0, 0, isRtl ? 0 : 24, 0));
 
         setOnClickListener(v -> toggleButton.setChecked(!toggleButton.isChecked()));
@@ -71,10 +72,20 @@ public class ToggleButtonCell extends FrameLayout {
         return toggleButton.isChecked();
     }
 
+    public void setChecked(boolean checked) {
+        toggleButton.setChecked(checked);
+    }
+
     @Override
     public void invalidate() {
         super.invalidate();
         textView.invalidate();
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        toggleButton.setEnabled(enabled);
+        super.setEnabled(enabled);
     }
 
     @Override

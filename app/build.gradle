@@ -278,7 +278,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     /*implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'*/
     implementation files('src/main/java/net/iGap/libs/bouncy.jar')
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 }
 
 configurations.all {

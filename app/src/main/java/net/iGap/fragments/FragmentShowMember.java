@@ -143,6 +143,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private boolean isGroup;
     private boolean isShowAddButton = true;
 
+    private RealmRoom realmRoom;
+
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         return newInstance2(null, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, false);
@@ -437,7 +439,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
 
-        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+        realmRoom = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
         });
 
@@ -834,7 +836,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    showMemberDialog(mContact.peerId);
+                    showMemberDialog(mContact);
                     return true;
                 }
             });
@@ -874,7 +876,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 holder.btnMenu.setVisibility(View.VISIBLE);
             }
 
-            holder.btnMenu.setOnClickListener(v -> showMemberDialog(mContact.peerId));
+            holder.btnMenu.setOnClickListener(v -> showMemberDialog(mContact));
 
             if (mContact.peerId == mContact.userID) {
                 holder.btnMenu.setVisibility(View.GONE);
@@ -963,7 +965,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
     }
 
-    private void showMemberDialog(long peerId) {
+    private void showMemberDialog(StructContactInfo contactInfo) {
 
         LinearLayout dialogRootView = new LinearLayout(getContext());
         dialogRootView.setOrientation(LinearLayout.VERTICAL);
@@ -971,12 +973,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         TextCell adminRights = new TextCell(dialogRootView.getContext(), true);
         adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
-        adminRights.setValue("Add to admin");
+        adminRights.setValue(contactInfo.isAdmin() ? "Edit admin rights" : "Add to admin");
         dialogRootView.addView(adminRights, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
-        TextCell removeView = new TextCell(dialogRootView.getContext(), true);
+        TextCell removeView = new TextCell(dialogRootView.getContext(), false);
         removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
-        removeView.setValue("Remove From Channel");
+        removeView.setValue("Remove from channel");
         dialogRootView.addView(removeView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
         Dialog dialog = new MaterialDialog.Builder(dialogRootView.getContext())
@@ -984,19 +986,19 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 .show();
 
         removeView.setOnClickListener(v -> {
-            kickMember(peerId);
+            kickMember(contactInfo.peerId);
             dialog.dismiss();
         });
 
         adminRights.setOnClickListener(v -> {
-            openChatEditRightsFragment();
+            openChatEditRightsFragment(realmRoom, contactInfo.peerId, contactInfo.isAdmin());
             dialog.dismiss();
         });
     }
 
-    private void openChatEditRightsFragment() {
+    private void openChatEditRightsFragment(RealmRoom realmRoom, long userId, boolean isAdmin) {
         if (getActivity() != null)
-            new HelperFragment(getActivity().getSupportFragmentManager(), new ChatRightsEditFragment()).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), AdminRightsEditFragment.getIncense(realmRoom, userId, isAdmin)).setReplace(false).load();
     }
 
     public void kickMember(long peerId) {

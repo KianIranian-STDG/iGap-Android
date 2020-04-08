@@ -42,6 +42,10 @@ public class StructContactInfo {
 
     }
 
+    public boolean isAdmin() {
+        return role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString());
+    }
+
     public StructContactInfo(long peerId) {
         this.peerId = peerId;
     }

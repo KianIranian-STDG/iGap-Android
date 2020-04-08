@@ -10,17 +10,15 @@
 
 package net.iGap.response;
 
-import net.iGap.helper.HelperMember;
-import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.proto.ProtoGroupAddAdmin;
+import net.iGap.observers.interfaces.OnResponse;
 
 public class GroupAddAdminResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public GroupAddAdminResponse(int actionId, Object protoClass, String identity) {
+    public GroupAddAdminResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -31,8 +29,9 @@ public class GroupAddAdminResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder = (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) message;
-        HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
+        if (identity instanceof OnResponse) {
+            ((OnResponse) identity).onReceived(message, null);
+        }
     }
 
     @Override
