@@ -24,12 +24,12 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.igap.video.trim.K4LVideoTrimmer;
+import net.igap.video.trim.interfaces.OnK4LVideoListener;
+import net.igap.video.trim.interfaces.OnTrimVideoListener;
 
 import java.io.File;
 
-import life.knowledge4.videotrimmer.K4LVideoTrimmer;
-import life.knowledge4.videotrimmer.interfaces.OnK4LVideoListener;
-import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener;
 
 public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoListener, OnK4LVideoListener {
 
