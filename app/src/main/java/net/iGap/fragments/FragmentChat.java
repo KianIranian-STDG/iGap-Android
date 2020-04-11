@@ -866,11 +866,6 @@ public class FragmentChat extends BaseFragment
             } else {
                 rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
 
-                if (keyboardViewVisible)
-                    hideKeyboard();
-
-                edtChat.setText("");
-
                 if (currentRoleIsAdmin())
                     rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
                 else
@@ -882,6 +877,15 @@ public class FragmentChat extends BaseFragment
                     layoutMute.setVisibility(View.GONE);
                 else
                     layoutMute.setVisibility(View.VISIBLE);
+            }
+
+            if (!realmRoomAccess.isCanEditMessage() || !realmRoomAccess.isCanPostMessage() && (rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
+                if (keyboardViewVisible)
+                    hideKeyboard();
+
+                edtChat.setText("");
+
+                removeEditedMessage();
             }
         }
     }
