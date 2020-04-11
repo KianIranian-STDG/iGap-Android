@@ -5,9 +5,6 @@ import android.util.Log;
 
 import androidx.collection.ArrayMap;
 
-import com.lalongooo.videocompressor.CompressTask;
-import com.lalongooo.videocompressor.OnCompress;
-
 import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.module.ChatSendMessageUtil;
@@ -18,6 +15,8 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.igap.video.compress.CompressTask;
+import net.igap.video.compress.OnCompress;
 
 import java.io.File;
 import java.util.concurrent.LinkedBlockingDeque;

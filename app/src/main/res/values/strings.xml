@@ -2609,5 +2609,6 @@ Want to get it?</string>
     <string name="file_manager">File Manager</string>
     <string name="gift_card_already_in_use">This gift card is already in use!</string>
     <string name="gift_carde_sended">You already sent a gift card to someone else!</string>
+    <string name="trim_error">"Trim is too short , please try with valid duration."</string>
 
 </resources>

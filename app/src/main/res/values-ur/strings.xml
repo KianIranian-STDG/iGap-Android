@@ -2290,4 +2290,6 @@
     <string name="lbl_magnify">بزرگنمایی</string>
     <string name="clr_adjust">تنظیم رنگ</string>
     <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
+
 </resources>
