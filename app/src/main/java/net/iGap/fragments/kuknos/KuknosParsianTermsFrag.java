@@ -15,9 +15,11 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosParsianTermsBinding;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosParsianTermsVM;
 
 public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM> {
@@ -55,13 +57,13 @@ public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                /*.setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
+                        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                     }
-                })*/
+                })
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosBuyPToolbar;
@@ -77,7 +79,7 @@ public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM
             @Override
             public void onChanged(Boolean goNext) {
                 if (goNext) {
-                    popBackStackFragment();
+                    KuknosParsianTermsFrag.this.getParentFragmentManager().popBackStack();
                 }
             }
         });
@@ -122,6 +124,7 @@ public class KuknosParsianTermsFrag extends BaseAPIViewFrag<KuknosParsianTermsVM
 
     @Override
     public boolean onBackPressed() {
+        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
         return true;
     }
 }

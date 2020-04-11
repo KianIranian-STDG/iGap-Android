@@ -133,6 +133,8 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         onDataChanged();
         onProgress();
         onTermsDownload();
+        // TODO: 4/11/2020 must be deleted for production 
+        viewModel.setOpenPage(6);
     }
 
     @Override
@@ -334,7 +336,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                         fragment = KuknosParsianTermsFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    return;
+                    break;
             }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             viewModel.getOpenPage().setValue(-1);

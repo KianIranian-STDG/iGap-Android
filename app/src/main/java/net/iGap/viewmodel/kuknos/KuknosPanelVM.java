@@ -12,6 +12,7 @@ import net.iGap.model.kuknos.Parsian.KuknosAsset;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
 import net.iGap.model.kuknos.Parsian.KuknosOptionStatus;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.PanelRepo;
 
@@ -44,7 +45,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
-        openPage = new MutableLiveData<>();
+        openPage = new SingleLiveEvent<>();
         openPage.setValue(-1);
         TandCAgree = new MutableLiveData<>(null);
     }
@@ -274,5 +275,9 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     public MutableLiveData<Integer> getBAndCState() {
         return BAndCState;
+    }
+
+    public void setOpenPage(Integer openPage) {
+        this.openPage.setValue(openPage);
     }
 }
