@@ -865,6 +865,12 @@ public class FragmentChat extends BaseFragment
                 rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
             } else {
                 rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
+
+                if (keyboardViewVisible)
+                    hideKeyboard();
+
+                edtChat.setText("");
+
                 if (currentRoleIsAdmin())
                     rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
                 else

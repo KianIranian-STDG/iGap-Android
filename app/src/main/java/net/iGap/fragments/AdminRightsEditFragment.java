@@ -130,10 +130,6 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
         emptyCell.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         linearLayout.addView(emptyCell);
 
-        modifyRoomCell = new ToggleButtonCell(getContext(), true);
-        modifyRoomCell.setText("Modify room");
-        linearLayout.addView(modifyRoomCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
-
         postMessageCell = new ToggleButtonCell(getContext(), true);
         postMessageCell.setText("Post message");
         linearLayout.addView(postMessageCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
@@ -163,13 +159,17 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
         pinMessageCell.setText("Pin message");
         linearLayout.addView(pinMessageCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
-        addNewMemberCell = new ToggleButtonCell(getContext(), true);
-        addNewMemberCell.setText("Add members");
-        linearLayout.addView(addNewMemberCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+        modifyRoomCell = new ToggleButtonCell(getContext(), true);
+        modifyRoomCell.setText("Modify room");
+        linearLayout.addView(modifyRoomCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
         showMemberListCell = new ToggleButtonCell(getContext(), true);
         showMemberListCell.setText("Show members");
         linearLayout.addView(showMemberListCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+
+        addNewMemberCell = new ToggleButtonCell(getContext(), true);
+        addNewMemberCell.setText("Add new member");
+        linearLayout.addView(addNewMemberCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
         banMemberCell = new ToggleButtonCell(getContext(), true);
         banMemberCell.setText("Ban members");
@@ -184,11 +184,14 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
             if (!isChecked) {
                 banMemberCell.setChecked(false);
                 addNewAdminCell.setChecked(false);
+                addNewMemberCell.setChecked(false);
                 banMemberCell.setEnabled(false);
                 addNewAdminCell.setEnabled(false);
+                addNewMemberCell.setEnabled(false);
             } else {
                 banMemberCell.setEnabled(true);
                 addNewAdminCell.setEnabled(true);
+                addNewMemberCell.setEnabled(true);
             }
         });
 
@@ -224,6 +227,7 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
 
         addNewAdminCell.setEnabled(showMemberListCell.isChecked());
         banMemberCell.setEnabled(showMemberListCell.isChecked());
+        addNewMemberCell.setEnabled(showMemberListCell.isChecked());
 
 
         return rootView;
