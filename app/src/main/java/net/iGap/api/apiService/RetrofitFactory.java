@@ -3,6 +3,7 @@ package net.iGap.api.apiService;
 import net.iGap.BuildConfig;
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.CPayApi;
+import net.iGap.api.ChargeApi;
 import net.iGap.api.CharityApi;
 import net.iGap.api.ElecBillApi;
 import net.iGap.api.FavoriteChannelApi;
@@ -123,6 +124,15 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(CPayApi.class);
+    }
+
+    public ChargeApi getChargeRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.CHARGE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(ChargeApi.class);
     }
 
     public MciApi getMciRetrofit() {

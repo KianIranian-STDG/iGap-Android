@@ -28,6 +28,8 @@ public class OperatorType {
             put("0901", Type.IRANCELL);
             put("0902", Type.IRANCELL);
             put("0903", Type.IRANCELL);
+            put("0904", Type.IRANCELL);
+            put("0905", Type.IRANCELL);
             put("0930", Type.IRANCELL);
             put("0933", Type.IRANCELL);
             put("0935", Type.IRANCELL);
