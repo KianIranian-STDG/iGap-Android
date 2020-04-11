@@ -203,6 +203,7 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.ProgressState;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
@@ -217,7 +218,6 @@ import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.observers.interfaces.ISendPosition;
 import net.iGap.observers.interfaces.IUpdateLogItem;
 import net.iGap.observers.interfaces.LocationListener;
-import net.iGap.observers.interfaces.OnBackgroundChanged;
 import net.iGap.observers.interfaces.OnBotClick;
 import net.iGap.observers.interfaces.OnChannelAddMessageReaction;
 import net.iGap.observers.interfaces.OnChannelGetMessagesStats;
@@ -340,6 +340,8 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
+import static net.iGap.G.iTowPanModDesinLayout;
+import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -369,7 +371,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
-        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
+        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
 
     public static OnComplete onMusicListener;
@@ -720,6 +722,8 @@ public class FragmentChat extends BaseFragment
 
         EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
+        if (twoPaneMode)
+            EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
         return attachToSwipeBack(notifyFrameLayout);
     }
@@ -989,7 +993,6 @@ public class FragmentChat extends BaseFragment
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
         G.onChatDelete = this;
-        G.onBackgroundChanged = this;
         G.onConnectionChangeStateChat = this;
         HelperNotification.getInstance().cancelNotification();
         G.onChannelUpdateReactionStatusChat = this;
@@ -1115,6 +1118,8 @@ public class FragmentChat extends BaseFragment
         FragmentEditImage.textImageList.clear();
         EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
+        if (twoPaneMode)
+            EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
         if (compositeDisposable != null) {
@@ -5537,26 +5542,6 @@ public class FragmentChat extends BaseFragment
         setConnectionText(connectionState);
     }
 
-    @Override
-    public void onBackgroundChanged(final String backgroundPath) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (imgBackGround != null) {
-                    File f = new File(backgroundPath);
-                    if (f.exists()) {
-                        Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                        //imgBackGround.setImageDrawable(d);
-                        try {
-                            imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
-                        } catch (Exception e) {
-                        }
-
-                    }
-                }
-            }
-        });
-    }
 
     private void updateShowItemInScreen() {
         /**
@@ -9331,6 +9316,12 @@ public class FragmentChat extends BaseFragment
             });
         } else if (id == EventManager.EMOJI_LOADED) {
             G.runOnUiThread(this::invalidateViews);
+        } else if (id == EventManager.CHAT_BACKGROUND_CHANGED) {
+            G.handler.post(() -> {
+                String path = (String) message[0];
+                if (new File(path).exists())
+                    ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
+            });
         }
     }
 

@@ -15,6 +15,7 @@ import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnGetWallpaper;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
@@ -205,10 +206,9 @@ public class ChatBackgroundViewModel extends ViewModel {
                     .putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath)
                     .putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, false)
                     .apply();
-            if (G.twoPaneMode && G.onBackgroundChanged != null) {
-                G.onBackgroundChanged.onBackgroundChanged(finalPath);
+            if (G.twoPaneMode) {
+                EventManager.getInstance().postEvent(EventManager.CHAT_BACKGROUND_CHANGED, finalPath);
             }
-
             goBack.setValue(true);
         }
     }
@@ -219,8 +219,8 @@ public class ChatBackgroundViewModel extends ViewModel {
                 .putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "")
                 .putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true)
                 .apply();
-        if (G.twoPaneMode && G.onBackgroundChanged != null) {
-            G.onBackgroundChanged.onBackgroundChanged("");
+        if (G.twoPaneMode) {
+            EventManager.getInstance().postEvent(EventManager.CHAT_BACKGROUND_CHANGED, "");
         }
         goBack.setValue(true);
     }
