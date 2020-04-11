@@ -14,10 +14,13 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomFields;
 
 import java.util.List;
@@ -73,7 +76,7 @@ public class GoToChatActivity {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
 
                 if (realmRoom != null) {
-                    if (realmRoom.getReadOnly() || (realmRoom.getType() != ProtoGlobal.Room.Type.CHAT && FragmentChat.structIGSticker != null) || (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null && RealmRoom.isBot(realmRoom.getChatRoom().getPeerId()))) {
+                    if (realmRoom.getReadOnly() || hasSendMessagePermission() || (realmRoom.getType() != ProtoGlobal.Room.Type.CHAT && FragmentChat.structIGSticker != null) || (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null && RealmRoom.isBot(realmRoom.getChatRoom().getPeerId()))) {
                         if (activity != null && !(activity).isFinishing()) {
                             new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
                         }
@@ -229,5 +232,12 @@ public class GoToChatActivity {
                 }
             }
         }
+    }
+
+    private boolean hasSendMessagePermission() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomid + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+            return realmRoomAccess != null && !realmRoomAccess.isCanPostMessage();
+        });
     }
 }

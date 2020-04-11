@@ -28,7 +28,6 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.proto.ProtoChannelAddAdmin;
 import net.iGap.proto.ProtoChannelKickAdmin;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupAddAdmin;
@@ -239,8 +238,11 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
 
     @Override
     public void onRightIconClickListener(View view) {
-        if (mustDismissAdmin()) {
-            dismissAdmin();
+        if (isAdmin) {
+            if (mustDismissAdmin())
+                dismissAdmin();
+            else
+                onLeftIconClickListener(view);
         } else {
             sendAddAdminRequest();
         }
@@ -264,14 +266,7 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
 
             new RequestChannelAddAdmin().channelAddAdmin(roomId, userId, roomAccessBuilder.build(), (response, error) -> {
                 if (error == null) {
-                    ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder builder = (ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder) response;
-                    HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
-
                     G.runOnUiThread(() -> onLeftIconClickListener(null));
-
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.putOrUpdate(builder.getPermission(), userId, roomId, asyncRealm));
-                    });
                 }
             });
         } else {
@@ -329,6 +324,6 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
     }
 
     private boolean mustDismissAdmin() {
-        return !modifyRoomCell.isChecked() && (postMessageCell != null && !postMessageCell.isChecked()) && (editMessageCell != null && !editMessageCell.isChecked()) && !editMessageCell.isChecked() && !deleteMessageCell.isChecked() && !pinMessageCell.isChecked() && !addNewMemberCell.isChecked() && !banMemberCell.isChecked() && !showMemberListCell.isChecked() && !addNewAdminCell.isChecked();
+        return isAdmin && !modifyRoomCell.isChecked() && (postMessageCell != null && !postMessageCell.isChecked()) && (editMessageCell != null && !editMessageCell.isChecked()) && !editMessageCell.isChecked() && !deleteMessageCell.isChecked() && !pinMessageCell.isChecked() && !addNewMemberCell.isChecked() && !banMemberCell.isChecked() && !showMemberListCell.isChecked() && !addNewAdminCell.isChecked();
     }
 }

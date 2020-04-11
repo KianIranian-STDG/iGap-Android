@@ -10,7 +10,12 @@
 
 package net.iGap.response;
 
+import net.iGap.helper.HelperMember;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.proto.ProtoChannelKickAdmin;
+import net.iGap.realm.RealmRoomAccess;
 
 public class ChannelKickAdminResponse extends MessageHandler {
 
@@ -29,13 +34,16 @@ public class ChannelKickAdminResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+
+        ProtoChannelKickAdmin.ChannelKickAdminResponse.Builder builder = (ProtoChannelKickAdmin.ChannelKickAdminResponse.Builder) message;
+        HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.getAccess(builder.getMemberId(), builder.getRoomId(), asyncRealm));
+        });
+
         if (identity instanceof OnResponse)
             ((OnResponse) identity).onReceived(message, null);
-    }
-
-    @Override
-    public void timeOut() {
-        super.timeOut();
     }
 
     @Override

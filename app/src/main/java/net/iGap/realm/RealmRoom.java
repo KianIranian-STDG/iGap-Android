@@ -172,6 +172,11 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getChannelRoom().setPrivate(room.getChannelRoomExtra().hasPrivateExtra());
                 realmRoom.getChannelRoom().setVerified(room.getChannelRoomExtra().getVerified());
                 realmRoom.getChannelRoom().setReactionStatus(room.getChannelRoomExtra().getReactionStatus());
+
+                if (room.getPermission() != null) {
+                    RealmRoomAccess.putOrUpdate(room.getPermission(), AccountManager.getInstance().getCurrentUser().getId(), room.getId(), realm);
+                }
+
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
@@ -195,6 +200,11 @@ public class RealmRoom extends RealmObject {
                 }
                 realmRoom.getGroupRoom().setUsername(room.getGroupRoomExtra().getPublicExtra().getUsername());
                 realmRoom.getGroupRoom().setPrivate(room.getGroupRoomExtra().hasPrivateExtra());
+
+                if (room.getPermission() != null) {
+                    RealmRoomAccess.putOrUpdate(room.getPermission(), AccountManager.getInstance().getCurrentUser().getId(), room.getId(), realm);
+                }
+
                 break;
         }
 

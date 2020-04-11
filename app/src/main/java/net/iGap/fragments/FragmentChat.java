@@ -273,6 +273,8 @@ import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomDraft;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -327,6 +329,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmObjectChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -435,7 +438,6 @@ public class FragmentChat extends BaseFragment
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
     private RealmRoom managedRoom;
-    private RealmRoom unmanagedRoom;
 
     private WebView webViewChatPage;
     private boolean isStopBot;
@@ -585,6 +587,9 @@ public class FragmentChat extends BaseFragment
     private int messageLentghCounter;
     private int oldMessageLentghCounter;
 
+    private RealmRoomAccess currentRoomAccess;
+    private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
+
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
             resentedMessageId = new ArrayList<>();
@@ -695,6 +700,16 @@ public class FragmentChat extends BaseFragment
                 return super.dispatchKeyEventPreIme(event);
             }
         };
+
+        Bundle extras = getArguments();
+        if (extras != null) {
+            mRoomId = extras.getLong("RoomId");
+
+            if (mustCheckPermission())
+                currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, mRoomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+                });
+        }
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
@@ -832,11 +847,45 @@ public class FragmentChat extends BaseFragment
             sendMoney.setVisibility(View.VISIBLE);
         }
 
+        if (currentRoomAccess != null) {
+            checkRoomAccess(currentRoomAccess);
+
+            roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
+
+            currentRoomAccess.addChangeListener(roomAccessChangeListener);
+        }
+
         setupIntentReceiverForGetDataInTwoPanMode();
+    }
+
+    private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
+        if (realmRoomAccess != null) {
+            if (realmRoomAccess.isCanPostMessage()) {
+                rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+            } else {
+                rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
+                if (currentRoleIsAdmin())
+                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
+                else
+                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+            }
+
+            if (getRoom().getType().equals(CHANNEL)) {
+                if (currentRoleIsAdmin())
+                    layoutMute.setVisibility(View.GONE);
+                else
+                    layoutMute.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public long getRoomId() {
         return mRoomId;
+    }
+
+    private boolean currentRoleIsAdmin() {
+        return getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP) && getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN);
     }
 
     private void setupIntentReceiverForGetDataInTwoPanMode() {
@@ -847,6 +896,21 @@ public class FragmentChat extends BaseFragment
                     manageTrimVideoResult(data);
                 }
             };
+        }
+    }
+
+    private boolean mustCheckPermission() {
+        if (getRoom().getType().equals(CHAT))
+            return false;
+        else
+            return getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN);
+    }
+
+    private void removeRoomAccessChangeListener() {
+        if (currentRoomAccess != null && roomAccessChangeListener != null) {
+            currentRoomAccess.removeChangeListener(roomAccessChangeListener);
+            currentRoomAccess = null;
+            roomAccessChangeListener = null;
         }
     }
 
@@ -1125,6 +1189,8 @@ public class FragmentChat extends BaseFragment
             notifyFrameLayout.setListener(null);
 
         showKeyboardOnResume = false;
+
+        removeRoomAccessChangeListener();
     }
 
     @Override
@@ -1440,9 +1506,12 @@ public class FragmentChat extends BaseFragment
     }
 
     private RealmRoom getRoom() {
-        return DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        });
+        if (managedRoom == null) {
+            return managedRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            });
+        } else
+            return managedRoom;
     }
 
     private void invalidateViews() {
@@ -1802,12 +1871,6 @@ public class FragmentChat extends BaseFragment
         });
     }
 
-    private void updateUnmanagedRoom() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            unmanagedRoom = realm.copyFromRealm(managedRoom);
-        });
-    }
-
     private void initMain() {
         HelperGetMessageState.clearMessageViews();
 
@@ -1864,11 +1927,6 @@ public class FragmentChat extends BaseFragment
 
         managedRoom = getRoom();
         if (managedRoom != null) { // room exist
-
-
-            DbManager.getInstance().doRealmTask(realm -> {
-                unmanagedRoom = realm.copyFromRealm(managedRoom);
-            });
 
             title = managedRoom.getTitle();
             initialize = managedRoom.getInitials();
