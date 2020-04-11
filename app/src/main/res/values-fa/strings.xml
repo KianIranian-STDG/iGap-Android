@@ -1207,6 +1207,9 @@
 
     <string name="filter_cancel_content">آیا از تغییرات انجام داده منصرف شدید ؟</string>
     <string name="lbl_brightness">روشنایی</string>
+    <string name="clr_adjust">تنظیم رنگ</string>
+    <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="lbl_magnify">بزرگنمایی</string>
     <string name="lbl_contrast">کنتراست</string>
     <string name="lbl_saturation">اشباع</string>
     <string name="tab_filters">فیلتر رنگ</string>
