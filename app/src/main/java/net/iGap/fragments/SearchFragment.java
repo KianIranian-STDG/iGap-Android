@@ -585,7 +585,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     private void fillMessages(String text) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
+            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.DELETED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
             if (results != null && results.size() > 0) {
                 addHeader(G.fragmentActivity.getResources().getString(R.string.messages));
                 for (RealmRoomMessage roomMessage : results) {
