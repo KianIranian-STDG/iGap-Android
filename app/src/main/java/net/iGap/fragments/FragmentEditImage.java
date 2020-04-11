@@ -36,6 +36,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
+import net.iGap.fragments.filterImage.FragmentPaintImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
@@ -72,6 +73,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     private TextView txtEditImage;
     public static UpdateImage updateImage;
     private EventEditText edtChat;
+    private TextView paintTv;
     private TextView iconOk;
     private ViewGroup layoutCaption;
     private MaterialDesignTextView channelOrGroupProfileSetTv;
@@ -132,6 +134,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         rootView.setListener(this);
         View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
         keyboardContainer = view.findViewById(R.id.fl_chat_keyboardContainer);
+        paintTv= view.findViewById(R.id.txtPaintImage);
         rootView.addView(view, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
         return rootView;
     }
@@ -289,7 +292,17 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
                 }
             }
         });
-
+        paintTv.setOnClickListener(v -> {
+            hideKeyboard();
+            if (getActivity() != null && itemGalleryList.size() > 0) {
+                if (!isNicknamePage) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaintImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
+                } else {
+                    FragmentPaintImage fragment = FragmentPaintImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                }
+            }
+        });
         iconOk.setOnClickListener(v -> {
 
             String path = itemGalleryList.get(viewPager.getCurrentItem()).path;

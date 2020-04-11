@@ -144,7 +144,7 @@
 
     <string name="Destruction_Code">التدمير</string>
 
-    <string name="Destruction_Des">أنت الآن في حال تدمير حسابك، رقم هاتفك هو  : </string>
+    <string name="destroy_description">أنت الآن في حال تدمير حسابك، رقم هاتفك هو  : </string>
 
     <string name="iGap_autofill_Destruction_Code">آیکب يعرف الرمز بشكل آلي ويقوم بملء الفراغ، في حال عدم ملء الفراغ قُم بملئها يدوياً.</string>
 
@@ -748,7 +748,7 @@
 
     <string name="USER_VERIFY_BLOCKED_USER">"تمّ حظر هذه الجهة للاتصال و لايمكن تأييدها"</string>
 
-    <string name="Enter_Code">"رمز التدمير "</string>
+    <string name="destroy_enter_code">"رمز التدمير "</string>
 
     <string name="E_2">الحاجة إلى الدخول إلى النظام </string>
 
@@ -2149,6 +2149,9 @@
 
     <string name="filter_cancel_content">هل تخليت عن التغييرات؟</string>
     <string name="lbl_brightness">سطوع</string>
+    <string name="clr_adjust">تعديل اللون</string>
+    <string name="lbl_magnify">تكبير</string>
+    <string name="dsgn_on_photo_title">التصميم</string>
     <string name="lbl_contrast">تباين</string>
     <string name="lbl_saturation">التشبع</string>
     <string name="tab_filters">مرشح اللون</string>
@@ -3209,4 +3212,5 @@
     <string name="file_manager">مدير الملفات</string>
     <string name="gift_card_already_in_use">بطاقة الهدايا هذه قيد الاستخدام بالفعل!</string>
     <string name="gift_carde_sended">لقد أرسلت بالفعل بطاقة هدايا لشخص آخر!</string>
+    <string name="trim_error">التقليم قصير جدًا ، يرجى المحاولة بمدة صالحة.</string>
 </resources>

@@ -30,7 +30,7 @@
     <string name="Default_Dir">پیش فرض مسیر </string>
     <string name="Delete_and_leave_Group">سیلمک و گروهدان چیخماق</string>
     <string name="Destruction_Code">تخریب</string>
-    <string name="Destruction_Des">سیز ایندی اوز اکانتینیزی تخریب ائتمه یه چالیشیرسینیز. سیزین تلفنونوز </string>
+    <string name="destroy_description">سیز ایندی اوز اکانتینیزی تخریب ائتمه یه چالیشیرسینیز. سیزین تلفنونوز </string>
     <string name="Disable">غیرفعال</string>
     <string name="Documents">اسناد</string>
     <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
@@ -164,7 +164,7 @@
     <string name="E_9009">سرور ایله ارتباط ممکن دییلدیر</string>
     <string name="E_9010">دریافت کننده ثبت نام ائتمه میشدیر</string>
     <string name="E_9013">سیزین اوچون ثبت نام قاداغاندیر</string>
-    <string name="Enter_Code">تخریب کدو</string>
+    <string name="destroy_enter_code">تخریب کدو</string>
     <string name="Favorite_Sticker">سئودیگیم </string>
     <string name="Female">خانم</string>
     <string name="FingerPrint">بارماق ایزی </string>
@@ -2294,4 +2294,8 @@
     <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
     <string name="kuknos_send_option1">از طریق کلید عمومی</string>
     <string name="kuknos_send_option2">از طریق نام کاربری</string>
+    <string name="lbl_magnify">بزرگنمایی</string>
+    <string name="clr_adjust">تنظیم رنگ</string>
+    <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
 </resources>

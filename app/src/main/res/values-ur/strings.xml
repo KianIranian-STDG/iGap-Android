@@ -62,7 +62,7 @@
     <string name="sure_delete_account">دڵنیایت لە سڕینەوەی ئەکانتەکەت؟ </string>
     <string name="delete_account_text_desc">(ئەگەر ئەکانتەکەت بسڕیتەوە، هەموو ئاو فایلانەش کە وەکوو پەیام بۆت هاتووە بە یەکجاری دەسڕدرێنەوە، Si vous supprimez votre compte).</string>
     <string name="Destruction_Code">رووخاندن</string>
-    <string name="Destruction_Des">ئێستا لە هەوڵی رووخاندنی ئەکانتەکەی خۆتی، ژمارە تەلەفوونەکەت بەرابەرە لەگەڵ:</string>
+    <string name="destroy_description">ئێستا لە هەوڵی رووخاندنی ئەکانتەکەی خۆتی، ژمارە تەلەفوونەکەت بەرابەرە لەگەڵ:</string>
     <string name="iGap_autofill_Destruction_Code">ئای­گەپ بە شێوەی ئۆتۆماتیک کۆدەکە دەستنیشان دەکات و جێگەی خاڵی پڕ دەکاتەوە؛ ئەگەر نەکرا، بە شێوەی دەست تایپی بکە.</string>
     <string name="video_message">پەیامی ڤیدیۆیی</string>
     <string name="file_message">پەیامی فایلی</string>
@@ -347,7 +347,7 @@
     <string name="desc_public_channel">بەکارهێنەران دەتوانن بە گەڕان بە دوای ناوی بەکارهێنەر یان وەرگرتنی لینکی بانگهێشت­کردن بێنە نێو ئەم کەناڵەوە.</string>
     <string name="last_msg_format_chat">%s</string>
     <string name="USER_VERIFY_BLOCKED_USER">بەکارهێنەر داخراوە و پەسەندکردن رێگەپێدراو نییە.</string>
-    <string name="Enter_Code">کۆدی رووخاندن</string>
+    <string name="destroy_enter_code">کۆدی رووخاندن</string>
     <string name="E_2">پێویستیی چوونەناو سیستەم </string>
     <string name="E_335">هەڵەیەک لە کلاینتەوە</string>
     <string name="E_336">هەڵەی ناوەکیی سێرڤێر</string>
@@ -2287,6 +2287,10 @@
     <string name="kuknos_Currency">نام ارز</string>
     <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
     <string name="kuknos_AddAsset_nullEntry">امکان اضافه شدن این دارایی به حساب شما وجود ندارد.</string>
+    <string name="lbl_magnify">بزرگنمایی</string>
+    <string name="clr_adjust">تنظیم رنگ</string>
+    <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
     <string name="kuknos_parsianTerms_title">قوانین و مقررات پارسیان</string>
     <string name="kuknos_parsianTerms_desc">برای ادامه و استفاده از خدمات کیف پول ققنوس پارسیان، شما باید تغییرات زیر در مفاد قرارداد پارسیان و ققنوس را تایید کنید.</string>
     <string name="kuknos_parsianTerms_term1">من به آدرس شرکت پارسیان که در ادامه ذکر شده است رای میدهم.  کلید عمومی: GALOLMASACBA6PGXV6DOJ7O42OAJS7XJLNG6EYEE2KTXZO2KTYAJWVFD</string>
