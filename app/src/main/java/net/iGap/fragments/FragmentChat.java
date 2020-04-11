@@ -2205,19 +2205,8 @@ public class FragmentChat extends BaseFragment
 
     private void sendRequestPinMessage(final long id) {
         if (id == 0) {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
                     .content(String.format(context.getString(R.string.pin_messages_content), context.getString(R.string.unpin)))
-                    .neutralText(R.string.all_member)
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (chatType == CHANNEL) {
-                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
-                            } else {
-                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
-                            }
-                        }
-                    })
                     .positiveText(R.string.this_page)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
@@ -2227,7 +2216,21 @@ public class FragmentChat extends BaseFragment
                             }
                             RealmRoom.updatePinedMessageDeleted(mRoomId, false);
                         }
-                    }).negativeText(R.string.cancel).show();
+                    }).negativeText(R.string.cancel);
+
+            if (currentRoomAccess != null && currentRoomAccess.isCanPinMessage()) {
+                builder.neutralText(R.string.all_member)
+                        .onNeutral((dialog, which) -> {
+                            if (chatType == CHANNEL) {
+                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
+                            } else {
+                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
+                            }
+                        });
+            }
+
+            builder.show();
+
         } else {
             new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
                     .content(String.format(context.getString(R.string.pin_messages_content), context.getString(R.string.PIN)))
@@ -4715,7 +4718,8 @@ public class FragmentChat extends BaseFragment
             return;
         }
         List<Integer> items = setupMessageContainerClickDialogItems(message);
-        if (items == null || items.size() == 0) return;
+        if (items.size() == 0)
+            return;
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setListDataWithResourceId(getContext(), items, -1, position -> {
             handleContainerBottomSheetClick(message, pos, items.get(position));
         });
@@ -4752,21 +4756,24 @@ public class FragmentChat extends BaseFragment
             shareLinkIsOn = true;
         }
 
-        if (!isNotJoin) items.add(R.string.replay_item_dialog);
+        if (!isNotJoin)
+            items.add(R.string.replay_item_dialog);
+
         items.add(R.string.share_item_dialog);
+
         if (shareLinkIsOn)
             items.add(R.string.share_link_item_dialog);
+
         items.add(R.string.forward_item_dialog);
         items.add(R.string.delete_item_dialog);
-        if (isFileExistInLocalStorage(message)) items.add(R.string.delete_from_storage);
+
+        if (isFileExistInLocalStorage(message))
+            items.add(R.string.delete_from_storage);
 
         //check and remove share base on type and download state
         if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")) {
-
             items.remove(Integer.valueOf(R.string.share_item_dialog));
-
         } else if (!roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
-
             String filepath_;
             if (message.realmRoomMessage.getForwardMessage() != null) {
                 filepath_ = message.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() != null ? message.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.realmRoomMessage.getForwardMessage().getAttachment().getCacheId(), message.realmRoomMessage.getForwardMessage().getAttachment().getName(), roomMessageType);
@@ -4823,30 +4830,20 @@ public class FragmentChat extends BaseFragment
 
         if (realmRoom != null) {
             //if user clicked on any message which he wasn't its sender, remove edit mList option
-            boolean showLayoutPin = RealmRoom.isPinedMessage(mRoomId, message.realmRoomMessage.getMessageId());
+            boolean showLayoutPin = !RealmRoom.isPinedMessage(mRoomId, message.realmRoomMessage.getMessageId()) && currentRoomAccess != null && currentRoomAccess.isCanPinMessage();
             if (chatType == CHANNEL) {
                 if (channelRole == ChannelChatRole.MEMBER) {
                     items.remove(Integer.valueOf(R.string.edit_item_dialog));
                     items.remove(Integer.valueOf(R.string.replay_item_dialog));
                     items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                } else {
-                    showLayoutPin = true;
                 }
-                //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
                 if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.realmRoomMessage.getAuthorHash())) {
-                    if (channelRole == ChannelChatRole.MEMBER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                    } else if (channelRole == ChannelChatRole.MODERATOR) {
-                        //if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
-                    } else if (channelRole == ChannelChatRole.ADMIN) {
-                        //if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
-                    }
-                    if (channelRole != ChannelChatRole.OWNER) {
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanEditMessage()) {
                         items.remove(Integer.valueOf(R.string.edit_item_dialog));
+                    }
+
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanDeleteMessage()) {
+                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
                     }
                 }
             } else if (chatType == GROUP) {

@@ -141,7 +141,7 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
 
         if (realmRoom.getType().equals(ProtoGlobal.Room.Type.CHANNEL)) {
             editMessageCell = new ToggleButtonCell(getContext(), true);
-            editMessageCell.setText("Edit message");
+            editMessageCell.setText("Edit others message");
 
             postMessageCell.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (!isChecked) {
@@ -156,7 +156,7 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
         }
 
         deleteMessageCell = new ToggleButtonCell(getContext(), true);
-        deleteMessageCell.setText("Delete message");
+        deleteMessageCell.setText("Delete others message");
         linearLayout.addView(deleteMessageCell, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
         pinMessageCell = new ToggleButtonCell(getContext(), true);
@@ -238,11 +238,8 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
 
     @Override
     public void onRightIconClickListener(View view) {
-        if (isAdmin) {
-            if (mustDismissAdmin())
-                dismissAdmin();
-            else
-                onLeftIconClickListener(view);
+        if (mustDismissAdmin()) {
+            dismissAdmin();
         } else {
             sendAddAdminRequest();
         }
