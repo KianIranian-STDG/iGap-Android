@@ -161,7 +161,8 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-public-key")
-    Call<KuknosResponseModel<KuknosFederation>> convertFederation(@Field("federation_name") String username);
+    Call<KuknosResponseModel<KuknosFederation>> convertFederation(@Field("federation_name") String username,
+                                                                  @Field("domain") String domain);
 
     /**
      * this api returns the user status

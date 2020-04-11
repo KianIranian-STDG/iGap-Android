@@ -2302,5 +2302,9 @@
     <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
     <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
     <string name="kuknos_Restore_ErrorNoAccount_Snack">اکانت مورد نظر یافت نشد.</string>
+    <string name="kuknos_send_walletAddress_Hint1">مثال: GAVYHKFT...</string>
+    <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
+    <string name="kuknos_send_option1">از طریق کلید عمومی</string>
+    <string name="kuknos_send_option2">از طریق نام کاربری</string>
 
 </resources>

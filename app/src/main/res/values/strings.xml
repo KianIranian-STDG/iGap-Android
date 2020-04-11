@@ -2124,6 +2124,8 @@ Want to get it?</string>
     <string name="kuknos_recieve_copyToast">Wallet Address copied in clipboard.</string>
     <string name="kuknos_send_title">Send Token</string>
     <string name="kuknos_send_walletAddress">Wallet Address*</string>
+    <string name="kuknos_send_walletAddress_Hint1">i.e. GAVYHKFTRGE…</string>
+    <string name="kuknos_send_walletAddress_Hint2">i.e. amini*pdpco.ir</string>
     <string name="kuknos_send_text">Memo ID or text</string>
     <string name="kuknos_send_amount">Amount*</string>
     <string name="kuknos_send_sendBtn">Send</string>
@@ -2136,6 +2138,8 @@ Want to get it?</string>
     <string name="kuknos_send_CreditError">NOT enough credit.</string>
     <string name="kuknos_send_AmountFromatError">Amount format is wrong. please only use . and digits.</string>
     <string name="kuknos_send_dialogTitle">Transfer Status</string>
+    <string name="kuknos_send_option1">via Public Key</string>
+    <string name="kuknos_send_option2">via Kuknos ID</string>
     <string name="kuknos_wHistory_date">Date</string>
     <string name="kuknos_wHistory_desc">Description</string>
     <string name="kuknos_wHistory_amount">Amount</string>

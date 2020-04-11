@@ -70,8 +70,8 @@ public class PanelRepo {
         kuknosAPIRepository.getFees(handShakeCallback, apiResponse);
     }
 
-    public void convertFederation(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
-        kuknosAPIRepository.convertFederation(username, handShakeCallback, apiResponse);
+    public void convertFederation(String username, String domain, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
+        kuknosAPIRepository.convertFederation(username, domain, handShakeCallback, apiResponse);
     }
 
     public void getPaymentData(String RRA, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosPaymentResponse>> apiResponse) {
