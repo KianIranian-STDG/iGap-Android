@@ -273,7 +273,7 @@ dependencies {
     /*implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'*/
     implementation 'com.divyanshu.colorseekbar:colorseekbar:1.0.2'
     implementation files('src/main/java/net/iGap/libs/bouncy.jar')
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     implementation project(path: ':video')
 }
 
