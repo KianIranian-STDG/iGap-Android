@@ -24,8 +24,6 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.proto.ProtoMplGetTopupToken;
-import net.iGap.request.RequestMplGetTopupToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -205,26 +203,21 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
                     if (selectedChargeTypePosition > 0) {
                         if (selectedPricePosition > 0) {
                             ChargeType chargeType = null;
-                            ProtoMplGetTopupToken.MplGetTopupToken.Type type = null;
                             switch (operatorType) {
                                 case HAMRAH_AVAL:
                                     chargeType = null;
-                                    type = ProtoMplGetTopupToken.MplGetTopupToken.Type.MCI;
                                     break;
                                 case IRANCELL:
                                     switch (selectedChargeTypePosition) {
                                         case 1:
                                             chargeType = ChargeType.MTN_NORMAL;
-                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_PREPAID;
                                             break;
                                         case 2:
                                             chargeType = ChargeType.MTN_AMAZING;
-                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_WOW;
                                             break;
                                     }
                                     break;
                                 case RITEL:
-                                    type = ProtoMplGetTopupToken.MplGetTopupToken.Type.RIGHTEL;
                                     switch (selectedChargeTypePosition) {
                                         case 1:
                                             chargeType = ChargeType.RIGHTEL_NORMAL;
@@ -260,17 +253,8 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
                                 sendRequestCharge(MTN, chargeType, phoneNumber.substring(1), (int) price);
                             } else if (operatorType == OperatorType.Type.RITEL) {
                                 sendRequestCharge(RIGHTEL, chargeType, phoneNumber.substring(1), (int) price);
-                            } else {
-                                RequestMplGetTopupToken requestMplGetTopupToken = new RequestMplGetTopupToken();
-                                requestMplGetTopupToken.mplGetTopupToken(Long.parseLong(phoneNumber), price, type);
-                                G.onMplResult = error -> {
-                                    if (error) {
-                                        observeEnabledPayment.set(true);
-                                    } else {
-                                        goBack.setValue(true);
-                                    }
-                                };
                             }
+
                             hideKeyWord.setValue(true);
                             observeEnabledPayment.set(false);
                         } else {
