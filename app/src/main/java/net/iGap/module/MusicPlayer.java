@@ -263,13 +263,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             layout.setVisibility(View.VISIBLE);
             txt_music_name.setText(MusicPlayer.musicName);
             txt_music_info.setText(MusicPlayer.musicInfoTitle);
+            txt_music_time.setText(musicTime);
 
-            if (isVoice) {
-                txt_music_info.setVisibility(View.GONE);
-            } else {
-                txt_music_info.setVisibility(View.VISIBLE);
-                txt_music_time.setText(musicTime);
-            }
             if (MusicPlayer.mp.isPlaying()) {
                 btnPlayMusic.setText(context.getString(R.string.pause_icon));
             } else {
