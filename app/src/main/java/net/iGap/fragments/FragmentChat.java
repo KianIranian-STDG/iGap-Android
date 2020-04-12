@@ -2731,15 +2731,15 @@ public class FragmentChat extends BaseFragment
                 }
 
                 @Override
-                public void onChildDraw(Canvas c,
-                                        RecyclerView recyclerView,
-                                        RecyclerView.ViewHolder viewHolder,
-                                        float dX, float dY,
-                                        int actionState, boolean isCurrentlyActive) {
+                public void onChildDraw(@NotNull Canvas c, @NotNull RecyclerView recyclerView, @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                    if (viewHolder.getItemViewType() == R.id.chatSubLayoutVoice)
+                        return;
 
                     if (actionState == ACTION_STATE_SWIPE && isCurrentlyActive) {
-                        setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                        setTouchListener(recyclerView, dX);
                     }
+
                     dX = dX + ViewMaker.dpToPixel(25);
                     if (dX > 0)
                         dX = 0;
@@ -3874,15 +3874,9 @@ public class FragmentChat extends BaseFragment
         webViewChatPage.loadUrl(urlWebViewForSpecialUrlChat);
     }
 
-    private void setTouchListener(Canvas c,
-                                  RecyclerView recyclerView,
-                                  RecyclerView.ViewHolder viewHolder,
-                                  float dX, float dY,
-                                  int actionState, boolean isCurrentlyActive) {
-
-
+    private void setTouchListener(RecyclerView recyclerView, float dX) {
         if (dX < -ViewMaker.dpToPixel(140)) {
-            if (!isRepley) {
+            if (!isRepley && getActivity() != null) {
                 Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -3893,38 +3887,13 @@ public class FragmentChat extends BaseFragment
                 }
             }
             isRepley = true;
-
-            // replay(message);
-           /* if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
-                goToPositionWithAnimation(replyMessage.getMessageId() * (-1), 1000);
-            }*/
         } else {
             isRepley = false;
         }
 
-       /* icon.setBounds(viewHolder.itemView.getRight() - 0, 0, viewHolder.itemView.getRight() - 0, 0 + icon.getIntrinsicHeight());
-        icon.draw(c);*/
-
-
-        View itemView = viewHolder.itemView;
-
-
-   /*     DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        Drawable drawable = ContextCompat.getDrawable(G.fragmentActivity, R.mipmap.ic_launcher_round);
-        Bitmap icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        //  Canvas canvas = new Canvas(icon);
-        drawable.setBounds(displayMetrics.widthPixels - 109, itemView.getTop() + 9, itemView.getRight() - 22, itemView.getBottom() - 9);
-        drawable.draw(c);*/
-
-
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
-                return false;
-            }
+        recyclerView.setOnTouchListener((v, event) -> {
+            swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
+            return false;
         });
 
     }
