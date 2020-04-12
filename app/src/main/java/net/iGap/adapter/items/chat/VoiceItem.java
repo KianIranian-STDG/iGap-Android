@@ -283,7 +283,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends NewChatItemHolder implements IThumbNailItem, IProgress {
+    public class ViewHolder extends NewChatItemHolder implements IThumbNailItem, IProgress {
 
         private MessageProgress progress;
         private AppCompatImageView thumbnail;

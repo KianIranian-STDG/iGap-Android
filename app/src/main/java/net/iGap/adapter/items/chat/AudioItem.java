@@ -341,7 +341,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
+    public class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         private MessageProgress progress;
         private AppCompatImageView thumbnail;
         private AppCompatTextView songSize;

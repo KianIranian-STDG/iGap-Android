@@ -2732,10 +2732,6 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public void onChildDraw(@NotNull Canvas c, @NotNull RecyclerView recyclerView, @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-
-                    if (viewHolder.getItemViewType() == R.id.chatSubLayoutVoice)
-                        return;
-
                     if (actionState == ACTION_STATE_SWIPE && isCurrentlyActive) {
                         setTouchListener(recyclerView, dX);
                     }
@@ -2758,7 +2754,11 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                    if (viewHolder instanceof NewChatItemHolder) {
+                    if (viewHolder instanceof VoiceItem.ViewHolder) {
+                        return 0;
+                    } else if (viewHolder instanceof AudioItem.ViewHolder) {
+                        return 0;
+                    } else if (viewHolder instanceof NewChatItemHolder) {
                         return super.getSwipeDirs(recyclerView, viewHolder);
                     }
                     // we disable swipe with returning Zero
