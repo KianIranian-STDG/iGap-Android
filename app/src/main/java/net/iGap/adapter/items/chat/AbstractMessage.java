@@ -128,7 +128,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean directionalBased;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
-    SpannableString myText;
+    private SpannableString myText;
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
@@ -284,9 +284,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             ArrayList<Tuple<Integer, Integer>> results = MessageBoldSetup(myText.toString());
             if (structMessage.hasLinkInMessage()) {
                 myText = SpannableString.valueOf(HelperUrl.getLinkText(G.currentActivity, myText.toString(), structMessage.getLinkInfo(), mMessage.getMessageId() + ""));
-            } else {
+            } /*else {
                 myText = new SpannableString(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(myText.toString()) : myText);
-            }
+            }*/
 
             for (int i = 0; i < results.size(); i++) {
                 Tuple<Integer, Integer> point = results.get(i);
