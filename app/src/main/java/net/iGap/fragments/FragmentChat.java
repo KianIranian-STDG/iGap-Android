@@ -2682,7 +2682,7 @@ public class FragmentChat extends BaseFragment
         }
 
 
-        mAdapter = new MessagesAdapter<>(this, this, this, avatarHandler, compositeDisposable, isCloudRoom);
+        mAdapter = new MessagesAdapter<>(managedRoom, this, this, this, avatarHandler, compositeDisposable, isCloudRoom);
 
         mAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
             @Override
