@@ -215,7 +215,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         final long _st = (int) ((mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getDuration() : structMessage.getAttachment().getDuration()) * 1000);
 
-        holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
+        holder.txt_Timer.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
 
         if (holder.waveView.getTag().equals(mMessage.getMessageId()) && MusicPlayer.messageId.equals(mMessage.getMessageId() + "")) {
             MusicPlayer.onCompleteChat = holder.complete;
