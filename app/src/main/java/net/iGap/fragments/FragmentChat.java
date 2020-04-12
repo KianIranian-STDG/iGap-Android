@@ -340,7 +340,6 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
-import static net.iGap.G.iTowPanModDesinLayout;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
@@ -891,7 +890,7 @@ public class FragmentChat extends BaseFragment
         isPaused = false;
         super.onResume();
 
-        if (showKeyboardOnResume) {
+        if (showKeyboardOnResume || (keyboardViewVisible && keyboardView != null && keyboardView.getCurrentMode() == KeyboardView.MODE_KEYBOARD)) {
             showPopup(KeyboardView.MODE_KEYBOARD);
             openKeyboardInternal();
         }
