@@ -30,9 +30,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
 
-    private final String MCI = "mci";
-    private final String MTN = "mtn";
-    private final String RIGHTEL = "rightel";
+    public static final String MCI = "mci";
+    public static final String MTN = "mtn";
+    public static final String RIGHTEL = "rightel";
 
     private ObservableInt showDetail = new ObservableInt(View.GONE);
     private ObservableInt observeTarabord = new ObservableInt(View.GONE);

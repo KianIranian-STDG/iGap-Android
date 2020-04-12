@@ -49,6 +49,14 @@ public class OperatorType {
         return phoneMap.get(phoneNumber);
     }
 
+    public boolean isValidType(String phoneNumber) {
+        Type tmp = phoneMap.get(phoneNumber);
+        if (tmp != null) {
+            return tmp == Type.HAMRAH_AVAL || tmp == Type.RITEL || tmp == Type.IRANCELL;
+        }
+        return false;
+    }
+
     public boolean isMci(String phoneNumber) {
         Type tmp = phoneMap.get(phoneNumber);
         if (tmp != null) {

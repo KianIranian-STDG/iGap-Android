@@ -9,7 +9,6 @@ import net.iGap.api.ElecBillApi;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.KuknosApi;
-import net.iGap.api.MciApi;
 import net.iGap.api.MobileBankApi;
 import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
@@ -133,15 +132,6 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(ChargeApi.class);
-    }
-
-    public MciApi getMciRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl(ApiStatic.MCI_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(getHttpClient())
-                .build()
-                .create(MciApi.class);
     }
 
     public CharityApi getCharityRetrofit() {
