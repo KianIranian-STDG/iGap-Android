@@ -133,8 +133,6 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         onDataChanged();
         onProgress();
         onTermsDownload();
-        // TODO: 4/11/2020 must be deleted for production 
-        viewModel.setOpenPage(6);
     }
 
     @Override
