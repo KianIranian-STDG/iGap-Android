@@ -293,7 +293,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     break;
                 case 1:
                     fragment = fragmentManager.findFragmentByTag(KuknosSendFrag.class.getName());
-                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("") && viewModel.isPmnActive()) {
+                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("") /*&& viewModel.isPmnActive()*/) {
                         fragment = KuknosSendFrag.newInstance();
                         Bundle b = new Bundle();
                         b.putString("balanceClientInfo", viewModel.convertToJSON(viewModel.getPosition()));
@@ -316,9 +316,14 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     return;
                 case 4:
                     fragment = fragmentManager.findFragmentByTag(KuknosBuyPeymanFrag.class.getName());
-                    if (fragment == null) {
+                    if (fragment == null && !viewModel.convertToJSON(viewModel.getPosition()).equals("")) {
                         fragment = KuknosBuyPeymanFrag.newInstance();
+                        Bundle b = new Bundle();
+                        b.putString("balanceClientInfo", viewModel.convertToJSON(viewModel.getPosition()));
+                        fragment.setArguments(b);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    } else {
+                        Toast.makeText(getContext(), R.string.unavalable, Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case 5:

@@ -256,7 +256,7 @@
                         android:paddingBottom="15dp"
                         android:text="@string/kuknos_panelStr_setting"
                         android:textColor="?iGapSubtitleTextColor"
-                        android:textSize="@dimen/dp16"
+                        android:textSize="@dimen/standardTextSize"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -303,7 +303,7 @@
                         android:paddingBottom="15dp"
                         android:text="@string/kuknos_panelStr_buyPeyman"
                         android:textColor="?iGapSubtitleTextColor"
-                        android:textSize="@dimen/dp16"
+                        android:textSize="@dimen/standardTextSize"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -350,7 +350,7 @@
                         android:paddingBottom="15dp"
                         android:text="@string/kuknos_panelStr_trading"
                         android:textColor="?iGapSubtitleTextColor"
-                        android:textSize="@dimen/dp16"
+                        android:textSize="@dimen/standardTextSize"
                         android:textStyle="bold" />
 
                 </LinearLayout>
