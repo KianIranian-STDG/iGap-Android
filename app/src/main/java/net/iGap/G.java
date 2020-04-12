@@ -228,11 +228,9 @@ public class G extends ApplicationContext {
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
-    public static OnUserDelete onUserDelete;
     /*public static OnUserProfileCheckUsername onUserProfileCheckUsername;*/
     /*public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;*/
     public static OnGroupGetMemberList onGroupGetMemberList;
-    public static OnUserGetDeleteToken onUserGetDeleteToken;
     public static OnGroupDelete onGroupDelete;
     public static OpenFragment onConvertToGroup;
     public static OnChatConvertToGroup onChatConvertToGroup;

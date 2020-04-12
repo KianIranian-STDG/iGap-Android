@@ -11,9 +11,12 @@ import net.iGap.model.kuknos.Parsian.KuknosFederation;
 import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
 import net.iGap.model.kuknos.Parsian.KuknosHash;
 import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
+import net.iGap.model.kuknos.Parsian.KuknosOptionStatus;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
+
+import org.stellar.sdk.responses.SubmitTransactionResponse;
 
 public class PanelRepo {
 
@@ -67,12 +70,20 @@ public class PanelRepo {
         kuknosAPIRepository.getFees(handShakeCallback, apiResponse);
     }
 
-    public void convertFederation(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
-        kuknosAPIRepository.convertFederation(username, handShakeCallback, apiResponse);
+    public void convertFederation(String username, String domain, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
+        kuknosAPIRepository.convertFederation(username, domain, handShakeCallback, apiResponse);
     }
 
     public void getPaymentData(String RRA, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosPaymentResponse>> apiResponse) {
         kuknosAPIRepository.getPaymentData(RRA, handShakeCallback, apiResponse);
+    }
+
+    public void setOptions(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
+        kuknosAPIRepository.setOptions(userRepo.getSeedKey(), handShakeCallback, apiResponse);
+    }
+
+    public void getAccountOptionsStatus(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOptionStatus>> apiResponse) {
+        kuknosAPIRepository.getAccountOptionsStatus(userRepo.getAccountID(), handShakeCallback, apiResponse);
     }
 
     public boolean isPinSet() {

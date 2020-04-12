@@ -323,8 +323,8 @@
         <item>@string/charge_type</item>
         <item>@string/normal_charge</item>
         <item>@string/amazing</item>
-        <item>@string/wimax_charging</item>
-        <item>@string/permanently_charge</item>
+        <!--<item>@string/wimax_charging</item>
+        <item>@string/permanently_charge</item>-->
     </string-array>
 
     <string-array name="charge_type_hamrahe_aval">
@@ -335,6 +335,7 @@
     <string-array name="charge_type_ritel">
         <item>@string/charge_type</item>
         <item>@string/normal_charge</item>
+        <item>@string/amazing</item>
     </string-array>
 
     <string-array name="charge_price">

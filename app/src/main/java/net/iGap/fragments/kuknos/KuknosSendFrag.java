@@ -9,6 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -26,14 +36,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosSendVM;
 
 import java.io.IOException;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
 
@@ -87,6 +89,12 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
 
         binding.fragKuknosSWalletAddressET.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         binding.fragKuknosSWalletAddressET.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        binding.modeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                onModeChangeView(checkedId);
+            }
+        });
 
         onError();
         onTransfer();
@@ -94,6 +102,7 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
         resetEdittextAfterError();
         openQrScanner();
         goToPin();
+        changeHint();
     }
 
     private void openQrScanner() {
@@ -142,9 +151,13 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
                         binding.fragKuknosSAmountHolder.requestFocus();
                         break;
                     case "2":
-                        //server related errors
-
+                        //memo
+                        binding.fragKuknosSTextHolder.setError("" + getString(errorM.getResID()));
+                        binding.fragKuknosSTextHolder.requestFocus();
                         break;
+                    default:
+                        //Wallet ID Problem
+                        binding.fragKuknosSWalletAddressHolder.setError(errorM.getMessage());
                 }
             }
         });
@@ -231,6 +244,7 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 binding.fragKuknosSWalletAddressHolder.setErrorEnabled(false);
+                viewModel.setWalletIdVisibility(View.GONE);
             }
 
             @Override
@@ -266,5 +280,26 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
+    }
+
+    public void onModeChangeView(int view) {
+        switch (view) {
+            case R.id.mode_publicKey:
+                viewModel.onModeChange(0);
+                break;
+            case R.id.mode_kuknosID:
+                viewModel.onModeChange(1);
+                break;
+        }
+    }
+
+    private void changeHint() {
+        viewModel.getChangeHint().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer stringRes) {
+                binding.fragKuknosSWalletAddressET.setHint(stringRes);
+            }
+        });
+
     }
 }

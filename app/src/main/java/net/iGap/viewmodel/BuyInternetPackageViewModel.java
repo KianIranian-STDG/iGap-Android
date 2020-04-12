@@ -9,18 +9,22 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.model.internetPackage.InternetPackage;
-import net.iGap.model.internetPackage.MciInternetPackageFilter;
-import net.iGap.repository.MciInternetPackageRepository;
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
+import net.iGap.model.igasht.BaseIGashtResponse;
+import net.iGap.model.internetPackage.InternetPackage;
+import net.iGap.model.internetPackage.MciInternetPackageFilter;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.MciInternetPackageRepository;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MCI;
+import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
+import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.RIGHTEL;
 
 public class BuyInternetPackageViewModel extends BaseAPIViewModel {
 
@@ -45,10 +49,11 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
     private List<InternetPackage> packageListFiltered;
     private boolean isDaily;
     private int selectedPackageType;
+    private String operator;
 
     public BuyInternetPackageViewModel() {
         repository = MciInternetPackageRepository.getInstance();
-        getData();
+        showMainView();
     }
 
     public ObservableInt getShowDetail() {
@@ -109,7 +114,22 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
 
     public void phoneNumberTextChangeListener(String phoneNumber) {
         if (phoneNumber.length() == 11) {
-            if (new OperatorType().isMci(phoneNumber.substring(0, 4))) {
+            String prefix = phoneNumber.substring(0, 4);
+            if (new OperatorType().isValidType(prefix)) {
+                OperatorType.Type opt = new OperatorType().getOperation(prefix);
+                if (opt != null) {
+                    if (opt == OperatorType.Type.RITEL)
+                        operator = RIGHTEL;
+                    else if (opt == OperatorType.Type.HAMRAH_AVAL)
+                        operator = MCI;
+                    else if (opt == OperatorType.Type.IRANCELL)
+                        operator = MTN;
+
+                    packageList = null;
+                    daysFilter = null;
+                    trafficFilter = null;
+                    getData();
+                }
                 showDetail.set(View.VISIBLE);
             } else {
                 showErrorMessage.setValue(R.string.error);
@@ -160,7 +180,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         if (selectedPackageType > 0) {
             enabledPaymentButton.set(false);
             showLoadingView.set(View.VISIBLE);
-            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType), this, new ResponseCallback<MciPurchaseResponse>() {
+            repository.purchaseInternetPackage(operator, phoneNumber.substring(1), String.valueOf(selectedPackageType), this, new ResponseCallback<MciPurchaseResponse>() {
                 @Override
                 public void onSuccess(MciPurchaseResponse data) {
                     G.handler.post(() -> {
@@ -194,10 +214,10 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
 
     private void getData() {
         showLoadingView.set(View.VISIBLE);
-        showMainView.set(View.GONE);
+        //showMainView.set(View.GONE);
         showRetryView.set(View.GONE);
         if (daysFilter == null || trafficFilter == null) {
-            repository.getFilterListData(this, new ResponseCallback<List<MciInternetPackageFilter>>() {
+            repository.getFilterListData(operator, this, new ResponseCallback<List<MciInternetPackageFilter>>() {
                 @Override
                 public void onSuccess(List<MciInternetPackageFilter> data) {
                     getFilterListDuration(data);
@@ -216,7 +236,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                 }
             });
         } else if (packageList == null) {
-            repository.getInternetPackageList(this, new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
+            repository.getInternetPackageList(operator, this, new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
                 @Override
                 public void onSuccess(BaseIGashtResponse<InternetPackage> data) {
                     packageList = data.getData();
@@ -262,6 +282,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         } else {
             tmp = trafficFilter.get(position);
         }
+
         packageListFiltered = getPackageList(tmp);
     }
 
@@ -287,11 +308,11 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         List<InternetPackage> tmp = new ArrayList<>();
         for (int i = 0; i < packageList.size(); i++) {
             if (isDaily) {
-                if (packageList.get(i).getDurationId().equals(filter.getId())) {
+                if (packageList.get(i).getDurationId() != null && packageList.get(i).getDurationId().equals(filter.getId())) {
                     tmp.add(packageList.get(i));
                 }
             } else {
-                if (packageList.get(i).getTrafficId().equals(filter.getId())) {
+                if (packageList.get(i).getTrafficId() != null && packageList.get(i).getTrafficId().equals(filter.getId())) {
                     tmp.add(packageList.get(i));
                 }
             }

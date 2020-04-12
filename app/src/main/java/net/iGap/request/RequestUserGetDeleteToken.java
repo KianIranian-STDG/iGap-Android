@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnUserGetDeleteToken;
 import net.iGap.proto.ProtoUserGetDeleteToken;
 
 public class RequestUserGetDeleteToken {
 
-    public void userGetDeleteToken() {
+    public void userGetDeleteToken(OnUserGetDeleteToken onUserGetDeleteToken) {
 
         ProtoUserGetDeleteToken.UserGetDeleteToken.Builder builder = ProtoUserGetDeleteToken.UserGetDeleteToken.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(118, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(118, builder, onUserGetDeleteToken);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -928,7 +928,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             @Override
             public void onError(int major, int minor) {
-                if (getIvanScoreTime > 3) {
+                if (getIvanScoreTime < 3) {
                     if (major == 5 && minor == 1) {
                         getIVandScore();
                     }

@@ -69,7 +69,7 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
         toolbarLayout.addView(mHelperToolbar.getView());
 
         onErrorObserver();
-        onNextObserver();
+//        onNextObserver();
     }
 
     private void onErrorObserver() {
@@ -84,13 +84,13 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
         });
     }
 
-    private void onNextObserver() {
+    /*private void onNextObserver() {
         kuknosShowRecoveryKeyVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
                 popBackStackFragment();
             }
         });
-    }
+    }*/
 
     @Override
     public void onResume() {

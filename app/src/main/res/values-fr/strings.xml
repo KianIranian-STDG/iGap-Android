@@ -63,7 +63,7 @@
     <string name="sure_delete_account">Etes-vous sûr de vouloir supprimer votre compte ?</string>
     <string name="delete_account_text_desc">Si vous supprimez votre compte , tous les messages seront éliminés  définitivement </string>
     <string name="Destruction_Code">destruction </string>
-    <string name="Destruction_Des">Vous essayez actuellement de détruire votre compte, votre numéro de téléphone est le suivant:</string>
+    <string name="destroy_description">Vous essayez actuellement de détruire votre compte, votre numéro de téléphone est le suivant:</string>
     <string name="iGap_autofill_Destruction_Code">AIGAP détecte automatiquement le code et remplit les espaces si vous ne pouvez pas le saisir manuellementl’option « envoyer de nouveau ».</string>
     <string name="video_message">Message vidéo</string>
     <string name="file_message">Message en fichier</string>
@@ -349,7 +349,7 @@
     <string name="desc_public_channel">les membres peuvent rejoindre le canal par le lien d\'invitation </string>
     <string name="last_msg_format_chat" formatted="false">%s</string>
     <string name="USER_VERIFY_BLOCKED_USER"> L\'utilisateur est bloqué,  Impossible d\'approuver.</string>
-    <string name="Enter_Code">Code de destruction</string>
+    <string name="destroy_enter_code">Code de destruction</string>
     <string name="E_2">    Nécessite un login</string>
     <string name="E_335">Erreur du client</string>
     <string name="E_336">Erreur Interne du Serveur</string>
