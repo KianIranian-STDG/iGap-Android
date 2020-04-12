@@ -11,6 +11,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -46,7 +48,11 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import yogesh.firzen.mukkiasevaigal.S;
+
+import static java.lang.Long.min;
 import static java.lang.Long.parseLong;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
@@ -131,12 +137,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.btnPlayMusic.setOnClickListener(v -> {
 
-
             if (FragmentChat.isInSelectionMode) {
                 holder.itemView.performLongClick();
                 return;
             }
-
             if (holder.mFilePath.length() < 1)
                 return;
 
@@ -147,6 +151,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
             }
 
+            AndroidUtils.getAudioDuration(G.context, holder.mFilePath);
+            int currentVoiceGoTO = (int) (AndroidUtils.getAudioDuration(G.context, holder.mFilePath) * holder.waveView.getProgress() / 100);
+            MusicPlayer.currentDuration = currentVoiceGoTO;
             if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                 MusicPlayer.onCompleteChat = holder.complete;
 
@@ -176,6 +183,15 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                     MusicPlayer.setMusicProgress((int) holder.waveView.getProgress());
                 }
             }
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                int currentVoiceGoTO = (int) (AndroidUtils.getAudioDuration(G.context, holder.mFilePath) * holder.waveView.getProgress() / 100);
+                String finalElapsedTime = exractTimingInString(currentVoiceGoTO);
+                String totalSizeInString = exractTimingInString((int) AndroidUtils.getAudioDuration(G.context, holder.mFilePath));
+                holder.txt_Timer.setText(finalElapsedTime + holder.getContext().getString(R.string.forward_slash) + totalSizeInString);
+                if (HelperCalander.isPersianUnicode) {
+                    holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                }
+            }
             return false;
         });
 
@@ -199,7 +215,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         final long _st = (int) ((mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getDuration() : structMessage.getAttachment().getDuration()) * 1000);
 
-        holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
+        holder.txt_Timer.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
 
         if (holder.waveView.getTag().equals(mMessage.getMessageId()) && MusicPlayer.messageId.equals(mMessage.getMessageId() + "")) {
             MusicPlayer.onCompleteChat = holder.complete;
@@ -267,7 +283,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends NewChatItemHolder implements IThumbNailItem, IProgress {
+    public class ViewHolder extends NewChatItemHolder implements IThumbNailItem, IProgress {
 
         private MessageProgress progress;
         private AppCompatImageView thumbnail;
@@ -405,5 +421,22 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         public MessageProgress getProgress() {
             return progress;
         }
+    }
+
+    private String exractTimingInString(int currentVoiceGoTO) {
+        int timeToSec = currentVoiceGoTO / 1000;
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(currentVoiceGoTO);
+        long sec = timeToSec % 60;
+
+        String minTo = minutes + "";
+        String secTo = sec + "";
+        if (sec < 10) {
+            secTo = "0" + secTo;
+        }
+        if (minutes < 10) {
+            minTo = "0" + minTo;
+        }
+        String finalElapsedTime = minTo + ":" + secTo;
+        return finalElapsedTime;
     }
 }
