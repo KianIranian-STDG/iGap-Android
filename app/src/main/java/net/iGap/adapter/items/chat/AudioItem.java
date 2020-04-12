@@ -260,7 +260,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         final long _st = (long) (structMessage.getAttachment() != null ? structMessage.getAttachment().getDuration() * 1000 : 0);
 
-        holder.songTimeTv.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
+        holder.songTimeTv.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
 
         if (holder.seekBar.getTag().equals(holder.mMessageID) && holder.mMessageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
