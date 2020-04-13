@@ -37,6 +37,7 @@ import net.iGap.adapter.items.BottomSheetItem;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
@@ -478,13 +479,18 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-
+                    showDeniedPermissionMessage();
                 }
             });
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showDeniedPermissionMessage() {
+        if (mContext != null)
+            HelperError.showSnackMessage(mContext.getString(R.string.you_need_to_allow) + " " + mContext.getString(R.string.permission_storage), false);
     }
 
     private void openVideoGallery() {
@@ -513,7 +519,7 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-
+                    showDeniedPermissionMessage();
                 }
             });
 
@@ -547,7 +553,7 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-
+                    showDeniedPermissionMessage();
                 }
             });
 

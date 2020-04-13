@@ -13,7 +13,5 @@ package net.iGap.observers.interfaces;
 public interface OnUserDelete {
     void onUserDeleteResponse();
 
-    void Error(int majorCode, int minorCode, int rime);
-
-    void TimeOut();
+    void Error(int majorCode, int minorCode, int time);
 }

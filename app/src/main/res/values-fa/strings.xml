@@ -91,7 +91,7 @@
     <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
     <string name="delete_account_text_desc">(در صورتیکه اکانت خود را حذف کنید، همه فایل هایی که به صورت پیام دریافت کرده اید نیز به طور دائم حذف خواهند شد.)</string>
     <string name="Destruction_Code">تخریب</string>
-    <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
+    <string name="destroy_description">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
     <string name="iGap_autofill_Destruction_Code">آیگپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست به صورت دستی وارد کنید.</string>
 
     <!-- Message Type and Status -->
@@ -408,7 +408,7 @@
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>
-    <string name="Enter_Code">"کد تخریب"</string>
+    <string name="destroy_enter_code">"کد تخریب"</string>
     <string name="E_2">نیاز به ورود به سیستم</string>
     <string name="E_335">"خطایی از کلاینت"</string>
     <string name="E_336">"خطای درونی سرور"</string>
@@ -1207,6 +1207,9 @@
 
     <string name="filter_cancel_content">آیا از تغییرات انجام داده منصرف شدید ؟</string>
     <string name="lbl_brightness">روشنایی</string>
+    <string name="clr_adjust">تنظیم رنگ</string>
+    <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="lbl_magnify">بزرگنمایی</string>
     <string name="lbl_contrast">کنتراست</string>
     <string name="lbl_saturation">اشباع</string>
     <string name="tab_filters">فیلتر رنگ</string>
@@ -1986,8 +1989,8 @@
     <string name="igasht_service_title">سرویس</string>
 
     <string name="kuknos_login_messge_str">لطفا کد ملی خود را وارد نمایید.</string>
-    <string name="kuknos_login_id_str">کد ملی</string>
-    <string name="kuknos_login_tel_str">تلفن</string>
+    <string name="kuknos_login_id_str">کد ملی *</string>
+    <string name="kuknos_login_tel_str">تلفن *</string>
     <string name="kuknos_login_submit_str">ثبت</string>
     <string name="kuknos_login_error_empty_str">کد ملی خود را وارد نمایید.</string>
     <string name="kuknos_login_error_invalid_str">کد ملی نامعتبر میباشد.</string>
@@ -2014,7 +2017,7 @@
     <string name="kuknos_SignupInfo_username">نام کاربری*</string>
     <string name="kuknos_SignupInfo_name">نام *</string>
     <string name="kuknos_SignupInfo_family">نام خانوادگی *</string>
-    <string name="kuknos_SignupInfo_email">آدرس ایمیل</string>
+    <string name="kuknos_SignupInfo_email">آدرس ایمیل *</string>
     <string name="kuknos_SignupInfo_submitBtn">ثبت</string>
     <string name="kuknos_SignupInfo_checkUsername">در حال بررسی...</string>
     <string name="kuknos_SignupInfo_submitConnecting">ذخیره...</string>
@@ -2071,7 +2074,7 @@
     <string name="kuknos_wHistory_error">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_setting_title">تنظیمات</string>
     <string name="kuknos_setting_changePin">تغییر رمز ورودی</string>
-    <string name="kuknos_setting_viewRecoveryP">نمایش زنجیره کلمات بازیابی</string>
+    <string name="kuknos_setting_viewRecoveryP">نمایش اطلاعات حساب کاربری</string>
     <string name="kuknos_setting_logout">خروج از کیف پول</string>
     <string name="kuknos_changePIN_title">تغییر رمز ورودی</string>
     <string name="kuknos_changePIN_message">رمز ورودی (چهار رقمی) جهت رمزنگاری کلید خصوصی شما مورد استفاده قرار می گیرد. لطفا رمز را به گونه ای انتخاب نمایید که به راحتی قابل حدس زدن نباشد.</string>
@@ -2142,7 +2145,7 @@
     <string name="kuknos_tradeDialogDelete_title">حذف مبادله</string>
     <string name="kuknos_tradeDialogDelete_message">آیا از حذف این مبادله اطمینان دارید؟</string>
     <string name="kuknos_tradeDialogDelete_btn">بله</string>
-    <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
+    <string name="kuknos_setting_copySeedKey">ذخیره اطلاعات حساب کاربری</string>
     <string name="kuknos_setting_sepid">سپیدنامه پیمان</string>
     <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
@@ -2164,7 +2167,7 @@
     <string name="kuknos_login_error_server_ErrorStr">خطای سرور: عدم جواب. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateMn">عدم امکان تولید زنجیره کلمات. لطفا با پشتیبانی تماس بگیرید.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
-    <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n</string>
+    <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n\n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
     <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
     <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
@@ -2548,4 +2551,24 @@
     <string name="gift_carde_sended">شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!</string>
     <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
     <string name="kuknos_AddAsset_nullEntry">امکان اضافه شدن این دارایی به حساب شما وجود ندارد.</string>
+    <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
+    <string name="kuknos_parsianTerms_title">قوانین و مقررات پارسیان</string>
+    <string name="kuknos_parsianTerms_desc">برای ادامه و استفاده از خدمات کیف پول ققنوس پارسیان، شما باید تغییرات زیر در مفاد قرارداد پارسیان و ققنوس را تایید کنید.</string>
+    <string name="kuknos_parsianTerms_term1">من به آدرس شرکت پارسیان که در ادامه ذکر شده است رای میدهم. \nکلید عمومی: GALOLMASACBA6PGXV6DOJ7O42OAJS7XJLNG6EYEE2KTXZO2KTYAJWVFD</string>
+    <string name="kuknos_parsianTerms_term2">من موافقت میکنم تا آدرس دامنه پارسیان که در ادامه ذکر شده است به عنوان دامنه اصلی کیف پول من تنظیم شود. \nآدرس: https://www.pdpco.ir</string>
+    <string name="kuknos_parsianTerms_term3">من به ایجاد کننده توکن SKYC اعتماد دارم.</string>
+    <string name="kuknos_parsianTerms_errorTermAndCondition">اگه شما مایل به ادامه و استفاده از امکانات کیف پول پارسیان هستید، باید تمامی مفاد را تایید کنید.</string>
+    <string name="kuknos_send_memoError">طول متن یادداشت بیش از حد مجاز است.</string>
+    <string name="kuknos_accountInfo_title">اطلاعات اکانت</string>
+    <string name="kuknos_accountInfo_desc">"تمامی اطلاعات مربوط به اکانت شما در سامانه ققنوس "</string>
+    <string name="kuknos_accountInfo_recoveryKey_title">1- رشته کلید بازگردانی حساب</string>
+    <string name="kuknos_accountInfo_publicKey_title">3- کلید عمومی</string>
+    <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
+    <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال ارز کنید.</string>
+    <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
+    <string name="kuknos_Restore_ErrorNoAccount_Snack">اکانت مورد نظر یافت نشد.</string>
+    <string name="kuknos_send_walletAddress_Hint1">مثال: GAVYHKFT...</string>
+    <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
+    <string name="kuknos_send_option1">از طریق کلید عمومی</string>
+    <string name="kuknos_send_option2">از طریق نام کاربری</string>
 </resources>

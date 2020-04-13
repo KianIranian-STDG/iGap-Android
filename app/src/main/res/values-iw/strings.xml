@@ -30,7 +30,7 @@
     <string name="Default_Dir">پیش فرض مسیر </string>
     <string name="Delete_and_leave_Group">سیلمک و گروهدان چیخماق</string>
     <string name="Destruction_Code">تخریب</string>
-    <string name="Destruction_Des">سیز ایندی اوز اکانتینیزی تخریب ائتمه یه چالیشیرسینیز. سیزین تلفنونوز </string>
+    <string name="destroy_description">سیز ایندی اوز اکانتینیزی تخریب ائتمه یه چالیشیرسینیز. سیزین تلفنونوز </string>
     <string name="Disable">غیرفعال</string>
     <string name="Documents">اسناد</string>
     <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
@@ -164,7 +164,7 @@
     <string name="E_9009">سرور ایله ارتباط ممکن دییلدیر</string>
     <string name="E_9010">دریافت کننده ثبت نام ائتمه میشدیر</string>
     <string name="E_9013">سیزین اوچون ثبت نام قاداغاندیر</string>
-    <string name="Enter_Code">تخریب کدو</string>
+    <string name="destroy_enter_code">تخریب کدو</string>
     <string name="Favorite_Sticker">سئودیگیم </string>
     <string name="Female">خانم</string>
     <string name="FingerPrint">بارماق ایزی </string>
@@ -2275,4 +2275,27 @@
     <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
     <string name="kuknos_AddAsset_nullEntry">امکان اضافه شدن این دارایی به حساب شما وجود ندارد.</string>
     <string name="gift_sticker_title">خرید کارت هدیه دیجیتال</string>
+    <string name="kuknos_parsianTerms_title">قوانین و مقررات پارسیان</string>
+    <string name="kuknos_parsianTerms_desc">برای ادامه و استفاده از خدمات کیف پول ققنوس پارسیان، شما باید تغییرات زیر در مفاد قرارداد پارسیان و ققنوس را تایید کنید.</string>
+    <string name="kuknos_parsianTerms_term1">"من به آدرس شرکت پارسیان که در ادامه ذکر شده است رای میدهم. "</string>
+    <string name="kuknos_parsianTerms_term2">من موافقت میکنم تا آدرس دامنه پارسیان که در ادامه ذکر شده است به عنوان دامنه اصلی کیف پول من تنظیم شود. \\nآدرس: https://www.pdpco.ir</string>
+    <string name="kuknos_parsianTerms_term3">من به ایجاد کننده توکن SKYC اعتماد دارم.</string>
+    <string name="kuknos_parsianTerms_errorTermAndCondition">اگه شما مایل به ادامه و استفاده از امکانات کیف پول پارسیان هستید، باید تمامی مفاد را تایید کنید.</string>
+    <string name="kuknos_send_memoError">طول متن یادداشت بیش از حد مجاز است.</string>
+    <string name="kuknos_accountInfo_title">اطلاعات اکانت</string>
+    <string name="kuknos_accountInfo_desc">"تمامی اطلاعات مربوط به اکانت شما در سامانه ققنوس "</string>
+    <string name="kuknos_accountInfo_recoveryKey_title">1- رشته کلید بازگردانی حساب</string>
+    <string name="kuknos_accountInfo_publicKey_title">3- کلید عمومی</string>
+    <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال ارز کنید.</string>
+    <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
+    <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
+    <string name="kuknos_Restore_ErrorNoAccount_Snack">اکانت مورد نظر یافت نشد.</string>
+    <string name="kuknos_send_walletAddress_Hint1">مثال: GAVYHKFT...</string>
+    <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
+    <string name="kuknos_send_option1">از طریق کلید عمومی</string>
+    <string name="kuknos_send_option2">از طریق نام کاربری</string>
+    <string name="lbl_magnify">بزرگنمایی</string>
+    <string name="clr_adjust">تنظیم رنگ</string>
+    <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
 </resources>

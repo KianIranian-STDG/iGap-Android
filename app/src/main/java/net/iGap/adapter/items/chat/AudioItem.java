@@ -46,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static android.view.Gravity.BOTTOM;
@@ -161,7 +162,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             if (mMessage != null && structMessage.getAttachment() != null) {
                 name = structMessage.getAttachment().getName();
             }
-
+            int currentVoiceGoTO = (int) (AndroidUtils.getAudioDuration(G.context, holder.mFilePath) * holder.seekBar.getProgress() / 100);
+            MusicPlayer.currentDuration = currentVoiceGoTO;
             if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                 MusicPlayer.onCompleteChat = holder.complete;
                 if (MusicPlayer.mp != null) {
@@ -197,6 +199,15 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
+                int currentVoiceGoTO = (int) (AndroidUtils.getAudioDuration(G.context, holder.mFilePath) * holder.seekBar.getProgress() / 100);
+                String finalElapsedTime = exractTimingInString(currentVoiceGoTO);
+                String totalSizeInString = exractTimingInString((int) AndroidUtils.getAudioDuration(G.context, holder.mFilePath));
+                holder.songTimeTv.setText(finalElapsedTime + holder.getContext().getString(R.string.forward_slash) + totalSizeInString);
+                if (HelperCalander.isPersianUnicode) {
+                    holder.songTimeTv.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.songTimeTv.getText().toString()));
+                }
+
                 if(!holder.mMessageID.equals(MusicPlayer.messageId)) return;
                 MusicPlayer.playAndPause();
             }
@@ -249,7 +260,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         final long _st = (long) (structMessage.getAttachment() != null ? structMessage.getAttachment().getDuration() * 1000 : 0);
 
-        holder.songTimeTv.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
+        holder.songTimeTv.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
 
         if (holder.seekBar.getTag().equals(holder.mMessageID) && holder.mMessageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
@@ -330,7 +341,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
+    public class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         private MessageProgress progress;
         private AppCompatImageView thumbnail;
         private AppCompatTextView songSize;
@@ -500,5 +511,21 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
 
 
+    }
+    private String exractTimingInString(int currentVoiceGoTO) {
+        int timeToSec = currentVoiceGoTO / 1000;
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(currentVoiceGoTO);
+        long sec = timeToSec % 60;
+
+        String minTo = minutes + "";
+        String secTo = sec + "";
+        if (sec < 10) {
+            secTo = "0" + secTo;
+        }
+        if (minutes < 10) {
+            minTo = "0" + minTo;
+        }
+        String finalElapsedTime = minTo + ":" + secTo;
+        return finalElapsedTime;
     }
 }

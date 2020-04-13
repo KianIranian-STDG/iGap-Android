@@ -59,6 +59,7 @@ public class EventManager {
     public static final int STICKER_CHANGED = eventId++;
 
     public static final int ROOM_LIST_CHANGED = eventId++;
+    public static final int CHAT_BACKGROUND_CHANGED = eventId++;
 
     private static EventManager eventListenerInstance;
 

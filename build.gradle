@@ -39,8 +39,8 @@ ext {
 }
 
 project.ext{
-    protoMainVersion = "protoMain26"
-    protoBetaVersion = "protoBeta26"
+    protoMainVersion = "protoMain27"
+    protoBetaVersion = "protoBeta27"
 }
 
 task clean(type: Delete) {

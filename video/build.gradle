@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    dexOptions {
+        preDexLibraries = false
+    }
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 29
+
+        ndk {
+            moduleName "webp"
+        }
+    }
+
+    sourceSets.main {
+        jniLibs.srcDir 'libs'
+        jni.srcDirs = [] //disable automatic ndk-build call
+    }
+}
+
+dependencies {
+    implementation files('libs/isoparser-1.0.6.jar')
+    implementation files('libs/aspectjrt-1.7.3.jar') // Don't remove this lib
+
+
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+}

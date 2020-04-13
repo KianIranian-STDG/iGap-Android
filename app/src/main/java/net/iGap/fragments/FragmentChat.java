@@ -203,6 +203,7 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.ProgressState;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
@@ -217,7 +218,6 @@ import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.observers.interfaces.ISendPosition;
 import net.iGap.observers.interfaces.IUpdateLogItem;
 import net.iGap.observers.interfaces.LocationListener;
-import net.iGap.observers.interfaces.OnBackgroundChanged;
 import net.iGap.observers.interfaces.OnBotClick;
 import net.iGap.observers.interfaces.OnChannelAddMessageReaction;
 import net.iGap.observers.interfaces.OnChannelGetMessagesStats;
@@ -343,6 +343,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
+import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -372,7 +373,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
-        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
+        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
 
     public static OnComplete onMusicListener;
@@ -735,6 +736,8 @@ public class FragmentChat extends BaseFragment
 
         EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
+        if (twoPaneMode)
+            EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
         return attachToSwipeBack(notifyFrameLayout);
     }
@@ -961,7 +964,7 @@ public class FragmentChat extends BaseFragment
         isPaused = false;
         super.onResume();
 
-        if (showKeyboardOnResume) {
+        if (showKeyboardOnResume || (keyboardViewVisible && keyboardView != null && keyboardView.getCurrentMode() == KeyboardView.MODE_KEYBOARD)) {
             showPopup(KeyboardView.MODE_KEYBOARD);
             openKeyboardInternal();
         }
@@ -1063,7 +1066,6 @@ public class FragmentChat extends BaseFragment
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
         G.onChatDelete = this;
-        G.onBackgroundChanged = this;
         G.onConnectionChangeStateChat = this;
         HelperNotification.getInstance().cancelNotification();
         G.onChannelUpdateReactionStatusChat = this;
@@ -1189,6 +1191,8 @@ public class FragmentChat extends BaseFragment
         FragmentEditImage.textImageList.clear();
         EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
+        if (twoPaneMode)
+            EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
         if (compositeDisposable != null) {
@@ -2749,7 +2753,7 @@ public class FragmentChat extends BaseFragment
         }
 
 
-        mAdapter = new MessagesAdapter<>(this, this, this, avatarHandler, compositeDisposable, isCloudRoom);
+        mAdapter = new MessagesAdapter<>(managedRoom, this, this, this, avatarHandler, compositeDisposable, isCloudRoom);
 
         mAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
             @Override
@@ -2798,15 +2802,11 @@ public class FragmentChat extends BaseFragment
                 }
 
                 @Override
-                public void onChildDraw(Canvas c,
-                                        RecyclerView recyclerView,
-                                        RecyclerView.ViewHolder viewHolder,
-                                        float dX, float dY,
-                                        int actionState, boolean isCurrentlyActive) {
-
+                public void onChildDraw(@NotNull Canvas c, @NotNull RecyclerView recyclerView, @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                     if (actionState == ACTION_STATE_SWIPE && isCurrentlyActive) {
-                        setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                        setTouchListener(recyclerView, dX);
                     }
+
                     dX = dX + ViewMaker.dpToPixel(25);
                     if (dX > 0)
                         dX = 0;
@@ -2825,7 +2825,11 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                    if (viewHolder instanceof NewChatItemHolder) {
+                    if (viewHolder instanceof VoiceItem.ViewHolder) {
+                        return 0;
+                    } else if (viewHolder instanceof AudioItem.ViewHolder) {
+                        return 0;
+                    } else if (viewHolder instanceof NewChatItemHolder) {
                         return super.getSwipeDirs(recyclerView, viewHolder);
                     }
                     // we disable swipe with returning Zero
@@ -3941,15 +3945,9 @@ public class FragmentChat extends BaseFragment
         webViewChatPage.loadUrl(urlWebViewForSpecialUrlChat);
     }
 
-    private void setTouchListener(Canvas c,
-                                  RecyclerView recyclerView,
-                                  RecyclerView.ViewHolder viewHolder,
-                                  float dX, float dY,
-                                  int actionState, boolean isCurrentlyActive) {
-
-
+    private void setTouchListener(RecyclerView recyclerView, float dX) {
         if (dX < -ViewMaker.dpToPixel(140)) {
-            if (!isRepley) {
+            if (!isRepley && getActivity() != null) {
                 Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -3960,38 +3958,13 @@ public class FragmentChat extends BaseFragment
                 }
             }
             isRepley = true;
-
-            // replay(message);
-           /* if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
-                goToPositionWithAnimation(replyMessage.getMessageId() * (-1), 1000);
-            }*/
         } else {
             isRepley = false;
         }
 
-       /* icon.setBounds(viewHolder.itemView.getRight() - 0, 0, viewHolder.itemView.getRight() - 0, 0 + icon.getIntrinsicHeight());
-        icon.draw(c);*/
-
-
-        View itemView = viewHolder.itemView;
-
-
-   /*     DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        Drawable drawable = ContextCompat.getDrawable(G.fragmentActivity, R.mipmap.ic_launcher_round);
-        Bitmap icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        //  Canvas canvas = new Canvas(icon);
-        drawable.setBounds(displayMetrics.widthPixels - 109, itemView.getTop() + 9, itemView.getRight() - 22, itemView.getBottom() - 9);
-        drawable.draw(c);*/
-
-
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
-                return false;
-            }
+        recyclerView.setOnTouchListener((v, event) -> {
+            swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
+            return false;
         });
 
     }
@@ -5602,26 +5575,6 @@ public class FragmentChat extends BaseFragment
         setConnectionText(connectionState);
     }
 
-    @Override
-    public void onBackgroundChanged(final String backgroundPath) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (imgBackGround != null) {
-                    File f = new File(backgroundPath);
-                    if (f.exists()) {
-                        Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                        //imgBackGround.setImageDrawable(d);
-                        try {
-                            imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
-                        } catch (Exception e) {
-                        }
-
-                    }
-                }
-            }
-        });
-    }
 
     private void updateShowItemInScreen() {
         /**
@@ -9396,6 +9349,12 @@ public class FragmentChat extends BaseFragment
             });
         } else if (id == EventManager.EMOJI_LOADED) {
             G.runOnUiThread(this::invalidateViews);
+        } else if (id == EventManager.CHAT_BACKGROUND_CHANGED) {
+            G.handler.post(() -> {
+                String path = (String) message[0];
+                if (new File(path).exists())
+                    ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
+            });
         }
     }
 
