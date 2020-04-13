@@ -11,15 +11,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.adapter.InternetPackageListAdapter;
 import net.iGap.adapter.MySpinnerAdapter;
+import net.iGap.adapter.PackagesFilterSpinnerAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentBuyInternetPackageBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.viewmodel.BuyInternetPackageViewModel;
-import net.iGap.adapter.InternetPackageListAdapter;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.BuyInternetPackageViewModel;
 
 public class BuyInternetPackageFragment extends BaseAPIViewFrag<BuyInternetPackageViewModel> {
 
@@ -61,12 +62,14 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag<BuyInternetPacka
 
         viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessageResId -> {
             if (errorMessageResId != null) {
+                hideKeyboard();
                 HelperError.showSnackMessage(getString(errorMessageResId), false);
             }
         });
 
         viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null) {
+                hideKeyboard();
                 HelperError.showSnackMessage(errorMessage, false);
             }
         });
@@ -77,6 +80,14 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag<BuyInternetPacka
                 binding.filterType.setAdapter(new MySpinnerAdapter(typeList));
             } else {
                 binding.filterType.setSelection(0);
+            }
+        });
+
+        viewModel.getPackageFiltersList().observe(getViewLifecycleOwner(), filters -> {
+            if (filters != null) {
+                binding.filterPkgType.setAdapter(new PackagesFilterSpinnerAdapter(filters));
+            } else {
+                binding.filterPkgType.setSelection(0);
             }
         });
 

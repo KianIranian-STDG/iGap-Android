@@ -74,6 +74,39 @@
             app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pkgTypeIcon"
+            style="@style/primaryIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:text="@string/dial_number_icon"
+            android:textStyle="bold"
+            android:visibility="@{viewModel.showFilterPkgType}"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+            app:layout_constraintTop_toTopOf="@id/filterPkgType" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/filterPkgType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:minHeight="@dimen/dp44"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelectedPkgTypeFilter(position)}"
+            android:visibility="@{viewModel.showFilterPkgType}"
+            app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
+            app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_cancel_money_action"
+            android:visibility="@{viewModel.showFilterPkgType}"
+            app:layout_constraintBottom_toBottomOf="@id/filterPkgType"
+            app:layout_constraintEnd_toEndOf="@id/filterPkgType"
+            app:layout_constraintStart_toStartOf="@id/filterPkgType"
+            app:layout_constraintTop_toTopOf="@id/filterPkgType" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/packageTypeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +117,7 @@
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showDetail}"
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
-            app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
+            app:layout_constraintTop_toBottomOf="@id/filterPkgType" />
 
         <RadioGroup
             android:id="@+id/typeGroup"
@@ -129,7 +162,7 @@
             android:visibility="@{viewModel.showFilterType}"
             app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
-            app:layout_constraintTop_toBottomOf="@id/packageTypeTitle" />
+            app:layout_constraintTop_toBottomOf="@id/typeGroup" />
 
         <View
             android:layout_width="0dp"

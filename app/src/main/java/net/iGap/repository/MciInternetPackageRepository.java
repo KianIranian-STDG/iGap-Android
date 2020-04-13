@@ -6,6 +6,7 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.internetPackage.InternetPackage;
+import net.iGap.model.internetPackage.InternetPackageFilter;
 import net.iGap.model.internetPackage.MciInternetPackageFilter;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
@@ -36,8 +37,12 @@ public class MciInternetPackageRepository {
         new ApiInitializer<List<MciInternetPackageFilter>>().initAPI(api.getInternetPackageFilterList(operator), handShakeCallback, callback);
     }
 
-    public void getInternetPackageList(String operator, HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<InternetPackage>> callback) {
-        new ApiInitializer<BaseIGashtResponse<InternetPackage>>().initAPI(api.getInternetPackageList(operator), handShakeCallback, callback);
+    public void getInternetPackageList(String operator, String filter, HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<InternetPackage>> callback) {
+        new ApiInitializer<BaseIGashtResponse<InternetPackage>>().initAPI(api.getInternetPackageList(operator, filter), handShakeCallback, callback);
+    }
+
+    public void getInternetPackagesFilters(HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<InternetPackageFilter>> callback) {
+        new ApiInitializer<BaseIGashtResponse<InternetPackageFilter>>().initAPI(api.getInternetPackageFilters(), handShakeCallback, callback);
     }
 
     public void purchaseInternetPackage(String operator, String phoneNumber, String internetPackageType, HandShakeCallback handShakeCallback, ResponseCallback<MciPurchaseResponse> callback) {
