@@ -611,9 +611,45 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         }
     }
 
+    private void checkStickerPermission(boolean canSendSticker) {
+        if (canSendSticker) {
+            emptyTv = new AppCompatTextView(getContext());
+            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+            emptyTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+            emptyTv.setLines(1);
+            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setMaxLines(1);
+            emptyTv.setSingleLine(true);
+            emptyTv.setEllipsize(TextUtils.TruncateAt.END);
+            emptyTv.setGravity(Gravity.CENTER);
+            emptyTv.setText("محدودیت در ارسال استیکر");
+            emptyTv.setOnClickListener(v -> listener.onAddStickerClicked());
+            stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));
+
+            stickerTabView.setVisibility(GONE);
+            addStickerIv.setVisibility(GONE);
+            stickerGridView.setVisibility(GONE);
+        } else if (emptyIv != null && emptyTv != null) {
+            stickerContainer.removeView(emptyIv);
+            emptyIv = null;
+            stickerContainer.removeView(emptyTv);
+            emptyTv = null;
+
+            stickerTabView.setVisibility(VISIBLE);
+            addStickerIv.setVisibility(VISIBLE);
+            stickerGridView.setVisibility(VISIBLE);
+        }
+    }
+
     public void onDestroyParentFragment() {
         if (compositeDisposable != null && !compositeDisposable.isDisposed())
             compositeDisposable.dispose();
+    }
+
+    public void setStickerPermission(boolean stickerPermission) {
+        if (hasSticker)
+            checkStickerPermission(stickerPermission);
     }
 
     public interface Listener {

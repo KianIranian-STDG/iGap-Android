@@ -589,6 +589,7 @@ public class FragmentChat extends BaseFragment
     private int oldMessageLentghCounter;
 
     private RealmRoomAccess currentRoomAccess;
+    private boolean canSendMedia;
     private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
 
     public static boolean allowResendMessage(long messageId) {
@@ -890,6 +891,14 @@ public class FragmentChat extends BaseFragment
 
                 removeEditedMessage();
             }
+
+            if (chatType == GROUP && realmRoomAccess.getRealmPostMessageRights() != null) {
+
+                if (keyboardView != null)
+                    keyboardView.setStickerPermission(realmRoomAccess.getRealmPostMessageRights().isCanSendSticker());
+
+            }
+
         }
     }
 
@@ -1203,6 +1212,9 @@ public class FragmentChat extends BaseFragment
             notifyFrameLayout.setListener(null);
 
         showKeyboardOnResume = false;
+
+        if (keyboardView != null)
+            keyboardView.onDestroyParentFragment();
 
         removeRoomAccessChangeListener();
     }
