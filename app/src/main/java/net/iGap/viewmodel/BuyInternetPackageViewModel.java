@@ -1,6 +1,5 @@
 package net.iGap.viewmodel;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
@@ -307,7 +306,6 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
             repository.getFilterListData(operator, this, new ResponseCallback<List<MciInternetPackageFilter>>() {
                 @Override
                 public void onSuccess(List<MciInternetPackageFilter> data) {
-                    Log.e("nazarii", data.size() + "");
                     getFilterListDuration(data);
                     getFilterListTraffic(data);
                     getData();
