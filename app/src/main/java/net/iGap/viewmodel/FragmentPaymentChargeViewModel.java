@@ -99,6 +99,7 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
 
     public void phoneNumberTextChangeListener(String phoneNumber) {
         showDetail.set(phoneNumber.length() == 11 ? View.VISIBLE : View.GONE);
+        observeTarabord.set(View.GONE);
         setOperator(phoneNumber);
     }
 
