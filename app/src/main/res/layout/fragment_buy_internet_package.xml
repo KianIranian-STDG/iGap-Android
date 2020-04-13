@@ -9,197 +9,242 @@
             type="net.iGap.viewmodel.BuyInternetPackageViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="horizontal" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/phoneNumberIcon"
-            style="@style/primaryIconTextViewStyle"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:layout_margin="@dimen/dp16"
-            android:text="@string/md_dialpad"
-            android:textStyle="bold"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/phoneNumberEditText"
-            style="@style/iGapEditTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginEnd="@dimen/dp16"
-            android:layout_marginRight="@dimen/dp16"
-            android:afterTextChanged="@{(phoneNumber)->viewModel.phoneNumberTextChangeListener(phoneNumber.toString())}"
-            android:background="@drawable/background_cancel_money_action"
-            android:gravity="center"
-            android:hint="@string/phone_number"
-            android:inputType="phone"
-            android:maxLength="11"
-            android:padding="8dp"
-            android:paddingLeft="@dimen/dp10"
-            android:paddingRight="@dimen/dp10"
-            android:textSize="@dimen/dp16"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toBottomOf="@id/phoneNumberIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/phoneNumberIcon"
-            app:layout_constraintTop_toTopOf="@id/phoneNumberIcon" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/phoneNumberExample"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp10"
-            android:paddingRight="@dimen/dp10"
-            android:text="@string/ex_mobile_phone"
-            android:textColor="@color/gray"
-            android:textSize="@dimen/dp10"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
-            app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/phoneNumberIcon"
+                    style="@style/primaryIconTextViewStyle"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_margin="@dimen/dp16"
+                    android:text="@string/md_dialpad"
+                    android:textStyle="bold"
+                    android:visibility="@{viewModel.showMainView}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/packageTypeTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:padding="@dimen/dp8"
-            android:text="@string/buy_internet_package_type_title"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.showDetail}"
-            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
-            app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/phoneNumberEditText"
+                    style="@style/iGapEditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:afterTextChanged="@{(phoneNumber)->viewModel.phoneNumberTextChangeListener(phoneNumber.toString())}"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:gravity="center"
+                    android:hint="@string/phone_number"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:padding="8dp"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.showMainView}"
+                    app:layout_constraintBottom_toBottomOf="@id/phoneNumberIcon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/phoneNumberIcon"
+                    app:layout_constraintTop_toTopOf="@id/phoneNumberIcon" />
 
-        <RadioGroup
-            android:id="@+id/typeGroup"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{(group,checkId)->viewModel.onCheckedListener(checkId)}"
-            android:orientation="horizontal"
-            android:visibility="@{viewModel.showDetail}"
-            app:layout_constraintBottom_toBottomOf="@id/packageTypeTitle"
-            app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
-            app:layout_constraintStart_toEndOf="@id/packageTypeTitle"
-            app:layout_constraintTop_toTopOf="@id/packageTypeTitle">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/phoneNumberExample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="@string/ex_mobile_phone"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/dp10"
+                    android:visibility="@{viewModel.showMainView}"
+                    app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
+                    app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
 
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/timeType"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@drawable/check_box_background"
-                android:padding="@dimen/dp8"
-                android:text="@string/buy_internet_package_time_type_title"
-                android:textColor="?iGapSubtitleTextColor" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/pkgTypeIcon"
+                    style="@style/primaryIconTextViewStyle"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="@dimen/dp48"
+                    android:text="@string/dial_number_icon"
+                    android:textStyle="bold"
+                    android:visibility="@{viewModel.showFilterPkgType}"
+                    app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+                    app:layout_constraintTop_toTopOf="@id/filterPkgType" />
 
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/volumeType"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@drawable/check_box_background"
-                android:padding="@dimen/dp8"
-                android:text="@string/buy_internet_package_volume_type_title"
-                android:textColor="?iGapSubtitleTextColor" />
-        </RadioGroup>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/filterPkgType"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:minHeight="@dimen/dp44"
+                    android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelectedPkgTypeFilter(position)}"
+                    android:visibility="@{viewModel.showFilterPkgType}"
+                    app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+                    app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
+                    app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/filterType"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:minHeight="@dimen/dp44"
-            android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelectedTypeFilter(position)}"
-            android:visibility="@{viewModel.showFilterType}"
-            app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
-            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
-            app:layout_constraintTop_toBottomOf="@id/packageTypeTitle" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:visibility="@{viewModel.showFilterPkgType}"
+                    app:layout_constraintBottom_toBottomOf="@id/filterPkgType"
+                    app:layout_constraintEnd_toEndOf="@id/filterPkgType"
+                    app:layout_constraintStart_toStartOf="@id/filterPkgType"
+                    app:layout_constraintTop_toTopOf="@id/filterPkgType" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/background_cancel_money_action"
-            android:visibility="@{viewModel.showFilterType}"
-            app:layout_constraintBottom_toBottomOf="@id/filterType"
-            app:layout_constraintEnd_toEndOf="@id/filterType"
-            app:layout_constraintStart_toStartOf="@id/filterType"
-            app:layout_constraintTop_toTopOf="@id/filterType" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/packageTypeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:padding="@dimen/dp8"
+                    android:text="@string/buy_internet_package_type_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    android:visibility="@{viewModel.showDetail}"
+                    app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+                    app:layout_constraintTop_toBottomOf="@id/filterPkgType" />
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/packageList"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:minHeight="@dimen/dp44"
-            android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelectedPackageList(position)}"
-            android:visibility="@{viewModel.showPackageList}"
-            app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
-            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
-            app:layout_constraintTop_toBottomOf="@id/filterType" />
+                <RadioGroup
+                    android:id="@+id/typeGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onCheckedChanged="@{(group,checkId)->viewModel.onCheckedListener(checkId)}"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.showDetail}"
+                    app:layout_constraintBottom_toBottomOf="@id/packageTypeTitle"
+                    app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+                    app:layout_constraintStart_toEndOf="@id/packageTypeTitle"
+                    app:layout_constraintTop_toTopOf="@id/packageTypeTitle">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/background_cancel_money_action"
-            android:visibility="@{viewModel.showPackageList}"
-            app:layout_constraintBottom_toBottomOf="@id/packageList"
-            app:layout_constraintEnd_toEndOf="@id/packageList"
-            app:layout_constraintStart_toStartOf="@id/packageList"
-            app:layout_constraintTop_toTopOf="@id/packageList" />
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/timeType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@drawable/check_box_background"
+                        android:padding="@dimen/dp8"
+                        android:text="@string/buy_internet_package_time_type_title"
+                        android:textColor="?iGapSubtitleTextColor" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/iGapButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
-            android:enabled="@{viewModel.enabledPaymentButton}"
-            android:onClick="@{()->viewModel.onBuyClick(phoneNumberEditText.getEditableText().toString())}"
-            android:text="@string/buy"
-            android:visibility="@{viewModel.showPayButton}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loadingView"
-            app:layout_constraintWidth_percent=".6" />
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/volumeType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@drawable/check_box_background"
+                        android:padding="@dimen/dp8"
+                        android:text="@string/buy_internet_package_volume_type_title"
+                        android:textColor="?iGapSubtitleTextColor" />
+                </RadioGroup>
 
-        <ProgressBar
-            android:id="@+id/loadingView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:indeterminate="true"
-            android:visibility="@{viewModel.showLoadingView}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/packageList" />
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/filterType"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:minHeight="@dimen/dp44"
+                    android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelectedTypeFilter(position)}"
+                    android:visibility="@{viewModel.showFilterType}"
+                    app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+                    app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+                    app:layout_constraintTop_toBottomOf="@id/typeGroup" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/retryView"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{()->viewModel.onRetryClick()}"
-            android:text="@string/retry_icon"
-            android:visibility="@{viewModel.showRetryView}"
-            app:layout_constraintBottom_toBottomOf="@id/loadingView"
-            app:layout_constraintEnd_toEndOf="@id/loadingView"
-            app:layout_constraintStart_toStartOf="@id/loadingView"
-            app:layout_constraintTop_toTopOf="@id/loadingView" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:visibility="@{viewModel.showFilterType}"
+                    app:layout_constraintBottom_toBottomOf="@id/filterType"
+                    app:layout_constraintEnd_toEndOf="@id/filterType"
+                    app:layout_constraintStart_toStartOf="@id/filterType"
+                    app:layout_constraintTop_toTopOf="@id/filterType" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/packageList"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:minHeight="@dimen/dp44"
+                    android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelectedPackageList(position)}"
+                    android:visibility="@{viewModel.showPackageList}"
+                    app:layout_constraintEnd_toEndOf="@id/phoneNumberEditText"
+                    app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
+                    app:layout_constraintTop_toBottomOf="@id/filterType" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:visibility="@{viewModel.showPackageList}"
+                    app:layout_constraintBottom_toBottomOf="@id/packageList"
+                    app:layout_constraintEnd_toEndOf="@id/packageList"
+                    app:layout_constraintStart_toStartOf="@id/packageList"
+                    app:layout_constraintTop_toTopOf="@id/packageList" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/iGapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:enabled="@{viewModel.enabledPaymentButton}"
+                    android:onClick="@{()->viewModel.onBuyClick(phoneNumberEditText.getEditableText().toString())}"
+                    android:text="@string/buy"
+                    android:visibility="@{viewModel.showPayButton}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loadingView"
+                    app:layout_constraintWidth_percent=".6" />
+
+                <ProgressBar
+                    android:id="@+id/loadingView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:indeterminate="true"
+                    android:visibility="@{viewModel.showLoadingView}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/packageList" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/retryView"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="@dimen/dp48"
+                    android:onClick="@{()->viewModel.onRetryClick()}"
+                    android:text="@string/retry_icon"
+                    android:visibility="@{viewModel.showRetryView}"
+                    app:layout_constraintBottom_toBottomOf="@id/loadingView"
+                    app:layout_constraintEnd_toEndOf="@id/loadingView"
+                    app:layout_constraintStart_toStartOf="@id/loadingView"
+                    app:layout_constraintTop_toTopOf="@id/loadingView" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
 </layout>

@@ -110,12 +110,14 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag<FragmentPaymentCharge
 
         viewModel.getShowError().observe(getViewLifecycleOwner(), errorMessageRes -> {
             if (errorMessageRes != null) {
+                hideKeyboard();
                 HelperError.showSnackMessage(getString(errorMessageRes), false);
             }
         });
 
         viewModel.getShowMciPaymentError().observe(getViewLifecycleOwner(), errorModel -> {
             if (errorModel != null) {
+                hideKeyboard();
                 HelperError.showSnackMessage(errorModel.getMessage(), false);
             }
         });
