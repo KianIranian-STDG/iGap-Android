@@ -28,9 +28,9 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.proto.ProtoChannelAddAdmin;
 import net.iGap.proto.ProtoChannelKickAdmin;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoGroupAddAdmin;
 import net.iGap.proto.ProtoGroupKickAdmin;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
@@ -39,7 +39,6 @@ import net.iGap.realm.RealmRoomAccess;
 import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelKickAdmin;
-import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupKickAdmin;
 
 public class AdminRightsEditFragment extends BaseFragment implements ToolbarListener {
@@ -250,39 +249,37 @@ public class AdminRightsEditFragment extends BaseFragment implements ToolbarList
     }
 
     private void sendAddAdminRequest() {
-
-        ProtoGlobal.RoomAccess.Builder roomAccessBuilder = ProtoGlobal.RoomAccess.newBuilder();
-
-        roomAccessBuilder.setModifyRoom(modifyRoomCell.isChecked());
-        roomAccessBuilder.setDeleteMessage(deleteMessageCell.isChecked());
-        roomAccessBuilder.setPinMessage(pinMessageCell.isChecked());
-        roomAccessBuilder.setAddMember(addNewMemberCell.isChecked());
-        roomAccessBuilder.setBanMember(banMemberCell.isChecked());
-        roomAccessBuilder.setGetMember(showMemberListCell.isChecked());
-        roomAccessBuilder.setAddAdmin(addNewAdminCell.isChecked());
-        roomAccessBuilder.setPostMessage(postMessageCell.isChecked());
-
         if (realmRoom.getType().equals(ProtoGlobal.Room.Type.CHANNEL)) {
-            roomAccessBuilder.setEditMessage(editMessageCell.isChecked());
+            ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights.Builder builder = ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights.newBuilder();
 
-            new RequestChannelAddAdmin().channelAddAdmin(roomId, userId, roomAccessBuilder.build(), (response, error) -> {
+            builder.setAddAdmin(addNewAdminCell.isChecked());
+            builder.setAddMember(addNewMemberCell.isChecked());
+            builder.setBanMember(banMemberCell.isChecked());
+            builder.setDeleteMessage(deleteMessageCell.isChecked());
+            builder.setEditMessage(editMessageCell.isChecked());
+            builder.setGetMember(showMemberListCell.isChecked());
+            builder.setModifyRoom(modifyRoomCell.isChecked());
+            builder.setPinMessage(pinMessageCell.isChecked());
+            builder.setPostMessage(postMessageCell.isChecked());
+
+            new RequestChannelAddAdmin().channelAddAdmin(roomId, userId, builder.build(), (response, error) -> {
                 if (error == null) {
                     G.runOnUiThread(() -> onLeftIconClickListener(null));
                 }
             });
         } else {
-            new RequestGroupAddAdmin().groupAddAdmin(roomId, userId, roomAccessBuilder.build(), (response, error) -> {
-                if (error == null) {
-                    ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder = (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) response;
-                    HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
-
-                    G.runOnUiThread(() -> onLeftIconClickListener(null));
-
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.putOrUpdate(builder.getPermission(), userId, roomId, asyncRealm));
-                    });
-                }
-            });
+//            new RequestGroupAddAdmin().groupAddAdmin(roomId, userId, roomAccessBuilder.build(), (response, error) -> {
+//                if (error == null) {
+//                    ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder = (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) response;
+//                    HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
+//
+//                    G.runOnUiThread(() -> onLeftIconClickListener(null));
+//
+//                    DbManager.getInstance().doRealmTask(realm -> {
+////                        realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.putOrUpdate(builder.getPermission(), userId, roomId, asyncRealm));
+//                    });
+//                }
+//            });
         }
     }
 

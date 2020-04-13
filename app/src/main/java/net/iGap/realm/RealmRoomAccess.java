@@ -1,7 +1,10 @@
 package net.iGap.realm;
 
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.proto.ProtoChannelAddAdmin;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoGroupAddAdmin;
+import net.iGap.proto.ProtoGroupChangeMemberRights;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -13,8 +16,8 @@ public class RealmRoomAccess extends RealmObject {
     private String id;
     private long userId;
     private long roomId;
+    private RealmPostMessageRights realmPostMessageRights;
     private boolean canModifyRoom;
-    private boolean canPostMessage;
     private boolean canEditMessage;
     private boolean canDeleteMessage;
     private boolean canPinMessage;
@@ -25,6 +28,7 @@ public class RealmRoomAccess extends RealmObject {
 
     public static RealmRoomAccess putOrUpdate(ProtoGlobal.RoomAccess roomAccess, long userId, long roomId, Realm realm) {
 
+        RealmPostMessageRights realmPostMessageRights = null;
         RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
             return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
                     .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
@@ -35,11 +39,22 @@ public class RealmRoomAccess extends RealmObject {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
         }
 
+        if (realmRoomAccess.getRealmPostMessageRights() == null) {
+            realmPostMessageRights = realm.createObject(RealmPostMessageRights.class);
+        }
+
+        if (realmPostMessageRights != null) {
+            realmPostMessageRights.setCanSendGif(roomAccess.getPostMessage().getSendGif());
+            realmPostMessageRights.setCanSendLink(roomAccess.getPostMessage().getSendLink());
+            realmPostMessageRights.setCanSendMedia(roomAccess.getPostMessage().getSendMedia());
+            realmPostMessageRights.setCanSendSticker(roomAccess.getPostMessage().getSendSticker());
+            realmPostMessageRights.setCanSendText(roomAccess.getPostMessage().getSendText());
+        }
+
         realmRoomAccess.setUserId(userId);
         realmRoomAccess.setRoomId(roomId);
 
         realmRoomAccess.setCanModifyRoom(roomAccess.getModifyRoom());
-        realmRoomAccess.setCanPostMessage(roomAccess.getPostMessage());
         realmRoomAccess.setCanEditMessage(roomAccess.getEditMessage());
         realmRoomAccess.setCanDeleteMessage(roomAccess.getDeleteMessage());
         realmRoomAccess.setCanPinMessage(roomAccess.getPinMessage());
@@ -47,8 +62,50 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanBanMember(roomAccess.getBanMember());
         realmRoomAccess.setCanGetMemberList(roomAccess.getGetMember());
         realmRoomAccess.setCanAddNewAdmin(roomAccess.getAddAdmin());
+        realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
 
         return realmRoomAccess;
+    }
+
+    public static RealmRoomAccess channelAdminPutOrUpdate(ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
+
+        RealmPostMessageRights realmPostMessageRights = null;
+        RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
+            return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
+                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
+                    .findFirst();
+        });
+
+        if (realmRoomAccess == null) {
+            realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
+        }
+
+        if (realmRoomAccess.getRealmPostMessageRights() == null && adminRights.getPostMessage()) {
+            realmPostMessageRights = realm.createObject(RealmPostMessageRights.class);
+        }
+
+        realmRoomAccess.setUserId(userId);
+        realmRoomAccess.setRoomId(roomId);
+
+        realmRoomAccess.setCanModifyRoom(adminRights.getModifyRoom());
+        realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
+        realmRoomAccess.setCanEditMessage(adminRights.getEditMessage());
+        realmRoomAccess.setCanDeleteMessage(adminRights.getDeleteMessage());
+        realmRoomAccess.setCanPinMessage(adminRights.getPinMessage());
+        realmRoomAccess.setCanAddNewMember(adminRights.getAddMember());
+        realmRoomAccess.setCanBanMember(adminRights.getBanMember());
+        realmRoomAccess.setCanGetMemberList(adminRights.getGetMember());
+        realmRoomAccess.setCanAddNewAdmin(adminRights.getAddAdmin());
+
+        return realmRoomAccess;
+    }
+
+    public static void groupAdminPutOrUpdate(ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
+
+    }
+
+    public static void groupMemberPutOrUpdate(ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, long userId, long roomId, Realm realm) {
+
     }
 
     public static void getAccess(long userId, long roomId, Realm asyncRealm) {
@@ -66,7 +123,7 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setRoomId(roomId);
 
         realmRoomAccess.setCanModifyRoom(false);
-        realmRoomAccess.setCanPostMessage(false);
+        realmRoomAccess.setRealmPostMessageRights(null);
         realmRoomAccess.setCanEditMessage(false);
         realmRoomAccess.setCanDeleteMessage(false);
         realmRoomAccess.setCanPinMessage(false);
@@ -77,12 +134,12 @@ public class RealmRoomAccess extends RealmObject {
 
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public boolean isCanModifyRoom() {
@@ -94,11 +151,11 @@ public class RealmRoomAccess extends RealmObject {
     }
 
     public boolean isCanPostMessage() {
-        return canPostMessage;
+        return realmPostMessageRights != null;
     }
 
-    private void setCanPostMessage(boolean canPostMessage) {
-        this.canPostMessage = canPostMessage;
+    private void setRealmPostMessageRights(RealmPostMessageRights realmPostMessageRights) {
+        this.realmPostMessageRights = realmPostMessageRights;
     }
 
     public boolean isCanEditMessage() {
@@ -157,19 +214,23 @@ public class RealmRoomAccess extends RealmObject {
         this.canAddNewAdmin = canAddNewAdmin;
     }
 
+    public long getRoomId() {
+        return roomId;
+    }
+
     public void setRoomId(long roomId) {
         this.roomId = roomId;
     }
 
-    public long getRoomId() {
-        return roomId;
+    public long getUserId() {
+        return userId;
     }
 
     public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public long getUserId() {
-        return userId;
+    public RealmPostMessageRights getRealmPostMessageRights() {
+        return realmPostMessageRights;
     }
 }

@@ -11,7 +11,6 @@
 package net.iGap.request;
 
 import net.iGap.observers.interfaces.OnResponse;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupAddAdmin;
 
 public class RequestGroupAddAdmin {
@@ -30,12 +29,12 @@ public class RequestGroupAddAdmin {
         }
     }
 
-    public void groupAddAdmin(long roomId, long memberId, ProtoGlobal.RoomAccess roomAccess, OnResponse onResponse) {
+    public void groupAddAdmin(long roomId, long memberId, ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, OnResponse onResponse) {
 
         ProtoGroupAddAdmin.GroupAddAdmin.Builder builder = ProtoGroupAddAdmin.GroupAddAdmin.newBuilder();
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
-        builder.setPermission(roomAccess);
+        builder.setPermission(adminRights);
 
         RequestWrapper requestWrapper = new RequestWrapper(302, builder, onResponse);
         try {

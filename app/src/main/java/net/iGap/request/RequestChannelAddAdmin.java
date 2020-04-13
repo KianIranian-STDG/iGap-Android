@@ -12,7 +12,6 @@ package net.iGap.request;
 
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoChannelAddAdmin;
-import net.iGap.proto.ProtoGlobal;
 
 public class RequestChannelAddAdmin {
 
@@ -29,11 +28,11 @@ public class RequestChannelAddAdmin {
         }
     }
 
-    public void channelAddAdmin(long roomId, long memberId, ProtoGlobal.RoomAccess roomAccess, OnResponse onResponse) {
+    public void channelAddAdmin(long roomId, long memberId, ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, OnResponse onResponse) {
         ProtoChannelAddAdmin.ChannelAddAdmin.Builder builder = ProtoChannelAddAdmin.ChannelAddAdmin.newBuilder();
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
-        builder.setPermission(roomAccess);
+        builder.setPermission(adminRights);
 
         RequestWrapper requestWrapper = new RequestWrapper(402, builder, onResponse);
         try {

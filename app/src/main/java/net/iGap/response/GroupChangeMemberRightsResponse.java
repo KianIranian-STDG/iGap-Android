@@ -10,16 +10,14 @@
 
 package net.iGap.response;
 
-import net.iGap.helper.HelperMember;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.OnResponse;
-import net.iGap.proto.ProtoChannelAddAdmin;
+import net.iGap.proto.ProtoGroupChangeMemberRights;
 import net.iGap.realm.RealmRoomAccess;
 
-public class ChannelAddAdminResponse extends MessageHandler {
+public class GroupChangeMemberRightsResponse extends MessageHandler {
 
-    public ChannelAddAdminResponse(int actionId, Object protoClass, Object identity) {
+    public GroupChangeMemberRightsResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
     }
 
@@ -27,11 +25,10 @@ public class ChannelAddAdminResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder builder = (ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder) message;
-        HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
+        ProtoGroupChangeMemberRights.GroupChangeMemberRights.Builder builder = (ProtoGroupChangeMemberRights.GroupChangeMemberRights.Builder) message;
 
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.channelAdminPutOrUpdate(builder.getPermission(), builder.getMemberId(), builder.getRoomId(), asyncRealm));
+            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), builder.getUserId(), builder.getRoomId(), asyncRealm));
         });
 
         if (identity instanceof OnResponse) {
