@@ -262,7 +262,7 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
                 viewModel.cancelFederation();
             } else {
                 if (viewModel.getFederationProgressVisibility().get() != View.VISIBLE)
-                    viewModel.convertFederation(false);
+                    viewModel.checkWalletID();
             }
         });
     }
