@@ -1,6 +1,5 @@
 package net.iGap.fragments.filterImage;
 
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -15,11 +14,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +25,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
-import com.afollestad.materialdialogs.DialogAction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.divyanshu.colorseekbar.ColorSeekBar;
 
@@ -45,9 +42,6 @@ import net.iGap.module.AttachFile;
 
 import java.io.File;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FragmentPaintImage extends Fragment {
     private static String PATH = "net.iGap.fragments.filterImage.path";
     private String path;
@@ -59,26 +53,18 @@ public class FragmentPaintImage extends Fragment {
 
     private LinearLayout paintLinearLayout;
     public boolean isChange = false;
-    boolean onstartPainting = false;
-    ////
-    AttachFile attachFile;
     private int minBrushSize = 12;
     private int brushSize = minBrushSize;
     private int paintColor = Color.BLACK;
     private boolean captureimage = false;
     private Bitmap mBitmap;
-    private Dialog dialogBrush;
     private DrawingView drawingView;
     private Paint paint;
     private FrameLayout frameLayout;
     ColorSeekBar colorSeekBar;
-    // TextView tvBrushSize;
     SeekBar skBrushSize;
 
     public FragmentPaintImage() {
-        // Required empty public constructor
-
-
     }
 
     public static FragmentPaintImage newInstance(String path) {
@@ -90,9 +76,7 @@ public class FragmentPaintImage extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_paint_image, container, false);
     }
 
@@ -112,38 +96,22 @@ public class FragmentPaintImage extends Fragment {
             return;
         }
 
-        //  tvBrushSize = view.findViewById(R.id.textView_brush_size);
         colorSeekBar = view.findViewById(R.id.color_seek_bar);
-//        colorSeekBar.set
-        paintLinearLayout=view.findViewById(R.id.paint_root_ll);
-paintLinearLayout.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Log.e("empting","empty clicking");
-    }
-});
-        colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
-            @Override
-            public void onColorChangeListener(int i) {
-                Log.e("touching",colorSeekBar.getX()+"\n0"+
-                        colorSeekBar.getBaseline()+"\n1"+
-                        colorSeekBar.getDrawableState()+"\n2"+
-                        colorSeekBar.getTranslationX()+"\n3"+
-                        colorSeekBar.getScrollX()+"4");
-                paintColor = i;
-                setPaintColor();
+        paintLinearLayout = view.findViewById(R.id.paint_root_ll);
+        paintLinearLayout.setOnClickListener(v -> {
 
-
-
-            }
         });
+        colorSeekBar.setOnColorChangeListener(i -> {
+            paintColor = i;
+            setPaintColor();
+        });
+
         skBrushSize = view.findViewById(R.id.seekbar_brushSize);
         skBrushSize.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN));
         drawingView = new DrawingView(getContext(), false, null);
-        frameLayout = (FrameLayout) view.findViewById(R.id.framexx);
+        frameLayout = view.findViewById(R.id.framexx);
 
         frameLayout.addView(drawingView);
-        Log.e("pathingnng", path);
         imageFilter = view.findViewById(R.id.imageFilter);
         frameLayout = view.findViewById(R.id.framexx);
         loadImage();
@@ -156,69 +124,47 @@ paintLinearLayout.setOnClickListener(new View.OnClickListener() {
         setPaintColor();
 
 
-        view.findViewById(R.id.pu_txt_ok).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // savePicToFile(false);
-//                finalImage   = getBitmapFile(getActivity(), path, 300, 300);
-                finalImage = mBitmap;
-                final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-                Log.e("paintingxx", path);
+        view.findViewById(R.id.pu_txt_ok).setOnClickListener(v -> {
+            finalImage = mBitmap;
+            final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
 
-                if (FragmentEditImage.updateImage != null && path != null) {
-                    FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
-                    Log.e("paintingxx", "entered");
-                }
-
-                popBackStackFragment();
+            if (FragmentEditImage.updateImage != null && path != null) {
+                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
             }
+
+            popBackStackFragment();
         });
 
-        view.findViewById(R.id.pu_txt_agreeImage).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isChange) {
-                    if (!AndroidUtils.canOpenDialog()) {
-                        return;
-                    }
-                    new MaterialDialog.Builder(G.fragmentActivity)
-                            .title(R.string.tab_filters)
-                            .content(R.string.filter_cancel_content)
-                            .positiveText(R.string.save)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    if (getActivity() != null) {
-                                        finalImage = mBitmap;
-                                        final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-                                        if (FragmentEditImage.updateImage != null && path != null) {
-                                            FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
-                                        }
-                                    }
-                                    popBackStackFragment();
-                                }
-                            }).onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            popBackStackFragment();
-                        }
-                    })
-                            .negativeText(R.string.close)
-                            .show();
-                } else {
-                    popBackStackFragment();
+        view.findViewById(R.id.pu_txt_agreeImage).setOnClickListener(v -> {
+            if (isChange) {
+                if (!AndroidUtils.canOpenDialog()) {
+                    return;
                 }
-
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(R.string.tab_filters)
+                        .content(R.string.filter_cancel_content)
+                        .positiveText(R.string.save)
+                        .onPositive((dialog, which) -> {
+                            if (getActivity() != null) {
+                                finalImage = mBitmap;
+                                final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                                if (FragmentEditImage.updateImage != null && path != null) {
+                                    FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
+                                }
+                            }
+                            popBackStackFragment();
+                        }).onNegative((dialog, which) -> popBackStackFragment())
+                        .negativeText(R.string.close)
+                        .show();
+            } else {
+                popBackStackFragment();
             }
+
         });
 
     }
 
-    void initDialogBrush() {
-
-
-        // lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
+    private void initDialogBrush() {
 
         skBrushSize.setProgress(brushSize - minBrushSize);
         skBrushSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -263,17 +209,9 @@ paintLinearLayout.setOnClickListener(new View.OnClickListener() {
 
     private void setImageToBitmap(String path) {
 
-        //   Uri selectedImageUri =Uri.parse(path);
-
-
-        Uri selectedImageUri = Uri.fromFile(new File(path));
-
         File file = new File(path);
 
-
-
         drawingView = new DrawingView(getContext(), true, getImageContentUri(getContext(), file));
-
         frameLayout.removeAllViews();
         frameLayout.addView(drawingView);
 
@@ -311,7 +249,6 @@ paintLinearLayout.setOnClickListener(new View.OnClickListener() {
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         imageFilter.setImageBitmap(originalImage);
     }
-
 
 
     public static Bitmap getBitmapFile(Context context, String fileName, int width, int height) {
@@ -413,7 +350,7 @@ paintLinearLayout.setOnClickListener(new View.OnClickListener() {
             mPath.moveTo(x, y);
             mX = x;
             mY = y;
-            isChange=true;
+            isChange = true;
         }
 
         private void touch_move(float x, float y) {
@@ -465,7 +402,7 @@ paintLinearLayout.setOnClickListener(new View.OnClickListener() {
         }
     }
 
-    void setPaintColor() {
+    private void setPaintColor() {
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
@@ -476,15 +413,4 @@ paintLinearLayout.setOnClickListener(new View.OnClickListener() {
         paint.setStrokeWidth(brushSize);
     }
 
-    void setPaintClear() {
-
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setDither(true);
-        paint.setColor(Color.parseColor("#ffffff"));
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(50);
-    }
 }
