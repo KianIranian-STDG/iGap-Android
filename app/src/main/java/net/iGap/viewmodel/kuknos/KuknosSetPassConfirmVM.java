@@ -1,12 +1,12 @@
 package net.iGap.viewmodel.kuknos;
 
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import net.iGap.R;
 import net.iGap.model.kuknos.KuknosError;
 import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.repository.kuknos.UserRepo;
-
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 public class KuknosSetPassConfirmVM extends ViewModel {
 
@@ -59,7 +59,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
         userRepo.setPIN(PIN);
         if (mode == 0) {
             try {
-                userRepo.generateKeyPairWithMnemonic();
+                userRepo.generateKeyPairWithMnemonic(userRepo.getMnemonic(), PIN);
             } catch (WalletException e) {
                 error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
                 e.printStackTrace();

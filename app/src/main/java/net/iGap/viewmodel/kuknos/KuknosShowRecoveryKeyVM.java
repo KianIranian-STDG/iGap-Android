@@ -14,15 +14,15 @@ import java.util.List;
 
 public class KuknosShowRecoveryKeyVM extends ViewModel {
 
-    private List<String> lengths = Arrays.asList("24", "12");
-    private List<String> languages = Arrays.asList("FA", "EN");
+    private List<String> lengths = Arrays.asList("12", "24");
+    private List<String> languages = Arrays.asList("EN", "FA");
     private UserRepo userRepo = new UserRepo();
     private MutableLiveData<KuknosError> error;
     private SingleLiveEvent<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
-    private String selectedLanguage = "FA";
-    private String selectedLength = "24";
+    private String selectedLanguage = "EN";
+    private String selectedLength = "12";
 
 
     public KuknosShowRecoveryKeyVM() {
@@ -36,25 +36,26 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
     public void initMnemonic() {
         if (selectedLanguage == null || selectedLength == null)
             return;
+        String mnemonicTemp = "";
         if (selectedLength.equals("12")) {
             if (selectedLanguage.equals("FA")) {
-                userRepo.generateFa12Mnemonic();
+                mnemonicTemp = userRepo.generateFa12Mnemonic();
             } else if (selectedLanguage.equals("EN")) {
-                userRepo.generateEn12Mnemonic();
+                mnemonicTemp = userRepo.generateEn12Mnemonic();
             }
         } else if (selectedLength.equals("24")) {
             if (selectedLanguage.equals("FA")) {
-                userRepo.generateFa24Mnemonic();
+                mnemonicTemp = userRepo.generateFa24Mnemonic();
             } else if (selectedLanguage.equals("EN")) {
-                userRepo.generateEn24Mnemonic();
+                mnemonicTemp = userRepo.generateEn24Mnemonic();
             }
         }
 
-        if (userRepo.getMnemonic() == null || userRepo.getMnemonic().equals("-1")) {
+        if (mnemonicTemp == null || mnemonicTemp.equals("-1")) {
             error.setValue(new KuknosError(true, "generate fatal error", "1", R.string.kuknos_RecoverySK_ErrorGenerateMn));
             return;
         }
-        mnemonic.set(userRepo.getMnemonic());
+        mnemonic.set(mnemonicTemp);
     }
 
     public void onNext() {

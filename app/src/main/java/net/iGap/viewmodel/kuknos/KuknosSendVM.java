@@ -56,7 +56,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         openQrScanner = new MutableLiveData<>();
         openQrScanner.setValue(false);
         mode = Mode.PUBLIC_KEY;
-        changeHint = new SingleLiveEvent<>();
+        changeHint = new MutableLiveData<>(R.string.kuknos_send_walletAddress_Hint1);
     }
 
     public void QrcodeScan() {

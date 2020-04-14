@@ -260,7 +260,9 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
         binding.fragKuknosSWalletAddressET.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 viewModel.cancelFederation();
+                binding.fragKuknosSWalletAddressET.setHint(viewModel.getChangeHint().getValue());
             } else {
+                binding.fragKuknosSWalletAddressET.setHint("");
                 if (viewModel.getFederationProgressVisibility().get() != View.VISIBLE)
                     viewModel.convertFederation(false);
             }

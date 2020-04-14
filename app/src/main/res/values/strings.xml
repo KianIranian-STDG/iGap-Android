@@ -2128,7 +2128,7 @@ Want to get it?</string>
     <string name="kuknos_send_title">Send Token</string>
     <string name="kuknos_send_walletAddress">Wallet Address*</string>
     <string name="kuknos_send_walletAddress_Hint1">i.e. GAVYHKFTRGE…</string>
-    <string name="kuknos_send_walletAddress_Hint2">i.e. amini*pdpco.ir</string>
+    <string name="kuknos_send_walletAddress_Hint2">i.e. test*pdpco.ir</string>
     <string name="kuknos_send_text">Memo ID or text</string>
     <string name="kuknos_send_amount">Amount*</string>
     <string name="kuknos_send_sendBtn">Send</string>
