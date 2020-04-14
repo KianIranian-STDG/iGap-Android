@@ -11,7 +11,6 @@
 package net.iGap.response;
 
 import net.iGap.helper.HelperMember;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoChannelKickAdmin;
@@ -38,9 +37,7 @@ public class ChannelKickAdminResponse extends MessageHandler {
         ProtoChannelKickAdmin.ChannelKickAdminResponse.Builder builder = (ProtoChannelKickAdmin.ChannelKickAdminResponse.Builder) message;
         HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
 
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.getAccess(builder.getMemberId(), builder.getRoomId(), asyncRealm));
-        });
+        RealmRoomAccess.getAccess(builder.getMemberId(), builder.getRoomId());
 
         if (identity instanceof OnResponse)
             ((OnResponse) identity).onReceived(message, null);

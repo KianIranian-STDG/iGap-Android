@@ -29,6 +29,10 @@ public class ToggleButtonCell extends FrameLayout {
     private boolean needDivider;
     private boolean isRtl = G.isAppRtl;
 
+    public ToggleButtonCell(@NonNull Context context) {
+        this(context, false, 21);
+    }
+
     public ToggleButtonCell(@NonNull Context context, boolean needDivider) {
         this(context, needDivider, 21);
     }
@@ -41,7 +45,7 @@ public class ToggleButtonCell extends FrameLayout {
 
         textView = new TextView(getContext());
         textView.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         textView.setLines(1);
         textView.setMaxLines(1);
@@ -60,12 +64,22 @@ public class ToggleButtonCell extends FrameLayout {
         toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (checkedChangeListener != null)
                 checkedChangeListener.onCheckedChanged(buttonView, isChecked);
+
         });
 
     }
 
-    public void setText(CharSequence text) {
+    public void setTextAndCheck(String text, boolean checked, boolean needDivider) {
         textView.setText(text);
+        toggleButton.setChecked(checked);
+        this.needDivider = needDivider;
+        invalidate();
+    }
+
+    public void setText(String text, boolean needDivider) {
+        textView.setText(text);
+        this.needDivider = needDivider;
+        invalidate();
     }
 
     public boolean isChecked() {
@@ -85,6 +99,7 @@ public class ToggleButtonCell extends FrameLayout {
     @Override
     public void setEnabled(boolean enabled) {
         toggleButton.setEnabled(enabled);
+        textView.setTextColor(enabled ? Theme.getInstance().getTitleTextColor(getContext()) : Theme.getInstance().getSubTitleColor(getContext()));
         super.setEnabled(enabled);
     }
 

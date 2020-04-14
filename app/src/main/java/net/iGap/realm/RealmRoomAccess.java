@@ -108,30 +108,15 @@ public class RealmRoomAccess extends RealmObject {
 
     }
 
-    public static void getAccess(long userId, long roomId, Realm asyncRealm) {
-        RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
-            return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
+    public static void getAccess(long userId, long roomId) {
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
                     .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
                     .findFirst();
+            if (realmRoomAccess != null) {
+                realmRoomAccess.deleteFromRealm();
+            }
         });
-
-        if (realmRoomAccess == null) {
-            realmRoomAccess = asyncRealm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
-        }
-
-        realmRoomAccess.setUserId(userId);
-        realmRoomAccess.setRoomId(roomId);
-
-        realmRoomAccess.setCanModifyRoom(false);
-        realmRoomAccess.setRealmPostMessageRights(null);
-        realmRoomAccess.setCanEditMessage(false);
-        realmRoomAccess.setCanDeleteMessage(false);
-        realmRoomAccess.setCanPinMessage(false);
-        realmRoomAccess.setCanAddNewMember(false);
-        realmRoomAccess.setCanBanMember(false);
-        realmRoomAccess.setCanGetMemberList(false);
-        realmRoomAccess.setCanAddNewAdmin(false);
-
     }
 
     public String getId() {

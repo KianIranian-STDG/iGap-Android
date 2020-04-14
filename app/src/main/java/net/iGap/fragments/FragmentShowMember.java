@@ -998,7 +998,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void openChatEditRightsFragment(RealmRoom realmRoom, long userId, boolean isAdmin) {
         if (getActivity() != null)
-            new HelperFragment(getActivity().getSupportFragmentManager(), AdminRightsEditFragment.getIncense(realmRoom, userId, isAdmin)).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, userId, isAdmin)).setReplace(false).load();
     }
 
     public void kickMember(long peerId) {

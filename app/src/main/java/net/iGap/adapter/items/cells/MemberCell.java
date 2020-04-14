@@ -30,29 +30,29 @@ public class MemberCell extends FrameLayout {
         super(context);
 
         avatarImage = new CircleImageView(getContext());
-        addView(avatarImage, LayoutCreator.createFrame(45, 45, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 16, 8, isRtl ? 16 : 0, 8));
+        addView(avatarImage, LayoutCreator.createFrame(55, 55, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 16, 8, isRtl ? 16 : 0, 8));
 
         memberNameView = new TextView(getContext());
         memberNameView.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
-        memberNameView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        memberNameView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         memberNameView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         memberNameView.setLines(1);
         memberNameView.setMaxLines(1);
         memberNameView.setSingleLine(true);
         memberNameView.setEllipsize(TextUtils.TruncateAt.END);
         memberNameView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
-        addView(memberNameView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 77, 12, isRtl ? 77 : 0, 0));
+        addView(memberNameView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 82, 12, isRtl ? 82 : 0, 0));
 
         memberStatusView = new TextView(getContext());
         memberStatusView.setTextColor(Theme.getInstance().getSubTitleColor(getContext()));
-        memberStatusView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        memberStatusView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         memberStatusView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         memberStatusView.setLines(1);
         memberStatusView.setMaxLines(1);
         memberStatusView.setSingleLine(true);
         memberStatusView.setEllipsize(TextUtils.TruncateAt.END);
         memberStatusView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
-        addView(memberStatusView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 77, 32, isRtl ? 77 : 0, 0));
+        addView(memberStatusView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 82, 38, isRtl ? 82 : 0, 0));
     }
 
     public void setInfo(AvatarHandler avatarHandler, long userId, CharSequence name, String status) {
