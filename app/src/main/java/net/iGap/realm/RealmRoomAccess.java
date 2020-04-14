@@ -67,9 +67,8 @@ public class RealmRoomAccess extends RealmObject {
         return realmRoomAccess;
     }
 
-    public static RealmRoomAccess channelAdminPutOrUpdate(ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
+    public static void channelAdminPutOrUpdate(ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
 
-        RealmPostMessageRights realmPostMessageRights = null;
         RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
             return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
                     .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
@@ -79,6 +78,8 @@ public class RealmRoomAccess extends RealmObject {
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
         }
+
+        RealmPostMessageRights realmPostMessageRights = realmRoomAccess.getRealmPostMessageRights();
 
         if (realmRoomAccess.getRealmPostMessageRights() == null && adminRights.getPostMessage()) {
             realmPostMessageRights = realm.createObject(RealmPostMessageRights.class);
@@ -97,14 +98,57 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanGetMemberList(adminRights.getGetMember());
         realmRoomAccess.setCanAddNewAdmin(adminRights.getAddAdmin());
 
-        return realmRoomAccess;
     }
 
     public static void groupAdminPutOrUpdate(ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
 
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
+                .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
+                .findFirst();
+
+        if (realmRoomAccess == null) {
+            realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
+        }
+
+        realmRoomAccess.setUserId(userId);
+        realmRoomAccess.setRoomId(roomId);
+        realmRoomAccess.setRealmPostMessageRights(null);
+        realmRoomAccess.setCanModifyRoom(adminRights.getModifyRoom());
+        realmRoomAccess.setCanDeleteMessage(adminRights.getDeleteMessage());
+        realmRoomAccess.setCanPinMessage(adminRights.getPinMessage());
+        realmRoomAccess.setCanAddNewMember(adminRights.getAddMember());
+        realmRoomAccess.setCanBanMember(adminRights.getBanMember());
+        realmRoomAccess.setCanGetMemberList(adminRights.getGetMember());
+        realmRoomAccess.setCanAddNewAdmin(adminRights.getAddAdmin());
+
     }
 
     public static void groupMemberPutOrUpdate(ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, long userId, long roomId, Realm realm) {
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
+                .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
+                .findFirst();
+
+        if (realmRoomAccess == null) {
+            realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
+        }
+
+        RealmPostMessageRights realmPostMessageRights = realmRoomAccess.getRealmPostMessageRights();
+
+        if (realmRoomAccess.getRealmPostMessageRights() == null) {
+            realmPostMessageRights = realm.createObject(RealmPostMessageRights.class);
+        }
+
+        if (realmPostMessageRights != null) {
+            realmPostMessageRights.setCanSendText(memberRights.getSendText());
+            realmPostMessageRights.setCanSendSticker(memberRights.getSendSticker());
+            realmPostMessageRights.setCanSendMedia(memberRights.getSendMedia());
+            realmPostMessageRights.setCanSendLink(memberRights.getSendLink());
+            realmPostMessageRights.setCanSendGif(memberRights.getSendGif());
+        }
+
+        realmRoomAccess.setUserId(userId);
+        realmRoomAccess.setRoomId(roomId);
+        realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
 
     }
 

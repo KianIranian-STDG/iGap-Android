@@ -15,6 +15,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoGroupAddAdmin;
+import net.iGap.realm.RealmRoomAccess;
 
 public class GroupAddAdminResponse extends MessageHandler {
 
@@ -29,20 +30,20 @@ public class GroupAddAdminResponse extends MessageHandler {
         HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
 
         DbManager.getInstance().doRealmTask(realm -> {
-//                        realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.putOrUpdate(builder.getPermission(), userId, roomId, asyncRealm));
+            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.groupAdminPutOrUpdate(builder.getPermission(), builder.getMemberId(), builder.getRoomId(), asyncRealm));
         });
+
         if (identity instanceof OnResponse) {
             ((OnResponse) identity).onReceived(message, null);
         }
     }
 
     @Override
-    public void timeOut() {
-        super.timeOut();
-    }
-
-    @Override
     public void error() {
         super.error();
+
+        if (identity instanceof OnResponse) {
+            ((OnResponse) identity).onReceived(null, message);
+        }
     }
 }

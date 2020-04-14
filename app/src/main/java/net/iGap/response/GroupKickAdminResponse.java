@@ -10,25 +10,28 @@
 
 package net.iGap.response;
 
+import net.iGap.helper.HelperMember;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.proto.ProtoGroupKickAdmin;
+import net.iGap.realm.RealmRoomAccess;
 
 public class GroupKickAdminResponse extends MessageHandler {
-
-    public int actionId;
-    public Object message;
-    public Object identity;
-
     public GroupKickAdminResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
     public void handler() {
         super.handler();
+        ProtoGroupKickAdmin.GroupKickAdminResponse.Builder builder = (ProtoGroupKickAdmin.GroupKickAdminResponse.Builder) message;
+        HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), builder.getMemberId(), builder.getRoomId(), asyncRealm));
+        });
+
         if (identity instanceof OnResponse) {
             ((OnResponse) identity).onReceived(message, null);
         }

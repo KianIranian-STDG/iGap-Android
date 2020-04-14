@@ -971,19 +971,31 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         dialogRootView.setOrientation(LinearLayout.VERTICAL);
         dialogRootView.setBackgroundColor(Theme.getInstance().getRootColor(dialogRootView.getContext()));
 
+        Dialog dialog = new MaterialDialog.Builder(dialogRootView.getContext())
+                .customView(dialogRootView, false)
+                .show();
+
         TextCell adminRights = new TextCell(dialogRootView.getContext(), true);
         adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
         adminRights.setValue(contactInfo.isAdmin() ? "Edit admin rights" : "Add to admin");
         dialogRootView.addView(adminRights, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
 
+        if (!contactInfo.isAdmin() && roomType == GROUP) {
+            TextCell permission = new TextCell(dialogRootView.getContext(), true);
+            permission.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
+            permission.setValue("Change permission");
+            dialogRootView.addView(permission, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+
+            permission.setOnClickListener(v -> {
+                openChatEditRightsFragment(realmRoom, contactInfo.peerId, 2);
+                dialog.dismiss();
+            });
+        }
+
         TextCell removeView = new TextCell(dialogRootView.getContext(), false);
         removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
         removeView.setValue("Remove from channel");
         dialogRootView.addView(removeView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
-
-        Dialog dialog = new MaterialDialog.Builder(dialogRootView.getContext())
-                .customView(dialogRootView, false)
-                .show();
 
         removeView.setOnClickListener(v -> {
             kickMember(contactInfo.peerId);
@@ -991,14 +1003,14 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         });
 
         adminRights.setOnClickListener(v -> {
-            openChatEditRightsFragment(realmRoom, contactInfo.peerId, contactInfo.isAdmin());
+            openChatEditRightsFragment(realmRoom, contactInfo.peerId, contactInfo.isAdmin() ? 1 : 0);
             dialog.dismiss();
         });
     }
 
-    private void openChatEditRightsFragment(RealmRoom realmRoom, long userId, boolean isAdmin) {
+    private void openChatEditRightsFragment(RealmRoom realmRoom, long userId, int mode) {
         if (getActivity() != null)
-            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, userId, isAdmin)).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, userId, mode)).setReplace(false).load();
     }
 
     public void kickMember(long peerId) {
