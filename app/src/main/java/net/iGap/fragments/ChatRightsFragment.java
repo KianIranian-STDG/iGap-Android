@@ -110,7 +110,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
             return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
         });
 
-        if (roomAccess == null) {
+        if (roomAccess == null || roomAccess.getRealmPostMessageRights() != null && currentMode == 0) {
             if (currentMode == 0 || currentMode == 1) {
                 canPostMessage = true;
                 canEditOthersMessage = true;
