@@ -10,6 +10,9 @@ public class BankAccountModel {
     @SerializedName("deposit_title")
     private String title;
 
+    @SerializedName("deposit_status")
+    private String status;
+
     private transient boolean isSelected;
 
     public String getAccountNumber() {
@@ -34,5 +37,13 @@ public class BankAccountModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

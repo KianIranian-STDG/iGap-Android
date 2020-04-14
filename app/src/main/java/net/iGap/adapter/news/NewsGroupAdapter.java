@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.news.NewsGroup;
 
@@ -75,7 +76,7 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void initView(int position) {
             title.setText(mData.getGroups().get(position).getTitle());
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")
                     .load(mData.getGroups().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_icon)

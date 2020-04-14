@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -457,12 +458,12 @@ public class NewAccountPaymentDialog extends BottomSheetDialogFragment implement
             }
 
             if (mOrder == null) {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);
@@ -488,12 +489,12 @@ public class NewAccountPaymentDialog extends BottomSheetDialogFragment implement
                 mPriceText.setText(s);
             }
             if (mOrder == null) {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);

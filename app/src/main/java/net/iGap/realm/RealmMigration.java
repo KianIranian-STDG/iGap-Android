@@ -10,15 +10,16 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
+import net.iGap.module.accountManager.AccountManager;
 
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
+import io.realm.RealmResults;
 import io.realm.RealmSchema;
 
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
@@ -546,6 +547,10 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 33) {
+
+            RealmResults<DynamicRealmObject> realmCallLogs = realm.where("RealmCallLog").findAll();
+            realmCallLogs.deleteAllFromRealm();
+
             RealmObjectSchema realmCallLog = schema.get(RealmCallLog.class.getSimpleName());
             if (realmCallLog != null) {
                 if (realmCallLog.hasField("name")) {
@@ -825,6 +830,21 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField(RealmStickerGroupFields.IS_GIFTABLE, boolean.class)
                     .addField(RealmStickerGroupFields.AVATAR_SIZE, long.class)
                     .addRealmListField(RealmStickerGroupFields.STICKER_ITEMS.$, realmStickerItem);
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 46) {
+
+            RealmObjectSchema realmMbCards = schema.get(RealmMobileBankCards.class.getSimpleName());
+            if (realmMbCards != null) {
+                realmMbCards.addField("status", String.class);
+            }
+
+            RealmObjectSchema realmMbDeposits = schema.get(RealmMobileBankAccounts.class.getSimpleName());
+            if (realmMbDeposits != null) {
+                realmMbDeposits.addField("status", String.class);
+            }
 
             oldVersion++;
         }

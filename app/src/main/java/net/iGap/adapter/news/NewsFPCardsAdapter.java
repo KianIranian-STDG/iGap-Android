@@ -142,7 +142,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             category.setText(temp.getCategory());
             title.setText(temp.getNews().get(0).getContents().getTitle());
             lead.setText(temp.getNews().get(0).getContents().getLead());
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(temp.getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
@@ -215,7 +215,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return;
             category.setText(mData.getmNews().get(position * 2).getCategory());
             title.setText(mData.getmNews().get(position * 2).getNews().get(0).getContents().getTitle());
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getmNews().get(position * 2).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
@@ -227,7 +227,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return;
             category1.setText(mData.getmNews().get(position * 2 + 1).getCategory());
             title1.setText(mData.getmNews().get(position * 2 + 1).getNews().get(0).getContents().getTitle());
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getmNews().get(position * 2 + 1).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
@@ -322,7 +322,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (position * 3 > mData.getmNews().size())
                 return;
             category.setText(mData.getmNews().get(position * 3).getCategory());
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getmNews().get(position * 3).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
@@ -333,7 +333,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (position * 3 + 1 > mData.getmNews().size())
                 return;
             category1.setText(mData.getmNews().get(position * 3 + 1).getCategory());
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getmNews().get(position * 3 + 1).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
@@ -344,7 +344,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (position * 3 + 2 > mData.getmNews().size())
                 return;
             category2.setText(mData.getmNews().get(position * 3 + 2).getCategory());
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getmNews().get(position * 3 + 2).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)

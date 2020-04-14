@@ -120,6 +120,7 @@
                     android:layout_marginTop="10dp"
                     android:button="@drawable/check_box_background"
                     android:checked="true"
+                    android:visibility="gone"
                     android:onCheckedChanged="@{(v,isChecked)->viewmodel.termsOnCheckChange(2, isChecked)}"
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPMessage"
                     app:layout_constraintTop_toBottomOf="@+id/termsAndConditionText2" />
@@ -132,6 +133,7 @@
                     android:layout_marginLeft="@dimen/dp6"
                     android:text="@string/kuknos_parsianTerms_term3"
                     android:textColor="?iGapSubtitleTextColor"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@+id/termsAndConditionCheck3"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPMessage"
                     app:layout_constraintTop_toTopOf="@+id/termsAndConditionCheck3" />
