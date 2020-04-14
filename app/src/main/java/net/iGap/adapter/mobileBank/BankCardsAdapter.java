@@ -1,5 +1,6 @@
 package net.iGap.adapter.mobileBank;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,11 +43,13 @@ public class BankCardsAdapter extends PagerAdapter {
         View layout = LayoutInflater.from(container.getContext()).inflate(R.layout.view_bank_card, container, false);
         TextView tvName, tvNumber, icAdd;
         ImageView ivLogo;
+        View lytBlocked;
 
         tvName = layout.findViewById(R.id.tvName);
         tvNumber = layout.findViewById(R.id.tvNumber);
         ivLogo = layout.findViewById(R.id.ivBankLogo);
         icAdd = layout.findViewById(R.id.tvAdd);
+        lytBlocked = layout.findViewById(R.id.ivBlocked);
 
         if (mCards.get(position) != null){
 
@@ -54,6 +57,12 @@ public class BankCardsAdapter extends PagerAdapter {
             tvName.setText(mCards.get(position).getCardName());
             tvNumber.setText(HelperMobileBank.getCardNumberPattern(mCards.get(position).getCardNumber()));
             ivLogo.setImageResource(getCardBankLogo(mCards.get(position).getCardNumber()));
+            Log.e("tsttt", mCards.get(position).getStatus() + "");
+            if (mCards.get(position).getStatus() != null && mCards.get(position).getStatus().equals("HOT")) {
+                lytBlocked.setVisibility(View.VISIBLE);
+            } else {
+                lytBlocked.setVisibility(View.GONE);
+            }
 
         }/*else {
 

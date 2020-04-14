@@ -10,10 +10,10 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
+import net.iGap.module.accountManager.AccountManager;
 
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
@@ -825,6 +825,21 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField(RealmStickerGroupFields.IS_GIFTABLE, boolean.class)
                     .addField(RealmStickerGroupFields.AVATAR_SIZE, long.class)
                     .addRealmListField(RealmStickerGroupFields.STICKER_ITEMS.$, realmStickerItem);
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 46) {
+
+            RealmObjectSchema realmMbCards = schema.get(RealmMobileBankCards.class.getSimpleName());
+            if (realmMbCards != null) {
+                realmMbCards.addField("status", String.class);
+            }
+
+            RealmObjectSchema realmMbDeposits = schema.get(RealmMobileBankAccounts.class.getSimpleName());
+            if (realmMbDeposits != null) {
+                realmMbDeposits.addField("status", String.class);
+            }
 
             oldVersion++;
         }

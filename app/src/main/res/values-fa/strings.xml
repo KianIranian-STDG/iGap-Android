@@ -2571,4 +2571,5 @@
     <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
     <string name="kuknos_send_option1">از طریق کلید عمومی</string>
     <string name="kuknos_send_option2">از طریق نام کاربری</string>
+    <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
 </resources>
