@@ -191,7 +191,6 @@ public class SHP_SETTING {
     public static final String KEY_TRACKER_INSTALL_USER = "KEY_INSTALL_USER";
 
     // ========================================================================================== Popular
-    public static final String KEY_CLEAR_CALL_LOG = "KEY_CLEAR_CALL_LOG"; // changed struct of "RealmCallLog" so for schema version 33 should clear realm data for "RealmCallLog"
 
     public static final String KEY_BBEP_TUNES_DOWNLOAD_QUALITY = "KEY_BEEP_TUNES_DOWNLOAD_QUALITY";
     public static final String KEY_BBEP_TUNES_DOWNLOAD = "KEY_BEEP_TUNES_DOWNLOAD";
