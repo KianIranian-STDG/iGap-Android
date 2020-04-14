@@ -13,6 +13,7 @@ import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.internetPackage.InternetPackage;
+import net.iGap.model.internetPackage.InternetPackageFilter;
 import net.iGap.model.internetPackage.MciInternetPackageFilter;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.MciInternetPackageRepository;
@@ -30,6 +31,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
 
     private ObservableInt showDetail = new ObservableInt(View.GONE);
     private ObservableInt showFilterType = new ObservableInt(View.GONE);
+    private ObservableInt showFilterPkgType = new ObservableInt(View.GONE);
     private ObservableInt showPackageList = new ObservableInt(View.GONE);
     private ObservableInt showPayButton = new ObservableInt(View.GONE);
     private ObservableInt showLoadingView = new ObservableInt(View.INVISIBLE);
@@ -39,6 +41,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<String> showRequestErrorMessage = new MutableLiveData<>();
     private MutableLiveData<List<MciInternetPackageFilter>> typeList = new MutableLiveData<>();
+    private MutableLiveData<List<InternetPackageFilter>> packageFiltersList = new MutableLiveData<>();
     private MutableLiveData<List<InternetPackage>> internetPackageFiltered = new MutableLiveData<>();
     private MutableLiveData<String> goToPaymentPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearTypeChecked = new MutableLiveData<>();
@@ -46,14 +49,41 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
     private List<MciInternetPackageFilter> daysFilter;
     private List<MciInternetPackageFilter> trafficFilter;
     private List<InternetPackage> packageList;
+    private List<InternetPackageFilter> packageFilters;
     private List<InternetPackage> packageListFiltered;
     private boolean isDaily;
     private int selectedPackageType;
     private String operator;
+    private String selectedPackagesFilter;
 
     public BuyInternetPackageViewModel() {
         repository = MciInternetPackageRepository.getInstance();
-        showMainView();
+        getPackagesFilters();
+    }
+
+    private void getPackagesFilters() {
+        showLoadingView.set(View.VISIBLE);
+        showMainView.set(View.GONE);
+        showRetryView.set(View.GONE);
+
+        repository.getInternetPackagesFilters(this, new ResponseCallback<BaseIGashtResponse<InternetPackageFilter>>() {
+            @Override
+            public void onSuccess(BaseIGashtResponse<InternetPackageFilter> data) {
+                packageFilters = data.getData();
+                packageFiltersList.setValue(packageFilters);
+                showMainView();
+            }
+
+            @Override
+            public void onError(String error) {
+                requestError(error);
+            }
+
+            @Override
+            public void onFailed() {
+                onFailedHandler();
+            }
+        });
     }
 
     public ObservableInt getShowDetail() {
@@ -62,6 +92,10 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
 
     public ObservableInt getShowFilterType() {
         return showFilterType;
+    }
+
+    public ObservableInt getShowFilterPkgType() {
+        return showFilterPkgType;
     }
 
     public ObservableInt getShowPackageList() {
@@ -96,6 +130,10 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         return typeList;
     }
 
+    public MutableLiveData<List<InternetPackageFilter>> getPackageFiltersList() {
+        return packageFiltersList;
+    }
+
     public MutableLiveData<String> getShowRequestErrorMessage() {
         return showRequestErrorMessage;
     }
@@ -125,17 +163,16 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                     else if (opt == OperatorType.Type.IRANCELL)
                         operator = MTN;
 
-                    packageList = null;
-                    daysFilter = null;
-                    trafficFilter = null;
-                    getData();
+                    showFilterPkgType.set(View.VISIBLE);
                 }
-                showDetail.set(View.VISIBLE);
+
             } else {
                 showErrorMessage.setValue(R.string.error);
             }
         } else {
+            packageFiltersList.setValue(null);
             clearTypeChecked.setValue(true);
+            showFilterPkgType.set(View.GONE);
             showDetail.set(View.GONE);
             showFilterType.set(View.GONE);
             showPackageList.set(View.GONE);
@@ -154,6 +191,51 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         showFilterType.set(View.VISIBLE);
         showPackageList.set(View.GONE);
         showPayButton.set(View.GONE);
+    }
+
+    public void onItemSelectedPkgTypeFilter(int position) {
+
+        clearTypeChecked.setValue(true);
+        showDetail.set(View.GONE);
+        showFilterType.set(View.GONE);
+        showPackageList.set(View.GONE);
+        showPayButton.set(View.GONE);
+
+        if (position != 0) {
+            selectedPackagesFilter = packageFilters.get(position - 1).getType();
+            packageList = null;
+            daysFilter = null;
+            trafficFilter = null;
+
+            getData();
+        }
+    }
+
+    private void getPackagesByFilter(String selectedPackagesFilter) {
+        showLoadingView.set(View.VISIBLE);
+        repository.getInternetPackageList(operator, selectedPackagesFilter, this, new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
+            @Override
+            public void onSuccess(BaseIGashtResponse<InternetPackage> data) {
+                packageList = data.getData();
+                showMainView();
+                if (data.getData().size() == 0) {
+                    showDetail.set(View.GONE);
+                    showErrorMessage.setValue(R.string.no_item);
+                } else {
+                    showDetail.set(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                requestError(error);
+            }
+
+            @Override
+            public void onFailed() {
+                onFailedHandler();
+            }
+        });
     }
 
     public void onItemSelectedTypeFilter(int position) {
@@ -209,7 +291,11 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
     }
 
     public void onRetryClick() {
-        getData();
+        if (packageFilters == null) {
+            getPackagesFilters();
+        } else {
+            getData();
+        }
     }
 
     private void getData() {
@@ -236,23 +322,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                 }
             });
         } else if (packageList == null) {
-            repository.getInternetPackageList(operator, this, new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
-                @Override
-                public void onSuccess(BaseIGashtResponse<InternetPackage> data) {
-                    packageList = data.getData();
-                    showMainView();
-                }
-
-                @Override
-                public void onError(String error) {
-                    requestError(error);
-                }
-
-                @Override
-                public void onFailed() {
-                    onFailedHandler();
-                }
-            });
+            getPackagesByFilter(selectedPackagesFilter);
         } else {
             showMainView();
         }
