@@ -40,7 +40,7 @@ public class RealmRoomAccess extends RealmObject {
 
         RealmPostMessageRights realmPostMessageRights = realmRoomAccess.getRealmPostMessageRights();
 
-        if (roomAccess.getPostMessage() != null && realmPostMessageRights == null) {
+        if (realmPostMessageRights == null) {
             realmPostMessageRights = realm.createObject(RealmPostMessageRights.class);
         }
 
@@ -112,9 +112,19 @@ public class RealmRoomAccess extends RealmObject {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
         }
 
+        RealmPostMessageRights realmPostMessageRights = realmRoomAccess.getRealmPostMessageRights();
+
+        if (realmPostMessageRights == null) {
+            realmPostMessageRights = realm.createObject(RealmPostMessageRights.class);
+        }
+
+        if (realmPostMessageRights != null) {
+            realmPostMessageRights.setPostMessage(true);
+        }
+
         realmRoomAccess.setUserId(userId);
         realmRoomAccess.setRoomId(roomId);
-        realmRoomAccess.setRealmPostMessageRights(null);
+        realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
         realmRoomAccess.setCanModifyRoom(adminRights.getModifyRoom());
         realmRoomAccess.setCanDeleteMessage(adminRights.getDeleteMessage());
         realmRoomAccess.setCanPinMessage(adminRights.getPinMessage());
@@ -136,7 +146,7 @@ public class RealmRoomAccess extends RealmObject {
 
         RealmPostMessageRights realmPostMessageRights = realmRoomAccess.getRealmPostMessageRights();
 
-        if (realmRoomAccess.getRealmPostMessageRights() == null) {
+        if (realmPostMessageRights == null) {
             realmPostMessageRights = realm.createObject(RealmPostMessageRights.class);
         }
 

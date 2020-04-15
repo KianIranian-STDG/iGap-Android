@@ -612,7 +612,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     }
 
     private void checkStickerPermission(boolean canSendSticker) {
-        if (canSendSticker) {
+        if (!canSendSticker) {
             emptyTv = new AppCompatTextView(getContext());
             emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
             emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
@@ -623,16 +623,14 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emptyTv.setSingleLine(true);
             emptyTv.setEllipsize(TextUtils.TruncateAt.END);
             emptyTv.setGravity(Gravity.CENTER);
-            emptyTv.setText("محدودیت در ارسال استیکر");
+            emptyTv.setText("محدودیت در ارسال استیکر!");
             emptyTv.setOnClickListener(v -> listener.onAddStickerClicked());
-            stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));
+            stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 42));
 
             stickerTabView.setVisibility(GONE);
             addStickerIv.setVisibility(GONE);
             stickerGridView.setVisibility(GONE);
-        } else if (emptyIv != null && emptyTv != null) {
-            stickerContainer.removeView(emptyIv);
-            emptyIv = null;
+        } else if (emptyTv != null) {
             stickerContainer.removeView(emptyTv);
             emptyTv = null;
 

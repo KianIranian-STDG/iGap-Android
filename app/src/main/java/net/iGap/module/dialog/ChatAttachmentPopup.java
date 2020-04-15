@@ -92,6 +92,7 @@ public class ChatAttachmentPopup {
     private boolean isCameraStart;
     private Animator animation;
     private View contentView;
+    private View privacyView;
     private int mChatBoxHeight;
     private int mMessagesLayoutHeight;
 
@@ -194,6 +195,7 @@ public class ChatAttachmentPopup {
 
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
+        privacyView = viewRoot.findViewById(R.id.fl_attachment_privacyView);
         contentView.setVisibility(View.INVISIBLE);
 
         contentView.setOnClickListener(v -> {
@@ -890,6 +892,12 @@ public class ChatAttachmentPopup {
             }, 50);
         } catch (Exception e) {
             e.getMessage();
+        }
+    }
+
+    public void setMediaPermission(boolean canSendMedia) {
+        if (privacyView != null) {
+            privacyView.setVisibility(canSendMedia ? View.GONE : View.VISIBLE);
         }
     }
 

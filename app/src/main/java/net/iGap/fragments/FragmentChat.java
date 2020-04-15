@@ -864,38 +864,54 @@ public class FragmentChat extends BaseFragment
 
     private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
         if (realmRoomAccess != null) {
-            if (realmRoomAccess.isCanPostMessage()) {
-                rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
-                rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
-            } else {
-                rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
-
-                if (currentRoleIsAdmin())
-                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
-                else
+            if (chatType == CHANNEL) {
+                if (realmRoomAccess.isCanPostMessage()) {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
                     rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
-            }
+                } else {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
 
-            if (getRoom().getType().equals(CHANNEL)) {
-                if (currentRoleIsAdmin())
-                    layoutMute.setVisibility(View.GONE);
-                else
-                    layoutMute.setVisibility(View.VISIBLE);
-            }
+                    if (currentRoleIsAdmin())
+                        rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
+                    else
+                        rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+                }
 
-            if (!realmRoomAccess.isCanEditMessage() || !realmRoomAccess.isCanPostMessage() && (rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
-                if (keyboardViewVisible)
-                    hideKeyboard();
+                if (getRoom().getType().equals(CHANNEL)) {
+                    if (currentRoleIsAdmin())
+                        layoutMute.setVisibility(View.GONE);
+                    else
+                        layoutMute.setVisibility(View.VISIBLE);
+                }
 
-                edtChat.setText("");
+                if (!realmRoomAccess.isCanEditMessage() || !realmRoomAccess.isCanPostMessage() && (rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
+                    if (keyboardViewVisible)
+                        hideKeyboard();
 
-                removeEditedMessage();
-            }
+                    edtChat.setText("");
 
-            if (chatType == GROUP && realmRoomAccess.getRealmPostMessageRights() != null) {
-
+                    removeEditedMessage();
+                }
+            } else if (chatType == GROUP && realmRoomAccess.getRealmPostMessageRights() != null) {
                 if (keyboardView != null)
                     keyboardView.setStickerPermission(realmRoomAccess.getRealmPostMessageRights().isCanSendSticker());
+
+                if (mAttachmentPopup != null) {
+                    mAttachmentPopup.setMediaPermission(realmRoomAccess.getRealmPostMessageRights().isCanSendMedia());
+                }
+
+                if (realmRoomAccess.getRealmPostMessageRights().isCanSendText()) {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
+                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+                } else {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
+                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
+
+                    if (keyboardViewVisible)
+                        hideKeyboard();
+
+                    edtChat.setText("");
+                }
 
             }
 
@@ -925,7 +941,7 @@ public class FragmentChat extends BaseFragment
         if (getRoom().getType().equals(CHAT))
             return false;
         else
-            return getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN);
+            return (getRoom().getType().equals(CHANNEL) && getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN)) || getRoom().getType().equals(GROUP);
     }
 
     private void removeRoomAccessChangeListener() {
@@ -3469,6 +3485,7 @@ public class FragmentChat extends BaseFragment
             }, KeyboardView.MODE_KEYBOARD);
 
             keyboardView.setVisibility(View.GONE);
+            keyboardView.setStickerPermission(currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights() != null && currentRoomAccess.getRealmPostMessageRights().isCanSendSticker());
 
             keyboardContainer.addView(keyboardView);
         }
@@ -4848,18 +4865,13 @@ public class FragmentChat extends BaseFragment
                 }
                 //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
                 if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.realmRoomMessage.getAuthorHash())) {
-                    if (groupRole == GroupChatRole.MEMBER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                    } else if (groupRole == GroupChatRole.MODERATOR) {
-                        //if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
-                    } else if (groupRole == GroupChatRole.ADMIN) {
-                        //if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanEditMessage()) {
+                        items.remove(Integer.valueOf(R.string.edit_item_dialog));
                     }
-                    items.remove(Integer.valueOf(R.string.edit_item_dialog));
+
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanDeleteMessage()) {
+                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
+                    }
                 }
             } else if (realmRoom.getReadOnly()) {
                 items.remove(Integer.valueOf(R.string.replay_item_dialog));
