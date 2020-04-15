@@ -67,15 +67,19 @@ public class RealmClientCondition extends RealmObject {
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
             if (realmClientCondition != null) {
-                if (conditionVersion == ClientConditionVersion.EDIT) {
-                    realmClientCondition.setMessageVersion(version);
-                } else if (conditionVersion == ClientConditionVersion.STATUS) {
-                    realmClientCondition.setStatusVersion(version);
-                } else if (conditionVersion == ClientConditionVersion.DELETE) {
-                    realmClientCondition.setDeleteVersion(version);
-                }
+                realmClientCondition.setVersion(version, conditionVersion);
             }
         });
+    }
+
+    public void setVersion(long version, final ClientConditionVersion conditionVersion) {
+        if (conditionVersion == ClientConditionVersion.EDIT) {
+            this.setMessageVersion(version);
+        } else if (conditionVersion == ClientConditionVersion.STATUS) {
+            this.setStatusVersion(version);
+        } else if (conditionVersion == ClientConditionVersion.DELETE) {
+            this.setDeleteVersion(version);
+        }
     }
 
     public static void addOfflineDelete(Realm realm, RealmClientCondition realmClientCondition, long messageId, ProtoGlobal.Room.Type roomType, boolean bothDelete) {
