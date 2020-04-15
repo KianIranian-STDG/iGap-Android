@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.news.NewsPublisher;
 
@@ -69,7 +70,7 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         void initView(int position) {
             title.setText(mData.get(position).getName());
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")
                     .load(mData.get(position).getImage())
                     .placeholder(R.mipmap.news_temp_icon)

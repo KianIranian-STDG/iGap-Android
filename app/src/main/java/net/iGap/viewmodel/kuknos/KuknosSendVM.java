@@ -81,7 +81,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         return true;
     }
 
-    private boolean checkWalletID() {
+    public boolean checkWalletID() {
         if (walletID.get() == null) {
             errorM.setValue(new KuknosError(true, "Invalid WalletID", "0", R.string.kuknos_send_walletIDError));
             return false;
@@ -135,7 +135,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         }
     }
 
-    public void convertFederation(boolean isFromBtn) {
+    private void convertFederation(boolean isFromBtn) {
         String id = walletID.get();
         String domain = "pdpco.ir";
         if (walletID.get() == null) {

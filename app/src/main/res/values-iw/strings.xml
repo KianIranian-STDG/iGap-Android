@@ -2298,4 +2298,5 @@
     <string name="kuknos_buyP_title">خرید %1$s</string>
     <string name="kuknos_buyP_message">شبکه ققنوس یک پلتفرم چند توکنی (Multi Token) یا چند دارایی (Multi Asset) است که امکان ساختن انواع توکن بر روی آن مقدور است. در این میان یک توکن (یا دارایی) بنام %1$s وجود دارد.</string>
     <string name="kuknos_buyP_amount">تعداد %1$s درخواستی *</string>
+    <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
 </resources>

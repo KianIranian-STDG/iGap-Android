@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.news.NewsImage;
 
@@ -51,7 +52,7 @@ public class NewsDetailSliderAdapter extends SliderViewAdapter {
         }
 
         void initView(int position) {
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(data.get(position).getOriginal())
                     .placeholder(R.mipmap.news_temp_banner)
