@@ -65,7 +65,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
 
     public void sendCredit() {
 
-        if (!checkWalletID() || !checkAmount() || !checkMemo()) {
+        if (!checkWalletID(true) || !checkAmount() || !checkMemo()) {
             return;
         }
         goToPin.setValue(true);
@@ -81,7 +81,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         return true;
     }
 
-    public boolean checkWalletID() {
+    public boolean checkWalletID(boolean isFromBtn) {
         if (walletID.get() == null) {
             errorM.setValue(new KuknosError(true, "Invalid WalletID", "0", R.string.kuknos_send_walletIDError));
             return false;
@@ -91,7 +91,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
             return false;
         }
         if (mode == Mode.KUKNOS_ID) {
-            convertFederation(true);
+            convertFederation(isFromBtn);
             return false;
         }
         if (!checkKeyPairExsit()) {

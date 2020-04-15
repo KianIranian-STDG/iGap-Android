@@ -2087,7 +2087,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
-    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers.</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers. It must be at least 5 characters</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
     <string name="kuknos_RecoverySK_Btn">Okay, I have written it down.</string>
