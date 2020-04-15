@@ -110,42 +110,38 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
             return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
         });
 
-        if (roomAccess == null || roomAccess.getRealmPostMessageRights() != null && currentMode == 0) {
-            if (currentMode == 0 || currentMode == 1) {
-                canPostMessage = true;
-                canEditOthersMessage = true;
-                canDeleteOtherMessage = true;
-                canPinMessage = true;
-                canModifyRoom = true;
-                canGetMemberList = true;
-                canAddNewMember = true;
-                canBanMember = false;
-                canAddNewAdmin = false;
-            } else {
-                canSendText = true;
-                canSendMedia = true;
-                canSendGif = true;
-                canSendSticker = true;
-                canSendLink = true;
-            }
-        } else {
-            if (currentMode == 0 || currentMode == 1) {
-                canPostMessage = roomAccess.isCanPostMessage();
-                canEditOthersMessage = roomAccess.isCanEditMessage();
-                canDeleteOtherMessage = roomAccess.isCanDeleteMessage();
-                canPinMessage = roomAccess.isCanPinMessage();
-                canModifyRoom = roomAccess.isCanModifyRoom();
-                canGetMemberList = roomAccess.isCanGetMemberList();
-                canAddNewMember = roomAccess.isCanAddNewMember();
-                canBanMember = roomAccess.isCanBanMember();
-                canAddNewAdmin = roomAccess.isCanAddNewAdmin();
-            } else if (roomAccess.getRealmPostMessageRights() != null) {
-                canSendText = roomAccess.getRealmPostMessageRights().isCanSendText();
-                canSendMedia = roomAccess.getRealmPostMessageRights().isCanSendMedia();
-                canSendGif = roomAccess.getRealmPostMessageRights().isCanSendGif();
-                canSendSticker = roomAccess.getRealmPostMessageRights().isCanSendSticker();
-                canSendLink = roomAccess.getRealmPostMessageRights().isCanSendLink();
-            }
+        if (currentMode == 0) {
+            canPostMessage = true;
+            canEditOthersMessage = true;
+            canDeleteOtherMessage = true;
+            canPinMessage = true;
+            canModifyRoom = true;
+            canGetMemberList = true;
+            canAddNewMember = true;
+            canBanMember = false;
+            canAddNewAdmin = false;
+        } else if (currentMode == 1 && roomAccess != null) {
+            canPostMessage = roomAccess.isCanPostMessage();
+            canEditOthersMessage = roomAccess.isCanEditMessage();
+            canDeleteOtherMessage = roomAccess.isCanDeleteMessage();
+            canPinMessage = roomAccess.isCanPinMessage();
+            canModifyRoom = roomAccess.isCanModifyRoom();
+            canGetMemberList = roomAccess.isCanGetMemberList();
+            canAddNewMember = roomAccess.isCanAddNewMember();
+            canBanMember = roomAccess.isCanBanMember();
+            canAddNewAdmin = roomAccess.isCanAddNewAdmin();
+        } else if (currentMode == 2 && (roomAccess == null || roomAccess.getRealmPostMessageRights() == null)) {
+            canSendText = true;
+            canSendMedia = true;
+            canSendGif = true;
+            canSendSticker = true;
+            canSendLink = true;
+        } else if (currentMode == 2 && roomAccess.getRealmPostMessageRights() != null) {
+            canSendText = roomAccess.getRealmPostMessageRights().isCanSendText();
+            canSendMedia = roomAccess.getRealmPostMessageRights().isCanSendMedia();
+            canSendGif = roomAccess.getRealmPostMessageRights().isCanSendGif();
+            canSendSticker = roomAccess.getRealmPostMessageRights().isCanSendSticker();
+            canSendLink = roomAccess.getRealmPostMessageRights().isCanSendLink();
         }
 
         setRows();
@@ -202,6 +198,8 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
 
         HelperToolbar helperToolbar = HelperToolbar.create();
 
+        String title = currentMode == 0 || currentMode == 1 ? "Admin Rights Edit" : isRoom() ? "Group Rights Edit" : "Member Rights Edit";
+
         View toolBar = helperToolbar
                 .setContext(getContext())
                 .setLogoShown(true)
@@ -209,7 +207,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 .setRightIcons(R.string.check_icon)
                 .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(getString(R.string.new_channel))
-                .setDefaultTitle("Admin Rights Edit")
+                .setDefaultTitle(title)
                 .getView();
 
         FrameLayout rootView = new FrameLayout(getContext());
@@ -404,6 +402,25 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
 
 
             } else {
+                if (position == sendTextRow) {
+                    canSendText = !canSendText;
+                } else if (position == sendGifRow) {
+                    canSendGif = !canSendGif;
+                } else if (position == sendLinkRow) {
+                    canSendLink = !canSendLink;
+                } else if (position == sendMediaRow) {
+                    canSendMedia = !canSendMedia;
+                } else if (position == sendStickerRow) {
+                    canSendSticker = !canSendSticker;
+                }
+
+                Log.i("abbasiChanges", "changes" +
+                        "\ncanSendText    -> " + canSendText +
+                        "\ncanSendMedia   -> " + canSendMedia +
+                        "\ncanSendGif     -> " + canSendGif +
+                        "\ncanSendSticker -> " + canSendSticker +
+                        "\ncanSendLink    -> " + canSendLink);
+
 
             }
         }
@@ -426,7 +443,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
     }
 
     private boolean mustDismissAdmin() {
-        return currentMode == 0 && !canPostMessage && !canEditOthersMessage && !canDeleteOtherMessage && !canPinMessage && !canModifyRoom && !canGetMemberList && !canAddNewMember && !canAddNewAdmin && !canBanMember;
+        return currentMode == 1 && !canPostMessage && !canEditOthersMessage && !canDeleteOtherMessage && !canPinMessage && !canModifyRoom && !canGetMemberList && !canAddNewMember && !canAddNewAdmin && !canBanMember;
     }
 
     private class ListAdapter extends RecyclerListView.ItemAdapter {

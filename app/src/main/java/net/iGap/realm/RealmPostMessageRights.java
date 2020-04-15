@@ -9,6 +9,18 @@ public class RealmPostMessageRights extends RealmObject {
     private boolean canSendSticker;
     private boolean canSendLink;
 
+    public void setPostMessage(boolean value) {
+        setCanSendGif(value);
+        setCanSendLink(value);
+        setCanSendMedia(value);
+        setCanSendSticker(value);
+        setCanSendText(value);
+    }
+
+    public boolean canPostMessage() {
+        return canSendGif && canSendMedia && canSendLink && canSendSticker && canSendText;
+    }
+
     public boolean isCanSendText() {
         return canSendText;
     }
