@@ -67,15 +67,19 @@ public class RealmClientCondition extends RealmObject {
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
             if (realmClientCondition != null) {
-                if (conditionVersion == ClientConditionVersion.EDIT) {
-                    realmClientCondition.setMessageVersion(version);
-                } else if (conditionVersion == ClientConditionVersion.STATUS) {
-                    realmClientCondition.setStatusVersion(version);
-                } else if (conditionVersion == ClientConditionVersion.DELETE) {
-                    realmClientCondition.setDeleteVersion(version);
-                }
+                realmClientCondition.setVersion(version, conditionVersion);
             }
         });
+    }
+
+    public void setVersion(long version, final ClientConditionVersion conditionVersion) {
+        if (conditionVersion == ClientConditionVersion.EDIT) {
+            this.setMessageVersion(version);
+        } else if (conditionVersion == ClientConditionVersion.STATUS) {
+            this.setStatusVersion(version);
+        } else if (conditionVersion == ClientConditionVersion.DELETE) {
+            this.setDeleteVersion(version);
+        }
     }
 
     public static void addOfflineDelete(Realm realm, RealmClientCondition realmClientCondition, long messageId, ProtoGlobal.Room.Type roomType, boolean bothDelete) {
@@ -119,26 +123,25 @@ public class RealmClientCondition extends RealmObject {
 
     public static void deleteOfflineAction(final long messageId, final ClientConditionOffline messageStatus) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmClientCondition realmClientCondition;
             if (messageStatus == ClientConditionOffline.DELETE) {
-                realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_DELETED.OFFLINE_DELETE, messageId).findFirst();
-                if (realmClientCondition != null) {
-                    realmClientCondition.getOfflineDeleted().deleteFirstFromRealm();
+                RealmOfflineDelete offlineDelete = realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, messageId).findFirst();
+                if (offlineDelete != null) {
+                    offlineDelete.deleteFromRealm();
                 }
             } else if (messageStatus == ClientConditionOffline.EDIT) {
-                realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_EDITED.MESSAGE_ID, messageId).findFirst();
-                if (realmClientCondition != null) {
-                    realmClientCondition.getOfflineEdited().deleteFirstFromRealm();
+                RealmOfflineEdited offlineEdited = realm.where(RealmOfflineEdited.class).equalTo(RealmOfflineEditedFields.MESSAGE_ID, messageId).findFirst();
+                if (offlineEdited != null) {
+                    offlineEdited.deleteFromRealm();
                 }
             } else if (messageStatus == ClientConditionOffline.SEEN) {
-                realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_SEEN.OFFLINE_SEEN, messageId).findFirst();
-                if (realmClientCondition != null) {
-                    realmClientCondition.getOfflineSeen().deleteFirstFromRealm();
+                RealmOfflineSeen offlineSeen = realm.where(RealmOfflineSeen.class).equalTo(RealmOfflineSeenFields.OFFLINE_SEEN, messageId).findFirst();
+                if (offlineSeen != null) {
+                    offlineSeen.deleteFromRealm();
                 }
             } else if (messageStatus == ClientConditionOffline.LISTEN) {
-                realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_LISTEN.OFFLINE_LISTEN, messageId).findFirst();
-                if (realmClientCondition != null) {
-                    realmClientCondition.getOfflineListen().deleteFirstFromRealm();
+                RealmOfflineListen offlineListen = realm.where(RealmOfflineListen.class).equalTo(RealmOfflineListenFields.OFFLINE_LISTEN, messageId).findFirst();
+                if (offlineListen != null) {
+                    offlineListen.deleteFromRealm();
                 }
             }
         });
