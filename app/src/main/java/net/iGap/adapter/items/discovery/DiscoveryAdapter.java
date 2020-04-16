@@ -1,7 +1,9 @@
 package net.iGap.adapter.items.discovery;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
+import net.iGap.adapter.items.discovery.holder.Type0ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type1ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type2ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type3ViewHolder;
@@ -46,6 +49,8 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         switch (i) {
+            case 0:
+                return new Type0ViewHolder(layoutInflater.inflate(R.layout.item_discovery_0, viewGroup, false), activity);
             case 1:
                 return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false), activity);
             case 2:
@@ -79,8 +84,12 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        try {
+       try {
+           if (discoveryList.get(position).model == null) {
+               return 0;
+           }
             return discoveryList.get(position).model.getNumber() + 1;
+
         } catch (Exception e) {
             return -2;
         }
