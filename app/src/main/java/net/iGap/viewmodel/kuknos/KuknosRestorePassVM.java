@@ -1,5 +1,7 @@
 package net.iGap.viewmodel.kuknos;
 
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
@@ -9,8 +11,6 @@ import net.iGap.model.kuknos.Parsian.KuknosUserInfo;
 import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.UserRepo;
-
-import androidx.lifecycle.MutableLiveData;
 
 public class KuknosRestorePassVM extends BaseAPIViewModel {
 
@@ -45,10 +45,10 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
 
     private void generateKeypair() {
         progressState.setValue(true);
-        userRepo.setMnemonic(keyPhrase);
+        userRepo.updateMnemonicRealm(keyPhrase);
         userRepo.setPIN(PIN);
         try {
-            userRepo.generateKeyPairWithMnemonic();
+            userRepo.generateKeyPairWithMnemonic("", "");
         } catch (WalletException e) {
             error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
 
     private void checkUserInfo() {
         progressState.setValue(true);
-        userRepo.getUserStatus(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
+        userRepo.getUserStatus("", this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfo> data) {
                 switch (data.getData().getStatus()) {

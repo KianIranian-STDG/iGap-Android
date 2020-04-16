@@ -20,7 +20,7 @@ public class KuknosEntryOptionVM extends BaseAPIViewModel {
     }
 
     public boolean loginStatus() {
-        if (userRepo.getSeedKey() != null) {
+        if (userRepo.getSeedKey() != null && userRepo.getPIN() != null) {
             return !userRepo.getSeedKey().equals("-1");
         }
         return false;

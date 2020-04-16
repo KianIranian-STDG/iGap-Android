@@ -1866,9 +1866,6 @@
     <string name="kuknos_logout_pin">کۆدی چوونەژوورەوە</string>
     <string name="kuknos_logout_btn">هاتنەدەرەوە لە جانتای پارە</string>
     <string name="kuknos_logout_load">هاتنەدەرەوە ...</string>
-    <string name="kuknos_buyP_title">کڕینی بەڵێن</string>
-    <string name="kuknos_buyP_message">تۆڕی قۆقنووس، پلەتفۆرمێکی چەند تۆکنی(Multi Token) یان چەند داراییە (Multi Asset) کە دەرفەتی دروست کردنی جۆرە جیاجیاکانی تۆکن لەسەری هەیە. لەم نێوانەدا یەک تۆکنی (یان دارایی) تایبەت بە ناوی (PMN) هەیە کە ئەرکی تایبەتی بۆ لە بەرچاو گیردراوە.</string>
-    <string name="kuknos_buyP_amount">ژمارەی بەڵێنی خوازراو *</string>
     <string name="kuknos_buyP_btn">کڕین</string>
     <string name="kuknos_buyP_btn_server">تاوتوێ کردنی ...</string>
     <string name="kuknos_buyP_btn_server2">گواستنەوە بۆ بانک </string>
@@ -2310,6 +2307,9 @@
     <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
     <string name="kuknos_send_option1">از طریق کلید عمومی</string>
     <string name="kuknos_send_option2">از طریق نام کاربری</string>
+    <string name="kuknos_buyP_title">خرید %1$s</string>
+    <string name="kuknos_buyP_message">شبکه ققنوس یک پلتفرم چند توکنی (Multi Token) یا چند دارایی (Multi Asset) است که امکان ساختن انواع توکن بر روی آن مقدور است. در این میان یک توکن (یا دارایی) بنام %1$s وجود دارد.</string>
+    <string name="kuknos_buyP_amount">تعداد %1$s درخواستی *</string>
     <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
 
 </resources>

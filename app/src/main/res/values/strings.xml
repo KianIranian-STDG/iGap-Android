@@ -2087,7 +2087,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
-    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers.</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers. It must be at least 5 characters</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
     <string name="kuknos_RecoverySK_Btn">Okay, I have written it down.</string>
@@ -2118,7 +2118,7 @@ Want to get it?</string>
     <string name="kuknos_panelStr_history">History</string>
     <string name="kuknos_panelStr_trading">Trading</string>
     <string name="kuknos_panelStr_kyc">KYC</string>
-    <string name="kuknos_panelStr_buyPeyman">Buy Peyman</string>
+    <string name="kuknos_panelStr_buyPeyman">Buy Token</string>
     <string name="kuknos_panelStr_setting">Setting</string>
     <string name="kuknos_develop">developing</string>
     <string name="kuknos_recieve_title">For receiving credit from others, you must send your wallet ID to others.</string>
@@ -2128,7 +2128,7 @@ Want to get it?</string>
     <string name="kuknos_send_title">Send Token</string>
     <string name="kuknos_send_walletAddress">Wallet Address*</string>
     <string name="kuknos_send_walletAddress_Hint1">i.e. GAVYHKFTRGE…</string>
-    <string name="kuknos_send_walletAddress_Hint2">i.e. amini*pdpco.ir</string>
+    <string name="kuknos_send_walletAddress_Hint2">i.e. test*pdpco.ir</string>
     <string name="kuknos_send_text">Memo ID or text</string>
     <string name="kuknos_send_amount">Amount*</string>
     <string name="kuknos_send_sendBtn">Send</string>
@@ -2186,10 +2186,10 @@ Want to get it?</string>
     <string name="kuknos_logout_pin">PIN</string>
     <string name="kuknos_logout_btn">Logout</string>
     <string name="kuknos_logout_load">Loging out...</string>
-    <string name="kuknos_buyP_title">Buy Peymon</string>
+    <string name="kuknos_buyP_title">Buy %1$s</string>
     <string name="kuknos_buyP_message">Kuknus is a multi-token platform that provides issues of any assets.
-        In Kuknos platform we have an assets called Paymon (PMN) which is the native assets for Kuknus.</string>
-    <string name="kuknos_buyP_amount">Number of Peymen (PMN)* :</string>
+        In Kuknos platform we have an assets called %1$s.</string>
+    <string name="kuknos_buyP_amount">Number of %1$s* :</string>
     <string name="kuknos_buyP_btn">Buy</string>
     <string name="kuknos_buyP_btn_server">Checking...</string>
     <string name="kuknos_buyP_btn_server2">Finilizing...</string>
@@ -2201,8 +2201,8 @@ Want to get it?</string>
         - Consider as a gauge for assessing minimum balances\n</string>
     <string name="kuknos_buyP_sumTitle">Sum: </string>
     <string name="kuknos_buyP_sumCurrency">IRR</string>
-    <string name="kuknos_buyP_emptyAmount">Number of PMN can NOT be empty.</string>
-    <string name="kuknos_buyP_zeroAmount">Number of PMN can NOT be zero.</string>
+    <string name="kuknos_buyP_emptyAmount">Number of %1$s can NOT be empty.</string>
+    <string name="kuknos_buyP_zeroAmount">Number of %1$s can NOT be zero.</string>
     <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
     <string name="kuknos_buyP_MaxAmount">You are exceeding the maximum buyable value of this token.</string>

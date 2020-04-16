@@ -61,10 +61,8 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        kuknosShowRecoveryKeyVM.initMnemonic();
-
-        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getString(R.string.kuknos_recoveryKey_fa), getResources().getString(R.string.kuknos_recoveryKey_en))));
-        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(CompatibleUnicode("24"), CompatibleUnicode("12"))));
+        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getString(R.string.kuknos_recoveryKey_en), getResources().getString(R.string.kuknos_recoveryKey_fa))));
+        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(CompatibleUnicode("12"), CompatibleUnicode("24"))));
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())

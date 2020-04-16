@@ -1873,9 +1873,6 @@
     <string name="kuknos_logout_pin"> mot de passe </string>
     <string name="kuknos_logout_btn"> déconnecter de portefeuille </string>
     <string name="kuknos_logout_load"> déconnecter </string>
-    <string name="kuknos_buyP_title"> contrat d\'achat </string>
-    <string name="kuknos_buyP_message"> e réseau GHOGHNOS est une plate-forme multi-jetons (Token ) ou multi-actifs sur laquelle vous pouvez créer une variété de jetons. Il existe également un jeton spécial (ou actif) appelé le PMN auquel des fonctions spéciales sont destinées. </string>
-    <string name="kuknos_buyP_amount"> nombre des contrats demandés * </string>
     <string name="kuknos_buyP_btn"> achat </string>
     <string name="kuknos_buyP_btn_server"> vérification… </string>
     <string name="kuknos_buyP_btn_server2"> transfert à la banque </string>
