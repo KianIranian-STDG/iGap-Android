@@ -33,6 +33,7 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoChannelAddAdmin;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupAddAdmin;
+import net.iGap.proto.ProtoGroupChangeMemberRights;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
@@ -41,18 +42,19 @@ import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestGroupAddAdmin;
+import net.iGap.request.RequestGroupChangeMemberRights;
 import net.iGap.request.RequestGroupKickAdmin;
 
 public class ChatRightsFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener {
     private RealmRoom realmRoom;
     private RealmRegisteredInfo realmRegisteredInfo;
+    private RealmRoomAccess currentUserAccess;
 
     private long userId;
     private long roomId;
+    private int currentMode;
 
     private RecyclerListView recyclerListView;
-
-    private int currentMode;
 
     private int rowCount;
     private int userProfileRow;
@@ -91,15 +93,16 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
     private boolean canSendSticker;
     private boolean canSendLink;
 
-    public static ChatRightsFragment getIncense(RealmRoom realmRoom, long userId, int mode) {
-        return new ChatRightsFragment(realmRoom, userId, mode);
+    public static ChatRightsFragment getIncense(RealmRoom realmRoom, RealmRoomAccess currentUserAccess, long userId, int mode) {
+        return new ChatRightsFragment(realmRoom, currentUserAccess, userId, mode);
     }
 
-    private ChatRightsFragment(RealmRoom realmRoom, long userId, int mode) {
+    private ChatRightsFragment(RealmRoom realmRoom, RealmRoomAccess currentUserAccess, long userId, int mode) {
         this.realmRoom = realmRoom;
         this.userId = userId;
         this.roomId = realmRoom.getId();
         this.currentMode = mode;
+        this.currentUserAccess = currentUserAccess;
 
         RealmRoomAccess roomAccess = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.USER_ID, userId)
@@ -136,12 +139,18 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
             canSendGif = true;
             canSendSticker = true;
             canSendLink = true;
+            canPinMessage = false;
+            canAddNewMember = false;
+            canGetMemberList = false;
         } else if (currentMode == 2 && roomAccess.getRealmPostMessageRights() != null) {
             canSendText = roomAccess.getRealmPostMessageRights().isCanSendText();
             canSendMedia = roomAccess.getRealmPostMessageRights().isCanSendMedia();
             canSendGif = roomAccess.getRealmPostMessageRights().isCanSendGif();
             canSendSticker = roomAccess.getRealmPostMessageRights().isCanSendSticker();
             canSendLink = roomAccess.getRealmPostMessageRights().isCanSendLink();
+            canPinMessage = roomAccess.isCanPinMessage();
+            canAddNewMember = roomAccess.isCanAddNewMember();
+            canGetMemberList = roomAccess.isCanGetMemberList();
         }
 
         setRows();
@@ -186,6 +195,9 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
             sendGifRow = rowCount++;
             sendStickerRow = rowCount++;
             sendLinkRow = rowCount++;
+            pinMessageRow = rowCount++;
+            addNewMemberRow = rowCount++;
+            getMemberListRow = rowCount++;
         }
     }
 
@@ -238,15 +250,15 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
         } else if (currentMode != 2) {
             if (isChannel()) {
                 ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights.Builder builder = ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights.newBuilder();
-                builder.setAddAdmin(canAddNewAdmin);
-                builder.setAddMember(canAddNewMember);
-                builder.setBanMember(canBanMember);
-                builder.setDeleteMessage(canDeleteOtherMessage);
-                builder.setEditMessage(canEditOthersMessage);
-                builder.setGetMember(canGetMemberList);
-                builder.setModifyRoom(canModifyRoom);
-                builder.setPinMessage(canPinMessage);
-                builder.setPostMessage(canPostMessage);
+                builder.setAddAdmin(canAddNewAdmin)
+                        .setAddMember(canAddNewMember)
+                        .setBanMember(canBanMember)
+                        .setDeleteMessage(canDeleteOtherMessage)
+                        .setEditMessage(canEditOthersMessage)
+                        .setGetMember(canGetMemberList)
+                        .setModifyRoom(canModifyRoom)
+                        .setPinMessage(canPinMessage)
+                        .setPostMessage(canPostMessage);
 
                 new RequestChannelAddAdmin().channelAddAdmin(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
@@ -255,13 +267,13 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 });
             } else if (isGroup()) {
                 ProtoGroupAddAdmin.GroupAddAdmin.AdminRights.Builder builder = ProtoGroupAddAdmin.GroupAddAdmin.AdminRights.newBuilder();
-                builder.setAddAdmin(canAddNewAdmin);
-                builder.setAddMember(canAddNewMember);
-                builder.setBanMember(canBanMember);
-                builder.setDeleteMessage(canDeleteOtherMessage);
-                builder.setGetMember(canGetMemberList);
-                builder.setModifyRoom(canModifyRoom);
-                builder.setPinMessage(canPinMessage);
+                builder.setAddAdmin(canAddNewAdmin)
+                        .setAddMember(canAddNewMember)
+                        .setBanMember(canBanMember)
+                        .setDeleteMessage(canDeleteOtherMessage)
+                        .setGetMember(canGetMemberList)
+                        .setModifyRoom(canModifyRoom)
+                        .setPinMessage(canPinMessage);
 
                 new RequestGroupAddAdmin().groupAddAdmin(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
@@ -271,9 +283,37 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
             }
         } else {
             if (isRoom()) {
+                ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights.Builder builder = ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights.newBuilder();
+                builder.setPinMessage(canPinMessage)
+                        .setGetMember(canGetMemberList)
+                        .setAddMember(canAddNewMember)
+                        .setSendGif(canSendGif)
+                        .setSendLink(canSendLink)
+                        .setSendText(canSendText)
+                        .setSendSticker(canSendSticker)
+                        .setSendMedia(canSendMedia);
 
+                new RequestGroupChangeMemberRights().groupChangeRights(roomId, builder.build(), (response, error) -> {
+                    if (error == null) {
+                        G.runOnUiThread(() -> onLeftIconClickListener(null));
+                    }
+                });
             } else {
+                ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights.Builder builder = ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights.newBuilder();
+                builder.setPinMessage(canPinMessage)
+                        .setGetMember(canGetMemberList)
+                        .setAddMember(canAddNewMember)
+                        .setSendGif(canSendGif)
+                        .setSendLink(canSendLink)
+                        .setSendText(canSendText)
+                        .setSendSticker(canSendSticker)
+                        .setSendMedia(canSendMedia);
 
+                new RequestGroupChangeMemberRights().groupChangeMemberRights(roomId, userId, builder.build(), (response, error) -> {
+                    if (error == null) {
+                        G.runOnUiThread(() -> onLeftIconClickListener(null));
+                    }
+                });
             }
         }
     }
@@ -333,7 +373,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                             holder.itemView.setEnabled(true);
                         } else {
                             canEditOthersMessage = false;
-                            ((ToggleButtonCell) holder.itemView).setChecked(canEditOthersMessage);
+                            ((ToggleButtonCell) holder.itemView).setChecked(false);
                             holder.itemView.setEnabled(canEditOthersMessage);
                         }
                     }
@@ -412,6 +452,12 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     canSendMedia = !canSendMedia;
                 } else if (position == sendStickerRow) {
                     canSendSticker = !canSendSticker;
+                } else if (position == addNewMemberRow) {
+                    canAddNewMember = !canAddNewMember;
+                } else if (position == pinMessageRow) {
+                    canPinMessage = !canPinMessage;
+                } else if (position == getMemberListRow) {
+                    canGetMemberList = !canGetMemberList;
                 }
 
                 Log.i("abbasiChanges", "changes" +
@@ -420,7 +466,6 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                         "\ncanSendGif     -> " + canSendGif +
                         "\ncanSendSticker -> " + canSendSticker +
                         "\ncanSendLink    -> " + canSendLink);
-
 
             }
         }
@@ -516,17 +561,17 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     } else if (position == banMemberRow) {
                         toggleButtonCell.setTextAndCheck("Ban member", canBanMember, true);
                     } else if (position == addNewAdminRow) {
-                        toggleButtonCell.setTextAndCheck("Add new admin", canAddNewAdmin, false);
+                        toggleButtonCell.setTextAndCheck("Add new admin", canAddNewAdmin, true);
                     } else if (position == sendTextRow) {
-                        toggleButtonCell.setTextAndCheck("Send Text message", canAddNewAdmin, false);
+                        toggleButtonCell.setTextAndCheck("Send Text message", canSendText, true);
                     } else if (position == sendGifRow) {
-                        toggleButtonCell.setTextAndCheck("Send gif message", canAddNewAdmin, false);
+                        toggleButtonCell.setTextAndCheck("Send gif message", canSendGif, true);
                     } else if (position == sendMediaRow) {
-                        toggleButtonCell.setTextAndCheck("Send media message", canAddNewAdmin, false);
+                        toggleButtonCell.setTextAndCheck("Send media message", canSendMedia, true);
                     } else if (position == sendStickerRow) {
-                        toggleButtonCell.setTextAndCheck("Send sticker message", canAddNewAdmin, false);
+                        toggleButtonCell.setTextAndCheck("Send sticker message", canSendSticker, true);
                     } else if (position == sendLinkRow) {
-                        toggleButtonCell.setTextAndCheck("Send link message", canAddNewAdmin, false);
+                        toggleButtonCell.setTextAndCheck("Send link message", canSendLink, false);
                     }
                     break;
                 case 3:

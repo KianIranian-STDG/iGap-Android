@@ -68,6 +68,8 @@ import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChannelAddAdmin;
@@ -144,6 +146,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private boolean isShowAddButton = true;
 
     private RealmRoom realmRoom;
+    private RealmRoomAccess realmRoomAccess;
 
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
@@ -208,6 +211,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             } else {
                 showMemberMode = ShowMemberMode.NONE;
             }
+
+            realmRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, mRoomID + "_" + userID).findFirst();
+            });
 
             isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER, true);
 
@@ -967,50 +974,67 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void showMemberDialog(StructContactInfo contactInfo) {
 
-        LinearLayout dialogRootView = new LinearLayout(getContext());
-        dialogRootView.setOrientation(LinearLayout.VERTICAL);
-        dialogRootView.setBackgroundColor(Theme.getInstance().getRootColor(dialogRootView.getContext()));
+        if (realmRoomAccess != null) {
+            TextCell adminRights = null;
+            TextCell permission = null;
+            TextCell removeView = null;
+            LinearLayout dialogRootView = new LinearLayout(getContext());
+            dialogRootView.setOrientation(LinearLayout.VERTICAL);
+            dialogRootView.setBackgroundColor(Theme.getInstance().getRootColor(dialogRootView.getContext()));
 
-        Dialog dialog = new MaterialDialog.Builder(dialogRootView.getContext())
-                .customView(dialogRootView, false)
-                .show();
+            if (realmRoomAccess.isCanAddNewAdmin()) {
+                adminRights = new TextCell(dialogRootView.getContext(), true);
+                adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
+                adminRights.setValue(contactInfo.isAdmin() ? "Edit admin rights" : "Add to admin");
+                dialogRootView.addView(adminRights, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+            }
 
-        TextCell adminRights = new TextCell(dialogRootView.getContext(), true);
-        adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
-        adminRights.setValue(contactInfo.isAdmin() ? "Edit admin rights" : "Add to admin");
-        dialogRootView.addView(adminRights, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+            if (!contactInfo.isAdmin() && roomType == GROUP) {
+                permission = new TextCell(dialogRootView.getContext(), true);
+                permission.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
+                permission.setValue("Change permission");
+                dialogRootView.addView(permission, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+            }
 
-        if (!contactInfo.isAdmin() && roomType == GROUP) {
-            TextCell permission = new TextCell(dialogRootView.getContext(), true);
-            permission.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
-            permission.setValue("Change permission");
-            dialogRootView.addView(permission, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+            if (realmRoomAccess.isCanAddNewMember()) {
+                removeView = new TextCell(dialogRootView.getContext(), false);
+                removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
+                removeView.setValue("Remove from channel");
+                dialogRootView.addView(removeView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+            }
 
-            permission.setOnClickListener(v -> {
-                openChatEditRightsFragment(realmRoom, contactInfo.peerId, 2);
-                dialog.dismiss();
-            });
+            Dialog dialog = new MaterialDialog.Builder(dialogRootView.getContext())
+                    .customView(dialogRootView, false)
+                    .build();
+
+            if (removeView != null) {
+                removeView.setOnClickListener(v -> {
+                    kickMember(contactInfo.peerId);
+                    dialog.dismiss();
+                });
+            }
+
+            if (adminRights != null) {
+                adminRights.setOnClickListener(v -> {
+                    openChatEditRightsFragment(realmRoom, contactInfo.peerId, contactInfo.isAdmin() ? 1 : 0);
+                    dialog.dismiss();
+                });
+            }
+
+            if (permission != null) {
+                permission.setOnClickListener(v -> {
+                    openChatEditRightsFragment(realmRoom, contactInfo.peerId, 2);
+                    dialog.dismiss();
+                });
+            }
+
+            dialog.show();
         }
-
-        TextCell removeView = new TextCell(dialogRootView.getContext(), false);
-        removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
-        removeView.setValue("Remove from channel");
-        dialogRootView.addView(removeView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
-
-        removeView.setOnClickListener(v -> {
-            kickMember(contactInfo.peerId);
-            dialog.dismiss();
-        });
-
-        adminRights.setOnClickListener(v -> {
-            openChatEditRightsFragment(realmRoom, contactInfo.peerId, contactInfo.isAdmin() ? 1 : 0);
-            dialog.dismiss();
-        });
     }
 
     private void openChatEditRightsFragment(RealmRoom realmRoom, long userId, int mode) {
         if (getActivity() != null)
-            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, userId, mode)).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, realmRoomAccess, userId, mode)).setReplace(false).load();
     }
 
     public void kickMember(long peerId) {

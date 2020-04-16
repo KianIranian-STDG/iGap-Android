@@ -38,11 +38,6 @@ public class GroupKickAdminResponse extends MessageHandler {
     }
 
     @Override
-    public void timeOut() {
-        super.timeOut();
-    }
-
-    @Override
     public void error() {
         super.error();
         if (identity instanceof OnResponse)

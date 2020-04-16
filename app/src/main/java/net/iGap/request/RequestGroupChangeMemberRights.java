@@ -22,7 +22,7 @@ public class RequestGroupChangeMemberRights {
         builder.setUserId(memberId);
         builder.setPermission(memberRights);
 
-        RequestWrapper requestWrapper = new RequestWrapper(302, builder, onResponse);
+        RequestWrapper requestWrapper = new RequestWrapper(327, builder, onResponse);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
@@ -36,7 +36,7 @@ public class RequestGroupChangeMemberRights {
         builder.setRoomId(roomId);
         builder.setPermission(memberRights);
 
-        RequestWrapper requestWrapper = new RequestWrapper(302, builder, onResponse);
+        RequestWrapper requestWrapper = new RequestWrapper(327, builder, onResponse);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -1,5 +1,7 @@
 package net.iGap.realm;
 
+import android.util.Log;
+
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoChannelAddAdmin;
 import net.iGap.proto.ProtoGlobal;
@@ -64,6 +66,8 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanGetMemberList(roomAccess.getGetMember());
         realmRoomAccess.setCanAddNewAdmin(roomAccess.getAddAdmin());
         realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
+
+        Log.e("abbasiInsertToRealm", "putOrUpdate: " + realmRoomAccess.toString());
     }
 
     public static void channelAdminPutOrUpdate(ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
@@ -100,6 +104,7 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanGetMemberList(adminRights.getGetMember());
         realmRoomAccess.setCanAddNewAdmin(adminRights.getAddAdmin());
 
+        Log.e("abbasiInsertToRealm", "channelAdminPutOrUpdate: " + realmRoomAccess.toString());
     }
 
     public static void groupAdminPutOrUpdate(ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
@@ -133,6 +138,8 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanGetMemberList(adminRights.getGetMember());
         realmRoomAccess.setCanAddNewAdmin(adminRights.getAddAdmin());
 
+        Log.e("abbasiInsertToRealm", "groupAdminPutOrUpdate: " + realmRoomAccess.toString());
+
     }
 
     public static void groupMemberPutOrUpdate(ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, long userId, long roomId, Realm realm) {
@@ -162,6 +169,7 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setRoomId(roomId);
         realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
 
+        Log.e("abbasiInsertToRealm", "groupMemberPutOrUpdate: " + realmRoomAccess.toString());
     }
 
     public static void getAccess(long userId, long roomId) {
