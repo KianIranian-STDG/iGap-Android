@@ -247,7 +247,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
                     DiscoveryItem a = new DiscoveryItem(ProtoGlobal.Discovery.newBuilder().setScale("3:1").build());
                     a.model=null;
-                    discoveryArrayList.add(a);
+                    discoveryArrayList.add(0,a);
 
                 }
 

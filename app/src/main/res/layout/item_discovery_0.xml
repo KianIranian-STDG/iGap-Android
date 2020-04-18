@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/dp8">
+    android:layout_height="50dp"
+    android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_city"
@@ -19,6 +19,8 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp60"
+            android:layout_marginStart="@dimen/dp18"
+            android:layout_marginLeft="@dimen/dp18"
             android:text="@string/cloud_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,8 +54,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLength="35"
-            android:maxLines="1"
-            android:text="سه شنبه  27 فروردین 1399"
+            android:text="یکشنبه31تیر1398"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@+id/iv_weather"
@@ -64,12 +65,12 @@
         android:id="@+id/container_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="@dimen/dp18"
+        android:layout_marginRight="@dimen/dp18"
         app:layout_constraintBottom_toBottomOf="@id/container_city"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/container_city"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.5">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/imageView5"
@@ -86,8 +87,8 @@
             android:id="@+id/textView8"
             android:layout_width="61dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp2"
+            android:layout_marginRight="@dimen/dp2"
             android:text="@string/payment_userScore"
             android:textColor="@color/orange"
             android:textSize="@dimen/standardTextSize"
@@ -99,7 +100,7 @@
             android:id="@+id/tv_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5000"
+            android:text="0"
             android:textColor="@color/orange"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@+id/textView8"
@@ -115,8 +116,9 @@
         android:layout_height="54dp"
         android:background="?iGapDividerLine"
         app:layout_constraintBottom_toBottomOf="@+id/container_city"
-        app:layout_constraintEnd_toStartOf="@+id/container_score"
-        app:layout_constraintStart_toEndOf="@+id/container_city"
+        app:layout_constraintEnd_toStartOf="@id/container_score"
+        app:layout_constraintHorizontal_bias="0.796"
+        app:layout_constraintStart_toEndOf="@id/container_city"
         app:layout_constraintTop_toTopOf="@+id/container_city" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
