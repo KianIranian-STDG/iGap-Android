@@ -2,6 +2,11 @@ package net.iGap.viewmodel;
 
 import android.view.View;
 
+import androidx.databinding.ObservableDouble;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -10,6 +15,7 @@ import net.iGap.model.payment.CheckOrderStatusResponse;
 import net.iGap.model.payment.Payment;
 import net.iGap.model.payment.PaymentFeature;
 import net.iGap.model.payment.PaymentResult;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.PaymentRepository;
 
@@ -17,11 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
-
-import androidx.databinding.ObservableDouble;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 
@@ -40,7 +41,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private ObservableField<String> description = new ObservableField<>();
     /*private ObservableField<String> paymentOrderId = new ObservableField<>();*/
     private ObservableField<String> paymentStatus = new ObservableField<>();
-    private ObservableField<String> price = new ObservableField<>();
+    private SingleLiveEvent<String> price = new SingleLiveEvent<>();
     private ObservableDouble paymentRRN = new ObservableDouble();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
@@ -136,7 +137,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         return paymentOrderId;
     }*/
 
-    public ObservableField<String> getPrice() {
+    public SingleLiveEvent<String> getPrice() {
         return price;
     }
 
@@ -180,7 +181,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 discountReceiptVisibility.set(View.VISIBLE);
                 discountReceiptAmount.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(payment.getDiscount()) : payment.getDiscount());
             }
-            if (payment.getTax() != null && !payment.getTax().equals("null")) {
+            if (payment.getTax() != null && !payment.getTax().equals("null") && !payment.getTax().equals("0")) {
                 taxReceiptVisibility.set(View.VISIBLE);
                 taxReceiptAmount.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(payment.getTax()) : payment.getTax());
             }
@@ -218,7 +219,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 description.set(data.getInfo().getProduct().getDescription());
                 originalPrice = data.getInfo().getPrice();
                 String tmp = String.valueOf(data.getInfo().getPrice());
-                price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+                price.setValue(tmp);
                 title.set(data.getInfo().getProduct().getTitle());
                 orderDetail = data;
                 discountOption.setValue(data.getDiscountOption());
@@ -255,7 +256,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 showMainView.set(View.VISIBLE);
                 description.set(data.getPaymentInfo().getProduct().getDescription());
                 String tmp = String.valueOf(data.getPaymentInfo().getPrice());
-                price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+                price.setValue(tmp);
                 title.set(data.getPaymentInfo().getProduct().getTitle());
                 /*paymentOrderId.set(data.getPaymentInfo().getId());*/
                 paymentStatus.set(data.getMessage());
@@ -317,10 +318,10 @@ public class PaymentViewModel extends BaseAPIViewModel {
         this.discountPlanPosition = discountPlanPosition;
         if (discountPlanPosition != -1) {
             String tmp = String.valueOf(discountOption.getValue().get(discountPlanPosition).getPrice());
-            price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+            price.setValue(tmp);
         } else {
             String tmp = String.valueOf(originalPrice);
-            price.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(tmp) : tmp);
+            price.setValue(tmp);
         }
     }
 

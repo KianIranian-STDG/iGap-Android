@@ -94,7 +94,7 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag<FragmentPaymentCharge
 
         viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
+                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), true, token, result -> {
                     if (result.isSuccess()) {
                         goBack();
                     }
