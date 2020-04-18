@@ -29,7 +29,7 @@ public class GroupKickAdminResponse extends MessageHandler {
         HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
 
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), builder.getMemberId(), builder.getRoomId(), asyncRealm));
+            realm.executeTransaction(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), builder.getMemberId(), builder.getRoomId(), asyncRealm));
         });
 
         if (identity instanceof OnResponse) {
