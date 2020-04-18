@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -48,6 +47,7 @@ import net.iGap.request.RequestGroupKickAdmin;
 public class ChatRightsFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener {
     private RealmRoom realmRoom;
     private RealmRegisteredInfo realmRegisteredInfo;
+    @Nullable
     private RealmRoomAccess currentUserAccess;
 
     private long userId;
@@ -97,7 +97,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
         return new ChatRightsFragment(realmRoom, currentUserAccess, userId, mode);
     }
 
-    private ChatRightsFragment(RealmRoom realmRoom, RealmRoomAccess currentUserAccess, long userId, int mode) {
+    private ChatRightsFragment(RealmRoom realmRoom, @Nullable RealmRoomAccess currentUserAccess, long userId, int mode) {
         this.realmRoom = realmRoom;
         this.userId = userId;
         this.roomId = realmRoom.getId();
@@ -114,15 +114,27 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
         });
 
         if (currentMode == 0) {
-            canPostMessage = true;
-            canEditOthersMessage = true;
-            canDeleteOtherMessage = true;
-            canPinMessage = true;
-            canModifyRoom = true;
-            canGetMemberList = true;
-            canAddNewMember = true;
-            canBanMember = false;
-            canAddNewAdmin = false;
+            if (currentUserAccess == null) {
+                canPostMessage = true;
+                canEditOthersMessage = true;
+                canDeleteOtherMessage = true;
+                canPinMessage = true;
+                canModifyRoom = true;
+                canGetMemberList = true;
+                canAddNewMember = true;
+                canBanMember = false;
+                canAddNewAdmin = false;
+            } else {
+                canPostMessage = currentUserAccess.isCanPostMessage();
+                canEditOthersMessage = currentUserAccess.isCanEditMessage();
+                canDeleteOtherMessage = currentUserAccess.isCanDeleteMessage();
+                canPinMessage = currentUserAccess.isCanPinMessage();
+                canModifyRoom = currentUserAccess.isCanModifyRoom();
+                canGetMemberList = currentUserAccess.isCanGetMemberList();
+                canAddNewMember = currentUserAccess.isCanAddNewMember();
+                canBanMember = currentUserAccess.isCanBanMember();
+                canAddNewAdmin = currentUserAccess.isCanAddNewAdmin();
+            }
         } else if (currentMode == 1 && roomAccess != null) {
             canPostMessage = roomAccess.isCanPostMessage();
             canEditOthersMessage = roomAccess.isCanEditMessage();
@@ -196,8 +208,8 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
             sendStickerRow = rowCount++;
             sendLinkRow = rowCount++;
             pinMessageRow = rowCount++;
-            addNewMemberRow = rowCount++;
             getMemberListRow = rowCount++;
+            addNewMemberRow = rowCount++;
         }
     }
 
@@ -503,9 +515,8 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     cellView.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
                     break;
                 case 1:
-                    cellView = new EmptyCell(parent.getContext());
+                    cellView = new EmptyCell(parent.getContext(), 12);
                     cellView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
-                    cellView.setEnabled(false);
                     break;
                 case 2:
                     cellView = new ToggleButtonCell(parent.getContext());
@@ -519,7 +530,6 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     break;
                 default:
                     cellView = new View(parent.getContext());
-                    cellView.setBackgroundColor(Color.RED);
             }
             return new RecyclerListView.ItemViewHolder(cellView, ChatRightsFragment.this);
         }
@@ -573,6 +583,17 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     } else if (position == sendLinkRow) {
                         toggleButtonCell.setTextAndCheck("Send link message", canSendLink, false);
                     }
+
+                    if (position == sendMediaRow || position == sendStickerRow) {
+                        toggleButtonCell.setEnabled(canPostMessage);
+                    } else if (currentMode == 2 && position == addNewMemberRow) {
+                        toggleButtonCell.setEnabled(canGetMemberList);
+                    }
+
+                    if (position == addNewMemberRow || position == banMemberRow || position == addNewAdminRow) {
+                        toggleButtonCell.setEnabled(canGetMemberList);
+                    }
+
                     break;
                 case 3:
                     TextCell textCell = (TextCell) holder.itemView;
@@ -607,8 +628,29 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
         }
 
         @Override
-        public boolean isEnable() {
-            return false;
+        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
+            if (currentMode == 0 || currentMode == 1 && viewType == 2) {
+                if (position == postMessageRow) {
+                    return currentUserAccess == null || currentUserAccess.isCanPostMessage();
+                } else if (position == editMessageRow) {
+                    return canPostMessage && (currentUserAccess == null || currentUserAccess.isCanEditMessage());
+                } else if (position == deleteMessageRow) {
+                    return currentUserAccess == null || currentUserAccess.isCanDeleteMessage();
+                } else if (position == pinMessageRow) {
+                    return currentUserAccess == null || currentUserAccess.isCanPinMessage();
+                } else if (position == modifyRow) {
+                    return currentUserAccess == null || currentUserAccess.isCanModifyRoom();
+                } else if (position == getMemberListRow) {
+                    return currentUserAccess == null || currentUserAccess.isCanGetMemberList();
+                } else if (position == addNewAdminRow) {
+                    return canGetMemberList && (currentUserAccess == null || currentUserAccess.isCanAddNewAdmin());
+                } else if (position == banMemberRow) {
+                    return canGetMemberList && (currentUserAccess == null || currentUserAccess.isCanBanMember());
+                } else if (position == addNewMemberRow) {
+                    return canGetMemberList && (currentUserAccess == null || currentUserAccess.isCanAddNewMember());
+                }
+            }
+            return viewType != 1;
         }
     }
 }

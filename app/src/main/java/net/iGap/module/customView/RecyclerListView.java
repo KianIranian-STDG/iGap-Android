@@ -29,6 +29,6 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public abstract static class ItemAdapter<VH extends ItemViewHolder> extends Adapter<VH> {
-        public abstract boolean isEnable();
+        public abstract boolean isEnable(ViewHolder holder, int viewType, int position);
     }
 }

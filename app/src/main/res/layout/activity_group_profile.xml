@@ -529,7 +529,6 @@
                     android:text="@string/add_new_member"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
-                    android:visibility="@{viewModel.addMemberVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/notificationTitle"
                     app:layout_constraintStart_toStartOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />

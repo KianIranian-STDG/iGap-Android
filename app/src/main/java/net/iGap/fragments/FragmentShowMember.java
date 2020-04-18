@@ -72,12 +72,10 @@ import net.iGap.realm.RealmRoomAccess;
 import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelGetMemberList;
 import net.iGap.request.RequestChannelKickMember;
-import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupGetMemberList;
@@ -147,7 +145,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private RealmRoom realmRoom;
     private RealmRoomAccess realmRoomAccess;
-
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         return newInstance2(null, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, false);
@@ -471,7 +468,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.list_admin));
             mBtnAdd.setText(context.getResources().getString(R.string.add_admin));
-            mBtnAdd.setVisibility(View.GONE);
+            mBtnAdd.setVisibility(realmRoomAccess != null && realmRoomAccess.isCanAddNewAdmin() ? View.VISIBLE : View.GONE);
             if (realmRoom != null) {
                 if (realmRoom.getGroupRoom() != null && realmRoom.getGroupRoom().getRole() == GroupChatRole.OWNER) {
                     mBtnAdd.setVisibility(View.VISIBLE);
@@ -829,12 +826,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                 getActivity().onBackPressed();
                                 break;
                             case SELECT_FOR_ADD_ADMIN:
-                                if (isGroup) {
-                                    new RequestGroupAddAdmin().groupAddAdmin(mRoomID, mContact.peerId);
-                                } else {
-                                    new RequestChannelAddAdmin().channelAddAdmin(mRoomID, mContact.peerId);
-                                }
                                 getActivity().onBackPressed();
+
+                                if (isGroup) {
+//                                    new RequestGroupAddAdmin().groupAddAdmin(mRoomID, mContact.peerId);
+                                    openChatEditRightsFragment(realmRoom, mContact, 0);
+                                } else {
+//                                    new RequestChannelAddAdmin().channelAddAdmin(mRoomID, mContact.peerId);
+                                    openChatEditRightsFragment(realmRoom, mContact, 0);
+                                }
                                 break;
                         }
                 }
@@ -996,7 +996,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 dialogRootView.addView(permission, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }
 
-            if (realmRoomAccess.isCanAddNewMember()) {
+            if (realmRoomAccess.isCanBanMember()) {
                 removeView = new TextCell(dialogRootView.getContext(), false);
                 removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
                 removeView.setValue("Remove from channel");
@@ -1016,14 +1016,14 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             if (adminRights != null) {
                 adminRights.setOnClickListener(v -> {
-                    openChatEditRightsFragment(realmRoom, contactInfo.peerId, contactInfo.isAdmin() ? 1 : 0);
+                    openChatEditRightsFragment(realmRoom, contactInfo, contactInfo.isAdmin() ? 1 : 0);
                     dialog.dismiss();
                 });
             }
 
             if (permission != null) {
                 permission.setOnClickListener(v -> {
-                    openChatEditRightsFragment(realmRoom, contactInfo.peerId, 2);
+                    openChatEditRightsFragment(realmRoom, contactInfo, 2);
                     dialog.dismiss();
                 });
             }
@@ -1032,9 +1032,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
     }
 
-    private void openChatEditRightsFragment(RealmRoom realmRoom, long userId, int mode) {
+    private void openChatEditRightsFragment(RealmRoom realmRoom, StructContactInfo info, int mode) {
         if (getActivity() != null)
-            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, realmRoomAccess, userId, mode)).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, role.equals(GroupChatRole.OWNER.toString()) ? null : realmRoomAccess, info.peerId, mode)).setReplace(false).load();
     }
 
     public void kickMember(long peerId) {

@@ -863,7 +863,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
-        if (realmRoomAccess != null) {
+        if (realmRoomAccess != null && realmRoomAccess.isValid()) {
             if (chatType == CHANNEL) {
                 if (realmRoomAccess.isCanPostMessage()) {
                     rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
@@ -871,14 +871,14 @@ public class FragmentChat extends BaseFragment
                 } else {
                     rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
 
-                    if (currentRoleIsAdmin())
+                    if (currentRoleIsOwnerOrAdmin())
                         rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
                     else
                         rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
                 }
 
                 if (getRoom().getType().equals(CHANNEL)) {
-                    if (currentRoleIsAdmin())
+                    if (currentRoleIsOwnerOrAdmin())
                         layoutMute.setVisibility(View.GONE);
                     else
                         layoutMute.setVisibility(View.VISIBLE);
@@ -922,8 +922,8 @@ public class FragmentChat extends BaseFragment
         return mRoomId;
     }
 
-    private boolean currentRoleIsAdmin() {
-        return getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP) && getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN);
+    private boolean currentRoleIsOwnerOrAdmin() {
+        return getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP) && getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) || getRoom().getChannelRoom().getRole().equals(ChannelChatRole.OWNER) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN) || getRoom().getGroupRoom().getRole().equals(GroupChatRole.OWNER);
     }
 
     private void setupIntentReceiverForGetDataInTwoPanMode() {
@@ -941,7 +941,7 @@ public class FragmentChat extends BaseFragment
         if (getRoom().getType().equals(CHAT))
             return false;
         else
-            return (getRoom().getType().equals(CHANNEL) && getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN)) || getRoom().getType().equals(GROUP);
+            return getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP);
     }
 
     private void removeRoomAccessChangeListener() {

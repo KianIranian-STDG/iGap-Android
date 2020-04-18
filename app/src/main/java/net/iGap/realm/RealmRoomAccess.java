@@ -173,7 +173,25 @@ public class RealmRoomAccess extends RealmObject {
     }
 
     public static void getAccess(long userId, long roomId) {
-        delete(userId, roomId);
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
+                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
+                    .findFirst();
+
+            if (realmRoomAccess != null) {
+                if (realmRoomAccess.getRealmPostMessageRights() != null) {
+                    realmRoomAccess.getRealmPostMessageRights().setPostMessage(false);
+                }
+
+                realmRoomAccess.setCanModifyRoom(false);
+                realmRoomAccess.setCanDeleteMessage(false);
+                realmRoomAccess.setCanPinMessage(false);
+                realmRoomAccess.setCanAddNewMember(false);
+                realmRoomAccess.setCanBanMember(false);
+                realmRoomAccess.setCanGetMemberList(false);
+                realmRoomAccess.setCanAddNewAdmin(false);
+            }
+        });
     }
 
     private static void delete(long userId, long roomId) {
