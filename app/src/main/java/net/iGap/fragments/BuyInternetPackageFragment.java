@@ -101,7 +101,7 @@ public class BuyInternetPackageFragment extends BaseAPIViewFrag<BuyInternetPacka
 
         viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), token, result -> {
+                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), true, token, result -> {
                     if (getActivity() != null && result.isSuccess()) {
                         getActivity().onBackPressed();
                     }

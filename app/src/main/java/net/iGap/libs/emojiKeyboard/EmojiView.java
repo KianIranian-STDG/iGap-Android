@@ -534,13 +534,13 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private void viewPagerItemChanged(int position) {
         if (hasEmoji && hasSticker)
             if (position == EMOJI) {
-                stickerIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
-                emojiIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
+                stickerIv.setColorFilter(Theme.getInstance().getSubTitleColor(stickerIv.getContext()), PorterDuff.Mode.SRC_IN);
+                emojiIv.setColorFilter(Theme.getInstance().getTitleTextColor(emojiIv.getContext()), PorterDuff.Mode.SRC_IN);
                 settingIv.setImageResource(R.drawable.ic_backspace);
                 checkEmojiTabY(null, 0);
             } else if (position == STICKER) {
-                emojiIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
-                stickerIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
+                emojiIv.setColorFilter(Theme.getInstance().getSubTitleColor(emojiIv.getContext()), PorterDuff.Mode.SRC_IN);
+                stickerIv.setColorFilter(Theme.getInstance().getTitleTextColor(stickerIv.getContext()), PorterDuff.Mode.SRC_IN);
                 settingIv.setImageResource(R.drawable.ic_settings);
                 checkStickersTabY(null, 0);
             }

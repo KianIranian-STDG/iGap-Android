@@ -1126,6 +1126,8 @@
     <string name="charge_20">٢٠٠٠٠٠ ریاڵی</string>
     <string name="charge_50">5٠٠٠٠٠ ریاڵی</string>
     <string name="charge_100">10٠٠٠٠٠ ریاڵی</string>
+
+    <string name="value_added">ارزش افزوده</string>
     <string name="charge_1_ir">١٠٠٠٠ ریاڵی + ٩% بەهای زیادە = ١٠٩٠٠ ریاڵ</string>
     <string name="charge_2_ir">٢٠٠٠٠ ریاڵی + ٩% بەهای زیادە = ٢١١٨٠ ریاڵ</string>
     <string name="charge_5_ir">٥٠٠٠٠ ریاڵی + ٩% بەهای زیادە = ٥٤٥٠٠ ریاڵ</string>

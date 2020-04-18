@@ -563,6 +563,8 @@
     <string name="charge_10">100.000 ریال لیق</string>
     <string name="charge_100">1.000.000 ریال لیق</string>
     <string name="charge_10_ir">100.000 ریالی +  9%  ارزش افزوده = 109.000 ریال</string>
+
+    <string name="value_added">ارزش افزوده</string>
     <string name="charge_1_ir">10.000 ریالی +  9%  ارزش افزوده = 10.900 ریال</string>
     <string name="charge_2">20.000 ریال لیق</string>
     <string name="charge_20">200.000 ریال لیق </string>
