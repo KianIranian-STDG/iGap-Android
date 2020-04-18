@@ -641,4 +641,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
+    public RealmRoom getRealmRoom() {
+        return realmRoom;
+    }
 }

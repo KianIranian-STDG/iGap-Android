@@ -55,11 +55,13 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnGroupAvatarDelete;
 import net.iGap.observers.interfaces.OnGroupCheckUsername;
 import net.iGap.observers.interfaces.OnGroupUpdateUsername;
 import net.iGap.proto.ProtoGroupCheckUsername;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
 import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -372,12 +374,24 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
+        if (viewModel.role.equals(GroupChatRole.OWNER)) {
+            binding.editGroupPermission.setVisibility(View.VISIBLE);
+            binding.editGroupPermission.setOnClickListener(v -> {
+                openChatEditRightsFragment(viewModel.getRealmRoom());
+            });
+        }
+
         initComponent();
 
         attachFile = new AttachFile(getActivity());
         G.onGroupAvatarDelete = this;
 
         initialToolbar();
+    }
+
+    private void openChatEditRightsFragment(RealmRoom realmRoom) {
+        if (getActivity() != null && realmRoom != null)
+            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, null, 0, 2)).setReplace(false).load();
     }
 
     private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
