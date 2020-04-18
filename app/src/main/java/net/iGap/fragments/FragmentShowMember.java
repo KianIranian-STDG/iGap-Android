@@ -447,10 +447,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
         });
 
-        //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
-
-
             if (isGroup) {
                 mHelperToolbar.setDefaultTitle(context.getResources().getString(R.string.member));
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_member));
@@ -463,6 +460,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 mBtnAdd.setVisibility(View.GONE);
                 view.findViewById(R.id.fcm_splitter_add).setVisibility(View.GONE);
             }
+
+            mBtnAdd.setVisibility(realmRoomAccess != null && realmRoomAccess.isCanAddNewMember() ? View.VISIBLE : View.GONE);
 
         } else if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
 
@@ -827,25 +826,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                 break;
                             case SELECT_FOR_ADD_ADMIN:
                                 getActivity().onBackPressed();
-
-                                if (isGroup) {
-//                                    new RequestGroupAddAdmin().groupAddAdmin(mRoomID, mContact.peerId);
-                                    openChatEditRightsFragment(realmRoom, mContact, 0);
-                                } else {
-//                                    new RequestChannelAddAdmin().channelAddAdmin(mRoomID, mContact.peerId);
-                                    openChatEditRightsFragment(realmRoom, mContact, 0);
-                                }
+                                openChatEditRightsFragment(realmRoom, mContact, 0);
                                 break;
                         }
                 }
             });
 
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    showMemberDialog(mContact);
-                    return true;
-                }
+            holder.itemView.setOnLongClickListener(v -> {
+                showMemberDialog(mContact);
+                return true;
             });
 
             if (mContact.isHeader) {
@@ -863,24 +852,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 holder.subtitle.setText(setUserStatus(holder.subtitle.getContext(), mContact.status, mContact.peerId, mContact.lastSeen));
             }
 
-            if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                holder.btnMenu.setVisibility(View.GONE);
-            } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-
-                if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString()))) {
-                    holder.btnMenu.setVisibility(View.GONE);
-                } else {
-                    holder.btnMenu.setVisibility(View.VISIBLE);
-                }
-            } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-
-                if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString()))) {
-                    holder.btnMenu.setVisibility(View.GONE);
-                } else {
-                    holder.btnMenu.setVisibility(View.VISIBLE);
-                }
-            } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+            if (realmRoomAccess.isCanAddNewAdmin() || realmRoomAccess.isCanBanMember() && !mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                 holder.btnMenu.setVisibility(View.VISIBLE);
+            } else {
+                holder.btnMenu.setVisibility(View.GONE);
             }
 
             holder.btnMenu.setOnClickListener(v -> showMemberDialog(mContact));
@@ -1028,7 +1003,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 });
             }
 
-            dialog.show();
+            if (dialogRootView.getChildCount() > 0)
+                dialog.show();
+
         }
     }
 
