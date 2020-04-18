@@ -25,7 +25,7 @@ public class GroupChangeMemberRightsResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoGroupChangeMemberRights.GroupChangeMemberRights.Builder builder = (ProtoGroupChangeMemberRights.GroupChangeMemberRights.Builder) message;
+        ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse.Builder builder = (ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse.Builder) message;
 
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), 0, builder.getRoomId(), asyncRealm));
