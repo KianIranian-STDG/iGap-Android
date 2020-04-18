@@ -76,6 +76,14 @@ public class ToggleButtonCell extends FrameLayout {
         invalidate();
     }
 
+    public void setTextAndCheckEnable(String text, boolean checked, boolean enable, boolean needDivider) {
+        textView.setText(text);
+        toggleButton.setChecked(checked && enable);
+        setEnabled(enable);
+        this.needDivider = needDivider;
+        invalidate();
+    }
+
     public void setText(String text, boolean needDivider) {
         textView.setText(text);
         this.needDivider = needDivider;
