@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +55,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
 
     private RecyclerListView recyclerListView;
 
-    private int rowCount;
+    private int rowSize;
     private int userProfileRow;
     private int emptyRow;
     private int empty2Row;
@@ -109,9 +108,10 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     .equalTo(RealmRoomAccessFields.ROOM_ID, realmRoom.getId()).findFirst();
         });
 
-        realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-        });
+        if (currentMode == 0 || currentMode == 1)
+            realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+            });
 
         if (currentMode == 0) {
             if (currentUserAccess == null) {
@@ -169,47 +169,69 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
     }
 
     private void setRows() {
+        userProfileRow = -1;
+        emptyRow = -1;
+        empty2Row = -1;
+        postMessageRow = -1;
+        editMessageRow = -1;
+        deleteMessageRow = -1;
+        pinMessageRow = -1;
+        modifyRow = -1;
+        getMemberListRow = -1;
+        addNewMemberRow = -1;
+        banMemberRow = -1;
+        addNewAdminRow = -1;
+        dismissAdminRow = -1;
+        sendTextRow = -1;
+        sendMediaRow = -1;
+        sendGifRow = -1;
+        sendStickerRow = -1;
+        sendLinkRow = -1;
+
         if (currentMode == 0) {//add admin
-            userProfileRow = rowCount++;
-            emptyRow = rowCount++;
+            userProfileRow = rowSize++;
+            emptyRow = rowSize++;
             if (isChannel()) {
-                postMessageRow = rowCount++;
-                editMessageRow = rowCount++;
+                postMessageRow = rowSize++;
+                editMessageRow = rowSize++;
             }
-            deleteMessageRow = rowCount++;
-            pinMessageRow = rowCount++;
-            modifyRow = rowCount++;
-            getMemberListRow = rowCount++;
-            addNewMemberRow = rowCount++;
-            banMemberRow = rowCount++;
-            addNewAdminRow = rowCount++;
+            deleteMessageRow = rowSize++;
+            pinMessageRow = rowSize++;
+            modifyRow = rowSize++;
+            getMemberListRow = rowSize++;
+            addNewMemberRow = rowSize++;
+            banMemberRow = rowSize++;
+            addNewAdminRow = rowSize++;
         } else if (currentMode == 1) {//edit admin
-            userProfileRow = rowCount++;
-            emptyRow = rowCount++;
+            userProfileRow = rowSize++;
+            emptyRow = rowSize++;
             if (isChannel()) {
-                postMessageRow = rowCount++;
-                editMessageRow = rowCount++;
+                postMessageRow = rowSize++;
+                editMessageRow = rowSize++;
             }
-            deleteMessageRow = rowCount++;
-            pinMessageRow = rowCount++;
-            modifyRow = rowCount++;
-            getMemberListRow = rowCount++;
-            addNewMemberRow = rowCount++;
-            banMemberRow = rowCount++;
-            addNewAdminRow = rowCount++;
-            empty2Row = rowCount++;
-            dismissAdminRow = rowCount++;
+            deleteMessageRow = rowSize++;
+            pinMessageRow = rowSize++;
+            modifyRow = rowSize++;
+            getMemberListRow = rowSize++;
+            addNewMemberRow = rowSize++;
+            banMemberRow = rowSize++;
+            addNewAdminRow = rowSize++;
+            empty2Row = rowSize++;
+            dismissAdminRow = rowSize++;
         } else if (currentMode == 2) {// edit member or group
-            userProfileRow = rowCount++;
-            emptyRow = rowCount++;
-            sendTextRow = rowCount++;
-            sendMediaRow = rowCount++;
-            sendGifRow = rowCount++;
-            sendStickerRow = rowCount++;
-            sendLinkRow = rowCount++;
-            pinMessageRow = rowCount++;
-            getMemberListRow = rowCount++;
-            addNewMemberRow = rowCount++;
+            if (!isRoom()) {
+                userProfileRow = rowSize++;
+                emptyRow = rowSize++;
+            }
+
+            sendTextRow = rowSize++;
+            sendMediaRow = rowSize++;
+            sendGifRow = rowSize++;
+            sendStickerRow = rowSize++;
+            sendLinkRow = rowSize++;
+            pinMessageRow = rowSize++;
+            getMemberListRow = rowSize++;
+            addNewMemberRow = rowSize++;
         }
     }
 
@@ -440,22 +462,32 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 } else if (position == addNewAdminRow) {
                     canAddNewAdmin = !canAddNewAdmin;
                 }
-
-                Log.i("abbasiChanges", "changes" +
-                        "\ncanPostMessage        -> " + canPostMessage +
-                        "\ncanEditOthersMessage  -> " + canEditOthersMessage +
-                        "\ncanDeleteOtherMessage -> " + canDeleteOtherMessage +
-                        "\ncanPinMessage         -> " + canPinMessage +
-                        "\ncanModifyRoom         -> " + canModifyRoom +
-                        "\ncanGetMemberList      -> " + canGetMemberList +
-                        "\ncanAddNewMember       -> " + canAddNewMember +
-                        "\ncanBanMember          -> " + canBanMember +
-                        "\ncanAddNewAdmin        -> " + canAddNewAdmin);
-
-
             } else {
                 if (position == sendTextRow) {
                     canSendText = !canSendText;
+
+                    RecyclerListView.ViewHolder newMemberHolder = recyclerListView.findViewHolderForAdapterPosition(sendMediaRow);
+                    if (newMemberHolder != null) {
+                        if (canSendText) {
+                            newMemberHolder.itemView.setEnabled(true);
+                        } else {
+                            canSendMedia = false;
+                            ((ToggleButtonCell) newMemberHolder.itemView).setChecked(false);
+                            newMemberHolder.itemView.setEnabled(false);
+                        }
+                    }
+
+                    RecyclerListView.ViewHolder stickerHolder = recyclerListView.findViewHolderForAdapterPosition(sendGifRow);
+                    if (stickerHolder != null) {
+                        if (canSendText) {
+                            stickerHolder.itemView.setEnabled(true);
+                        } else {
+                            canSendGif = false;
+                            ((ToggleButtonCell) stickerHolder.itemView).setChecked(false);
+                            stickerHolder.itemView.setEnabled(false);
+                        }
+                    }
+
                 } else if (position == sendGifRow) {
                     canSendGif = !canSendGif;
                 } else if (position == sendLinkRow) {
@@ -470,15 +502,18 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     canPinMessage = !canPinMessage;
                 } else if (position == getMemberListRow) {
                     canGetMemberList = !canGetMemberList;
+
+                    RecyclerListView.ViewHolder newMemberHolder = recyclerListView.findViewHolderForAdapterPosition(addNewMemberRow);
+                    if (newMemberHolder != null) {
+                        if (canGetMemberList) {
+                            newMemberHolder.itemView.setEnabled(true);
+                        } else {
+                            canAddNewMember = false;
+                            ((ToggleButtonCell) newMemberHolder.itemView).setChecked(false);
+                            newMemberHolder.itemView.setEnabled(false);
+                        }
+                    }
                 }
-
-                Log.i("abbasiChanges", "changes" +
-                        "\ncanSendText    -> " + canSendText +
-                        "\ncanSendMedia   -> " + canSendMedia +
-                        "\ncanSendGif     -> " + canSendGif +
-                        "\ncanSendSticker -> " + canSendSticker +
-                        "\ncanSendLink    -> " + canSendLink);
-
             }
         }
 
@@ -496,7 +531,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
     }
 
     private boolean isRoom() {
-        return realmRoom.getType().equals(ProtoGlobal.Room.Type.GROUP) && userId == 0 || userId == -1;
+        return realmRoom.getType().equals(ProtoGlobal.Room.Type.GROUP) && userId == 0;
     }
 
     private boolean mustDismissAdmin() {
@@ -607,7 +642,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
 
         @Override
         public int getItemCount() {
-            return rowCount;
+            return rowSize;
         }
 
         @Override
