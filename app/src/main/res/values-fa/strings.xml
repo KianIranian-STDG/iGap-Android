@@ -2573,4 +2573,5 @@
     <string name="kuknos_send_option1">از طریق کلید عمومی</string>
     <string name="kuknos_send_option2">از طریق نام کاربری</string>
     <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
+    <string name="kuknos_buyP_MinAmount">میزان درخواستی شما از حداقل تعداد خرید این توکن کمتر میباشد.</string>
 </resources>

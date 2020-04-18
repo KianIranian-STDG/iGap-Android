@@ -2207,6 +2207,7 @@ Want to get it?</string>
     <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
     <string name="kuknos_buyP_MaxAmount">You are exceeding the maximum buyable value of this token.</string>
+    <string name="kuknos_buyP_MinAmount">Your order is less than the minimum buyable value of this token.</string>
     <string name="kuknos_buyP_currency">IRR</string>
     <string name="kuknos_trade_origin">Selling*</string>
     <string name="kuknos_trade_dest">Buying*</string>

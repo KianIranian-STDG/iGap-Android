@@ -73,7 +73,8 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         if (requestedAsset == null)
             return false;
         if (Double.parseDouble(amount.get()) > requestedAsset.getRemainAmount()
-                || Double.parseDouble(amount.get()) > requestedAsset.getiGapTransferLimit()) {
+                || Double.parseDouble(amount.get()) > requestedAsset.getiGapTransferLimit()
+                || Double.parseDouble(amount.get()) > requestedAsset.getSaleMax()) {
             error.setValue(new KuknosError(true, "", "1", R.string.kuknos_buyP_MaxAmount));
             return false;
         }
@@ -182,6 +183,10 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         }
         if (Double.parseDouble(amount.get()) == 0) {
             error.setValue(new KuknosError(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
+            return true;
+        }
+        if (Double.parseDouble(amount.get()) < requestedAsset.getSaleMin()) {
+            error.setValue(new KuknosError(true, "", "1", R.string.kuknos_buyP_MinAmount));
             return true;
         }
         //Terms and Condition
