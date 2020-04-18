@@ -28,6 +28,19 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
+    @Override
+    public void onChildAttachedToWindow(@NonNull View child) {
+        if (getAdapter() instanceof ItemAdapter) {
+            ViewHolder holder = findContainingViewHolder(child);
+            if (holder != null) {
+                child.setEnabled(((ItemAdapter) getAdapter()).isEnable(holder, holder.getItemViewType(), holder.getAdapterPosition()));
+            }
+        } else {
+            child.setEnabled(false);
+        }
+        super.onChildAttachedToWindow(child);
+    }
+
     public abstract static class ItemAdapter<VH extends ItemViewHolder> extends Adapter<VH> {
         public abstract boolean isEnable(ViewHolder holder, int viewType, int position);
     }
