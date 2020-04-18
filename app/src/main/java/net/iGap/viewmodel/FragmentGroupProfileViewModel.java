@@ -13,22 +13,22 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.Config;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.GoToSharedMediaModel;
+import net.iGap.module.Contacts;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.enums.GroupChatRole;
+import net.iGap.module.structs.StructContactInfo;
 import net.iGap.observers.interfaces.OnGroupAddMember;
 import net.iGap.observers.interfaces.OnGroupKickMember;
 import net.iGap.observers.interfaces.OnGroupLeft;
 import net.iGap.observers.interfaces.OnGroupRemoveUsername;
 import net.iGap.observers.interfaces.OnGroupRevokeLink;
 import net.iGap.observers.interfaces.OnMenuClick;
-import net.iGap.model.GoToSharedMediaModel;
-import net.iGap.module.Contacts;
-import net.iGap.module.enums.GroupChatRole;
-import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
@@ -70,7 +70,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public ObservableInt sharedFileCount = new ObservableInt(0);
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
-    public ObservableInt addMemberVisibility = new ObservableInt(View.GONE);
     public ObservableField<String> inviteLink = new ObservableField<>("");
     public ObservableInt inviteLinkTitle = new ObservableInt(R.string.group_link);
     public ObservableInt showLoading = new ObservableInt(View.GONE);
@@ -159,7 +158,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         setTextGroupLik();
 
         //OWNER,ADMIN,MODERATOR,MEMBER can add member to group
-        addMemberVisibility.set(View.VISIBLE);
         showEditButton.setValue(role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER);
         showLeaveGroup.set(role != GroupChatRole.ADMIN && role != GroupChatRole.OWNER ? View.VISIBLE : View.GONE);
 
