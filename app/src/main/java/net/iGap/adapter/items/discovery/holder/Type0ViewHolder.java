@@ -8,10 +8,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
+import net.iGap.helper.HelperCalander;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.realm.RealmUserInfo;
 
 public class Type0ViewHolder extends BaseViewHolder {
 
     public AppCompatTextView ivWeather, tvCityName, tvDegree, tvDate, tvScore;
+    private RealmUserInfo userInfo;
 
     public Type0ViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView, activity);
@@ -20,10 +24,14 @@ public class Type0ViewHolder extends BaseViewHolder {
         tvDegree = itemView.findViewById(R.id.tv_degree);
         tvDate = itemView.findViewById(R.id.tv_date);
         tvScore = itemView.findViewById(R.id.tv_score);
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            userInfo = realm.where(RealmUserInfo.class).findFirst();
+        });
     }
 
     @Override
     public void bindView(DiscoveryItem item) {
-
+        tvScore.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(userInfo.getIvandScore())) : String.valueOf(userInfo.getIvandScore()));
     }
 }

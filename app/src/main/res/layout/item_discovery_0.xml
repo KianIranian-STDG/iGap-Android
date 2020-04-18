@@ -1,96 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dp12"
-    tools:layout_editor_absoluteY="25dp">
+    android:padding="@dimen/dp8">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/iv_weather"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="@dimen/dp60"
-        android:layout_height="@dimen/dp60"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/cloud_icon"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_cityName"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/iv_weather"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:text="@string/cloud_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_cityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="تهران"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintStart_toEndOf="@+id/iv_weather"
+            app:layout_constraintTop_toTopOf="@+id/iv_weather" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_degree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="31"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintEnd_toEndOf="@+id/tv_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_cityName" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="35"
+            android:maxLines="1"
+            android:text="سه شنبه  27 فروردین 1399"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_weather"
+            app:layout_constraintStart_toStartOf="@+id/tv_cityName" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="@dimen/dp8"
-        android:text="تهران"
-        android:textColor="?iGapTitleTextColor"
-        android:textSize="@dimen/largeTextSize"
-        app:layout_constraintStart_toEndOf="@+id/iv_weather"
-        app:layout_constraintTop_toTopOf="@+id/iv_weather" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/container_city"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/container_city"
+        app:layout_constraintVertical_bias="1.0">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_degree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="31"
-        android:textColor="?iGapTitleTextColor"
-        android:textSize="@dimen/largeTextSize"
-        app:layout_constraintEnd_toEndOf="@+id/tv_date"
-        app:layout_constraintStart_toEndOf="@+id/tv_cityName"
-        app:layout_constraintTop_toTopOf="@+id/tv_cityName" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/imageView5"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:text="@string/cloud_icon"
+            app:layout_constraintEnd_toEndOf="@+id/tv_score"
+            app:layout_constraintHorizontal_bias="0.53"
+            app:layout_constraintStart_toStartOf="@+id/textView8"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLength="30"
-        android:textSize="@dimen/smallTextSize"
-        android:maxLines="1"
-        android:text="سه شنبه  27 فروردین 1399"
-        android:textColor="?iGapTitleTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_weather"
-        app:layout_constraintStart_toStartOf="@+id/tv_cityName" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView8"
+            android:layout_width="61dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="@dimen/dp8"
+            android:text="@string/payment_userScore"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_score"
+            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5000"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="@+id/textView8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView8"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/view12"
         android:layout_width="@dimen/dp1"
-        android:layout_height="@dimen/dp80"
+        android:layout_height="54dp"
         android:background="?iGapDividerLine"
-        app:layout_constraintEnd_toStartOf="@+id/textView8"
-        app:layout_constraintStart_toEndOf="@+id/tv_date"
-        app:layout_constraintTop_toTopOf="@+id/tv_degree" />
+        app:layout_constraintBottom_toBottomOf="@+id/container_city"
+        app:layout_constraintEnd_toStartOf="@+id/container_score"
+        app:layout_constraintStart_toEndOf="@+id/container_city"
+        app:layout_constraintTop_toTopOf="@+id/container_city" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/imageView5"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="@dimen/dp40"
-        android:layout_height="@dimen/dp40"
-        android:text="@string/cloud_icon"
-        app:layout_constraintEnd_toEndOf="@+id/tv_score"
-        app:layout_constraintStart_toStartOf="@+id/textView8"
-        app:layout_constraintTop_toTopOf="@+id/tv_degree" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textView8"
-        android:layout_width="61dp"
-        android:layout_height="wrap_content"
-        android:text="@string/payment_userScore"
-        android:textSize="@dimen/smallTextSize"
-        android:textColor="?iGapTitleTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_date"
-        app:layout_constraintEnd_toStartOf="@+id/tv_score" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1520"
-        android:textSize="@dimen/smallTextSize"
-        android:textColor="?iGapTitleTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/textView8"
-        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
