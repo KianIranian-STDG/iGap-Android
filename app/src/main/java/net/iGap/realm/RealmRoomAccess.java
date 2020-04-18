@@ -173,11 +173,20 @@ public class RealmRoomAccess extends RealmObject {
     }
 
     public static void getAccess(long userId, long roomId) {
+        delete(userId, roomId);
+    }
+
+    private static void delete(long userId, long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
                     .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
                     .findFirst();
+
             if (realmRoomAccess != null) {
+                if (realmRoomAccess.getRealmPostMessageRights() != null) {
+                    realmRoomAccess.getRealmPostMessageRights().deleteFromRealm();
+                }
+
                 realmRoomAccess.deleteFromRealm();
             }
         });
