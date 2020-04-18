@@ -142,6 +142,9 @@ public class RealmRoomAccess extends RealmObject {
 
     }
 
+    /**
+     * @param userId for insert room to db set user id to 0
+     */
     public static void groupMemberPutOrUpdate(ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, long userId, long roomId, Realm realm) {
         RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
                 .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
@@ -168,6 +171,9 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setUserId(userId);
         realmRoomAccess.setRoomId(roomId);
         realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
+        realmRoomAccess.setCanPinMessage(memberRights.getPinMessage());
+        realmRoomAccess.setCanGetMemberList(memberRights.getGetMember());
+        realmRoomAccess.setCanAddNewMember(memberRights.getAddMember());
 
         Log.e("abbasiInsertToRealm", "groupMemberPutOrUpdate: " + realmRoomAccess.toString());
     }
