@@ -35,30 +35,33 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.OnGroupAvatarDelete;
-import net.iGap.observers.interfaces.OnGroupCheckUsername;
-import net.iGap.observers.interfaces.OnGroupUpdateUsername;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGroupAvatarDelete;
+import net.iGap.observers.interfaces.OnGroupCheckUsername;
+import net.iGap.observers.interfaces.OnGroupUpdateUsername;
 import net.iGap.proto.ProtoGroupCheckUsername;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupCheckUsername;
@@ -70,6 +73,7 @@ import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import io.realm.RealmObjectChangeListener;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -99,6 +103,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     private FragmentGroupProfileViewModel viewModel;
     private ActivityGroupProfileBinding binding;
 
+    private RealmRoomAccess currentRoomAccess;
+    private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
+    private long roomId;
 
     AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
@@ -122,7 +129,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        long roomId = 0;
         boolean isNotJoin = true;
         if (getArguments() != null) {
             roomId = getArguments().getLong(ROOM_ID);
@@ -132,6 +138,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_group_profile, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+
+        currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+        });
+
         return attachToSwipeBack(binding.getRoot());
     }
 
@@ -144,6 +155,12 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         // because actionbar not in this view do that and not correct in viewModel
         imvGroupAvatar = binding.toolbarAvatar;
         imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
+
+        if (currentRoomAccess != null) {
+            checkRoomAccess(currentRoomAccess);
+            roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
+            currentRoomAccess.addChangeListener(roomAccessChangeListener);
+        }
 
         binding.toolbarMore.setOnClickListener(v -> viewModel.onClickRippleMenu());
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
@@ -361,6 +378,15 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         G.onGroupAvatarDelete = this;
 
         initialToolbar();
+    }
+
+    private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
+        if (realmRoomAccess != null) {
+            binding.showMemberList.setVisibility(realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+            binding.addMember.setVisibility(realmRoomAccess.isCanAddNewMember() ? View.VISIBLE : View.GONE);
+
+            binding.toolbarEdit.setVisibility(realmRoomAccess.isCanModifyRoom() ? View.VISIBLE : View.GONE);
+        }
     }
 
     @Override

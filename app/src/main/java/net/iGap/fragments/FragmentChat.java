@@ -4845,9 +4845,7 @@ public class FragmentChat extends BaseFragment
             boolean showLayoutPin = !RealmRoom.isPinedMessage(mRoomId, message.realmRoomMessage.getMessageId()) && currentRoomAccess != null && currentRoomAccess.isCanPinMessage();
             if (chatType == CHANNEL) {
                 if (channelRole == ChannelChatRole.MEMBER) {
-                    items.remove(Integer.valueOf(R.string.edit_item_dialog));
                     items.remove(Integer.valueOf(R.string.replay_item_dialog));
-                    items.remove(Integer.valueOf(R.string.delete_item_dialog));
                 }
                 if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.realmRoomMessage.getAuthorHash())) {
                     if (currentRoomAccess != null && !currentRoomAccess.isCanEditMessage()) {
