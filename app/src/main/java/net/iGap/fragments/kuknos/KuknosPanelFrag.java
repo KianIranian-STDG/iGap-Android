@@ -233,6 +233,8 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), accountResponse.getAssets());
                 walletSpinner.setAdapter(adapter);
                 binding.fragKuknosPError.setVisibility(View.GONE);
+                if (viewModel.getPosition() != 0)
+                    walletSpinner.setSelection(viewModel.getPosition());
             } else {
                 List<KuknosBalance.Balance> noItem = new ArrayList<>();
                 KuknosBalance.Balance temp = new KuknosBalance.Balance();
