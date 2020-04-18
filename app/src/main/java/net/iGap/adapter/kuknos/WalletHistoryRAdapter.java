@@ -139,6 +139,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            df = new SimpleDateFormat("HH:mm");
             df.setTimeZone(TimeZone.getTimeZone("GMT+4:30"));
             return df.format(date);
         }
