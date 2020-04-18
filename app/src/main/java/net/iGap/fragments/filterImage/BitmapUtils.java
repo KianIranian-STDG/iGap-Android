@@ -56,7 +56,7 @@ public class BitmapUtils {
             if (source != null) {
                 OutputStream imageOut = cr.openOutputStream(url);
                 try {
-                    source.compress(Bitmap.CompressFormat.JPEG, 50, imageOut);
+                    source.compress(Bitmap.CompressFormat.JPEG, 100, imageOut);
                 } finally {
                     imageOut.close();
                 }
@@ -71,6 +71,7 @@ public class BitmapUtils {
                 url = null;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             if (url != null) {
                 cr.delete(url, null, null);
                 url = null;
