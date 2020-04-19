@@ -82,6 +82,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     public final static String ARG_USER_ID = "arg_user_id";
     private HelperToolbar mHelperToolbar;
     private long userID;
+    private FastScroller fastScroller;
 
     public static FragmentSyncRegisteredContacts newInstance() {
         return new FragmentSyncRegisteredContacts();
@@ -157,8 +158,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         realmRecyclerView.setVisibility(View.VISIBLE);
         realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         realmRecyclerView.setNestedScrollingEnabled(false);
-        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+        fastScroller = view.findViewById(R.id.fast_scroller);
         fastScroller.setRecyclerView(realmRecyclerView);
+        fastScroller.setVisibility(View.GONE);
 
 
         // going to app directly
@@ -290,7 +292,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
     @Override
     public void onContactsGetList() {
-
+        G.runOnUiThread(() -> {
+            fastScroller.setVisibility(View.VISIBLE);
+        });
         if (getActivity() == null || getActivity().isFinishing()) {
             return;
         }
