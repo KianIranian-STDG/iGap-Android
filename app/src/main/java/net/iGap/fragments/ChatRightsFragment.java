@@ -508,7 +508,18 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                         }
                     }
 
-                    RecyclerListView.ViewHolder stickerHolder = recyclerListView.findViewHolderForAdapterPosition(sendGifRow);
+                    RecyclerListView.ViewHolder gifHolder = recyclerListView.findViewHolderForAdapterPosition(sendGifRow);
+                    if (gifHolder != null) {
+                        if (canSendText) {
+                            gifHolder.itemView.setEnabled(true);
+                        } else {
+                            canSendGif = false;
+                            ((ToggleButtonCell) gifHolder.itemView).setChecked(false);
+                            gifHolder.itemView.setEnabled(false);
+                        }
+                    }
+
+                    RecyclerListView.ViewHolder stickerHolder = recyclerListView.findViewHolderForAdapterPosition(sendStickerRow);
                     if (stickerHolder != null) {
                         if (canSendText) {
                             stickerHolder.itemView.setEnabled(true);
@@ -650,16 +661,6 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                         toggleButtonCell.setTextAndCheck("Send link message", canSendLink, true);
                     }
 
-                    if (position == sendMediaRow || position == sendStickerRow) {
-                        toggleButtonCell.setEnabled(canPostMessage);
-                    } else if (currentMode == 2 && position == addNewMemberRow) {
-                        toggleButtonCell.setEnabled(canGetMemberList);
-                    }
-
-                    if (position == addNewMemberRow || position == banMemberRow || position == addNewAdminRow) {
-                        toggleButtonCell.setEnabled(canGetMemberList);
-                    }
-
                     break;
                 case 3:
                     TextCell textCell = (TextCell) holder.itemView;
@@ -714,6 +715,12 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     return canGetMemberList && (currentUserAccess == null || currentUserAccess.isCanBanMember());
                 } else if (position == addNewMemberRow) {
                     return canGetMemberList && (currentUserAccess == null || currentUserAccess.isCanAddNewMember());
+                }
+            } else if (currentMode == 2 && viewType == 2) {
+                if (position == sendMediaRow || position == sendGifRow || position == sendStickerRow) {
+                    return canSendText;
+                } else if (position == addNewMemberRow) {
+                    return canGetMemberList;
                 }
             }
             return viewType != 1;
