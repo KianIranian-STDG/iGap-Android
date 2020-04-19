@@ -36,21 +36,21 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmUserInfo;
 
 import org.paygear.WalletActivity;
@@ -77,21 +77,21 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
  */
 public class HelperToolbar {
 
-    private ConstraintLayout mRootConstraint;
     private AppCompatTextView mLeftBtn, passCodeBtn, scannerBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
-    private TextView mTxtChatUserName;
+    private AppCompatTextView mTxtChatUserName;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch;
     private AppCompatTextView groupName, groupMemberCount, profileStatus, profileTell;
     private FloatingActionButton profileFabChat;
-    public EditText mEdtSearch;
+    private EditText mEdtSearch;
     private TextView mChatVerifyIcon;
     private TextView mChatMuteIcon;
     private CircleImageView mCloudChatIcon;
     private TextView mBtnClearSearch;
     private View callLayout;
+    private LinearLayout userNameLayout;
 
     private CircleImageView mTabletUserAvatar;
     private TextView mTabletUserName;
@@ -650,6 +650,10 @@ public class HelperToolbar {
         return mAvatarSmall;
     }
 
+    public LinearLayout getUserNameLayout() {
+        return userNameLayout;
+    }
+
     public CircleImageView getTabletUserAvatar() {
         return mTabletUserAvatar;
     }
@@ -1057,8 +1061,6 @@ public class HelperToolbar {
 
     private void initViews(ViewMaker view) {
 
-        mRootConstraint = view.getMainConstraint();
-
         mLeftBtn = view.getLeftIcon();
         passCodeBtn = view.getpassCodeIcon();
         scannerBtn = view.getScannerIcon();
@@ -1074,6 +1076,7 @@ public class HelperToolbar {
         mTxtLogo = view.getLogo();
         mCloudChatIcon = view.getCivCloud();
         mAvatarChat = view.getCivAvatar();
+        userNameLayout = view.getLayoutChatName();
 
         mAvatarSmall = view.getSmallAvatar();
 
@@ -1218,7 +1221,7 @@ public class HelperToolbar {
         private CircleImageView civAvatar;
         private CircleImageView civCloud;
         private LinearLayout layoutChatName;
-        private TextView tvChatName;
+        private AppCompatTextView tvChatName;
         private TextView tvChatStatus;
         private TextView iconChatVerify;
         private TextView muteChatIcon;
@@ -1603,9 +1606,11 @@ public class HelperToolbar {
                     tvChatName.setId(R.id.view_toolbar_chat_txt_userName);
                     tvChatName.setTypeface(tfMain);
                     tvChatName.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) getContext().getResources().getDimension(R.dimen.standardTextSize));
-//                    tvChatName.setEmojiSize((int) getContext().getResources().getDimension(R.dimen.standardTextSize));
                     tvChatName.setSingleLine();
                     tvChatName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                    tvChatName.setMarqueeRepeatLimit(-1);
+                    tvChatName.setHorizontalScrollBarEnabled(true);
+                    tvChatName.setSelected(true);
                     tvChatName.setGravity(Gravity.LEFT);
                     tvChatName.setTextColor(getContext().getResources().getColor(R.color.white));
                     setLayoutParams(tvChatName, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -2168,7 +2173,7 @@ public class HelperToolbar {
             return layoutChatName;
         }
 
-        public TextView getTvChatName() {
+        public AppCompatTextView getTvChatName() {
             return tvChatName;
         }
 
