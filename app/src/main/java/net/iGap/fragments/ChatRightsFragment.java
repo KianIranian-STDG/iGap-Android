@@ -107,14 +107,12 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
         this.currentUserAccess = currentUserAccess;
 
         RealmRoomAccess roomAccess = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.USER_ID, userId)
-                    .equalTo(RealmRoomAccessFields.ROOM_ID, realmRoom.getId()).findFirst();
+            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
         });
 
-        if (currentMode == 0 || currentMode == 1)
-            realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-            });
+        realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        });
 
         if (currentMode == 0) {
             if (currentUserAccess == null) {
@@ -649,7 +647,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     } else if (position == sendStickerRow) {
                         toggleButtonCell.setTextAndCheck("Send sticker message", canSendSticker, true);
                     } else if (position == sendLinkRow) {
-                        toggleButtonCell.setTextAndCheck("Send link message", canSendLink, false);
+                        toggleButtonCell.setTextAndCheck("Send link message", canSendLink, true);
                     }
 
                     if (position == sendMediaRow || position == sendStickerRow) {

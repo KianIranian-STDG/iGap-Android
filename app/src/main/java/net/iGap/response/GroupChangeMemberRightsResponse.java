@@ -10,10 +10,15 @@
 
 package net.iGap.response;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupChangeMemberRights;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomFields;
 
 public class GroupChangeMemberRightsResponse extends MessageHandler {
 
@@ -28,7 +33,18 @@ public class GroupChangeMemberRightsResponse extends MessageHandler {
         ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse.Builder builder = (ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse.Builder) message;
 
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), 0, builder.getRoomId(), asyncRealm));
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+
+            if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                if (realmRoom.getGroupRoom().getRole() == GroupChatRole.OWNER || realmRoom.getGroupRoom().getRole() == GroupChatRole.ADMIN) {
+                    if (builder.getUserId() == 0 || builder.getUserId() != AccountManager.getInstance().getCurrentUser().getId())
+                        realm.executeTransaction(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), builder.getUserId(), builder.getRoomId(), asyncRealm));
+                } else if (builder.getUserId() == 0) {
+                    realm.executeTransaction(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), AccountManager.getInstance().getCurrentUser().getId(), builder.getRoomId(), asyncRealm));
+                } else {
+                    realm.executeTransaction(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), builder.getUserId(), builder.getRoomId(), asyncRealm));
+                }
+            }
         });
 
         if (identity instanceof OnResponse) {

@@ -1,7 +1,5 @@
 package net.iGap.realm;
 
-import android.util.Log;
-
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoChannelAddAdmin;
 import net.iGap.proto.ProtoGlobal;
@@ -30,11 +28,7 @@ public class RealmRoomAccess extends RealmObject {
 
     public static void putOrUpdate(ProtoGlobal.RoomAccess roomAccess, long userId, long roomId, Realm realm) {
 
-        RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
-            return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
-                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
-                    .findFirst();
-        });
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -67,16 +61,11 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanAddNewAdmin(roomAccess.getAddAdmin());
         realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
 
-        Log.e("abbasiInsertToRealm", "putOrUpdate: " + realmRoomAccess.toString());
     }
 
     public static void channelAdminPutOrUpdate(ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
 
-        RealmRoomAccess realmRoomAccess = DbManager.getInstance().doRealmTask(realm1 -> {
-            return realm1.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
-                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
-                    .findFirst();
-        });
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -104,14 +93,11 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanGetMemberList(adminRights.getGetMember());
         realmRoomAccess.setCanAddNewAdmin(adminRights.getAddAdmin());
 
-        Log.e("abbasiInsertToRealm", "channelAdminPutOrUpdate: " + realmRoomAccess.toString());
     }
 
     public static void groupAdminPutOrUpdate(ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
 
-        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
-                .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
-                .findFirst();
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -138,17 +124,10 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanGetMemberList(adminRights.getGetMember());
         realmRoomAccess.setCanAddNewAdmin(adminRights.getAddAdmin());
 
-        Log.e("abbasiInsertToRealm", "groupAdminPutOrUpdate: " + realmRoomAccess.toString());
-
     }
 
-    /**
-     * @param userId for insert room to db set user id to 0
-     */
     public static void groupMemberPutOrUpdate(ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, long userId, long roomId, Realm realm) {
-        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
-                .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
-                .findFirst();
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -175,14 +154,11 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanGetMemberList(memberRights.getGetMember());
         realmRoomAccess.setCanAddNewMember(memberRights.getAddMember());
 
-        Log.e("abbasiInsertToRealm", "groupMemberPutOrUpdate: " + realmRoomAccess.toString());
     }
 
     public static void getAccess(long userId, long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
-                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
-                    .findFirst();
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
 
             if (realmRoomAccess != null) {
                 if (realmRoomAccess.getRealmPostMessageRights() != null) {
@@ -202,8 +178,7 @@ public class RealmRoomAccess extends RealmObject {
 
     private static void delete(long userId, long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ROOM_ID, roomId)
-                    .equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
                     .findFirst();
 
             if (realmRoomAccess != null) {

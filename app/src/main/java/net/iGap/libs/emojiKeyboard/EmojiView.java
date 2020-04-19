@@ -615,8 +615,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         if (!canSendSticker) {
             emptyTv = new AppCompatTextView(getContext());
             emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
-            emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-            emptyTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+            emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            emptyTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
             emptyTv.setLines(1);
             emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
             emptyTv.setMaxLines(1);
@@ -624,7 +624,6 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emptyTv.setEllipsize(TextUtils.TruncateAt.END);
             emptyTv.setGravity(Gravity.CENTER);
             emptyTv.setText("محدودیت در ارسال استیکر!");
-            emptyTv.setOnClickListener(v -> listener.onAddStickerClicked());
             stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 42));
 
             stickerTabView.setVisibility(GONE);
