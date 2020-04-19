@@ -292,12 +292,13 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
     @Override
     public void onContactsGetList() {
-        G.runOnUiThread(() -> {
-            fastScroller.setVisibility(View.VISIBLE);
-        });
         if (getActivity() == null || getActivity().isFinishing()) {
             return;
         }
+
+        G.runOnUiThread(() -> {
+            fastScroller.setVisibility(View.VISIBLE);
+        });
 
         if (results == null || results.size() == 0) {
             results = DbManager.getInstance().doRealmTask(realm -> {
