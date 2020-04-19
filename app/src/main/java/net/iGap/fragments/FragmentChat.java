@@ -4609,6 +4609,10 @@ public class FragmentChat extends BaseFragment
 
         if (getActivity() == null) return;
         HelperUrl.openLinkDialog(getActivity(), url);
+
+        if (keyboardViewVisible) {
+            hideKeyboard();
+        }
     }
 
     @Override
