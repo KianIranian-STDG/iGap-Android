@@ -9267,6 +9267,10 @@ public class FragmentChat extends BaseFragment
         CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
         if (getFragmentManager() != null)
             selectFragment.show(getFragmentManager(), null);
+
+        if (keyboardViewVisible) {
+            hideKeyboard();
+        }
     }
 
     @Override
