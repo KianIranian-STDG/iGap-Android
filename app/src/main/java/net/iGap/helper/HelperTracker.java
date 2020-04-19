@@ -142,6 +142,9 @@ public class HelperTracker {
                     break;
                 case TRACKER_REGISTRATION_NEW_USER:
                     Metrix.getInstance().newEvent("wthwa");
+
+                    //REGISTRATION_UNIQUE
+                    Metrix.getInstance().newEvent("npmol");
                     break;
                 case TRACKER_DISCOVERY_PAGE:
                     Metrix.getInstance().newEvent("qkslv");
