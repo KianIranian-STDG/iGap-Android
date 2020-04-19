@@ -2166,8 +2166,7 @@
     <string name="kuknos_login_progress_next">بعدی</string>
     <string name="kuknos_panel_addAsset">افزودن دارایی</string>
     <string name="kuknos_login_error_server_ErrorStr">خطای سرور: عدم جواب. لطفا دوباره تلاش کنید.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateMn">عدم امکان تولید زنجیره کلمات. لطفا با پشتیبانی تماس بگیرید.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateKey">متاسفانه امکان تولید کلید عمومی وجود ندارد. امکان استفاده از کیف پول ققنوس در گوشی شما وجود ندارد.</string>
     <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n\n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
     <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
@@ -2575,4 +2574,5 @@
     <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
     <string name="kuknos_buyP_MinAmount">میزان درخواستی شما از حداقل تعداد خرید این توکن کمتر میباشد.</string>
     <string name="kuknos_regulations_title">برای اضافه شدن این توکن به کیف پول خود باید با تمامی موارد سپیدنامه این توکن موافقت کنید.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateMn">متاسفانه امکان تولید کلید عمومی وجود ندارد. امکان استفاده از کیف پول ققنوس در گوشی شما وجود ندارد.</string>
 </resources>
