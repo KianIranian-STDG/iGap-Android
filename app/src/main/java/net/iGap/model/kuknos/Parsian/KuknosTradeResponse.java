@@ -10,7 +10,7 @@ import java.util.List;
 
 public class KuknosTradeResponse {
 
-    @SerializedName("trades")
+    @SerializedName("offers")
     private List<TradeResponse> trades;
 
     public List<TradeResponse> getTrades() {
