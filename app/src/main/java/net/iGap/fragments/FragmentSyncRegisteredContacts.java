@@ -144,7 +144,12 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         results.addChangeListener(new RealmChangeListener<RealmResults<RealmContacts>>() {
             @Override
-            public void onChange(RealmResults<RealmContacts> realmContacts) {
+            public void onChange(@NotNull RealmResults<RealmContacts> realmContacts) {
+                if (realmContacts != null && realmContacts.size() > 0) {
+                    G.runOnUiThread(() -> {
+                        fastScroller.setVisibility(View.VISIBLE);
+                    });
+                }
                 contactListAdapter2.notifyDataSetChanged();
             }
         });
@@ -295,10 +300,6 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         if (getActivity() == null || getActivity().isFinishing()) {
             return;
         }
-
-        G.runOnUiThread(() -> {
-            fastScroller.setVisibility(View.VISIBLE);
-        });
 
         if (results == null || results.size() == 0) {
             results = DbManager.getInstance().doRealmTask(realm -> {
