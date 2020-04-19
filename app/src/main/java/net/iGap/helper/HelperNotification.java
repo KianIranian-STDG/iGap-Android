@@ -554,14 +554,14 @@ public class HelperNotification {
             }
 
 
-            if (result) {
+            if (result && id == AccountManager.getInstance().getCurrentUser().getId()) {
                 if (getForegroundApp() || ActivityPopUpNotification.isPopUpVisible) { //check that any other program is in background
 
                     if (ActivityPopUpNotification.isPopUpVisible) {
                         if (ActivityPopUpNotification.popUpListener != null) {
                             ActivityPopUpNotification.popUpListener.onMessageReceive();
                         }
-                    } else if(id == AccountManager.getInstance().getCurrentUser().getId()) {
+                    } else {
                         Intent intent = new Intent(context, ActivityPopUpNotification.class);
                         intent.putExtra(ActivityMain.userId, id);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
