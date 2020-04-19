@@ -102,7 +102,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
                         kuknosSignupM.setRegistered(true);
                         nextPage.setValue(2);
                         break;
-                    case "ACTIVATED_ON_NETWORK ":
+                    case "ACTIVATED_ON_NETWORK":
                         nextPage.setValue(3);
                         break;
                     default:
