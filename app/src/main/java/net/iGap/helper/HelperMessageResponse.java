@@ -10,9 +10,9 @@
 
 package net.iGap.helper;
 
+import net.iGap.G;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -23,8 +23,6 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoom;
-
-import io.realm.Realm;
 
 /**
  * helper message response for get message and detect message that is for
@@ -78,7 +76,8 @@ public class HelperMessageResponse {
                  */
                 new RequestClientGetRoom().clientGetRoom(roomId, null);
             } else {
-                room.setDeleted(false);
+                if (room.getType() == ProtoGlobal.Room.Type.CHAT)
+                    room.setDeleted(false);
 
                 /**
                  * update unread count if new messageId that received is bigger than latest messageId that exist
