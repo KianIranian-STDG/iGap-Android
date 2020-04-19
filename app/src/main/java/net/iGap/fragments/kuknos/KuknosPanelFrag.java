@@ -233,6 +233,8 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(), accountResponse.getAssets());
                 walletSpinner.setAdapter(adapter);
                 binding.fragKuknosPError.setVisibility(View.GONE);
+                if (viewModel.getPosition() != 0)
+                    walletSpinner.setSelection(viewModel.getPosition());
             } else {
                 List<KuknosBalance.Balance> noItem = new ArrayList<>();
                 KuknosBalance.Balance temp = new KuknosBalance.Balance();
@@ -323,6 +325,11 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                         fragment.setArguments(b);
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     } else {
+                        fragment = KuknosBuyPeymanFrag.newInstance();
+                        Bundle b = new Bundle();
+                        b.putString("balanceClientInfo", viewModel.convertToJSON(viewModel.getPosition()));
+                        fragment.setArguments(b);
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
                         Toast.makeText(getContext(), R.string.unavalable, Toast.LENGTH_SHORT).show();
                     }
                     break;

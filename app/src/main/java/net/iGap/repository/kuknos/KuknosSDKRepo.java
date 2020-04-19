@@ -61,7 +61,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
             case PAYMENT_SEND:
                 return paymentToOtherXDR(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5]);
             case CHANGE_TRUST:
-                return trustlineXDR(ts[0], ts[1], ts[2]);
+                return trustlineXDR(ts[0], ts[1], ts[2], ts[3]);
             case MANAGE_OFFER:
                 return manageOffer(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6], Long.parseLong(ts[7]));
             case SET_OPTION:
@@ -174,7 +174,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         return transaction.toEnvelopeXdrBase64();
     }
 
-    private String trustlineXDR(String AccountSeed, String code, String issuer) {
+    private String trustlineXDR(String AccountSeed, String code, String issuer, String trustLineLimitByIssuer) {
         Server server = new Server(KUKNOS_Horizon_Server);
         Network network = new Network(PASS_PHRASE);
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
@@ -190,7 +190,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         }
 
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
-                .addOperation(new ChangeTrustOperation.Builder(asset, "" + Integer.MAX_VALUE).build())
+                .addOperation(new ChangeTrustOperation.Builder(asset, (trustLineLimitByIssuer == null) ? "" + Integer.MAX_VALUE : trustLineLimitByIssuer).build())
                 .addMemo(Memo.text(""))
                 .setTimeout(60)
                 .setOperationFee(50000)

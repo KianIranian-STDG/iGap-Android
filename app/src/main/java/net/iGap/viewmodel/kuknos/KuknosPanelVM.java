@@ -134,10 +134,13 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public String convertToJSON(int position) {
-        if (kuknosWalletsM.getValue() == null)
-            return "";
         Gson gson = new Gson();
-        return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
+        if (kuknosWalletsM.getValue() == null) {
+            KuknosBalance.Balance temp = new KuknosBalance.Balance();
+            temp.setAssetType("native");
+            return gson.toJson(temp);
+        } else
+            return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
     }
 
     public void spinnerSelect(int position) {

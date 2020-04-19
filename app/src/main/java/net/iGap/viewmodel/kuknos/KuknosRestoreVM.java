@@ -75,7 +75,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         try {
             checkUserInfo(userRepo.generateKeyPairWithMnemonic(keys.get().trim(), null));
         } catch (WalletException e) {
-            error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
     }
@@ -85,7 +85,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         try {
             checkUserInfo(userRepo.generateKeyPairWithSeed(keys.get(), null, null));
         } catch (Exception e) {
-            error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
     }
@@ -102,7 +102,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
                         kuknosSignupM.setRegistered(true);
                         nextPage.setValue(2);
                         break;
-                    case "ACTIVATED_ON_NETWORK ":
+                    case "ACTIVATED_ON_NETWORK":
                         nextPage.setValue(3);
                         break;
                     default:
