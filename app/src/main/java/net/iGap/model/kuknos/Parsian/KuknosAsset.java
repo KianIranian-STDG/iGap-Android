@@ -55,6 +55,8 @@ public class KuknosAsset {
         private double saleMin;
         @SerializedName("sale_limit_max")
         private double saleMax;
+        @SerializedName("whitepaper")
+        private String regulations;
 
 
         public org.stellar.sdk.Asset getAsset() {
@@ -179,6 +181,10 @@ public class KuknosAsset {
 
         public double getSaleMax() {
             return saleMax;
+        }
+
+        public String getRegulations() {
+            return regulations;
         }
     }
 }

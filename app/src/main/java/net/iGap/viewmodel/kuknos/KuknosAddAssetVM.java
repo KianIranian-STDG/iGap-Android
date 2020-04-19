@@ -114,6 +114,10 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         });
     }
 
+    public String getRegulationsAddress(int position) {
+        return assetPageMutableLiveData.getValue().getAssets().get(position).getRegulations();
+    }
+
     public void onSubmit() {
         openAddList.setValue(1);
     }

@@ -2312,6 +2312,7 @@ Want to get it?</string>
     <string name="kuknos_parsianTerms_term2">I set https://pdpco.ir as the home domain of my wallet</string>
     <string name="kuknos_parsianTerms_term3">I have trust to the issuer of SKYC</string>
     <string name="kuknos_parsianTerms_errorTermAndCondition">If you would like to continue, please accept all terms and conditions</string>
+    <string name="kuknos_regulations_title">Regulations and Terms: You must incline to all of the term of this token to add it to your wallet.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

@@ -65,7 +65,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
 
     public void sendCredit() {
 
-        if (!checkWalletID(true) || !checkAmount() || !checkMemo()) {
+        if (!checkAmount() || !checkMemo() || !checkWalletID(true)) {
             return;
         }
         goToPin.setValue(true);
@@ -155,7 +155,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
                 }
                 federationProgressVisibility.set(View.GONE);
                 if (isFromBtn)
-                    sendCredit();
+                    goToPin.setValue(true);
             }
 
             @Override
@@ -178,7 +178,10 @@ public class KuknosSendVM extends BaseAPIViewModel {
     public void sendDataServer() {
         kuknosSendM.setAmount(amount.get());
         kuknosSendM.setSrc(panelRepo.getUserRepo().getSeedKey());
-        kuknosSendM.setDest(walletID.get());
+        if (mode == Mode.KUKNOS_ID)
+            kuknosSendM.setDest(walletIdResponse.get());
+        else
+            kuknosSendM.setDest(walletID.get());
         kuknosSendM.setAssetCode(balanceInfoM.getAssetCode());
         kuknosSendM.setAssetInssuer(balanceInfoM.getAssetIssuer());
         kuknosSendM.setMemo("TRANSFER: " + (text.get() == null ? "" : text.get()));
