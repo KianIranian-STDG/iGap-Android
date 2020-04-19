@@ -29,6 +29,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoChannelAddAdmin;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupAddAdmin;
 import net.iGap.proto.ProtoGroupChangeMemberRights;
@@ -297,6 +298,9 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 new RequestChannelAddAdmin().channelAddAdmin(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
                         G.runOnUiThread(() -> onLeftIconClickListener(null));
+                    } else if (response == null) {
+                        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
+
                     }
                 });
             } else if (isGroup()) {
@@ -312,6 +316,9 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 new RequestGroupAddAdmin().groupAddAdmin(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
                         G.runOnUiThread(() -> onLeftIconClickListener(null));
+                    } else if (response == null) {
+                        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
+
                     }
                 });
             }
@@ -330,6 +337,9 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 new RequestGroupChangeMemberRights().groupChangeRights(roomId, builder.build(), (response, error) -> {
                     if (error == null) {
                         G.runOnUiThread(() -> onLeftIconClickListener(null));
+                    } else if (response == null) {
+                        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
+
                     }
                 });
             } else {
@@ -346,6 +356,9 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 new RequestGroupChangeMemberRights().groupChangeMemberRights(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
                         G.runOnUiThread(() -> onLeftIconClickListener(null));
+                    } else if (response == null) {
+                        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
+
                     }
                 });
             }
@@ -364,12 +377,18 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                                 if (error == null) {
 
                                     G.runOnUiThread(() -> onLeftIconClickListener(null));
+                                } else if (response == null) {
+                                    ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
+
                                 }
                             });
                         } else {
                             new RequestGroupKickAdmin().groupKickAdmin(roomId, userId, (response, error) -> {
                                 if (error == null) {
                                     G.runOnUiThread(() -> onLeftIconClickListener(null));
+                                } else if (response == null) {
+                                    ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
+
                                 }
                             });
                         }
