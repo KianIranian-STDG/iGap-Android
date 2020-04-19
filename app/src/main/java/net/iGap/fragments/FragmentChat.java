@@ -7389,7 +7389,7 @@ public class FragmentChat extends BaseFragment
         if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
             layoutMute.setVisibility(View.VISIBLE);
         } else {
-            if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
+            if (!isNotJoin && !isChatReadOnly) viewAttachFile.setVisibility(View.VISIBLE);
         }
         ll_navigateHash.setVisibility(View.GONE);
 
