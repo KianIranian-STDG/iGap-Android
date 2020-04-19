@@ -61,6 +61,11 @@ public class ToggleButtonCell extends FrameLayout {
 
         setOnClickListener(v -> toggleButton.setChecked(!toggleButton.isChecked()));
 
+        toggleButton.setOnClickListener(v -> {
+            toggleButton.setChecked(!toggleButton.isChecked());
+            performClick();
+        });
+
         toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (checkedChangeListener != null)
                 checkedChangeListener.onCheckedChanged(buttonView, isChecked);
