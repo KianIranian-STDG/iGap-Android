@@ -240,6 +240,10 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         });
     }
 
+    public String getRegulationsAddress() {
+        return requestedAsset.getRegulations();
+    }
+
     public void termsOnCheckChange(boolean isChecked) {
         termsAndConditionIsChecked = isChecked;
     }

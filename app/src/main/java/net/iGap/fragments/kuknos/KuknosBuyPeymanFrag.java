@@ -33,6 +33,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
 import net.iGap.model.kuknos.KuknosPaymentResponse;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosBuyPeymanVM;
@@ -96,7 +97,7 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NotNull View textView) {
-                viewModel.getTermsAndCond();
+                HelperUrl.openWebBrowser(getContext(), viewModel.getRegulationsAddress());
             }
 
             @Override
