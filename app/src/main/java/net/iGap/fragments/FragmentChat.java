@@ -6150,7 +6150,7 @@ public class FragmentChat extends BaseFragment
             realm.copyToRealmOrUpdate(roomMessage);
         })).start();
 
-        DbManager.getInstance().doRealmTransaction(realm -> {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmStickerItem stickerItem = realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
             if (stickerItem != null && stickerItem.isValid()) {
                 stickerItem.setRecent();
