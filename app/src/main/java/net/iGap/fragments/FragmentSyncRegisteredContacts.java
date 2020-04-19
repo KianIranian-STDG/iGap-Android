@@ -145,10 +145,8 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         results.addChangeListener(new RealmChangeListener<RealmResults<RealmContacts>>() {
             @Override
             public void onChange(@NotNull RealmResults<RealmContacts> realmContacts) {
-                if (realmContacts != null && realmContacts.size() > 0) {
-                    G.runOnUiThread(() -> {
-                        fastScroller.setVisibility(View.VISIBLE);
-                    });
+                if (realmContacts.size() > 0) {
+                    fastScroller.setVisibility(View.VISIBLE);
                 }
                 contactListAdapter2.notifyDataSetChanged();
             }
