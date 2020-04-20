@@ -859,7 +859,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField(RealmPostMessageRightsFields.CAN_SEND_TEXT, boolean.class);
 
             schema.create(RealmRoomAccess.class.getSimpleName())
-                    .addField(RealmRoomAccessFields.ID, String.class)
+                    .addField(RealmRoomAccessFields.ID, String.class, FieldAttribute.PRIMARY_KEY)
                     .addField(RealmRoomAccessFields.USER_ID, long.class)
                     .addField(RealmRoomAccessFields.ROOM_ID, long.class)
                     .addField(RealmRoomAccessFields.CAN_ADD_NEW_ADMIN, boolean.class)
@@ -870,7 +870,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField(RealmRoomAccessFields.CAN_GET_MEMBER_LIST, boolean.class)
                     .addField(RealmRoomAccessFields.CAN_MODIFY_ROOM, boolean.class)
                     .addField(RealmRoomAccessFields.CAN_PIN_MESSAGE, boolean.class)
-                    .addRealmListField(RealmRoomAccessFields.REALM_POST_MESSAGE_RIGHTS.$, realmPostMessageRights);
+                    .addRealmObjectField(RealmRoomAccessFields.REALM_POST_MESSAGE_RIGHTS.$, realmPostMessageRights);
 
             oldVersion++;
         }
