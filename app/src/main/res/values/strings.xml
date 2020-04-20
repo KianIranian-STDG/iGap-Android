@@ -2629,5 +2629,19 @@ Want to get it?</string>
     <string name="gift_card_already_in_use">This gift card is already in use!</string>
     <string name="gift_carde_sended">You already sent a gift card to someone else!</string>
     <string name="trim_error">"Trim is too short , please try with valid duration."</string>
+    <string name="post_message">Post Message</string>
+    <string name="pin_message_1">Pin Message</string>
+    <string name="edit_message">Edit Message</string>
+    <string name="delete_message">Delete Message</string>
+    <string name="modify_room">Modify Room</string>
+    <string name="send_text">Send Text</string>
+    <string name="send_media">Send Media</string>
+    <string name="send_gif">Send Gif</string>
+    <string name="send_sticker">Send Sticker</string>
+    <string name="send_link">Send Link</string>
+    <string name="remove_user">Remove User</string>
+    <string name="edit_admin_rights">Edit Admin Rights</string>
+    <string name="edit_member_rights">Edit Member Rights</string>
+    <string name="edit_room_rights">Determine the group\'s public rights</string>
 
 </resources>
