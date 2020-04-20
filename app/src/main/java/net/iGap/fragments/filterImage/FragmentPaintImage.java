@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -31,11 +32,15 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentEditImage;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
 import net.iGap.module.AttachFile;
 import net.iGap.module.PaintImageView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class FragmentPaintImage extends Fragment {
     private static String PATH = "net.iGap.fragments.filterImage.path";
@@ -127,11 +132,32 @@ public class FragmentPaintImage extends Fragment {
             return;
         }
         finalImage = bd.getBitmap();
-        final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+        final String path;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+        } else {
+            path = storeBitmapInCache(finalImage);
+        }
         if (FragmentEditImage.updateImage != null && path != null) {
             FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
         }
         popBackStackFragment();
+    }
+
+    private String storeBitmapInCache(Bitmap bitmap) {
+        if (!HelperPermission.grantedUseStorage()) return null;
+
+        String savedPath = G.DIR_TEMP + "/" + System.currentTimeMillis() + "_Painted.png";
+        File imageFile = new File(savedPath);
+//        imageFile.mkdir();
+        try (OutputStream out = new FileOutputStream(imageFile)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            bitmap.recycle();
+            return savedPath;
+        } catch (IOException ignored) {
+        }
+        return null;
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
