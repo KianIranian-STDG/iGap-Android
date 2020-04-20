@@ -2642,8 +2642,9 @@ Want to get it?</string>
     <string name="send_sticker">Send Sticker</string>
     <string name="send_link">Send Link</string>
     <string name="remove_user">Remove User</string>
-    <string name="edit_admin_rights">Edit Admin Rights</string>
-    <string name="edit_member_rights">Edit Member Rights</string>
-    <string name="edit_room_rights">Determine the group\'s public rights</string>
+    <string name="edit_admin_rights">Admin Rights</string>
+    <string name="edit_member_rights">Member Rights</string>
+    <string name="edit_room_rights">Change group\'s rights</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
 
 </resources>

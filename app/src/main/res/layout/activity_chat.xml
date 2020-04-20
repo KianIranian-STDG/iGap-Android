@@ -246,7 +246,7 @@
                 android:background="?attr/iGapTopRoundButtonPrimary"
                 android:gravity="center"
                 android:clickable="true"
-                android:text="محدودیت در ارسال پیام از طرف سازنده‌ی گفتگو"
+                android:text="@string/restrictions_on_sending_messages"
                 android:textColor="?attr/iGapPrimaryTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:visibility="gone"

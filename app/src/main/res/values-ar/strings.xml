@@ -3229,5 +3229,6 @@
     <string name="edit_admin_rights">تحرير وصول المسؤول</string>
     <string name="edit_member_rights">تحرير حقوق العضو</string>
     <string name="edit_room_rights">تحديد الوصول العام للمجموعة</string>
+    <string name="restrictions_on_sending_messages">قيود على إرسال الرسائل!</string>
 
 </resources>

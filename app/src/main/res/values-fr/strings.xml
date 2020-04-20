@@ -2217,4 +2217,5 @@
     <string name="edit_admin_rights">Edit Admin Rights</string>
     <string name="edit_member_rights">Edit Member Rights</string>
     <string name="edit_room_rights">Déterminer l\'accès public du groupe</string>
+    <string name="restrictions_on_sending_messages">Ограничения на отправку сообщений!</string>
 </resources>

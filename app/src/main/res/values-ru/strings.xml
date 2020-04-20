@@ -1981,4 +1981,5 @@
     <string name="trim_error">Обрезка слишком короткая, пожалуйста, попробуйте с действительной продолжительностью.</string>
     <string name="restrictions_on_sending_stickers">Ограничения на отправку стикеров!</string>
     <string name="restrictions_on_sending_multimedia_messages">Ограничения на отправку мультимедийных сообщений!</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
 </resources>
