@@ -31,6 +31,8 @@ public class KeyboardView extends FrameLayout {
         this.listener = listener;
         currentMode = mode;
 
+        if (emojiView == null)
+            createEmojiView();
     }
 
     public void setCurrentMode(int mode, int contentView) {

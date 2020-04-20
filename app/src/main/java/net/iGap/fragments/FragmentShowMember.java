@@ -73,11 +73,9 @@ import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChannelAddMember;
-import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelGetMemberList;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestGroupAddMember;
-import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
@@ -816,14 +814,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                     }
                                 }
                                 break;
-                            case SELECT_FOR_ADD_MODERATOR:
-                                if (isGroup) {
-                                    new RequestGroupAddModerator().groupAddModerator(mRoomID, mContact.peerId);
-                                } else {
-                                    new RequestChannelAddModerator().channelAddModerator(mRoomID, mContact.peerId);
-                                }
-                                getActivity().onBackPressed();
-                                break;
                             case SELECT_FOR_ADD_ADMIN:
                                 getActivity().onBackPressed();
                                 openChatEditRightsFragment(realmRoom, mContact, 0);
@@ -833,7 +823,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             });
 
             holder.itemView.setOnLongClickListener(v -> {
-                showMemberDialog(mContact);
+                if (!role.equals(GroupChatRole.MEMBER.toString()))
+                    showMemberDialog(mContact);
                 return true;
             });
 
@@ -858,7 +849,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 holder.btnMenu.setVisibility(View.GONE);
             }
 
-            holder.btnMenu.setOnClickListener(v -> showMemberDialog(mContact));
+            holder.btnMenu.setOnClickListener(v -> {
+                if (!role.equals(GroupChatRole.MEMBER.toString()))
+                    showMemberDialog(mContact);
+            });
 
             if (mContact.peerId == mContact.userID) {
                 holder.btnMenu.setVisibility(View.GONE);
