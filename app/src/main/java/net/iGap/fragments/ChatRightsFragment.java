@@ -245,7 +245,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
 
         HelperToolbar helperToolbar = HelperToolbar.create();
 
-        String title = currentMode == 0 || currentMode == 1 ? "Admin Rights Edit" : isRoom() ? "Group Rights Edit" : "Member Rights Edit";
+        String title = currentMode == 0 || currentMode == 1 ? getResources().getString(R.string.edit_admin_rights) : isRoom() ? getResources().getString(R.string.edit_room_rights) : getResources().getString(R.string.edit_member_rights);
 
         View toolBar = helperToolbar
                 .setContext(getContext())
@@ -632,33 +632,33 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 case 2:
                     ToggleButtonCell toggleButtonCell = (ToggleButtonCell) holder.itemView;
                     if (position == postMessageRow) {
-                        toggleButtonCell.setTextAndCheck("Post message", canPostMessage, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.post_message), canPostMessage, true);
                     } else if (position == editMessageRow) {
-                        toggleButtonCell.setTextAndCheck("Edit others message", canEditOthersMessage, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.edit_message), canEditOthersMessage, true);
                     } else if (position == deleteMessageRow) {
-                        toggleButtonCell.setTextAndCheck("Delete others message", canDeleteOtherMessage, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.delete_message), canDeleteOtherMessage, true);
                     } else if (position == pinMessageRow) {
-                        toggleButtonCell.setTextAndCheck("Pin message", canPinMessage, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.pin_message_1), canPinMessage, true);
                     } else if (position == modifyRow) {
-                        toggleButtonCell.setTextAndCheck("Modify Room", canModifyRoom, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.modify_room), canModifyRoom, true);
                     } else if (position == getMemberListRow) {
-                        toggleButtonCell.setTextAndCheck("Show members", canGetMemberList, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.show_member), canGetMemberList, true);
                     } else if (position == addNewMemberRow) {
-                        toggleButtonCell.setTextAndCheck("Add new member", canAddNewMember, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.add_new_member), canAddNewMember, true);
                     } else if (position == banMemberRow) {
-                        toggleButtonCell.setTextAndCheck("Ban member", canBanMember, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.remove_user), canBanMember, true);
                     } else if (position == addNewAdminRow) {
-                        toggleButtonCell.setTextAndCheck("Add new admin", canAddNewAdmin, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.remove_user), canAddNewAdmin, true);
                     } else if (position == sendTextRow) {
-                        toggleButtonCell.setTextAndCheck("Send Text message", canSendText, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.send_text), canSendText, true);
                     } else if (position == sendGifRow) {
-                        toggleButtonCell.setTextAndCheck("Send gif message", canSendGif, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.send_gif), canSendGif, true);
                     } else if (position == sendMediaRow) {
-                        toggleButtonCell.setTextAndCheck("Send media message", canSendMedia, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.send_media), canSendMedia, true);
                     } else if (position == sendStickerRow) {
-                        toggleButtonCell.setTextAndCheck("Send sticker message", canSendSticker, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.send_sticker), canSendSticker, true);
                     } else if (position == sendLinkRow) {
-                        toggleButtonCell.setTextAndCheck("Send link message", canSendLink, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.send_link), canSendLink, true);
                     }
 
                     break;

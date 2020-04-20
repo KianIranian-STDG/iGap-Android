@@ -2573,4 +2573,18 @@
     <string name="kuknos_send_option2">از طریق نام کاربری</string>
     <string name="restrictions_on_sending_stickers">محدودیت در ارسال استیکر!</string>
     <string name="restrictions_on_sending_multimedia_messages">Restrictions on sending multimedia messages!</string>
+    <string name="post_message">ارسال پیام</string>
+    <string name="pin_message_1">سنجاق پیام</string>
+    <string name="edit_message">ویرایش پیام</string>
+    <string name="delete_message">حذف پیام</string>
+    <string name="modify_room">ویرایش اطلاعات</string>
+    <string name="send_text">ارسال متن</string>
+    <string name="send_media">ارسال رسانه</string>
+    <string name="send_gif">ارسال گیف</string>
+    <string name="send_sticker">ارسال برچسب</string>
+    <string name="send_link">ارسال پیوند</string>
+    <string name="remove_user">حذف کاربر</string>
+    <string name="edit_admin_rights">ویرایش دسترسی های مدیر</string>
+    <string name="edit_member_rights">ویرایش دسترسی های کاربر</string>
+    <string name="edit_room_rights">دسترسی های عمومی گروه را تعیین کنید</string>
 </resources>
