@@ -2203,4 +2203,6 @@
     <string name="gift_card_already_in_use">Cette carte-cadeau est déjà utilisée!</string>
     <string name="gift_carde_sended">Vous avez déjà envoyé une carte-cadeau à quelqu autre!</string>
     <string name="trim_error">La taille est trop courte, veuillez essayer avec une durée valide.</string>
+    <string name="restrictions_on_sending_stickers">Restrictions sur l\'envoi d'autocollants!</string>
+    <string name="restrictions_on_sending_multimedia_messages">Restrictions sur l\'envoi de messages multimédias!</string>
 </resources>

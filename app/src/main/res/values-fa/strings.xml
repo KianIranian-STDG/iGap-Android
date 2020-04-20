@@ -2571,4 +2571,6 @@
     <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
     <string name="kuknos_send_option1">از طریق کلید عمومی</string>
     <string name="kuknos_send_option2">از طریق نام کاربری</string>
+    <string name="restrictions_on_sending_stickers">محدودیت در ارسال استیکر!</string>
+    <string name="restrictions_on_sending_multimedia_messages">Restrictions on sending multimedia messages!</string>
 </resources>

@@ -1979,4 +1979,6 @@
     <string name="gift_card_already_in_use">Эта подарочная карта уже используется!</string>
     <string name="gift_carde_sended">Вы уже отправили подарочную карту кому-то еще!</string>
     <string name="trim_error">Обрезка слишком короткая, пожалуйста, попробуйте с действительной продолжительностью.</string>
+    <string name="restrictions_on_sending_stickers">Ограничения на отправку стикеров!</string>
+    <string name="restrictions_on_sending_multimedia_messages">Ограничения на отправку мультимедийных сообщений!</string>
 </resources>

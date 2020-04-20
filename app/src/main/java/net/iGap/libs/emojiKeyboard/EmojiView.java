@@ -623,7 +623,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             emptyTv.setSingleLine(true);
             emptyTv.setEllipsize(TextUtils.TruncateAt.END);
             emptyTv.setGravity(Gravity.CENTER);
-            emptyTv.setText("محدودیت در ارسال استیکر!");
+            emptyTv.setText(R.string.restrictions_on_sending_stickers);
             stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 42));
 
             stickerTabView.setVisibility(GONE);

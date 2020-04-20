@@ -333,7 +333,7 @@
                 android:gravity="center"
                 android:textSize="@dimen/standardTextSize"
                 android:textColor="?attr/iGapTitleTextColor"
-                android:text="محدودیت در ارسال پیام چندرسانه‌ای!" />
+                android:text="@string/restrictions_on_sending_multimedia_messages" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
