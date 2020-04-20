@@ -555,7 +555,7 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:padding="@dimen/dp8"
-                    android:text="Change group rights"
+                    android:text="@string/change_group_rights"
                     android:visibility="gone"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"

@@ -665,7 +665,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 case 3:
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == dismissAdminRow) {
-                        textCell.setValue("Dismiss admin");
+                        textCell.setValue(getResources().getString(R.string.remove_admin));
                         textCell.setTextColor(textCell.getContext().getResources().getColor(R.color.red));
                     }
                     break;

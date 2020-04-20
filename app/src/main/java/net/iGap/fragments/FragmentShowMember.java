@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -937,6 +938,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 subtitle = itemView.findViewById(R.id.cigp_txt_contact_lastseen);
                 topLine = itemView.findViewById(R.id.cigp_view_topLine);
                 btnMenu = itemView.findViewById(R.id.cigp_moreButton);
+
+                title.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+                subtitle.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+
             }
         }
     }
