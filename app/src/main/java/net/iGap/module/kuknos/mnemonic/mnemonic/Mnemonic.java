@@ -3,8 +3,11 @@ package net.iGap.module.kuknos.mnemonic.mnemonic;
 
 import net.iGap.module.kuknos.mnemonic.util.PrimitiveUtil;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.KeySpec;
 import java.util.List;
 
@@ -57,6 +60,10 @@ public class Mnemonic {
     }
 
     public static byte[] createSeed(char[] mnemonic, char[] passphrase) throws MnemonicException {
+        // added for low api support
+        Security.removeProvider("BC");
+        Security.insertProviderAt(new BouncyCastleProvider(), 1);
+
         char[] saltChars = new char[]{'m', 'n', 'e', 'm', 'o', 'n', 'i', 'c'};
         if (passphrase != null) {
             saltChars = PrimitiveUtil.concatCharArrays(saltChars, passphrase);

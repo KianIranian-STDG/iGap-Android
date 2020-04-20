@@ -58,12 +58,10 @@ import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
 
 import java.io.File;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -461,10 +459,6 @@ public class G extends ApplicationContext {
         PassCode.initPassCode(getApplicationContext());
 
         AndroidUtils.density = getApplicationContext().getResources().getDisplayMetrics().density;
-
-        // added for low api support
-        Security.removeProvider("BC");
-        Security.insertProviderAt(new BouncyCastleProvider(), 1);
 
         //init account manager for handle multi account
 
