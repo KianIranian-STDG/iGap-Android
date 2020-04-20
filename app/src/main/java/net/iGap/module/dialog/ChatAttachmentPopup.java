@@ -172,6 +172,7 @@ public class ChatAttachmentPopup {
         mPopup.setFocusable(true);
         mPopup.setOutsideTouchable(true);
 
+        privacyView = viewRoot.findViewById(R.id.fl_attachment_privacyView);
 
         mPopup.setOnDismissListener(() -> {
             isNewBottomSheet = true;
@@ -195,7 +196,6 @@ public class ChatAttachmentPopup {
 
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
-        privacyView = viewRoot.findViewById(R.id.fl_attachment_privacyView);
         contentView.setVisibility(View.INVISIBLE);
 
         contentView.setOnClickListener(v -> {

@@ -588,8 +588,8 @@ public class FragmentChat extends BaseFragment
     private int messageLentghCounter;
     private int oldMessageLentghCounter;
 
+    @Nullable
     private RealmRoomAccess currentRoomAccess;
-    private boolean canSendMedia;
     private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
 
     public static boolean allowResendMessage(long messageId) {
@@ -3485,7 +3485,9 @@ public class FragmentChat extends BaseFragment
             }, KeyboardView.MODE_KEYBOARD);
 
             keyboardView.setVisibility(View.GONE);
-            keyboardView.setStickerPermission(currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights() != null && currentRoomAccess.getRealmPostMessageRights().isCanSendSticker());
+
+            if (mustCheckPermission())
+                keyboardView.setStickerPermission(currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights() != null && currentRoomAccess.getRealmPostMessageRights().isCanSendSticker());
 
             keyboardContainer.addView(keyboardView);
         }
@@ -3688,6 +3690,11 @@ public class FragmentChat extends BaseFragment
                 .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
                 .setListener(FragmentChat.this)
                 .build();
+
+
+        if (mAttachmentPopup != null && mustCheckPermission()) {
+            mAttachmentPopup.setMediaPermission(currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights() != null && currentRoomAccess.getRealmPostMessageRights().isCanSendMedia());
+        }
 
     }
 
