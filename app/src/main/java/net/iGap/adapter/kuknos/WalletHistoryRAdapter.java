@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.kuknos.Parsian.KuknosCreateAccountOpResponse;
@@ -17,11 +20,10 @@ import net.iGap.module.mobileBank.JalaliCalendar;
 import net.iGap.repository.kuknos.UserRepo;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import java.util.TimeZone;
 
 public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAdapter.ViewHolder> {
 
@@ -80,7 +82,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
         public void initView(KuknosPaymentOpResponse model) {
             String[] temp = model.getCreatedAt().split("T");
             date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(getDateTime(model.getCreatedAt())) : getDateTime(model.getCreatedAt()));
-            time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0, 5)) : temp[1].substring(0, 5));
+            time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(convertTime(temp[1].substring(0, 7))) : convertTime(temp[1].substring(0, 7)));
             DecimalFormat df = new DecimalFormat("#,##0.00");
             if (model.getType() != null && model.getType().equals("create_account")) {
                 amount.setText(HelperCalander.isPersianUnicode ?
@@ -126,6 +128,20 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
                 e.printStackTrace();
                 return JalaliCalendar.getPersianDate(entry);
             }
+        }
+
+        private String convertTime(String dateStr) {
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = null;
+            try {
+                date = df.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            df = new SimpleDateFormat("HH:mm");
+            df.setTimeZone(TimeZone.getTimeZone("GMT+4:30"));
+            return df.format(date);
         }
 
         public void initViewCreateAccount(KuknosCreateAccountOpResponse model) {

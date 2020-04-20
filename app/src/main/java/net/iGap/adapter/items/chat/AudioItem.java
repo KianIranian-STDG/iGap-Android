@@ -13,7 +13,6 @@ package net.iGap.adapter.items.chat;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,8 +30,6 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.observers.interfaces.IMessageItem;
-import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -40,6 +37,8 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoGlobal;
 
 import org.jetbrains.annotations.NotNull;
@@ -185,16 +184,12 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar , int progress , boolean fromUser) {
-                if(!fromUser) return;
-                if(holder.mMessageID.equals(MusicPlayer.messageId)) {
-                    MusicPlayer.setMusicProgress(holder.seekBar.getProgress());
-                }
+
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                if(!holder.mMessageID.equals(MusicPlayer.messageId)) return;
-                MusicPlayer.pauseSound();
+
             }
 
             @Override
@@ -208,8 +203,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                     holder.songTimeTv.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.songTimeTv.getText().toString()));
                 }
 
-                if(!holder.mMessageID.equals(MusicPlayer.messageId)) return;
-                MusicPlayer.playAndPause();
+                if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+                    MusicPlayer.setMusicProgress(holder.seekBar.getProgress());
+                }
             }
         });
 

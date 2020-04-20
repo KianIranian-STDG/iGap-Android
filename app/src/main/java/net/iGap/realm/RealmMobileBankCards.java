@@ -1,7 +1,7 @@
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.model.mobileBank.BankCardModel;
+import net.iGap.module.accountManager.DbManager;
 
 import java.util.List;
 
@@ -16,16 +16,18 @@ public class RealmMobileBankCards extends RealmObject {
     private String cardName;
     private String bankName;
     private String expireDate;
+    private String status;
     private boolean isOrigin;
 
     public RealmMobileBankCards() {
     }
 
-    public RealmMobileBankCards(String cardNumber, String cardName, String bankName, String expireDate, boolean isOrigin) {
+    public RealmMobileBankCards(String cardNumber, String cardName, String bankName, String expireDate, String status, boolean isOrigin) {
         this.cardNumber = cardNumber;
         this.cardName = cardName;
         this.bankName = bankName;
         this.expireDate = expireDate;
+        this.status = status;
         this.isOrigin = isOrigin;
     }
 
@@ -41,7 +43,7 @@ public class RealmMobileBankCards extends RealmObject {
                         object = asyncRealm.createObject(RealmMobileBankCards.class, card.getPan());
 
                     object.setCardName(card.getCustomerFirstName() + " " + card.getCustomerLastName());
-                    //object.setCardNumber(card.getPan());
+                    object.setStatus(card.getCardStatus());
                     object.setBankName(card.getCardBankName() == null ? "پارسیان" : card.getCardBankName());
                     object.setExpireDate(card.getExpireDate());
                     object.setOrigin(card.getCardBankName() == null);
@@ -51,7 +53,7 @@ public class RealmMobileBankCards extends RealmObject {
         });
     }
 
-    public static void putOrUpdate(String cardNumber, String cardName, String bankName, String expireDate, boolean isOrigin) {
+    public static void putOrUpdate(String cardNumber, String cardName, String bankName, String expireDate, String status, boolean isOrigin) {
         DbManager.getInstance().doRealmTask(realm1 -> {
 
             RealmMobileBankCards object = realm1.where(RealmMobileBankCards.class).equalTo(RealmMobileBankCardsFields.CARD_NUMBER, cardNumber).findFirst();
@@ -59,6 +61,7 @@ public class RealmMobileBankCards extends RealmObject {
 
             object.setCardName(cardName);
             object.setCardNumber(cardNumber);
+            object.setStatus(status);
             object.setBankName(bankName);
             object.setExpireDate(expireDate);
             object.setOrigin(isOrigin);
@@ -73,9 +76,11 @@ public class RealmMobileBankCards extends RealmObject {
         });
     }
 
-    public static void deleteAll() {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmMobileBankCards.class).findAll().deleteAllFromRealm();
+    public static void deleteAll(Realm.Transaction.OnSuccess callback) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.where(RealmMobileBankCards.class).findAll().deleteAllFromRealm();
+            }, callback);
         });
     }
 
@@ -124,5 +129,13 @@ public class RealmMobileBankCards extends RealmObject {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

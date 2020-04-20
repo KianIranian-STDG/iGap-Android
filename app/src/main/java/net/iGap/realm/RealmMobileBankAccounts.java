@@ -1,7 +1,7 @@
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.model.mobileBank.BankAccountModel;
+import net.iGap.module.accountManager.DbManager;
 
 import java.util.List;
 
@@ -14,13 +14,15 @@ public class RealmMobileBankAccounts extends RealmObject {
     @PrimaryKey
     private String accountNumber;
     private String accountName;
+    private String status;
 
     public RealmMobileBankAccounts() {
     }
 
-    public RealmMobileBankAccounts(String number, String name) {
+    public RealmMobileBankAccounts(String number, String name, String status) {
         this.accountNumber = number;
         this.accountName = name;
+        this.status = status;
     }
 
     public static void putOrUpdate(List<BankAccountModel> accounts, Realm.Transaction.OnSuccess onSuccess) {
@@ -35,6 +37,7 @@ public class RealmMobileBankAccounts extends RealmObject {
                         object = asyncRealm.createObject(RealmMobileBankAccounts.class, item.getAccountNumber());
 
                     object.setAccountName(item.getTitle());
+                    object.setStatus(item.getStatus());
 
                 }
 
@@ -49,9 +52,11 @@ public class RealmMobileBankAccounts extends RealmObject {
         });
     }
 
-    public static void deleteAll() {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmMobileBankAccounts.class).findAll().deleteAllFromRealm();
+    public static void deleteAll(Realm.Transaction.OnSuccess callback) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.where(RealmMobileBankAccounts.class).findAll().deleteAllFromRealm();
+            }, callback);
         });
     }
 
@@ -76,5 +81,13 @@ public class RealmMobileBankAccounts extends RealmObject {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

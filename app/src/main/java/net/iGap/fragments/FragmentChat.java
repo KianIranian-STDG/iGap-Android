@@ -345,7 +345,6 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
-import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -1067,6 +1066,8 @@ public class FragmentChat extends BaseFragment
                             txtName = mHelperToolbar.getTextViewChatUserName();
                         }
                         txtName.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), txtName.getPaint().getFontMetricsInt()));
+
+                        Log.e("nazariii", "in realm");
                         checkToolbarNameSize();
                     }
                 });
@@ -1172,15 +1173,21 @@ public class FragmentChat extends BaseFragment
 
     private void checkToolbarNameSize() {
 
-        if (!mHelperToolbar.getRightButton().isShown()) {
-            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width4));
-        } else if (!mHelperToolbar.getSecondRightButton().isShown()) {
-            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width3));
-        }/*else if (mHelperToolbar.getThirdRightButton().isShown()){
-            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width2));
-        }*/ else {
-            txtName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width));
+        int finalWidth = mHelperToolbar.getUserNameLayout().getMeasuredWidth();
+        int verifyWidth = mHelperToolbar.getChatVerify().getMeasuredWidth();
+        int muteWidth = mHelperToolbar.getChatMute().getMeasuredWidth();
+
+        finalWidth = finalWidth - (muteWidth + verifyWidth);
+
+        if (mHelperToolbar.getSecondRightButton().isShown()) {
+            finalWidth = finalWidth - (LayoutCreator.getDimen(R.dimen.toolbar_icon_size) * 2);
+        } else if (mHelperToolbar.getRightButton().isShown()) {
+            finalWidth = finalWidth - LayoutCreator.getDimen(R.dimen.toolbar_icon_size);
+        } else {
+            finalWidth = finalWidth - LayoutCreator.getDimen(R.dimen.dp4);
         }
+
+        txtName.setMaxWidth(finalWidth);
 
     }
 
@@ -1765,7 +1772,6 @@ public class FragmentChat extends BaseFragment
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         }
-        checkToolbarNameSize();
         manageExtraLayout();
     }
 
@@ -4710,6 +4716,10 @@ public class FragmentChat extends BaseFragment
 
         if (getActivity() == null) return;
         HelperUrl.openLinkDialog(getActivity(), url);
+
+        if (keyboardViewVisible) {
+            hideKeyboard();
+        }
     }
 
     @Override
@@ -6172,9 +6182,9 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 updateShowItemInScreen();
+                checkToolbarNameSize();
             }
         }, 300);
-
         super.onConfigurationChanged(newConfig);
 
         if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.updateHeight();
@@ -7477,7 +7487,7 @@ public class FragmentChat extends BaseFragment
         if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
             layoutMute.setVisibility(View.VISIBLE);
         } else {
-            if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
+            if (!isNotJoin && !isChatReadOnly) viewAttachFile.setVisibility(View.VISIBLE);
         }
         ll_navigateHash.setVisibility(View.GONE);
 
@@ -9355,6 +9365,10 @@ public class FragmentChat extends BaseFragment
         CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
         if (getFragmentManager() != null)
             selectFragment.show(getFragmentManager(), null);
+
+        if (keyboardViewVisible) {
+            hideKeyboard();
+        }
     }
 
     @Override

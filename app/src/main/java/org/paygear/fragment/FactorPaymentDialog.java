@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentDialogFactorPaymentBinding;
 
@@ -163,7 +164,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
 
         factorPaymentBinding.title.setText(R.string.pay_to);
         if (mOrder == null) {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                     .fit()
                     .into(factorPaymentBinding.image);
@@ -173,7 +174,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
             factorPaymentBinding.amountToPay.setText(RaadCommonUtils.formatPrice(amountToPay, false));
 
         } else {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                     .fit()
                     .into(factorPaymentBinding.image);

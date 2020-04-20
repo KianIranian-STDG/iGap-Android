@@ -2,6 +2,7 @@ package net.iGap.fragments.mobileBank;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     private String mCurrentNumber;
     private boolean isCard;
     private DialogParsian mDialogWait;
-    private List<String> items = new ArrayList<>();
+    private List<Pair<String, String>> items = new ArrayList<>();
     private ViewTreeObserver.OnScrollChangedListener listener;
     private int lastPos = -1;
 
@@ -97,7 +98,12 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     }
 
     private void setupSpinner() {
-        List<String> itemsSpinner = getAccountsItem();
+        List<Pair<String, String>> allAccounts = getAccountsItem();
+        List<String> itemsSpinner = new ArrayList<>();
+        for (int i = 0; i < allAccounts.size(); i++) {
+            itemsSpinner.add(allAccounts.get(i).first);
+        }
+
         AccountSpinnerAdapter adapter = new AccountSpinnerAdapter(itemsSpinner, isCard);
         binding.spAccounts.setAdapter(adapter);
         getCheckAndSetCurrentSelection(itemsSpinner);
@@ -105,12 +111,23 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String number = items.get(position);
+                if (isCard) {
+                    if (items.get(position).second != null && items.get(position).second.equals("HOT")) {
+                        HelperError.showSnackMessage(getString(R.string.card_is_disable), false);
+                        return;
+                    }
+                } else {
+                    if (items.get(position).second != null && !items.get(position).second.equals("OPEN") && !items.get(position).second.equals("OPENING")) {
+                        HelperError.showSnackMessage(getString(R.string.card_is_disable), false);
+                        return;
+                    }
+                }
+                String number = items.get(position).first;
                 binding.tvNumber.setText(checkAndSetPersianNumberIfNeeded(number, isCard));
                 viewModel.getBalance().set("...");
                 if (getArguments() != null) getArguments().putString("accountNum", number);
                 mCurrentNumber = number;
-                if(isCard){
+                if (isCard) {
                     showProgress();
                     viewModel.getCardDeposits(number);
                     return;
@@ -128,8 +145,8 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
     }
 
     private void getCheckAndSetCurrentSelection(List<String> accounts) {
-        for (int i = 0 ; i < accounts.size() ; i++){
-            if(mCurrentNumber.equals(accounts.get(i))){
+        for (int i = 0; i < accounts.size(); i++) {
+            if (mCurrentNumber.equals(accounts.get(i))) {
                 binding.spAccounts.setSelection(i);
                 break;
             }
@@ -142,17 +159,17 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         viewModel.getAccountDataForMonth(0);
     }
 
-    private List<String> getAccountsItem() {
+    private List<Pair<String, String>> getAccountsItem() {
         items = new ArrayList<>();
         if (isCard) {
             List<RealmMobileBankCards> cards = RealmMobileBankCards.getCards();
             for (RealmMobileBankCards card : cards) {
-                items.add(card.getCardNumber());
+                items.add(new Pair<>(card.getCardNumber(), card.getStatus()));
             }
         } else {
             List<RealmMobileBankAccounts> accounts = RealmMobileBankAccounts.getAccounts();
             for (RealmMobileBankAccounts account : accounts) {
-                items.add(account.getAccountNumber());
+                items.add(new Pair<>(account.getAccountNumber(), account.getStatus()));
             }
         }
 
@@ -288,9 +305,9 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
 
         viewModel.getBills().observe(getViewLifecycleOwner(), this::initMainRecycler);
 
-        viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner() , msg ->{
-            if(msg == null) return;
-            HelperError.showSnackMessage(msg , false);
+        viewModel.getShowRequestErrorMessage().observe(getViewLifecycleOwner(), msg -> {
+            if (msg == null) return;
+            HelperError.showSnackMessage(msg, false);
         });
     }
 
@@ -386,10 +403,9 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
         });
 
 
-
-        viewModel.getCardDepositResponse().observe(getViewLifecycleOwner() , deposit->{
+        viewModel.getCardDepositResponse().observe(getViewLifecycleOwner(), deposit -> {
             mDialogWait.dismiss();
-            if(deposit != null && !deposit.equals("-1")){
+            if (deposit != null && !deposit.equals("-1")) {
                 reloadPage(deposit);
             }
         });
@@ -397,11 +413,11 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
 
     private void showProgress() {
         if (getActivity() != null) {
-            if(mDialogWait == null) {
+            if (mDialogWait == null) {
                 mDialogWait = new DialogParsian()
                         .setContext(getActivity())
                         .setTitle(getString(R.string.please_wait) + "..")
-                        .setButtonsText(null , getString(R.string.cancel))
+                        .setButtonsText(null, getString(R.string.cancel))
                         .setListener(new DialogParsian.ParsianDialogListener() {
                             @Override
                             public void onDeActiveButtonClicked(Dialog dialog) {

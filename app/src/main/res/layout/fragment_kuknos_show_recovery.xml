@@ -96,14 +96,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRMessage"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosSRkeysET"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp10"
                     android:background="@drawable/background_cancel_money_action"
                     android:ems="10"
-                    android:enabled="false"
                     android:gravity="top"
                     android:hint="@string/kuknos_RecoverySK_Hint"
                     android:inputType="textMultiLine"
@@ -146,14 +145,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRprivateTitle"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosSRPrivatekeyET"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp10"
                     android:background="@drawable/background_cancel_money_action"
                     android:ems="10"
-                    android:enabled="false"
                     android:gravity="top"
                     android:hint="SBBHRGETDFHJKIOLTG..."
                     android:inputType="textMultiLine"
@@ -196,14 +194,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRpublicTitle"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosSRpublickeyET"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp10"
                     android:background="@drawable/background_cancel_money_action"
                     android:ems="10"
-                    android:enabled="false"
                     android:gravity="top"
                     android:hint="GBBHRGETDFHJKIOLTG..."
                     android:inputType="textMultiLine"

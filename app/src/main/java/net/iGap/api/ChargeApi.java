@@ -3,6 +3,7 @@ package net.iGap.api;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.internetPackage.InternetPackage;
+import net.iGap.model.internetPackage.InternetPackageFilter;
 import net.iGap.model.internetPackage.MciInternetPackageFilter;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ChargeApi {
 
@@ -27,7 +29,11 @@ public interface ChargeApi {
     Call<List<MciInternetPackageFilter>> getInternetPackageFilterList(@Path("operator") String operator);
 
     @GET("{operator}/internet-package/packages/categorized")
-    Call<BaseIGashtResponse<InternetPackage>> getInternetPackageList(@Path("operator") String operator);
+    Call<BaseIGashtResponse<InternetPackage>> getInternetPackageList(@Path("operator") String operator,
+                                                                     @Query("type") String filter);
+
+    @GET("internet-package/charge-types")
+    Call<BaseIGashtResponse<InternetPackageFilter>> getInternetPackageFilters();
 
     @FormUrlEncoded
     @POST("{operator}/internet-package/purchase")

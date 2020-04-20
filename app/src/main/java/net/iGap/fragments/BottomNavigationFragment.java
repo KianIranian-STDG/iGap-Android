@@ -15,20 +15,20 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
-import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.fragments.news.NewsMainFrag;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
-import net.iGap.observers.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
-import net.iGap.fragments.news.NewsMainFrag;
+import net.iGap.module.Theme;
+import net.iGap.module.dialog.account.AccountsDialog;
+import net.iGap.observers.interfaces.OnUnreadChange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -393,7 +393,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                             default:
                                 break;
                         }
-                        new HelperFragment(getFragmentManager(), frag).setReplace(false).load();
+                        new HelperFragment(getFragmentManager(), frag).setReplace(false).load(false);
                     }
                     break;
                 case PROFILE_FRAGMENT:

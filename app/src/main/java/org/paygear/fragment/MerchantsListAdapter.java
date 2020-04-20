@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -168,14 +169,14 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
             if (data.getAccount_type() != 4) {
                 if (data.getBusiness_type()==2){
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                    Picasso.with(G.context).load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
                             .transform(new CircleImageTransform())
                             .error(R.drawable.ic_local_taxi_black_24dp)
                             .placeholder(R.drawable.ic_local_taxi_black_24dp)
                             .fit()
                             .into(mBinding.image);
                 }else {
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                    Picasso.with(G.context).load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
                             .transform(new CircleImageTransform())
                             .error(R.drawable.ic_store_black_24dp)
                             .placeholder(R.drawable.ic_store_black_24dp)
@@ -183,7 +184,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
                             .into(mBinding.image);
                 }
             } else {
-                Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                Picasso.with(G.context).load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
                         .transform(new CircleImageTransform())
                         .error(R.drawable.ic_person_outline2_white_24dp)
                         .placeholder(R.drawable.ic_person_outline2_white_24dp)

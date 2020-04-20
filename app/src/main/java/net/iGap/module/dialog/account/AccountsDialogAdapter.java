@@ -1,6 +1,5 @@
 package net.iGap.module.dialog.account;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +34,6 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
         this.mAccountsList = new ArrayList<>();
         this.mAccountsList.addAll(AccountManager.getInstance().getUserAccountList());
         Collections.reverse(mAccountsList);
-        for (int i = 0; i < mAccountsList.size(); i++) {
-            Log.wtf(this.getClass().getName(), "account: " + mAccountsList.get(i).toString());
-        }
         this.mAvatarHandler = mAvatarHandler;
         this.currentUserPosition = mAccountsList.indexOf(AccountManager.getInstance().getCurrentUser());
         this.mListener = listener;
@@ -51,7 +47,6 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
 
     @Override
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
-        holder.getOtherAccountUserId(mAccountsList.get(position).getId());
 
         holder.username.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
         if (currentUserPosition == position) {
@@ -60,6 +55,7 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
             holder.currentUserView.setVisibility(View.INVISIBLE);
         }
         if (mAccountsList.get(position).isAssigned()) {
+            holder.getOtherAccountUserId(mAccountsList.get(position).getId());
             mAvatarHandler.getAvatar(new ParamWithAvatarType(holder.userAvatar, mAccountsList.get(position).getId()).avatarType(AvatarHandler.AvatarType.USER).showMain(), true);
             holder.username.setText(mAccountsList.get(position).getName());
             holder.messageUnreadCount.setVisibility(View.VISIBLE);

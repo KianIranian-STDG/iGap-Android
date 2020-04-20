@@ -19,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -295,10 +296,15 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         paintTv.setOnClickListener(v -> {
             hideKeyboard();
             if (getActivity() != null && itemGalleryList.size() > 0) {
+                String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
+                if (path == null || path.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!isNicknamePage) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaintImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaintImage.newInstance(path)).setReplace(false).load();
                 } else {
-                    FragmentPaintImage fragment = FragmentPaintImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
+                    FragmentPaintImage fragment = FragmentPaintImage.newInstance(path);
                     getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
                 }
             }

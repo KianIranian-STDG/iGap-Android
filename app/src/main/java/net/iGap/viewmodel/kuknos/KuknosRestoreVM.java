@@ -72,33 +72,27 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     private void generateKeypairWithMnemonic() {
         progressState.setValue(true);
-        userRepo.setMnemonic(keys.get().trim());
         try {
-            userRepo.generateKeyPairWithMnemonic();
+            checkUserInfo(userRepo.generateKeyPairWithMnemonic(keys.get().trim(), null));
         } catch (WalletException e) {
-            error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
-        checkUserInfo();
     }
 
     private void generateKeypairWithSeed() {
         progressState.setValue(true);
-        userRepo.setSeedKey(keys.get());
         try {
-            userRepo.generateKeyPairWithSeed();
-            userRepo.setPIN(null);
-            userRepo.setMnemonic(null);
+            checkUserInfo(userRepo.generateKeyPairWithSeed(keys.get(), null, null));
         } catch (Exception e) {
-            error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
-        checkUserInfo();
     }
 
-    private void checkUserInfo() {
+    private void checkUserInfo(String publicKey) {
         progressState.setValue(true);
-        userRepo.getUserStatus(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
+        userRepo.getUserStatus(publicKey, this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfo> data) {
                 switch (data.getData().getStatus()) {
@@ -108,7 +102,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
                         kuknosSignupM.setRegistered(true);
                         nextPage.setValue(2);
                         break;
-                    case "ACTIVATED_ON_NETWORK ":
+                    case "ACTIVATED_ON_NETWORK":
                         nextPage.setValue(3);
                         break;
                     default:

@@ -349,11 +349,11 @@
 
     <string-array name="charge_price_irancell">
         <item>@string/price</item>
-        <item> @string/charge_1_ir</item>
-        <item> @string/charge_2_ir</item>
-        <item> @string/charge_5_ir</item>
-        <item> @string/charge_10_ir</item>
-        <item> @string/charge_20_ir</item>
+        <item> @string/charge_1</item>
+        <item> @string/charge_2</item>
+        <item> @string/charge_5</item>
+        <item> @string/charge_10</item>
+        <item> @string/charge_20</item>
     </string-array>
 
     <string-array name="cpay_charge">

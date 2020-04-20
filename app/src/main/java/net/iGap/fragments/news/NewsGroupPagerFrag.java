@@ -84,7 +84,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
         binding.Toolbar.addView(mHelperToolbar.getView());
 
         if (!arg.getString("GroupPic").equals(""))
-            Picasso.get()
+            Picasso.with(G.context)
                     //                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(arg.getString("GroupPic"))
                     .placeholder(R.mipmap.news_temp_banner)
@@ -97,7 +97,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
         frag.setHandler(news -> {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(news.getImage())
                     .into(binding.groupImage);
             binding.groupTitle.setText(news.getTitle());
