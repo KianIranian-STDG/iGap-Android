@@ -6151,10 +6151,12 @@ public class FragmentChat extends BaseFragment
         })).start();
 
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmStickerItem stickerItem = realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
-            if (stickerItem != null && stickerItem.isValid()) {
-                stickerItem.setRecent();
-            }
+            realm.executeTransactionAsync(realm1 -> {
+                RealmStickerItem stickerItem = realm1.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
+                if (stickerItem != null && stickerItem.isValid()) {
+                    stickerItem.setRecent();
+                }
+            });
         });
 
         StructMessageInfo sm = new StructMessageInfo(roomMessage);
