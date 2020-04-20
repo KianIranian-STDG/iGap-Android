@@ -648,7 +648,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     } else if (position == banMemberRow) {
                         toggleButtonCell.setTextAndCheck(getResources().getString(R.string.remove_user), canBanMember, true);
                     } else if (position == addNewAdminRow) {
-                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.remove_user), canAddNewAdmin, true);
+                        toggleButtonCell.setTextAndCheck(getResources().getString(R.string.add_admin), canAddNewAdmin, true);
                     } else if (position == sendTextRow) {
                         toggleButtonCell.setTextAndCheck(getResources().getString(R.string.send_text), canSendText, true);
                     } else if (position == sendGifRow) {
