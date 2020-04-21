@@ -147,11 +147,11 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
             canBanMember = roomAccess.isCanBanMember();
             canAddNewAdmin = roomAccess.isCanAddNewAdmin();
         } else if (currentMode == 2 && (roomAccess == null || roomAccess.getRealmPostMessageRights() == null)) {
-            canSendText = true;
-            canSendMedia = true;
-            canSendGif = true;
-            canSendSticker = true;
-            canSendLink = true;
+            canSendText = false;
+            canSendMedia = false;
+            canSendGif = false;
+            canSendSticker = false;
+            canSendLink = false;
             canPinMessage = false;
             canAddNewMember = false;
             canGetMemberList = false;
@@ -245,7 +245,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
 
         HelperToolbar helperToolbar = HelperToolbar.create();
 
-        String title = currentMode == 0 || currentMode == 1 ? getResources().getString(R.string.edit_admin_rights) : isRoom() ? getResources().getString(R.string.edit_room_rights) : getResources().getString(R.string.edit_member_rights);
+        String title = currentMode == 0 || currentMode == 1 ? getResources().getString(R.string.admin_rights) : isRoom() ? getResources().getString(R.string.edit_room_rights) : getResources().getString(R.string.edit_member_rights);
 
         View toolBar = helperToolbar
                 .setContext(getContext())
@@ -524,7 +524,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                         if (canSendText) {
                             stickerHolder.itemView.setEnabled(true);
                         } else {
-                            canSendGif = false;
+                            canSendSticker = false;
                             ((ToggleButtonCell) stickerHolder.itemView).setChecked(false);
                             stickerHolder.itemView.setEnabled(false);
                         }

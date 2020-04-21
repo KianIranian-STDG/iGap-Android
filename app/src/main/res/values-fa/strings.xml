@@ -2588,7 +2588,9 @@
     <string name="send_sticker">ارسال استیکر</string>
     <string name="send_link">ارسال پیوند</string>
     <string name="remove_user">حذف کاربر</string>
-    <string name="edit_admin_rights">دسترسی های مدیر</string>
+    <string name="admin_rights">دسترسی های مدیر</string>
+    <string name="edit_rights">ویرایش دسترسی</string>
+    <string name="edit_admin_rights">ویرایش دسترسی های مدیر</string>
     <string name="edit_member_rights">دسترسی های کاربر</string>
     <string name="edit_room_rights">دسترسی های عمومی گروه</string>
     <string name="restrictions_on_sending_messages">محدودیت در ارسال پیام!</string>

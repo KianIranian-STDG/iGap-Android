@@ -67,9 +67,6 @@ import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupCheckUsername;
-import net.iGap.request.RequestGroupKickAdmin;
-import net.iGap.request.RequestGroupKickMember;
-import net.iGap.request.RequestGroupKickModerator;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
@@ -79,7 +76,6 @@ import io.realm.RealmObjectChangeListener;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-
 
 /*
  * This is the source code of iGap for Android
@@ -808,47 +804,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 HelperError.showSnackMessage(getString(R.string.time_out), false);
             }
         });
-    }
-
-
-    /**
-     * if user was admin set  role to member
-     */
-    public void kickAdmin(final long memberID) {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity()).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    new RequestGroupKickAdmin().groupKickAdmin(viewModel.roomId, memberID);
-                }
-            }).show();
-        }
-    }
-
-    /**
-     * delete this member from list of member group
-     */
-    public void kickMember(final long memberID) {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity()).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestGroupKickMember().groupKickMember(viewModel.roomId, memberID);
-                }
-            }).show();
-        }
-    }
-
-    public void kickModerator(final long memberID) {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity()).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestGroupKickModerator().groupKickModerator(viewModel.roomId, memberID);
-                }
-            }).show();
-        }
     }
 }
 

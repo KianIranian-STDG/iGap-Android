@@ -78,9 +78,8 @@ import net.iGap.request.RequestChannelGetMemberList;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupGetMemberList;
+import net.iGap.request.RequestGroupKickMember;
 import net.iGap.request.RequestUserInfo;
-import net.iGap.viewmodel.FragmentChannelProfileViewModel;
-import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -93,6 +92,7 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static net.iGap.G.context;
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupKickMember {
@@ -882,26 +882,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             notifyDataSetChanged();
         }
 
-        private void showPopup(ViewHolder holder, final StructContactInfo mContact) {
-            holder.btnMenu.setVisibility(View.VISIBLE);
-
-            holder.btnMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                        if (FragmentChannelProfileViewModel.onMenuClick != null) {
-                            FragmentChannelProfileViewModel.onMenuClick.clicked(v, mContact);
-                        }
-                    } else if (roomType == GROUP) {
-                        if (FragmentGroupProfileViewModel.onMenuClick != null) {
-                            FragmentGroupProfileViewModel.onMenuClick.clicked(v, mContact);
-                        }
-                    }
-                }
-            });
-        }
-
         StructContactInfo convertRealmToStruct(RealmMember realmMember) {
             return DbManager.getInstance().doRealmTask(realm -> {
                 String role = realmMember.getRole();
@@ -959,21 +939,21 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             if (realmRoomAccess.isCanAddNewAdmin()) {
                 adminRights = new TextCell(dialogRootView.getContext(), true);
                 adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
-                adminRights.setValue(contactInfo.isAdmin() ? "Edit admin rights" : "Add to admin");
+                adminRights.setValue(contactInfo.isAdmin() ? getResources().getString(R.string.edit_admin_rights) : getResources().getString(R.string.set_admin));
                 dialogRootView.addView(adminRights, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }
 
             if (!contactInfo.isAdmin() && roomType == GROUP) {
                 permission = new TextCell(dialogRootView.getContext(), true);
                 permission.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
-                permission.setValue("Change permission");
+                permission.setValue(getResources().getString(R.string.edit_rights));
                 dialogRootView.addView(permission, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }
 
             if (realmRoomAccess.isCanBanMember()) {
                 removeView = new TextCell(dialogRootView.getContext(), false);
                 removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
-                removeView.setValue("Remove from channel");
+                removeView.setValue(getResources().getString(R.string.remove_user));
                 dialogRootView.addView(removeView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }
 
@@ -1019,7 +999,13 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     .content(R.string.do_you_want_to_kick_this_member)
                     .positiveText(R.string.yes)
                     .negativeText(R.string.no)
-                    .onPositive((dialog, which) -> new RequestChannelKickMember().channelKickMember(mRoomID, peerId))
+                    .onPositive((dialog, which) -> {
+                        if (roomType == CHANNEL) {
+                            new RequestChannelKickMember().channelKickMember(mRoomID, peerId);
+                        } else {
+                            new RequestGroupKickMember().groupKickMember(mRoomID, peerId);
+                        }
+                    })
                     .show();
         }
     }
