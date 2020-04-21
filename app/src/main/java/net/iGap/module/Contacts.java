@@ -435,6 +435,7 @@ public class Contacts {
                 if (sp.length == 1) {
                     itemContact.setFirstName(sp[0]);
                     itemContact.setLastName("");
+                    phone = normalizePhoneNumber(phone);
                     itemContact.setPhone(phone);
                     itemContact.setDisplayName(name);
                 } else if (sp.length == 2) {
@@ -459,6 +460,15 @@ public class Contacts {
         } catch (Exception e) {
             //nothing
         }
+    }
+
+    private static String normalizePhoneNumber(String phone) {
+        String number = phone;
+        if (phone.trim().charAt(0) == '0') {
+            number = "+98" + phone.trim().substring(1);
+        }
+        number = number.replace(" ", "");
+        return number;
     }
 
     public interface ContactCallback {

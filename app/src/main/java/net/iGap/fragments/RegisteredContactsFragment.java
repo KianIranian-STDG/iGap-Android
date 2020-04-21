@@ -293,11 +293,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                          * if contacts size is zero send request for get contacts list
                          * for insuring that contacts not exist really or not
                          */
-                        if (results.size() == 0) {
                             LoginActions.importContact();
-                        } else {
                             prgMainLoader.setVisibility(View.GONE);
-                        }
                     }
 
                     @Override
@@ -309,9 +306,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     }
                 });
             } else {
-                if (results.size() == 0) {
-                    new RequestUserContactsGetList().userContactGetList();
-                }
+                LoginActions.importContact();
                 prgMainLoader.setVisibility(View.GONE);
             }
         } catch (IOException e) {
