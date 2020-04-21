@@ -1,30 +1,24 @@
 package net.iGap.fragments.mobileBank;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+
 import net.iGap.R;
 import net.iGap.adapter.mobileBank.AccountSpinnerAdapter;
 import net.iGap.databinding.MobileBankPayLoanBsFragmentBinding;
-import net.iGap.helper.HelperError;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.realm.RealmMobileBankAccounts;
 import net.iGap.viewmodel.mobileBank.MobileBankPayLoanBsViewModel;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,14 +31,14 @@ public class MobileBankPayLoanBsFragment extends BaseBottomSheet {
     private List<String> items = new ArrayList<>();
     private int mAmount ;
     private String mLoanNumber ;
-    private WeakReference<PayLoanListener> listener ;
+    private PayLoanListener listener;
 
     public static MobileBankPayLoanBsFragment newInstance( String loan , int amount , PayLoanListener loanListener) {
         MobileBankPayLoanBsFragment fragment = new MobileBankPayLoanBsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(fragment.AMOUNT_KEY, amount);
         bundle.putString(fragment.LOAN_NUMBER_KEY , loan);
-        fragment.listener = new WeakReference<>(loanListener);
+        fragment.listener = loanListener;
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -97,8 +91,8 @@ public class MobileBankPayLoanBsFragment extends BaseBottomSheet {
         mViewModel.getResponseListener().observe(getViewLifecycleOwner() , msg ->{
             if(msg == null) return;
             dismiss();
-            HelperError.showSnackMessage(msg , false);
-            if(listener.get() != null) listener.get().updateList();
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+            if (listener != null) listener.updateList();
         });
     }
 
