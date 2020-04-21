@@ -311,7 +311,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 inputGroupLink.addView(viewRevoke, viewParams);
 
                 TextView txtLink = new AppCompatTextView(getActivity());
-                txtLink.setText(Config.IGAP_LINK_PREFIX);
+                txtLink.setText(/*Config.IGAP_LINK_PREFIX*/link);
                 txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
