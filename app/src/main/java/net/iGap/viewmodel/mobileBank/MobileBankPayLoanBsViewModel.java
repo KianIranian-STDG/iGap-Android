@@ -18,18 +18,18 @@ public class MobileBankPayLoanBsViewModel extends BaseMobileBankViewModel {
 
     private SingleLiveEvent<Boolean> showLoader = new SingleLiveEvent<>();
     private SingleLiveEvent<String> responseListener = new SingleLiveEvent<>();
-    private ObservableBoolean isDefaultDeposit = new ObservableBoolean(true);
+    private ObservableBoolean isDefaultDeposit = new ObservableBoolean(false);
     private ObservableField<String> amountText = new ObservableField<>();
     private ObservableField<String> secondaryPass = new ObservableField<>();
     private ObservableField<String> customDeposit = new ObservableField<>();
-    private String mPaymentMethod = AUTO_GET_DEPOSIT;
+    private String mPaymentMethod = CUSTOM_DEPOSIT;
     private String mLoanNumber ;
     private int mMaxAmount ;
 
     public void onInquiryClicked(){
 
         if(amountText.get() != null && !amountText.get().isEmpty() && secondaryPass.get() != null && !secondaryPass.get().isEmpty()){
-            if(Integer.valueOf(amountText.get()) < mMaxAmount){
+            if (Integer.parseInt(amountText.get()) <= mMaxAmount) {
 
                 showLoader.setValue(true);
                 MobileBankRepository.getInstance().getPayLoan(
@@ -87,6 +87,8 @@ public class MobileBankPayLoanBsViewModel extends BaseMobileBankViewModel {
 
     public void setMaxAmount(int mMaxAmount) {
         this.mMaxAmount = mMaxAmount;
+        amountText.set(mMaxAmount + "");
+
     }
 
     public ObservableBoolean getIsDefaultDeposit() {

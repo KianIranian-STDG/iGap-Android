@@ -25,7 +25,7 @@ class PaintImageView @JvmOverloads constructor(context: Context,
     private val defaultStrokeWidth = 12f
     private val defaultTouchTolerance = 4f
     private val defaultBitmapPaint = Paint(Paint.DITHER_FLAG)
-    private var brushBitmap: Bitmap? = null
+    private lateinit var brushBitmap: Bitmap
     private var brushCanvas: Canvas? = null
     private var countDrawn = 0
     private var currentBrush = BrushType.NORMAL
