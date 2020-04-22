@@ -862,6 +862,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
+        if (isNotJoin)
+            return;
+
         if (realmRoomAccess != null && realmRoomAccess.isValid()) {
             if (chatType == CHANNEL) {
                 if (realmRoomAccess.isCanPostMessage()) {
@@ -2115,6 +2118,8 @@ public class FragmentChat extends BaseFragment
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);
             viewAttachFile.setVisibility(View.GONE);
+
+            rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
 
             layoutJoin.setOnClickListener(new View.OnClickListener() {
                 @Override
