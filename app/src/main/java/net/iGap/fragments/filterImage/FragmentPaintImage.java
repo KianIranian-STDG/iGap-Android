@@ -133,7 +133,7 @@ public class FragmentPaintImage extends Fragment {
         }
         finalImage = bd.getBitmap();
         final String path;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT < 29) {
             path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
         } else {
             path = storeBitmapInCache(finalImage);
