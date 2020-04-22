@@ -627,6 +627,7 @@ public class FragmentChat extends BaseFragment
     private SuggestedStickerAdapter suggestedAdapter;
     private FrameLayout suggestedLayout;
     private String lastChar;
+    public static View.OnClickListener onLinkClick;
 
     /**
      * get images for show in bottom sheet
@@ -859,6 +860,8 @@ public class FragmentChat extends BaseFragment
         }
 
         setupIntentReceiverForGetDataInTwoPanMode();
+
+
     }
 
     private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
@@ -1172,6 +1175,13 @@ public class FragmentChat extends BaseFragment
 
         //enable attachment popup camera if was visible
         if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.enableCamera();
+
+        onLinkClick = v -> {
+            Log.i("nazanin", "onViewCreated: " + keyboardViewVisible);
+            if (keyboardViewVisible) {
+                hideKeyboard();
+            }
+        };
     }
 
     private void checkToolbarNameSize() {
@@ -1236,6 +1246,9 @@ public class FragmentChat extends BaseFragment
 
         if (notifyFrameLayout != null)
             notifyFrameLayout.setListener(null);
+
+        if (onLinkClick != null)
+            onLinkClick = null;
 
         showKeyboardOnResume = false;
 
@@ -1304,7 +1317,6 @@ public class FragmentChat extends BaseFragment
 
         if (notifyFrameLayout != null)
             notifyFrameLayout.setListener(null);
-
     }
 
     @Override

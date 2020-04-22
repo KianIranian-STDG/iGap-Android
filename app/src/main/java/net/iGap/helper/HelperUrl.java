@@ -30,6 +30,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -212,6 +213,9 @@ public class HelperUrl {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
 
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
+
                 new CountDownTimer(300, 100) {
 
                     public void onTick(long millisUntilFinished) {
@@ -228,12 +232,12 @@ public class HelperUrl {
                     G.isLinkClicked = true;
                     String mUrl = strBuilder.toString().substring(start, end).trim();
 
-                    if (isTextEmail(mUrl)){
+                    if (isTextEmail(mUrl)) {
 
-                        openEmail(context , mUrl);
+                        openEmail(context, mUrl);
 
-                    }else { //text is url
-                        openWebBrowser(context , mUrl);
+                    } else { //text is url
+                        openWebBrowser(context, mUrl);
                     }
                 }
             }
@@ -264,7 +268,7 @@ public class HelperUrl {
         }
     }
 
-    public static void openEmail(Context context ,String email) {
+    public static void openEmail(Context context, String email) {
 
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
@@ -351,9 +355,11 @@ public class HelperUrl {
     }
 
     private static void insertIgapLink(FragmentActivity activity, final SpannableStringBuilder strBuilder, final int start, final int end) {
-
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
+
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
 
                 G.isLinkClicked = true;
                 String url = strBuilder.toString().substring(start, end);
@@ -392,6 +398,10 @@ public class HelperUrl {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
+
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
+
                 G.isLinkClicked = true;
                 String botCommandText = strBuilder.toString().substring(start, end);
 
@@ -415,6 +425,9 @@ public class HelperUrl {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
+
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
 
                 String url = strBuilder.toString().substring(start, end);
 
@@ -454,6 +467,10 @@ public class HelperUrl {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
+
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
+
                 G.isLinkClicked = true;
                 String digitLink = strBuilder.toString().substring(start, end);
                 openDialogDigitClick(activity, digitLink);
@@ -474,6 +491,10 @@ public class HelperUrl {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
+
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
+
                 G.isLinkClicked = true;
 
                 if (activity == null)
@@ -563,6 +584,10 @@ public class HelperUrl {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View view) {
+
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
+
                 G.isLinkClicked = true;
                 if (FragmentChat.hashListener != null) {
                     FragmentChat.hashListener.complete(true, "#" + text, messageID);
@@ -639,6 +664,10 @@ public class HelperUrl {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View view) {
+
+                if (FragmentChat.onLinkClick != null)
+                    FragmentChat.onLinkClick.onClick(view);
+
                 G.isLinkClicked = true;
                 checkUsernameAndGoToRoom(activity, text, ChatEntry.profile);
             }
@@ -853,10 +882,15 @@ public class HelperUrl {
                 closeDialogWaiting();
                 new JoinDialogFragment().setData(room, new JoinDialogFragment.JoinDialogListener() {
                     @Override
-                    public void onJoinClicked() { joinToRoom(activity, token, room); }
+                    public void onJoinClicked() {
+                        joinToRoom(activity, token, room);
+                    }
+
                     @Override
-                    public void onCancelClicked() { RealmRoom.deleteRoom(room.getId()); }
-                }).show(activity.getSupportFragmentManager() , "JoinDialogFragment");
+                    public void onCancelClicked() {
+                        RealmRoom.deleteRoom(room.getId());
+                    }
+                }).show(activity.getSupportFragmentManager(), "JoinDialogFragment");
             });
         }
     }
@@ -1001,7 +1035,7 @@ public class HelperUrl {
                                 });
                             } else {
                                 DbManager.getInstance().doRealmTransaction(realm -> {
-                                   for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                    for (ProtoGlobal.RoomMessage roomMessage : messageList) {
                                         if (roomMessage.getAuthor().hasUser()) {
                                             RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                                         }
@@ -1145,13 +1179,11 @@ public class HelperUrl {
                 if (realmRoom != null) {
                     // room with given roomID exists.
                     new GoToChatActivity(realmRoom.getId()).startActivity(activity);
-                }
-                else if (peerId > 0){
+                } else if (peerId > 0) {
                     realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
                     if (realmRoom != null) {
                         new GoToChatActivity(realmRoom.getId()).startActivity(activity);
-                    }
-                    else {
+                    } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
                             public void onChatGetRoom(final ProtoGlobal.Room room) {
@@ -1192,8 +1224,7 @@ public class HelperUrl {
                         };
                         new RequestChatGetRoom().chatGetRoom(peerId);
                     }
-                }
-                else {
+                } else {
                     G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
                         @Override
                         public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
@@ -1453,8 +1484,8 @@ public class HelperUrl {
 
     }
 
-    public static void openLinkDialog(FragmentActivity fa , String mUrl){
-        String url = mUrl ;
+    public static void openLinkDialog(FragmentActivity fa, String mUrl) {
+        String url = mUrl;
         List<String> items = new ArrayList<>();
         items.add(fa.getString(R.string.copy_item_dialog));
 
@@ -1479,7 +1510,7 @@ public class HelperUrl {
                     Toast.makeText(fa, R.string.copied, Toast.LENGTH_SHORT).show();
 
                 } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
-                    openWebBrowser(fa , finalUrl);
+                    openWebBrowser(fa, finalUrl);
                 } else if (items.get(position).equals(fa.getString(R.string.email))) {
                     openEmail(fa, finalUrl);
                 }
