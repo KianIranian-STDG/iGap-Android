@@ -342,7 +342,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onBackPressed() throws IllegalStateException {
-        startActivity(new Intent(ActivityCall.this, ActivityMain.class));
+        if (viewModel.isConnected || viewModel.isConnecting)
+            startActivity(new Intent(ActivityCall.this, ActivityMain.class));
+        else {
+            viewModel.onLeaveView("");
+        }
+        Log.d("amini", "onBackPressed: ");
     }
 
     @Override
@@ -561,7 +566,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     }
 
     private void screenOff() {
-        if (ActivityCallViewModel.isConnected) {
+        if (viewModel.isConnected) {
             PowerManager.WakeLock wakeLock;
             int field = 0x00000020;
             wakeLock = ((PowerManager) getSystemService(POWER_SERVICE)).newWakeLock(field, getLocalClassName());

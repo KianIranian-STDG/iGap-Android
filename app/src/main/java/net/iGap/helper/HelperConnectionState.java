@@ -33,7 +33,7 @@ public class HelperConnectionState {
 
         if (connectionState != ConnectionState.IGAP) {
             if (G.onCallLeaveView != null) {
-                G.onCallLeaveView.onLeaveView("");
+                G.onCallLeaveView.onLeaveView("SocketDisconnect");
             }
         }
 

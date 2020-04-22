@@ -1449,6 +1449,8 @@ Want to get it?</string>
     <string name="Create_new_Folder_here">Create a new Folder here</string>
     <string name="Powered_by_iGap">Powered by iGap</string>
     <string name="on_hold">call on hold...</string>
+    <string name="disconnecting">Disconnecting...</string>
+    <string name="poor_connection">poor connection!</string>
     <string name="switchTo">switch To :</string>
     <string name="stop">Stop Bot</string>
     <string name="stop_message_bot">Are you sure you want to stop this bot?</string>

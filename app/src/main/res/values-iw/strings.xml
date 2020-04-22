@@ -2303,4 +2303,6 @@
     <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
     <string name="kuknos_buyP_MinAmount">میزان درخواستی شما از حداقل تعداد خرید این توکن کمتر میباشد.</string>
     <string name="kuknos_regulations_title">برای اضافه شدن این توکن به کیف پول خود باید با تمامی موارد سپیدنامه این توکن موافقت کنید.</string>
+    <string name="disconnecting">قطع تماس...</string>
+    <string name="poor_connection">اتصال ضعیف</string>
 </resources>
