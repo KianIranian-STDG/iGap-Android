@@ -2577,4 +2577,24 @@
     <string name="kuknos_RecoverySK_ErrorGenerateMn">متاسفانه امکان تولید کلید عمومی وجود ندارد. امکان استفاده از کیف پول ققنوس در گوشی شما وجود ندارد.</string>
     <string name="disconnecting">قطع تماس...</string>
     <string name="poor_connection">اتصال ضعیف</string>
+    <string name="restrictions_on_sending_stickers">محدودیت در ارسال استیکر!</string>
+    <string name="restrictions_on_sending_multimedia_messages">Restrictions on sending multimedia messages!</string>
+    <string name="post_message">ارسال پیام</string>
+    <string name="pin_message_1">سنجاق پیام</string>
+    <string name="edit_message">ویرایش پیام</string>
+    <string name="delete_message">حذف پیام</string>
+    <string name="modify_room">ویرایش اطلاعات</string>
+    <string name="send_text">ارسال متن</string>
+    <string name="send_media">ارسال رسانه</string>
+    <string name="send_gif">ارسال گیف</string>
+    <string name="send_sticker">ارسال استیکر</string>
+    <string name="send_link">ارسال پیوند</string>
+    <string name="remove_user">حذف کاربر</string>
+    <string name="admin_rights">دسترسی های مدیر</string>
+    <string name="edit_rights">ویرایش دسترسی</string>
+    <string name="edit_admin_rights">ویرایش دسترسی های مدیر</string>
+    <string name="edit_member_rights">دسترسی های کاربر</string>
+    <string name="edit_room_rights">دسترسی های عمومی گروه</string>
+    <string name="restrictions_on_sending_messages">محدودیت در ارسال پیام!</string>
+    <string name="change_group_rights">ویرایش دسترسی های عمومی گروه</string>
 </resources>

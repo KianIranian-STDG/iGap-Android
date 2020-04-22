@@ -10,8 +10,8 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperString;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
@@ -172,6 +172,9 @@ public class RealmChannelRoom extends RealmObject {
     }
 
     public void setRole(ChannelChatRole role) {
+        if (role == ChannelChatRole.MODERATOR) {
+            role = ChannelChatRole.ADMIN;
+        }
         this.role = role.toString();
     }
 

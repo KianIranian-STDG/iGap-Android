@@ -11,21 +11,16 @@
 package net.iGap.response;
 
 import net.iGap.helper.HelperMember;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoGroupAddAdmin;
+import net.iGap.realm.RealmRoomAccess;
 
 public class GroupAddAdminResponse extends MessageHandler {
 
-    public int actionId;
-    public Object message;
-    public String identity;
-
-    public GroupAddAdminResponse(int actionId, Object protoClass, String identity) {
+    public GroupAddAdminResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
@@ -33,15 +28,22 @@ public class GroupAddAdminResponse extends MessageHandler {
         super.handler();
         ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder = (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) message;
         HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
-    }
 
-    @Override
-    public void timeOut() {
-        super.timeOut();
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(asyncRealm -> RealmRoomAccess.groupAdminPutOrUpdate(builder.getPermission(), builder.getMemberId(), builder.getRoomId(), asyncRealm));
+        });
+
+        if (identity instanceof OnResponse) {
+            ((OnResponse) identity).onReceived(message, null);
+        }
     }
 
     @Override
     public void error() {
         super.error();
+
+        if (identity instanceof OnResponse) {
+            ((OnResponse) identity).onReceived(null, message);
+        }
     }
 }

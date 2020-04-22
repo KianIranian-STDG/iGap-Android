@@ -319,7 +319,6 @@
                     android:text="@string/member"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
-                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
                     app:layout_constraintRight_toRightOf="@id/notification"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
@@ -334,7 +333,7 @@
                     android:text="@string/subscribers_title"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
-                    android:visibility="@{viewModel.showMemberList}"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@id/subscribersCount"
                     app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintTop_toBottomOf="@id/members" />
@@ -347,7 +346,7 @@
                     android:text="@{viewModel.subscribersCount}"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
-                    android:visibility="@{viewModel.showMemberList}"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/subscribers"
                     app:layout_constraintEnd_toEndOf="@id/members"
                     app:layout_constraintStart_toEndOf="@id/subscribers"
@@ -363,7 +362,6 @@
                     android:text="@string/administrators_title"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
-                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
                     app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintTop_toBottomOf="@id/subscribers" />
@@ -376,7 +374,6 @@
                     android:text="@{viewModel.administratorsCount}"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
-                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
                     app:layout_constraintEnd_toEndOf="@id/members"
                     app:layout_constraintStart_toEndOf="@id/administrators"
@@ -392,7 +389,7 @@
                     android:text="@string/moderators_title"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
-                    android:visibility="@{viewModel.showMemberList}"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
                     app:layout_constraintStart_toStartOf="@id/members"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
@@ -405,7 +402,7 @@
                     android:text="@{viewModel.moderatorsCount}"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
-                    android:visibility="@{viewModel.showMemberList}"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
                     app:layout_constraintEnd_toEndOf="@id/members"
                     app:layout_constraintStart_toEndOf="@id/moderator"
@@ -417,7 +414,6 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
                     android:background="?iGapDividerLine"
-                    android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />

@@ -849,6 +849,31 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 47) {
+
+            RealmObjectSchema realmPostMessageRights = schema.create(RealmPostMessageRights.class.getSimpleName())
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_GIF, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_LINK, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_MEDIA, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_STICKER, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_TEXT, boolean.class);
+
+            schema.create(RealmRoomAccess.class.getSimpleName())
+                    .addField(RealmRoomAccessFields.ID, String.class, FieldAttribute.PRIMARY_KEY)
+                    .addField(RealmRoomAccessFields.USER_ID, long.class)
+                    .addField(RealmRoomAccessFields.ROOM_ID, long.class)
+                    .addField(RealmRoomAccessFields.CAN_ADD_NEW_ADMIN, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_ADD_NEW_MEMBER, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_BAN_MEMBER, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_DELETE_MESSAGE, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_EDIT_MESSAGE, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_GET_MEMBER_LIST, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_MODIFY_ROOM, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_PIN_MESSAGE, boolean.class)
+                    .addRealmObjectField(RealmRoomAccessFields.REALM_POST_MESSAGE_RIGHTS.$, realmPostMessageRights);
+
+            oldVersion++;
+        }
     }
 
     @Override

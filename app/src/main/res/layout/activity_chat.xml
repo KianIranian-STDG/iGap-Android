@@ -239,6 +239,19 @@
                 android:id="@+id/layout_attach_file"
                 layout="@layout/layout_chatroom_botoom" />
 
+            <TextView
+                android:id="@+id/tv_chat_sendMessagePermission"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp52"
+                android:background="?attr/iGapTopRoundButtonPrimary"
+                android:gravity="center"
+                android:clickable="true"
+                android:text="@string/restrictions_on_sending_messages"
+                android:textColor="?attr/iGapPrimaryTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:visibility="gone"
+                android:focusable="true" />
+
             <FrameLayout
                 android:id="@+id/fl_chat_keyboardContainer"
                 android:layout_width="match_parent"

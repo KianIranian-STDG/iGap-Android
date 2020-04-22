@@ -2317,5 +2317,8 @@
     <string name="kuknos_regulations_title">برای اضافه شدن این توکن به کیف پول خود باید با تمامی موارد سپیدنامه این توکن موافقت کنید.</string>
     <string name="disconnecting">قطع تماس...</string>
     <string name="poor_connection">اتصال ضعیف</string>
+    <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
+    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
 
 </resources>

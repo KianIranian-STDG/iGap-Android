@@ -23,11 +23,11 @@ public class TextCell extends FrameLayout {
     private boolean isRtl = G.isAppRtl;
 
     public TextCell(@NonNull Context context) {
-        this(context, false, 21);
+        this(context, false, 22);
     }
 
     public TextCell(@NonNull Context context, boolean needDivider) {
-        this(context, needDivider, 21);
+        this(context, needDivider, 22);
     }
 
     public TextCell(@NonNull Context context, boolean needDivider, int padding) {
@@ -45,10 +45,10 @@ public class TextCell extends FrameLayout {
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-        addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_VERTICAL | (isRtl ? Gravity.RIGHT : Gravity.LEFT), isRtl ? 72 : padding, 0, isRtl ? padding : 72, 0));
+        addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_VERTICAL | (isRtl ? Gravity.RIGHT : Gravity.LEFT), isRtl ? 8 : padding, 0, isRtl ? padding : 8, 0));
     }
 
-    public void setText(CharSequence text) {
+    public void setValue(CharSequence text) {
         textView.setText(text);
     }
 
@@ -66,7 +66,7 @@ public class TextCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(20) : 0), getMeasuredHeight() - 1, Theme.getInstance().getDividerPaint(getContext()));
+            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1, Theme.getInstance().getDividerPaint(getContext()));
         }
     }
 }

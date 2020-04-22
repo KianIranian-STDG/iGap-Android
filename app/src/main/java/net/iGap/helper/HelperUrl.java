@@ -39,28 +39,28 @@ import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.module.dialog.BottomSheetItemClickCallback;
-import net.iGap.module.dialog.JoinDialogFragment;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.libs.Tuple;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.BottomSheetItemClickCallback;
+import net.iGap.module.dialog.JoinDialogFragment;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.observers.interfaces.OnClientCheckInviteLink;
 import net.iGap.observers.interfaces.OnClientGetRoomResponse;
 import net.iGap.observers.interfaces.OnClientJoinByInviteLink;
 import net.iGap.observers.interfaces.OnClientResolveUsername;
-import net.iGap.libs.Tuple;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
@@ -871,6 +871,8 @@ public class HelperUrl {
 
                     closeDialogWaiting();
                     RealmRoom.joinByInviteLink(room.getId());
+
+                    new RequestClientGetRoom().clientGetRoom(room.getId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner);
 
                     if (room.getId() != FragmentChat.lastChatRoomId) {
                         new GoToChatActivity(room.getId()).startActivity(activity);
