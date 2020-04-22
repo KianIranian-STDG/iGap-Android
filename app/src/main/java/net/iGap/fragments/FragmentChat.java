@@ -273,6 +273,8 @@ import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomDraft;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -327,6 +329,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmObjectChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -435,7 +438,6 @@ public class FragmentChat extends BaseFragment
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
     private RealmRoom managedRoom;
-    private RealmRoom unmanagedRoom;
 
     private WebView webViewChatPage;
     private boolean isStopBot;
@@ -585,6 +587,10 @@ public class FragmentChat extends BaseFragment
     private int messageLentghCounter;
     private int oldMessageLentghCounter;
 
+    @Nullable
+    private RealmRoomAccess currentRoomAccess;
+    private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
+
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
             resentedMessageId = new ArrayList<>();
@@ -621,6 +627,7 @@ public class FragmentChat extends BaseFragment
     private SuggestedStickerAdapter suggestedAdapter;
     private FrameLayout suggestedLayout;
     private String lastChar;
+    public static View.OnClickListener onLinkClick;
 
     /**
      * get images for show in bottom sheet
@@ -695,6 +702,16 @@ public class FragmentChat extends BaseFragment
                 return super.dispatchKeyEventPreIme(event);
             }
         };
+
+        Bundle extras = getArguments();
+        if (extras != null) {
+            mRoomId = extras.getLong("RoomId");
+
+            if (mustCheckPermission())
+                currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, mRoomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+                });
+        }
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
@@ -834,11 +851,84 @@ public class FragmentChat extends BaseFragment
             sendMoney.setVisibility(View.VISIBLE);
         }
 
+        if (currentRoomAccess != null) {
+            checkRoomAccess(currentRoomAccess);
+
+            roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
+
+            currentRoomAccess.addChangeListener(roomAccessChangeListener);
+        }
+
         setupIntentReceiverForGetDataInTwoPanMode();
+
+
+    }
+
+    private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
+        if (isNotJoin)
+            return;
+
+        if (realmRoomAccess != null && realmRoomAccess.isValid()) {
+            if (chatType == CHANNEL) {
+                if (realmRoomAccess.isCanPostMessage()) {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
+                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+                } else {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
+
+                    if (currentRoleIsOwnerOrAdmin())
+                        rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
+                    else
+                        rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+                }
+
+                if (getRoom().getType().equals(CHANNEL)) {
+                    if (currentRoleIsOwnerOrAdmin())
+                        layoutMute.setVisibility(View.GONE);
+                    else
+                        layoutMute.setVisibility(View.VISIBLE);
+                }
+
+                if (!realmRoomAccess.isCanEditMessage() || !realmRoomAccess.isCanPostMessage() && (rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
+                    if (keyboardViewVisible)
+                        hideKeyboard();
+
+                    edtChat.setText("");
+
+                    removeEditedMessage();
+                }
+            } else if (chatType == GROUP && realmRoomAccess.getRealmPostMessageRights() != null) {
+                if (keyboardView != null)
+                    keyboardView.setStickerPermission(realmRoomAccess.getRealmPostMessageRights().isCanSendSticker());
+
+                if (mAttachmentPopup != null) {
+                    mAttachmentPopup.setMediaPermission(realmRoomAccess.getRealmPostMessageRights().isCanSendMedia());
+                }
+
+                if (realmRoomAccess.getRealmPostMessageRights().isCanSendText()) {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
+                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+                } else {
+                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.GONE);
+                    rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.VISIBLE);
+
+                    if (keyboardViewVisible)
+                        hideKeyboard();
+
+                    edtChat.setText("");
+                }
+
+            }
+
+        }
     }
 
     public long getRoomId() {
         return mRoomId;
+    }
+
+    private boolean currentRoleIsOwnerOrAdmin() {
+        return getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP) && getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) || getRoom().getChannelRoom().getRole().equals(ChannelChatRole.OWNER) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN) || getRoom().getGroupRoom().getRole().equals(GroupChatRole.OWNER);
     }
 
     private void setupIntentReceiverForGetDataInTwoPanMode() {
@@ -849,6 +939,21 @@ public class FragmentChat extends BaseFragment
                     manageTrimVideoResult(data);
                 }
             };
+        }
+    }
+
+    private boolean mustCheckPermission() {
+        if (getRoom().getType().equals(CHAT))
+            return false;
+        else
+            return getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP);
+    }
+
+    private void removeRoomAccessChangeListener() {
+        if (currentRoomAccess != null && roomAccessChangeListener != null) {
+            currentRoomAccess.removeChangeListener(roomAccessChangeListener);
+            currentRoomAccess = null;
+            roomAccessChangeListener = null;
         }
     }
 
@@ -1070,6 +1175,13 @@ public class FragmentChat extends BaseFragment
 
         //enable attachment popup camera if was visible
         if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.enableCamera();
+
+        onLinkClick = v -> {
+            Log.i("nazanin", "onViewCreated: " + keyboardViewVisible);
+            if (keyboardViewVisible) {
+                hideKeyboard();
+            }
+        };
     }
 
     private void checkToolbarNameSize() {
@@ -1135,7 +1247,15 @@ public class FragmentChat extends BaseFragment
         if (notifyFrameLayout != null)
             notifyFrameLayout.setListener(null);
 
+        if (onLinkClick != null)
+            onLinkClick = null;
+
         showKeyboardOnResume = false;
+
+        if (keyboardView != null)
+            keyboardView.onDestroyParentFragment();
+
+        removeRoomAccessChangeListener();
     }
 
     @Override
@@ -1197,7 +1317,6 @@ public class FragmentChat extends BaseFragment
 
         if (notifyFrameLayout != null)
             notifyFrameLayout.setListener(null);
-
     }
 
     @Override
@@ -1451,9 +1570,12 @@ public class FragmentChat extends BaseFragment
     }
 
     private RealmRoom getRoom() {
-        return DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        });
+        if (managedRoom == null) {
+            return managedRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            });
+        } else
+            return managedRoom;
     }
 
     private void invalidateViews() {
@@ -1812,12 +1934,6 @@ public class FragmentChat extends BaseFragment
         });
     }
 
-    private void updateUnmanagedRoom() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            unmanagedRoom = realm.copyFromRealm(managedRoom);
-        });
-    }
-
     private void initMain() {
         HelperGetMessageState.clearMessageViews();
 
@@ -1874,11 +1990,6 @@ public class FragmentChat extends BaseFragment
 
         managedRoom = getRoom();
         if (managedRoom != null) { // room exist
-
-
-            DbManager.getInstance().doRealmTask(realm -> {
-                unmanagedRoom = realm.copyFromRealm(managedRoom);
-            });
 
             title = managedRoom.getTitle();
             initialize = managedRoom.getInitials();
@@ -2020,6 +2131,8 @@ public class FragmentChat extends BaseFragment
             layoutMute.setVisibility(View.GONE);
             viewAttachFile.setVisibility(View.GONE);
 
+            rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
+
             layoutJoin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -2157,19 +2270,8 @@ public class FragmentChat extends BaseFragment
 
     private void sendRequestPinMessage(final long id) {
         if (id == 0) {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
                     .content(String.format(context.getString(R.string.pin_messages_content), context.getString(R.string.unpin)))
-                    .neutralText(R.string.all_member)
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (chatType == CHANNEL) {
-                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
-                            } else {
-                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
-                            }
-                        }
-                    })
                     .positiveText(R.string.this_page)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
@@ -2179,7 +2281,21 @@ public class FragmentChat extends BaseFragment
                             }
                             RealmRoom.updatePinedMessageDeleted(mRoomId, false);
                         }
-                    }).negativeText(R.string.cancel).show();
+                    }).negativeText(R.string.cancel);
+
+            if (currentRoomAccess != null && currentRoomAccess.isCanPinMessage()) {
+                builder.neutralText(R.string.all_member)
+                        .onNeutral((dialog, which) -> {
+                            if (chatType == CHANNEL) {
+                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
+                            } else {
+                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
+                            }
+                        });
+            }
+
+            builder.show();
+
         } else {
             new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
                     .content(String.format(context.getString(R.string.pin_messages_content), context.getString(R.string.PIN)))
@@ -3393,6 +3509,9 @@ public class FragmentChat extends BaseFragment
 
             keyboardView.setVisibility(View.GONE);
 
+            if (mustCheckPermission())
+                keyboardView.setStickerPermission(currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights() != null && currentRoomAccess.getRealmPostMessageRights().isCanSendSticker());
+
             keyboardContainer.addView(keyboardView);
         }
     }
@@ -3594,6 +3713,11 @@ public class FragmentChat extends BaseFragment
                 .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
                 .setListener(FragmentChat.this)
                 .build();
+
+
+        if (mAttachmentPopup != null && mustCheckPermission()) {
+            mAttachmentPopup.setMediaPermission(currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights() != null && currentRoomAccess.getRealmPostMessageRights().isCanSendMedia());
+        }
 
     }
 
@@ -4640,7 +4764,8 @@ public class FragmentChat extends BaseFragment
             return;
         }
         List<Integer> items = setupMessageContainerClickDialogItems(message);
-        if (items == null || items.size() == 0) return;
+        if (items.size() == 0)
+            return;
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setListDataWithResourceId(getContext(), items, -1, position -> {
             handleContainerBottomSheetClick(message, pos, items.get(position));
         });
@@ -4677,21 +4802,24 @@ public class FragmentChat extends BaseFragment
             shareLinkIsOn = true;
         }
 
-        if (!isNotJoin) items.add(R.string.replay_item_dialog);
+        if (!isNotJoin)
+            items.add(R.string.replay_item_dialog);
+
         items.add(R.string.share_item_dialog);
+
         if (shareLinkIsOn)
             items.add(R.string.share_link_item_dialog);
+
         items.add(R.string.forward_item_dialog);
         items.add(R.string.delete_item_dialog);
-        if (isFileExistInLocalStorage(message)) items.add(R.string.delete_from_storage);
+
+        if (isFileExistInLocalStorage(message))
+            items.add(R.string.delete_from_storage);
 
         //check and remove share base on type and download state
         if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")) {
-
             items.remove(Integer.valueOf(R.string.share_item_dialog));
-
         } else if (!roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
-
             String filepath_;
             if (message.realmRoomMessage.getForwardMessage() != null) {
                 filepath_ = message.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() != null ? message.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.realmRoomMessage.getForwardMessage().getAttachment().getCacheId(), message.realmRoomMessage.getForwardMessage().getAttachment().getName(), roomMessageType);
@@ -4748,30 +4876,18 @@ public class FragmentChat extends BaseFragment
 
         if (realmRoom != null) {
             //if user clicked on any message which he wasn't its sender, remove edit mList option
-            boolean showLayoutPin = RealmRoom.isPinedMessage(mRoomId, message.realmRoomMessage.getMessageId());
+            boolean showLayoutPin = !RealmRoom.isPinedMessage(mRoomId, message.realmRoomMessage.getMessageId()) && currentRoomAccess != null && currentRoomAccess.isCanPinMessage();
             if (chatType == CHANNEL) {
                 if (channelRole == ChannelChatRole.MEMBER) {
-                    items.remove(Integer.valueOf(R.string.edit_item_dialog));
                     items.remove(Integer.valueOf(R.string.replay_item_dialog));
-                    items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                } else {
-                    showLayoutPin = true;
                 }
-                //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
                 if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.realmRoomMessage.getAuthorHash())) {
-                    if (channelRole == ChannelChatRole.MEMBER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                    } else if (channelRole == ChannelChatRole.MODERATOR) {
-                        //if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
-                    } else if (channelRole == ChannelChatRole.ADMIN) {
-                        //if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
-                    }
-                    if (channelRole != ChannelChatRole.OWNER) {
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanEditMessage()) {
                         items.remove(Integer.valueOf(R.string.edit_item_dialog));
+                    }
+
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanDeleteMessage()) {
+                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
                     }
                 }
             } else if (chatType == GROUP) {
@@ -4781,18 +4897,13 @@ public class FragmentChat extends BaseFragment
                 }
                 //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
                 if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.realmRoomMessage.getAuthorHash())) {
-                    if (groupRole == GroupChatRole.MEMBER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                    } else if (groupRole == GroupChatRole.MODERATOR) {
-                        //if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
-                    } else if (groupRole == GroupChatRole.ADMIN) {
-                        //if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
-                        //}
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanEditMessage()) {
+                        items.remove(Integer.valueOf(R.string.edit_item_dialog));
                     }
-                    items.remove(Integer.valueOf(R.string.edit_item_dialog));
+
+                    if (currentRoomAccess != null && !currentRoomAccess.isCanDeleteMessage()) {
+                        items.remove(Integer.valueOf(R.string.delete_item_dialog));
+                    }
                 }
             } else if (realmRoom.getReadOnly()) {
                 items.remove(Integer.valueOf(R.string.replay_item_dialog));
@@ -6158,14 +6269,11 @@ public class FragmentChat extends BaseFragment
 
         new Thread(() -> DbManager.getInstance().doRealmTransaction(realm -> {
             realm.copyToRealmOrUpdate(roomMessage);
-        })).start();
-
-        DbManager.getInstance().doRealmTransaction(realm -> {
             RealmStickerItem stickerItem = realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
             if (stickerItem != null && stickerItem.isValid()) {
                 stickerItem.setRecent();
             }
-        });
+        })).start();
 
         StructMessageInfo sm = new StructMessageInfo(roomMessage);
 

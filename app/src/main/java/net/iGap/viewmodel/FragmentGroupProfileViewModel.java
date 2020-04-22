@@ -1,11 +1,8 @@
 package net.iGap.viewmodel;
 
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
-import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
@@ -13,23 +10,20 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.Config;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.GoToSharedMediaModel;
+import net.iGap.module.Contacts;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.enums.GroupChatRole;
+import net.iGap.module.structs.StructContactInfo;
 import net.iGap.observers.interfaces.OnGroupAddMember;
-import net.iGap.observers.interfaces.OnGroupKickMember;
 import net.iGap.observers.interfaces.OnGroupLeft;
 import net.iGap.observers.interfaces.OnGroupRemoveUsername;
 import net.iGap.observers.interfaces.OnGroupRevokeLink;
-import net.iGap.observers.interfaces.OnMenuClick;
-import net.iGap.model.GoToSharedMediaModel;
-import net.iGap.module.Contacts;
-import net.iGap.module.enums.GroupChatRole;
-import net.iGap.module.structs.StructContactInfo;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
@@ -39,8 +33,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientMuteRoom;
-import net.iGap.request.RequestGroupAddAdmin;
-import net.iGap.request.RequestGroupAddModerator;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
@@ -70,7 +62,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public ObservableInt sharedFileCount = new ObservableInt(0);
     public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedLinkCount = new ObservableInt(0);
-    public ObservableInt addMemberVisibility = new ObservableInt(View.GONE);
     public ObservableField<String> inviteLink = new ObservableField<>("");
     public ObservableInt inviteLinkTitle = new ObservableInt(R.string.group_link);
     public ObservableInt showLoading = new ObservableInt(View.GONE);
@@ -102,7 +93,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public GroupChatRole role;
     public boolean isPrivate;
 
-    public static OnMenuClick onMenuClick;
     public long roomId;
     private String initials;
     public String linkUsername;
@@ -159,7 +149,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         setTextGroupLik();
 
         //OWNER,ADMIN,MODERATOR,MEMBER can add member to group
-        addMemberVisibility.set(View.VISIBLE);
         showEditButton.setValue(role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER);
         showLeaveGroup.set(role != GroupChatRole.ADMIN && role != GroupChatRole.OWNER ? View.VISIBLE : View.GONE);
 
@@ -167,9 +156,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
         FragmentShearedMedia.getCountOfSharedMedia(roomId);
 
-        initRecycleView();
         onGroupAddMemberCallback();
-        onGroupKickMemberCallback();
 
         if (realmRoom != null) {
             realmRoom.addChangeListener((realmModel, changeSet) -> {
@@ -280,7 +267,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     public void onClickRippleGroupAvatar() {
-        if (DbManager.getInstance().doRealmTask(realm -> { return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();}) != null) {
+        if (DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
+        }) != null) {
             goToShowAvatarPage.setValue(roomId);
         }
     }
@@ -501,31 +490,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         };
     }
 
-    private void onGroupKickMemberCallback() {
-        G.onGroupKickMember = new OnGroupKickMember() {
-            @Override
-            public void onGroupKickMember(final long roomId, final long memberId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setMemberCount(roomId);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        };
-    }
-
-    private void setMemberCount(final long roomId) {
+    public void setMemberCount(final long roomId) {
         memberCount = DbManager.getInstance().doRealmTask(realm -> {
             return RealmRoom.getMemberCount(realm, roomId);
         });
@@ -542,105 +507,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
     }
 
-    private void initRecycleView() {
-
-        onMenuClick = new OnMenuClick() {
-            @Override
-            public void clicked(View view, StructContactInfo info) {
-                new CreatePopUpMessage().show(view, info);
-            }
-        };
+    public RealmRoom getRealmRoom() {
+        return realmRoom;
     }
-
-    class CreatePopUpMessage {
-
-        private void show(View view, final StructContactInfo info) {
-            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
-            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
-
-            if (role == GroupChatRole.OWNER) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == GroupChatRole.ADMIN) {
-
-                /**
-                 *  ----------- Admin ---------------
-                 *  1- admin dose'nt access set another admin
-                 *  2- admin can set moderator
-                 *  3- can remove moderator
-                 *  4- can kick moderator and Member
-                 */
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == GroupChatRole.MODERATOR) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                }
-            } else {
-
-                return;
-            }
-
-            // Setup menu item selection
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.menu_setAdmin:
-                            setToAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_set_moderator:
-                            setToModerator(info.peerId);
-                            return true;
-                        case R.id.menu_remove_admin:
-                            fragment.kickAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_remove_moderator:
-                            fragment.kickModerator(info.peerId);
-                            return true;
-                        case R.id.menu_kick:
-                            fragment.kickMember(info.peerId);
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-            // Handle dismissal with: popup.setOnDismissListener(...);
-            // Show the menu
-            popup.show();
-        }
-
-        private void setToAdmin(Long peerId) {
-            new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
-        }
-
-        private void setToModerator(Long peerId) {
-            new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
-        }
-    }
-
 }

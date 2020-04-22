@@ -149,6 +149,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30324, "ProtoGroupRevokeLink.GroupRevokeLinkResponse");
         lookupMap.put(30325, "ProtoGroupEditMessage.GroupEditMessageResponse");
         lookupMap.put(30326, "ProtoGroupPinMessage.GroupPinMessageResponse");
+        lookupMap.put(30327, "ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse");
 
         // Channel 4xx , 304xx
         lookupMap.put(30400, "ProtoChannelCreate.ChannelCreateResponse");

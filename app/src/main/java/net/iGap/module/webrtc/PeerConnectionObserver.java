@@ -46,12 +46,12 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
 
     @Override
     public void onSignalingChange(PeerConnection.SignalingState signalingState) {
-        Log.i("WWW", "onSignalingChange : " + signalingState);
+        Log.i("amini", "onSignalingChange : " + signalingState);
     }
 
     @Override
     public void onIceConnectionChange(final PeerConnection.IceConnectionState iceConnectionState) {
-        Log.i("WWW", "onIceConnectionChange : " + iceConnectionState);
+        Log.i("amini", "onIceConnectionChange : " + iceConnectionState);
         if (G.iSignalingCallBack != null) {
             if (iceConnectionState == CLOSED || iceConnectionState == DISCONNECTED) {
                 G.iSignalingCallBack.onStatusChanged(CallState.DISCONNECTED);
@@ -67,19 +67,18 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
 
     @Override
     public void onIceConnectionReceivingChange(boolean b) {
-        Log.i("WWW", "onIceConnectionReceivingChange : " + b);
+        Log.i("amini", "onIceConnectionReceivingChange : " + b);
     }
 
     @Override
     public void onIceGatheringChange(PeerConnection.IceGatheringState iceGatheringState) {
-        Log.i("WWW", "onIceGatheringChange : " + iceGatheringState);
+        Log.i("amini", "onIceGatheringChange : " + iceGatheringState);
     }
 
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
         Log.i("WWW", "WebRtc onIceCandidate : " + iceCandidate.toString());
         new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
-
     }
 
     @Override

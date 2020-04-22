@@ -15,9 +15,9 @@ import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.module.SUID;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoChannelGetMemberList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
@@ -209,6 +209,9 @@ public class RealmMember extends RealmObject {
                                 newMembers.clear();
                                 for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
 
+                                    if (member.getRole().equals(ProtoGlobal.ChannelRoom.Role.ADMIN) || member.getRole().equals(ProtoGlobal.ChannelRoom.Role.OWNER))
+                                        RealmRoomAccess.channelAdminPutOrUpdate(member.getAdminRights(), member.getUserId(), realmRoom.getId(), realm);
+
                                     final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
                                     if (realmRegisteredInfo != null) {
                                         newMembers.add(RealmMember.put(realm, member.getUserId(), member.getRole().toString()));
@@ -253,6 +256,11 @@ public class RealmMember extends RealmObject {
                                 members.clear();
                                 newMembers.clear();
                                 for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
+
+                                    if (member.getRole().equals(ProtoGlobal.GroupRoom.Role.ADMIN) || member.getRole().equals(ProtoGlobal.GroupRoom.Role.OWNER))
+                                        RealmRoomAccess.groupAdminPutOrUpdate(member.getAdminRights(), member.getUserId(), realmRoom.getId(), realm);
+                                    else if (member.getRole().equals(ProtoGlobal.GroupRoom.Role.MEMBER))
+                                        RealmRoomAccess.groupMemberPutOrUpdate(member.getMemberRights(), member.getUserId(), realmRoom.getId(), realm);
 
                                     final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
                                     if (realmRegisteredInfo != null) {

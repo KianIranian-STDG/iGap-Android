@@ -18,11 +18,11 @@ import androidx.lifecycle.ViewModel;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructSessions;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmPrivacy;
@@ -138,23 +138,14 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
         updatePrivacyUI(realmPrivacy);
 
-        userInfoListener = new RealmChangeListener<RealmModel>() {
-            @Override
-            public void onChange(RealmModel element) {
-
-                if (((RealmUserInfo) element).isValid()) {
-                    selfRemove = ((RealmUserInfo) element).getSelfRemove();
-                    setTextSelfDestructs();
-                }
+        userInfoListener = element -> {
+            if (((RealmUserInfo) element).isValid()) {
+                selfRemove = ((RealmUserInfo) element).getSelfRemove();
+                setTextSelfDestructs();
             }
         };
 
-        privacyListener = new RealmChangeListener<RealmModel>() {
-            @Override
-            public void onChange(RealmModel element) {
-                updatePrivacyUI((RealmPrivacy) element);
-            }
-        };
+        privacyListener = element -> updatePrivacyUI((RealmPrivacy) element);
     }
 
     private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, final int position, int title, final int type) {
@@ -329,11 +320,16 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
         if (realmPrivacy == null) {
             fillPrivacyDatabaseWithDefaultValues();
         }
-        
-        if (privacyListener != null) {
+
+        addPrivacyChangeListener();
+        updatePrivacyUI(realmPrivacy);
+    }
+
+    private void addPrivacyChangeListener() {
+
+        if (privacyListener != null && realmPrivacy != null) {
             realmPrivacy.addChangeListener(privacyListener);
         }
-        updatePrivacyUI(realmPrivacy);
     }
 
     /**
@@ -342,18 +338,14 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
      */
     private void fillPrivacyDatabaseWithDefaultValues() {
 
-        RealmPrivacy.updatePrivacy(
-                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
-                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
-                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
-                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
-                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
-                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString()
-        );
-
-        realmPrivacy = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmPrivacy.class).findFirst();
+        RealmPrivacy.fillWithDefaultValues(() -> {
+            realmPrivacy = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmPrivacy.class).findFirst();
+            });
+            addPrivacyChangeListener();
+            updatePrivacyUI(realmPrivacy);
         });
+
 
     }
 }

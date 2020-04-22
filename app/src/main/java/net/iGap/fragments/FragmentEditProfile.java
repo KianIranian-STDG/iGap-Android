@@ -82,12 +82,14 @@ public class FragmentEditProfile extends BaseFragment {
             }
         });
         viewModel.getCancelIconClick().observe(getViewLifecycleOwner(), isClick -> {
-            String currentName = viewModel.getUserInfo().getUserInfo().getDisplayName() != null ? viewModel.getUserInfo().getUserInfo().getDisplayName() : "";
-            String currentUserName = viewModel.getUserInfo().getUserInfo().getUsername() != null ? viewModel.getUserInfo().getUserInfo().getUsername() : "";
-            String currentBio = viewModel.getUserInfo().getUserInfo().getBio() != null ? viewModel.getUserInfo().getUserInfo().getBio() : "";
-            binding.nameEditText.setText(currentName);
-            binding.userNameEditText.setText(currentUserName);
-            binding.bioEditText.setText(currentBio);
+            if (viewModel.getUserInfo() != null) {
+                String currentName = viewModel.getUserInfo().getUserInfo().getDisplayName() != null ? viewModel.getUserInfo().getUserInfo().getDisplayName() : "";
+                String currentUserName = viewModel.getUserInfo().getUserInfo().getUsername() != null ? viewModel.getUserInfo().getUserInfo().getUsername() : "";
+                String currentBio = viewModel.getUserInfo().getUserInfo().getBio() != null ? viewModel.getUserInfo().getUserInfo().getBio() : "";
+                binding.nameEditText.setText(currentName);
+                binding.userNameEditText.setText(currentUserName);
+                binding.bioEditText.setText(currentBio);
+            }
         });
 
         binding.userNameEditText.addTextChangedListener(new TextWatcher() {
