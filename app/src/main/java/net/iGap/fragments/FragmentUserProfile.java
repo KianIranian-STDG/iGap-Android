@@ -42,6 +42,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -122,9 +123,9 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
-            if (drawable != null) {
-                binding.fupBgAvatar.setImageDrawable(drawable);
+        viewModel.changeUserProfileWallpaperPath.observe(getViewLifecycleOwner(), path -> {
+            if (path != null && new File(path).exists()) {
+                ImageLoadingServiceInjector.inject().loadImage(binding.fupBgAvatar, path);
             } else {
                 binding.fupBgAvatar.setImageResource(R.drawable.test_bg);
             }

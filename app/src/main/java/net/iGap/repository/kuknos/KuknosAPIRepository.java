@@ -88,10 +88,10 @@ class KuknosAPIRepository {
         temp.execute();
     }*/
 
-    void changeTrust(String accountSeed, String code, String issuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+    void changeTrust(String accountSeed, String code, String issuer, String trustLineLimitByIssuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
         new KuknosSDKRepo(KuknosSDKRepo.API.CHANGE_TRUST, XDR -> new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.changeTrust(XDR), handShakeCallback, apiResponse))
-                .execute(accountSeed, code, issuer);
+                .execute(accountSeed, code, issuer, trustLineLimitByIssuer);
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.changeTrust(new KuknosSDKRepo().trustlineXDR(accountSeed, code, issuer))
                         , handShakeCallback, apiResponse);*/

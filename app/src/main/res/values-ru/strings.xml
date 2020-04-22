@@ -1127,6 +1127,8 @@
     <string name="charge_5">50000 риалов</string>
     <string name="charge_10">100 000 риалов</string>
     <string name="charge_20">200 000 риалов</string>
+
+    <string name="value_added">добавленной стоимости</string>
     <string name="charge_1_ir">10 000 риалов + 9% добавленной стоимости = 10 900 риалов</string>
     <string name="charge_2_ir">20 000 риалов + 9% добавленной стоимости = 21 180 риалов</string>
     <string name="charge_5_ir">50 000 риалов + 9% добавленной стоимости = 54 500 риалов</string>
@@ -1980,4 +1982,7 @@
     <string name="gift_carde_sended">Вы уже отправили подарочную карту кому-то еще!</string>
     <string name="trim_error">Обрезка слишком короткая, пожалуйста, попробуйте с действительной продолжительностью.</string>
     <string name="card_is_disable">Текущий пункт отключен.</string>
+    <string name="restrictions_on_sending_stickers">Ограничения на отправку стикеров!</string>
+    <string name="restrictions_on_sending_multimedia_messages">Ограничения на отправку мультимедийных сообщений!</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
 </resources>

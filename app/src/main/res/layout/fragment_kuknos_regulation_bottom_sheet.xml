@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/lineViewTop"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/iGapBottomSheetHeaderLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".34" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:padding="@dimen/dp8"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="visible"
+            android:text="@string/kuknos_regulations_title"
+            android:textColor="?attr/iGapTitleTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/termsAndConditionCheck"
+            android:layout_marginTop="10dp"
+            android:button="@drawable/check_box_background"
+            android:checked="true"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/termsAndConditionText"
+            android:layout_marginStart="@dimen/dp6"
+            android:layout_marginLeft="@dimen/dp6"
+            android:text="@string/ok"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintStart_toEndOf="@+id/termsAndConditionCheck"
+            app:layout_constraintEnd_toEndOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/termsAndConditionCheck"
+            app:layout_constraintBottom_toTopOf="@+id/termsAndConditionCheck" />
+
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/iGapButton"
+            android:id="@+id/nextBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="24dp"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/termsAndConditionCheck"
+            app:layout_constraintWidth_percent=".5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

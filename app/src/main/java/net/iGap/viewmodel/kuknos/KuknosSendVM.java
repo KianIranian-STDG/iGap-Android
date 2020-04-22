@@ -56,7 +56,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         openQrScanner = new MutableLiveData<>();
         openQrScanner.setValue(false);
         mode = Mode.PUBLIC_KEY;
-        changeHint = new SingleLiveEvent<>();
+        changeHint = new MutableLiveData<>(R.string.kuknos_send_walletAddress_Hint1);
     }
 
     public void QrcodeScan() {
@@ -65,7 +65,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
 
     public void sendCredit() {
 
-        if (!checkWalletID() || !checkAmount() || !checkMemo()) {
+        if (!checkAmount() || !checkMemo() || !checkWalletID(true)) {
             return;
         }
         goToPin.setValue(true);
@@ -81,7 +81,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
         return true;
     }
 
-    public boolean checkWalletID() {
+    public boolean checkWalletID(boolean isFromBtn) {
         if (walletID.get() == null) {
             errorM.setValue(new KuknosError(true, "Invalid WalletID", "0", R.string.kuknos_send_walletIDError));
             return false;
@@ -91,7 +91,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
             return false;
         }
         if (mode == Mode.KUKNOS_ID) {
-            convertFederation(true);
+            convertFederation(isFromBtn);
             return false;
         }
         if (!checkKeyPairExsit()) {
@@ -155,7 +155,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
                 }
                 federationProgressVisibility.set(View.GONE);
                 if (isFromBtn)
-                    sendCredit();
+                    goToPin.setValue(true);
             }
 
             @Override
@@ -178,7 +178,10 @@ public class KuknosSendVM extends BaseAPIViewModel {
     public void sendDataServer() {
         kuknosSendM.setAmount(amount.get());
         kuknosSendM.setSrc(panelRepo.getUserRepo().getSeedKey());
-        kuknosSendM.setDest(walletID.get());
+        if (mode == Mode.KUKNOS_ID)
+            kuknosSendM.setDest(walletIdResponse.get());
+        else
+            kuknosSendM.setDest(walletID.get());
         kuknosSendM.setAssetCode(balanceInfoM.getAssetCode());
         kuknosSendM.setAssetInssuer(balanceInfoM.getAssetIssuer());
         kuknosSendM.setMemo("TRANSFER: " + (text.get() == null ? "" : text.get()));

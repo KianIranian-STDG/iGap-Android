@@ -14,6 +14,13 @@ import android.bluetooth.BluetoothProfile;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.StringRes;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -44,12 +51,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.annotation.StringRes;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import io.realm.Realm;
 
 public class ActivityCallViewModel extends ViewModel implements BluetoothProfile.ServiceListener {
@@ -96,7 +97,8 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     private boolean isHandsFreeConnected = false;
 
 
-    public static boolean isConnected = false;
+    public boolean isConnected = false;
+    public boolean isConnecting = false;
     public ObservableInt txtAviVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutOptionVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutChatCallVisibility = new ObservableInt(View.VISIBLE);
@@ -129,6 +131,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
             playRingTone.setValue(true);
             callBackTxtStatus.set(R.string.incoming_call);
             layoutOptionVisibility.set(View.GONE);
+            isConnecting = true;
         } else {
             setPhoneSpeaker();
             playSound.setValue(R.raw.igap_signaling);
@@ -279,11 +282,11 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     public void onCallClick() {
         if (isIncomingCall) {
-            G.isWebRtcConnected = true;
             if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
                 showRendererSurface.set(View.VISIBLE);
                 showImageBackground.set(View.GONE);
             }
+            G.isWebRtcConnected = true;
             G.isVideoCallRinging = false;
             UserStatusController.getInstance().setOnline();
             WebRTC.getInstance().createAnswer();
@@ -324,6 +327,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                 //    @Override
                 //    public void run() {
                 Log.d("amini", "onStatusChanged: " + callState.name());
+                isConnecting = false;
                 callBackTxtStatus.set(getTextString(callState));
                 switch (callState) {
                     case RINGING:
@@ -331,6 +335,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         playSound.postValue(R.raw.igap_ringing);
                         txtAviVisibility.set(View.VISIBLE);
                         G.isVideoCallRinging = true;
+                        isConnecting = true;
                         break;
                     case INCAMING_CALL:
                         showRippleView.postValue(true);
@@ -339,6 +344,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                     case CONNECTING:
                         showRippleView.postValue(false);
                         txtAviVisibility.set(View.VISIBLE);
+                        isConnecting = true;
                         break;
                     case CONNECTED:
 
@@ -459,6 +465,10 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                 return R.string.too_long;
             case ON_HOLD:
                 return R.string.on_hold;
+            case DISCONNECTING:
+                return R.string.disconnecting;
+            case POOR_CONNECTION:
+                return R.string.poor_connection;
             default:
                 return R.string.empty_error_message;
         }
@@ -507,6 +517,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     }
 
     public void endCall() {
+        G.iSignalingCallBack.onStatusChanged(CallState.DISCONNECTING);
         Log.wtf(this.getClass().getName(), "endCall");
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
@@ -514,6 +525,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
+        isConnecting = false;
 
         /*G.handler.postDelayed(new Runnable() {
             @Override
@@ -675,7 +687,10 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     public void onLeaveView(String type) {
         Log.wtf(this.getClass().getName(), "onLeaveView");
+        if (type.equals("SocketDisconnect"))
+            G.iSignalingCallBack.onStatusChanged(CallState.POOR_CONNECTION);
         isConnected = false;
+        isConnecting = false;
         if (type.equals("error")) {
             playRingTone.postValue(false);
             txtAviVisibility.set(View.GONE);

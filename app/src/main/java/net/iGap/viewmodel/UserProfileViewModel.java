@@ -169,7 +169,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
-    public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
+    public MutableLiveData<String> changeUserProfileWallpaperPath = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> openAccountsDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
@@ -990,16 +990,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             if (realmWallpaper != null) {
                 RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
                 String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
-                if (!new File(bigImagePath).exists()) {
-                    changeUserProfileWallpaper.postValue(null);
-                } else {
-                    setProfileWallpaperOrDefault(bigImagePath);
-                }
+                changeUserProfileWallpaperPath.postValue(bigImagePath);
+
             } else {
-                changeUserProfileWallpaper.postValue(null);
+                changeUserProfileWallpaperPath.postValue(null);
             }
         } catch (Exception e) {
-            changeUserProfileWallpaper.postValue(null);
+            changeUserProfileWallpaperPath.postValue(null);
         }
     }
 
@@ -1017,7 +1014,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             @Override
                             public void OnProgress(String mPath, final int progress) {
                                 if (progress == 100) {
-                                    setProfileWallpaperOrDefault(bigImagePath);
+                                    changeUserProfileWallpaperPath.postValue(bigImagePath);
                                 }
                             }
 
@@ -1026,7 +1023,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             }
                         });
                     } else {
-                        setProfileWallpaperOrDefault(bigImagePath);
+                        changeUserProfileWallpaperPath.postValue(bigImagePath);
                     }
                 } else {
                     getProfileWallpaperFromServer();
@@ -1043,28 +1040,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             e3.printStackTrace();
         }
 
-    }
-
-    private void setProfileWallpaperOrDefault(String backGroundPath) {
-
-        if (backGroundPath.length() > 0) {
-            File f = new File(backGroundPath);
-            if (f.exists()) {
-                try {
-                    Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                    changeUserProfileWallpaper.postValue(d);
-                    return;
-                } catch (OutOfMemoryError e) {
-                    changeUserProfileWallpaper.postValue(null);
-                    ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
-                    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-                    activityManager.getMemoryInfo(memoryInfo);
-                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
-                }
-            }
-        }
-
-        changeUserProfileWallpaper.postValue(null);
     }
 
     @Override

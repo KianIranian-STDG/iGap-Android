@@ -455,16 +455,9 @@ public class FragmentMediaPlayer extends BaseFragment {
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-
-                DbManager.getInstance().doRealmTransaction(realm -> {
-                    for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                        RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
-                    }
-                });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
             }
         });
     }

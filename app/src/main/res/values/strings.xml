@@ -1307,6 +1307,7 @@ Want to get it?</string>
     <string name="charge_50"> 500,000 Rials</string>
     <string name="charge_100"> 1,000,000 Rials</string>
 
+    <string name="value_added">Value added</string>
     <string name="charge_1_ir">10,000 Rials + 9% Value Added = 10,900 Rials</string>
     <string name="charge_2_ir">20,000 Rials + 9% Value Added = 21,180 Rials</string>
     <string name="charge_5_ir">50,000 Rials + 9% Value Added = 54,500 Rials</string>
@@ -1448,6 +1449,8 @@ Want to get it?</string>
     <string name="Create_new_Folder_here">Create a new Folder here</string>
     <string name="Powered_by_iGap">Powered by iGap</string>
     <string name="on_hold">call on hold...</string>
+    <string name="disconnecting">Disconnecting...</string>
+    <string name="poor_connection">poor connection!</string>
     <string name="switchTo">switch To :</string>
     <string name="stop">Stop Bot</string>
     <string name="stop_message_bot">Are you sure you want to stop this bot?</string>
@@ -2087,7 +2090,7 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">Name length is too short.</string>
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">National ID format is wrong.</string>
     <string name="kuknos_SignupInfo_errorUsernameEmpty">Username must not be empty.</string>
-    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers.</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">Username\'s Character must be a to z and numbers. It must be at least 5 characters</string>
     <string name="kuknos_RecoverySK_Title">Recovery keys</string>
     <string name="kuknos_RecoverySK_Message">All of the below keywords are case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to restore your wallet.</string>
     <string name="kuknos_RecoverySK_Btn">Okay, I have written it down.</string>
@@ -2118,7 +2121,7 @@ Want to get it?</string>
     <string name="kuknos_panelStr_history">History</string>
     <string name="kuknos_panelStr_trading">Trading</string>
     <string name="kuknos_panelStr_kyc">KYC</string>
-    <string name="kuknos_panelStr_buyPeyman">Buy Peyman</string>
+    <string name="kuknos_panelStr_buyPeyman">Buy Token</string>
     <string name="kuknos_panelStr_setting">Setting</string>
     <string name="kuknos_develop">developing</string>
     <string name="kuknos_recieve_title">For receiving credit from others, you must send your wallet ID to others.</string>
@@ -2128,7 +2131,7 @@ Want to get it?</string>
     <string name="kuknos_send_title">Send Token</string>
     <string name="kuknos_send_walletAddress">Wallet Address*</string>
     <string name="kuknos_send_walletAddress_Hint1">i.e. GAVYHKFTRGE…</string>
-    <string name="kuknos_send_walletAddress_Hint2">i.e. amini*pdpco.ir</string>
+    <string name="kuknos_send_walletAddress_Hint2">i.e. test*pdpco.ir</string>
     <string name="kuknos_send_text">Memo ID or text</string>
     <string name="kuknos_send_amount">Amount*</string>
     <string name="kuknos_send_sendBtn">Send</string>
@@ -2186,10 +2189,10 @@ Want to get it?</string>
     <string name="kuknos_logout_pin">PIN</string>
     <string name="kuknos_logout_btn">Logout</string>
     <string name="kuknos_logout_load">Loging out...</string>
-    <string name="kuknos_buyP_title">Buy Peymon</string>
+    <string name="kuknos_buyP_title">Buy %1$s</string>
     <string name="kuknos_buyP_message">Kuknus is a multi-token platform that provides issues of any assets.
-        In Kuknos platform we have an assets called Paymon (PMN) which is the native assets for Kuknus.</string>
-    <string name="kuknos_buyP_amount">Number of Peymen (PMN)* :</string>
+        In Kuknos platform we have an assets called %1$s.</string>
+    <string name="kuknos_buyP_amount">Number of %1$s* :</string>
     <string name="kuknos_buyP_btn">Buy</string>
     <string name="kuknos_buyP_btn_server">Checking...</string>
     <string name="kuknos_buyP_btn_server2">Finilizing...</string>
@@ -2201,11 +2204,12 @@ Want to get it?</string>
         - Consider as a gauge for assessing minimum balances\n</string>
     <string name="kuknos_buyP_sumTitle">Sum: </string>
     <string name="kuknos_buyP_sumCurrency">IRR</string>
-    <string name="kuknos_buyP_emptyAmount">Number of PMN can NOT be empty.</string>
-    <string name="kuknos_buyP_zeroAmount">Number of PMN can NOT be zero.</string>
+    <string name="kuknos_buyP_emptyAmount">Number of %1$s can NOT be empty.</string>
+    <string name="kuknos_buyP_zeroAmount">Number of %1$s can NOT be zero.</string>
     <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
     <string name="kuknos_buyP_MaxAmount">You are exceeding the maximum buyable value of this token.</string>
+    <string name="kuknos_buyP_MinAmount">Your order is less than the minimum buyable value of this token.</string>
     <string name="kuknos_buyP_currency">IRR</string>
     <string name="kuknos_trade_origin">Selling*</string>
     <string name="kuknos_trade_dest">Buying*</string>
@@ -2250,8 +2254,8 @@ Want to get it?</string>
     <string name="kuknos_login_progress_next">Next</string>
     <string name="kuknos_panel_addAsset">Add Asset</string>
     <string name="kuknos_login_error_server_ErrorStr">Server Error: No response. please try again later.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateMn">Can NOT generate recovery key. make contact with support.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateKey">Can NOT generate seed key. make contact with support.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateMn">Sorry we can NOT generate recovery key. Kuknos wallet is NOT supported in your phone.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateKey">Sorry we can NOT generate recovery key. Kuknos wallet is NOT supported in your phone.</string>
     <string name="kuknos_recieve_walletCopy">My Kuknus wallet address is: \n\n</string>
     <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
     <string name="kuknos_soon_error">Trade will be active soon.</string>
@@ -2310,6 +2314,7 @@ Want to get it?</string>
     <string name="kuknos_parsianTerms_term2">I set https://pdpco.ir as the home domain of my wallet</string>
     <string name="kuknos_parsianTerms_term3">I have trust to the issuer of SKYC</string>
     <string name="kuknos_parsianTerms_errorTermAndCondition">If you would like to continue, please accept all terms and conditions</string>
+    <string name="kuknos_regulations_title">Regulations and Terms: You must incline to all of the term of this token to add it to your wallet.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>
@@ -2630,5 +2635,25 @@ Want to get it?</string>
     <string name="gift_carde_sended">You already sent a gift card to someone else!</string>
     <string name="trim_error">"Trim is too short , please try with valid duration."</string>
     <string name="card_is_disable">Current item is disable.</string>
+    <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
+    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="post_message">Post Message</string>
+    <string name="pin_message_1">Pin Message</string>
+    <string name="edit_message">Edit Message</string>
+    <string name="delete_message">Delete Message</string>
+    <string name="modify_room">Modify Room</string>
+    <string name="send_text">Send Text</string>
+    <string name="send_media">Send Media</string>
+    <string name="send_gif">Send Gif</string>
+    <string name="send_sticker">Send Sticker</string>
+    <string name="send_link">Send Link</string>
+    <string name="remove_user">Remove user</string>
+    <string name="admin_rights">‌Admin rights</string>
+    <string name="edit_rights">Edit admin rights</string>
+    <string name="edit_admin_rights">Edit admin rights</string>
+    <string name="edit_member_rights">Member rights</string>
+    <string name="edit_room_rights">group\'s rights</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
+    <string name="change_group_rights">Change group rights</string>
 
 </resources>

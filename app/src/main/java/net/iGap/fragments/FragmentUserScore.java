@@ -21,6 +21,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentUserScoreBinding;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -109,6 +110,12 @@ public class FragmentUserScore extends BaseFragment {
                 integrator.setBeepEnabled(false);
                 integrator.setPrompt("");
                 integrator.initiateScan();
+            }
+        });
+
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessageResource -> {
+            if (errorMessageResource != null) {
+                HelperError.showSnackMessage(getString(errorMessageResource), false);
             }
         });
     }

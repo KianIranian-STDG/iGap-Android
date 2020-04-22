@@ -534,13 +534,13 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private void viewPagerItemChanged(int position) {
         if (hasEmoji && hasSticker)
             if (position == EMOJI) {
-                stickerIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
-                emojiIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
+                stickerIv.setColorFilter(Theme.getInstance().getSubTitleColor(stickerIv.getContext()), PorterDuff.Mode.SRC_IN);
+                emojiIv.setColorFilter(Theme.getInstance().getTitleTextColor(emojiIv.getContext()), PorterDuff.Mode.SRC_IN);
                 settingIv.setImageResource(R.drawable.ic_backspace);
                 checkEmojiTabY(null, 0);
             } else if (position == STICKER) {
-                emojiIv.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.SRC_IN);
-                stickerIv.setColorFilter(Color.parseColor("#434343"), PorterDuff.Mode.SRC_IN);
+                emojiIv.setColorFilter(Theme.getInstance().getSubTitleColor(emojiIv.getContext()), PorterDuff.Mode.SRC_IN);
+                stickerIv.setColorFilter(Theme.getInstance().getTitleTextColor(stickerIv.getContext()), PorterDuff.Mode.SRC_IN);
                 settingIv.setImageResource(R.drawable.ic_settings);
                 checkStickersTabY(null, 0);
             }
@@ -611,9 +611,42 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         }
     }
 
+    private void checkStickerPermission(boolean canSendSticker) {
+        if (!canSendSticker) {
+            emptyTv = new AppCompatTextView(getContext());
+            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            emptyTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
+            emptyTv.setLines(1);
+            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setMaxLines(1);
+            emptyTv.setSingleLine(true);
+            emptyTv.setEllipsize(TextUtils.TruncateAt.END);
+            emptyTv.setGravity(Gravity.CENTER);
+            emptyTv.setText(R.string.restrictions_on_sending_stickers);
+            stickerContainer.addView(emptyTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 42));
+
+            stickerTabView.setVisibility(GONE);
+            addStickerIv.setVisibility(GONE);
+            stickerGridView.setVisibility(GONE);
+        } else if (emptyTv != null) {
+            stickerContainer.removeView(emptyTv);
+            emptyTv = null;
+
+            stickerTabView.setVisibility(VISIBLE);
+            addStickerIv.setVisibility(VISIBLE);
+            stickerGridView.setVisibility(VISIBLE);
+        }
+    }
+
     public void onDestroyParentFragment() {
         if (compositeDisposable != null && !compositeDisposable.isDisposed())
             compositeDisposable.dispose();
+    }
+
+    public void setStickerPermission(boolean stickerPermission) {
+        if (hasSticker)
+            checkStickerPermission(stickerPermission);
     }
 
     public interface Listener {

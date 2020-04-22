@@ -526,7 +526,7 @@ public class HelperNotification {
     private class ShowPopUp {
 
 
-        void checkPopUp(int popUpMod) {
+        void checkPopUp(int popUpMod, long id) {
 
             boolean result = false;
 
@@ -554,7 +554,7 @@ public class HelperNotification {
             }
 
 
-            if (result) {
+            if (result && id == AccountManager.getInstance().getCurrentUser().getId()) {
                 if (getForegroundApp() || ActivityPopUpNotification.isPopUpVisible) { //check that any other program is in background
 
                     if (ActivityPopUpNotification.isPopUpVisible) {
@@ -563,6 +563,7 @@ public class HelperNotification {
                         }
                     } else {
                         Intent intent = new Intent(context, ActivityPopUpNotification.class);
+                        intent.putExtra(ActivityMain.userId, id);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(intent);
                     }
@@ -714,7 +715,7 @@ public class HelperNotification {
             }
 
             if (!G.isAppInFg && !AttachFile.isInAttach) {
-                showPopUp.checkPopUp(popUpMode);
+                showPopUp.checkPopUp(popUpMode, accountUser.getId());
             }
 
         }

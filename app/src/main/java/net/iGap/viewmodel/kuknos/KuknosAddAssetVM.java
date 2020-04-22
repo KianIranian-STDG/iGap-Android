@@ -1,5 +1,7 @@
 package net.iGap.viewmodel.kuknos;
 
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
@@ -10,8 +12,6 @@ import net.iGap.model.kuknos.Parsian.KuknosTransactionResult;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.PanelRepo;
 import net.iGap.repository.kuknos.TradeRepo;
-
-import androidx.lifecycle.MutableLiveData;
 
 public class KuknosAddAssetVM extends BaseAPIViewModel {
 
@@ -92,7 +92,7 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             return;
         }
         progressState.setValue(false);
-        tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
+        tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), (temp.getTrustLimit() == 0) ? null : ("" + temp.getTrustLimit()), this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosTransactionResult> data) {
                 getAccountDataFromServer();
@@ -112,6 +112,10 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             }
 
         });
+    }
+
+    public String getRegulationsAddress(int position) {
+        return assetPageMutableLiveData.getValue().getAssets().get(position).getRegulations();
     }
 
     public void onSubmit() {

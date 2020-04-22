@@ -563,6 +563,8 @@
     <string name="charge_10">100.000 ریال لیق</string>
     <string name="charge_100">1.000.000 ریال لیق</string>
     <string name="charge_10_ir">100.000 ریالی +  9%  ارزش افزوده = 109.000 ریال</string>
+
+    <string name="value_added">ارزش افزوده</string>
     <string name="charge_1_ir">10.000 ریالی +  9%  ارزش افزوده = 10.900 ریال</string>
     <string name="charge_2">20.000 ریال لیق</string>
     <string name="charge_20">200.000 ریال لیق </string>
@@ -1117,7 +1119,6 @@
     <string name="kuknos_SignupInfo_submitConnecting">ذخیره </string>
     <string name="kuknos_SignupInfo_title">استفاده چینین معلوماتی </string>
     <string name="kuknos_SignupInfo_username">استفاده چی آدی *</string>
-    <string name="kuknos_buyP_amount">درخواست اولونان پیمانلارین سایی</string>
     <string name="kuknos_buyP_btn">آلیش</string>
     <string name="kuknos_buyP_btn_server">بررسی</string>
     <string name="kuknos_buyP_btn_server2">بانکا گوندرمک </string>
@@ -1126,10 +1127,8 @@
     <string name="kuknos_buyP_emptyAmount">درخواست ائتدیگینیز پیمانلارین سایینی داخل ائدین </string>
     <string name="kuknos_buyP_failB">بانک سروری ایله ارتباط یارانمادی. زحمت اولماسا نئچه دقیقه سونرا بیر داها چالیشین </string>
     <string name="kuknos_buyP_failS">سرور ایله ارتباط یارانمادی. نئچه دقیقه سونرا یئنیدن چالیشین </string>
-    <string name="kuknos_buyP_message">ققنوس شبکه سی بیر نئچه پلتفرملو و یا نئچه دارایی لی توکندیر (Multi Token) و اونون اوستونده مختلف نوع توکنلری دوزلتمک ممکندور. بورادا مختلف نوع توکنلری اونون اوستونده دوزلتمک ممکندور. بورادا بیر خاط توکن و یا دارایی پیمان آدی ایله موجوددور(PMN). اونون اوچون مخصوص بیر استفاده نظرده توتولموشدور. </string>
     <string name="kuknos_buyP_sumCurrency">ریال </string>
     <string name="kuknos_buyP_sumTitle">پرداخت لارین جمعی:</string>
-    <string name="kuknos_buyP_title">پیمان آلماق </string>
     <string name="kuknos_buyP_zeroAmount">درخواست اولونان پیمانلارین سایی صفر اولمامالیدر </string>
     <string name="kuknos_changePIN_emptyCP">حاضرکی رمزی داخل ائدین </string>
     <string name="kuknos_changePIN_emptyNP">یئنی رمزی داخل ائدثین </string>
@@ -2298,5 +2297,15 @@
     <string name="clr_adjust">تنظیم رنگ</string>
     <string name="dsgn_on_photo_title">طراحی</string>
     <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
+    <string name="kuknos_buyP_title">خرید %1$s</string>
+    <string name="kuknos_buyP_message">شبکه ققنوس یک پلتفرم چند توکنی (Multi Token) یا چند دارایی (Multi Asset) است که امکان ساختن انواع توکن بر روی آن مقدور است. در این میان یک توکن (یا دارایی) بنام %1$s وجود دارد.</string>
+    <string name="kuknos_buyP_amount">تعداد %1$s درخواستی *</string>
     <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
+    <string name="kuknos_buyP_MinAmount">میزان درخواستی شما از حداقل تعداد خرید این توکن کمتر میباشد.</string>
+    <string name="kuknos_regulations_title">برای اضافه شدن این توکن به کیف پول خود باید با تمامی موارد سپیدنامه این توکن موافقت کنید.</string>
+    <string name="disconnecting">قطع تماس...</string>
+    <string name="poor_connection">اتصال ضعیف</string>
+    <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
+    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
 </resources>

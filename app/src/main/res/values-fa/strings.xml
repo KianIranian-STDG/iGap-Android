@@ -1269,6 +1269,7 @@
     <string name="charge_50"> 500.000 ریالی</string>
     <string name="charge_100"> 1.000.000 ریالی</string>
 
+    <string name="value_added">ارزش افزوده</string>
     <string name="charge_1_ir">10.000 ریالی +  9%  ارزش افزوده = 10.900 ریال</string>
     <string name="charge_2_ir">20.000 ریالی +  9%  ارزش افزوده = 21.180 ریال</string>
     <string name="charge_5_ir">50.000 ریالی +  9%  ارزش افزوده = 54.500 ریال</string>
@@ -2047,7 +2048,7 @@
     <string name="kuknos_panelStr_history">سابقه</string>
     <string name="kuknos_panelStr_trading">مبادله</string>
     <string name="kuknos_panelStr_kyc">احراز هویت</string>
-    <string name="kuknos_panelStr_buyPeyman">خرید پیمان</string>
+    <string name="kuknos_panelStr_buyPeyman">خرید دارایی</string>
     <string name="kuknos_panelStr_setting">تنظیمات</string>
     <string name="kuknos_develop">در حال توسعه</string>
     <string name="kuknos_recieve_title">جهت دریافت اعتبار از افراد دیگر، شناسه کیف پول خود را برای آنها ارسال نمایید.</string>
@@ -2108,17 +2109,17 @@
     <string name="kuknos_logout_pin">رمز ورودی</string>
     <string name="kuknos_logout_btn">خروج از کیف پول</string>
     <string name="kuknos_logout_load">خروج...</string>
-    <string name="kuknos_buyP_title">خرید پیمان</string>
-    <string name="kuknos_buyP_message">شبکه ققنوس یک پلتفرم چند توکنی (Multi Token) یا چند دارایی (Multi Asset) است که امکان ساختن انواع توکن بر روی آن مقدور است. در این میان یک توکن (یا دارایی) خاص بنام پیمان (PMN) وجود دارد که کارکردهای ویژه ای برای آن در نظر گرفته شده است.</string>
-    <string name="kuknos_buyP_amount">تعداد پیمان درخواستی *</string>
+    <string name="kuknos_buyP_title">خرید %1$s</string>
+    <string name="kuknos_buyP_message">شبکه ققنوس یک پلتفرم چند توکنی (Multi Token) یا چند دارایی (Multi Asset) است که امکان ساختن انواع توکن بر روی آن مقدور است. در این میان یک توکن (یا دارایی) بنام %1$s وجود دارد.</string>
+    <string name="kuknos_buyP_amount">تعداد %1$s درخواستی *</string>
     <string name="kuknos_buyP_btn">خرید</string>
     <string name="kuknos_buyP_btn_server">بررسی...</string>
     <string name="kuknos_buyP_btn_server2">انتقال به بانک</string>
     <string name="kuknos_buyP_desc">- سنجش (پیمانه) ارزشگذاری سایر دارایی­ های شبکه ققنوس و تعیین ضریب تبدیل آنها به یکدیگر \n- به دلیل بهره گیری از پشتوانه طلا (هر پیمان دارای پشتوانه ۳۰ سوت طلای ۲۴ عیار) نوسان ارزش آن بسیارناچیز است و لذا در معاملات بازار می تواند به عنوان یک دارایی ثابت از آن استفاده نمود. \n- پرداخت هزینه های تراکنش های شبکه ققنوس \n- معیاری جهت کنترل حداقل مانده موجودی حساب ها \n </string>
     <string name="kuknos_buyP_sumTitle">جمع پرداختی:</string>
     <string name="kuknos_buyP_sumCurrency">ریال</string>
-    <string name="kuknos_buyP_emptyAmount">تعداد پیمان درخواستی خود را وارد نمایید.</string>
-    <string name="kuknos_buyP_zeroAmount">تعداد پیمان درخواستی نباید صفر باشد.</string>
+    <string name="kuknos_buyP_emptyAmount">تعداد %1$s درخواستی خود را وارد نمایید.</string>
+    <string name="kuknos_buyP_zeroAmount">تعداد %1$s درخواستی نباید صفر باشد.</string>
     <string name="kuknos_buyP_failS">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_buyP_failB">ارتباط با سرور بانک برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_buyP_currency">ریال</string>
@@ -2165,8 +2166,7 @@
     <string name="kuknos_login_progress_next">بعدی</string>
     <string name="kuknos_panel_addAsset">افزودن دارایی</string>
     <string name="kuknos_login_error_server_ErrorStr">خطای سرور: عدم جواب. لطفا دوباره تلاش کنید.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateMn">عدم امکان تولید زنجیره کلمات. لطفا با پشتیبانی تماس بگیرید.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateKey">متاسفانه امکان تولید کلید عمومی وجود ندارد. امکان استفاده از کیف پول ققنوس در گوشی شما وجود ندارد.</string>
     <string name="kuknos_recieve_walletCopy">آدرس کیف توکن من: \n\n</string>
     <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
     <string name="kuknos_panelStr_firstUser">حساب کاربری شما فعال نمی باشد. لطفا از طریق منوی خرید پیمان و یا دریافت نسبت به شارژ اکانت خود جهت فعال سازی استفاده کنید.</string>
@@ -2549,7 +2549,7 @@
     <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان ‌خود ‌را وارد نمایید</string>
     <string name="gift_card_already_in_use">این کارت هدیه قبلا استفاده شده است!</string>
     <string name="gift_carde_sended">شما کارت هدیه را قبلا برای شخص دیگری ارسال کرده‌اید!</string>
-    <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
+    <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود. و تعداد کاراکتر های نام کاربری بیشتر از 5 باشد.</string>
     <string name="kuknos_AddAsset_nullEntry">امکان اضافه شدن این دارایی به حساب شما وجود ندارد.</string>
     <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
     <string name="kuknos_parsianTerms_title">قوانین و مقررات پارسیان</string>
@@ -2564,12 +2564,37 @@
     <string name="kuknos_accountInfo_recoveryKey_title">1- رشته کلید بازگردانی حساب</string>
     <string name="kuknos_accountInfo_publicKey_title">3- کلید عمومی</string>
     <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
-    <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال ارز کنید.</string>
+    <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال توکن کنید.</string>
     <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
     <string name="kuknos_Restore_ErrorNoAccount_Snack">اکانت مورد نظر یافت نشد.</string>
     <string name="kuknos_send_walletAddress_Hint1">مثال: GAVYHKFT...</string>
-    <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
+    <string name="kuknos_send_walletAddress_Hint2">مثال: test*pdpco.ir</string>
     <string name="kuknos_send_option1">از طریق کلید عمومی</string>
     <string name="kuknos_send_option2">از طریق نام کاربری</string>
     <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
+    <string name="kuknos_buyP_MinAmount">میزان درخواستی شما از حداقل تعداد خرید این توکن کمتر میباشد.</string>
+    <string name="kuknos_regulations_title">برای اضافه شدن این توکن به کیف پول خود باید با تمامی موارد سپیدنامه این توکن موافقت کنید.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateMn">متاسفانه امکان تولید کلید عمومی وجود ندارد. امکان استفاده از کیف پول ققنوس در گوشی شما وجود ندارد.</string>
+    <string name="disconnecting">قطع تماس...</string>
+    <string name="poor_connection">اتصال ضعیف</string>
+    <string name="restrictions_on_sending_stickers">محدودیت در ارسال استیکر!</string>
+    <string name="restrictions_on_sending_multimedia_messages">Restrictions on sending multimedia messages!</string>
+    <string name="post_message">ارسال پیام</string>
+    <string name="pin_message_1">سنجاق پیام</string>
+    <string name="edit_message">ویرایش پیام</string>
+    <string name="delete_message">حذف پیام</string>
+    <string name="modify_room">ویرایش اطلاعات</string>
+    <string name="send_text">ارسال متن</string>
+    <string name="send_media">ارسال رسانه</string>
+    <string name="send_gif">ارسال گیف</string>
+    <string name="send_sticker">ارسال استیکر</string>
+    <string name="send_link">ارسال پیوند</string>
+    <string name="remove_user">حذف کاربر</string>
+    <string name="admin_rights">دسترسی های مدیر</string>
+    <string name="edit_rights">ویرایش دسترسی</string>
+    <string name="edit_admin_rights">ویرایش دسترسی های مدیر</string>
+    <string name="edit_member_rights">دسترسی های کاربر</string>
+    <string name="edit_room_rights">دسترسی های عمومی گروه</string>
+    <string name="restrictions_on_sending_messages">محدودیت در ارسال پیام!</string>
+    <string name="change_group_rights">ویرایش دسترسی های عمومی گروه</string>
 </resources>

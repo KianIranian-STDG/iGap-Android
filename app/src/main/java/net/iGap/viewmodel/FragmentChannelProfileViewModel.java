@@ -21,19 +21,19 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChannelProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
-import net.iGap.observers.interfaces.OnChannelLeft;
-import net.iGap.observers.interfaces.OnMenuClick;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.model.GoToShowMemberModel;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.structs.StructContactInfo;
+import net.iGap.observers.interfaces.OnChannelLeft;
+import net.iGap.observers.interfaces.OnMenuClick;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
@@ -68,7 +68,6 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public ObservableField<String> subscribersCount = new ObservableField<>("0");
     public ObservableField<String> administratorsCount = new ObservableField<>("0");
     public ObservableField<String> moderatorsCount = new ObservableField<>("0");
-    public ObservableInt showMemberList = new ObservableInt(View.GONE);
     public ObservableInt noMediaVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoCount = new ObservableInt(0);
@@ -92,7 +91,6 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public MutableLiveData<String> channelSecondsTitle = new MutableLiveData<>();
     public MutableLiveData<String> channelDescription = new MutableLiveData<>();
     public MutableLiveData<Integer> menuPopupVisibility = new MutableLiveData<>();
-    public MutableLiveData<Integer> editButtonVisibility = new MutableLiveData<>();
     public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
     public MutableLiveData<GoToShowMemberModel> goToShowMemberList = new MutableLiveData<>();
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
@@ -197,13 +195,9 @@ public class FragmentChannelProfileViewModel extends ViewModel
         if (role == ChannelChatRole.ADMIN || role == ChannelChatRole.OWNER) {
             //Todo : fixed it
             channelSecondsTitle.setValue(mRoom.getChannelRoom().isPrivate() ? G.currentActivity.getString(R.string.private_channel) : G.currentActivity.getString(R.string.public_channel));
-            showMemberList.set(View.VISIBLE);
-            editButtonVisibility.setValue(View.VISIBLE);
             showLeaveChannel.set(View.GONE);
         } else {
             channelSecondsTitle.setValue(String.format("%s %s", mRoom.getChannelRoom().getParticipantsCountLabel(), G.currentActivity.getString(R.string.subscribers_title)));
-            showMemberList.set(View.GONE);
-            editButtonVisibility.setValue(View.GONE);
             showLeaveChannel.set(View.VISIBLE);
         }
 
@@ -402,8 +396,6 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public void checkChannelIsEditable() {
         if (mRoom == null) return;
         role = mRoom.getChannelRoom().getRole();
-        editButtonVisibility.setValue(isEditable() ? View.VISIBLE : View.GONE);
-        showMemberList.set(isEditable() ? View.VISIBLE : View.GONE);
     }
 
     private boolean isEditable() {

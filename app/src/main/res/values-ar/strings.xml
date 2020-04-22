@@ -2212,6 +2212,7 @@
     <string name="charge_50"> 500.000 ریالی</string>
     <string name="charge_100"> 1.000.000 ریالی</string>
 
+    <string name="value_added">القيمة المضافة</string>
     <string name="charge_1_ir">10.000 ریالی +  9%  القيمة المضافة = 10.900 ریال</string>
     <string name="charge_2_ir">20.000 ریالی +  9%  القيمة المضافة = 21.180 ریال</string>
     <string name="charge_5_ir">50.000 ریالی +  9%  القيمة المضافة = 54.500 ریال</string>
@@ -3214,4 +3215,25 @@
     <string name="gift_carde_sended">لقد أرسلت بالفعل بطاقة هدايا لشخص آخر!</string>
     <string name="trim_error">التقليم قصير جدًا ، يرجى المحاولة بمدة صالحة.</string>
     <string name="card_is_disable">العنصر الحالي معطل.</string>
+    <string name="restrictions_on_sending_stickers">قيود على إرسال الملصقات!</string>
+    <string name="restrictions_on_sending_multimedia_messages">قيود على إرسال رسائل الوسائط المتعددة!</string>
+    <string name="post_message">أرسل رسالة</string>
+    <string name="pin_message_1">حذف الرسالة</string>
+    <string name="edit_message">تحرير الرسالة</string>
+    <string name="delete_message">حذف الرسالة</string>
+    <string name="modify_room">تحرير المعلومات</string>
+    <string name="send_text">إرسال نص</string>
+    <string name="send_media">إرسال الوسائط</string>
+    <string name="send_gif">إرسال Gif</string>
+    <string name="send_sticker">إرسال ملصق</string>
+    <string name="send_link">إرسال الارتباط</string>
+    <string name="remove_user">حذف المستخدم</string>
+    <string name="admin_rights">وصول المسؤول</string>
+    <string name="edit_rights">تحرير الوصول</string>
+    <string name="edit_admin_rights">تحرير وصول المسؤول</string>
+    <string name="edit_member_rights">تحرير حقوق العضو</string>
+    <string name="edit_room_rights">تحديد الوصول العام للمجموعة</string>
+    <string name="restrictions_on_sending_messages">قيود على إرسال الرسائل!</string>
+    <string name="change_group_rights">تحديد الوصول العام للمجموعة</string>
+
 </resources>

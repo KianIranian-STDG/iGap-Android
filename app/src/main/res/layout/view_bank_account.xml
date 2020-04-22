@@ -87,11 +87,10 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:rotation="330"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
                 android:scaleType="fitCenter"
-                android:padding="@dimen/dp40"
+                android:layout_margin="@dimen/dp10"
                 android:src="@drawable/card_block_holder" />
 
         </FrameLayout>

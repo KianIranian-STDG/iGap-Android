@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeHistoryAdapter.ViewHolder> {
 
@@ -98,11 +99,27 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
             try {
                 Date mDate = sdf.parse(date);
                 long timeInMilliseconds = mDate.getTime();
-                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS) + " | " + HelperCalander.getClocktime(timeInMilliseconds, HelperCalander.isLanguagePersian);
+                return HelperCalander.convertToUnicodeFarsiNumber(
+                        HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS))
+                        + " | " + HelperCalander.convertToUnicodeFarsiNumber(convertTime(date));
             } catch (ParseException e) {
                 e.printStackTrace();
                 return "";
             }
+        }
+
+        private String convertTime(String dateStr) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = null;
+            try {
+                date = df.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            df = new SimpleDateFormat("HH:mm");
+            df.setTimeZone(TimeZone.getTimeZone("GMT+4:30"));
+            return df.format(date);
         }
     }
 }

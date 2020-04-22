@@ -1127,6 +1127,8 @@
     <string name="charge_5">       50,000 Rials    </string>
     <string name="charge_10">       100,000 Rials    </string>
     <string name="charge_20">       200,000 Rials    </string>
+
+    <string name="value_added">TVA</string>
     <string name="charge_1_ir">      10,000 Rials + 9% TVA= 10,900 Rials    </string>
     <string name="charge_2_ir">      20,000 Rials + 9% TVA = 21,180 Rials    </string>
     <string name="charge_5_ir">      50,000 Rials + 9% TVA = 54,500 Rials    </string>
@@ -1873,9 +1875,6 @@
     <string name="kuknos_logout_pin"> mot de passe </string>
     <string name="kuknos_logout_btn"> déconnecter de portefeuille </string>
     <string name="kuknos_logout_load"> déconnecter </string>
-    <string name="kuknos_buyP_title"> contrat d\'achat </string>
-    <string name="kuknos_buyP_message"> e réseau GHOGHNOS est une plate-forme multi-jetons (Token ) ou multi-actifs sur laquelle vous pouvez créer une variété de jetons. Il existe également un jeton spécial (ou actif) appelé le PMN auquel des fonctions spéciales sont destinées. </string>
-    <string name="kuknos_buyP_amount"> nombre des contrats demandés * </string>
     <string name="kuknos_buyP_btn"> achat </string>
     <string name="kuknos_buyP_btn_server"> vérification… </string>
     <string name="kuknos_buyP_btn_server2"> transfert à la banque </string>
@@ -2204,4 +2203,19 @@
     <string name="gift_carde_sended">Vous avez déjà envoyé une carte-cadeau à quelqu autre!</string>
     <string name="trim_error">La taille est trop courte, veuillez essayer avec une durée valide.</string>
     <string name="card_is_disable">L\'élément actuel est désactivé.</string>
+    <string name="post_message">Envoyer un message</string>
+    <string name="pin_message_1">Épingle de message</string>
+    <string name="edit_message">Modifier le message</string>
+    <string name="delete_message">Supprimer le message</string>
+    <string name="modify_room">modifier la salle</string>
+    <string name="send_text">Envoyer du texte</string>
+    <string name="send_media">Envoyer le média</string>
+    <string name="send_gif">Envoyer un Gif</string>
+    <string name="send_sticker">Envoyer l\'autocollant</string>
+    <string name="send_link">Envoyer le lien</string>
+    <string name="remove_user">Supprimer l\'utilisateur</string>
+    <string name="edit_admin_rights">Edit Admin Rights</string>
+    <string name="edit_member_rights">Edit Member Rights</string>
+    <string name="edit_room_rights">Déterminer l\'accès public du groupe</string>
+    <string name="restrictions_on_sending_messages">Ограничения на отправку сообщений!</string>
 </resources>

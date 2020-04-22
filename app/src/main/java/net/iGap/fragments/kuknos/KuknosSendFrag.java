@@ -133,6 +133,7 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
 
     public void setWalletIDQrCode(String code) {
         viewModel.getWalletID().set(code);
+        binding.modePublicKey.setChecked(true);
     }
 
     private void onError() {
@@ -143,17 +144,17 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
                     case "0":
                         //Wallet ID Problem
                         binding.fragKuknosSWalletAddressHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSWalletAddressHolder.requestFocus();
+//                        binding.fragKuknosSWalletAddressHolder.requestFocus();
                         break;
                     case "1":
                         //Amount enough
                         binding.fragKuknosSAmountHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSAmountHolder.requestFocus();
+//                        binding.fragKuknosSAmountHolder.requestFocus();
                         break;
                     case "2":
                         //memo
                         binding.fragKuknosSTextHolder.setError("" + getString(errorM.getResID()));
-                        binding.fragKuknosSTextHolder.requestFocus();
+//                        binding.fragKuknosSTextHolder.requestFocus();
                         break;
                     default:
                         //Wallet ID Problem
@@ -260,9 +261,11 @@ public class KuknosSendFrag extends BaseAPIViewFrag<KuknosSendVM> {
         binding.fragKuknosSWalletAddressET.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 viewModel.cancelFederation();
+                binding.fragKuknosSWalletAddressET.setHint(viewModel.getChangeHint().getValue());
             } else {
+                binding.fragKuknosSWalletAddressET.setHint("");
                 if (viewModel.getFederationProgressVisibility().get() != View.VISIBLE)
-                    viewModel.checkWalletID();
+                    viewModel.checkWalletID(false);
             }
         });
     }
