@@ -218,7 +218,7 @@ public class G extends ApplicationContext {
     public static OnGroupAddMember onGroupAddMember;
     //    public static OnGroupClearMessage onGroupClearMessage;
     /*public static OnGroupEdit onGroupEdit;*/
-    public static OnGroupKickMember onGroupKickMember;
+//    public static OnGroupKickMember onGroupKickMember;
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;

@@ -146,12 +146,12 @@ class AudioWave : View {
 
         cv.transform {
             clipRect(0, 0, w, h)
-            waveBitmap?.let { drawBitmap(it, 0F, 0F, wavePaint) }
+            drawBitmap(waveBitmap, 0F, 0F, wavePaint)
         }
 
         cv.transform {
             clipRect(0F, 0F, w * progressFactor, h.toFloat())
-            waveBitmap?.let { drawBitmap(it, 0F, 0F, waveFilledPaint) }
+            drawBitmap(waveBitmap, 0F, 0F, waveFilledPaint)
         }
     }
 

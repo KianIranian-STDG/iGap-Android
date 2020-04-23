@@ -1449,6 +1449,8 @@ Want to get it?</string>
     <string name="Create_new_Folder_here">Create a new Folder here</string>
     <string name="Powered_by_iGap">Powered by iGap</string>
     <string name="on_hold">call on hold...</string>
+    <string name="disconnecting">Disconnecting...</string>
+    <string name="poor_connection">poor connection!</string>
     <string name="switchTo">switch To :</string>
     <string name="stop">Stop Bot</string>
     <string name="stop_message_bot">Are you sure you want to stop this bot?</string>
@@ -2635,5 +2637,25 @@ Want to get it?</string>
     <string name="gift_carde_sended">You already sent a gift card to someone else!</string>
     <string name="trim_error">"Trim is too short , please try with valid duration."</string>
     <string name="card_is_disable">Current item is disable.</string>
+    <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
+    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="post_message">Post Message</string>
+    <string name="pin_message_1">Pin Message</string>
+    <string name="edit_message">Edit Message</string>
+    <string name="delete_message">Delete Message</string>
+    <string name="modify_room">Modify Room</string>
+    <string name="send_text">Send Text</string>
+    <string name="send_media">Send Media</string>
+    <string name="send_gif">Send Gif</string>
+    <string name="send_sticker">Send Sticker</string>
+    <string name="send_link">Send Link</string>
+    <string name="remove_user">Remove user</string>
+    <string name="admin_rights">‌Admin rights</string>
+    <string name="edit_rights">Edit admin rights</string>
+    <string name="edit_admin_rights">Edit admin rights</string>
+    <string name="edit_member_rights">Member rights</string>
+    <string name="edit_room_rights">group\'s rights</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
+    <string name="change_group_rights">Change group rights</string>
 
 </resources>

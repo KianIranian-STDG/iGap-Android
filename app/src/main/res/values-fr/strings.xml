@@ -2203,4 +2203,19 @@
     <string name="gift_carde_sended">Vous avez déjà envoyé une carte-cadeau à quelqu autre!</string>
     <string name="trim_error">La taille est trop courte, veuillez essayer avec une durée valide.</string>
     <string name="card_is_disable">L\'élément actuel est désactivé.</string>
+    <string name="post_message">Envoyer un message</string>
+    <string name="pin_message_1">Épingle de message</string>
+    <string name="edit_message">Modifier le message</string>
+    <string name="delete_message">Supprimer le message</string>
+    <string name="modify_room">modifier la salle</string>
+    <string name="send_text">Envoyer du texte</string>
+    <string name="send_media">Envoyer le média</string>
+    <string name="send_gif">Envoyer un Gif</string>
+    <string name="send_sticker">Envoyer l\'autocollant</string>
+    <string name="send_link">Envoyer le lien</string>
+    <string name="remove_user">Supprimer l\'utilisateur</string>
+    <string name="edit_admin_rights">Edit Admin Rights</string>
+    <string name="edit_member_rights">Edit Member Rights</string>
+    <string name="edit_room_rights">Déterminer l\'accès public du groupe</string>
+    <string name="restrictions_on_sending_messages">Ограничения на отправку сообщений!</string>
 </resources>
