@@ -2599,4 +2599,5 @@
     <string name="edit_room_rights">دسترسی های عمومی گروه</string>
     <string name="restrictions_on_sending_messages">محدودیت در ارسال پیام!</string>
     <string name="change_group_rights">ویرایش دسترسی های عمومی گروه</string>
+    <string name="owner">سازنده</string>
 </resources>

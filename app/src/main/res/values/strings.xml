@@ -2651,11 +2651,12 @@ Want to get it?</string>
     <string name="send_link">Send Link</string>
     <string name="remove_user">Remove user</string>
     <string name="admin_rights">‌Admin rights</string>
-    <string name="edit_rights">Edit admin rights</string>
+    <string name="edit_rights">Edit member rights</string>
     <string name="edit_admin_rights">Edit admin rights</string>
     <string name="edit_member_rights">Member rights</string>
     <string name="edit_room_rights">group\'s rights</string>
     <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
     <string name="change_group_rights">Change group rights</string>
+    <string name="owner">Owner</string>
 
 </resources>
