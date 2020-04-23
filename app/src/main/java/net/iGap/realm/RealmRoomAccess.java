@@ -153,6 +153,7 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setCanPinMessage(memberRights.getPinMessage());
         realmRoomAccess.setCanGetMemberList(memberRights.getGetMember());
         realmRoomAccess.setCanAddNewMember(memberRights.getAddMember());
+        realmRoomAccess.setCanDeleteMessage(false);
 
     }
 
