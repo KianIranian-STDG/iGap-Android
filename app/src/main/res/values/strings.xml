@@ -2636,7 +2636,7 @@ Want to get it?</string>
     <string name="trim_error">"Trim is too short , please try with valid duration."</string>
     <string name="card_is_disable">Current item is disable.</string>
     <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
-    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="restrictions_on_sending_multimedia_messages">!Restrictions on sending multimedia messages</string>
     <string name="post_message">Post Message</string>
     <string name="pin_message_1">Pin Message</string>
     <string name="edit_message">Edit Message</string>

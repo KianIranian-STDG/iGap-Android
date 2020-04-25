@@ -2578,7 +2578,7 @@
     <string name="disconnecting">قطع تماس...</string>
     <string name="poor_connection">اتصال ضعیف</string>
     <string name="restrictions_on_sending_stickers">محدودیت در ارسال استیکر!</string>
-    <string name="restrictions_on_sending_multimedia_messages">Restrictions on sending multimedia messages!</string>
+    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
     <string name="post_message">ارسال پیام</string>
     <string name="pin_message_1">سنجاق پیام</string>
     <string name="edit_message">ویرایش پیام</string>
