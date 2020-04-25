@@ -54,7 +54,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
@@ -355,19 +354,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         try {
             if (mRecyclerView != null) {
-
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable) {
                     setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
                 }
-
                 if (G.isInCall && isChatMultiSelectEnable) {
                     setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
                 }
-
                 setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_search);
 
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
@@ -377,6 +373,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 } else if (isChatMultiSelectEnable) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
                 } else if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+                } else if (MusicPlayer.mp != null && MusicPlayer.playerStatusObservable.getValue() != null && MusicPlayer.playerStatusObservable.getValue().equals(MusicPlayer.PAUSE)) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
                 } else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
