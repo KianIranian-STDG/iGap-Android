@@ -839,7 +839,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-                holder.subtitle.setText("Owner");
+                holder.subtitle.setText(R.string.owner);
             } else {
                 holder.subtitle.setText(setUserStatus(holder.subtitle.getContext(), mContact.status, mContact.peerId, mContact.lastSeen));
             }
@@ -859,7 +859,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 holder.btnMenu.setVisibility(View.GONE);
             }
 
-            if (showMemberMode != ShowMemberMode.NONE) {
+            if (showMemberMode != ShowMemberMode.NONE || mContact.isOwner()) {
                 holder.btnMenu.setVisibility(View.GONE);
             }
         }
@@ -928,6 +928,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void showMemberDialog(StructContactInfo contactInfo) {
 
+        if (contactInfo.peerId == AccountManager.getInstance().getCurrentUser().getId())
+            return;
+
         if (realmRoomAccess != null) {
             TextCell adminRights = null;
             TextCell permission = null;
@@ -936,7 +939,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             dialogRootView.setOrientation(LinearLayout.VERTICAL);
             dialogRootView.setBackgroundColor(Theme.getInstance().getRootColor(dialogRootView.getContext()));
 
-            if (realmRoomAccess.isCanAddNewAdmin()) {
+            if (!contactInfo.isOwner() && realmRoomAccess.isCanAddNewAdmin()) {
                 adminRights = new TextCell(dialogRootView.getContext(), true);
                 adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
                 adminRights.setValue(contactInfo.isAdmin() ? getResources().getString(R.string.edit_admin_rights) : getResources().getString(R.string.set_admin));
@@ -950,7 +953,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 dialogRootView.addView(permission, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }
 
-            if (realmRoomAccess.isCanBanMember()) {
+            if (!contactInfo.isOwner() && realmRoomAccess.isCanBanMember()) {
                 removeView = new TextCell(dialogRootView.getContext(), false);
                 removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
                 removeView.setValue(getResources().getString(R.string.remove_user));

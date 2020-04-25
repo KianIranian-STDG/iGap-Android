@@ -2518,6 +2518,8 @@
     <string name="gift_sticker_activation_title">فعالسازی کارت</string>
     <string name="gift_sticker_empty_list_message">کارت هدیه دیجیتالی وجود ندارد</string>
     <string name="inquiry_and_shopping">استعلام و خرید</string>
+    <string name="file_manager_logs">فقط بروی نسخه های آزمایشی</string>
+    <string name="file_manager_logs_title">گزارشات فایلی</string>
 
     <string name="kuknos_RecoverySK_languageTitle">زبان کلمات بازیابی</string>
     <string name="kuknos_RecoverySK_lengthTitle">تعداد کلمات بازیابی</string>
@@ -2597,4 +2599,5 @@
     <string name="edit_room_rights">دسترسی های عمومی گروه</string>
     <string name="restrictions_on_sending_messages">محدودیت در ارسال پیام!</string>
     <string name="change_group_rights">ویرایش دسترسی های عمومی گروه</string>
+    <string name="owner">سازنده</string>
 </resources>

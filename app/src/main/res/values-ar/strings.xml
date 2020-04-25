@@ -3235,5 +3235,6 @@
     <string name="edit_room_rights">تحديد الوصول العام للمجموعة</string>
     <string name="restrictions_on_sending_messages">قيود على إرسال الرسائل!</string>
     <string name="change_group_rights">تحديد الوصول العام للمجموعة</string>
+    <string name="owner">مالك</string>
 
 </resources>

@@ -100,7 +100,7 @@
                         android:layout_marginEnd="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp4"
                         android:text="@string/edit_icon"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintRight_toLeftOf="@id/toolbar_more"
                         app:layout_constraintTop_toTopOf="@id/toolbar_back" />
@@ -364,6 +364,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onAdministratorsClick()}"
                     android:padding="8dp"
+                    android:visibility="gone"
                     android:text="@string/administrators_title"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
