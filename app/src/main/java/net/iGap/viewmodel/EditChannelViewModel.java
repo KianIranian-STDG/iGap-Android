@@ -174,10 +174,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         } catch (NullPointerException e) {
             e.getStackTrace();
         }*/
-        subscribersCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmChannelRoom.getParticipantsCountLabel())));
+
+        String subCount = String.valueOf(realmChannelRoom.getParticipantsCountLabel());
+        subscribersCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(subCount) : subCount);
         DbManager.getInstance().doRealmTask(realm -> {
             String adminsCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
-            administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(adminsCount));
+            administratorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(adminsCount) : adminsCount);
         });
 
         if (role == ChannelChatRole.OWNER) {

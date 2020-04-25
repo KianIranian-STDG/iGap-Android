@@ -179,16 +179,13 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
         isMuteNotification.set(mRoom.getMute());
 
-        subscribersCount.set(HelperCalander.convertToUnicodeFarsiNumber(mRoom.getChannelRoom().getParticipantsCountLabel()));
+        subscribersCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(mRoom.getChannelRoom().getParticipantsCountLabel()) : mRoom.getChannelRoom().getParticipantsCountLabel());
         DbManager.getInstance().doRealmTask(realm -> {
             String adminCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
-            String modsCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size());
-            administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(adminCount));
-            moderatorsCount.set(modsCount);
+            administratorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(adminCount) : adminCount);
 
             admins = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             moderators = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
-
         });
 
         admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
