@@ -276,8 +276,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     }
 
     private void messageBox(final View view) {
-        if (textImageList.containsKey(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path)) {
-            edtChat.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path).getText(), edtChat.getPaint().getFontMetricsInt()));
+        if (textImageList.containsKey(itemGalleryList.get(selectPosition).path)) {
+            edtChat.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get(selectPosition).path).getText(), edtChat.getPaint().getFontMetricsInt()));
         } else {
             edtChat.setText("");
         }
@@ -558,7 +558,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         mAdapter = new AdapterViewPager(itemGalleryList);
         viewPager.setAdapter(mAdapter);
 
-        viewPager.setCurrentItem((itemGalleryList.size() - selectPosition) - 1);
+        viewPager.setCurrentItem(selectPosition);
 
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

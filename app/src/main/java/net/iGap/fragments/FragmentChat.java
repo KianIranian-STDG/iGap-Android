@@ -1072,8 +1072,6 @@ public class FragmentChat extends BaseFragment
                             txtName = mHelperToolbar.getTextViewChatUserName();
                         }
                         txtName.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), txtName.getPaint().getFontMetricsInt()));
-
-                        Log.e("nazariii", "in realm");
                         checkToolbarNameSize();
                     }
                 });
@@ -1177,7 +1175,6 @@ public class FragmentChat extends BaseFragment
         if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.enableCamera();
 
         onLinkClick = v -> {
-            Log.i("nazanin", "onViewCreated: " + keyboardViewVisible);
             if (keyboardViewVisible) {
                 hideKeyboard();
             }
@@ -2883,7 +2880,7 @@ public class FragmentChat extends BaseFragment
                         e.printStackTrace();
                     }
 
-                    if (message_ != null && (message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
+                    if (message_ != null && message_.getStatus() != null && (message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
                         return 0;
                     } else if (viewHolder instanceof VoiceItem.ViewHolder) {
                         return 0;
