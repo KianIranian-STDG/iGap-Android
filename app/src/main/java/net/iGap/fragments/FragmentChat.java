@@ -3289,6 +3289,13 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean onLongClick(View view) {
 
+                if (mustCheckPermission()) {
+                    if (currentRoomAccess != null && !currentRoomAccess.getRealmPostMessageRights().isCanSendMedia()) {
+                        Toast.makeText(getContext(), getResources().getString(R.string.restrictions_on_sending_multimedia_messages), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                }
+
                 if (keyboardViewVisible) {
                     hideKeyboard();
                 }
