@@ -3,7 +3,6 @@ package net.iGap.api.apiService;
 import android.util.Log;
 
 import net.iGap.BuildConfig;
-import net.iGap.helper.HelperLog;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnRefreshToken;
 import net.iGap.realm.RealmUserInfo;
@@ -55,8 +54,6 @@ public class TokenContainer {
 
         if (BuildConfig.DEBUG)
             Log.i(getClass().getSimpleName(), "UpdateToken successfully " + token + " with updated count -> " + updatedTokenCount);
-
-        HelperLog.setErrorLog(new Exception("update jwt token from TokenContainer with updated count -> " + updatedTokenCount));
     }
 
     void getRefreshToken(Delegate delegate) {
@@ -73,7 +70,6 @@ public class TokenContainer {
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                Log.i(getClass().getSimpleName(), "onError: " + majorCode + " " + minorCode);
                 try {
                     delegate.onRefreshToken();
                 } catch (IOException e) {

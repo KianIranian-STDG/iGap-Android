@@ -62,7 +62,7 @@
     <string name="sure_delete_account">دڵنیایت لە سڕینەوەی ئەکانتەکەت؟ </string>
     <string name="delete_account_text_desc">(ئەگەر ئەکانتەکەت بسڕیتەوە، هەموو ئاو فایلانەش کە وەکوو پەیام بۆت هاتووە بە یەکجاری دەسڕدرێنەوە، Si vous supprimez votre compte).</string>
     <string name="Destruction_Code">رووخاندن</string>
-    <string name="Destruction_Des">ئێستا لە هەوڵی رووخاندنی ئەکانتەکەی خۆتی، ژمارە تەلەفوونەکەت بەرابەرە لەگەڵ:</string>
+    <string name="destroy_description">ئێستا لە هەوڵی رووخاندنی ئەکانتەکەی خۆتی، ژمارە تەلەفوونەکەت بەرابەرە لەگەڵ:</string>
     <string name="iGap_autofill_Destruction_Code">ئای­گەپ بە شێوەی ئۆتۆماتیک کۆدەکە دەستنیشان دەکات و جێگەی خاڵی پڕ دەکاتەوە؛ ئەگەر نەکرا، بە شێوەی دەست تایپی بکە.</string>
     <string name="video_message">پەیامی ڤیدیۆیی</string>
     <string name="file_message">پەیامی فایلی</string>
@@ -347,7 +347,7 @@
     <string name="desc_public_channel">بەکارهێنەران دەتوانن بە گەڕان بە دوای ناوی بەکارهێنەر یان وەرگرتنی لینکی بانگهێشت­کردن بێنە نێو ئەم کەناڵەوە.</string>
     <string name="last_msg_format_chat">%s</string>
     <string name="USER_VERIFY_BLOCKED_USER">بەکارهێنەر داخراوە و پەسەندکردن رێگەپێدراو نییە.</string>
-    <string name="Enter_Code">کۆدی رووخاندن</string>
+    <string name="destroy_enter_code">کۆدی رووخاندن</string>
     <string name="E_2">پێویستیی چوونەناو سیستەم </string>
     <string name="E_335">هەڵەیەک لە کلاینتەوە</string>
     <string name="E_336">هەڵەی ناوەکیی سێرڤێر</string>
@@ -1126,6 +1126,8 @@
     <string name="charge_20">٢٠٠٠٠٠ ریاڵی</string>
     <string name="charge_50">5٠٠٠٠٠ ریاڵی</string>
     <string name="charge_100">10٠٠٠٠٠ ریاڵی</string>
+
+    <string name="value_added">ارزش افزوده</string>
     <string name="charge_1_ir">١٠٠٠٠ ریاڵی + ٩% بەهای زیادە = ١٠٩٠٠ ریاڵ</string>
     <string name="charge_2_ir">٢٠٠٠٠ ریاڵی + ٩% بەهای زیادە = ٢١١٨٠ ریاڵ</string>
     <string name="charge_5_ir">٥٠٠٠٠ ریاڵی + ٩% بەهای زیادە = ٥٤٥٠٠ ریاڵ</string>
@@ -1866,9 +1868,6 @@
     <string name="kuknos_logout_pin">کۆدی چوونەژوورەوە</string>
     <string name="kuknos_logout_btn">هاتنەدەرەوە لە جانتای پارە</string>
     <string name="kuknos_logout_load">هاتنەدەرەوە ...</string>
-    <string name="kuknos_buyP_title">کڕینی بەڵێن</string>
-    <string name="kuknos_buyP_message">تۆڕی قۆقنووس، پلەتفۆرمێکی چەند تۆکنی(Multi Token) یان چەند داراییە (Multi Asset) کە دەرفەتی دروست کردنی جۆرە جیاجیاکانی تۆکن لەسەری هەیە. لەم نێوانەدا یەک تۆکنی (یان دارایی) تایبەت بە ناوی (PMN) هەیە کە ئەرکی تایبەتی بۆ لە بەرچاو گیردراوە.</string>
-    <string name="kuknos_buyP_amount">ژمارەی بەڵێنی خوازراو *</string>
     <string name="kuknos_buyP_btn">کڕین</string>
     <string name="kuknos_buyP_btn_server">تاوتوێ کردنی ...</string>
     <string name="kuknos_buyP_btn_server2">گواستنەوە بۆ بانک </string>
@@ -2287,5 +2286,41 @@
     <string name="kuknos_Currency">نام ارز</string>
     <string name="kuknos_SignupInfo_errorUsernameRegularExp">نام کاربری باید شامل اعداد و حروف انگلیسی باشد و نمیتواند با اعداد شروع شود.</string>
     <string name="kuknos_AddAsset_nullEntry">امکان اضافه شدن این دارایی به حساب شما وجود ندارد.</string>
+    <string name="lbl_magnify">بزرگنمایی</string>
+    <string name="clr_adjust">تنظیم رنگ</string>
+    <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
+    <string name="kuknos_parsianTerms_title">قوانین و مقررات پارسیان</string>
+    <string name="kuknos_parsianTerms_desc">برای ادامه و استفاده از خدمات کیف پول ققنوس پارسیان، شما باید تغییرات زیر در مفاد قرارداد پارسیان و ققنوس را تایید کنید.</string>
+    <string name="kuknos_parsianTerms_term1">من به آدرس شرکت پارسیان که در ادامه ذکر شده است رای میدهم.  کلید عمومی: GALOLMASACBA6PGXV6DOJ7O42OAJS7XJLNG6EYEE2KTXZO2KTYAJWVFD</string>
+    <string name="kuknos_parsianTerms_term2">من موافقت میکنم تا آدرس دامنه پارسیان که در ادامه ذکر شده است به عنوان دامنه اصلی کیف پول من تنظیم شود. \\nآدرس: https://www.pdpco.ir</string>
+    <string name="kuknos_parsianTerms_term3">من به ایجاد کننده توکن SKYC اعتماد دارم.</string>
+    <string name="kuknos_parsianTerms_errorTermAndCondition">اگه شما مایل به ادامه و استفاده از امکانات کیف پول پارسیان هستید، باید تمامی مفاد را تایید کنید.</string>
+    <string name="kuknos_send_memoError">طول متن یادداشت بیش از حد مجاز است.</string>
+    <string name="kuknos_accountInfo_title">اطلاعات اکانت</string>
+    <string name="kuknos_accountInfo_desc">"تمامی اطلاعات مربوط به اکانت شما در سامانه ققنوس "</string>
+    <string name="kuknos_accountInfo_recoveryKey_title">1- رشته کلید بازگردانی حساب</string>
+    <string name="kuknos_accountInfo_publicKey_title">3- کلید عمومی</string>
+    <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال ارز کنید.</string>
+    <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
+    <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
+    <string name="kuknos_Restore_ErrorNoAccount_Snack">اکانت مورد نظر یافت نشد.</string>
+    <string name="kuknos_send_walletAddress_Hint1">مثال: GAVYHKFT...</string>
+    <string name="kuknos_send_walletAddress_Hint2">مثال: amini*pdpco.ir</string>
+    <string name="kuknos_send_option1">از طریق کلید عمومی</string>
+    <string name="kuknos_send_option2">از طریق نام کاربری</string>
+    <string name="kuknos_buyP_title">خرید %1$s</string>
+    <string name="kuknos_buyP_message">شبکه ققنوس یک پلتفرم چند توکنی (Multi Token) یا چند دارایی (Multi Asset) است که امکان ساختن انواع توکن بر روی آن مقدور است. در این میان یک توکن (یا دارایی) بنام %1$s وجود دارد.</string>
+    <string name="kuknos_buyP_amount">تعداد %1$s درخواستی *</string>
+    <string name="card_is_disable">مورد انتخاب شده غیرفعال است.</string>
+    <string name="kuknos_buyP_MinAmount">میزان درخواستی شما از حداقل تعداد خرید این توکن کمتر میباشد.</string>
+    <string name="kuknos_regulations_title">برای اضافه شدن این توکن به کیف پول خود باید با تمامی موارد سپیدنامه این توکن موافقت کنید.</string>
+    <string name="disconnecting">قطع تماس...</string>
+    <string name="poor_connection">اتصال ضعیف</string>
+    <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
+    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
+    <string name="kuknos_buy_noPrice">قیمت این توکن موجود نیست.</string>
+    <string name="kuknos_NewAsset_title">دارایی های جدید</string>
 
 </resources>

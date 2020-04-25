@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.Theme;
 import net.iGap.databinding.FragmentDialogCreditPaymentBinding;
@@ -247,14 +248,14 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
 
         creditPaymentBinding.title.setText(R.string.pay_to);
         if (mOrder == null) {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                     .fit()
                     .into(creditPaymentBinding.image);
             creditPaymentBinding.subtitle.setText(mAccount.getName());
 
         } else {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                     .fit()
                     .into(creditPaymentBinding.image);

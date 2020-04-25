@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import net.iGap.R;
 import net.iGap.databinding.FragmentGiftStickerCardDetailBinding;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.helper.HelperLog;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -70,6 +71,10 @@ public class GiftStickerCardDetailFragment extends Fragment {
                 binding.cvvView.setText(cardDetailDataModel.getSecondPassword());
             } catch (Exception e) {
                 e.printStackTrace();
+                if (getParentFragment() instanceof MainGiftStickerCardFragment) {
+                    ((MainGiftStickerCardFragment) getParentFragment()).closeFragment(true);
+                }
+                HelperLog.setErrorLog(e);
             }
         });
 

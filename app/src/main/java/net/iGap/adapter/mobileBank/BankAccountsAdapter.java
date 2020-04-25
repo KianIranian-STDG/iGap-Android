@@ -44,11 +44,13 @@ public class BankAccountsAdapter extends PagerAdapter {
         View layout = LayoutInflater.from(container.getContext()).inflate(R.layout.view_bank_account, container, false);
         TextView tvName, tvNumber, icAdd;
         ConstraintLayout lytRoot;
+        View lytBlocked;
 
         tvName = layout.findViewById(R.id.tvName);
         tvNumber = layout.findViewById(R.id.tvNumber);
         icAdd = layout.findViewById(R.id.tvAdd);
         lytRoot = layout.findViewById(R.id.lytRoot);
+        lytBlocked = layout.findViewById(R.id.ivBlocked);
 
         if (mAccounts.get(position) != null) {
 
@@ -58,6 +60,11 @@ public class BankAccountsAdapter extends PagerAdapter {
             tvName.setText(mAccounts.get(position).getAccountName());
             tvNumber.setText(HelperMobileBank.checkNumbersInMultiLangs(mAccounts.get(position).getAccountNumber()));
 
+            if (mAccounts.get(position).getStatus() != null && !mAccounts.get(position).getStatus().equals("OPEN") && !mAccounts.get(position).getStatus().equals("OPENING")) {
+                lytBlocked.setVisibility(View.VISIBLE);
+            } else {
+                lytBlocked.setVisibility(View.GONE);
+            }
         } /*else {
 
             icAdd.setVisibility(View.VISIBLE);

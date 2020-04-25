@@ -345,7 +345,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
                         intent.getStringExtra("message"),
-                        intent.getStringExtra("order_id")
+                        intent.getStringExtra("order_id"),
+                        intent.getStringExtra("tax"),
+                        intent.getStringExtra("discount")
                 ));
             }
         }

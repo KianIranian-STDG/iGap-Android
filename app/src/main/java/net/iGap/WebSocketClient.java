@@ -15,14 +15,15 @@ import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketCloseCode;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketState;
 
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.helper.HelperConnectionState;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestQueue;
@@ -47,7 +48,7 @@ public class WebSocketClient {
     private WebSocketClient() {
         autoConnect = true;
         try {
-            this.webSocketClient = new WebSocketFactory().setConnectionTimeout((int) (10 * DateUtils.SECOND_IN_MILLIS)).createSocket(Config.URL_WEBSOCKET);
+            this.webSocketClient = new WebSocketFactory().setConnectionTimeout((int) (10 * DateUtils.SECOND_IN_MILLIS)).createSocket(Config.URL_WEB_SOCKET);
             this.webSocketClient.setPingInterval(60 * DateUtils.SECOND_IN_MILLIS);
             this.webSocketClient.addListener(new WebSocketAdapter() {
 
@@ -242,6 +243,6 @@ public class WebSocketClient {
 
     public void disconnectSocket(boolean autoConnect) {
         this.autoConnect = autoConnect;
-        webSocketClient.disconnect();
+        webSocketClient.disconnect(WebSocketCloseCode.NORMAL, null, 0);
     }
 }

@@ -1,5 +1,9 @@
 package net.iGap.viewmodel.kuknos;
 
+import androidx.core.text.HtmlCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
@@ -12,10 +16,6 @@ import net.iGap.repository.kuknos.UserRepo;
 import net.iGap.request.RequestInfoPage;
 
 import java.util.Objects;
-
-import androidx.core.text.HtmlCompat;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
 
 public class KuknosSignupInfoVM extends BaseAPIViewModel {
 
@@ -97,7 +97,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
         } else if (username.get().isEmpty()) {
             error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
-        } else if (!username.get().matches("^[A-Za-z][A-Za-z0-9]*")) {
+        } else if (!username.get().matches("^[A-Za-z][A-Za-z0-9]*") || username.get().length() < 5) {
             error.setValue(new KuknosError(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameRegularExp));
         } else {
             // TODO: fetch data from server for valid username

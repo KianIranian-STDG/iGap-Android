@@ -18,7 +18,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.Config;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
@@ -28,12 +27,13 @@ import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.webrtc.CallObserver;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.module.webrtc.CallObserver;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -321,7 +321,7 @@ public final class StartupActions {
             }
         }
 
-        G.iGapAccount = new Account(Config.iGapAccount, G.context.getPackageName());
+        G.iGapAccount = new Account(Config.IGAP_ACCOUNT, G.context.getPackageName());
         String password = "net.iGap";
         try {
             accountManager.addAccountExplicitly(G.iGapAccount, password, null);

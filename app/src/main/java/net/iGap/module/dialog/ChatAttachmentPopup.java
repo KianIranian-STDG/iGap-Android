@@ -37,6 +37,7 @@ import net.iGap.adapter.items.BottomSheetItem;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
@@ -91,6 +92,7 @@ public class ChatAttachmentPopup {
     private boolean isCameraStart;
     private Animator animation;
     private View contentView;
+    private View privacyView;
     private int mChatBoxHeight;
     private int mMessagesLayoutHeight;
 
@@ -170,6 +172,7 @@ public class ChatAttachmentPopup {
         mPopup.setFocusable(true);
         mPopup.setOutsideTouchable(true);
 
+        privacyView = viewRoot.findViewById(R.id.fl_attachment_privacyView);
 
         mPopup.setOnDismissListener(() -> {
             isNewBottomSheet = true;
@@ -478,13 +481,18 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-
+                    showDeniedPermissionMessage();
                 }
             });
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showDeniedPermissionMessage() {
+        if (mContext != null)
+            HelperError.showSnackMessage(mContext.getString(R.string.you_need_to_allow) + " " + mContext.getString(R.string.permission_storage), false);
     }
 
     private void openVideoGallery() {
@@ -513,7 +521,7 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-
+                    showDeniedPermissionMessage();
                 }
             });
 
@@ -547,7 +555,7 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-
+                    showDeniedPermissionMessage();
                 }
             });
 
@@ -678,7 +686,7 @@ public class ChatAttachmentPopup {
     }
 
     private void loadItemsToRecycler() {
-        for (int i = FragmentEditImage.itemGalleryList.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
             addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
         }
         if (FragmentEditImage.itemGalleryList.size() >= MAX_COUNT_OF_IMAGE) {
@@ -741,11 +749,10 @@ public class ChatAttachmentPopup {
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA,
-                MediaStore.Images.ImageColumns.DATE_TAKEN
+                MediaStore.MediaColumns.DATA
         };
 
-        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
         if (cursor != null) {
             column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -757,7 +764,7 @@ public class ChatAttachmentPopup {
                 item.setId(listOfAllImages.size());
                 item.setPath(absolutePathOfImage);
                 item.isSelected = true;
-                listOfAllImages.add(0, item);
+                listOfAllImages.add(item);
                 if (listOfAllImages.size() >= MAX_COUNT_OF_IMAGE) break;
             }
             cursor.close();
@@ -884,6 +891,12 @@ public class ChatAttachmentPopup {
             }, 50);
         } catch (Exception e) {
             e.getMessage();
+        }
+    }
+
+    public void setMediaPermission(boolean canSendMedia) {
+        if (privacyView != null) {
+            privacyView.setVisibility(canSendMedia ? View.GONE : View.VISIBLE);
         }
     }
 

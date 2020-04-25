@@ -49,8 +49,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -60,6 +58,8 @@ import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnAudioFocusChangeListener;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
@@ -110,7 +110,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static OnComplete onComplete = null;
     public static OnComplete onCompleteChat = null;
     public static MutableLiveData<Boolean> playerStateChangeListener = new MutableLiveData<>();
-    public static MutableLiveData<Integer> playerStatusObservable = new MutableLiveData<>();
+    public static MutableLiveData<Integer> playerStatusObservable = new MutableLiveData<>(STOP);
     public static boolean isShowMediaPlayer = false;
     public static int musicProgress = 0;
     public static boolean isPause = false;
@@ -263,13 +263,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             layout.setVisibility(View.VISIBLE);
             txt_music_name.setText(MusicPlayer.musicName);
             txt_music_info.setText(MusicPlayer.musicInfoTitle);
+            txt_music_time.setText(musicTime);
 
-            if (isVoice) {
-                txt_music_info.setVisibility(View.GONE);
-            } else {
-                txt_music_info.setVisibility(View.VISIBLE);
-                txt_music_time.setText(musicTime);
-            }
             if (MusicPlayer.mp.isPlaying()) {
                 btnPlayMusic.setText(context.getString(R.string.pause_icon));
             } else {

@@ -19,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -36,6 +37,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
+import net.iGap.fragments.filterImage.FragmentPaintImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
@@ -72,6 +74,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     private TextView txtEditImage;
     public static UpdateImage updateImage;
     private EventEditText edtChat;
+    private TextView paintTv;
     private TextView iconOk;
     private ViewGroup layoutCaption;
     private MaterialDesignTextView channelOrGroupProfileSetTv;
@@ -132,6 +135,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         rootView.setListener(this);
         View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
         keyboardContainer = view.findViewById(R.id.fl_chat_keyboardContainer);
+        paintTv= view.findViewById(R.id.txtPaintImage);
         rootView.addView(view, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
         return rootView;
     }
@@ -272,8 +276,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     }
 
     private void messageBox(final View view) {
-        if (textImageList.containsKey(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path)) {
-            edtChat.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path).getText(), edtChat.getPaint().getFontMetricsInt()));
+        if (textImageList.containsKey(itemGalleryList.get(selectPosition).path)) {
+            edtChat.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get(selectPosition).path).getText(), edtChat.getPaint().getFontMetricsInt()));
         } else {
             edtChat.setText("");
         }
@@ -289,7 +293,22 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
                 }
             }
         });
-
+        paintTv.setOnClickListener(v -> {
+            hideKeyboard();
+            if (getActivity() != null && itemGalleryList.size() > 0) {
+                String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
+                if (path == null || path.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!isNicknamePage) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaintImage.newInstance(path)).setReplace(false).load();
+                } else {
+                    FragmentPaintImage fragment = FragmentPaintImage.newInstance(path);
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                }
+            }
+        });
         iconOk.setOnClickListener(v -> {
 
             String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
@@ -539,7 +558,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         mAdapter = new AdapterViewPager(itemGalleryList);
         viewPager.setAdapter(mAdapter);
 
-        viewPager.setCurrentItem((itemGalleryList.size() - selectPosition) - 1);
+        viewPager.setCurrentItem(selectPosition);
 
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -742,8 +761,17 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
             if (itemGalleryList.get(position).path != null) {
                 new Thread(() -> {
-                    String finalPath = attachFile.saveGalleryPicToLocal(itemGalleryList.get(position).path);
+                    String oldPath = itemGalleryList.get(position).path;
+                    String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
                     G.runOnUiThread(() -> {
+                        //check if old path available in selected list , replace new path with that
+                        if (!oldPath.equals(finalPath)) {
+                            StructBottomSheet item = textImageList.get(oldPath);
+                            if (item != null) {
+                                textImageList.remove(oldPath);
+                                textImageList.put(finalPath, item);
+                            }
+                        }
                         itemGalleryList.get(position).path = finalPath;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), imgPlay);
                     });
@@ -956,6 +984,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         super.onDestroy();
         if (rootView != null)
             rootView.setListener(null);
+
+        updateImage = null;
     }
 
     public interface GalleryListener {

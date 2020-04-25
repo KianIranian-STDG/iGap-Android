@@ -43,11 +43,11 @@
                 android:paddingBottom="@dimen/dp20">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/fragKuknosSRMessage"
+                    android:id="@+id/fragKuknosSRMainTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
-                    android:text="@string/kuknos_RecoverySK_Title"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:text="@string/kuknos_accountInfo_title"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     android:textStyle="bold"
@@ -57,72 +57,164 @@
                     app:layout_constraintWidth_percent="0.7" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRMainDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:text="@string/kuknos_accountInfo_desc"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRMainTitle"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:text="@string/kuknos_accountInfo_recoveryKey_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRMainDescription"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosSRDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/dp10"
                     android:text="@string/kuknos_RecoverySK_Message"
                     android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/dp16"
+                    android:textSize="@dimen/dp14"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRMessage"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosSRkeysET"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="@dimen/dp10"
                     android:background="@drawable/background_cancel_money_action"
                     android:ems="10"
-                    android:enabled="false"
                     android:gravity="top"
                     android:hint="@string/kuknos_RecoverySK_Hint"
                     android:inputType="textMultiLine"
-                    android:maxHeight="200dp"
-                    android:minHeight="200dp"
-                    android:minLines="3"
                     android:padding="8dp"
                     android:scrollbars="vertical"
                     android:scrollHorizontally="false"
-                    android:text="@={viewmodel.keys}"
+                    android:text="@={viewmodel.recoveryKeys}"
                     android:textColorHint="?iGapSubtitleTextColor"
                     android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/dp18"
+                    android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRDescription"
-                    app:layout_constraintWidth_percent="0.8" />
+                    app:layout_constraintWidth_percent="0.7" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/fragKuknosIdSubmit"
-                    style="@style/iGapButton"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRprivateTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.onNext()}"
-                    android:text="@string/kuknos_RecoverySK_Btn"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:text="@string/kuknos_accountInfo_privateKey_title"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
-                    android:visibility="gone"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRkeysET"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <ProgressBar
-                    android:id="@+id/fragKuknosSRProgressV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:elevation="2dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosIdSubmit"
-                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
-                    app:layout_constraintHeight_percent="0.08"
-                    app:layout_constraintHorizontal_bias="0.05"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRprivateDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:text="@string/kuknos_accountInfo_privateKey_desc"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRprivateTitle"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRPrivatekeyET"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:ems="10"
+                    android:gravity="top"
+                    android:hint="SBBHRGETDFHJKIOLTG..."
+                    android:inputType="textMultiLine"
+                    android:padding="8dp"
+                    android:scrollbars="vertical"
+                    android:scrollHorizontally="false"
+                    android:text="@={viewmodel.privateKey}"
+                    android:textColorHint="?iGapSubtitleTextColor"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRprivateDescription"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRpublicTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:text="@string/kuknos_accountInfo_publicKey_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRPrivatekeyET"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRpublicDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:text="@string/kuknos_accountInfo_publicKey_desc"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRpublicTitle"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosSRpublickeyET"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:ems="10"
+                    android:gravity="top"
+                    android:hint="GBBHRGETDFHJKIOLTG..."
+                    android:inputType="textMultiLine"
+                    android:padding="8dp"
+                    android:scrollbars="vertical"
+                    android:scrollHorizontally="false"
+                    android:text="@={viewmodel.publicKey}"
+                    android:textColorHint="?iGapSubtitleTextColor"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRpublicDescription"
+                    app:layout_constraintWidth_percent="0.7" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

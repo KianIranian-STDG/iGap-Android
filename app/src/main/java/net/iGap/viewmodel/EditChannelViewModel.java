@@ -9,23 +9,24 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.Config;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.helper.upload.UploadTask;
+import net.iGap.module.SUID;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.OnChannelAvatarAdd;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnChannelDelete;
 import net.iGap.observers.interfaces.OnChannelEdit;
 import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.observers.interfaces.OnChannelUpdateSignature;
-import net.iGap.module.SUID;
-import net.iGap.module.SingleLiveEvent;
-import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
@@ -51,7 +52,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public ObservableField<String> moderatorsCount = new ObservableField<>("");
     public ObservableField<String> subscribersCount = new ObservableField<>("");
     public ObservableInt showLayoutReactStatus = new ObservableInt(View.GONE);
-    public ObservableBoolean canChangeChannelName = new ObservableBoolean(false);
     public ObservableInt isShowLoading = new ObservableInt(View.GONE);
     public ObservableInt leaveChannelText = new ObservableInt();
     public ObservableInt showUsername = new ObservableInt(View.GONE);
@@ -161,11 +161,9 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
         if (role == ChannelChatRole.OWNER) {
             showLayoutReactStatus.set(View.VISIBLE);
-            canChangeChannelName.set(true);
             G.onChannelUpdateReactionStatus = this;
         } else {
             showLayoutReactStatus.set(View.GONE);
-            canChangeChannelName.set(false);
             G.onChannelUpdateReactionStatus = null;
         }
 
@@ -176,11 +174,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         } catch (NullPointerException e) {
             e.getStackTrace();
         }*/
-        subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
-        DbManager.getInstance().doRealmTask(realm -> {
-            administratorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-            moderatorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
+        String subCount = String.valueOf(realmChannelRoom.getParticipantsCountLabel());
+        subscribersCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(subCount) : subCount);
+        DbManager.getInstance().doRealmTask(realm -> {
+            String adminsCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
+            administratorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(adminsCount) : adminsCount);
         });
 
         if (role == ChannelChatRole.OWNER) {

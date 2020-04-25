@@ -27,10 +27,12 @@ public class CustomToggleButton extends ToggleButton {
 
     public CustomToggleButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        init();
     }
 
     public CustomToggleButton(Context context) {
         this(context, null);
+        init();
     }
 
     private void init() {
@@ -40,10 +42,10 @@ public class CustomToggleButton extends ToggleButton {
         ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), Theme.getInstance().getTheme(getContext()));
 
         StateListDrawable listDrawable = new StateListDrawable();
-        listDrawable.addState(new int[]{android.R.attr.state_checked,android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_on, wrapper.getTheme()));
-        listDrawable.addState(new int[]{android.R.attr.state_checked,-android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_on, wrapper.getTheme()));
-        listDrawable.addState(new int[]{-android.R.attr.state_checked,android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_off, wrapper.getTheme()));
-        listDrawable.addState(new int[]{-android.R.attr.state_checked,-android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_off, wrapper.getTheme()));
+        listDrawable.addState(new int[]{android.R.attr.state_checked, android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_on, wrapper.getTheme()));
+        listDrawable.addState(new int[]{android.R.attr.state_checked, -android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_on, wrapper.getTheme()));
+        listDrawable.addState(new int[]{-android.R.attr.state_checked, android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_off, wrapper.getTheme()));
+        listDrawable.addState(new int[]{-android.R.attr.state_checked, -android.R.attr.state_pressed}, VectorDrawableCompat.create(getResources(), R.drawable.toggle_state_off, wrapper.getTheme()));
         setButtonDrawable(listDrawable);
     }
 

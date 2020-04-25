@@ -18,6 +18,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -30,16 +40,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosSignupInfoVM;
 
 import org.jetbrains.annotations.NotNull;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
 
@@ -94,18 +94,6 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
 
         LinearLayout toolbarLayout = binding.fragKuknosSIToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
-
-        /*if (viewModel.loginStatus()) {
-            FragmentManager fragmentManager = getChildFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
-            if (fragment == null) {
-                fragment = KuknosPanelFrag.newInstance();
-                fragmentTransaction.addToBackStack(fragment.getClass().getName());
-            }
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            popBackStackFragment();
-        }*/
 
         String t = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
         SpannableString ss = new SpannableString(t);

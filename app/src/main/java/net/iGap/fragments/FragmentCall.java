@@ -19,26 +19,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.ISignalingGetCallLog;
-import net.iGap.observers.interfaces.OnCallLogClear;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.ISignalingGetCallLog;
+import net.iGap.observers.interfaces.OnCallLogClear;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
@@ -92,7 +92,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        RealmCallLog.manageClearCallLog();
         return inflater.inflate(R.layout.fragment_call, container, false);
     }
 

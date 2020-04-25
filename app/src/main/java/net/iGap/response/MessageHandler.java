@@ -15,10 +15,12 @@ import android.util.Log;
 import androidx.annotation.CallSuper;
 
 import net.iGap.BuildConfig;
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.IGLog;
 import net.iGap.proto.ProtoError;
 
 import static net.iGap.G.latestResponse;
@@ -42,6 +44,10 @@ public abstract class MessageHandler {
     public void handler() throws NullPointerException {
         if (BuildConfig.DEBUG) {
             Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
+        }
+
+        if (Config.FILE_LOG_ENABLE && actionId != 0) {
+            IGLog.e("RCV MSGH -> " + actionId);
         }
         latestResponse = System.currentTimeMillis();
     }
@@ -68,6 +74,10 @@ public abstract class MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         majorCode = errorResponse.getMajorCode();
         minorCode = errorResponse.getMinorCode();
+
+        if (Config.FILE_LOG_ENABLE && actionId != 0) {
+            IGLog.e("ERROR " + actionId + " MA " + majorCode + " MI " + minorCode);
+        }
 
         HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode), false);
 

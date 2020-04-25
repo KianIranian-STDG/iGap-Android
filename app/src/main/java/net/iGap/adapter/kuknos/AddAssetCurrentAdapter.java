@@ -46,17 +46,19 @@ public class AddAssetCurrentAdapter extends RecyclerView.Adapter<AddAssetCurrent
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title;
+        private TextView title, icon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.cellAddAssetTitle);
+            icon = itemView.findViewById(R.id.addIcon);
 
         }
 
         public void initView(KuknosBalance.Balance model) {
             title.setText(model.getAsset().getType().equals("native") ? "PMN" : model.getAssetCode());
+            icon.setVisibility(View.GONE);
         }
     }
 

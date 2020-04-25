@@ -10,6 +10,7 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoChannelAddAdmin;
 
 public class RequestChannelAddAdmin {
@@ -20,6 +21,20 @@ public class RequestChannelAddAdmin {
         builder.setMemberId(memberId);
 
         RequestWrapper requestWrapper = new RequestWrapper(402, builder);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void channelAddAdmin(long roomId, long memberId, ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, OnResponse onResponse) {
+        ProtoChannelAddAdmin.ChannelAddAdmin.Builder builder = ProtoChannelAddAdmin.ChannelAddAdmin.newBuilder();
+        builder.setRoomId(roomId);
+        builder.setMemberId(memberId);
+        builder.setPermission(adminRights);
+
+        RequestWrapper requestWrapper = new RequestWrapper(402, builder, onResponse);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -5,7 +5,7 @@
 
     <stroke
         android:width="@dimen/dp1"
-        android:color="?iGapDividerLine" />
+        android:color="@color/background_editText" />
 
     <corners android:radius="@dimen/dp6" />
 

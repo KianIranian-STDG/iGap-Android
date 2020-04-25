@@ -99,7 +99,9 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
 
         Collections.sort(structCountryArrayList, new CountryListComparator());
 
-        reagentCountryCode.set("+" + repository.getCallingCode());
+        if (repository.getCallingCode() != 0)
+            reagentCountryCode.set("+" + repository.getCallingCode());
+        if(repository.getPattern()!="")
         reagentPhoneNumberMask.set(repository.getPattern().replace("X", "#").replace(" ", "-"));
     }
 

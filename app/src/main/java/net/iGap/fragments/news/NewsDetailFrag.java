@@ -23,6 +23,7 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsDetailPageBinding;
@@ -187,7 +188,7 @@ public class NewsDetailFrag extends BaseAPIViewFrag<NewsDetailVM> {
 
     private void initMainRecycler(NewsDetail data) {
 
-        Picasso.get()
+        Picasso.with(G.context)
                 .load(data.getSourceImage())
                 .placeholder(R.mipmap.news_temp_banner)
                 .into(binding.image);

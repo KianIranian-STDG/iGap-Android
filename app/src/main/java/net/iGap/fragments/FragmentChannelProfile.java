@@ -25,23 +25,26 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnChannelAvatarDelete;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.OnChannelAvatarDelete;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
@@ -53,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmObjectChangeListener;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -69,10 +73,14 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
+    private long roomId = -1;
 
     private FragmentChannelProfileViewModel viewModel;
     private ActivityProfileChannelBinding binding;
     private CircleImageView imvChannelAvatar;
+
+    private RealmRoomAccess currentRoomAccess;
+    private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
 
     public static FragmentChannelProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
@@ -92,7 +100,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                long roomId = -1;
                 boolean v = false;
                 if (getArguments() != null) {
                     roomId = getArguments().getLong(ROOM_ID);
@@ -110,12 +117,23 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+
+        currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+        });
+
         return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (currentRoomAccess != null) {
+            checkRoomAccess(currentRoomAccess);
+            roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
+            currentRoomAccess.addChangeListener(roomAccessChangeListener);
+        }
 
         imvChannelAvatar = binding.toolbarAvatar;
         imvChannelAvatar.setOnClickListener(v -> viewModel.onClickCircleImage());
@@ -138,12 +156,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         viewModel.menuPopupVisibility.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
                 binding.toolbarMore.setVisibility(integer);
-            }
-        });
-
-        viewModel.editButtonVisibility.observe(getViewLifecycleOwner(), visibility -> {
-            if (visibility != null) {
-                binding.toolbarEdit.setVisibility(visibility);
             }
         });
 
@@ -203,7 +215,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 inputChannelLink.addView(viewRevoke, viewParams);
 
                 TextView txtLink = new AppCompatTextView(getActivity());
-                txtLink.setText(Config.IGAP_LINK_PREFIX + link);
+                txtLink.setText( link);
                 txtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
@@ -223,7 +235,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                         .onPositive((dialog1, which) -> {
                             if (getActivity() != null) {
                                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", Config.IGAP_LINK_PREFIX + link);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP",link);
                                 clipboard.setPrimaryClip(clip);
                             }
                         })
@@ -291,6 +303,21 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         initialToolbar();
     }
 
+    private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
+        if (realmRoomAccess != null) {
+            binding.subscribers.setVisibility(realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+            binding.subscribersCount.setVisibility(realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+
+            binding.toolbarEdit.setVisibility(realmRoomAccess.isCanModifyRoom() ? View.VISIBLE : View.GONE);
+
+            binding.administrators.setVisibility(realmRoomAccess.isCanAddNewAdmin() ? View.VISIBLE : View.GONE);
+            binding.administratorsCount.setVisibility(realmRoomAccess.isCanAddNewAdmin() ? View.VISIBLE : View.GONE);
+
+            binding.members.setVisibility(realmRoomAccess.isCanAddNewAdmin() || realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+            binding.divider3.setVisibility(realmRoomAccess.isCanAddNewAdmin() || realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+        }
+    }
+
     private void initialToolbar() {
 
         binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
@@ -301,7 +328,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             handleToolbarTitleVisibility(percentage);
         });
         startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
-
+        binding.toolbarTxtNameExpanded.setSelected(true);
     }
 
     private void showDialogLeaveChannel() {
@@ -380,6 +407,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        removeRoomAccessChangeListener();
+    }
+
     private void setAvatar() {
         avatarHandler.getAvatar(new ParamWithAvatarType(imvChannelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
@@ -442,5 +475,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     @Override
     public void onTimeOut() {
 
+    }
+
+    private void removeRoomAccessChangeListener() {
+        if (currentRoomAccess != null && roomAccessChangeListener != null) {
+            currentRoomAccess.removeChangeListener(roomAccessChangeListener);
+            currentRoomAccess = null;
+            roomAccessChangeListener = null;
+        }
     }
 }

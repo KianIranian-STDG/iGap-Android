@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
 
@@ -56,7 +57,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
         if (position == (getCount() - 1) && position != 0 /*&& wallets.get(position).getAssetCode().equals("Add Asset")*/) {
             // set
             walletName.setText(context.getResources().getString(R.string.kuknos_panel_addAsset));
-            Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
+            Picasso.with(G.context).load(R.mipmap.kuknos_add).into(walletPic);
             walletPic.setVisibility(View.VISIBLE);
             // config text
             walletName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font), Typeface.BOLD);
@@ -104,7 +105,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<KuknosBalance.Balanc
         if (position == (getCount() - 1) && position != 0 /*&& wallets.get(position).getAssetCode().equals("Add Asset")*/) {
             // set
             walletName.setText(context.getResources().getString(R.string.kuknos_panel_addAsset));
-            Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
+            Picasso.with(G.context).load(R.mipmap.kuknos_add).into(walletPic);
             walletPic.setVisibility(View.VISIBLE);
             // config text
             walletName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font), Typeface.BOLD);

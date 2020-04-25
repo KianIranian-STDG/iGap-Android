@@ -1,11 +1,15 @@
 package net.iGap.fragments.kuknos;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,8 +72,30 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosSRToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        binding.fragKuknosSRkeysET.setOnLongClickListener(v -> {
+            copyWalletID(getResources().getString(R.string.kuknos_accountInfo_recoveryKey_title), kuknosShowRecoveryKeyVM.getRecoveryKeys().get());
+            return false;
+        });
+
+        binding.fragKuknosSRPrivatekeyET.setOnLongClickListener(v -> {
+            copyWalletID(getResources().getString(R.string.kuknos_accountInfo_privateKey_title), kuknosShowRecoveryKeyVM.getPrivateKey().get());
+            return false;
+        });
+
+        binding.fragKuknosSRpublickeyET.setOnLongClickListener(v -> {
+            copyWalletID(getResources().getString(R.string.kuknos_accountInfo_publicKey_title), kuknosShowRecoveryKeyVM.getPublicKey().get());
+            return false;
+        });
+
         onErrorObserver();
-        onNextObserver();
+//        onNextObserver();
+    }
+
+    private void copyWalletID(String label, String desc) {
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(label, desc);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
     }
 
     private void onErrorObserver() {
@@ -84,13 +110,13 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
         });
     }
 
-    private void onNextObserver() {
+    /*private void onNextObserver() {
         kuknosShowRecoveryKeyVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
             if (nextPage) {
                 popBackStackFragment();
             }
         });
-    }
+    }*/
 
     @Override
     public void onResume() {

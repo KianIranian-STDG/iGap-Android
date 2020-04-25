@@ -1,7 +1,5 @@
 package net.iGap.api.apiService;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -56,9 +54,6 @@ public class IgapRetrofitInterceptor implements Interceptor {
 
         if (response.code() == 401) {
             synchronized (this) {
-                if (BuildConfig.DEBUG)
-                    Log.e(getClass().getSimpleName(), "Failed " + request.toString() + " with token -> " + tokenContainer.getToken());
-
                 String currentToken = tokenContainer.getToken();
 
                 if (currentToken != null && currentToken.equals(token)) {
@@ -72,10 +67,6 @@ public class IgapRetrofitInterceptor implements Interceptor {
                 if (tokenContainer.getToken() != null) {
                     builder.header("Authorization", tokenContainer.getToken());
                     request = builder.build();
-
-                    if (BuildConfig.DEBUG)
-                        Log.e(getClass().getSimpleName(), "Send " + request.toString() + " again with new token -> " + tokenContainer.getToken());
-
                     return chain.proceed(request);
                 }
             }
@@ -88,23 +79,15 @@ public class IgapRetrofitInterceptor implements Interceptor {
 
             isRefreshing = true;
 
-            if (BuildConfig.DEBUG)
-                Log.e(getClass().getSimpleName(), "Refreshing token...");
-
             tokenContainer.getRefreshToken(() -> {
                 synchronized (IgapRetrofitInterceptor.this) {
                     isRefreshing = false;
-                    if (BuildConfig.DEBUG)
-                        Log.e(getClass().getSimpleName(), "Proto response on success and token updated with token -> " + tokenContainer.getToken());
                     IgapRetrofitInterceptor.this.notifyAll();
                 }
             });
         }
 
-        Log.e(getClass().getSimpleName(), "lock thread -> " + android.os.Process.getThreadPriority(android.os.Process.myTid()) + this.toString());
         this.wait();
-        Log.e(getClass().getSimpleName(), "unlock thread -> " + android.os.Process.getThreadPriority(android.os.Process.myTid()) + this.toString());
-
     }
 
     private String getSpecifications() {

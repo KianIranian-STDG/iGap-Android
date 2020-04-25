@@ -34,10 +34,9 @@ public class KuknosLogoutVM extends ViewModel {
 
     private void sendDataServer() {
         progressState.setValue(true);
-        // TODO: send data to server
+        userRepo.deleteAccount();
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            userRepo.deleteAccount();
             progressState.setValue(false);
             nextPage.setValue(true);
         }, 1000);

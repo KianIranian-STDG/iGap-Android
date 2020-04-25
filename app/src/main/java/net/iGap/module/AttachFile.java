@@ -45,6 +45,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPaint;
 import net.iGap.fragments.FileManagerFragment;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
@@ -634,7 +635,8 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                if (context != null)
+                    HelperError.showSnackMessage(context.getString(R.string.you_need_to_allow) + " " + context.getString(R.string.permission_storage), false);
             }
         });
     }

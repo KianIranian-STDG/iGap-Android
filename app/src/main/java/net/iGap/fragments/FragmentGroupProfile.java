@@ -35,45 +35,47 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.OnGroupAvatarDelete;
-import net.iGap.observers.interfaces.OnGroupCheckUsername;
-import net.iGap.observers.interfaces.OnGroupUpdateUsername;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.enums.GroupChatRole;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGroupAvatarDelete;
+import net.iGap.observers.interfaces.OnGroupCheckUsername;
+import net.iGap.observers.interfaces.OnGroupUpdateUsername;
 import net.iGap.proto.ProtoGroupCheckUsername;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupCheckUsername;
-import net.iGap.request.RequestGroupKickAdmin;
-import net.iGap.request.RequestGroupKickMember;
-import net.iGap.request.RequestGroupKickModerator;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import io.realm.RealmObjectChangeListener;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-
 
 /*
  * This is the source code of iGap for Android
@@ -99,6 +101,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     private FragmentGroupProfileViewModel viewModel;
     private ActivityGroupProfileBinding binding;
 
+    private RealmRoomAccess currentRoomAccess;
+    private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
+    private long roomId;
 
     AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
@@ -122,7 +127,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        long roomId = 0;
         boolean isNotJoin = true;
         if (getArguments() != null) {
             roomId = getArguments().getLong(ROOM_ID);
@@ -132,6 +136,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_group_profile, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+
+        currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+        });
+
         return attachToSwipeBack(binding.getRoot());
     }
 
@@ -144,6 +153,12 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         // because actionbar not in this view do that and not correct in viewModel
         imvGroupAvatar = binding.toolbarAvatar;
         imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
+
+        if (currentRoomAccess != null) {
+            checkRoomAccess(currentRoomAccess);
+            roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
+            currentRoomAccess.addChangeListener(roomAccessChangeListener);
+        }
 
         binding.toolbarMore.setOnClickListener(v -> viewModel.onClickRippleMenu());
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
@@ -311,7 +326,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 inputGroupLink.addView(viewRevoke, viewParams);
 
                 TextView txtLink = new AppCompatTextView(getActivity());
-                txtLink.setText(Config.IGAP_LINK_PREFIX);
+                txtLink.setText(/*Config.IGAP_LINK_PREFIX*/link);
                 txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
@@ -355,12 +370,33 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
+        if (viewModel.role.equals(GroupChatRole.OWNER)) {
+            binding.editGroupPermission.setVisibility(View.VISIBLE);
+            binding.editGroupPermission.setOnClickListener(v -> {
+                openChatEditRightsFragment(viewModel.getRealmRoom());
+            });
+        }
+
         initComponent();
 
         attachFile = new AttachFile(getActivity());
         G.onGroupAvatarDelete = this;
 
         initialToolbar();
+    }
+
+    private void openChatEditRightsFragment(RealmRoom realmRoom) {
+        if (getActivity() != null && realmRoom != null)
+            new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, null, 0, 2)).setReplace(false).load();
+    }
+
+    private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
+        if (realmRoomAccess != null) {
+            binding.showMemberList.setVisibility(realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+            binding.addMember.setVisibility(realmRoomAccess.isCanAddNewMember() ? View.VISIBLE : View.GONE);
+
+            binding.toolbarEdit.setVisibility(realmRoomAccess.isCanModifyRoom() ? View.VISIBLE : View.GONE);
+        }
     }
 
     @Override
@@ -380,6 +416,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             handleToolbarTitleVisibility(percentage);
         });
         startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
+        binding.toolbarTxtNameExpanded.setSelected(true);
 
     }
 
@@ -768,47 +805,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 HelperError.showSnackMessage(getString(R.string.time_out), false);
             }
         });
-    }
-
-
-    /**
-     * if user was admin set  role to member
-     */
-    public void kickAdmin(final long memberID) {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity()).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    new RequestGroupKickAdmin().groupKickAdmin(viewModel.roomId, memberID);
-                }
-            }).show();
-        }
-    }
-
-    /**
-     * delete this member from list of member group
-     */
-    public void kickMember(final long memberID) {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity()).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestGroupKickMember().groupKickMember(viewModel.roomId, memberID);
-                }
-            }).show();
-        }
-    }
-
-    public void kickModerator(final long memberID) {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity()).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestGroupKickModerator().groupKickModerator(viewModel.roomId, memberID);
-                }
-            }).show();
-        }
     }
 }
 

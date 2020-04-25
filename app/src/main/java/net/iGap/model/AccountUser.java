@@ -7,7 +7,9 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+import net.iGap.Config;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.IGLog;
 import net.iGap.realm.RealmMigration;
 
 import java.io.File;
@@ -43,7 +45,7 @@ public class AccountUser {
     private transient RealmConfiguration realmConfiguration;
 
     /**
-     create real account
+     * create real account
      **/
     public AccountUser(long id, String dbName, String name, String phoneNumber, int unReadMessageCount, boolean isAssigned) {
         this.id = id;
@@ -55,7 +57,7 @@ public class AccountUser {
     }
 
     /**
-        create test account
+     * create test account
      **/
     public AccountUser(String name) {
         this.name = name;
@@ -164,6 +166,10 @@ public class AccountUser {
                             HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
                         }
 
+                        if (Config.FILE_LOG_ENABLE) {
+                            IGLog.e("DB total bytes Size -> " + totalBytes + " used Size -> " + usedBytes);
+                        }
+
                         return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
                     }
                 })
@@ -185,7 +191,8 @@ public class AccountUser {
             try {
                 if (realm != null)
                     realm.close();
-            } catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
 
             Realm.deleteRealm(oldConfig);
         }

@@ -15,6 +15,7 @@ import org.stellar.sdk.Memo;
 import org.stellar.sdk.Network;
 import org.stellar.sdk.PaymentOperation;
 import org.stellar.sdk.Server;
+import org.stellar.sdk.SetOptionsOperation;
 import org.stellar.sdk.Transaction;
 import org.stellar.sdk.responses.AccountResponse;
 
@@ -24,11 +25,11 @@ import java.util.Objects;
 public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
 
     enum API {
-        PAYMENT_SEND, CHANGE_TRUST, MANAGE_OFFER
+        PAYMENT_SEND, CHANGE_TRUST, MANAGE_OFFER, SET_OPTION
     }
 
-    private static final String KUKNOS_Horizon_Server = "https://horizon.kuknos.org" /*"https://horizon-testnet.stellar.org"*/;
-    private static final String PASS_PHRASE = "Kuknos Foundation, Feb 2019" /*"https://horizon-testnet.stellar.org"*/;
+    private static final String KUKNOS_Horizon_Server = "https://horizon.kuknos.org" /*"https://hz1-test.kuknos.org"*/;
+    private static final String PASS_PHRASE = "Kuknos Foundation, Feb 2019" /*"Kuknos-NET"*/;
     private API apiEnum;
     private callBack response;
 
@@ -60,9 +61,11 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
             case PAYMENT_SEND:
                 return paymentToOtherXDR(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5]);
             case CHANGE_TRUST:
-                return trustlineXDR(ts[0], ts[1], ts[2]);
+                return trustlineXDR(ts[0], ts[1], ts[2], ts[3]);
             case MANAGE_OFFER:
                 return manageOffer(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6], Long.parseLong(ts[7]));
+            case SET_OPTION:
+                return setHomeDomainAndInflation(ts[0]);
         }
         return null;
     }
@@ -171,7 +174,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         return transaction.toEnvelopeXdrBase64();
     }
 
-    private String trustlineXDR(String AccountSeed, String code, String issuer) {
+    private String trustlineXDR(String AccountSeed, String code, String issuer, String trustLineLimitByIssuer) {
         Server server = new Server(KUKNOS_Horizon_Server);
         Network network = new Network(PASS_PHRASE);
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
@@ -187,7 +190,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         }
 
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
-                .addOperation(new ChangeTrustOperation.Builder(asset, "" + Integer.MAX_VALUE).build())
+                .addOperation(new ChangeTrustOperation.Builder(asset, (trustLineLimitByIssuer == null) ? "" + Integer.MAX_VALUE : trustLineLimitByIssuer).build())
                 .addMemo(Memo.text(""))
                 .setTimeout(60)
                 .setOperationFee(50000)
@@ -226,6 +229,34 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
 
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
                 .addOperation(new ManageSellOfferOperation.Builder(sourceAsset, counterAsset, amount, price).setOfferId(offerID).build())
+                .addMemo(Memo.text(""))
+                .setTimeout(60)
+                .setOperationFee(50000)
+                .build();
+        // Sign the transaction to prove you are actually the person sending it.
+        transaction.sign(source);
+        return transaction.toEnvelopeXdrBase64();
+    }
+
+    private String setHomeDomainAndInflation(String AccountSeed) {
+        Server server = new Server(KUKNOS_Horizon_Server);
+        Network network = new Network(PASS_PHRASE);
+        KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
+
+        // If there was no error, load up-to-date information on your account.
+        AccountResponse sourceAccount = null;
+        try {
+            sourceAccount = server.accounts().account(source.getAccountId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "" + R.string.kuknos_send_errorServer;
+        }
+
+        Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
+                .addOperation(new SetOptionsOperation.Builder()
+                        .setHomeDomain("https://pdpco.ir")
+                        .setInflationDestination("GAG75QOJLNDST4G7TDGHX6RVJAZJ2IOMRS4BJK4EVKYQYCKILXB5JVJ6")
+                        .build())
                 .addMemo(Memo.text(""))
                 .setTimeout(60)
                 .setOperationFee(50000)

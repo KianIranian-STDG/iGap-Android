@@ -5,6 +5,6 @@
 
     <stroke
         android:width="@dimen/dp2"
-        android:color="?iGapSubtitleTextColor"/>
+        android:color="@color/gray_4c" />
 
 </shape>

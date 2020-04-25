@@ -54,40 +54,61 @@ public class RealmKuknos extends RealmObject {
     }
 
     public static void updateMnemonic(String kuknosMnemonic) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-            if (realmUserInfo != null) {
-                realmUserInfo.setKuknosMnemonic(kuknosMnemonic);
-            }
-        });
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosMnemonic(kuknosMnemonic);
+                }
+            });
+        }).start();
     }
 
     public static void updatePIN(String kuknosPin) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-            if (realmUserInfo != null) {
-                realmUserInfo.setKuknosPIN(kuknosPin);
-            }
-        });
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosPIN(kuknosPin);
+                }
+            });
+        }).start();
     }
 
     public static void updateKey(String kuknosSeed, String publicKey) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-            if (realmUserInfo != null) {
-                realmUserInfo.setKuknosSeedKey(kuknosSeed);
-                realmUserInfo.setKuknosPublicKey(publicKey);
-            }
-        });
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosSeedKey(kuknosSeed);
+                    realmUserInfo.setKuknosPublicKey(publicKey);
+                }
+            });
+        }).start();
     }
 
     public static void updateSeedKey(String kuknosSeed) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
-            if (realmUserInfo != null) {
-                realmUserInfo.setKuknosSeedKey(kuknosSeed);
-            }
-        });
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosSeedKey(kuknosSeed);
+                }
+            });
+        }).start();
     }
 
+    public static void updateKuknos(String seed, String publicKey, String mNemonic, String pin) {
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmKuknos realmUserInfo = realm.where(RealmUserInfo.class).findFirst().getKuknosM();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setKuknosSeedKey(seed);
+                    realmUserInfo.setKuknosPublicKey(publicKey);
+                    realmUserInfo.setKuknosMnemonic(mNemonic);
+                    realmUserInfo.setKuknosPIN(pin);
+                }
+            });
+        }).start();
+    }
 }

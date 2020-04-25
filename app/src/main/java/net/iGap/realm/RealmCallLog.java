@@ -10,13 +10,7 @@
 
 package net.iGap.realm;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.helper.HelperPreferences;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoSignalingGetLog;
 
 import java.util.List;
@@ -63,27 +57,6 @@ public class RealmCallLog extends RealmObject {
         DbManager.getInstance().doRealmTransaction(realm -> {
             realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
         });
-    }
-
-    /**
-     * this method shouldn't be async because at start of {@link net.iGap.fragments.FragmentCall} and on
-     * {@link net.iGap.fragments.FragmentCall#onCreateView(LayoutInflater, ViewGroup, Bundle)}
-     * should be check state of call and clear should be execute synchronise
-     */
-    private static void clearAllCallLog() {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmCallLog.class).findAll().deleteAllFromRealm();
-        });
-    }
-
-    /**
-     * clear call log if needed for new struct of "RealmCallLog" for schema version 33
-     */
-    public static void manageClearCallLog() {
-        if (!HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_CLEAR_CALL_LOG)) {
-            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_CLEAR_CALL_LOG, true);
-            clearAllCallLog();
-        }
     }
 
     public long getId() {

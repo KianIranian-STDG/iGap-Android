@@ -97,6 +97,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private String initialize;
     private String color;
+    private long userId;
 
     /////////////////////////////////////////////////////////////////////////////////////////
 //    private EmojiPopup emojiPopup;
@@ -137,6 +138,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         setContentView(R.layout.activity_popup_notification);
 
         mList = HelperNotification.getInstance().getMessageList();
+        if (getIntent().getExtras() != null)
+            userId = getIntent().getExtras().getLong(ActivityMain.userId);
         new InitComponent();
     }
 
@@ -265,6 +268,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     private void goToChatActivity() {
         Intent intent = new Intent(ActivityPopUpNotification.this, ActivityMain.class);
         intent.putExtra(ActivityMain.openChat, mList.get(viewPager.getCurrentItem()).roomId);
+        intent.putExtra(ActivityMain.userId, userId);
         startActivity(intent);
         finish();
     }

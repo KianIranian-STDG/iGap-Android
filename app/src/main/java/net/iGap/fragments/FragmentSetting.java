@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -37,6 +38,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentSettingViewModel;
 import net.iGap.WebSocketClient;
+import net.iGap.G;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -214,69 +216,54 @@ public class FragmentSetting extends BaseFragment {
     }
 
     private void showDialogLogout() {
-
-        if (getActivity() != null) {
-            MaterialDialog inDialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.dialog_content_custom, true).build();
-            View v = inDialog.getCustomView();
-
-            inDialog.show();
-
-            TextView txtTitle = v.findViewById(R.id.txtDialogTitle);
-            txtTitle.setText(getString(R.string.log_out));
-
-            TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
-            iconTitle.setText(R.string.md_exit_app);
-            iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext() , R.font.font_icon_old));
-
-            TextView txtContent = v.findViewById(R.id.txtDialogContent);
-            txtContent.setText(R.string.content_log_out);
-
-            TextView txtCancel = v.findViewById(R.id.txtDialogCancel);
-            TextView txtOk = v.findViewById(R.id.txtDialogOk);
-
-            txtOk.setOnClickListener(v1 -> {
-                inDialog.dismiss();
-                viewModel.logout();
-
-            });
-
-            txtCancel.setOnClickListener(v12 -> inDialog.dismiss());
-        }
+        showDialog(G.context.getString(R.string.log_out), G.context.getString(R.string.content_log_out), R.string.md_exit_app, v -> viewModel.logout(), null);
     }
 
     private void showDeleteAccountDialog() {
-        if (getContext() != null) {
-            MaterialDialog inDialog = new MaterialDialog.Builder(getContext()).customView(R.layout.dialog_content_custom, true).build();
-            View v = inDialog.getCustomView();
+        showDialog(G.context.getString(R.string.delete_account), G.context.getString(R.string.delete_account_text) + "\n" + G.context.getString(R.string.delete_account_text_desc),
+                R.string.md_delete_acc, v -> {
+                    if (getActivity() != null) {
+                        FragmentDeleteAccount fragmentDeleteAccount = FragmentDeleteAccount.getInstance(AccountManager.getInstance().getCurrentUser().getPhoneNumber());
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentDeleteAccount).setReplace(false).load();
+                    }
+                }, null);
+    }
 
-            inDialog.show();
-
-            TextView txtTitle = v.findViewById(R.id.txtDialogTitle);
-            txtTitle.setText(getString(R.string.delete_account));
-
-            TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
-            iconTitle.setText(R.string.md_delete_acc);
-
-            TextView txtContent = v.findViewById(R.id.txtDialogContent);
-            String text = getString(R.string.delete_account_text) + "\n" + getString(R.string.delete_account_text_desc);
-            txtContent.setText(text);
-
-            TextView txtCancel = v.findViewById(R.id.txtDialogCancel);
-            TextView txtOk = v.findViewById(R.id.txtDialogOk);
-
-
-            txtOk.setOnClickListener(v1 -> {
-                inDialog.dismiss();
-                if (getActivity() != null) {
-                    FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("PHONE", AccountManager.getInstance().getCurrentUser().getPhoneNumber());
-                    fragmentDeleteAccount.setArguments(bundle);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentDeleteAccount).setReplace(false).load();
-                }
-            });
-
-            txtCancel.setOnClickListener(v12 -> inDialog.dismiss());
+    private void showDialog(String title, String content, @StringRes int icon, View.OnClickListener onOk, View.OnClickListener onCancel) {
+        if (getActivity() == null || getActivity().isFinishing()) {
+            return;
         }
+
+        MaterialDialog inDialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.dialog_content_custom, true).build();
+        View v = inDialog.getCustomView();
+
+        inDialog.show();
+
+        TextView txtTitle = v.findViewById(R.id.txtDialogTitle);
+        txtTitle.setText(title);
+
+        TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
+        iconTitle.setText(icon);
+
+        TextView txtContent = v.findViewById(R.id.txtDialogContent);
+        txtContent.setText(content);
+
+        TextView txtCancel = v.findViewById(R.id.txtDialogCancel);
+        TextView txtOk = v.findViewById(R.id.txtDialogOk);
+
+
+        txtOk.setOnClickListener(v1 -> {
+            inDialog.dismiss();
+            if (onOk != null) {
+                onOk.onClick(v1);
+            }
+        });
+
+        txtCancel.setOnClickListener(v12 -> {
+            inDialog.dismiss();
+            if (onCancel != null) {
+                onCancel.onClick(v12);
+            }
+        });
     }
 }

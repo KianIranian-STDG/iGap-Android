@@ -1,27 +1,24 @@
 package net.iGap.viewmodel.kuknos;
 
-import android.util.Log;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import net.iGap.G;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.kuknos.KuknosError;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.model.kuknos.Parsian.KuknosOptionStatus;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.PanelRepo;
-import net.iGap.request.RequestInfoPage;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.core.text.HtmlCompat;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
 
 public class KuknosPanelVM extends BaseAPIViewModel {
 
@@ -48,12 +45,17 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
-        openPage = new MutableLiveData<>();
+        openPage = new SingleLiveEvent<>();
         openPage.setValue(-1);
         TandCAgree = new MutableLiveData<>(null);
     }
 
-    public void getDataFromServer() {
+    public void initApis() {
+        getAccountOptionStatus();
+        getDataFromServer();
+    }
+
+    private void getDataFromServer() {
         progressState.setValue(true);
         panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
@@ -69,7 +71,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
                 KuknosBalance temp = new KuknosBalance();
                 temp.setAssets(tempBalanceList);
                 kuknosWalletsM.setValue(temp);
-                spinnerSelect(0);
+//                spinnerSelect(0);
                 progressState.setValue(false);
             }
 
@@ -111,19 +113,34 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         });
     }
 
-    public boolean isPinSet() {
-        return panelRepo.isPinSet();
-    }
+    private void getAccountOptionStatus() {
+        panelRepo.getAccountOptionsStatus(this, new ResponseCallback<KuknosResponseModel<KuknosOptionStatus>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosOptionStatus> data) {
+                if (!data.getData().isStatus())
+                    openPage.setValue(6);
+            }
 
-    public boolean isMnemonicAvailable() {
-        return panelRepo.isMnemonicAvailable();
+            @Override
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
     }
 
     public String convertToJSON(int position) {
-        if (kuknosWalletsM.getValue() == null)
-            return "";
         Gson gson = new Gson();
-        return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
+        if (kuknosWalletsM.getValue() == null) {
+            KuknosBalance.Balance temp = new KuknosBalance.Balance();
+            temp.setAssetType("native");
+            return gson.toJson(temp);
+        } else
+            return gson.toJson(kuknosWalletsM.getValue().getAssets().get(position));
     }
 
     public void spinnerSelect(int position) {
@@ -165,31 +182,6 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         return currency.get().equals("PMN");
     }
 
-    public void getTermsAndCond() {
-        if (TandCAgree.getValue() != null && !TandCAgree.getValue().equals("error")) {
-            TandCAgree.postValue(TandCAgree.getValue());
-            return;
-        }
-        if (!G.isSecure) {
-            TandCAgree.postValue("error");
-            return;
-        }
-        new RequestInfoPage().infoPageAgreementDiscovery("KUKNUS_SEPID_AGREEMENT", new RequestInfoPage.OnInfoPage() {
-            @Override
-            public void onInfo(String body) {
-                if (body != null) {
-                    TandCAgree.postValue(HtmlCompat.fromHtml(body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
-                } else
-                    TandCAgree.postValue("error");
-            }
-
-            @Override
-            public void onError(int major, int minor) {
-                TandCAgree.postValue("error");
-            }
-        });
-    }
-
     public void receiveW() {
         openPage.setValue(0);
     }
@@ -207,7 +199,6 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     }
 
     public void goToTrading() {
-        Log.d("amini", "goToTrading: in here");
         openPage.setValue(5);
     }
 
@@ -287,5 +278,9 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     public MutableLiveData<Integer> getBAndCState() {
         return BAndCState;
+    }
+
+    public void setOpenPage(Integer openPage) {
+        this.openPage.setValue(openPage);
     }
 }

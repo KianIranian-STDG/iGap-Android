@@ -140,6 +140,7 @@
     <string name="md_igap_alert_box">\uf027</string>
     <string name="md_igap_chevron_double_up">\uf13f</string>
     <string name="md_igap_tune">\ue934</string>
+    <string name="md_igap_paint">\ue935</string>
     <string name="md_igap_credit_card">\uf19b</string>
     <string name="md_payment">\uf72c</string>
     <string name="md_barcode_scan">\uf072</string>

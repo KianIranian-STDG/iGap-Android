@@ -14,6 +14,7 @@ import net.iGap.model.kuknos.Parsian.KuknosFeeModel;
 import net.iGap.model.kuknos.Parsian.KuknosHash;
 import net.iGap.model.kuknos.Parsian.KuknosOfferResponse;
 import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
+import net.iGap.model.kuknos.Parsian.KuknosOptionStatus;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.model.kuknos.Parsian.KuknosTradeResponse;
 import net.iGap.model.kuknos.Parsian.KuknosTransactionResult;
@@ -87,13 +88,19 @@ class KuknosAPIRepository {
         temp.execute();
     }*/
 
-    void changeTrust(String accountSeed, String code, String issuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+    void changeTrust(String accountSeed, String code, String issuer, String trustLineLimitByIssuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
         new KuknosSDKRepo(KuknosSDKRepo.API.CHANGE_TRUST, XDR -> new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.changeTrust(XDR), handShakeCallback, apiResponse))
-                .execute(accountSeed, code, issuer);
+                .execute(accountSeed, code, issuer, trustLineLimitByIssuer);
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.changeTrust(new KuknosSDKRepo().trustlineXDR(accountSeed, code, issuer))
                         , handShakeCallback, apiResponse);*/
+    }
+
+    void setOptions(String accountSeed, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<SubmitTransactionResponse>> apiResponse) {
+        new KuknosSDKRepo(KuknosSDKRepo.API.SET_OPTION, XDR -> new ApiInitializer<KuknosResponseModel<SubmitTransactionResponse>>()
+                .initAPI(apiService.setOption(XDR), handShakeCallback, apiResponse))
+                .execute(accountSeed);
     }
 
     /*void changeTrust(String accountSeed, String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
@@ -133,6 +140,10 @@ class KuknosAPIRepository {
         new ApiInitializer<KuknosResponseModel<KuknosBankPayment>>().initAPI(apiService.buyAsset(publicKey, assetCode, assetAmount, totalPrice, description), handShakeCallback, apiResponse);
     }
 
+    void getAccountOptionsStatus(String publicKey, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOptionStatus>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosOptionStatus>>().initAPI(apiService.accountOptionsStatus(publicKey), handShakeCallback, apiResponse);
+    }
+
     void checkUsername(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUsernameStatus>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosUsernameStatus>>().initAPI(apiService.checkUsername(username), handShakeCallback, apiResponse);
     }
@@ -145,8 +156,8 @@ class KuknosAPIRepository {
         new ApiInitializer<KuknosResponseModel<KuknosTradeResponse>>().initAPI(apiService.getTradesHistory(userID, limit, cursor, null), handShakeCallback, apiResponse);
     }
 
-    void convertFederation(String username, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
-        new ApiInitializer<KuknosResponseModel<KuknosFederation>>().initAPI(apiService.convertFederation(username), handShakeCallback, apiResponse);
+    void convertFederation(String username, String domain, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFederation>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosFederation>>().initAPI(apiService.convertFederation(username, domain), handShakeCallback, apiResponse);
     }
 
     void getFees(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosFeeModel>> apiResponse) {

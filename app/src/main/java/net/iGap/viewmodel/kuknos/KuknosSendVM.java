@@ -2,6 +2,9 @@ package net.iGap.viewmodel.kuknos;
 
 import android.view.View;
 
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.gson.Gson;
 
 import net.iGap.R;
@@ -18,8 +21,7 @@ import net.iGap.repository.kuknos.PanelRepo;
 
 import org.stellar.sdk.KeyPair;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
+import java.nio.charset.StandardCharsets;
 
 public class KuknosSendVM extends BaseAPIViewModel {
 
@@ -27,6 +29,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
     private MutableLiveData<KuknosError> errorM;
     private MutableLiveData<KuknosError> payResult;
     private MutableLiveData<Boolean> progressState;
+    private MutableLiveData<Integer> changeHint;
     private ObservableField<String> walletID = new ObservableField<>();
     private ObservableField<String> text = new ObservableField<>();
     private ObservableField<String> amount = new ObservableField<>();
@@ -37,6 +40,13 @@ public class KuknosSendVM extends BaseAPIViewModel {
     private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
     private PanelRepo panelRepo = new PanelRepo();
 
+    private ObservableField<String> walletIdResponse = new ObservableField<>("");
+    private ObservableField<Integer> walletIdVisibility = new ObservableField<>(View.GONE);
+
+    public enum Mode {PUBLIC_KEY, KUKNOS_ID}
+
+    private Mode mode;
+
     public KuknosSendVM() {
         kuknosSendM = new KuknosSendM();
         errorM = new MutableLiveData<>();
@@ -45,6 +55,8 @@ public class KuknosSendVM extends BaseAPIViewModel {
         progressState.setValue(false);
         openQrScanner = new MutableLiveData<>();
         openQrScanner.setValue(false);
+        mode = Mode.PUBLIC_KEY;
+        changeHint = new MutableLiveData<>(R.string.kuknos_send_walletAddress_Hint1);
     }
 
     public void QrcodeScan() {
@@ -53,14 +65,23 @@ public class KuknosSendVM extends BaseAPIViewModel {
 
     public void sendCredit() {
 
-        if (!checkWalletID() || !checkAmount()) {
+        if (!checkAmount() || !checkMemo() || !checkWalletID(true)) {
             return;
         }
         goToPin.setValue(true);
 
     }
 
-    private boolean checkWalletID() {
+    private boolean checkMemo() {
+        String memo = "TRANSFER: " + (text.get() == null ? "" : text.get());
+        if (memo.getBytes(StandardCharsets.UTF_8).length > 28) {
+            errorM.setValue(new KuknosError(true, "Invalid Memo", "2", R.string.kuknos_send_memoError));
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkWalletID(boolean isFromBtn) {
         if (walletID.get() == null) {
             errorM.setValue(new KuknosError(true, "Invalid WalletID", "0", R.string.kuknos_send_walletIDError));
             return false;
@@ -69,8 +90,8 @@ public class KuknosSendVM extends BaseAPIViewModel {
             errorM.setValue(new KuknosError(true, "Invalid WalletID", "0", R.string.kuknos_send_walletIDError));
             return false;
         }
-        if (walletID.get().length() < 50) {
-            convertFederation(true);
+        if (mode == Mode.KUKNOS_ID) {
+            convertFederation(isFromBtn);
             return false;
         }
         if (!checkKeyPairExsit()) {
@@ -114,24 +135,33 @@ public class KuknosSendVM extends BaseAPIViewModel {
         }
     }
 
-    public void convertFederation(boolean isFromBtn) {
-        if (walletID.get() == null || walletID.get().length() > 50) {
+    private void convertFederation(boolean isFromBtn) {
+        String id = walletID.get();
+        String domain = "pdpco.ir";
+        if (walletID.get() == null) {
             return;
         }
+        if (walletID.get().contains("*")) {
+            id = walletID.get().substring(0, walletID.get().indexOf("*"));
+            domain = walletID.get().substring(walletID.get().indexOf("*") + 1);
+        }
         federationProgressVisibility.set(View.VISIBLE);
-        panelRepo.convertFederation(walletID.get(), this, new ResponseCallback<KuknosResponseModel<KuknosFederation>>() {
+        panelRepo.convertFederation(id, domain, this, new ResponseCallback<KuknosResponseModel<KuknosFederation>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosFederation> data) {
-                if (data.getData().getPublicKey() != null && data.getData().getPublicKey().length() > 50)
-                    walletID.set(data.getData().getPublicKey());
+                if (data.getData().getPublicKey() != null && data.getData().getPublicKey().length() > 50) {
+                    walletIdResponse.set(data.getData().getPublicKey());
+                    walletIdVisibility.set(View.VISIBLE);
+                }
                 federationProgressVisibility.set(View.GONE);
                 if (isFromBtn)
-                    sendCredit();
+                    goToPin.setValue(true);
             }
 
             @Override
             public void onError(String error) {
                 federationProgressVisibility.set(View.GONE);
+                errorM.setValue(new KuknosError(true, "Invalid WalletID", error, 0));
             }
 
             @Override
@@ -148,7 +178,10 @@ public class KuknosSendVM extends BaseAPIViewModel {
     public void sendDataServer() {
         kuknosSendM.setAmount(amount.get());
         kuknosSendM.setSrc(panelRepo.getUserRepo().getSeedKey());
-        kuknosSendM.setDest(walletID.get());
+        if (mode == Mode.KUKNOS_ID)
+            kuknosSendM.setDest(walletIdResponse.get());
+        else
+            kuknosSendM.setDest(walletID.get());
         kuknosSendM.setAssetCode(balanceInfoM.getAssetCode());
         kuknosSendM.setAssetInssuer(balanceInfoM.getAssetIssuer());
         kuknosSendM.setMemo("TRANSFER: " + (text.get() == null ? "" : text.get()));
@@ -182,6 +215,16 @@ public class KuknosSendVM extends BaseAPIViewModel {
             }
 
         });
+    }
+
+    public void onModeChange(int position) {
+        if (position == 0 & mode != Mode.PUBLIC_KEY) {
+            mode = Mode.PUBLIC_KEY;
+            changeHint.setValue(R.string.kuknos_send_walletAddress_Hint1);
+        } else if (position == 1 & mode != Mode.KUKNOS_ID) {
+            mode = Mode.KUKNOS_ID;
+            changeHint.setValue(R.string.kuknos_send_walletAddress_Hint2);
+        }
     }
 
     // Setter and Getter
@@ -254,5 +297,25 @@ public class KuknosSendVM extends BaseAPIViewModel {
 
     public ObservableField<Integer> getFederationProgressVisibility() {
         return federationProgressVisibility;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public MutableLiveData<Integer> getChangeHint() {
+        return changeHint;
+    }
+
+    public ObservableField<String> getWalletIdResponse() {
+        return walletIdResponse;
+    }
+
+    public ObservableField<Integer> getWalletIdVisibility() {
+        return walletIdVisibility;
+    }
+
+    public void setWalletIdVisibility(Integer walletIdVisibility) {
+        this.walletIdVisibility.set(walletIdVisibility);
     }
 }

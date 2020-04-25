@@ -125,7 +125,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_VideoTrim">
 
-        <life.knowledge4.videotrimmer.K4LVideoTrimmer
+        <net.igap.video.trim.K4LVideoTrimmer
             android:id="@+id/timeLine"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

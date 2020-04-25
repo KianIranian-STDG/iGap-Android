@@ -86,10 +86,8 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
 
             if (mdata.get(position).getBalance() != null) {
                 chValue.setText(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))) + itemView.getContext().getResources().getString(R.string.rial));
-                customize.setVisibility(View.GONE);
             } else {
                 chValue.setText(itemView.getContext().getResources().getString(R.string.mobile_bank_balance_error_no_price));
-                customize.setVisibility(View.VISIBLE);
             }
 
             String date = mdata.get(position).getChangeStatusDate();
@@ -101,11 +99,11 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
             }
             String status = mdata.get(position).getStatus();
 
-            /*if (status.equals("USED") || status.equals("REGISTER")) {
-                block.setVisibility(View.VISIBLE);
+            if (status.equals("USED")) {
+                customize.setVisibility(View.VISIBLE);
             } else {
-                block.setVisibility(View.GONE);
-            }*/
+                customize.setVisibility(View.GONE);
+            }
             block.setVisibility(View.GONE);
 
             chStatus.setText(getStatusText(status).toLowerCase());

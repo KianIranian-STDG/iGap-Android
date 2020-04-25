@@ -711,8 +711,8 @@ public class RoomListCell extends FrameLayout {
                     } else
                         message = lastMessage.getMessage();
 
-                    if (HelperCalander.isPersianUnicode)
-                        message = HelperCalander.convertToUnicodeFarsiNumber(message);
+//                    if (HelperCalander.isPersianUnicode)
+//                        message = HelperCalander.convertToUnicodeFarsiNumber(message);
 
                     lastMessageSpannable = new SpannableString(/*subStringInternal(*/message/*)*/);
                     lastMessageSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getSendMessageTextColor(lastMessageTv.getContext())), 0, lastMessageSpannable.length(), 0);

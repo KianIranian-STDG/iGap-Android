@@ -19,18 +19,20 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
-import net.iGap.proto.ProtoMplGetTopupToken;
-import net.iGap.request.RequestMplGetTopupToken;
+import net.iGap.observers.interfaces.ResponseCallback;
 
 import org.jetbrains.annotations.NotNull;
 
 
 public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
+
+    public static final String MCI = "mci";
+    public static final String MTN = "mtn";
+    public static final String RIGHTEL = "rightel";
 
     private ObservableInt showDetail = new ObservableInt(View.GONE);
     private ObservableInt observeTarabord = new ObservableInt(View.GONE);
@@ -97,6 +99,7 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
 
     public void phoneNumberTextChangeListener(String phoneNumber) {
         showDetail.set(phoneNumber.length() == 11 ? View.VISIBLE : View.GONE);
+        observeTarabord.set(View.GONE);
         setOperator(phoneNumber);
     }
 
@@ -200,84 +203,59 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
                 if (operatorType != null) {
                     if (selectedChargeTypePosition > 0) {
                         if (selectedPricePosition > 0) {
-                            ProtoMplGetTopupToken.MplGetTopupToken.Type type = null;
+                            ChargeType chargeType = null;
                             switch (operatorType) {
                                 case HAMRAH_AVAL:
-                                    type = ProtoMplGetTopupToken.MplGetTopupToken.Type.MCI;
+                                    chargeType = null;
                                     break;
                                 case IRANCELL:
                                     switch (selectedChargeTypePosition) {
                                         case 1:
-                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_PREPAID;
+                                            chargeType = ChargeType.MTN_NORMAL;
                                             break;
                                         case 2:
-                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_WOW;
-                                            break;
-                                        case 3:
-                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_WIMAX;
-                                            break;
-                                        case 4:
-                                            type = ProtoMplGetTopupToken.MplGetTopupToken.Type.IRANCELL_POSTPAID;
+                                            chargeType = ChargeType.MTN_AMAZING;
                                             break;
                                     }
                                     break;
                                 case RITEL:
-                                    type = ProtoMplGetTopupToken.MplGetTopupToken.Type.RIGHTEL;
+                                    switch (selectedChargeTypePosition) {
+                                        case 1:
+                                            chargeType = ChargeType.RIGHTEL_NORMAL;
+                                            break;
+                                        case 2:
+                                            chargeType = ChargeType.RIGHTEL_EXCITING;
+                                            break;
+                                    }
                                     break;
                             }
                             long price = 0;
-                            boolean isIranCell = operatorType == OperatorType.Type.IRANCELL;
                             switch (selectedPricePosition) {
                                 case 1:
-                                    if (isIranCell) {
-                                        price = 10900;
-                                    } else {
-                                        price = 10000;
-                                    }
+                                    price = 10000;
                                     break;
                                 case 2:
-                                    if (isIranCell) {
-                                        price = 21180;
-                                    } else {
-                                        price = 20000;
-                                    }
+                                    price = 20000;
                                     break;
                                 case 3:
-                                    if (isIranCell) {
-                                        price = 54500;
-                                    } else {
-                                        price = 50000;
-                                    }
+                                    price = 50000;
                                     break;
                                 case 4:
-                                    if (isIranCell) {
-                                        price = 109000;
-                                    } else {
-                                        price = 100000;
-                                    }
+                                    price = 100000;
                                     break;
                                 case 5:
-                                    if (isIranCell) {
-                                        price = 218000;
-                                    } else {
-                                        price = 200000;
-                                    }
+                                    price = 200000;
                                     break;
                             }
 
                             if (operatorType == OperatorType.Type.HAMRAH_AVAL) {
-                                sendRequestChargeMci(phoneNumber.substring(1), (int) price);
-                            } else {
-                                RequestMplGetTopupToken requestMplGetTopupToken = new RequestMplGetTopupToken();
-                                requestMplGetTopupToken.mplGetTopupToken(Long.parseLong(phoneNumber), price, type);
-                                G.onMplResult = error -> {
-                                    if (error) {
-                                        observeEnabledPayment.set(true);
-                                    } else {
-                                        goBack.setValue(true);
-                                    }
-                                };
+                                sendRequestCharge(MCI, chargeType, phoneNumber.substring(1), (int) price);
+                            } else if (operatorType == OperatorType.Type.IRANCELL) {
+                                sendRequestCharge(MTN, chargeType, phoneNumber.substring(1), (int) price);
+                            } else if (operatorType == OperatorType.Type.RITEL) {
+                                sendRequestCharge(RIGHTEL, chargeType, phoneNumber.substring(1), (int) price);
                             }
+
                             hideKeyWord.setValue(true);
                             observeEnabledPayment.set(false);
                         } else {
@@ -297,9 +275,9 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
         }
     }
 
-    private void sendRequestChargeMci(String phoneNumber, int price) {
+    private void sendRequestCharge(String operator, ChargeType chargeType, String phoneNumber, int price) {
         new ApiInitializer<MciPurchaseResponse>().initAPI(
-                new RetrofitFactory().getMciRetrofit().topUpPurchase(phoneNumber, price),
+                new RetrofitFactory().getChargeRetrofit().topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price),
                 this, new ResponseCallback<MciPurchaseResponse>() {
                     @Override
                     public void onSuccess(MciPurchaseResponse data) {
@@ -321,4 +299,9 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
                     }
                 });
     }
+
+    enum ChargeType {
+        MTN_NORMAL, MTN_AMAZING, RIGHTEL_NORMAL, RIGHTEL_EXCITING;
+    }
+
 }

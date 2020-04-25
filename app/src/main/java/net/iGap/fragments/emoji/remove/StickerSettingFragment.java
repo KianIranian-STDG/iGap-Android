@@ -63,7 +63,7 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
             }
 
             @Override
-            public void onRemoveStickerClick(StructIGStickerGroup stickerGroup, RemoveStickerAdapter.ProgressStatus progressStatus) {
+            public void onRemoveStickerClick(StructIGStickerGroup stickerGroup, int pos, RemoveStickerAdapter.ProgressStatus progressStatus) {
                 if (getContext() != null) {
                     new MaterialDialog.Builder(getContext())
                             .title(getResources().getString(R.string.remove_sticker))
@@ -72,7 +72,13 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
                             .negativeText(getString(R.string.no))
                             .onPositive((dialog, which) -> {
                                 progressStatus.setVisibility(true);
-                                viewModel.removeStickerFromMySticker(stickerGroup);
+                                viewModel.removeStickerFromMySticker(stickerGroup, (response, error) -> {
+                                    if (error == null) {
+                                        adapter.removeItem(pos);
+                                    } else {
+                                        progressStatus.setVisibility(false);
+                                    }
+                                });
                                 dialog.dismiss();
                             }).show();
                 }

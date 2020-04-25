@@ -176,7 +176,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 rootTitle.setVisibility(View.GONE);
             else
                 rootTitle.setText(tempRoot);
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
@@ -215,7 +215,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void initVH(int position) {
-            Picasso.get()
+            Picasso.with(G.context)
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_banner)

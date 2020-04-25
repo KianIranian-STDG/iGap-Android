@@ -3,9 +3,11 @@ package net.iGap.observers.rx;
 
 import android.widget.Toast;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.ExceptionMessageFactory;
+import net.iGap.helper.IGLog;
 import net.iGap.observers.eventbus.EventManager;
 
 import io.reactivex.SingleObserver;
@@ -28,6 +30,11 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
 
     @Override
     public void onError(Throwable e) {
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e(e);
+        }
+
         e.printStackTrace();
 //        EventBus.getDefault().post(new AaException(ExceptionMessageFactory.getMessage(e)));
         ErrorModel errorModel = ExceptionMessageFactory.getMessage(e);

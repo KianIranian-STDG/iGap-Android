@@ -1,5 +1,11 @@
 package net.iGap.viewmodel.kuknos;
 
+import androidx.core.text.HtmlCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.gson.Gson;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
@@ -7,6 +13,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.model.kuknos.KuknosError;
 import net.iGap.model.kuknos.KuknosPaymentResponse;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
+import net.iGap.model.kuknos.Parsian.KuknosBalance;
 import net.iGap.model.kuknos.Parsian.KuknosBankPayment;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
 import net.iGap.module.SingleLiveEvent;
@@ -18,16 +25,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import androidx.core.text.HtmlCompat;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     private ObservableField<String> amount = new ObservableField<>();
     private ObservableField<Boolean> amountEnable = new ObservableField<>(false);
     private ObservableField<String> sum = new ObservableField<>();
-    private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر پیمان: ...");
+    private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر توکن: ...");
     private MutableLiveData<KuknosError> error;
     private MutableLiveData<KuknosPaymentResponse> paymentData = new MutableLiveData<>(null);
     // 0 : nothing 1: connecting to server 2: connecting to bank
@@ -37,12 +40,14 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     //go to bank
     private MutableLiveData<Boolean> nextPage;
     private SingleLiveEvent<Boolean> goToPin = new SingleLiveEvent<>();
-    private int PMNprice = -1;
-    private double maxAmount = 1000000;
+    //    private int PMNprice = -1;
+//    private double maxAmount = 1000000;
     Double sumTemp;
     private PanelRepo panelRepo = new PanelRepo();
     private MutableLiveData<String> TandCAgree;
     private boolean termsAndConditionIsChecked = false;
+    private KuknosAsset.Asset requestedAsset = null;
+    private KuknosBalance.Balance currentAssetInfo;
 
     public KuknosBuyPeymanVM() {
         error = new MutableLiveData<>();
@@ -65,13 +70,17 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         if (checkEntry()) {
             return false;
         }
-        if (Double.parseDouble(amount.get()) > maxAmount) {
+        if (requestedAsset == null)
+            return false;
+        if (Double.parseDouble(amount.get()) > requestedAsset.getRemainAmount()
+                || Double.parseDouble(amount.get()) > requestedAsset.getiGapTransferLimit()
+                || Double.parseDouble(amount.get()) > requestedAsset.getSaleMax()) {
             error.setValue(new KuknosError(true, "", "1", R.string.kuknos_buyP_MaxAmount));
             return false;
         }
-        if (PMNprice == -1)
-            return false;
-        sumTemp = Double.parseDouble(amount.get()) * PMNprice;
+//        if (requestedAsset.getBuyRate() == -1)
+//            return false;
+        sumTemp = Double.parseDouble(amount.get()) * requestedAsset.getBuyRate();
         BigDecimal tmp = new BigDecimal(sumTemp).setScale(0, RoundingMode.UP);
         sumTemp = Double.parseDouble(tmp.toString());
         DecimalFormat df = new DecimalFormat(",###");
@@ -81,49 +90,63 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     public void getAssetValue() {
         progressState.setValue(3);
-        panelRepo.getSpecificAssets("PMN", this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
+        panelRepo.getSpecificAssets(getCurrentAssetType(), this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
-                PMNprice = data.getData().getAssets().get(0).getBuyRate();
-                maxAmount = data.getData().getAssets().get(0).getRemainAmount();
-                assetPrice.set("قیمت هر پیمان: " + PMNprice + " ریال");
+                requestedAsset = data.getData().getAssets().get(0);
+//                PMNprice = data.getData().getAssets().get(0).getBuyRate();
+//                maxAmount = data.getData().getAssets().get(0).getRemainAmount();
+                assetPrice.set("قیمت " + getCurrentAssetType() + " لحظه ای: " + CompatibleUnicode(decimalFormatter(Double.parseDouble("" + requestedAsset.getBuyRate()))) + " ریال");
                 progressState.setValue(0);
                 amountEnable.set(true);
 //                getFees();
             }
 
             @Override
-            public void onError(String error) {
+            public void onError(String errorM) {
                 progressState.setValue(0);
+                error.setValue(new KuknosError(true, "", "2", R.string.kuknos_buy_noPrice));
             }
 
             @Override
             public void onFailed() {
                 progressState.setValue(0);
+                error.setValue(new KuknosError(true, "", "2", R.string.kuknos_buy_noPrice));
             }
         });
     }
 
+    private String decimalFormatter(Double entry) {
+        DecimalFormat df = new DecimalFormat(",###");
+        return df.format(entry);
+    }
+
+    private String CompatibleUnicode(String entry) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
+    }
+
     public void sendDataServer() {
         progressState.setValue(1);
-        panelRepo.buyAsset("PMN", amount.get(), "" + (int) Math.round(sumTemp),
+        panelRepo.buyAsset(getCurrentAssetType(), amount.get(), "" + (int) Math.round(sumTemp),
                 "", this, new ResponseCallback<KuknosResponseModel<KuknosBankPayment>>() {
                     @Override
                     public void onSuccess(KuknosResponseModel<KuknosBankPayment> data) {
                         goToPaymentPage.setValue(data.getData().getToken());
                         progressState.setValue(0);
+                        amountEnable.set(true);
                     }
 
                     @Override
                     public void onError(String errorM) {
                         progressState.setValue(0);
+                        amountEnable.set(true);
                         error.setValue(new KuknosError(true, "wrong pin", errorM, R.string.kuknos_buyP_failS));
-
                     }
 
                     @Override
                     public void onFailed() {
                         progressState.setValue(0);
+                        amountEnable.set(true);
                         error.setValue(new KuknosError(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
                     }
 
@@ -164,6 +187,10 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
         }
         if (Double.parseDouble(amount.get()) == 0) {
             error.setValue(new KuknosError(true, "zero fail", "0", R.string.kuknos_buyP_zeroAmount));
+            return true;
+        }
+        if (Double.parseDouble(amount.get()) < requestedAsset.getSaleMin()) {
+            error.setValue(new KuknosError(true, "", "1", R.string.kuknos_buyP_MinAmount));
             return true;
         }
         //Terms and Condition
@@ -215,6 +242,10 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                 TandCAgree.postValue("error");
             }
         });
+    }
+
+    public String getRegulationsAddress() {
+        return requestedAsset.getRegulations();
     }
 
     public void termsOnCheckChange(boolean isChecked) {
@@ -295,5 +326,18 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
 
     public void setAmountEnable(boolean amountEnable) {
         this.amountEnable.set(amountEnable);
+    }
+
+    public KuknosBalance.Balance getCurrentAssetInfo() {
+        return currentAssetInfo;
+    }
+
+    public void setCurrentAssetInfo(String currentAssetInfo) {
+        Gson gson = new Gson();
+        this.currentAssetInfo = gson.fromJson(currentAssetInfo, KuknosBalance.Balance.class);
+    }
+
+    public String getCurrentAssetType() {
+        return this.currentAssetInfo.getAsset().getType().equals("native") ? "PMN" : this.currentAssetInfo.getAssetCode();
     }
 }

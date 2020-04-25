@@ -76,6 +76,25 @@
             android:gravity="center"
             android:layout_margin="@dimen/dp10" />
 
+        <FrameLayout
+            android:id="@+id/ivBlocked"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#4D000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:scaleType="fitCenter"
+                android:layout_margin="@dimen/dp10"
+                android:src="@drawable/card_block_holder" />
+
+        </FrameLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

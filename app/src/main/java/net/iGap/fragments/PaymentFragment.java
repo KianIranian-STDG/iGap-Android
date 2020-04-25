@@ -14,26 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.GravityEnum;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
-import net.iGap.R;
-import net.iGap.adapter.PaymentPlansAdapter;
-import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.api.apiService.TokenContainer;
-import net.iGap.databinding.FragmentUniversalPaymentBinding;
-import net.iGap.helper.HelperScreenShot;
-import net.iGap.model.payment.Payment;
-import net.iGap.model.payment.PaymentFeature;
-import net.iGap.observers.interfaces.PaymentCallBack;
-import net.iGap.viewmodel.PaymentViewModel;
-
-import java.io.File;
-import java.util.Date;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -43,15 +23,38 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
+
+import net.iGap.R;
+import net.iGap.adapter.PaymentPlansAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.api.apiService.TokenContainer;
+import net.iGap.databinding.FragmentUniversalPaymentBinding;
+import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperScreenShot;
+import net.iGap.model.payment.Payment;
+import net.iGap.model.payment.PaymentFeature;
+import net.iGap.observers.interfaces.PaymentCallBack;
+import net.iGap.viewmodel.PaymentViewModel;
+
+import java.io.File;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.List;
+
 public class PaymentFragment extends BaseAPIViewFrag {
 
     private static String TOKEN = "Payment_Token";
     private static String TYPE = "Payment_Type";
+    private static String IS_SHOW_VALUE_ADDED = "VALUE_ADDED";
 
     private FragmentUniversalPaymentBinding binding;
     private PaymentCallBack callBack;
     private PaymentViewModel paymentViewModel;
     private PaymentPlansAdapter adapter;
+    private boolean isShowValueAdded = false;
 
     public static PaymentFragment getInstance(String type, String token, PaymentCallBack paymentCallBack) {
         PaymentFragment fragment = new PaymentFragment();
@@ -59,6 +62,17 @@ public class PaymentFragment extends BaseAPIViewFrag {
         Bundle bundle = new Bundle();
         bundle.putString(TOKEN, token);
         bundle.putString(TYPE, type);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static PaymentFragment getInstance(String type, boolean isShowValueAdded, String token, PaymentCallBack paymentCallBack) {
+        PaymentFragment fragment = new PaymentFragment();
+        fragment.setCallBack(paymentCallBack);
+        Bundle bundle = new Bundle();
+        bundle.putString(TOKEN, token);
+        bundle.putString(TYPE, type);
+        bundle.putBoolean(IS_SHOW_VALUE_ADDED, isShowValueAdded);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -100,6 +114,10 @@ public class PaymentFragment extends BaseAPIViewFrag {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (getArguments() != null) {
+            isShowValueAdded = getArguments().getBoolean(IS_SHOW_VALUE_ADDED, false);
+        }
+
         paymentViewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
             if (getActivity() != null && paymentResult != null) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
@@ -117,7 +135,6 @@ public class PaymentFragment extends BaseAPIViewFrag {
                     bundle.putString("Authorization", TokenContainer.getInstance().getToken());
                     browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
                     startActivity(browserIntent);
-                    Log.e("abbasiApiToken", "intent to chrome -> " + bundle.getString("Authorization"));
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), R.string.add_new_account, Toast.LENGTH_LONG).show();
@@ -155,10 +172,19 @@ public class PaymentFragment extends BaseAPIViewFrag {
             loadImage loadImage = new loadImage();
             loadImage.execute();
         });
+
+        paymentViewModel.getPrice().observe(getViewLifecycleOwner(), price -> {
+            if (getContext() != null && price != null) {
+                DecimalFormat df = new DecimalFormat(",###");
+                binding.priceTitle.setText(getString(R.string.wallet_amount) +
+                        (isShowValueAdded ? (" + " + getString(R.string.value_added)) : "") + ": " +
+                        (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(price)) : price) +
+                        getString(R.string.rial));
+            }
+        });
     }
 
     public void setPaymentResult(Payment paymentModel) {
-        Log.d("amini", "setPaymentResult " + new Gson().toJson(paymentModel));
         paymentViewModel.setPaymentResult(paymentModel);
     }
 

@@ -138,7 +138,7 @@
     <dimen name="standardIconSize">@dimen/dp24</dimen>
 
     <dimen name="toolbar_chat_avatar_size">@dimen/dp40</dimen>
-    <dimen name="toolbar_txt_name_max_width">@dimen/dp110</dimen>
+    <dimen name="toolbar_txt_name_max_width">@dimen/dp140</dimen>
     <dimen name="toolbar_txt_name_max_width2">@dimen/dp130</dimen>
     <dimen name="toolbar_txt_name_max_width3">@dimen/dp160</dimen>
     <dimen name="toolbar_txt_name_max_width4">@dimen/dp180</dimen>

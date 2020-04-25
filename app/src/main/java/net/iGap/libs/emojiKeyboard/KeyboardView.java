@@ -31,6 +31,8 @@ public class KeyboardView extends FrameLayout {
         this.listener = listener;
         currentMode = mode;
 
+        if (emojiView == null)
+            createEmojiView();
     }
 
     public void setCurrentMode(int mode, int contentView) {
@@ -58,7 +60,8 @@ public class KeyboardView extends FrameLayout {
     }
 
     private void createEmojiView() {
-        if (emojiView != null) return;
+        if (emojiView != null)
+            return;
 
         emojiView = new EmojiView(getContext(), true, true);
         emojiView.setListener(new EmojiView.Listener() {
@@ -96,6 +99,17 @@ public class KeyboardView extends FrameLayout {
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
+    }
+
+    public void setStickerPermission(boolean stickerPermission) {
+        if (emojiView != null) {
+            emojiView.setStickerPermission(stickerPermission);
+        }
+    }
+
+    public void onDestroyParentFragment() {
+        if (emojiView != null)
+            emojiView.onDestroyParentFragment();
     }
 
     public interface Listener {

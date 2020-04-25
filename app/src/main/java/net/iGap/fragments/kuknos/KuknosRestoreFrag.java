@@ -8,18 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
-import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentKuknosRestoreBinding;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.model.kuknos.KuknosSignupM;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.viewmodel.kuknos.KuknosRestoreVM;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -27,6 +15,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
+
+import net.iGap.R;
+import net.iGap.activities.ActivityMain;
+import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.databinding.FragmentKuknosRestoreBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.model.kuknos.KuknosSignupM;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.kuknos.KuknosRestoreVM;
 
 public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
 
@@ -107,12 +108,21 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
                     binding.fragKuknosRkeysET.setError("" + getString(errorM.getResID()));
                     binding.fragKuknosRkeysET.requestFocus();
                 } else if (errorM.getMessage().equals("1")) {
-                    Snackbar snackbar = Snackbar.make(binding.fragKuknosRContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                    showDialog(errorM.getResID());
+                    /*Snackbar snackbar = Snackbar.make(binding.fragKuknosRContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                     snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
-                    snackbar.show();
+                    snackbar.show();*/
                 }
             }
         });
+    }
+
+    private void showDialog(int messageResource) {
+        new MaterialDialog.Builder(getContext())
+                .title(R.string.kuknos_viewRecoveryEP_failTitle)
+                .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                .content(getResources().getString(messageResource))
+                .onPositive((dialog, which) -> ((ActivityMain) getActivity()).removeAllFragmentFromMain()).show();
     }
 
     private void saveRegisterInfo() {
@@ -130,29 +140,11 @@ public class KuknosRestoreFrag extends BaseAPIViewFrag<KuknosRestoreVM> {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = null;
-//            if (nextPage == 1) {
             fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
             if (fragment == null) {
                 fragment = KuknosSetPassFrag.newInstance(nextPageMode);
                 fragmentTransaction.addToBackStack(fragment.getClass().getName());
             }
-                /*Bundle bundle = new Bundle();
-                bundle.putString("key_phrase", viewModel.getKeys().get());
-                fragment.setArguments(bundle);*/
-            /*} else if (nextPage == 2) {
-                saveRegisterInfo();
-                fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
-                if (fragment == null) {
-                    fragment = KuknosPanelFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-            } else if (nextPage == 3) {
-                fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
-                if (fragment == null) {
-                    fragment = KuknosSignupInfoFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-            }*/
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
     }

@@ -169,7 +169,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
-    public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
+    public MutableLiveData<String> changeUserProfileWallpaperPath = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> openAccountsDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
@@ -616,17 +616,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showDialogChooseImage.setValue(true);
     }
 
-   /* public void nameTextChangeListener(String newName) {
-        if (isEditProfile) {
-            if (!newName.equals(currentName)) {
-                editProfileIcon.set(R.string.check_icon);
-            } else {
-                if (currentBio.equals(bio.get()) && currentUserEmail.equals(email.get()) && currentUserName.equals(userName.get()) && currentGender == gender.get()) {
-                    editProfileIcon.set(R.string.close_icon);
-                }
-            }
-        }
-    }*/
 
     public void usernameTextChangeListener(String newUsername) {
         if (!newUsername.equals(currentUserName)) {
@@ -674,17 +663,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         referralNumberObservableField.set(phoneNumber);
     }
 
-    /*public void bioTextChangeListener(String newBio) {
-        if (isEditProfile) {
-            if (!currentBio.equals(newBio)) {
-                editProfileIcon.set(R.string.check_icon);
-            } else {
-                if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentUserEmail.equals(email.get()) && currentGender == gender.get()) {
-                    editProfileIcon.set(R.string.close_icon);
-                }
-            }
-        }
-    }*/
 
     public void genderCheckedListener(int checkedId) {
         if (currentGender != checkedId) {
@@ -775,20 +753,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showLoading.set(View.VISIBLE);
         if (!currentName.equals(name.get())) {
             sendRequestSetName();
-        }
-        if (!currentUserName.equals(userName.get())) {
+        } else if (!currentUserName.equals(userName.get())) {
             sendRequestSetUsername();
-        }
-        if (!currentBio.equals(bio.get())) {
+        } else if (!currentBio.equals(bio.get())) {
             sendRequestSetBio();
-        }
-        if (!currentUserEmail.equals(email.get())) {
+        } else if (!currentUserEmail.equals(email.get())) {
             sendRequestSetEmail();
-        }
-        if (currentGender != gender.get()) {
+        } else if (currentGender != gender.get()) {
             sendRequestSetGender();
-        }
-        if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
+        } else if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
             setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);
@@ -796,37 +769,36 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void sendRequestSetName() {
-        showLoading.set(View.VISIBLE);
         new RequestUserProfileSetNickname().userProfileNickName(name.get(), new OnUserProfileSetNickNameResponse() {
             @Override
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                //setAvatar();
                 RealmRoom.updateChatTitle(userId, nickName);
                 AccountManager.getInstance().updateCurrentUserName(nickName);
-                currentName = nickName;
-                showLoading.set(View.GONE);
-                submitData();
+                G.handler.post(() -> {
+                    currentName = nickName;
+                    submitData();
+                });
             }
 
             @Override
             public void onUserProfileNickNameError(int majorCode, int minorCode) {
-                G.handler.post(() -> showLoading.set(View.GONE));
+                G.handler.post(() -> {
+                    currentName = name.get();
+                    submitData();
+                });
             }
 
             @Override
             public void onUserProfileNickNameTimeOut() {
-                G.handler.post(() -> showLoading.set(View.GONE));
             }
         });
     }
 
     private void sendRequestSetUsername() {
-        showLoading.set(View.VISIBLE);
         new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
             @Override
             public void onUserProfileUpdateUsername(final String username) {
                 G.handler.post(() -> {
-                    showLoading.set(View.GONE);
                     currentUserName = username;
                     submitData();
                 });
@@ -835,7 +807,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void Error(final int majorCode, int minorCode, final int time) {
                 G.handler.post(() -> {
-                    showLoading.set(View.GONE);
+                    currentUserName = userName.get();
+                    submitData();
                     if (majorCode == 175) {
                         dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                     }
@@ -844,18 +817,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             @Override
             public void timeOut() {
-                G.handler.post(() -> showLoading.set(View.GONE));
             }
         });
     }
 
     private void sendRequestSetEmail() {
-        showLoading.set(View.VISIBLE);
         new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
             @Override
             public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
                 G.handler.post(() -> {
-                    showLoading.set(View.GONE);
                     currentUserEmail = email;
                     submitData();
                 });
@@ -864,7 +834,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void Error(int majorCode, int minorCode) {
                 G.handler.post(() -> {
-                    showLoading.set(View.GONE);
+                    currentUserEmail = email.get();
+                    submitData();
                     if (majorCode == 114 && minorCode == 1) {
                         emailErrorMessage.set(R.string.error_email);
                         emailErrorEnable.setValue(true);
@@ -877,7 +848,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             @Override
             public void onTimeOut() {
-                G.handler.post(() -> showLoading.set(View.GONE));
             }
         });
     }
@@ -889,12 +859,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void sendRequestSetGender() {
-        showLoading.set(View.VISIBLE);
         new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
             @Override
             public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
                 G.handler.post(() -> {
-                    showLoading.set(View.GONE);
                     currentGender = gender == ProtoGlobal.Gender.MALE ? R.id.male : R.id.female;
                     submitData();
                 });
@@ -902,12 +870,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             @Override
             public void Error(int majorCode, int minorCode) {
-                G.handler.post(() -> showLoading.set(View.GONE));
+                G.handler.post(() -> {
+                    currentGender = (gender.get() == R.id.male ? ProtoGlobal.Gender.MALE.getNumber() : ProtoGlobal.Gender.FEMALE.getNumber());
+                    submitData();
+                });
             }
 
             @Override
             public void onTimeOut() {
-                G.handler.post(() -> showLoading.set(View.GONE));
             }
         });
     }
@@ -958,7 +928,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             @Override
             public void onError(int major, int minor) {
-                if (getIvanScoreTime > 3) {
+                if (getIvanScoreTime < 3) {
                     if (major == 5 && minor == 1) {
                         getIVandScore();
                     }
@@ -1020,16 +990,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             if (realmWallpaper != null) {
                 RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
                 String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
-                if (!new File(bigImagePath).exists()) {
-                    changeUserProfileWallpaper.postValue(null);
-                } else {
-                    setProfileWallpaperOrDefault(bigImagePath);
-                }
+                changeUserProfileWallpaperPath.postValue(bigImagePath);
+
             } else {
-                changeUserProfileWallpaper.postValue(null);
+                changeUserProfileWallpaperPath.postValue(null);
             }
         } catch (Exception e) {
-            changeUserProfileWallpaper.postValue(null);
+            changeUserProfileWallpaperPath.postValue(null);
         }
     }
 
@@ -1047,7 +1014,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             @Override
                             public void OnProgress(String mPath, final int progress) {
                                 if (progress == 100) {
-                                    setProfileWallpaperOrDefault(bigImagePath);
+                                    changeUserProfileWallpaperPath.postValue(bigImagePath);
                                 }
                             }
 
@@ -1056,7 +1023,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             }
                         });
                     } else {
-                        setProfileWallpaperOrDefault(bigImagePath);
+                        changeUserProfileWallpaperPath.postValue(bigImagePath);
                     }
                 } else {
                     getProfileWallpaperFromServer();
@@ -1073,28 +1040,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             e3.printStackTrace();
         }
 
-    }
-
-    private void setProfileWallpaperOrDefault(String backGroundPath) {
-
-        if (backGroundPath.length() > 0) {
-            File f = new File(backGroundPath);
-            if (f.exists()) {
-                try {
-                    Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                    changeUserProfileWallpaper.postValue(d);
-                    return;
-                } catch (OutOfMemoryError e) {
-                    changeUserProfileWallpaper.postValue(null);
-                    ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
-                    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-                    activityManager.getMemoryInfo(memoryInfo);
-                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
-                }
-            }
-        }
-
-        changeUserProfileWallpaper.postValue(null);
     }
 
     @Override
@@ -1205,13 +1150,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onSetRepresentative(String phone) {
                 referralEnableLiveData.postValue(false);
                 referralNumberObservableField.set("");
-                G.handler.post(() -> submitData());
+                G.handler.post(() -> {
+                    submitData();
+                });
             }
 
             @Override
             public void onErrorSetRepresentative(int majorCode, int minorCode) {
                 showReferralErrorLiveData.set(true);
-                showLoading.set(View.GONE);
+                submitData();
                 switch (majorCode) {
                     case 10177:
                         if (minorCode == 2) {

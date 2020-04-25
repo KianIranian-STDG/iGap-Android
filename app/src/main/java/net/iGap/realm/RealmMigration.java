@@ -10,15 +10,16 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
+import net.iGap.module.accountManager.AccountManager;
 
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
+import io.realm.RealmResults;
 import io.realm.RealmSchema;
 
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
@@ -546,6 +547,10 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 33) {
+
+            RealmResults<DynamicRealmObject> realmCallLogs = realm.where("RealmCallLog").findAll();
+            realmCallLogs.deleteAllFromRealm();
+
             RealmObjectSchema realmCallLog = schema.get(RealmCallLog.class.getSimpleName());
             if (realmCallLog != null) {
                 if (realmCallLog.hasField("name")) {
@@ -829,6 +834,46 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 46) {
+
+            RealmObjectSchema realmMbCards = schema.get(RealmMobileBankCards.class.getSimpleName());
+            if (realmMbCards != null) {
+                realmMbCards.addField("status", String.class);
+            }
+
+            RealmObjectSchema realmMbDeposits = schema.get(RealmMobileBankAccounts.class.getSimpleName());
+            if (realmMbDeposits != null) {
+                realmMbDeposits.addField("status", String.class);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 47) {
+
+            RealmObjectSchema realmPostMessageRights = schema.create(RealmPostMessageRights.class.getSimpleName())
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_GIF, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_LINK, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_MEDIA, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_STICKER, boolean.class)
+                    .addField(RealmPostMessageRightsFields.CAN_SEND_TEXT, boolean.class);
+
+            schema.create(RealmRoomAccess.class.getSimpleName())
+                    .addField(RealmRoomAccessFields.ID, String.class, FieldAttribute.PRIMARY_KEY)
+                    .addField(RealmRoomAccessFields.USER_ID, long.class)
+                    .addField(RealmRoomAccessFields.ROOM_ID, long.class)
+                    .addField(RealmRoomAccessFields.CAN_ADD_NEW_ADMIN, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_ADD_NEW_MEMBER, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_BAN_MEMBER, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_DELETE_MESSAGE, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_EDIT_MESSAGE, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_GET_MEMBER_LIST, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_MODIFY_ROOM, boolean.class)
+                    .addField(RealmRoomAccessFields.CAN_PIN_MESSAGE, boolean.class)
+                    .addRealmObjectField(RealmRoomAccessFields.REALM_POST_MESSAGE_RIGHTS.$, realmPostMessageRights);
+
+            oldVersion++;
+        }
     }
 
     @Override

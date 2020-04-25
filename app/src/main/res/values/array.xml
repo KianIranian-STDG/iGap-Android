@@ -323,8 +323,8 @@
         <item>@string/charge_type</item>
         <item>@string/normal_charge</item>
         <item>@string/amazing</item>
-        <item>@string/wimax_charging</item>
-        <item>@string/permanently_charge</item>
+        <!--<item>@string/wimax_charging</item>
+        <item>@string/permanently_charge</item>-->
     </string-array>
 
     <string-array name="charge_type_hamrahe_aval">
@@ -335,6 +335,7 @@
     <string-array name="charge_type_ritel">
         <item>@string/charge_type</item>
         <item>@string/normal_charge</item>
+        <item>@string/amazing</item>
     </string-array>
 
     <string-array name="charge_price">
@@ -348,11 +349,11 @@
 
     <string-array name="charge_price_irancell">
         <item>@string/price</item>
-        <item> @string/charge_1_ir</item>
-        <item> @string/charge_2_ir</item>
-        <item> @string/charge_5_ir</item>
-        <item> @string/charge_10_ir</item>
-        <item> @string/charge_20_ir</item>
+        <item> @string/charge_1</item>
+        <item> @string/charge_2</item>
+        <item> @string/charge_5</item>
+        <item> @string/charge_10</item>
+        <item> @string/charge_20</item>
     </string-array>
 
     <string-array name="cpay_charge">

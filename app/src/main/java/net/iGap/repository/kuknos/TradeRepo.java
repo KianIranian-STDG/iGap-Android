@@ -22,8 +22,8 @@ public class TradeRepo {
         kuknosAPIRepository.getAssets(handShakeCallback, apiResponse);
     }
 
-    public void changeTrustline(String code, String issuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
-        kuknosAPIRepository.changeTrust(userRepo.getSeedKey(), code, issuer, handShakeCallback, apiResponse);
+    public void changeTrustline(String code, String issuer, String trustLineLimitByIssuer, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosTransactionResult>> apiResponse) {
+        kuknosAPIRepository.changeTrust(userRepo.getSeedKey(), code, issuer, trustLineLimitByIssuer, handShakeCallback, apiResponse);
     }
 
     /*public void getOffersList(ApiResponse<Page<OfferResponse>> apiResponse) {

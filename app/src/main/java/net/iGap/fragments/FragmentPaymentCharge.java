@@ -94,7 +94,7 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag<FragmentPaymentCharge
 
         viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.mci_topup_payment_title), token, result -> {
+                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
                     if (result.isSuccess()) {
                         goBack();
                     }
@@ -110,12 +110,14 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag<FragmentPaymentCharge
 
         viewModel.getShowError().observe(getViewLifecycleOwner(), errorMessageRes -> {
             if (errorMessageRes != null) {
+                hideKeyboard();
                 HelperError.showSnackMessage(getString(errorMessageRes), false);
             }
         });
 
         viewModel.getShowMciPaymentError().observe(getViewLifecycleOwner(), errorModel -> {
             if (errorModel != null) {
+                hideKeyboard();
                 HelperError.showSnackMessage(errorModel.getMessage(), false);
             }
         });

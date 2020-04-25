@@ -2,6 +2,9 @@ package net.iGap.viewmodel.kuknos;
 
 import android.text.TextUtils;
 
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
@@ -12,9 +15,6 @@ import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.UserRepo;
-
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
 
 public class KuknosRestoreVM extends BaseAPIViewModel {
 
@@ -72,33 +72,27 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
 
     private void generateKeypairWithMnemonic() {
         progressState.setValue(true);
-        userRepo.setMnemonic(keys.get().trim());
         try {
-            userRepo.generateKeyPairWithMnemonic();
+            checkUserInfo(userRepo.generateKeyPairWithMnemonic(keys.get().trim(), null));
         } catch (WalletException e) {
-            error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
-        checkUserInfo();
     }
 
     private void generateKeypairWithSeed() {
         progressState.setValue(true);
-        userRepo.setSeedKey(keys.get());
         try {
-            userRepo.generateKeyPairWithSeed();
-            userRepo.setPIN(null);
-            userRepo.setMnemonic(null);
+            checkUserInfo(userRepo.generateKeyPairWithSeed(keys.get(), null, null));
         } catch (Exception e) {
-            error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
         }
-        checkUserInfo();
     }
 
-    private void checkUserInfo() {
+    private void checkUserInfo(String publicKey) {
         progressState.setValue(true);
-        userRepo.getUserStatus(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
+        userRepo.getUserStatus(publicKey, this, new ResponseCallback<KuknosResponseModel<KuknosUserInfo>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfo> data) {
                 switch (data.getData().getStatus()) {
@@ -108,8 +102,11 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
                         kuknosSignupM.setRegistered(true);
                         nextPage.setValue(2);
                         break;
-                    case "NOT_CREATED":
+                    case "ACTIVATED_ON_NETWORK":
                         nextPage.setValue(3);
+                        break;
+                    default:
+                        error.setValue(new KuknosError(true, "", "1", R.string.kuknos_Restore_ErrorNoAccount_Snack));
                         break;
                 }
                 progressState.setValue(false);

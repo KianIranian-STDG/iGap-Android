@@ -3,6 +3,8 @@ package net.iGap.module.accountManager;
 import android.os.Looper;
 import android.util.Log;
 
+import net.iGap.BuildConfig;
+
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -86,6 +88,10 @@ public class DbManager {
     }
 
     public void doRealmTransaction(RealmTransaction realmTransaction) {
+        if (BuildConfig.DEBUG && Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalStateException("running transaction in ui thread !!!!!!");
+        }
+
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(realmTransaction::doTransaction);
         });
@@ -123,6 +129,10 @@ public class DbManager {
     }
 
     public void doRealmTransaction(RealmTransaction realmTransaction, long userId) {
+        if (BuildConfig.DEBUG && Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalStateException("running transaction in ui thread !!!!!!");
+        }
+
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(realmTransaction::doTransaction);
         }, userId);

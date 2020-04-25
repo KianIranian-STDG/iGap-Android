@@ -218,7 +218,7 @@ public class G extends ApplicationContext {
     public static OnGroupAddMember onGroupAddMember;
     //    public static OnGroupClearMessage onGroupClearMessage;
     /*public static OnGroupEdit onGroupEdit;*/
-    public static OnGroupKickMember onGroupKickMember;
+//    public static OnGroupKickMember onGroupKickMember;
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
@@ -228,11 +228,9 @@ public class G extends ApplicationContext {
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
-    public static OnUserDelete onUserDelete;
     /*public static OnUserProfileCheckUsername onUserProfileCheckUsername;*/
     /*public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;*/
     public static OnGroupGetMemberList onGroupGetMemberList;
-    public static OnUserGetDeleteToken onUserGetDeleteToken;
     public static OnGroupDelete onGroupDelete;
     public static OpenFragment onConvertToGroup;
     public static OnChatConvertToGroup onChatConvertToGroup;
@@ -294,7 +292,6 @@ public class G extends ApplicationContext {
     public static OnVerifyNewDevice onVerifyNewDevice;
     public static OnPushLoginToken onPushLoginToken;
     public static OnPushTwoStepVerification onPushTwoStepVerification;
-    public static OnBackgroundChanged onBackgroundChanged;
     public static IClientSearchUserName onClientSearchUserName;
     public static OnCallLeaveView onCallLeaveView;
     public static OnVideoCallFrame onVideoCallFrame;

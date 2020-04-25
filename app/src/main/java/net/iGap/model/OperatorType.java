@@ -28,6 +28,8 @@ public class OperatorType {
             put("0901", Type.IRANCELL);
             put("0902", Type.IRANCELL);
             put("0903", Type.IRANCELL);
+            put("0904", Type.IRANCELL);
+            put("0905", Type.IRANCELL);
             put("0930", Type.IRANCELL);
             put("0933", Type.IRANCELL);
             put("0935", Type.IRANCELL);
@@ -45,6 +47,14 @@ public class OperatorType {
 
     public Type getOperation(String phoneNumber) {
         return phoneMap.get(phoneNumber);
+    }
+
+    public boolean isValidType(String phoneNumber) {
+        Type tmp = phoneMap.get(phoneNumber);
+        if (tmp != null) {
+            return tmp == Type.HAMRAH_AVAL || tmp == Type.RITEL || tmp == Type.IRANCELL;
+        }
+        return false;
     }
 
     public boolean isMci(String phoneNumber) {

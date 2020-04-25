@@ -44,12 +44,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -62,19 +60,21 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.helper.upload.UploadTask;
-import net.iGap.observers.interfaces.OnAvatarAdd;
-import net.iGap.observers.interfaces.OnChannelAvatarAdd;
-import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.OnGroupAddMember;
-import net.iGap.observers.interfaces.OnGroupAvatarResponse;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructContactInfo;
+import net.iGap.observers.interfaces.OnAvatarAdd;
+import net.iGap.observers.interfaces.OnChannelAvatarAdd;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGroupAddMember;
+import net.iGap.observers.interfaces.OnGroupAvatarResponse;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
@@ -691,10 +691,11 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 @Override
                 public void run() {
                     G.refreshRealmUi();
-                    popBackStackFragment();
-                    popBackStackFragment();
+                    ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+//                    popBackStackFragment();
+//                    popBackStackFragment();
                     ContactGroupFragment.selectedContacts.clear();
-                    removeFromBaseFragment(FragmentNewGroup.this);
+//                    removeFromBaseFragment(FragmentNewGroup.this);
                     new GoToChatActivity(roomId).startActivity(getActivity());
                 }
             });

@@ -5,18 +5,21 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.FileUtils;
-import net.iGap.repository.StickerRepository;
+import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -66,9 +69,21 @@ public class RemoveStickerViewModel extends ObserverViewModel {
         }
     }
 
-    public void removeStickerFromMySticker(StructIGStickerGroup stickerGroup) {
-        Disposable disposable = repository.removeStickerGroupFromMyStickers(stickerGroup).subscribe();
-        backgroundDisposable.add(disposable);
+    public void removeStickerFromMySticker(StructIGStickerGroup stickerGroup, OnResponse onResponse) {
+        repository.removeStickerGroupFromMyStickers(stickerGroup)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
+                    @Override
+                    public void onSuccess(StructIGStickerGroup stickerGroup) {
+                        onResponse.onReceived(stickerGroup, null);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        onResponse.onReceived(null, e);
+                    }
+                });
     }
 
     public void clearRecentSticker() {

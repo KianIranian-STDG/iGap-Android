@@ -9,6 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
@@ -26,13 +33,6 @@ import net.iGap.viewmodel.kuknos.KuknosAddAssetVM;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 
 public class KuknosAddAssetFrag extends BaseAPIViewFrag<KuknosAddAssetVM> {
 
@@ -102,12 +102,18 @@ public class KuknosAddAssetFrag extends BaseAPIViewFrag<KuknosAddAssetVM> {
 
         viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
-                Snackbar snackbar = Snackbar.make(binding.fragKuknosAddAContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
-                snackbar.show();
+                showSnack(getResources().getString(errorM.getResID()));
+            } else {
+                showSnack(errorM.getMessage());
             }
         });
 
+    }
+
+    private void showSnack(String message) {
+        Snackbar snackbar = Snackbar.make(binding.fragKuknosAddAContainer, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
+        snackbar.show();
     }
 
     private void onProgress() {
@@ -147,8 +153,20 @@ public class KuknosAddAssetFrag extends BaseAPIViewFrag<KuknosAddAssetVM> {
             items.add(temp.getLabel());
 //            items.add(temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode());
         }
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, this::addAsset);
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, this::openRegulationsBS);
         bottomSheetFragment.show(getFragmentManager(), "AddAssetBottomSheet");
+    }
+
+    private void openRegulationsBS(int position) {
+        if (viewModel.getRegulationsAddress(position) == null || viewModel.getRegulationsAddress(position).length() == 0) {
+            addAsset(position);
+            return;
+        }
+        KuknosRegulationsBottomSheetFrag frag = KuknosRegulationsBottomSheetFrag.newInstance(viewModel.getRegulationsAddress(position), accepted -> {
+            if (accepted)
+                addAsset(position);
+        });
+        frag.show(getFragmentManager(), "KuknosTokenRegulationsBottomSheet");
     }
 
     private void initCurrentAssets(KuknosBalance accountResponse) {

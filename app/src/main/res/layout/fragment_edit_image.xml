@@ -207,6 +207,16 @@
                 android:text="@string/md_igap_tune"
                 android:textColor="@color/whit_background" />
 
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/txtPaintImage"
+                style="@style/myIconToolbarStyle"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="@dimen/dp52"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:text="@string/md_igap_paint"
+                android:textColor="@color/whit_background" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

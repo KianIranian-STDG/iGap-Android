@@ -298,28 +298,38 @@ public class RealmUserInfo extends RealmObject {
         this.kuknosM = kuknosM;
     }
 
-    public static void updateKuknos(RealmKuknos kuknosM) {
+    /*public static void updateKuknos(RealmKuknos kuknosM) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
                 realmUserInfo.setKuknosM(kuknosM);
             }
         });
-    }
+    }*/
 
     public void createKuknos() {
         if (kuknosM == null) {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                setKuknosM(realm.createObject(RealmKuknos.class));
-            });
+            new Thread(() -> {
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosM(realm.createObject(RealmKuknos.class));
+                    }
+                });
+            }).start();
         }
     }
 
     public void deleteKuknos() {
         if (kuknosM != null) {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                kuknosM.deleteFromRealm();
-            });
+            new Thread(() -> {
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.getKuknosM().deleteFromRealm();
+                    }
+                });
+            }).start();
         }
     }
 

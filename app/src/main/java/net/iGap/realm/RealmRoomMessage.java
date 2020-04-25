@@ -227,7 +227,7 @@ public class RealmRoomMessage extends RealmObject {
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (room != null) {
+                if (room != null && room.getType() != ProtoGlobal.Room.Type.CHANNEL) {
                     RealmResults<RealmRoomMessage> realmRoomMessages =
                             realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
                     RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();

@@ -41,12 +41,15 @@ public class BankCardsAdapter extends PagerAdapter {
 
         View layout = LayoutInflater.from(container.getContext()).inflate(R.layout.view_bank_card, container, false);
         TextView tvName, tvNumber, icAdd;
-        ImageView ivLogo;
+        ImageView ivLogo, ivShetab;
+        View lytBlocked;
 
         tvName = layout.findViewById(R.id.tvName);
         tvNumber = layout.findViewById(R.id.tvNumber);
         ivLogo = layout.findViewById(R.id.ivBankLogo);
+        ivShetab = layout.findViewById(R.id.ivBankShetabLogo);
         icAdd = layout.findViewById(R.id.tvAdd);
+        lytBlocked = layout.findViewById(R.id.ivBlocked);
 
         if (mCards.get(position) != null){
 
@@ -54,6 +57,13 @@ public class BankCardsAdapter extends PagerAdapter {
             tvName.setText(mCards.get(position).getCardName());
             tvNumber.setText(HelperMobileBank.getCardNumberPattern(mCards.get(position).getCardNumber()));
             ivLogo.setImageResource(getCardBankLogo(mCards.get(position).getCardNumber()));
+            if (mCards.get(position).getStatus() != null && mCards.get(position).getStatus().equals("HOT")) {
+                lytBlocked.setVisibility(View.VISIBLE);
+                ivShetab.setVisibility(View.GONE);
+            } else {
+                lytBlocked.setVisibility(View.GONE);
+                ivShetab.setVisibility(View.VISIBLE);
+            }
 
         }/*else {
 

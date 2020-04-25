@@ -3,7 +3,7 @@ package net.iGap.helper;
 import android.os.Build;
 import android.widget.ImageView;
 
-import com.squareup.picasso.OkHttp3Downloader;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;

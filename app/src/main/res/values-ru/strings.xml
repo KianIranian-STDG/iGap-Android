@@ -62,7 +62,7 @@
     <string name="sure_delete_account">Вы уверены, что захотите удалить свой аккаунт?</string>
     <string name="delete_account_text_desc">(Если вы удалите свою аккуант, все файлы, которые вы получали как сообщение, также будут удалены без возможности восстановления.)</string>
     <string name="Destruction_Code">Уничтожение</string>
-    <string name="Destruction_Des">В данный момент вы пытаетесь уничтожить свой аккаунт, ваш номер телефона:</string>
+    <string name="destroy_description">В данный момент вы пытаетесь уничтожить свой аккаунт, ваш номер телефона:</string>
     <string name="iGap_autofill_Destruction_Code">Если вы не можете ввести код вручную, iGap автоматически обнаруживает код и заполняет пробел</string>
     <string name="video_message">Видео сообщение</string>
     <string name="file_message">Файл сообщений</string>
@@ -348,7 +348,7 @@
     <string name="desc_public_channel">Пользователи могут присоединиться к каналу, выполнив поиск имени пользователя или получив ссылку приглашения.</string>
     <string name="last_msg_format_chat" formatted="false">%s</string>
     <string name="USER_VERIFY_BLOCKED_USER">Пользователь был заблокирован и не может быть проверен.</string>
-    <string name="Enter_Code">Код уничтожения</string>
+    <string name="destroy_enter_code">Код уничтожения</string>
     <string name="E_2">Требуется логин</string>
     <string name="E_335">Ошибка клиента</string>
     <string name="E_336">Внутренняя ошибка сервера</string>
@@ -1069,7 +1069,11 @@
     <string name="content_import_contact_limit">Извините, ваши контакты слишком много. Авторизованный номер перезагружен.</string>
     <string name="another_room">Другая комната</string>
     <string name="filter_cancel_content">Вы отказались от внесенных изменений?</string>
-    <string name="lbl_brightness">Освещение</string>
+    <string name="lbl_brightness">освещение</string>
+
+    <string name="dsgn_on_photo_title">проектирование</string>
+    <string name="clr_adjust">Регулировка цвета</string>
+    <string name="lbl_magnify">Увеличить</string>
     <string name="lbl_contrast">контраст</string>
     <string name="lbl_saturation">насыщенность</string>
     <string name="tab_filters">Цветовой фильтр</string>
@@ -1123,6 +1127,8 @@
     <string name="charge_5">50000 риалов</string>
     <string name="charge_10">100 000 риалов</string>
     <string name="charge_20">200 000 риалов</string>
+
+    <string name="value_added">добавленной стоимости</string>
     <string name="charge_1_ir">10 000 риалов + 9% добавленной стоимости = 10 900 риалов</string>
     <string name="charge_2_ir">20 000 риалов + 9% добавленной стоимости = 21 180 риалов</string>
     <string name="charge_5_ir">50 000 риалов + 9% добавленной стоимости = 54 500 риалов</string>
@@ -1974,4 +1980,9 @@
     <string name="mobile_bank_login_hint">Используйте логин и пароль для входа в мобильный банк Parsian.</string>
     <string name="gift_card_already_in_use">Эта подарочная карта уже используется!</string>
     <string name="gift_carde_sended">Вы уже отправили подарочную карту кому-то еще!</string>
+    <string name="trim_error">Обрезка слишком короткая, пожалуйста, попробуйте с действительной продолжительностью.</string>
+    <string name="card_is_disable">Текущий пункт отключен.</string>
+    <string name="restrictions_on_sending_stickers">Ограничения на отправку стикеров!</string>
+    <string name="restrictions_on_sending_multimedia_messages">Ограничения на отправку мультимедийных сообщений!</string>
+    <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
 </resources>

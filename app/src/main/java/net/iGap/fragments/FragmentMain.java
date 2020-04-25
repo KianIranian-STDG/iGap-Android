@@ -54,7 +54,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
@@ -217,23 +216,22 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             multiSelectAdapter.setCallBack(action -> {
                 switch (action) {
                     case 0:
-                        pinToTop(finalItem.getId(), finalItem.isPinned());
+                        confirmActionForPinToTop(finalItem.getId(), finalItem.isPinned());
                         break;
                     case 1:
-                        muteNotification(finalItem.getId(), finalItem.getMute());
-                        disableMultiSelect();
+                        confirmActionForMuteNotification(finalItem.getId(), finalItem.getMute());
                         break;
                     case 2:
-                        clearHistory(finalItem.getId(), true);
+                        confirmActionForClearHistory(finalItem.getId());
                         break;
                     case 3:
                         confirmActionForRemoveItem(finalItem);
                         break;
                     case 4:
-                        readAllRoom();
+                        confirmActionForReadAllRoom();
                         break;
                     case 5:
-                        markAsRead();
+                        confirmActionForMarkAsRead();
                         break;
                     case 6:
                         if (mSelectedRoomList.size() > 0) {
@@ -292,6 +290,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
+    private void confirmActionForMarkAsRead() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    markAsRead();
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
     private void markAsRead() {
         DbManager.getInstance().doRealmTask(realm -> {
             AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
@@ -310,10 +320,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 }
             });
         });
-
     }
 
-    private void readAllRoom() {
+    private void confirmActionForReadAllRoom() {
         List<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
             return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll());
         });
@@ -355,19 +364,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         try {
             if (mRecyclerView != null) {
-
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable) {
                     setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
                 }
-
                 if (G.isInCall && isChatMultiSelectEnable) {
                     setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
                 }
-
                 setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_search);
 
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
@@ -377,6 +383,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 } else if (isChatMultiSelectEnable) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
                 } else if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+                } else if (MusicPlayer.mp != null && MusicPlayer.playerStatusObservable.getValue() != null && MusicPlayer.playerStatusObservable.getValue().equals(MusicPlayer.PAUSE)) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
                 } else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
@@ -581,8 +589,33 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             disableMultiSelect();
     }
 
+    private void confirmActionForMuteNotification(long id, boolean mute) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    muteNotification(id, mute);
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
     private void muteNotification(final long roomId, final boolean mute) {
         new RequestClientMuteRoom().muteRoom(roomId, !mute);
+        disableMultiSelect();
+    }
+
+    private void confirmActionForClearHistory(long id) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
+                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    clearHistory(id, true);
+                    disableMultiSelect();
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void clearHistory(final long roomId, boolean exit) {
@@ -591,8 +624,19 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             disableMultiSelect();
     }
 
-    private void pinToTop(final long roomId, final boolean isPinned) {
+    private void confirmActionForPinToTop(final long roomId, final boolean isPinned) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    pinToTop(roomId, isPinned);
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
 
+    private void pinToTop(final long roomId, final boolean isPinned) {
         new RequestClientPinRoom().pinRoom(roomId, !isPinned);
         if (!isPinned) {
             goToTop();

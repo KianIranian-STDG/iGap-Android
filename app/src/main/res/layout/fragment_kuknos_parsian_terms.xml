@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="net.iGap.viewmodel.kuknos.KuknosParsianTermsVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/fragKuknosBuyPToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPToolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:paddingBottom="@dimen/dp20">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosBuyPTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/kuknos_parsianTerms_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp18"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fragKuknosBuyPMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:justificationMode="inter_word"
+                    android:text="@string/kuknos_parsianTerms_desc"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPTitle"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionCheck"
+                    android:layout_marginTop="10dp"
+                    android:button="@drawable/check_box_background"
+                    android:checked="true"
+                    android:onCheckedChanged="@{(v,isChecked)->viewmodel.termsOnCheckChange(0, isChecked)}"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPMessage"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPMessage" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionText"
+                    android:layout_marginStart="@dimen/dp6"
+                    android:layout_marginLeft="@dimen/dp6"
+                    android:text="@string/kuknos_parsianTerms_term1"
+                    android:textColor="?iGapSubtitleTextColor"
+                    app:layout_constraintStart_toEndOf="@+id/termsAndConditionCheck"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPMessage"
+                    app:layout_constraintTop_toTopOf="@+id/termsAndConditionCheck" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionCheck2"
+                    android:layout_marginTop="10dp"
+                    android:button="@drawable/check_box_background"
+                    android:checked="true"
+                    android:onCheckedChanged="@{(v,isChecked)->viewmodel.termsOnCheckChange(1, isChecked)}"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPMessage"
+                    app:layout_constraintTop_toBottomOf="@+id/termsAndConditionText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionText2"
+                    android:layout_marginStart="@dimen/dp6"
+                    android:layout_marginLeft="@dimen/dp6"
+                    android:text="@string/kuknos_parsianTerms_term2"
+                    android:textColor="?iGapSubtitleTextColor"
+                    app:layout_constraintStart_toEndOf="@+id/termsAndConditionCheck2"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPMessage"
+                    app:layout_constraintTop_toTopOf="@+id/termsAndConditionCheck2" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionCheck3"
+                    android:layout_marginTop="10dp"
+                    android:button="@drawable/check_box_background"
+                    android:checked="true"
+                    android:visibility="gone"
+                    android:onCheckedChanged="@{(v,isChecked)->viewmodel.termsOnCheckChange(2, isChecked)}"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPMessage"
+                    app:layout_constraintTop_toBottomOf="@+id/termsAndConditionText2" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/termsAndConditionText3"
+                    android:layout_marginStart="@dimen/dp6"
+                    android:layout_marginLeft="@dimen/dp6"
+                    android:text="@string/kuknos_parsianTerms_term3"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/termsAndConditionCheck3"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPMessage"
+                    app:layout_constraintTop_toTopOf="@+id/termsAndConditionCheck3" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fragKuknosBuyPSubmit"
+                    style="@style/iGapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.onSubmitBtn()}"
+                    android:text="@string/i_agree_with_the_terms"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/termsAndConditionCheck3"
+                    app:layout_constraintWidth_percent="0.65" />
+
+                <ProgressBar
+                    android:id="@+id/fragKuknosBuyPProgressV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosBuyPSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPSubmit"
+                    app:layout_constraintHeight_percent="0.06"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPSubmit"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSubmit" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

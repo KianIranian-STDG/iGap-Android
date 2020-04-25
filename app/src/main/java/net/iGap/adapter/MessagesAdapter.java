@@ -41,6 +41,7 @@ import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnChatMessageRemove onChatMessageRemove;
     public AvatarHandler avatarHandler;
     private boolean roomIsCloud;
+    private RealmRoom realmRoom;
 
     public CompositeDisposable compositeDisposable;
 
@@ -89,7 +91,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
-    public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler, CompositeDisposable compositeDisposable, boolean roomIsCloud) {
+    public MessagesAdapter(RealmRoom realmRoom, OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener, AvatarHandler avatarHandler, CompositeDisposable compositeDisposable, boolean roomIsCloud) {
+        this.realmRoom = realmRoom;
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         this.compositeDisposable = compositeDisposable;
         iMessageItem = iMessageItemListener;
@@ -479,5 +482,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public boolean roomIsMyCloud() {
         return roomIsCloud;
+    }
+
+    public RealmRoom getRealmRoom() {
+        return realmRoom;
     }
 }

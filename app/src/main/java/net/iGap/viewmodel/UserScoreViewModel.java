@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
-import net.iGap.module.accountManager.DbManager;
+import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
@@ -25,6 +27,7 @@ public class UserScoreViewModel extends ViewModel {
     private MutableLiveData<String> userScore = new MutableLiveData<>();
     private MutableLiveData<String> userRank = new MutableLiveData<>();
     private MutableLiveData<String> totalRank = new MutableLiveData<>();
+    private SingleLiveEvent<Integer> errorMessage = new SingleLiveEvent<>();
 
     private RealmUserInfo userInfo;
 
@@ -133,9 +136,13 @@ public class UserScoreViewModel extends ViewModel {
                 userRankPointer.postValue(0);
                 userScore.postValue(checkPersianNumber("-1"));
                 if (major == 5 && minor == 1) {
-                    getUserIVandScore();
+                    errorMessage.setValue(R.string.time_out_error);
                 }
             }
         });
+    }
+
+    public SingleLiveEvent<Integer> getErrorMessage() {
+        return errorMessage;
     }
 }

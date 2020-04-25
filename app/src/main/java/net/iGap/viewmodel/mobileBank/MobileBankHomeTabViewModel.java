@@ -5,19 +5,20 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.module.SingleLiveEvent;
-import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.fragments.mobileBank.MobileBankHomeTabFragment;
 import net.iGap.helper.HelperCalander;
-import net.iGap.repository.MobileBankRepository;
-import net.iGap.realm.RealmMobileBankAccounts;
-import net.iGap.realm.RealmMobileBankCards;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankHistoryModel;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
-import net.iGap.fragments.mobileBank.MobileBankHomeTabFragment;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.realm.RealmMobileBankAccounts;
+import net.iGap.realm.RealmMobileBankCards;
+import net.iGap.repository.MobileBankRepository;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.List;
 
 public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryViewModel {
@@ -41,10 +42,23 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankCardModel>> data) {
                 //todo: delete when cards changed
-                RealmMobileBankCards.deleteAll();
-                cards = data.getData();
-                cardsData.setValue(cards);
-                showLoading.set(View.GONE);
+                RealmMobileBankCards.deleteAll(() -> {
+                    cards = data.getData();
+                    Collections.sort(cards, (card1, card2) -> {
+                        String ok = "OK";
+                        if (card1 == null || card2 == null || card1.getCardStatus() == null || card2.getCardStatus() == null) {
+                            return 1;
+                        } else if (card1.getCardStatus().equals(ok) && card2.getCardStatus().equals(ok)) {
+                            return 0;
+                        } else if (card1.getCardStatus().equals(ok) && !card2.getCardStatus().equals(ok)) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    });
+                    cardsData.setValue(cards);
+                    showLoading.set(View.GONE);
+                });
             }
 
             @Override
@@ -69,10 +83,23 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
             @Override
             public void onSuccess(BaseMobileBankResponse<List<BankAccountModel>> data) {
                 //todo: delete when accounts changed
-                RealmMobileBankAccounts.deleteAll();
-                accounts = data.getData();
-                accountsData.postValue(data.getData());
-                showLoading.set(View.GONE);
+                RealmMobileBankAccounts.deleteAll(() -> {
+                    accounts = data.getData();
+                    Collections.sort(accounts, (dep1, dep2) -> {
+                        String ok = "OPEN";
+                        if (dep1 == null || dep2 == null || dep1.getStatus() == null || dep2.getStatus() == null) {
+                            return 1;
+                        } else if (dep1.getStatus().equals(ok) && dep2.getStatus().equals(ok)) {
+                            return 0;
+                        } else if (dep1.getStatus().equals(ok) && !dep2.getStatus().equals(ok)) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    });
+                    accountsData.postValue(data.getData());
+                    showLoading.set(View.GONE);
+                });
             }
 
             @Override

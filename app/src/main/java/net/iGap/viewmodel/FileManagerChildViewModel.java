@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import com.google.common.collect.Ordering;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.FileManager;
@@ -123,6 +124,22 @@ public class FileManagerChildViewModel extends BaseViewModel {
                 R.drawable.shape_file_manager_file_2_bg,
                 false
         );
+
+        if (Config.FILE_LOG_ENABLE) {
+            File filesDir = G.context.getExternalFilesDir(null);
+            if (filesDir != null && new File(filesDir.getAbsolutePath() + "/logs").exists()) {
+                addItemToList(
+                        R.string.file_manager_logs_title,
+                        null,
+                        R.drawable.ic_log,
+                        filesDir.getAbsolutePath() + "/logs",
+                        R.string.file_manager_logs,
+                        null,
+                        R.drawable.shape_file_manager_file_1_bg,
+                        true
+                );
+            }
+        }
 
         return mItems;
     }

@@ -16,9 +16,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentKuknosRecoveryKeyBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
@@ -61,10 +62,8 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        kuknosShowRecoveryKeyVM.initMnemonic();
-
-        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getString(R.string.kuknos_recoveryKey_fa), getResources().getString(R.string.kuknos_recoveryKey_en))));
-        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(CompatibleUnicode("24"), CompatibleUnicode("12"))));
+        binding.spinnerLanguage.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(getResources().getString(R.string.kuknos_recoveryKey_en), getResources().getString(R.string.kuknos_recoveryKey_fa))));
+        binding.spinnerLength.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item_custom, Arrays.asList(CompatibleUnicode("12"), CompatibleUnicode("24"))));
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -93,12 +92,21 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
     private void onErrorObserver() {
         kuknosShowRecoveryKeyVM.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
-                Snackbar snackbar = Snackbar.make(binding.fragKuknosRKSContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
+                /*Snackbar snackbar = Snackbar.make(binding.fragKuknosRKSContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
                 snackbar.show();
-                binding.fragKuknosIdSubmit.setEnabled(false);
+                binding.fragKuknosIdSubmit.setEnabled(false);*/
+                showDialog(errorM.getResID());
             }
         });
+    }
+
+    private void showDialog(int messageResource) {
+        new MaterialDialog.Builder(getContext())
+                .title(R.string.kuknos_viewRecoveryEP_failTitle)
+                .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
+                .content(getResources().getString(messageResource))
+                .onPositive((dialog, which) -> ((ActivityMain) getActivity()).removeAllFragmentFromMain()).show();
     }
 
     private void onNextObserver() {

@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterChatBackground;
@@ -99,7 +100,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
             if (wallpaper != null) {
                 binding.stchfFullImage.setBackground(null);
-                Picasso.get().load(wallpaper.getImagePath()).fit().centerCrop().into(binding.stchfFullImage);
+                Picasso.with(G.context).load(wallpaper.getImagePath()).fit().centerCrop().into(binding.stchfFullImage);
                 if (wallpaper.isNew()) {
                     toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
                     toolbar.getThirdRightButton().setVisibility(View.GONE);

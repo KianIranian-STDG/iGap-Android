@@ -177,7 +177,7 @@ public class MakeButtons {
         /*img1.setId(1);
         img1.setTag("abc");*/
         if (!entity.getImageUrl().equals("")) {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(entity.getImageUrl())
                     .resize(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32))
                     .into(img1);
