@@ -1,6 +1,7 @@
 
 package net.iGap.helper;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.downloadFile.time.FastDateFormat;
 import net.iGap.libs.emojiKeyboard.emoji.DispatchQueue;
@@ -57,7 +58,7 @@ public class IGLog {
             currentFile.createNewFile();
             FileOutputStream stream = new FileOutputStream(currentFile);
             streamWriter = new OutputStreamWriter(stream);
-            streamWriter.write("-----IGLOG start " + dateFormat.format(System.currentTimeMillis()) + "-----\n");
+            streamWriter.write("******* start " + dateFormat.format(System.currentTimeMillis()) + "*******\n");
             streamWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,6 +71,10 @@ public class IGLog {
     }
 
     public static void e(final String message, final Throwable exception) {
+        if (!Config.FILE_LOG_ENABLE) {
+            return;
+        }
+
         initied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
@@ -85,6 +90,10 @@ public class IGLog {
     }
 
     public static void e(final String message) {
+        if (!Config.FILE_LOG_ENABLE) {
+            return;
+        }
+
         initied();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
@@ -99,6 +108,10 @@ public class IGLog {
     }
 
     public static void e(final Throwable e) {
+        if (!Config.FILE_LOG_ENABLE) {
+            return;
+        }
+
         initied();
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
