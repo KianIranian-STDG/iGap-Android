@@ -582,7 +582,15 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void muteNotification(final long roomId, final boolean mute) {
-        new RequestClientMuteRoom().muteRoom(roomId, !mute);
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    new RequestClientMuteRoom().muteRoom(roomId, !mute);
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void clearHistory(final long roomId, boolean exit) {
