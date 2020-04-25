@@ -2624,8 +2624,8 @@ Want to get it?</string>
     <string name="internal_desc">Browse your file system</string>
     <string name="external_desc">Browse your external storage</string>
     <string name="file_manager_app_desc">Browse the app\'s folder</string>
-    <string name="file_manager_logs">just visible on beta versions</string>
-    <string name="file_manager_logs_title">beta logs</string>
+    <string name="file_manager_logs">just visible on alpha versions</string>
+    <string name="file_manager_logs_title">alpha logs</string>
     <string name="file_manager_image_desc">To send images file</string>
     <string name="file_manager_video_desc">To send videos file</string>
     <string name="file_manager_music">To send audios file</string>
