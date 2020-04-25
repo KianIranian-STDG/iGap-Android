@@ -127,10 +127,15 @@
 
                         <TextView
                             android:id="@+id/toolbar_txt_name_expanded"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:ellipsize="marquee"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:layout_gravity="left"
-                            android:gravity="bottom|center_horizontal"
+                            android:gravity="left|center_horizontal"
                             android:singleLine="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/largeTextSize" />

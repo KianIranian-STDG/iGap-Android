@@ -25,7 +25,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -329,7 +328,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             handleToolbarTitleVisibility(percentage);
         });
         startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
-
+        binding.toolbarTxtNameExpanded.setSelected(true);
     }
 
     private void showDialogLeaveChannel() {

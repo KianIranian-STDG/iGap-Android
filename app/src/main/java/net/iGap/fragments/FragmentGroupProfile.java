@@ -416,6 +416,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             handleToolbarTitleVisibility(percentage);
         });
         startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
+        binding.toolbarTxtNameExpanded.setSelected(true);
 
     }
 
