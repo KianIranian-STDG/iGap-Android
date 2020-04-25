@@ -201,6 +201,10 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getGroupRoom().setUsername(room.getGroupRoomExtra().getPublicExtra().getUsername());
                 realmRoom.getGroupRoom().setPrivate(room.getGroupRoomExtra().hasPrivateExtra());
 
+                if (room.getGroupRoomExtra().getRoomRights() != null) {
+                    RealmRoomAccess.groupMemberPutOrUpdate(room.getGroupRoomExtra().getRoomRights(), 0, room.getId(), realm);
+                }
+
                 if (room.getPermission() != null) {
                     RealmRoomAccess.putOrUpdate(room.getPermission(), AccountManager.getInstance().getCurrentUser().getId(), room.getId(), realm);
                 }
