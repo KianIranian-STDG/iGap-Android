@@ -96,6 +96,7 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosTransactionResult> data) {
                 getAccountDataFromServer();
+                error.setValue(new KuknosError(false, "", data.getMessage(), 0));
                 progressState.setValue(false);
             }
 

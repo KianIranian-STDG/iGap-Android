@@ -2254,8 +2254,8 @@ Want to get it?</string>
     <string name="kuknos_login_progress_next">Next</string>
     <string name="kuknos_panel_addAsset">Add Asset</string>
     <string name="kuknos_login_error_server_ErrorStr">Server Error: No response. please try again later.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateMn">Sorry we can NOT generate recovery key. Kuknos wallet is NOT supported in your phone.</string>
-    <string name="kuknos_RecoverySK_ErrorGenerateKey">Sorry we can NOT generate recovery key. Kuknos wallet is NOT supported in your phone.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateMn">Sorry we can NOT generate keys. Kuknos wallet is NOT supported in your phone.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateKey">Sorry we can NOT generate keys. Kuknos wallet is NOT supported in your phone.</string>
     <string name="kuknos_recieve_walletCopy">My Kuknus wallet address is: \n\n</string>
     <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
     <string name="kuknos_soon_error">Trade will be active soon.</string>
