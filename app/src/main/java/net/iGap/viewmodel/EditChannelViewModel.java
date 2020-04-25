@@ -9,6 +9,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.Config;
+import net.iGap.helper.HelperCalander;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -176,10 +177,13 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         } catch (NullPointerException e) {
             e.getStackTrace();
         }*/
-        subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
+        subscribersCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmChannelRoom.getParticipantsCountLabel())));
         DbManager.getInstance().doRealmTask(realm -> {
-            administratorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-            moderatorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+            String adminsCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
+            String modsCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size());
+
+            administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(adminsCount));
+            moderatorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(modsCount));
 
         });
 
