@@ -190,8 +190,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
             moderators = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
         });
 
-        admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
-        moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
+        admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size())) : String.valueOf(realmMembers.size())));
+        moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size())) : String.valueOf(realmMembers.size())));
 
         if (role == ChannelChatRole.ADMIN || role == ChannelChatRole.OWNER) {
             //Todo : fixed it
