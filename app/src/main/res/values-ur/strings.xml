@@ -2320,5 +2320,7 @@
     <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
     <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
     <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
+    <string name="kuknos_buy_noPrice">قیمت این توکن موجود نیست.</string>
+    <string name="kuknos_NewAsset_title">دارایی های جدید</string>
 
 </resources>

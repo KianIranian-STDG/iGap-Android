@@ -172,6 +172,8 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
                 binding.fragKuknosBuyPAmountHolder.requestFocus();
             } else if (errorM.getState() && errorM.getMessage().equals("1")) {
                 showDialog(errorM.getResID());
+            } else if (errorM.getState() && errorM.getMessage().equals("2")) {
+                binding.fragKuknosBuyPPrice.setText(getResources().getString(errorM.getResID()));
             } else {
                 showDialog(getResources().getString(R.string.kuknos_viewRecoveryEP_failTitle), errorM.getMessage());
             }
@@ -198,7 +200,6 @@ public class KuknosBuyPeymanFrag extends BaseAPIViewFrag<KuknosBuyPeymanVM> {
             if (integer == 0) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
                 binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
-                viewModel.setAmountEnable(true);
             } else if (integer == 1) {
                 binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
                 viewModel.setAmountEnable(false);

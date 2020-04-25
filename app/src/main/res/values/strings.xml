@@ -2280,8 +2280,9 @@ Want to get it?</string>
         Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river
         named Duden flows by their place and supplies it with the necessary regelialia. It is a
         paradisematic country, in which roasted parts of sentences fly into your mouth. </string>
-    <string name="kuknos_AddAsset_AddBTN">More Assets</string>
+    <string name="kuknos_AddAsset_AddBTN">Add new assets</string>
     <string name="kuknos_AddAsset_title">Current Assets</string>
+    <string name="kuknos_NewAsset_title">New Assets</string>
     <string name="kuknos_trade_noItem">There is no record.</string>
     <string name="kuknos_Restore_CheckPIN">I had set PIN code for my account before.</string>
     <string name="kuknos_RestorePass_title">Enter your 4 digit PIN code</string>
@@ -2315,6 +2316,7 @@ Want to get it?</string>
     <string name="kuknos_parsianTerms_term3">I have trust to the issuer of SKYC</string>
     <string name="kuknos_parsianTerms_errorTermAndCondition">If you would like to continue, please accept all terms and conditions</string>
     <string name="kuknos_regulations_title">Regulations and Terms: You must incline to all of the term of this token to add it to your wallet.</string>
+    <string name="kuknos_buy_noPrice">Token\'s price is not available.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>

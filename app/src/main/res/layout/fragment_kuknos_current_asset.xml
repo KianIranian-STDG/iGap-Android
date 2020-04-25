@@ -1,0 +1,41 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.kuknos.KuknosCurrentAssetVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragKuknosAddAContainer"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragKuknosAddARecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/fragKuknosAddAProgressV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:elevation="2dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/fragKuknosAddARecycler"
+            app:layout_constraintEnd_toEndOf="@+id/fragKuknosAddARecycler"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/fragKuknosAddARecycler"
+            app:layout_constraintTop_toTopOf="@+id/fragKuknosAddARecycler" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
