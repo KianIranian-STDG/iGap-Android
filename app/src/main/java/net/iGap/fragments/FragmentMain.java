@@ -228,10 +228,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         confirmActionForRemoveItem(finalItem);
                         break;
                     case 4:
-                        readAllRoom();
+                        confirmActionForReadAllRoom();
                         break;
                     case 5:
-                        markAsRead();
+                        confirmActionForMarkAsRead();
                         break;
                     case 6:
                         if (mSelectedRoomList.size() > 0) {
@@ -290,36 +290,39 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
-    private void markAsRead() {
+    private void confirmActionForMarkAsRead() {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
                 .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                 .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                if (mSelectedRoomList.size() > 0) {
-                                    for (int i = 0; i < mSelectedRoomList.size(); i++) {
-                                        markAsRead(realm, mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
-                                    }
-                                }
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                disableMultiSelect();
-                            }
-                        });
-                    });
+                    markAsRead();
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
     }
 
-    private void readAllRoom() {
+    private void markAsRead() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    if (mSelectedRoomList.size() > 0) {
+                        for (int i = 0; i < mSelectedRoomList.size(); i++) {
+                            markAsRead(realm, mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
+                        }
+                    }
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    disableMultiSelect();
+                }
+            });
+        });
+    }
+
+    private void confirmActionForReadAllRoom() {
         List<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
             return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll());
         });
