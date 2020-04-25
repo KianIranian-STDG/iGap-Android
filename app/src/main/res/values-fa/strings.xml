@@ -1900,7 +1900,7 @@
     <string name="location_dialog_message">آیا می خواهید از موقعیت مکانی شما استفاده شود؟</string>
     <string name="recent_action">اقدامات اخیر</string>
     <string name="sign_channel_message_description">اسامی مدیران را به پیامهایی که ارسال کرده اید اضافه کنید.</string>
-    <string name="reaction_message_detail">با فعال کردن این گزینه امکان نظردهی اعضا گروه برای هر پست فعال میشود.</string>
+    <string name="reaction_message_detail">با فعال کردن این گزینه امکان نظردهی اعضا کانال برای هر پست فعال میشود.</string>
     <string name="chat_history_for_new_member_title">تاریخچه گپ برای اعضای جدید</string>
     <string name="permissions_title">مجوزها</string>
     <string name="all">همه</string>
