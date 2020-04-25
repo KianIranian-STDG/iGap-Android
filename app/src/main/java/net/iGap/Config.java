@@ -14,7 +14,7 @@ import android.text.format.DateUtils;
 
 public class Config {
 
-    public static final boolean ALPHA_VERSION = false;
+    public static final boolean ALPHA_VERSION = true;
     public static final boolean BETA_VERSION = false;
     public static final boolean FILE_LOG_ENABLE = ALPHA_VERSION;
 
