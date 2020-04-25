@@ -292,24 +292,32 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void markAsRead() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (mSelectedRoomList.size() > 0) {
-                        for (int i = 0; i < mSelectedRoomList.size(); i++) {
-                            markAsRead(realm, mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
-                        }
-                    }
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    disableMultiSelect();
-                }
-            });
-        });
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
 
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                if (mSelectedRoomList.size() > 0) {
+                                    for (int i = 0; i < mSelectedRoomList.size(); i++) {
+                                        markAsRead(realm, mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
+                                    }
+                                }
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                disableMultiSelect();
+                            }
+                        });
+                    });
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void readAllRoom() {
