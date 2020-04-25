@@ -40,6 +40,7 @@ import net.iGap.observers.interfaces.PaymentCallBack;
 import net.iGap.viewmodel.PaymentViewModel;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -174,9 +175,10 @@ public class PaymentFragment extends BaseAPIViewFrag {
 
         paymentViewModel.getPrice().observe(getViewLifecycleOwner(), price -> {
             if (getContext() != null && price != null) {
+                DecimalFormat df = new DecimalFormat(",###");
                 binding.priceTitle.setText(getString(R.string.wallet_amount) +
                         (isShowValueAdded ? (" + " + getString(R.string.value_added)) : "") + ": " +
-                        (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(price) : price) +
+                        (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(price)) : price) +
                         getString(R.string.rial));
             }
         });

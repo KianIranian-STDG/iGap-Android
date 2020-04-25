@@ -41,7 +41,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private ObservableField<String> description = new ObservableField<>();
     /*private ObservableField<String> paymentOrderId = new ObservableField<>();*/
     private ObservableField<String> paymentStatus = new ObservableField<>();
-    private SingleLiveEvent<String> price = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> price = new SingleLiveEvent<>();
     private ObservableDouble paymentRRN = new ObservableDouble();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
@@ -137,7 +137,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         return paymentOrderId;
     }*/
 
-    public SingleLiveEvent<String> getPrice() {
+    public SingleLiveEvent<Integer> getPrice() {
         return price;
     }
 
@@ -218,8 +218,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 showButtons.set(View.VISIBLE);
                 description.set(data.getInfo().getProduct().getDescription());
                 originalPrice = data.getInfo().getPrice();
-                String tmp = String.valueOf(data.getInfo().getPrice());
-                price.setValue(tmp);
+                price.setValue(originalPrice);
                 title.set(data.getInfo().getProduct().getTitle());
                 orderDetail = data;
                 discountOption.setValue(data.getDiscountOption());
@@ -255,8 +254,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
                 description.set(data.getPaymentInfo().getProduct().getDescription());
-                String tmp = String.valueOf(data.getPaymentInfo().getPrice());
-                price.setValue(tmp);
+                price.setValue(data.getPaymentInfo().getPrice());
                 title.set(data.getPaymentInfo().getProduct().getTitle());
                 /*paymentOrderId.set(data.getPaymentInfo().getId());*/
                 paymentStatus.set(data.getMessage());
@@ -317,11 +315,9 @@ public class PaymentViewModel extends BaseAPIViewModel {
     public void setDiscountPlanPosition(int discountPlanPosition) {
         this.discountPlanPosition = discountPlanPosition;
         if (discountPlanPosition != -1) {
-            String tmp = String.valueOf(discountOption.getValue().get(discountPlanPosition).getPrice());
-            price.setValue(tmp);
+            price.setValue(discountOption.getValue().get(discountPlanPosition).getPrice());
         } else {
-            String tmp = String.valueOf(originalPrice);
-            price.setValue(tmp);
+            price.setValue(originalPrice);
         }
     }
 
