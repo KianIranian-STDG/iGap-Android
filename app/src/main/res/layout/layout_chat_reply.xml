@@ -41,7 +41,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:text="SAMPLE TEXT"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="?attr/iGapSendReplayColor"
             android:textSize="@dimen/dp12"
             android:textStyle="bold" />
 

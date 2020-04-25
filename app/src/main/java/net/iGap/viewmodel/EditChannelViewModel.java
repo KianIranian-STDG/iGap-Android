@@ -13,6 +13,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.helper.upload.UploadTask;
@@ -173,11 +174,10 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         } catch (NullPointerException e) {
             e.getStackTrace();
         }*/
-        subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
+        subscribersCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmChannelRoom.getParticipantsCountLabel())));
         DbManager.getInstance().doRealmTask(realm -> {
-            administratorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-            moderatorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
-
+            String adminsCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
+            administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(adminsCount));
         });
 
         if (role == ChannelChatRole.OWNER) {

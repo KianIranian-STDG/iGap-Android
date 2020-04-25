@@ -179,18 +179,20 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
         isMuteNotification.set(mRoom.getMute());
 
-        subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
+        subscribersCount.set(HelperCalander.convertToUnicodeFarsiNumber(mRoom.getChannelRoom().getParticipantsCountLabel()));
         DbManager.getInstance().doRealmTask(realm -> {
-            administratorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-            moderatorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+            String adminCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
+            String modsCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size());
+            administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(adminCount));
+            moderatorsCount.set(modsCount);
 
             admins = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             moderators = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
 
         });
 
-        admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(realmMembers.size() + ""));
-        moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(realmMembers.size() + ""));
+        admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
+        moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
 
         if (role == ChannelChatRole.ADMIN || role == ChannelChatRole.OWNER) {
             //Todo : fixed it

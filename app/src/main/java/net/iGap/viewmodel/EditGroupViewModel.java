@@ -116,11 +116,11 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
             moderatorMembers = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
 
         });
-        administratorsCount.set(String.valueOf(adminMembers.size()));
-        moderatorsCount.set(String.valueOf(moderatorMembers.size()));
+        administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(adminMembers.size())));
+        moderatorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(moderatorMembers.size())));
 
-        adminMembers.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(String.valueOf(realmMembers.size())));
-        moderatorMembers.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(String.valueOf(realmMembers.size())));
+        adminMembers.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
+        moderatorMembers.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
 
         int t;
         switch (realmGroupRoom.getStartFrom()) {
