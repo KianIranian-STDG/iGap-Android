@@ -600,12 +600,19 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void pinToTop(final long roomId, final boolean isPinned) {
-
-        new RequestClientPinRoom().pinRoom(roomId, !isPinned);
-        if (!isPinned) {
-            goToTop();
-        }
-        disableMultiSelect();
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    new RequestClientPinRoom().pinRoom(roomId, !isPinned);
+                    if (!isPinned) {
+                        goToTop();
+                    }
+                    disableMultiSelect();
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void goToTop() {
