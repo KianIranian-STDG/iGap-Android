@@ -2876,13 +2876,23 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                    if (viewHolder instanceof VoiceItem.ViewHolder) {
+                    RealmRoomMessage message_ = null;
+                    try {
+                        message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (message_ != null && (message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
+                        return 0;
+                    } else if (viewHolder instanceof VoiceItem.ViewHolder) {
                         return 0;
                     } else if (viewHolder instanceof AudioItem.ViewHolder) {
                         return 0;
                     } else if (viewHolder instanceof NewChatItemHolder) {
                         return super.getSwipeDirs(recyclerView, viewHolder);
                     }
+
                     // we disable swipe with returning Zero
                     return 0;
                 }
