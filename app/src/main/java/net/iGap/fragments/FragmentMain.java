@@ -221,7 +221,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         break;
                     case 1:
                         muteNotification(finalItem.getId(), finalItem.getMute());
-                        disableMultiSelect();
                         break;
                     case 2:
                         clearHistory(finalItem.getId(), true);
@@ -588,6 +587,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     new RequestClientMuteRoom().muteRoom(roomId, !mute);
+                    disableMultiSelect();
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
