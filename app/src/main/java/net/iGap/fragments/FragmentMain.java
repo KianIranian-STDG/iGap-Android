@@ -54,7 +54,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
@@ -217,7 +216,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             multiSelectAdapter.setCallBack(action -> {
                 switch (action) {
                     case 0:
-                        pinToTop(finalItem.getId(), finalItem.isPinned());
+                        confirmActionForPinToTop(finalItem.getId(), finalItem.isPinned());
                         break;
                     case 1:
                         muteNotification(finalItem.getId(), finalItem.getMute());
@@ -607,20 +606,24 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             disableMultiSelect();
     }
 
-    private void pinToTop(final long roomId, final boolean isPinned) {
+    private void confirmActionForPinToTop(final long roomId, final boolean isPinned) {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
                 .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                 .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-                    new RequestClientPinRoom().pinRoom(roomId, !isPinned);
-                    if (!isPinned) {
-                        goToTop();
-                    }
-                    disableMultiSelect();
+                    pinToTop(roomId, isPinned);
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    private void pinToTop(final long roomId, final boolean isPinned) {
+        new RequestClientPinRoom().pinRoom(roomId, !isPinned);
+        if (!isPinned) {
+            goToTop();
+        }
+        disableMultiSelect();
     }
 
     private void goToTop() {
