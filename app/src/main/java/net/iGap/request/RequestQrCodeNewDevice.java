@@ -68,6 +68,8 @@ public class RequestQrCodeNewDevice {
         if (pInfo != null) {
             AppVersion = pInfo.versionName.replace(".beta", "")
                     .replace("beta", "")
+                    .replace("alpha", "")
+                    .replace(".alpha", "")
                     .replace(".local", "")
                     .replace("local", "")
                     .replace(".newUi", "");

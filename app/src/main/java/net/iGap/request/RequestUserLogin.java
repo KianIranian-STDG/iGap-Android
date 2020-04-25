@@ -74,6 +74,8 @@ public class RequestUserLogin {
             AppVersion = pInfo.versionName
                     .replace(".beta", "")
                     .replace("beta", "")
+                    .replace(".alpha", "")
+                    .replace("alpha", "")
                     .replace(".newUi", "")
                     .replace(".local", "")
                     .replace("local", "")
