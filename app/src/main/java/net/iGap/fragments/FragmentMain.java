@@ -222,7 +222,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         confirmActionForMuteNotification(finalItem.getId(), finalItem.getMute());
                         break;
                     case 2:
-                        clearHistory(finalItem.getId(), true);
+                        confirmActionForClearHistory(finalItem.getId());
                         break;
                     case 3:
                         confirmActionForRemoveItem(finalItem);
@@ -602,6 +602,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void muteNotification(final long roomId, final boolean mute) {
         new RequestClientMuteRoom().muteRoom(roomId, !mute);
         disableMultiSelect();
+    }
+
+    private void confirmActionForClearHistory(long id) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
+                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    clearHistory(id, true);
+                    disableMultiSelect();
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void clearHistory(final long roomId, boolean exit) {
