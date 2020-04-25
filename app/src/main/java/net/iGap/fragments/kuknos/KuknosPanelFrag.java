@@ -104,9 +104,9 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     walletSpinner.setSelection(viewModel.getPosition());
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosAddAssetFrag.class.getName());
+                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosAssetsPagerFrag.class.getName());
                     if (fragment == null) {
-                        fragment = KuknosAddAssetFrag.newInstance();
+                        fragment = KuknosAssetsPagerFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

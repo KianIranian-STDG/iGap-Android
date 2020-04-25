@@ -30,7 +30,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     private ObservableField<String> amount = new ObservableField<>();
     private ObservableField<Boolean> amountEnable = new ObservableField<>(false);
     private ObservableField<String> sum = new ObservableField<>();
-    private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر پیمان: ...");
+    private ObservableField<String> assetPrice = new ObservableField<>("قیمت هر توکن: ...");
     private MutableLiveData<KuknosError> error;
     private MutableLiveData<KuknosPaymentResponse> paymentData = new MutableLiveData<>(null);
     // 0 : nothing 1: connecting to server 2: connecting to bank
@@ -103,13 +103,15 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(String error) {
+            public void onError(String errorM) {
                 progressState.setValue(0);
+                error.setValue(new KuknosError(true, "", "2", R.string.kuknos_buy_noPrice));
             }
 
             @Override
             public void onFailed() {
                 progressState.setValue(0);
+                error.setValue(new KuknosError(true, "", "2", R.string.kuknos_buy_noPrice));
             }
         });
     }
@@ -131,18 +133,20 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
                     public void onSuccess(KuknosResponseModel<KuknosBankPayment> data) {
                         goToPaymentPage.setValue(data.getData().getToken());
                         progressState.setValue(0);
+                        amountEnable.set(true);
                     }
 
                     @Override
                     public void onError(String errorM) {
                         progressState.setValue(0);
+                        amountEnable.set(true);
                         error.setValue(new KuknosError(true, "wrong pin", errorM, R.string.kuknos_buyP_failS));
-
                     }
 
                     @Override
                     public void onFailed() {
                         progressState.setValue(0);
+                        amountEnable.set(true);
                         error.setValue(new KuknosError(true, "wrong pin", "1", R.string.kuknos_buyP_failS));
                     }
 

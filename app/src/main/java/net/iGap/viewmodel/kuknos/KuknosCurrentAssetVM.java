@@ -13,30 +13,35 @@ import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.PanelRepo;
 import net.iGap.repository.kuknos.TradeRepo;
 
-public class KuknosAddAssetVM extends BaseAPIViewModel {
+public class KuknosCurrentAssetVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosAsset> assetPageMutableLiveData;
-    private MutableLiveData<KuknosAsset> advAssetPageMutableLiveData;
     private MutableLiveData<KuknosBalance> accountPageMutableLiveData;
     private TradeRepo tradeRepo = new TradeRepo();
     private PanelRepo panelRepo = new PanelRepo();
 
     private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> progressState;
-    private MutableLiveData<Boolean> progressStateAdv;
     private MutableLiveData<Integer> openAddList;
+    // 0 : is current  assets - 1 : is all active assets
+    private int mode;
 
-    public KuknosAddAssetVM() {
+    public KuknosCurrentAssetVM() {
         assetPageMutableLiveData = new MutableLiveData<>();
         accountPageMutableLiveData = new MutableLiveData<>();
-        advAssetPageMutableLiveData = new MutableLiveData<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
-        progressStateAdv = new MutableLiveData<>();
         openAddList = new MutableLiveData<>();
     }
 
-    public void getAccountDataFromServer() {
+    public void getData() {
+        if (mode == 0)
+            getAccountDataFromServer();
+        else
+            getAssetDataFromServer();
+    }
+
+    private void getAccountDataFromServer() {
         progressState.setValue(true);
         panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
             @Override
@@ -60,26 +65,26 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         });
     }
 
-    public void getAssetDataFromServer() {
-        progressStateAdv.setValue(true);
+    private void getAssetDataFromServer() {
+        progressState.setValue(true);
         tradeRepo.getAssets(this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
                 assetPageMutableLiveData.setValue(data.getData());
                 /*advAssetPageMutableLiveData.setValue(data.getData());*/
-                progressStateAdv.setValue(false);
+                progressState.setValue(false);
             }
 
             @Override
             public void onError(String errorM) {
                 error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
-                progressStateAdv.setValue(false);
+                progressState.setValue(false);
             }
 
             @Override
             public void onFailed() {
                 error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
-                progressStateAdv.setValue(false);
+                progressState.setValue(false);
             }
 
         });
@@ -95,7 +100,6 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), (temp.getTrustLimit() == 0) ? null : ("" + temp.getTrustLimit()), this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosTransactionResult> data) {
-                getAccountDataFromServer();
                 error.setValue(new KuknosError(false, "", data.getMessage(), 0));
                 progressState.setValue(false);
             }
@@ -123,13 +127,6 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         openAddList.setValue(1);
     }
 
-    public MutableLiveData<KuknosAsset> getAssetPageMutableLiveData() {
-        return assetPageMutableLiveData;
-    }
-
-    public MutableLiveData<KuknosAsset> getAdvAssetPageMutableLiveData() {
-        return advAssetPageMutableLiveData;
-    }
 
     public MutableLiveData<KuknosError> getError() {
         return error;
@@ -147,16 +144,15 @@ public class KuknosAddAssetVM extends BaseAPIViewModel {
         this.progressState = progressState;
     }
 
-    public MutableLiveData<Integer> getOpenAddList() {
-        return openAddList;
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public MutableLiveData<KuknosAsset> getAssetPageMutableLiveData() {
+        return assetPageMutableLiveData;
     }
 
     public MutableLiveData<KuknosBalance> getAccountPageMutableLiveData() {
         return accountPageMutableLiveData;
     }
-
-    public MutableLiveData<Boolean> getProgressStateAdv() {
-        return progressStateAdv;
-    }
-
 }

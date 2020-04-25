@@ -102,12 +102,18 @@ public class KuknosAddAssetFrag extends BaseAPIViewFrag<KuknosAddAssetVM> {
 
         viewModel.getError().observe(getViewLifecycleOwner(), errorM -> {
             if (errorM.getState()) {
-                Snackbar snackbar = Snackbar.make(binding.fragKuknosAddAContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
-                snackbar.show();
+                showSnack(getResources().getString(errorM.getResID()));
+            } else {
+                showSnack(errorM.getMessage());
             }
         });
 
+    }
+
+    private void showSnack(String message) {
+        Snackbar snackbar = Snackbar.make(binding.fragKuknosAddAContainer, message, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
+        snackbar.show();
     }
 
     private void onProgress() {

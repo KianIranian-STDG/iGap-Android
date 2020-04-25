@@ -7,24 +7,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.model.kuknos.Parsian.KuknosAsset;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddAssetCurrentAdapter extends RecyclerView.Adapter<AddAssetCurrentAdapter.ViewHolder> {
+public class AddAllAssetAdapter extends RecyclerView.Adapter<AddAllAssetAdapter.ViewHolder> {
 
-    private ArrayList<KuknosBalance.Balance> mdata;
+    private ArrayList<KuknosAsset.Asset> mdata;
     private Context context;
+    private onClickListener listener;
 
-    public AddAssetCurrentAdapter(List<KuknosBalance.Balance> data, Context context) {
+    public AddAllAssetAdapter(List<KuknosAsset.Asset> data, Context context, onClickListener listener) {
         if (this.mdata == null)
             this.mdata = new ArrayList<>();
         this.mdata.addAll(data);
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,7 +39,7 @@ public class AddAssetCurrentAdapter extends RecyclerView.Adapter<AddAssetCurrent
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        viewHolder.initView(mdata.get(position));
+        viewHolder.initView(position);
     }
 
     @Override
@@ -46,20 +49,24 @@ public class AddAssetCurrentAdapter extends RecyclerView.Adapter<AddAssetCurrent
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title, icon;
+        private TextView title;
+        private CardView container;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.cellAddAssetTitle);
-            icon = itemView.findViewById(R.id.addIcon);
+            container = itemView.findViewById(R.id.cellAddAssetContainer);
 
         }
 
-        public void initView(KuknosBalance.Balance model) {
-            title.setText(model.getAsset().getType().equals("native") ? "PMN" : model.getAssetCode());
-            icon.setVisibility(View.GONE);
+        public void initView(int position) {
+            title.setText(mdata.get(position).getAsset().getType().equals("native") ? "PMN" : mdata.get(position).getAssetCode());
+            container.setOnClickListener(v -> listener.onAdd(position));
         }
     }
 
+    public interface onClickListener {
+        void onAdd(int position);
+    }
 }
