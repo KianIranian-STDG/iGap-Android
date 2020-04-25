@@ -41,7 +41,7 @@ public class FileManager {
                     projection,
                     null,
                     null,
-                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+                    MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
             ArrayList<String> ids = new ArrayList<>();
             if (cursor != null) {
@@ -90,8 +90,7 @@ public class FileManager {
 
             Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             String[] projection = {
-                    MediaStore.MediaColumns.DATA,
-                    MediaStore.Images.Media.DATE_TAKEN
+                    MediaStore.MediaColumns.DATA
             };
 
             boolean isAllPhoto = folderId.equals("-1");
@@ -101,7 +100,7 @@ public class FileManager {
                     projection,
                     isAllPhoto ? null : MediaStore.Images.Media.BUCKET_ID + " = ?",
                     isAllPhoto ? null : new String[]{folderId},
-                    MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC"
+                    MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC"
             );
 
             if (cursor != null) {
@@ -149,7 +148,7 @@ public class FileManager {
                     projection,
                     isAllPhoto ? null : MediaStore.Video.Media.BUCKET_ID + " = ?",
                     isAllPhoto ? null : new String[]{folderId},
-                    MediaStore.Video.Media.DATE_TAKEN + " DESC"
+                    MediaStore.Video.Media.DATE_MODIFIED + " DESC"
             );
 
             if (cursor != null) {
@@ -196,7 +195,7 @@ public class FileManager {
                     projection,
                     null,
                     null,
-                    MediaStore.Video.Media.DATE_TAKEN + " DESC");
+                    MediaStore.Video.Media.DATE_MODIFIED + " DESC");
 
             ArrayList<String> ids = new ArrayList<>();
             if (cursor != null) {

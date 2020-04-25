@@ -686,7 +686,7 @@ public class ChatAttachmentPopup {
     }
 
     private void loadItemsToRecycler() {
-        for (int i = FragmentEditImage.itemGalleryList.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
             addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
         }
         if (FragmentEditImage.itemGalleryList.size() >= MAX_COUNT_OF_IMAGE) {
@@ -749,11 +749,10 @@ public class ChatAttachmentPopup {
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA,
-                MediaStore.Images.ImageColumns.DATE_TAKEN
+                MediaStore.MediaColumns.DATA
         };
 
-        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
         if (cursor != null) {
             column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -765,7 +764,7 @@ public class ChatAttachmentPopup {
                 item.setId(listOfAllImages.size());
                 item.setPath(absolutePathOfImage);
                 item.isSelected = true;
-                listOfAllImages.add(0, item);
+                listOfAllImages.add(item);
                 if (listOfAllImages.size() >= MAX_COUNT_OF_IMAGE) break;
             }
             cursor.close();
