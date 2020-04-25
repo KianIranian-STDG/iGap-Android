@@ -2624,8 +2624,8 @@ Want to get it?</string>
     <string name="internal_desc">Browse your file system</string>
     <string name="external_desc">Browse your external storage</string>
     <string name="file_manager_app_desc">Browse the app\'s folder</string>
-    <string name="file_manager_logs">just visible on beta versions</string>
-    <string name="file_manager_logs_title">beta logs</string>
+    <string name="file_manager_logs">just visible on alpha versions</string>
+    <string name="file_manager_logs_title">alpha logs</string>
     <string name="file_manager_image_desc">To send images file</string>
     <string name="file_manager_video_desc">To send videos file</string>
     <string name="file_manager_music">To send audios file</string>
@@ -2638,7 +2638,7 @@ Want to get it?</string>
     <string name="trim_error">"Trim is too short , please try with valid duration."</string>
     <string name="card_is_disable">Current item is disable.</string>
     <string name="restrictions_on_sending_stickers">Restrictions on sending stickers!</string>
-    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="restrictions_on_sending_multimedia_messages">!Restrictions on sending multimedia messages</string>
     <string name="post_message">Post Message</string>
     <string name="pin_message_1">Pin Message</string>
     <string name="edit_message">Edit Message</string>

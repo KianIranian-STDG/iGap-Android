@@ -21,6 +21,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChannelProfile;
@@ -172,25 +173,25 @@ public class FragmentChannelProfileViewModel extends ViewModel
                 isShowLink.set(View.GONE);
             }
         } else {
-            channelLink.set(mRoom.getChannelRoom().getUsername());
+            channelLink.set(Config.IGAP_LINK_PREFIX + mRoom.getChannelRoom().getUsername());
+
             channelLinkTitle.set(R.string.st_username);
             isShowLink.set(View.VISIBLE);
         }
 
         isMuteNotification.set(mRoom.getMute());
 
-        subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
+        subscribersCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(mRoom.getChannelRoom().getParticipantsCountLabel()) : mRoom.getChannelRoom().getParticipantsCountLabel());
         DbManager.getInstance().doRealmTask(realm -> {
-            administratorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-            moderatorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+            String adminCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
+            administratorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(adminCount) : adminCount);
 
             admins = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             moderators = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
-
         });
 
-        admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(realmMembers.size() + ""));
-        moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(realmMembers.size() + ""));
+        admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
+        moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size()))));
 
         if (role == ChannelChatRole.ADMIN || role == ChannelChatRole.OWNER) {
             //Todo : fixed it
@@ -229,7 +230,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
         if (isPrivate) {
             showDialogCopyLink.setValue(mRoom.getChannelRoom().getInviteLink());
         } else {
-            showDialogCopyLink.setValue(mRoom.getChannelRoom().getUsername());
+            showDialogCopyLink.setValue(Config.IGAP_LINK_PREFIX + mRoom.getChannelRoom().getUsername());
+
         }
     }
 
@@ -288,7 +290,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
                                             isShowLink.set(View.GONE);
                                         }
                                     } else {
-                                        channelLink.set(mRoom.getChannelRoom().getUsername());
+                                        channelLink.set(Config.IGAP_LINK_PREFIX + mRoom.getChannelRoom().getUsername());
                                         channelLinkTitle.set(R.string.st_username);
                                         isShowLink.set(View.VISIBLE);
                                     }

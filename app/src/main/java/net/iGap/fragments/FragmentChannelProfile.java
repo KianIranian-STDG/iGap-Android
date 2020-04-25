@@ -215,7 +215,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 inputChannelLink.addView(viewRevoke, viewParams);
 
                 TextView txtLink = new AppCompatTextView(getActivity());
-                txtLink.setText(/*Config.IGAP_LINK_PREFIX +*/ link);
+                txtLink.setText( link);
                 txtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
@@ -235,7 +235,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                         .onPositive((dialog1, which) -> {
                             if (getActivity() != null) {
                                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", /*Config.IGAP_LINK_PREFIX +*/ link);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP",link);
                                 clipboard.setPrimaryClip(clip);
                             }
                         })
