@@ -219,7 +219,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         confirmActionForPinToTop(finalItem.getId(), finalItem.isPinned());
                         break;
                     case 1:
-                        muteNotification(finalItem.getId(), finalItem.getMute());
+                        confirmActionForMuteNotification(finalItem.getId(), finalItem.getMute());
                         break;
                     case 2:
                         clearHistory(finalItem.getId(), true);
@@ -587,17 +587,21 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             disableMultiSelect();
     }
 
-    private void muteNotification(final long roomId, final boolean mute) {
+    private void confirmActionForMuteNotification(long id, boolean mute) {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
                 .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                 .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-                    new RequestClientMuteRoom().muteRoom(roomId, !mute);
-                    disableMultiSelect();
+                    muteNotification(id, mute);
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    private void muteNotification(final long roomId, final boolean mute) {
+        new RequestClientMuteRoom().muteRoom(roomId, !mute);
+        disableMultiSelect();
     }
 
     private void clearHistory(final long roomId, boolean exit) {
