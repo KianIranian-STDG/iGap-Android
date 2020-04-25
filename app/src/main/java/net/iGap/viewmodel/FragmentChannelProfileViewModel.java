@@ -21,6 +21,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChannelProfile;
@@ -172,7 +173,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
                 isShowLink.set(View.GONE);
             }
         } else {
-            channelLink.set(mRoom.getChannelRoom().getUsername());
+            channelLink.set(Config.IGAP_LINK_PREFIX + mRoom.getChannelRoom().getUsername());
+
             channelLinkTitle.set(R.string.st_username);
             isShowLink.set(View.VISIBLE);
         }
@@ -228,7 +230,8 @@ public class FragmentChannelProfileViewModel extends ViewModel
         if (isPrivate) {
             showDialogCopyLink.setValue(mRoom.getChannelRoom().getInviteLink());
         } else {
-            showDialogCopyLink.setValue(mRoom.getChannelRoom().getUsername());
+            showDialogCopyLink.setValue(Config.IGAP_LINK_PREFIX + mRoom.getChannelRoom().getUsername());
+
         }
     }
 
@@ -287,7 +290,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
                                             isShowLink.set(View.GONE);
                                         }
                                     } else {
-                                        channelLink.set(mRoom.getChannelRoom().getUsername());
+                                        channelLink.set(Config.IGAP_LINK_PREFIX + mRoom.getChannelRoom().getUsername());
                                         channelLinkTitle.set(R.string.st_username);
                                         isShowLink.set(View.VISIBLE);
                                     }
