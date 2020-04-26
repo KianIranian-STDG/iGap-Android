@@ -2160,7 +2160,7 @@
     <string name="kuknos_setting_copySFailWriteM">آیگپ اجازه نوشتن فایل را ندارد.</string>
     <string name="kuknos_setting_copySFailDir">آیگپ اجازه ایجاد مسیر مناسب را ندارد.</string>
     <string name="kuknos_setting_copySFailWriteFile">خطایی رخ داده است. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
-    <string name="kuknos_setting_copySSuccessMessage">کلید مخفی شما آماده است. میتوانید در فولدر دانلود ها به کلید خود را مشاهده کنید.</string>
+    <string name="kuknos_setting_copySSuccessMessage">کلید مخفی شما آماده است. میتوانید در فولدر دانلود ها کلید خود را مشاهده کنید.</string>
     <string name="kuknos_setting_copySSuccessTitle">موفقیت</string>
     <string name="kuknos_login_progress_load">دریافت داده...</string>
     <string name="kuknos_login_progress_next">بعدی</string>

@@ -92,11 +92,11 @@ public class KuknosCurrentAssetVM extends BaseAPIViewModel {
 
     public void addAsset(int position) {
         KuknosAsset.Asset temp = assetPageMutableLiveData.getValue().getAssets().get(position);
-        if (temp.getAssetIssuer() == null || temp.getAssetCode() == null || temp.getAssetIssuer().length() == 0 || temp.getAssetCode().length() == 0) {
+        if (temp.getAssetIssuer() == null || temp.getAssetCode() == null || temp.getAssetIssuer().length() < 3 || temp.getAssetCode().length() == 0) {
             error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_AddAsset_nullEntry));
             return;
         }
-        progressState.setValue(false);
+        progressState.setValue(true);
         tradeRepo.changeTrustline(temp.getAssetCode(), temp.getAssetIssuer(), (temp.getTrustLimit() == 0) ? null : ("" + temp.getTrustLimit()), this, new ResponseCallback<KuknosResponseModel<KuknosTransactionResult>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosTransactionResult> data) {
