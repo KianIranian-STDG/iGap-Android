@@ -58,13 +58,12 @@
         app:layout_constraintTop_toTopOf="@id/lytToolbar"
         app:layout_constraintBottom_toBottomOf="@id/lytToolbar" />
 
-    <net.iGap.module.PaintImageView
+    <ja.burhanrashid52.photoeditor.PhotoEditorView
         android:id="@+id/paintView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/dp16"
         android:scaleType="fitCenter"
-        app:inEditMode="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lytToolbar"

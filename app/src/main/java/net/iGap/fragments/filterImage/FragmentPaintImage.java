@@ -9,9 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -34,13 +32,15 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
-import net.iGap.module.AttachFile;
-import net.iGap.module.PaintImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import ja.burhanrashid52.photoeditor.PhotoEditor;
+import ja.burhanrashid52.photoeditor.PhotoEditorView;
+import ja.burhanrashid52.photoeditor.SaveSettings;
 
 public class FragmentPaintImage extends Fragment {
     private static String PATH = "net.iGap.fragments.filterImage.path";
@@ -48,12 +48,14 @@ public class FragmentPaintImage extends Fragment {
     private Bitmap finalImage;
 
     private boolean isChange = false;
-    private int minBrushSize = 12;
+    private int minBrushSize = 6;
     private int brushSize = minBrushSize;
     private int paintColor = Color.BLACK;
     private SeekBar skBrushSize;
-    private PaintImageView paintImageView;
+    private PhotoEditorView paintImageView;
+    private PhotoEditor photoEditor;
     private TextView closeRevertBtn;
+    private View btnOk;
 
     public FragmentPaintImage() {
     }
@@ -88,29 +90,33 @@ public class FragmentPaintImage extends Fragment {
         ColorSeekBar colorSeekBar = view.findViewById(R.id.color_seek_bar);
         paintImageView = view.findViewById(R.id.paintView);
         closeRevertBtn = view.findViewById(R.id.pu_txt_agreeImage);
-        paintImageView.setStrokeColor(paintColor);
+
+        photoEditor = new PhotoEditor.Builder(getContext(), paintImageView)
+                .setPinchTextScalable(true)
+                .build();
+
+        photoEditor.setBrushDrawingMode(true);
+        photoEditor.setBrushSize(brushSize);
+        photoEditor.setBrushColor(paintColor);
 
         colorSeekBar.setOnColorChangeListener(i -> {
             paintColor = i;
-            paintImageView.setStrokeColor(paintColor);
+            photoEditor.setBrushColor(paintColor);
         });
 
         skBrushSize = view.findViewById(R.id.seekbar_brushSize);
         skBrushSize.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN));
 
-        paintImageView.setImageURI(Uri.parse(path));
+        paintImageView.getSource().setImageURI(Uri.parse(path));
         initDialogBrush();
 
-        view.findViewById(R.id.pu_txt_ok).setOnClickListener(v -> {
+        btnOk = view.findViewById(R.id.pu_txt_ok);
+        btnOk.setOnClickListener(v -> {
             saveImageAndFinish();
         });
 
         closeRevertBtn.setOnClickListener(v -> {
-            if (paintImageView.getPaths().size() > 0) {
-                paintImageView.undo();
-            } else {
-                popBackStackFragment();
-            }
+            popBackStackFragment();
         });
 
         closeRevertBtn.setOnLongClickListener(v -> {
@@ -118,30 +124,46 @@ public class FragmentPaintImage extends Fragment {
             return false;
         });
 
-        paintImageView.getOnPathChanged().observe(getViewLifecycleOwner(), count -> {
-            closeRevertBtn.setText(count == 0 ? R.string.close_icon : R.string.forward_icon);
-        });
-
     }
 
     private void saveImageAndFinish() {
         if (getActivity() == null) return;
-        BitmapDrawable bd = (BitmapDrawable) paintImageView.getDrawable();
-        if (bd == null || bd.getBitmap() == null) {
-            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
-            return;
+        btnOk.setEnabled(false);
+        try {
+
+            String savedPath = G.DIR_TEMP + "/" + System.currentTimeMillis() + "_Painted.png";
+            File imageFile = new File(savedPath);
+
+            imageFile.createNewFile();
+
+            SaveSettings saveSettings = new SaveSettings.Builder()
+                    .setTransparencyEnabled(true)
+                    .build();
+
+            photoEditor.saveAsFile(imageFile.getAbsolutePath(), saveSettings, new PhotoEditor.OnSaveListener() {
+                @Override
+                public void onSuccess(@NonNull String imagePath) {
+                    if (FragmentEditImage.updateImage != null) {
+                        FragmentEditImage.updateImage.result(imagePath);
+                    }
+                    popBackStackFragment();
+                }
+
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    G.runOnUiThread(() -> {
+                        btnOk.setEnabled(true);
+                        if (getActivity() != null) {
+                            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        } catch (IOException e) {
+            btnOk.setEnabled(true);
+            e.printStackTrace();
         }
-        finalImage = bd.getBitmap();
-        final String path;
-        if (Build.VERSION.SDK_INT < 29) {
-            path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-        } else {
-            path = storeBitmapInCache(finalImage);
-        }
-        if (FragmentEditImage.updateImage != null && path != null) {
-            FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
-        }
-        popBackStackFragment();
+
     }
 
     private String storeBitmapInCache(Bitmap bitmap) {
@@ -178,7 +200,8 @@ public class FragmentPaintImage extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                brushSize = seekBar.getProgress() + minBrushSize;
+                photoEditor.setBrushSize(brushSize);
             }
 
             @Override
@@ -187,8 +210,7 @@ public class FragmentPaintImage extends Fragment {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                brushSize = progress + minBrushSize;
-                paintImageView.setStrokeWidth(brushSize);
+
             }
         });
     }
