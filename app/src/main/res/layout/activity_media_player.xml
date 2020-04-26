@@ -131,7 +131,7 @@
                     android:text="@string/back_icon"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -148,7 +148,7 @@
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="@id/ml_btn_back"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/ml_btn_back" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

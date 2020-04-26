@@ -3637,14 +3637,16 @@ public class FragmentChat extends BaseFragment
                 suggestedRecyclerView.setClipToPadding(false);
                 suggestedRecyclerView.setPadding(LayoutCreator.dp(2), LayoutCreator.dp(3), LayoutCreator.dp(8), LayoutCreator.dp(2));
                 suggestedAdapter.setListener(structIGSticker -> {
-                    sendStickerAsMessage(structIGSticker);
                     lastChar = null;
-                    edtChat.setText("");
                     suggestedLayout.setVisibility(View.GONE);
                     suggestedAdapter.clearData();
                     suggestedRecyclerView.scrollToPosition(0);
+
                     if (disposable != null && !disposable.isDisposed())
                         disposable.dispose();
+
+                    edtChat.setText("");
+                    sendStickerAsMessage(structIGSticker);
                 });
 
                 suggestedLayout.addView(suggestedRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
@@ -3655,7 +3657,7 @@ public class FragmentChat extends BaseFragment
 
             disposable = stickerRepository
                     .getStickerByEmoji(lastChar)
-                    .filter(structIGStickers -> structIGStickers.size() > 0)
+                    .filter(structIGStickers -> structIGStickers.size() > 0 && lastChar != null)
                     .subscribe(structIGStickers -> {
                         suggestedAdapter.setIgStickers(structIGStickers);
                         suggestedLayout.setVisibility(View.VISIBLE);
@@ -4573,7 +4575,8 @@ public class FragmentChat extends BaseFragment
     private void openFragmentAddStickerToFavorite(String groupId) {
         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, isChatReadOnly);
+        boolean canSendSticker = currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights().isCanSendSticker();
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, mustCheckPermission() ? !canSendSticker || isChatReadOnly : isChatReadOnly);
         dialogFragment.setListener(this::sendStickerAsMessage);
 
         if (getFragmentManager() != null) {
