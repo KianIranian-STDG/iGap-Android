@@ -4575,7 +4575,8 @@ public class FragmentChat extends BaseFragment
     private void openFragmentAddStickerToFavorite(String groupId) {
         StructIGStickerGroup stickerGroup = new StructIGStickerGroup(groupId);
 
-        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, isChatReadOnly);
+        boolean canSendSticker = currentRoomAccess != null && currentRoomAccess.getRealmPostMessageRights().isCanSendSticker();
+        StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, mustCheckPermission() ? !canSendSticker || isChatReadOnly : isChatReadOnly);
         dialogFragment.setListener(this::sendStickerAsMessage);
 
         if (getFragmentManager() != null) {
