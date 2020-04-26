@@ -56,6 +56,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     public static final int STICKER = 1;
 
     public boolean isShow;
+    private boolean hasStickerPermission;
     public int currentPage;
 
     private ViewPager viewPager;
@@ -578,7 +579,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     }
 
     private void checkStickerEmptyView(int groupSize) {
-        if (groupSize == 0) {
+        if (groupSize == 0 && hasStickerPermission) {
             emptyIv = new AppCompatImageView(getContext());
             emptyIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.empty_chat));
             emptyIv.setOnClickListener(v -> listener.onAddStickerClicked());
@@ -612,6 +613,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     }
 
     private void checkStickerPermission(boolean canSendSticker) {
+        hasStickerPermission = canSendSticker;
         if (!canSendSticker) {
             emptyTv = new AppCompatTextView(getContext());
             emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
