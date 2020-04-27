@@ -245,6 +245,8 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
     }
 
     public String getRegulationsAddress() {
+        if (requestedAsset == null)
+            return "";
         return requestedAsset.getRegulations();
     }
 

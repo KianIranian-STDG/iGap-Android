@@ -57,6 +57,7 @@ public class KuknosAsset {
         private double saleMax;
         @SerializedName("whitepaper")
         private String regulations;
+        private boolean isTrusted = false;
 
 
         public org.stellar.sdk.Asset getAsset() {
@@ -185,6 +186,14 @@ public class KuknosAsset {
 
         public String getRegulations() {
             return regulations;
+        }
+
+        public boolean isTrusted() {
+            return isTrusted;
+        }
+
+        public void setTrusted(boolean trusted) {
+            isTrusted = trusted;
         }
     }
 }

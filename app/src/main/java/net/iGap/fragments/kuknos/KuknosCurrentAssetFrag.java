@@ -103,7 +103,7 @@ public class KuknosCurrentAssetFrag extends BaseAPIViewFrag<KuknosCurrentAssetVM
     }
 
     private void openRegulationsBS(int position) {
-        if (viewModel.getRegulationsAddress(position) == null || viewModel.getRegulationsAddress(position).length() == 0) {
+        if (viewModel.getRegulationsAddress(position) == null || viewModel.getRegulationsAddress(position).length() < 4) {
             addAsset(position);
             return;
         }

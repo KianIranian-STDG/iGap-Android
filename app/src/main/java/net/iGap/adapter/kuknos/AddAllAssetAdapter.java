@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class AddAllAssetAdapter extends RecyclerView.Adapter<AddAllAssetAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title;
+        private TextView title, icon;
         private CardView container;
 
         public ViewHolder(@NonNull View itemView) {
@@ -57,12 +58,23 @@ public class AddAllAssetAdapter extends RecyclerView.Adapter<AddAllAssetAdapter.
 
             title = itemView.findViewById(R.id.cellAddAssetTitle);
             container = itemView.findViewById(R.id.cellAddAssetContainer);
+            icon = itemView.findViewById(R.id.addIcon);
 
         }
 
         public void initView(int position) {
             title.setText(mdata.get(position).getAsset().getType().equals("native") ? "PMN" : mdata.get(position).getAssetCode());
-            container.setOnClickListener(v -> listener.onAdd(position));
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mdata.get(position).isTrusted())
+                        listener.onAdd(position);
+                    else
+                        HelperError.showSnackMessage(context.getResources().getString(R.string.kuknos_addAsset_alreadyTrusted), true);
+                }
+            });
+            if (mdata.get(position).isTrusted())
+                icon.setText(R.string.check_icon);
         }
     }
 
