@@ -1,5 +1,7 @@
 package net.iGap.viewmodel.kuknos;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
@@ -25,6 +27,7 @@ public class KuknosCurrentAssetVM extends BaseAPIViewModel {
     private MutableLiveData<Integer> openAddList;
     // 0 : is current  assets - 1 : is all active assets
     private int mode;
+    private KuknosBalance usersAssets = null;
 
     public KuknosCurrentAssetVM() {
         assetPageMutableLiveData = new MutableLiveData<>();
@@ -35,10 +38,7 @@ public class KuknosCurrentAssetVM extends BaseAPIViewModel {
     }
 
     public void getData() {
-        if (mode == 0)
-            getAccountDataFromServer();
-        else
-            getAssetDataFromServer();
+        getAccountDataFromServer();
     }
 
     private void getAccountDataFromServer() {
@@ -47,20 +47,28 @@ public class KuknosCurrentAssetVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
                 //todo fix it here
-                accountPageMutableLiveData.setValue(data.getData());
                 progressState.setValue(false);
+                if (mode == 1) {
+                    usersAssets = data.getData();
+                    getAssetDataFromServer();
+                } else
+                    accountPageMutableLiveData.setValue(data.getData());
             }
 
             @Override
             public void onError(String errorM) {
                 error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
+                if (mode == 1)
+                    getAssetDataFromServer();
             }
 
             @Override
             public void onFailed() {
                 error.setValue(new KuknosError(true, "Fail to get data", "0", R.string.kuknos_send_errorServer));
                 progressState.setValue(false);
+                if (mode == 1)
+                    getAssetDataFromServer();
             }
         });
     }
@@ -70,7 +78,24 @@ public class KuknosCurrentAssetVM extends BaseAPIViewModel {
         tradeRepo.getAssets(this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
-                assetPageMutableLiveData.setValue(data.getData());
+                KuknosAsset temp = data.getData();
+                if (usersAssets != null && usersAssets.getAssets().size() > 0) {
+                    for (KuknosBalance.Balance tempExist : usersAssets.getAssets()) {
+                        for (int i = 0; i < temp.getAssets().size(); i++) {
+                            Log.d("amini", "onSuccess: " + tempExist.getAssetCode() + " " + temp.getAssets().get(i).getAssetCode());
+                            if (tempExist.getAssetCode() == null) {
+                                if (temp.getAssets().get(i).getAssetCode().equals("PMN")) {
+                                    temp.getAssets().get(i).setTrusted(true);
+                                    break;
+                                }
+                            } else if (tempExist.getAssetCode().equals(temp.getAssets().get(i).getAssetCode())) {
+                                temp.getAssets().get(i).setTrusted(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+                assetPageMutableLiveData.setValue(temp);
                 /*advAssetPageMutableLiveData.setValue(data.getData());*/
                 progressState.setValue(false);
             }

@@ -2602,4 +2602,5 @@
     <string name="owner">سازنده</string>
     <string name="kuknos_buy_noPrice">قیمت این توکن موجود نیست.</string>
     <string name="kuknos_NewAsset_title">دارایی های جدید</string>
+    <string name="kuknos_addAsset_alreadyTrusted">شما هم اکنون این توکن را در کیف پول خود دارید.</string>
 </resources>
