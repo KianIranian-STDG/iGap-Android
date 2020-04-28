@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.helper.HelperLog;
 import net.iGap.model.kuknos.KuknosError;
 import net.iGap.model.kuknos.KuknosSignupM;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
@@ -12,6 +13,7 @@ import net.iGap.module.kuknos.mnemonic.WalletException;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.kuknos.UserRepo;
 
+// this page is deleted!!
 public class KuknosRestorePassVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosError> error;
@@ -52,6 +54,7 @@ public class KuknosRestorePassVM extends BaseAPIViewModel {
         } catch (WalletException e) {
             error.setValue(new KuknosError(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
+            HelperLog.setErrorLog(e);
         }
         checkUserInfo();
     }

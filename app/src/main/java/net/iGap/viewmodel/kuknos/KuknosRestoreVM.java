@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.helper.HelperLog;
 import net.iGap.model.kuknos.KuknosError;
 import net.iGap.model.kuknos.KuknosSignupM;
 import net.iGap.model.kuknos.Parsian.KuknosResponseModel;
@@ -77,6 +78,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         } catch (WalletException e) {
             error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
+            HelperLog.setErrorLog(e);
         }
     }
 
