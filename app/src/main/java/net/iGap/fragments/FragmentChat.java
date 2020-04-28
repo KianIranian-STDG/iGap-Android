@@ -851,7 +851,7 @@ public class FragmentChat extends BaseFragment
             sendMoney.setVisibility(View.VISIBLE);
         }
 
-        if (currentRoomAccess != null) {
+        if (currentRoomAccess != null && getRoom() != null) {
             checkRoomAccess(currentRoomAccess);
 
             roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
@@ -868,7 +868,7 @@ public class FragmentChat extends BaseFragment
         if (isNotJoin)
             return;
 
-        if (realmRoomAccess != null && realmRoomAccess.isValid()) {
+        if (realmRoomAccess != null && realmRoomAccess.isValid() && getRoom() != null) {
             if (chatType == CHANNEL) {
                 if (realmRoomAccess.isCanPostMessage()) {
                     rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
@@ -928,7 +928,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private boolean currentRoleIsOwnerOrAdmin() {
-        return getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP) && getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) || getRoom().getChannelRoom().getRole().equals(ChannelChatRole.OWNER) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN) || getRoom().getGroupRoom().getRole().equals(GroupChatRole.OWNER);
+        return getRoom() != null && getRoom().getType() != null && (getRoom().getType().equals(CHANNEL) || getRoom().getType().equals(GROUP) && getRoom().getType().equals(CHANNEL) ? getRoom().getChannelRoom().getRole().equals(ChannelChatRole.ADMIN) || getRoom().getChannelRoom().getRole().equals(ChannelChatRole.OWNER) : getRoom().getGroupRoom().getRole().equals(GroupChatRole.ADMIN) || getRoom().getGroupRoom().getRole().equals(GroupChatRole.OWNER));
     }
 
     private void setupIntentReceiverForGetDataInTwoPanMode() {
