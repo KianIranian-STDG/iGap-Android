@@ -122,7 +122,7 @@
                     style="@style/myIconTextViewStyle"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:text="@string/scan_qr_code_icon"
+                    android:text="@string/history_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="@dimen/dp8"
-                    android:text="انتخاب از مخاطبین"
+                    android:text="شماره های قبلی"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_history"
                     app:layout_constraintStart_toEndOf="@+id/iv_history"
                     app:layout_constraintTop_toTopOf="@+id/iv_history" />
