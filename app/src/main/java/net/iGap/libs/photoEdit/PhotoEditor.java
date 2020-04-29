@@ -2,10 +2,8 @@ package net.iGap.libs.photoEdit;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,6 +12,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.annotation.UiThread;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 
@@ -34,23 +33,16 @@ import java.util.List;
  */
 public class PhotoEditor implements BrushViewChangeListener {
 
-    private final LayoutInflater mLayoutInflater;
     private PhotoEditorView parentView;
-    private ImageView imageView;
-    private View deleteView;
     private BrushDrawingView brushDrawingView;
     private List<View> addedViews;
     private List<View> redoViews;
+    private MutableLiveData<Integer> onPaintChanged = new MutableLiveData<>();
     private OnPhotoEditorListener mOnPhotoEditorListener;
-    private boolean isTextPinchZoomable;
 
     private PhotoEditor(Builder builder) {
         this.parentView = builder.parentView;
-        this.imageView = builder.imageView;
-        this.deleteView = builder.deleteView;
         this.brushDrawingView = builder.brushDrawingView;
-        this.isTextPinchZoomable = builder.isTextPinchZoomable;
-        mLayoutInflater = (LayoutInflater) builder.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         brushDrawingView.setBrushViewChangeListener(this);
         addedViews = new ArrayList<>();
         redoViews = new ArrayList<>();
@@ -91,12 +83,17 @@ public class PhotoEditor implements BrushViewChangeListener {
             if (addedViews.contains(removedView)) {
                 parentView.removeView(removedView);
                 addedViews.remove(removedView);
+                onPaintChanged.setValue(addedViews.size());
                 redoViews.add(removedView);
                 if (mOnPhotoEditorListener != null) {
                     mOnPhotoEditorListener.onRemoveViewListener(viewType, addedViews.size());
                 }
             }
         }
+    }
+
+    public MutableLiveData<Integer> getOnPaintChanged() {
+        return onPaintChanged;
     }
 
     /**
@@ -113,6 +110,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 addedViews.remove(addedViews.size() - 1);
                 parentView.removeView(removeView);
                 redoViews.add(removeView);
+                onPaintChanged.setValue(addedViews.size());
             }
             if (mOnPhotoEditorListener != null) {
                 Object viewTag = removeView.getTag();
@@ -138,6 +136,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 redoViews.remove(redoViews.size() - 1);
                 parentView.addView(redoView);
                 addedViews.add(redoView);
+                onPaintChanged.setValue(addedViews.size());
             }
             Object viewTag = redoView.getTag();
             if (mOnPhotoEditorListener != null && viewTag != null && viewTag instanceof ViewType) {
@@ -165,6 +164,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         }
         addedViews.clear();
         redoViews.clear();
+        onPaintChanged.setValue(addedViews.size());
         clearBrushAllViews();
     }
 
@@ -231,6 +231,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             redoViews.remove(redoViews.size() - 1);
         }
         addedViews.add(brushDrawingView);
+        onPaintChanged.setValue(addedViews.size());
         if (mOnPhotoEditorListener != null) {
             mOnPhotoEditorListener.onAddViewListener(ViewType.BRUSH_DRAWING, addedViews.size());
         }
@@ -243,6 +244,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             if (!(removeView instanceof BrushDrawingView)) {
                 parentView.removeView(removeView);
             }
+            onPaintChanged.setValue(addedViews.size());
             redoViews.add(removeView);
         }
         if (mOnPhotoEditorListener != null) {
@@ -270,36 +272,17 @@ public class PhotoEditor implements BrushViewChangeListener {
      */
     public static class Builder {
 
-        private Context context;
         private PhotoEditorView parentView;
-        private ImageView imageView;
-        private View deleteView;
         private BrushDrawingView brushDrawingView;
-        private boolean isTextPinchZoomable = true;
 
         /**
          * Building a PhotoEditor which requires a Context and PhotoEditorView
          * which we have setup in our xml layout
-         *
-         * @param context         context
          * @param photoEditorView {@link PhotoEditorView}
          */
-        public Builder(Context context, PhotoEditorView photoEditorView) {
-            this.context = context;
+        public Builder(PhotoEditorView photoEditorView) {
             parentView = photoEditorView;
-            imageView = photoEditorView.getSource();
             brushDrawingView = photoEditorView.getBrushDrawingView();
-        }
-
-        /**
-         * set false to disable pinch to zoom on text insertion.By deafult its true
-         *
-         * @param isTextPinchZoomable flag to make pinch to zoom
-         * @return {@link Builder} instant to build {@link PhotoEditor}
-         */
-        public Builder setPinchTextScalable(boolean isTextPinchZoomable) {
-            this.isTextPinchZoomable = isTextPinchZoomable;
-            return this;
         }
 
         /**

@@ -84,9 +84,7 @@ public class FragmentPaintImage extends Fragment {
         PhotoEditorView paintImageView = view.findViewById(R.id.paintView);
         TextView closeRevertBtn = view.findViewById(R.id.pu_txt_agreeImage);
 
-        photoEditor = new PhotoEditor.Builder(getContext(), paintImageView)
-                .setPinchTextScalable(true)
-                .build();
+        photoEditor = new PhotoEditor.Builder(paintImageView).build();
 
         photoEditor.setBrushDrawingMode(true);
         photoEditor.setBrushSize(brushSize);
@@ -95,6 +93,15 @@ public class FragmentPaintImage extends Fragment {
         colorSeekBar.setOnColorChangeListener(i -> {
             paintColor = i;
             photoEditor.setBrushColor(paintColor);
+        });
+
+        photoEditor.getOnPaintChanged().observe(getViewLifecycleOwner(), count -> {
+            if (count == null) return;
+            if (count > 0) {
+                closeRevertBtn.setText(R.string.forward_icon);
+            } else {
+                closeRevertBtn.setText(R.string.close_icon);
+            }
         });
 
         skBrushSize = view.findViewById(R.id.seekbar_brushSize);
@@ -109,7 +116,15 @@ public class FragmentPaintImage extends Fragment {
         });
 
         closeRevertBtn.setOnClickListener(v -> {
-            popBackStackFragment();
+            if (photoEditor.getOnPaintChanged().getValue() != null) {
+                if (photoEditor.getOnPaintChanged().getValue() > 0) {
+                    photoEditor.undo();
+                } else {
+                    popBackStackFragment();
+                }
+            } else {
+                popBackStackFragment();
+            }
         });
 
         closeRevertBtn.setOnLongClickListener(v -> {
