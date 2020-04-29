@@ -99,22 +99,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_header" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/kuknos_tradeHistory_recycler"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/pullToRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_NOitem" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_NOitem">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/kuknos_tradeHistory_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         <ProgressBar
             android:id="@+id/kuknos_tradeHistory_ProgressV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:elevation="2dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.08"

@@ -2,6 +2,9 @@ package net.iGap.viewmodel.kuknos;
 
 import android.util.Log;
 
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -18,9 +21,6 @@ import org.stellar.sdk.responses.SubmitTransactionResponse;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
 
 public class KuknosTradeVM extends BaseAPIViewModel {
 
@@ -110,7 +110,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
 
     public void sendDataServer() {
         sendProgressState.setValue(true);
-        double price = Double.valueOf(originAmount.get()) / Double.valueOf(destAmount.get());
+        double price = Double.parseDouble(originAmount.get()) / Double.parseDouble(destAmount.get());
         Log.d("amini", "sendDataServer: " + price + " ");
         tradeRepo.manangeOffer(
                 kuknosOriginWalletsM.getValue().get(originPosition).getAsset().getType().equals("native") ? "PMN" : kuknosOriginWalletsM.getValue().get(originPosition).getAssetCode(),
@@ -151,7 +151,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
             error.setValue(new KuknosError(true, "empty origin amount", "0", R.string.kuknos_trade_emptyOriginAmount));
             return false;
         }
-        if (Integer.parseInt(originAmount.get()) == 0) {
+        if (Double.parseDouble(originAmount.get()) == 0) {
             error.setValue(new KuknosError(true, "zero origin fail", "0", R.string.kuknos_trade_zeroOriginAmount));
             return false;
         }
@@ -165,7 +165,7 @@ public class KuknosTradeVM extends BaseAPIViewModel {
             error.setValue(new KuknosError(true, "empty dest amount", "1", R.string.kuknos_trade_emptyDestAmount));
             return false;
         }
-        if (Integer.parseInt(destAmount.get()) == 0) {
+        if (Double.parseDouble(destAmount.get()) == 0) {
             error.setValue(new KuknosError(true, "zero dest fail", "1", R.string.kuknos_trade_zeroDestAmount));
             return false;
         }
