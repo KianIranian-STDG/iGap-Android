@@ -33,7 +33,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="@dimen/dp10"
             android:background="@drawable/kuknos_list_header_style"
-            app:layout_constraintBottom_toTopOf="@+id/kuknos_wHistory_recycler"
+            app:layout_constraintBottom_toTopOf="@+id/pullToRefresh"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosWHToolbar"
@@ -89,22 +89,29 @@
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/kuknos_wHistory_recycler"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/pullToRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_wHistory_header" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_wHistory_header">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/kuknos_wHistory_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scrollbars="vertical" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
             android:id="@+id/kuknos_wHistory_ProgressV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:elevation="2dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.08"

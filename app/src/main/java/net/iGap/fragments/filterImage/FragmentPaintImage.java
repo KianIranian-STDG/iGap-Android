@@ -24,37 +24,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.divyanshu.colorseekbar.ColorSeekBar;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
+import net.iGap.libs.ColorSeekBar;
+import net.iGap.libs.photoEdit.PhotoEditor;
+import net.iGap.libs.photoEdit.PhotoEditorView;
+import net.iGap.libs.photoEdit.SaveSettings;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import ja.burhanrashid52.photoeditor.PhotoEditor;
-import ja.burhanrashid52.photoeditor.PhotoEditorView;
-import ja.burhanrashid52.photoeditor.SaveSettings;
-
 public class FragmentPaintImage extends Fragment {
     private static String PATH = "net.iGap.fragments.filterImage.path";
     private String path;
-    private Bitmap finalImage;
-
-    private boolean isChange = false;
     private int minBrushSize = 6;
     private int brushSize = minBrushSize;
     private int paintColor = Color.BLACK;
     private SeekBar skBrushSize;
-    private PhotoEditorView paintImageView;
     private PhotoEditor photoEditor;
-    private TextView closeRevertBtn;
     private View btnOk;
 
     public FragmentPaintImage() {
@@ -88,12 +81,10 @@ public class FragmentPaintImage extends Fragment {
         }
 
         ColorSeekBar colorSeekBar = view.findViewById(R.id.color_seek_bar);
-        paintImageView = view.findViewById(R.id.paintView);
-        closeRevertBtn = view.findViewById(R.id.pu_txt_agreeImage);
+        PhotoEditorView paintImageView = view.findViewById(R.id.paintView);
+        TextView closeRevertBtn = view.findViewById(R.id.pu_txt_agreeImage);
 
-        photoEditor = new PhotoEditor.Builder(getContext(), paintImageView)
-                .setPinchTextScalable(true)
-                .build();
+        photoEditor = new PhotoEditor.Builder(paintImageView).build();
 
         photoEditor.setBrushDrawingMode(true);
         photoEditor.setBrushSize(brushSize);
@@ -102,6 +93,15 @@ public class FragmentPaintImage extends Fragment {
         colorSeekBar.setOnColorChangeListener(i -> {
             paintColor = i;
             photoEditor.setBrushColor(paintColor);
+        });
+
+        photoEditor.getOnPaintChanged().observe(getViewLifecycleOwner(), count -> {
+            if (count == null) return;
+            if (count > 0) {
+                closeRevertBtn.setText(R.string.forward_icon);
+            } else {
+                closeRevertBtn.setText(R.string.close_icon);
+            }
         });
 
         skBrushSize = view.findViewById(R.id.seekbar_brushSize);
@@ -116,7 +116,15 @@ public class FragmentPaintImage extends Fragment {
         });
 
         closeRevertBtn.setOnClickListener(v -> {
-            popBackStackFragment();
+            if (photoEditor.getOnPaintChanged().getValue() != null) {
+                if (photoEditor.getOnPaintChanged().getValue() > 0) {
+                    photoEditor.undo();
+                } else {
+                    popBackStackFragment();
+                }
+            } else {
+                popBackStackFragment();
+            }
         });
 
         closeRevertBtn.setOnLongClickListener(v -> {
@@ -126,6 +134,7 @@ public class FragmentPaintImage extends Fragment {
 
     }
 
+    @SuppressLint("MissingPermission")
     private void saveImageAndFinish() {
         if (getActivity() == null) return;
         btnOk.setEnabled(false);
@@ -139,6 +148,8 @@ public class FragmentPaintImage extends Fragment {
             SaveSettings saveSettings = new SaveSettings.Builder()
                     .setTransparencyEnabled(true)
                     .build();
+
+            if (!HelperPermission.grantedUseStorage()) return;
 
             photoEditor.saveAsFile(imageFile.getAbsolutePath(), saveSettings, new PhotoEditor.OnSaveListener() {
                 @Override

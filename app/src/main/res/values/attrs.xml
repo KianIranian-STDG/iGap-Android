@@ -13,6 +13,18 @@
         <attr name="civ_fill_color" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="PhotoEditorView">
+        <attr name="photo_src" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ColorSeekBar">
+        <attr name="colorSeeds" format="reference" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="barHeight" format="dimension" />
+        <attr name="thumbBorder" format="dimension" />
+        <attr name="thumbBorderColor" format="color" />
+    </declare-styleable>
+
     <declare-styleable name="GifMoviewView">
         <attr name="gif" format="reference" />
         <attr name="paused" format="boolean" />

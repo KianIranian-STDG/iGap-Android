@@ -1,8 +1,6 @@
 package net.iGap.module.kuknos.mnemonic.mnemonic;
 
 
-import android.os.Build;
-
 import net.iGap.module.kuknos.mnemonic.util.PrimitiveUtil;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -63,10 +61,8 @@ public class Mnemonic {
 
     public static byte[] createSeed(char[] mnemonic, char[] passphrase) throws MnemonicException {
         // added for low api support
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            Security.removeProvider("BC");
-            Security.insertProviderAt(new BouncyCastleProvider(), 1);
-        }
+        Security.removeProvider("BC");
+        Security.addProvider(new BouncyCastleProvider());
 
         char[] saltChars = new char[]{'m', 'n', 'e', 'm', 'o', 'n', 'i', 'c'};
         if (passphrase != null) {

@@ -1,5 +1,7 @@
 package net.iGap.api.apiService;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -9,6 +11,7 @@ import net.iGap.G;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -29,6 +32,10 @@ public class IgapRetrofitInterceptor implements Interceptor {
 
     private boolean isRefreshing;
 
+    public static final String CONNECT_TIMEOUT = "CONNECT_TIMEOUT";
+    public static final String READ_TIMEOUT = "READ_TIMEOUT";
+    public static final String WRITE_TIMEOUT = "WRITE_TIMEOUT";
+
     private TokenContainer tokenContainer = TokenContainer.getInstance();
 
     IgapRetrofitInterceptor() {
@@ -41,6 +48,28 @@ public class IgapRetrofitInterceptor implements Interceptor {
         Request original = chain.request();
         Request request = chain.request();
 
+        // start of checking for custom time outs
+
+        int connectTimeout = chain.connectTimeoutMillis();
+        int readTimeout = chain.readTimeoutMillis();
+        int writeTimeout = chain.writeTimeoutMillis();
+
+        String connectNew = request.header(CONNECT_TIMEOUT);
+        String readNew = request.header(READ_TIMEOUT);
+        String writeNew = request.header(WRITE_TIMEOUT);
+
+        if (!TextUtils.isEmpty(connectNew)) {
+            connectTimeout = Integer.valueOf(connectNew);
+        }
+        if (!TextUtils.isEmpty(readNew)) {
+            readTimeout = Integer.valueOf(readNew);
+        }
+        if (!TextUtils.isEmpty(writeNew)) {
+            writeTimeout = Integer.valueOf(writeNew);
+        }
+
+        // end of checking for custom time outs
+
         Request.Builder builder = request.newBuilder();
         builder.header("Authorization", tokenContainer.getToken());
         builder.header("spec", getSpecifications());
@@ -50,7 +79,11 @@ public class IgapRetrofitInterceptor implements Interceptor {
         String token = tokenContainer.getToken();
 
         request = builder.build();
-        Response response = chain.proceed(request);
+        Response response = chain
+                .withConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
+                .withReadTimeout(readTimeout, TimeUnit.MILLISECONDS)
+                .withWriteTimeout(writeTimeout, TimeUnit.MILLISECONDS)
+                .proceed(request);
 
         if (response.code() == 401) {
             synchronized (this) {
@@ -67,7 +100,11 @@ public class IgapRetrofitInterceptor implements Interceptor {
                 if (tokenContainer.getToken() != null) {
                     builder.header("Authorization", tokenContainer.getToken());
                     request = builder.build();
-                    return chain.proceed(request);
+                    return chain
+                            .withConnectTimeout(connectTimeout, TimeUnit.SECONDS)
+                            .withReadTimeout(readTimeout, TimeUnit.SECONDS)
+                            .withWriteTimeout(writeTimeout, TimeUnit.SECONDS)
+                            .proceed(request);
                 }
             }
         }

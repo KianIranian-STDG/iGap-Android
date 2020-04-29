@@ -5,6 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -13,12 +19,6 @@ import net.iGap.adapter.kuknos.WalletTradeHistoryAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosTraceHistoryBinding;
 import net.iGap.viewmodel.kuknos.KuknosTradeHistoryVM;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class KuknosTradeHistoryFrag extends BaseAPIViewFrag<KuknosTradeHistoryVM> {
 
@@ -56,6 +56,8 @@ public class KuknosTradeHistoryFrag extends BaseAPIViewFrag<KuknosTradeHistoryVM
         binding.kuknosTradeHistoryRecycler.setLayoutManager(layoutManager);
 
         viewModel.getDataFromServer();
+        binding.pullToRefresh.setRefreshing(true);
+        binding.pullToRefresh.setOnRefreshListener(() -> viewModel.getDataFromServer());
 
         onError();
         onProgressVisibility();
@@ -94,11 +96,12 @@ public class KuknosTradeHistoryFrag extends BaseAPIViewFrag<KuknosTradeHistoryVM
 
     private void onProgressVisibility() {
         viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
+            binding.pullToRefresh.setRefreshing(aBoolean);
+            /*if (aBoolean) {
                 binding.kuknosTradeHistoryProgressV.setVisibility(View.VISIBLE);
             } else {
                 binding.kuknosTradeHistoryProgressV.setVisibility(View.GONE);
-            }
+            }*/
         });
     }
 
