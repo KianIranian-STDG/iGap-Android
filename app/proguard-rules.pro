@@ -311,3 +311,6 @@
 -dontwarn android.content.pm.PackageInfo
 -keep public class com.android.installreferrer.** { *; }
 
+# prevent proguard from destroying bouncy castle for kuknos
+-dontwarn org.bouncycastle.**
+-keep class org.bouncycastle.**
