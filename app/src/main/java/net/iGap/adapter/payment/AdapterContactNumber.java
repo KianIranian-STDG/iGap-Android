@@ -26,7 +26,7 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
     @Override
     public int getItemCount() {
-        return 8;
+        return 4;
     }
 
     public class ContactNumberViewHolder extends RecyclerView.ViewHolder {
