@@ -6,6 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -16,12 +22,6 @@ import net.iGap.databinding.FragmentKuknosWHistoryBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.kuknos.KuknosWHistoryVM;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
 
@@ -75,6 +75,8 @@ public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
         binding.kuknosWHistoryRecycler.setLayoutManager(layoutManager);
 
         viewModel.getDataFromServer();
+        binding.pullToRefresh.setRefreshing(true);
+        binding.pullToRefresh.setOnRefreshListener(() -> viewModel.getDataFromServer());
 
         onError();
         onProgressVisibility();
@@ -111,11 +113,12 @@ public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
 
     private void onProgressVisibility() {
         viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
+            binding.pullToRefresh.setRefreshing(aBoolean);
+            /*if (aBoolean) {
                 binding.kuknosWHistoryProgressV.setVisibility(View.VISIBLE);
             } else {
                 binding.kuknosWHistoryProgressV.setVisibility(View.GONE);
-            }
+            }*/
         });
     }
 
