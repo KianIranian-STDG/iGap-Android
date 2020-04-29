@@ -72,19 +72,16 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosSRToolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        binding.fragKuknosSRkeysET.setOnLongClickListener(v -> {
+        binding.fragKuknosSRkeysET.setOnClickListener(v -> {
             copyWalletID(getResources().getString(R.string.kuknos_accountInfo_recoveryKey_title), kuknosShowRecoveryKeyVM.getRecoveryKeys().get());
-            return false;
         });
 
-        binding.fragKuknosSRPrivatekeyET.setOnLongClickListener(v -> {
+        binding.fragKuknosSRPrivatekeyET.setOnClickListener(v -> {
             copyWalletID(getResources().getString(R.string.kuknos_accountInfo_privateKey_title), kuknosShowRecoveryKeyVM.getPrivateKey().get());
-            return false;
         });
 
-        binding.fragKuknosSRpublickeyET.setOnLongClickListener(v -> {
+        binding.fragKuknosSRpublickeyET.setOnClickListener(v -> {
             copyWalletID(getResources().getString(R.string.kuknos_accountInfo_publicKey_title), kuknosShowRecoveryKeyVM.getPublicKey().get());
-            return false;
         });
 
         onErrorObserver();

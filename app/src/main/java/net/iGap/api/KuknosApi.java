@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.api.apiService.IgapRetrofitInterceptor;
 import net.iGap.model.kuknos.KuknosPaymentResponse;
 import net.iGap.model.kuknos.Parsian.KuknosAsset;
 import net.iGap.model.kuknos.Parsian.KuknosBalance;
@@ -22,6 +23,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 public interface KuknosApi {
@@ -39,6 +41,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("create-account")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel> createAccount(@Field("first_name") String firstName,
                                             @Field("last_name") String lastName,
                                             @Field("federation_name") String federationName,
