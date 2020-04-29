@@ -546,10 +546,10 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingBottom="@dimen/dp4"
                     android:singleLine="true"
-                    android:text="Today"
+                    android:text="@string/today"
                     android:textAllCaps="false"
                     android:textColor="?attr/iGapTitleTextColor"
-                    android:textSize="@dimen/dp12" />
+                    android:textSize="@dimen/smallTextSize" />
 
 
             </RelativeLayout>

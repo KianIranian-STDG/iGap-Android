@@ -58,7 +58,7 @@
         app:layout_constraintTop_toTopOf="@id/lytToolbar"
         app:layout_constraintBottom_toBottomOf="@id/lytToolbar" />
 
-    <ja.burhanrashid52.photoeditor.PhotoEditorView
+    <net.iGap.libs.photoEdit.PhotoEditorView
         android:id="@+id/paintView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -106,7 +106,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/color_seek_bar" />
 
-    <com.divyanshu.colorseekbar.ColorSeekBar
+    <net.iGap.libs.ColorSeekBar
         app:thumbBorderColor="@android:color/white"
         android:outlineAmbientShadowColor="@color/white"
         android:id="@+id/color_seek_bar"
