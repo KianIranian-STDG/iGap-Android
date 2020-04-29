@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +10,27 @@ import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
+import com.google.android.material.button.MaterialButton;
 
 import net.iGap.R;
+import net.iGap.adapter.payment.AdapterContactNumber;
+import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 public class FragmentPaymentChargeNewUi extends BaseFragment {
     private LinearLayout toolbar;
-    private ConstraintLayout frameHamrah, frameIrancell, frameRightel;
+    private ConstraintLayout frameHamrah, frameIrancell, frameRightel, frameContact, frameHistory;
     private RadioButton radioButtonHamrah, radioButtonIrancell, radioButtonRightel;
+    private AdapterHistoryNumber adapterHistory;
+    private AdapterContactNumber adapterContact;
 
     public static FragmentPaymentChargeNewUi newInstance() {
 
@@ -47,7 +59,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
         radioButtonIrancell = view.findViewById(R.id.radio_irancell);
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
-        radioButtonHamrah.setSelected(false);
+        frameContact = view.findViewById(R.id.frame_contact);
+        frameHistory = view.findViewById(R.id.frame_history);
 
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -64,45 +77,77 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     }
                 }).getView());
 
-        frameHamrah.setOnClickListener(v1 -> {
-            if (frameHamrah.isSelected() && radioButtonHamrah.isChecked()) {
+        radioButtonHamrah.setOnClickListener(v1 -> {
+            if (radioButtonHamrah.isChecked() && radioButtonHamrah.isSelected()) {
                 frameHamrah.setSelected(false);
                 radioButtonHamrah.setChecked(false);
             } else {
-                frameHamrah.setSelected(true);
-                radioButtonHamrah.setChecked(true);
+                SetSelected(frameHamrah, radioButtonHamrah, frameIrancell, radioButtonIrancell, frameRightel, radioButtonRightel);
             }
         });
 
-        frameIrancell.setOnClickListener(v1 -> {
-            if (frameIrancell.isSelected() && radioButtonIrancell.isChecked()) {
+        radioButtonIrancell.setOnClickListener(v1 -> {
+            if (radioButtonIrancell.isChecked() && radioButtonIrancell.isSelected()) {
                 frameIrancell.setSelected(false);
                 radioButtonIrancell.setChecked(false);
             } else {
-                frameIrancell.setSelected(true);
-                radioButtonIrancell.setChecked(true);
+                SetSelected(frameIrancell, radioButtonIrancell, frameHamrah, radioButtonHamrah, frameRightel, radioButtonRightel);
             }
         });
 
-        frameRightel.setOnClickListener(v1 -> {
-            if (frameRightel.isSelected() && radioButtonRightel.isChecked()) {
+        radioButtonRightel.setOnClickListener(v1 -> {
+            if (radioButtonRightel.isChecked() && radioButtonRightel.isSelected()) {
                 frameRightel.setSelected(false);
                 radioButtonRightel.setChecked(false);
             } else {
-                frameRightel.setSelected(true);
-                radioButtonRightel.setChecked(true);
+                SetSelected(frameRightel, radioButtonRightel, frameHamrah, radioButtonHamrah, frameIrancell, radioButtonIrancell);
             }
         });
 
+        CreateCustomDialog();
+
     }
 
-    public void OnCLickFrames(View[] views) {
-        for (int i = 0; i < views.length; i++) {
-            switch (i){
-                case 0:
+    public void SetSelected(View v0, RadioButton v1, View v2, RadioButton v3, View v4, RadioButton v5) {
+        v0.setSelected(true);
+        v1.setChecked(true);
+        v2.setSelected(false);
+        v3.setChecked(false);
+        v4.setSelected(false);
+        v5.setChecked(false);
+    }
 
+    public void CreateCustomDialog() {
+        frameContact.setOnClickListener(v -> {
+            adapterHistory = new AdapterHistoryNumber();
+            MaterialDialog dialog = new MaterialDialog.Builder(v.getContext()).customView(R.layout.popup_paymet_charge, true).build();
 
-            }
-        }
+            View view1 = dialog.getCustomView();
+            RecyclerView rv = view1.findViewById(R.id.rv_payment);
+            AppCompatTextView closeImage = view1.findViewById(R.id.iv_close);
+            MaterialButton saveBtn = view1.findViewById(R.id.btn_save);
+
+            rv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+            rv.setAdapter(adapterHistory);
+            dialog.show();
+
+            closeImage.setOnClickListener(v12 -> dialog.dismiss());
+
+            saveBtn.setOnClickListener(v13 -> {
+                // TODO: 4/28/20 save number
+            });
+        });
+
+        frameHistory.setOnClickListener(v -> {
+            adapterContact = new AdapterContactNumber();
+            MaterialDialog dialog = new MaterialDialog.Builder(v.getContext()).build();
+
+            RecyclerView rv = new RecyclerView(getContext());
+
+            rv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+            rv.setAdapter(adapterContact);
+            dialog.show();
+
+        });
     }
 }
