@@ -1,15 +1,22 @@
 package net.iGap.viewmodel.controllers;
 
-import net.iGap.helper.IGLog;
+import net.iGap.proto.ProtoSignalingOffer;
+import net.iGap.realm.RealmCallConfig;
 
 public class CallManager extends BaseController {
+
+    private long callPeerId;
+    private String currentSDP;
+    private ProtoSignalingOffer.SignalingOffer.Type currentCallType;
+
+    private RealmCallConfig currentCallConfig;
 
     private static volatile CallManager instance = null;
 
     public static CallManager getInstance() {
         CallManager localInstance = instance;
         if (localInstance == null) {
-            synchronized (IGLog.class) {
+            synchronized (CallManager.class) {
                 localInstance = instance;
                 if (localInstance == null) {
                     instance = localInstance = new CallManager();
@@ -19,9 +26,22 @@ public class CallManager extends BaseController {
         return localInstance;
     }
 
+    public void incomingCall(ProtoSignalingOffer.SignalingOfferResponse.Builder response) {
+        if (invalidCallType(response.getType()))
+            return;
+
+        callPeerId = response.getCallerUserId();
+        currentCallType = response.getType();
+        currentSDP = response.getCallerSdp();
+
+    }
 
     @Override
     public void cleanUp(boolean withListener) {
 
+    }
+
+    private boolean invalidCallType(ProtoSignalingOffer.SignalingOffer.Type type) {
+        return type == ProtoSignalingOffer.SignalingOffer.Type.SECRET_CHAT || type == ProtoSignalingOffer.SignalingOffer.Type.SCREEN_SHARING || type == ProtoSignalingOffer.SignalingOffer.Type.UNRECOGNIZED;
     }
 }
