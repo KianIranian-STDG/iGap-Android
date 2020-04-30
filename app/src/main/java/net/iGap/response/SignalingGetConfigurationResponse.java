@@ -10,21 +10,13 @@
 
 package net.iGap.response;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 import net.iGap.realm.RealmCallConfig;
 
 public class SignalingGetConfigurationResponse extends MessageHandler {
-
-    public int actionId;
-    public Object message;
-    public String identity;
-
     public SignalingGetConfigurationResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
@@ -32,7 +24,9 @@ public class SignalingGetConfigurationResponse extends MessageHandler {
         super.handler();
 
         ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder = (ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder) message;
-        RealmCallConfig.updateSignalingConfiguration(builder);
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmCallConfig.putOrUpdate(realm, builder);
+        });
     }
 
     @Override
