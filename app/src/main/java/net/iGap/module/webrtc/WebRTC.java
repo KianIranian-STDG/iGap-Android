@@ -15,9 +15,9 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.activities.ActivityCall;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmIceServer;
@@ -68,18 +68,25 @@ public class WebRTC {
     private VideoCapturer videoCapturer;
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
-    private static WebRTC webRTCInstance;
     private EglBase.Context eglBaseContext = null;
 
+    private static volatile WebRTC instance = null;
+
     public static WebRTC getInstance() {
-        if (webRTCInstance == null) {
-            webRTCInstance = new WebRTC();
+        WebRTC localInstance = instance;
+        if (localInstance == null) {
+            synchronized (WebRTC.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new WebRTC();
+                }
+            }
         }
-        return webRTCInstance;
+        return localInstance;
     }
 
     public static boolean isAlive() {
-        return webRTCInstance != null;
+        return instance != null;
     }
 
     public void muteSound() {
@@ -428,7 +435,7 @@ public class WebRTC {
 
             peerConnectionFactory = null;
             peerConnection = null;
-            webRTCInstance = null;
+            instance = null;
 
         } catch (RuntimeException e) {
             e.printStackTrace();
