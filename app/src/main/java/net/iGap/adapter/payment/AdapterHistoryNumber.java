@@ -15,7 +15,7 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
     @NonNull
     @Override
     public HistoryNumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_payment_charge_history, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_payment_charge_contact, parent, false);
         return new HistoryNumberViewHolder(view);
     }
 

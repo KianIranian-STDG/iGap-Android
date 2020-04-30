@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.button.MaterialButton;
 
 import net.iGap.R;
+import net.iGap.adapter.payment.AdapterChargeAmount;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.helper.HelperToolbar;
@@ -30,9 +32,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private RadioButton radioButtonHamrah, radioButtonIrancell, radioButtonRightel;
     private RadioGroup radioGroup;
     private AdapterContactNumber adapterContact;
+    private AdapterChargeAmount adapterAmount;
     private AdapterHistoryNumber adapterHistory;
-    private RecyclerView rvContact, rvHistory;
+    private RecyclerView rvContact, rvHistory, rvAmount;
     private AppCompatTextView chooseNumber, closeImage;
+    private MaterialButton saveBtn, amountChoose;
 
     public static FragmentPaymentChargeNewUi newInstance() {
 
@@ -61,7 +65,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         radioGroup = view.findViewById(R.id.radioGroup);
         frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
-
+        amountChoose = view.findViewById(R.id.btn_charge_type);
 
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -97,7 +101,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             }
         });
         CreateCustomDialog();
-
+        OnClickedButtons();
     }
 
 
@@ -111,7 +115,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             contactFrame = view1.findViewById(R.id.contact_frame);
             historyFrame = view1.findViewById(R.id.history_frame);
             rvContact = view1.findViewById(R.id.rv_contact);
-            MaterialButton saveBtn = view1.findViewById(R.id.btn_save);
+            saveBtn = view1.findViewById(R.id.btn_save);
 
             contactFrame.setVisibility(View.VISIBLE);
             historyFrame.setVisibility(View.GONE);
@@ -138,7 +142,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             rvHistory = view.findViewById(R.id.rv_history);
 
 
-
             chooseNumber.setText("انتخاب از شماره های قبلی");
             contactFrame.setVisibility(View.GONE);
             historyFrame.setVisibility(View.VISIBLE);
@@ -148,5 +151,17 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             dialog.show();
         });
 
+    }
+
+    public void OnClickedButtons() {
+        amountChoose.setOnClickListener(v -> {
+            adapterAmount = new AdapterChargeAmount();
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_charge, false).build();
+            View view = dialog.getCustomView();
+            rvAmount = view.findViewById(R.id.rv_payment);
+            rvAmount.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+            rvAmount.setAdapter(adapterAmount);
+            dialog.show();
+        });
     }
 }

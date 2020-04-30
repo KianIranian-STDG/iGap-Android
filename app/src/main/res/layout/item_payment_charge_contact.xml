@@ -5,19 +5,29 @@
     android:layout_height="@dimen/dp48">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/number_contact"
+        android:id="@+id/phone_Number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="@dimen/dp16"
+        android:textColor="?iGapSubtitleTextColor"
+        app:layout_constraintBottom_toBottomOf="@+id/contact_Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/contact_Name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/contact_Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="@dimen/dp16"
         android:gravity="clip_vertical"
         android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/view_line"
         android:layout_width="0dp"
         android:layout_height="2dp"
         android:background="?iGapDividerLine"
