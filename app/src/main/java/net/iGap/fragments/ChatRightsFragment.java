@@ -530,6 +530,17 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                         }
                     }
 
+                    RecyclerListView.ViewHolder linkHolder = recyclerListView.findViewHolderForAdapterPosition(sendLinkRow);
+                    if (linkHolder != null) {
+                        if (canSendText) {
+                            linkHolder.itemView.setEnabled(true);
+                        } else {
+                            canSendLink = false;
+                            ((ToggleButtonCell) linkHolder.itemView).setChecked(false);
+                            linkHolder.itemView.setEnabled(false);
+                        }
+                    }
+
                 } else if (position == sendGifRow) {
                     canSendGif = !canSendGif;
                 } else if (position == sendLinkRow) {
@@ -717,7 +728,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                     return canGetMemberList && (currentUserAccess == null || currentUserAccess.isCanAddNewMember());
                 }
             } else if (currentMode == 2 && viewType == 2) {
-                if (position == sendMediaRow || position == sendGifRow || position == sendStickerRow) {
+                if (position == sendMediaRow || position == sendGifRow || position == sendStickerRow || position == sendLinkRow) {
                     return canSendText;
                 } else if (position == addNewMemberRow) {
                     return canGetMemberList;
