@@ -13,6 +13,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,23 +28,22 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.databinding.ActivityChatBackgroundBinding;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.ChatBackgroundViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 
 import static net.iGap.helper.HelperSaveFile.getPrivateDirectory;
@@ -100,7 +100,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
             if (wallpaper != null) {
                 binding.stchfFullImage.setBackground(null);
-                Picasso.with(G.context).load(wallpaper.getImagePath()).fit().centerCrop().into(binding.stchfFullImage);
+                binding.stchfFullImage.setImageDrawable(Drawable.createFromPath(new File(wallpaper.getImagePath()).getAbsolutePath()));
                 if (wallpaper.isNew()) {
                     toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
                     toolbar.getThirdRightButton().setVisibility(View.GONE);

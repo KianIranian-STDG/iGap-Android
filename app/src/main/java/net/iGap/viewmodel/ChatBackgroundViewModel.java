@@ -9,19 +9,18 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnGetWallpaper;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StructWallpaper;
 import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.OnGetWallpaper;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.realm.RealmAttachment;
@@ -85,7 +84,7 @@ public class ChatBackgroundViewModel extends ViewModel {
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);
             if (f.exists()) {
-                loadSelectedImage.setValue(new WallpaperImage(AndroidUtils.suitablePath(backGroundPath), false));
+                loadSelectedImage.setValue(new WallpaperImage(backGroundPath, false));
             } else {
                 loadSelectedColor.setValue(new WallpaperSolidColor(Color.parseColor(backGroundPath), false));
             }
@@ -105,7 +104,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                     } else {
                         bigImagePath = wList.get(position).getPath();
                     }
-                    loadSelectedImage.setValue(new WallpaperImage(AndroidUtils.suitablePath(bigImagePath), true));
+                    loadSelectedImage.setValue(new WallpaperImage(bigImagePath, true));
                     savePath = bigImagePath;
                     isSolidColor = false;
                 } else {
