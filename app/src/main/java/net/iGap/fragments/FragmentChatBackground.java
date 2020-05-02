@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -35,6 +36,7 @@ import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.databinding.ActivityChatBackgroundBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -100,7 +102,11 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
             if (wallpaper != null) {
                 binding.stchfFullImage.setBackground(null);
-                binding.stchfFullImage.setImageDrawable(Drawable.createFromPath(new File(wallpaper.getImagePath()).getAbsolutePath()));
+                try {
+                    binding.stchfFullImage.setImageDrawable(Drawable.createFromPath(new File(wallpaper.getImagePath()).getAbsolutePath()));
+                } catch (OutOfMemoryError e) {
+                    Glide.with(binding.stchfFullImage.getContext()).load(AndroidUtils.suitablePath(wallpaper.getImagePath())).into(binding.stchfFullImage);
+                }
                 if (wallpaper.isNew()) {
                     toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
                     toolbar.getThirdRightButton().setVisibility(View.GONE);

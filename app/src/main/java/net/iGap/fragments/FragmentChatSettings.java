@@ -28,14 +28,14 @@ import com.crashlytics.android.Crashlytics;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.adapter.ThemeColorListAdapter;
 import net.iGap.databinding.FragmentChatSettingsBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
+import net.iGap.module.Theme;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentChatSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -177,7 +177,7 @@ public class FragmentChatSettings extends BaseFragment {
                     }
                 } else {
                     try {
-                        Log.wtf(this.getClass().getName(), "set color");
+                        binding.chatBackgroundImage.setImageResource(0);
                         binding.chatBackgroundImage.setBackgroundColor(Color.parseColor(backgroundPath));
                     } catch (Exception e) {
                         e.printStackTrace();
