@@ -41,12 +41,13 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.ContactChip;
+import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.Theme;
+import net.iGap.module.scrollbar.FastScroller;
+import net.iGap.module.structs.StructContactInfo;
 import net.iGap.observers.interfaces.OnSelectedList;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.module.ContactChip;
-import net.iGap.module.scrollbar.FastScroller;
-import net.iGap.module.ScrollingLinearLayoutManager;
-import net.iGap.module.structs.StructContactInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -115,7 +116,13 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
          * library does not support change text color or background color at run time until 1.0.8
          */
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
-        layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
+
+        //todo:// use material chips
+        if (G.themeColor == Theme.DARK) {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
+        } else {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
+        }
 
         chipsInput = view.findViewById(R.id.chips_input);
 
