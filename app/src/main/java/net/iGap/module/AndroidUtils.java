@@ -53,6 +53,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
@@ -401,14 +402,14 @@ public final class AndroidUtils {
      * convert bytes to human readable length
      *
      * @param bytes bytes
-     * @param si    Boolean
+     * @param si    Boolean : true is in Binary Mode and false is Decimal Mode
      * @return String
      */
     public static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
+        int unit = (!si ? 1000 : 1024);
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+        String pre = (!si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (!si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
@@ -501,7 +502,7 @@ public final class AndroidUtils {
     private static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
         md.reset();
-        byte[] buffer = input.getBytes("UTF-8");
+        byte[] buffer = input.getBytes(StandardCharsets.UTF_8);
         md.update(buffer);
         byte[] digest = md.digest();
 
