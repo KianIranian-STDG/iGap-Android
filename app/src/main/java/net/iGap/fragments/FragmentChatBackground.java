@@ -13,7 +13,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,6 +37,7 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.ChatBackgroundViewModel;
 
@@ -100,7 +100,10 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
             if (wallpaper != null) {
                 binding.stchfFullImage.setBackground(null);
-                binding.stchfFullImage.setImageDrawable(Drawable.createFromPath(new File(wallpaper.getImagePath()).getAbsolutePath()));
+
+                if (new File(wallpaper.getImagePath()).exists())
+                    ImageLoadingServiceInjector.inject().loadImage(binding.stchfFullImage, wallpaper.getImagePath(), true);
+
                 if (wallpaper.isNew()) {
                     toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
                     toolbar.getThirdRightButton().setVisibility(View.GONE);
