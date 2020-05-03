@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.IGLog;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
@@ -474,6 +476,22 @@ public class G extends ApplicationContext {
         LooperThreadHelper.getInstance();
         Metrix.initialize(this, "jpbnabzrmeqvxme");
         Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
+
+        try {
+            IGLog.e("-----------------------------------------------------------------");
+            IGLog.e("current account id " + AccountManager.getInstance().getCurrentUser().getId());
+            IGLog.e("total account  size " + AccountManager.getInstance().getUserAccountList().size());
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            if (Config.FILE_LOG_ENABLE) {
+                IGLog.e("Screen state -> " + pm.isScreenOn());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    IGLog.e("Power Save Mode -> " + pm.isPowerSaveMode());
+                }
+            }
+            IGLog.e("-----------------------------------------------------------------");
+        } catch (Exception e) {
+            IGLog.e(e);
+        }
 
         // dont remove below line please
         if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
