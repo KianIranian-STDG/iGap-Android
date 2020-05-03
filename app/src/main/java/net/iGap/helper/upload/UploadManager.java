@@ -15,7 +15,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.igap.video.compress.CompressTask;
 import net.igap.video.compress.OnCompress;
 
 import java.io.File;
