@@ -264,7 +264,7 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
         } else if (page == 5) {
 
             FragmentSecurity.isFirstSetPassword = false;
-            if (edtSetEmail.length() > 0) {
+            if (edtSetEmail.getText() != null && edtSetEmail.getText().toString().length() > 0) {
                 Pattern EMAIL_ADDRESS = patternEmail();
 
                 if (EMAIL_ADDRESS.matcher(edtSetEmail.getText().toString()).matches()) {
@@ -279,22 +279,8 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                     error(getString(R.string.invalid_email));
                 }
             } else {
-                page = 0;
-                FragmentSecurity.isSetRecoveryEmail = false;
-                new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
-
                 closeKeyboard(v);
-
-                edtSetPassword.setText("");
-                edtSetRePassword.setText("");
-                edtSetHintPassword.setText("");
-                edtSetQuestionPassOne.setText("");
-                edtSetQuestionPassTwo.setText("");
-                edtSetAnswerPassOne.setText("");
-                edtSetAnswerPassTwo.setText("");
-                edtSetEmail.setText("");
-                popBackStackFragment();
-                popBackStackFragment();
+                error(getString(R.string.invalid_email));
             }
 
 
@@ -304,21 +290,19 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                 new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString(), new RecoveryEmailCallback() {
                     @Override
                     public void confirmEmail() {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                        G.handler.post(() -> {
 
-                                //mActivity.getSupportFragmentManager().popBackStack();
-                                popBackStackFragment();
+                            page = 0;
+                            edtSetRePassword.setText("");
+                            edtSetHintPassword.setText("");
+                            edtSetQuestionPassOne.setText("");
+                            edtSetQuestionPassTwo.setText("");
+                            edtSetAnswerPassOne.setText("");
+                            edtSetAnswerPassTwo.setText("");
+                            edtSetEmail.setText("");
 
-                                edtSetRePassword.setText("");
-                                edtSetHintPassword.setText("");
-                                edtSetQuestionPassOne.setText("");
-                                edtSetQuestionPassTwo.setText("");
-                                edtSetAnswerPassOne.setText("");
-                                edtSetAnswerPassTwo.setText("");
-                                edtSetEmail.setText("");
-                            }
+                            popBackStackFragment();
+                            popBackStackFragment();
                         });
                     }
 
