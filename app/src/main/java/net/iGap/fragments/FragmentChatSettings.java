@@ -177,7 +177,7 @@ public class FragmentChatSettings extends BaseFragment {
                     }
                 } else {
                     try {
-                        Log.wtf(this.getClass().getName(), "set color");
+                        binding.chatBackgroundImage.setImageResource(0);
                         binding.chatBackgroundImage.setBackgroundColor(Color.parseColor(backgroundPath));
                     } catch (Exception e) {
                         e.printStackTrace();
