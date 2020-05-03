@@ -255,10 +255,6 @@ public class HelperNotification {
                 alarmNotification(messageToShow);
             }
 
-            IGLog.e("show notification " + notification.toString() + " for account " + accountUser.getId());
-
-            IGLog.e("-----------------------------------------END-----------------------------------------");
-
             notificationManager.notify(notificationId, notification);
         }
 
@@ -633,13 +629,9 @@ public class HelperNotification {
     }
 
     public void addMessage(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, AccountUser accountUser) {
-        IGLog.e("room id -> " + roomId + " message id " + roomMessage.getMessageId() + " for account " + accountUser.getId());
         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (room != null) {
-            IGLog.e(room.toString());
             addMessage(roomId, roomMessage, roomType, room, realm, accountUser);
-        } else {
-            IGLog.e("++++++++ room is null ++++++++++");
         }
     }
 
@@ -697,7 +689,6 @@ public class HelperNotification {
 
             if (notificationSetting != null) {
                 if (notificationSetting.getNotification() == 2 || (notificationSetting.getNotification() == 0 && !defaultAlert)) { // notification in selected room is disable
-                    IGLog.e("notification for selection room disable");
                     return;
                 }
 

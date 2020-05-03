@@ -82,7 +82,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.IGLog;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.model.PassCode;
@@ -262,7 +261,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     protected void onDestroy() {
-        IGLog.e(getClass().getSimpleName() + " on Destroy");
         super.onDestroy();
         if (G.ISRealmOK) {
             if (myPhonStateService != null) {
@@ -396,7 +394,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        IGLog.e(getClass().getSimpleName() + " on Create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

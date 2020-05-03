@@ -32,7 +32,6 @@ public class HelperMessageResponse {
 
 
     public static void handleMessage(final long roomId, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType, final ProtoResponse.Response response, final String identity) {
-        IGLog.e("Helper Message Response " + roomId + " " + roomMessage.getMessageId());
         DbManager.getInstance().doRealmTransaction(realm -> {
             /**
              * put message to realm
