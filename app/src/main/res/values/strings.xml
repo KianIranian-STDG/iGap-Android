@@ -2185,7 +2185,7 @@ Want to get it?</string>
     <string name="kuknos_viewRecoveryEP_failTitle">Fail</string>
     <string name="kuknos_logout_title">Logout</string>
     <string name="kuknos_logout_message">Warning: loging out from your wallet will wipe the information from this machine.
-        To view your wallet, you will have to go through the restoration process again.\n(If you have not set pin code, just enter 0000)</string>
+        To view your wallet, you will have to go through the restoration process again.</string>
     <string name="kuknos_logout_pin">PIN</string>
     <string name="kuknos_logout_btn">Logout</string>
     <string name="kuknos_logout_load">Loging out...</string>
