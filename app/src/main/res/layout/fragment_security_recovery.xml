@@ -16,9 +16,9 @@
     <LinearLayout
         android:id="@+id/rootRecoveryQuestionPassword"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             style="?iGapTitleTextColor"
@@ -101,7 +101,7 @@
     <LinearLayout
         android:id="@+id/rootRecoveryEmailPassword"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -161,5 +161,13 @@
             android:textSize="@dimen/dp13" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_margin="@dimen/dp10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center" />
 
 </LinearLayout>
