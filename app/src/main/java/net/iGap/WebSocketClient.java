@@ -66,7 +66,7 @@ public class WebSocketClient {
                     );
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("Connection on Connected");
+                        IGLog.e("on Connected");
                     }
 
                     super.onConnected(websocket, headers);
@@ -85,9 +85,9 @@ public class WebSocketClient {
                     Log.wtf(this.getClass().getName(), "onError");
 
 
-//                    if (Config.FILE_LOG_ENABLE) {
-//                        IGLog.e("on onError " + cause.getMessage());
-//                    }
+                    if (Config.FILE_LOG_ENABLE) {
+                        IGLog.e("on onError " + cause.getMessage());
+                    }
 
                     super.onError(websocket, cause);
                 }
@@ -126,7 +126,7 @@ public class WebSocketClient {
                     );
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("Connection on Disconnected ");
+                        IGLog.e("on onDisconnected ");
                     }
 
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
