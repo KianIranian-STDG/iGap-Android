@@ -54,7 +54,7 @@
                     android:paddingRight="@dimen/dp20"
                     android:text="@string/two_step_verification_description"
                     android:textColor="?iGapSubtitleTextColor"
-                    android:textSize="@dimen/dp14"
+                    android:textSize="@dimen/standardTextSize"
                     android:textStyle="normal" />
 
                 <com.google.android.material.button.MaterialButton
@@ -370,7 +370,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp32"
                 android:gravity="center"
-                android:text="@string/your_email"
+                android:text="@string/email"
                 android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 

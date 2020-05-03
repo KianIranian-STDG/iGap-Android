@@ -124,6 +124,7 @@
             android:layout_marginTop="@dimen/dp32"
             android:layout_marginEnd="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
+            android:singleLine="true"
             android:gravity="center"
             android:textSize="@dimen/dp13" />
 
