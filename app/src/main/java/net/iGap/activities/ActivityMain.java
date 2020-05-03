@@ -38,6 +38,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -77,6 +82,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.IGLog;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.model.PassCode;
@@ -132,12 +138,6 @@ import org.paygear.fragment.PaymentHistoryFragment;
 
 import java.io.File;
 import java.io.IOException;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
-import io.realm.Realm;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -262,6 +262,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     protected void onDestroy() {
+        IGLog.e(getClass().getSimpleName() + " on Destroy");
         super.onDestroy();
         if (G.ISRealmOK) {
             if (myPhonStateService != null) {
@@ -395,6 +396,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        IGLog.e(getClass().getSimpleName() + " on Create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -1273,7 +1275,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         try {
             return super.dispatchTouchEvent(ev);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             //Fix for support lib bug, happening when onDestroy() is
             HelperLog.setErrorLog(e);
             return true;

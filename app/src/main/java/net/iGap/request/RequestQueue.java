@@ -21,7 +21,6 @@ import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperClassNamePreparation;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
-import net.iGap.helper.IGLog;
 import net.iGap.module.AESCrypt;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
@@ -173,9 +172,9 @@ public class RequestQueue {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
                     Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
-                    if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("SND MSGR -> " + (30000 + requestWrapper.actionId));
-                    }
+//                    if (Config.FILE_LOG_ENABLE) {
+//                        IGLog.e("SND MSGR -> " + (30000 + requestWrapper.actionId));
+//                    }
                     WebSocketClient.getInstance().sendBinary(message, requestWrapper);
                 } else {
                     if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {

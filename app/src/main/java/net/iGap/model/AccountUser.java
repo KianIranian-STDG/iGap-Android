@@ -7,9 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.iGap.Config;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.IGLog;
 import net.iGap.realm.RealmMigration;
 
 import java.io.File;
@@ -164,10 +162,6 @@ public class AccountUser {
 
                         if (totalBytes > 500 * 1024 * 1024) {
                             HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
-                        }
-
-                        if (Config.FILE_LOG_ENABLE) {
-                            IGLog.e("DB total bytes Size -> " + totalBytes + " used Size -> " + usedBytes);
                         }
 
                         return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);

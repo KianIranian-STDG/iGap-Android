@@ -24,15 +24,12 @@ import android.view.Display;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.observers.interfaces.OnActivityChatStart;
 import net.iGap.libs.Tuple;
 import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
@@ -40,6 +37,8 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmNotificationSetting;
@@ -255,6 +254,10 @@ public class HelperNotification {
             if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
                 alarmNotification(messageToShow);
             }
+
+            IGLog.e("show notification " + notification.toString() + " for account " + accountUser.getId());
+
+            IGLog.e("-----------------------------------------END-----------------------------------------");
 
             notificationManager.notify(notificationId, notification);
         }
@@ -630,9 +633,13 @@ public class HelperNotification {
     }
 
     public void addMessage(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, AccountUser accountUser) {
+        IGLog.e("room id -> " + roomId + " message id " + roomMessage.getMessageId() + " for account " + accountUser.getId());
         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (room != null) {
+            IGLog.e(room.toString());
             addMessage(roomId, roomMessage, roomType, room, realm, accountUser);
+        } else {
+            IGLog.e("++++++++ room is null ++++++++++");
         }
     }
 
@@ -690,6 +697,7 @@ public class HelperNotification {
 
             if (notificationSetting != null) {
                 if (notificationSetting.getNotification() == 2 || (notificationSetting.getNotification() == 0 && !defaultAlert)) { // notification in selected room is disable
+                    IGLog.e("notification for selection room disable");
                     return;
                 }
 

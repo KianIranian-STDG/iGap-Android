@@ -4,12 +4,13 @@ package net.iGap.libs.notification;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperNotification;
+import net.iGap.helper.IGLog;
 import net.iGap.model.AccountUser;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmUserInfo;
@@ -23,6 +24,13 @@ public class NotificationService extends FirebaseMessagingService {
     private final static String MESSAGE_ID = "messageId";
     private final static String MESSAGE_TYPE = "loc_key";
     private final static String USER_ID = "userId";
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        IGLog.e("NotificationService onCreate");
+    }
 
     @Override
     public void onNewToken(String mToken) {
@@ -42,6 +50,8 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
+        IGLog.e("onMessageReceived " + remoteMessage.getData().toString());
+
         if (remoteMessage.getNotification() != null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)) {
             HelperNotification.sendDeepLink(remoteMessage.getData(), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
@@ -52,9 +62,13 @@ public class NotificationService extends FirebaseMessagingService {
             final long roomId = Long.valueOf(remoteMessage.getData().get(ROOM_ID));
             final long userId = Long.valueOf(remoteMessage.getData().get(USER_ID));
 
+            IGLog.e("room id " + roomId + " message id " + messageId + " from user id " + userId);
+
             AccountUser accountUser = AccountManager.getInstance().getUser(userId);
-            if (accountUser == null)
+            if (accountUser == null) {
+                IGLog.e("++++++++++++ accountUser null ++++++++++++");
                 return;
+            }
 
             new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
@@ -82,15 +96,21 @@ public class NotificationService extends FirebaseMessagingService {
                                     .setMessage(text)
                                     .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
                                     .build();
+                            IGLog.e(getClass().getSimpleName() + " add message from service ");
                             HelperNotification.getInstance().addMessage(realm1, roomId, roomMessage, roomType, accountUser);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        IGLog.e(e);
                     }
                 });
             }, userId)).start();
         }
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        IGLog.e(getClass().getSimpleName() + " onDestroy");
+    }
 }
