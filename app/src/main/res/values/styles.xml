@@ -232,7 +232,7 @@
     <style name="iGapButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">?iGapButtonColor</item>
     </style>
-
+z
     <style name="mobileBankButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">@color/brown</item>
     </style>

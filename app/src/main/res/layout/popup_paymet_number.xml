@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/iv_close"
+        android:id="@+id/close_iv"
         style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,9 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_close"
-        app:layout_constraintStart_toEndOf="@+id/iv_close"
-        app:layout_constraintTop_toTopOf="@+id/iv_close" />
+        app:layout_constraintBottom_toBottomOf="@+id/close_iv"
+        app:layout_constraintStart_toEndOf="@+id/close_iv"
+        app:layout_constraintTop_toTopOf="@+id/close_iv" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/contact_frame"
@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_saveContact"
             style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

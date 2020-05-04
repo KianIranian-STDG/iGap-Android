@@ -154,6 +154,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentChargeNewUi.newInstance()).setReplace(false).load();
                 break;
             case BILL_MENU:/** tested **/
+
                 try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();

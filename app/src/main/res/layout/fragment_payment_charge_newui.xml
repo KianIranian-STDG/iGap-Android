@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?rootBackgroundColor">
@@ -43,7 +44,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/phoneNumberEditText"
+                android:id="@+id/phoneNumberInput"
                 style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,8 +77,8 @@
                 android:paddingTop="@dimen/dp2"
                 android:paddingEnd="@dimen/dp16"
                 android:paddingBottom="@dimen/dp2"
-                app:layout_constraintStart_toStartOf="@+id/phoneNumberEditText"
-                app:layout_constraintTop_toBottomOf="@+id/phoneNumberEditText">
+                app:layout_constraintStart_toStartOf="@+id/phoneNumberInput"
+                app:layout_constraintTop_toBottomOf="@+id/phoneNumberInput">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/iv_contact"
@@ -113,7 +114,7 @@
                 android:paddingEnd="@dimen/dp16"
                 android:paddingBottom="@dimen/dp2"
                 app:layout_constraintBottom_toBottomOf="@+id/frame_contact"
-                app:layout_constraintEnd_toEndOf="@+id/phoneNumberEditText"
+                app:layout_constraintEnd_toEndOf="@+id/phoneNumberInput"
                 app:layout_constraintStart_toEndOf="@+id/frame_contact"
                 app:layout_constraintTop_toTopOf="@+id/frame_contact">
 
@@ -149,8 +150,48 @@
                 app:layout_constraintStart_toStartOf="@+id/frame_contact"
                 app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
 
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_amount_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:elevation="@dimen/dp4"
+                android:text="انتخاب مبلغ"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
+                app:layout_constraintEnd_toEndOf="@+id/choose_amount"
+                app:layout_constraintStart_toStartOf="@+id/choose_amount"
+                app:layout_constraintTop_toTopOf="@+id/choose_amount"
+                tools:layout_editor_absoluteX="242dp"
+                tools:layout_editor_absoluteY="386dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/add_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/dp4"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_amount_btn"
+                app:layout_constraintEnd_toStartOf="@+id/tv_amount_btn"
+                app:layout_constraintStart_toStartOf="@+id/choose_amount"
+                app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
+                app:srcCompat="@drawable/ic_action_add_white" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/low_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/dp4"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_amount_btn"
+                app:layout_constraintEnd_toEndOf="@+id/choose_amount"
+                app:layout_constraintStart_toEndOf="@+id/tv_amount_btn"
+                app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
+                app:srcCompat="@drawable/ic_action_remove_white" />
+
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_charge_type"
+                android:id="@+id/choose_amount"
                 style="@style/iGapButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -158,20 +199,21 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="16dp"
-                android:text="انتخاب مبلغ"
-                app:layout_constraintBottom_toTopOf="@+id/btn_amount"
+                app:layout_constraintBottom_toTopOf="@+id/btn_charge_type"
                 app:layout_constraintEnd_toEndOf="@+id/radioGroup"
-                app:layout_constraintHorizontal_bias="0.531"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/radioGroup"
                 app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+                app:layout_constraintVertical_bias="1.0"
                 app:layout_constraintWidth_percent=".6" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_amount"
+                android:id="@+id/btn_charge_type"
                 style="@style/iGapButtonStroke"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="9dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="68dp"
@@ -180,6 +222,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/btn_next"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/btn_next"
+                app:layout_constraintTop_toBottomOf="@+id/choose_amount"
                 app:layout_constraintWidth_percent=".6" />
 
             <com.google.android.material.button.MaterialButton
