@@ -47,7 +47,8 @@ public class HelperError {
             case 4:
                 if (minorCode == 14) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_4_14);
-                }
+                } else if (minorCode == 9)
+                    error = G.fragmentActivity.getResources().getString(R.string.restrictions_on_sending_messages);
                 break;
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
@@ -256,6 +257,10 @@ public class HelperError {
                 break;
             case 305:
                 error = G.fragmentActivity.getResources().getString(R.string.E_305);
+                break;
+            case 308:
+                if (minorCode == 18)
+                    error = G.fragmentActivity.getResources().getString(R.string.restrictions_on_sending_messages);
                 break;
 
             case 3356:
