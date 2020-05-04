@@ -84,7 +84,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
     public MutableLiveData<Long> goToCustomNotificationPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showMoreMenu = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showEditButton = new MutableLiveData<>();
     public MutableLiveData<String> showDialogCopyLink = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLeaveGroup = new MutableLiveData<>();
 
@@ -149,8 +148,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         setTextGroupLik();
 
         //OWNER,ADMIN,MODERATOR,MEMBER can add member to group
-        showEditButton.setValue(role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER);
-        showLeaveGroup.set(role != GroupChatRole.ADMIN && role != GroupChatRole.OWNER ? View.VISIBLE : View.GONE);
+        showLeaveGroup.set(role != GroupChatRole.OWNER ? View.VISIBLE : View.GONE);
 
         showMoreMenu.setValue(!isNotJoin);
 
@@ -373,7 +371,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     public void checkGroupIsEditable() {
         if (realmRoom == null) return;
         role = realmRoom.getGroupRoom().getRole();
-        showEditButton.setValue(isEditable());
     }
 
     private boolean isEditable() {

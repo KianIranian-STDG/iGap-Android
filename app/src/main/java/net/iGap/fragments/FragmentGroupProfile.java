@@ -163,7 +163,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         binding.toolbarMore.setOnClickListener(v -> viewModel.onClickRippleMenu());
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarEdit.setOnClickListener(v -> {
-            if (getActivity() != null && viewModel.checkIsEditableAndReturnState()) {
+            if (getActivity() != null && currentRoomAccess != null && currentRoomAccess.isCanModifyRoom()) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
             }
         });
@@ -178,12 +178,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         viewModel.showMoreMenu.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null) {
                 binding.toolbarMore.setVisibility(isShow ? View.VISIBLE : View.GONE);
-            }
-        });
-
-        viewModel.showEditButton.observe(getViewLifecycleOwner(), isShow -> {
-            if (isShow != null) {
-                binding.toolbarEdit.setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
 
