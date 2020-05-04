@@ -408,7 +408,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                     btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                     }.getType());
                     btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                    childLayout = MakeButtons.addButtons(Theme.getInstance(), btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, type);
+                    childLayout = MakeButtons.addButtons(Theme.getInstance(), btnEntery, buttonList.get(i).length(), 1f, childLayout, this);
                     //   childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
                 } catch (JSONException e) {
                     e.printStackTrace();
