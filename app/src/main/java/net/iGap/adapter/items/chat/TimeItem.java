@@ -69,18 +69,18 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             linearLayout_33.setGravity(CENTER);
             LinearLayout.LayoutParams layout_509 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             linearLayout_33.setLayoutParams(layout_509);
-            linearLayout_33.setPadding(0, ViewMaker.i_Dp(R.dimen.dp12), 0, ViewMaker.i_Dp(R.dimen.dp12));
+            linearLayout_33.setPadding(0, ViewMaker.i_Dp(R.dimen.dp8), 0, ViewMaker.i_Dp(R.dimen.dp8));
 
             View view_12 = new View(view.getContext());
             view_12.setBackgroundColor(theme.getDividerColor(view.getContext()));
-            LinearLayout.LayoutParams layout_522 = new LinearLayout.LayoutParams(0, 1, 1);
+            LinearLayout.LayoutParams layout_522 = new LinearLayout.LayoutParams(0, 2, 1);
             view_12.setLayoutParams(layout_522);
             linearLayout_33.addView(view_12);
 
             text = new AppCompatTextView(view.getContext());
             text.setId(R.id.cslt_txt_time_date);
             text.setSingleLine(true);
-            text.setPadding(ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4));
+            text.setPadding(ViewMaker.i_Dp(R.dimen.dp10), ViewMaker.i_Dp(R.dimen.dp1), ViewMaker.i_Dp(R.dimen.dp10), ViewMaker.i_Dp(R.dimen.dp1));
             text.setTextColor(theme.getTitleTextColor(text.getContext()));
             text.setBackground(theme.tintDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.background_log_time), view.getContext(), R.attr.iGapDividerLine));
 
@@ -95,7 +95,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
             View vew_147 = new View(view.getContext());
             vew_147.setBackgroundColor(theme.getDividerColor(view.getContext()));
-            LinearLayout.LayoutParams layout_270 = new LinearLayout.LayoutParams(0, 1, 1);
+            LinearLayout.LayoutParams layout_270 = new LinearLayout.LayoutParams(0, 2, 1);
             vew_147.setLayoutParams(layout_270);
             linearLayout_33.addView(vew_147);
 
