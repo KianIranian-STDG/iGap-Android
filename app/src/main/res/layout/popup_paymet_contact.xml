@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/iv_close1"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp16"
+        android:text="@string/close_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txt_choose1"
+        style="?iGapTitleTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="انتخاب از شماره های مخاطبین"
+        android:layout_marginLeft="@dimen/dp8"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_close1"
+        app:layout_constraintStart_toEndOf="@+id/iv_close1"
+        app:layout_constraintTop_toTopOf="@+id/iv_close1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_contact"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp300"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp32"
+        android:background="@drawable/shape_payment_dialog"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btn_dialog1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_choose1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_dialog1"
+        style="@style/iGapButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp16"
+        android:layout_marginBottom="16dp"
+        android:text="تایید"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

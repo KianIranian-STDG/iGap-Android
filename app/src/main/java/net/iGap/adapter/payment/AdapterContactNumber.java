@@ -10,31 +10,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNumber.HistoryNumberViewHolder> {
-    private List<Amount> amountList;
+    private List<ContactNumber> amountList = new ArrayList<>();
     private int selectedPosition;
 
-    public AdapterContactNumber(List<Amount> amountList) {
-        this.amountList = amountList;
-        Amount amount = new Amount();
-        amount.setTextAmount("نازنین عمرانی");
+    public AdapterContactNumber() {
+        ContactNumber amount = new ContactNumber();
+        amount.setContactNumber("0912912912912");
         amountList.add(amount);
-        Amount amount1 = new Amount();
-        amount1.setTextAmount("عباسی");
+        ContactNumber amount1 = new ContactNumber();
+        amount1.setContactNumber("0935935935");
         amountList.add(amount1);
-        Amount amount2 = new Amount();
-        amount2.setTextAmount("بگوند");
+        ContactNumber amount2 = new ContactNumber();
+        amount2.setContactNumber("0919919919");
         amountList.add(amount2);
-        Amount amount3 = new Amount();
-        amount3.setTextAmount("نظری");
+        ContactNumber amount3 = new ContactNumber();
+        amount3.setContactNumber("0935935935935");
         amountList.add(amount3);
-        Amount amount4 = new Amount();
-        amount4.setTextAmount("امیری");
+        ContactNumber amount4 = new ContactNumber();
+        amount4.setContactNumber("0937937937937");
         amountList.add(amount4);
-        Amount amount5 = new Amount();
-        amount5.setTextAmount("امینی");
+        ContactNumber amount5 = new ContactNumber();
+        amount5.setContactNumber("0938938938938");
         amountList.add(amount5);
 
     }
@@ -49,6 +49,7 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
     @Override
     public void onBindViewHolder(@NonNull HistoryNumberViewHolder holder, int position) {
         holder.bindNumber(amountList.get(position));
+
     }
 
     @Override
@@ -73,13 +74,17 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
         }
 
-        public void bindNumber(Amount amount) {
-            contactName.setText(amount.getTextAmount());
-            phoneNumber.setText("091212345678");
+        public void bindNumber(ContactNumber amount) {
+            contactName.setText(amount.getContactNumber());
+            phoneNumber.setText("نازنین عمرانی");
         }
     }
 
     public int getSelectedPosition() {
         return selectedPosition;
+    }
+
+    public List<ContactNumber> getAmountList() {
+        return amountList;
     }
 }

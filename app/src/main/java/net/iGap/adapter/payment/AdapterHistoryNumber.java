@@ -10,25 +10,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNumber.ContactNumberViewHolder> {
-    private List<Amount> amountList;
-    private int selectedPosition = -1;
+    private List<HistoryNumber> historyNumberList = new ArrayList<>();
+    private int selectedPosition;
 
-    public AdapterHistoryNumber(List<Amount> amountList) {
-        Amount amount = new Amount();
-        amount.setTextAmount("091212345678");
-        amountList.add(amount);
-        Amount amount1 = new Amount();
-        amount1.setTextAmount("093511111111");
-        amountList.add(amount1);
-        Amount amount2 = new Amount();
-        amount2.setTextAmount("09198888888");
-        amountList.add(amount2);
-        Amount amount3 = new Amount();
-        amount3.setTextAmount("091233333333");
-        amountList.add(amount3);
+    public AdapterHistoryNumber() {
+        HistoryNumber amount = new HistoryNumber();
+        amount.setHistoryNumber("091211111111");
+        historyNumberList.add(amount);
+        HistoryNumber amount1 = new HistoryNumber();
+        amount1.setHistoryNumber("09122222222");
+        historyNumberList.add(amount1);
+        HistoryNumber amount2 = new HistoryNumber();
+        amount2.setHistoryNumber("091233333333");
+        historyNumberList.add(amount2);
+        HistoryNumber amount3 = new HistoryNumber();
+        amount3.setHistoryNumber("091244444444");
+        historyNumberList.add(amount3);
+
     }
 
     @NonNull
@@ -40,12 +42,12 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
 
     @Override
     public void onBindViewHolder(@NonNull ContactNumberViewHolder holder, int position) {
-        holder.bindNUmber();
+        holder.bindNUmber(historyNumberList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return historyNumberList.size();
     }
 
     public class ContactNumberViewHolder extends RecyclerView.ViewHolder {
@@ -61,12 +63,17 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
             });
         }
 
-        public void bindNUmber() {
-            textView.setText("091212345678");
+        public void bindNUmber(HistoryNumber historyNumber) {
+            textView.setText(historyNumber.getHistoryNumber());
         }
     }
 
     public int getSelectedPosition() {
         return selectedPosition;
+    }
+
+
+    public List<HistoryNumber> getHistoryNumberList() {
+        return historyNumberList;
     }
 }

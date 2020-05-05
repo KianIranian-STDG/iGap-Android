@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.model.news.NewsList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmount.ChargeAmountViewHolder> {
 
-    private int selectedPosition = -1;
-    private List<Amount> amountList;
-    private OnItemClicked onItemClicked;
+    private int selectedPosition;
+    private List<Amount> amountList = new ArrayList<>();
 
-    public AdapterChargeAmount(List<Amount> amountList) {
-        this.amountList = amountList;
+    public AdapterChargeAmount() {
         Amount amount = new Amount();
         amount.setTextAmount("10000 ریال");
         amountList.add(amount);
@@ -65,7 +65,6 @@ public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmoun
 
             itemView.setOnClickListener(v -> {
                 selectedPosition = getAdapterPosition();
-                onItemClicked.clickedItem(v);
                 notifyDataSetChanged();
 
             });
@@ -83,16 +82,11 @@ public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmoun
     }
 
 
-    public interface OnItemClicked {
-        void clickedItem(View v);
-    }
-
-    public void setOnItemClicked(OnItemClicked onItemClicked) {
-        this.onItemClicked = onItemClicked;
-    }
-
     public int getSelectedPosition() {
         return selectedPosition;
     }
 
+    public List<Amount> getAmountList() {
+        return amountList;
+    }
 }

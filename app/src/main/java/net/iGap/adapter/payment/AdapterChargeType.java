@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,20 +19,19 @@ import java.util.List;
 
 public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.ChargeTypeViewHolder> {
 
-    private List<Amount> amountList ;
-    private int selectedPosition = -1;
+    private List<ChargeType> chargeTypes = new ArrayList<>();
+    private int selectedPosition;
 
-    public AdapterChargeType(List<Amount> amountList) {
-        this.amountList = amountList;
-        Amount amount = new Amount();
-        amount.setTextAmount("شارژ ساده");
-        amountList.add(amount);
-        Amount amount1 = new Amount();
-        amount1.setTextAmount("شگفت انگیز");
-        amountList.add(amount1);
-        Amount amount2 = new Amount();
-        amount2.setTextAmount("مستقیم");
-        amountList.add(amount2);
+    public AdapterChargeType() {
+        ChargeType chargeType = new ChargeType();
+        chargeType.setChargeType("شارژ ساده");
+        chargeTypes.add(chargeType);
+        ChargeType chargeType1 = new ChargeType();
+        chargeType1.setChargeType("شگفت انگیز");
+        chargeTypes.add(chargeType1);
+        ChargeType chargeType2 = new ChargeType();
+        chargeType2.setChargeType("مستقیم");
+        chargeTypes.add(chargeType2);
     }
 
     @NonNull
@@ -43,34 +43,51 @@ public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.Ch
 
     @Override
     public void onBindViewHolder(@NonNull ChargeTypeViewHolder holder, int position) {
-        holder.bindChargeType(amountList.get(position));
+        holder.bindChargeType(chargeTypes.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return amountList.size();
+        return chargeTypes.size();
     }
 
     public class ChargeTypeViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
+        private RadioButton radioButton;
 
         public ChargeTypeViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.amount);
+            radioButton = itemView.findViewById(R.id.radio_amount);
+
+            radioButton.setOnClickListener(v -> itemView.performClick());
+            
             itemView.setOnClickListener(v -> {
                 selectedPosition = getAdapterPosition();
                 notifyDataSetChanged();
             });
+
         }
 
-        public void bindChargeType(Amount amount) {
-            textView.setText(amount.getTextAmount());
+        public void bindChargeType(ChargeType chargeType, int position) {
+            if (selectedPosition == position) {
+                radioButton.setChecked(true);
+            } else {
+                radioButton.setChecked(false);
+            }
+
+            textView.setText(chargeType.getChargeType());
+
         }
 
     }
 
     public int getSelectedPosition() {
         return selectedPosition;
+    }
+
+    public List<ChargeType> getChargeTypes() {
+        return chargeTypes;
     }
 }
 

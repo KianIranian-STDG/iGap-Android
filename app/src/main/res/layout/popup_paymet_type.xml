@@ -7,7 +7,7 @@
     android:padding="@dimen/dp16">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/iv_close"
+        android:id="@+id/iv_close4"
         style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,34 +23,34 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
-        android:text="انتخاب مبلغ"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_close"
-        app:layout_constraintStart_toEndOf="@+id/iv_close"
-        app:layout_constraintTop_toTopOf="@+id/iv_close" />
+        android:text="انتخاب نوع شارژ"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_close4"
+        app:layout_constraintStart_toEndOf="@+id/iv_close4"
+        app:layout_constraintTop_toTopOf="@+id/iv_close4" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_payment"
+        android:id="@+id/rv_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp32"
         android:scrollbars="none"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btn_dialog4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_save"
+        android:id="@+id/btn_dialog4"
         style="@style/iGapButton"
         android:layout_width="0dp"
         android:layout_height="52dp"
-        android:text="انتخاب مبلغ"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
+        android:text="ادامه"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/rv_payment"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/rv_payment"
-        app:layout_constraintTop_toBottomOf="@+id/rv_payment"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
