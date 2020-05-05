@@ -55,7 +55,6 @@ public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmoun
             itemView.setOnClickListener(v -> {
                 selectedPosition = getAdapterPosition();
                 notifyDataSetChanged();
-
             });
         }
 

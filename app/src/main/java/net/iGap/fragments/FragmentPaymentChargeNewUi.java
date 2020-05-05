@@ -1,10 +1,10 @@
 package net.iGap.fragments;
 
-import android.accounts.NetworkErrorException;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.button.MaterialButton;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterChargeAmount;
 import net.iGap.adapter.payment.AdapterChargeType;
@@ -34,8 +35,14 @@ import net.iGap.adapter.payment.Amount;
 import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.HistoryNumber;
+import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -71,16 +78,21 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private MaterialButton enterBtn;
     private AppCompatEditText editTextNumber;
     private int selectedIndex;
+    private int selectedChargeTypeIndex;
+    private int selectedPriceIndex;
     private ContactNumber contactNumber;
     private HistoryNumber historyNumber;
     private Amount amount;
-    private ChargeType chargeTypes;
+    private ChargeType typeList;
     private ScrollView scrollView;
-
     List<Amount> amountList = new ArrayList<>();
     List<ChargeType> chargeTypeList = new ArrayList<>();
 
     private OperatorType.Type operatorType;
+
+    public static final String MCI = "mci";
+    public static final String MTN = "mtn";
+    public static final String RIGHTEL = "rightel";
 
     public static FragmentPaymentChargeNewUi newInstance() {
 
@@ -120,7 +132,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         enterBtn = view.findViewById(R.id.btn_next);
         scrollView = view.findViewById(R.id.scroll_payment);
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
         }
@@ -140,12 +151,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     }
                 }).getView());
 
-        onTypeChooseClick();
+        onChargeTypeChooseClick();
         onContactNumberButtonClick();
         onHistoryNumberButtonClick();
         onPriceChooseClick();
         onPhoneNumberInputClick();
         onItemOperatorSelect();
+        onSaveBtnClicked();
     }
 
     private void onContactNumberButtonClick() {
@@ -280,8 +292,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     return;
                 }
 
-                selectedIndex = adapterAmount.getSelectedPosition();
-                amount = amountList.get(selectedIndex);
+                selectedPriceIndex = adapterAmount.getSelectedPosition();
+                amount = amountList.get(selectedPriceIndex);
                 amountTxt.setText(amount.getTextAmount());
 
                 ivAdd.setVisibility(View.VISIBLE);
@@ -306,22 +318,22 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             dialog.show();
         });
         ivAdd.setOnClickListener(v -> {
-            if (selectedIndex < amountList.size()) {
-                amount = amountList.get(selectedIndex = selectedIndex + 1);
+            if (selectedPriceIndex < amountList.size()) {
+                amount = amountList.get(selectedPriceIndex = selectedPriceIndex + 1);
                 amountTxt.setText(amount.getTextAmount());
             }
         });
 
 
         lowView.setOnClickListener(v -> {
-            if (selectedIndex < amountList.size()) {
-                amount = amountList.get(selectedIndex = selectedIndex - 1);
+            if (selectedPriceIndex < amountList.size()) {
+                amount = amountList.get(selectedPriceIndex = selectedPriceIndex - 1);
                 amountTxt.setText(amount.getTextAmount());
             }
         });
     }
 
-    private void onTypeChooseClick() {
+    private void onChargeTypeChooseClick() {
         btnChargeType.setOnClickListener(v -> {
             adapterChargeType = new AdapterChargeType(chargeTypeList);
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_type, false).build();
@@ -336,9 +348,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     return;
                 }
 
-                selectedIndex = adapterChargeType.getSelectedPosition();
-                chargeTypes = chargeTypeList.get(selectedIndex);
-                chooseType.setText(chargeTypes.getChargeType());
+                selectedChargeTypeIndex = adapterChargeType.getSelectedPosition();
+                typeList = chargeTypeList.get(selectedChargeTypeIndex);
+                chooseType.setText(typeList.getChargeType());
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
@@ -397,6 +409,148 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     chargeTypeList.add(new ChargeType(chargeType.get(i)));
                 }
                 break;
+        }
+    }
+
+
+    private void onSaveBtnClicked() {
+        enterBtn.setOnClickListener(v -> {
+            Log.i("eliya", "onSaveBtnClicked: ");
+            if (G.userLogin) {
+                if (isNumeric(editTextNumber.getText().toString()) && editTextNumber.getText().length() == 11) {
+                    if (operatorType != null) {
+                        if (selectedChargeTypeIndex != -1) {
+                            if (selectedPriceIndex != -1) {
+                                ChooseChargeType chooseChargeType = null;
+                                switch (operatorType) {
+                                    case HAMRAH_AVAL:
+                                        chooseChargeType = null;
+                                        break;
+                                    case IRANCELL:
+                                        switch (selectedChargeTypeIndex) {
+                                            case 1:
+                                                chooseChargeType = ChooseChargeType.MTN_NORMAL;
+                                                break;
+                                            case 2:
+                                                chooseChargeType = ChooseChargeType.MTN_AMAZING;
+                                                break;
+                                        }
+                                        break;
+                                    case RITEL:
+                                        switch (selectedChargeTypeIndex) {
+                                            case 1:
+                                                chooseChargeType = ChooseChargeType.RIGHTEL_NORMAL;
+                                                break;
+                                            case 2:
+                                                chooseChargeType = ChooseChargeType.RIGHTEL_EXCITING;
+                                                break;
+                                        }
+                                        break;
+                                }
+                                long price = 0;
+                                switch (selectedPriceIndex) {
+                                    case 1:
+                                        price = 10000;
+                                        break;
+                                    case 2:
+                                        price = 20000;
+                                        break;
+                                    case 3:
+                                        price = 50000;
+                                        break;
+                                    case 4:
+                                        price = 100000;
+                                        break;
+                                    case 5:
+                                        price = 200000;
+                                        break;
+                                }
+
+                                if (operatorType == OperatorType.Type.HAMRAH_AVAL) {
+                                    sendRequestCharge(MCI, chooseChargeType, editTextNumber.getText().toString().substring(1), (int) price);
+                                } else if (operatorType == OperatorType.Type.IRANCELL) {
+                                    sendRequestCharge(MTN, chooseChargeType, editTextNumber.getText().toString().substring(1), (int) price);
+                                } else if (operatorType == OperatorType.Type.RITEL) {
+                                    sendRequestCharge(RIGHTEL, chooseChargeType, editTextNumber.getText().toString().substring(1), (int) price);
+                                }
+
+                                //   hideKeyWord.setValue(true);
+                                //observeEnabledPayment.set(false);
+                            } else {
+                                ShowError(getContext().getResources().getString(R.string.charge_price_error_message));
+                            }
+                        } else {
+                            ShowError(getContext().getResources().getString(R.string.charge_type_error_message));
+                        }
+                    } else {
+                        ShowError(getContext().getResources().getString(R.string.please_select_operator));
+                    }
+                } else {
+                    ShowError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
+                }
+            } else {
+                ShowError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
+            }
+        });
+    }
+
+    public static boolean isNumeric(String strNum) {
+        try {
+            long d = Long.parseLong(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    enum ChooseChargeType {
+        MTN_NORMAL, MTN_AMAZING, RIGHTEL_NORMAL, RIGHTEL_EXCITING;
+    }
+
+    private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
+        new ApiInitializer<MciPurchaseResponse>().initAPI(
+                new RetrofitFactory().getChargeRetrofit().topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price),
+                null, new ResponseCallback<MciPurchaseResponse>() {
+                    @Override
+                    public void onSuccess(MciPurchaseResponse data) {
+                        // observeEnabledPayment.set(true);
+                        String token = data.getToken();
+                        if (getActivity() != null && token != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
+                                if (result.isSuccess()) {
+                                    goBack();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        //   observeEnabledPayment.set(true);
+                        // showMciPaymentError.setValue(new ErrorModel("", error));
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        //ToDO: handle this event
+                        /*observeEnabledPayment.set(true);
+                        showMciPaymentError.setValue(error);*/
+                    }
+                });
+    }
+
+    private void goBack() {
+        G.handler.post(() -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
+    }
+
+    public void ShowError(String errorMessage) {
+        if (errorMessage != null) {
+            hideKeyboard();
+            HelperError.showSnackMessage(errorMessage, false);
         }
     }
 
