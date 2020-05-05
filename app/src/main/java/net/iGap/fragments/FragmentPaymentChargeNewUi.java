@@ -357,7 +357,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                  prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
 
                 for (int i = 0; i < prices.size(); i++) {
-                    amountList.add(amountList.get(i));
+                    amountList.add(new Amount(prices.get(i)));
                 }
 
 //                onOpereatorChange.setValue(R.array.charge_type_hamrahe_aval);
