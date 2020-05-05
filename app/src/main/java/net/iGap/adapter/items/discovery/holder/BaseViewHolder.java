@@ -143,6 +143,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case WEB_VIEW_LINK:/** tested title needed**/
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
+
                 } else {
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentWebView.newInstance(discoveryField.value, discoveryField.refresh, discoveryField.param)).setReplace(false).load();
                 }

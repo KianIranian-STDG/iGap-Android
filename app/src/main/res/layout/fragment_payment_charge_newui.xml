@@ -292,7 +292,7 @@
                     android:drawableRight="@drawable/hamrahaval" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/radio_rightel"
+                    android:id="@+id/radio_irancell"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp8"
@@ -303,7 +303,7 @@
                     android:drawableRight="@drawable/hamrahaval" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/radio_irancell"
+                    android:id="@+id/radio_rightel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

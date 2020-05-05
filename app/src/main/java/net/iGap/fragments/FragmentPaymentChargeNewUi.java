@@ -2,6 +2,8 @@ package net.iGap.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +35,14 @@ import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.HistoryNumber;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.OperatorType;
 import net.iGap.observers.interfaces.ToolbarListener;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FragmentPaymentChargeNewUi extends BaseFragment {
@@ -60,7 +67,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private AppCompatImageView ivAdd;
     private AppCompatImageView lowView;
     private MaterialButton saveBtn1, saveBtn2, saveBtn3, saveBtn4;
-    private MaterialButton amountChoose;
+    private MaterialButton priceChoose;
     private MaterialButton btnChargeType;
     private MaterialButton enterBtn;
     private AppCompatEditText editTextNumber;
@@ -70,6 +77,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private Amount amount;
     private ChargeType chargeTypes;
     private ScrollView scrollView;
+    List<Amount> amountList = new ArrayList<>();
+
+
+    private OperatorType.Type operatorType;
 
     public static FragmentPaymentChargeNewUi newInstance() {
 
@@ -98,7 +109,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         radioGroup = view.findViewById(R.id.radioGroup);
         frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
-        amountChoose = view.findViewById(R.id.choose_amount);
+        priceChoose = view.findViewById(R.id.choose_amount);
         btnChargeType = view.findViewById(R.id.btn_charge_type);
         ivAdd = view.findViewById(R.id.add_amount);
         lowView = view.findViewById(R.id.low_amount);
@@ -129,30 +140,15 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     }
                 }).getView());
 
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-
-            if (radioButtonHamrah.isChecked()) {
-                radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-            } else {
-                radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-            }
-            if (radioButtonIrancell.isChecked()) {
-                radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-            } else {
-                radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-            }
-            if (radioButtonRightel.isChecked()) {
-                radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-            } else {
-                radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-            }
-        });
-
-        OnClickedButtons();
+        onTypeChooseClick();
+        onContactNumberButtonClick();
+        onHistoryNumberButtonClick();
+        onPriceChooseClick();
+        onItemOperatorSelect();
+        onInputNumberClick();
     }
 
-    public void OnClickedButtons() {
-
+    public void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
             adapterContact = new AdapterContactNumber();
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
@@ -177,7 +173,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             rvContact.setAdapter(adapterContact);
         });
+    }
 
+    public void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
             adapterHistory = new AdapterHistoryNumber();
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
@@ -202,10 +200,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             rvHistory.setAdapter(adapterHistory);
             dialog.show();
         });
+    }
 
-        amountChoose.setOnClickListener(v -> {
-
-            adapterAmount = new AdapterChargeAmount();
+    private void onPriceChooseClick() {
+        priceChoose.setOnClickListener(v -> {
+            adapterAmount = new AdapterChargeAmount(amountList);
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_amount, false).build();
             View view = dialog.getCustomView();
             rvAmount = view.findViewById(R.id.rv_amount);
@@ -227,11 +226,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 lowView.setVisibility(View.VISIBLE);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    amountChoose.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
+                    priceChoose.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
                     btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.green));
                 }
                 chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
-                amountChoose.setClickable(false);
+                priceChoose.setClickable(false);
                 dialog.dismiss();
             });
 
@@ -244,7 +243,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             rvAmount.setAdapter(adapterAmount);
             dialog.show();
         });
-
         ivAdd.setOnClickListener(v -> {
             if (selectedIndex < adapterAmount.getAmountList().size()) {
                 amount = adapterAmount.getAmountList().get(selectedIndex = selectedIndex + 1);
@@ -259,7 +257,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 amountTxt.setText(amount.getTextAmount());
             }
         });
+    }
 
+    public void onTypeChooseClick() {
         btnChargeType.setOnClickListener(v -> {
             adapterChargeType = new AdapterChargeType();
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_type, false).build();
@@ -296,4 +296,94 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             dialog.show();
         });
     }
+
+    public void onItemOperatorSelect() {
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            int id = radioGroup.getCheckedRadioButtonId();
+            switch (id) {
+                case R.id.radio_hamrahAval:
+                    setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    break;
+                case R.id.radio_irancell:
+                    setAdapterValue(OperatorType.Type.IRANCELL);
+                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    break;
+                case R.id.radio_rightel:
+                    setAdapterValue(OperatorType.Type.RITEL);
+                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    break;
+            }
+        });
+
+    }
+
+    private void onInputNumberClick() {
+        editTextNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (editTextNumber.getText().length() == 11) {
+                    String number = editTextNumber.getText().toString().substring(0, 4);
+                    OperatorType.Type opt = new OperatorType().getOperation(number);
+                    if (opt != null) {
+                        setAdapterValue(opt);
+                    } }
+
+            }
+        });
+    }
+
+    private void setAdapterValue(@NotNull OperatorType.Type operator) {
+        List<String> prices;
+        switch (operator) {
+            case HAMRAH_AVAL:
+                operatorType = OperatorType.Type.HAMRAH_AVAL;
+                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
+
+                for (int i = 0; i < prices.size(); i++) {
+                    amountList.add(amountList.get(i));
+                }
+
+//                onOpereatorChange.setValue(R.array.charge_type_hamrahe_aval);
+                break;
+            case IRANCELL:
+                operatorType = OperatorType.Type.IRANCELL;
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_type_irancell));
+
+                for (int i = 0; i < prices.size(); i++) {
+                    amountList.add(new Amount(prices.get(i)));
+                }
+
+//                onPriceChange.setValue(R.array.charge_price_irancell);
+                break;
+            case RITEL:
+                operatorType = OperatorType.Type.RITEL;
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_type_ritel));
+
+                for (int i = 0; i < prices.size(); i++) {
+                    amountList.add(new Amount(prices.get(i)));
+                }
+
+//                onPriceChange.setValue(R.array.charge_price);
+                break;
+        }
+    }
+
+
 }

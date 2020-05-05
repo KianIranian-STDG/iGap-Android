@@ -18,21 +18,10 @@ import java.util.List;
 public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmount.ChargeAmountViewHolder> {
 
     private int selectedPosition;
-    private List<Amount> amountList = new ArrayList<>();
+    private List<Amount> amountList;
 
-    public AdapterChargeAmount() {
-        Amount amount = new Amount();
-        amount.setTextAmount("10000 ریال");
-        amountList.add(amount);
-        Amount amount1 = new Amount();
-        amount1.setTextAmount("20000 ریال");
-        amountList.add(amount1);
-        Amount amount2 = new Amount();
-        amount2.setTextAmount("30000 ریال");
-        amountList.add(amount2);
-        Amount amount3 = new Amount();
-        amount3.setTextAmount("40000 ریال");
-        amountList.add(amount3);
+    public AdapterChargeAmount(List<Amount> amountList) {
+        this.amountList = amountList;
     }
 
     @NonNull
