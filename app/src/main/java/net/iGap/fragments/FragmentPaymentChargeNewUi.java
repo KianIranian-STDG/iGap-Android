@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,9 +75,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private Amount amount;
     private ChargeType chargeTypes;
     private ScrollView scrollView;
+
     List<Amount> amountList = new ArrayList<>();
-
-
     private OperatorType.Type operatorType;
 
     public static FragmentPaymentChargeNewUi newInstance() {
@@ -144,8 +141,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         onContactNumberButtonClick();
         onHistoryNumberButtonClick();
         onPriceChooseClick();
+        onPhoneNumberInputClick();
         onItemOperatorSelect();
-        onInputNumberClick();
     }
 
     public void onContactNumberButtonClick() {
@@ -202,6 +199,71 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
     }
 
+    public void onPhoneNumberInputClick() {
+        editTextNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (editTextNumber.getText().length() == 11) {
+                    String number = editTextNumber.getText().toString().substring(0, 4);
+                    OperatorType.Type opt = new OperatorType().getOperation(number);
+                    if (opt != null) {
+                        setAdapterValue(opt);
+                        switch (opt) {
+                            case HAMRAH_AVAL:
+                                radioButtonHamrah.setChecked(true);
+                                break;
+                            case IRANCELL:
+                                radioButtonIrancell.setChecked(true);
+                                break;
+                            case RITEL:
+                                radioButtonRightel.setChecked(true);
+                                break;
+                        }
+                        scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+                    }
+
+                }
+            }
+        });
+    }
+
+    public void onItemOperatorSelect() {
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            int id = radioGroup.getCheckedRadioButtonId();
+            switch (id) {
+                case R.id.radio_hamrahAval:
+                    setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    break;
+                case R.id.radio_irancell:
+                    setAdapterValue(OperatorType.Type.IRANCELL);
+                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    break;
+                case R.id.radio_rightel:
+                    setAdapterValue(OperatorType.Type.RITEL);
+                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                    break;
+            }
+        });
+
+    }
+
     private void onPriceChooseClick() {
         priceChoose.setOnClickListener(v -> {
             adapterAmount = new AdapterChargeAmount(amountList);
@@ -212,8 +274,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             saveBtn3 = view.findViewById(R.id.btn_dialog3);
 
             saveBtn3.setOnClickListener(v1 -> {
-                scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
-
                 if (adapterAmount.getSelectedPosition() == -1) {
                     return;
                 }
@@ -297,64 +357,14 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
     }
 
-    public void onItemOperatorSelect() {
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            int id = radioGroup.getCheckedRadioButtonId();
-            switch (id) {
-                case R.id.radio_hamrahAval:
-                    setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
-                case R.id.radio_irancell:
-                    setAdapterValue(OperatorType.Type.IRANCELL);
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
-                case R.id.radio_rightel:
-                    setAdapterValue(OperatorType.Type.RITEL);
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
-            }
-        });
 
-    }
-
-    private void onInputNumberClick() {
-        editTextNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (editTextNumber.getText().length() == 11) {
-                    String number = editTextNumber.getText().toString().substring(0, 4);
-                    OperatorType.Type opt = new OperatorType().getOperation(number);
-                    if (opt != null) {
-                        setAdapterValue(opt);
-                    } }
-
-            }
-        });
-    }
 
     private void setAdapterValue(@NotNull OperatorType.Type operator) {
         List<String> prices;
         switch (operator) {
             case HAMRAH_AVAL:
                 operatorType = OperatorType.Type.HAMRAH_AVAL;
-                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
 
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
@@ -364,7 +374,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 break;
             case IRANCELL:
                 operatorType = OperatorType.Type.IRANCELL;
-                prices = Arrays.asList(getResources().getStringArray(R.array.charge_type_irancell));
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price_irancell));
 
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
@@ -374,7 +384,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 break;
             case RITEL:
                 operatorType = OperatorType.Type.RITEL;
-                prices = Arrays.asList(getResources().getStringArray(R.array.charge_type_ritel));
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
 
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
