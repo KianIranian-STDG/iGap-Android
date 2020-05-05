@@ -74,8 +74,4 @@ public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmoun
     public int getSelectedPosition() {
         return selectedPosition;
     }
-
-    public List<Amount> getAmountList() {
-        return amountList;
-    }
 }

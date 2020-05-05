@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.accounts.NetworkErrorException;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -77,6 +78,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private ScrollView scrollView;
 
     List<Amount> amountList = new ArrayList<>();
+    List<ChargeType> chargeTypeList = new ArrayList<>();
+
     private OperatorType.Type operatorType;
 
     public static FragmentPaymentChargeNewUi newInstance() {
@@ -145,7 +148,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         onItemOperatorSelect();
     }
 
-    public void onContactNumberButtonClick() {
+    private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
             adapterContact = new AdapterContactNumber();
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
@@ -172,7 +175,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
     }
 
-    public void onHistoryNumberButtonClick() {
+    private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
             adapterHistory = new AdapterHistoryNumber();
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
@@ -199,11 +202,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
     }
 
-    public void onPhoneNumberInputClick() {
+    private void onPhoneNumberInputClick() {
         editTextNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -237,7 +239,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
     }
 
-    public void onItemOperatorSelect() {
+    private void onItemOperatorSelect() {
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             int id = radioGroup.getCheckedRadioButtonId();
             switch (id) {
@@ -279,7 +281,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 }
 
                 selectedIndex = adapterAmount.getSelectedPosition();
-                amount = adapterAmount.getAmountList().get(selectedIndex);
+                amount = amountList.get(selectedIndex);
                 amountTxt.setText(amount.getTextAmount());
 
                 ivAdd.setVisibility(View.VISIBLE);
@@ -304,24 +306,24 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             dialog.show();
         });
         ivAdd.setOnClickListener(v -> {
-            if (selectedIndex < adapterAmount.getAmountList().size()) {
-                amount = adapterAmount.getAmountList().get(selectedIndex = selectedIndex + 1);
+            if (selectedIndex < amountList.size()) {
+                amount = amountList.get(selectedIndex = selectedIndex + 1);
                 amountTxt.setText(amount.getTextAmount());
             }
         });
 
 
         lowView.setOnClickListener(v -> {
-            if (selectedIndex < adapterAmount.getAmountList().size()) {
-                amount = adapterAmount.getAmountList().get(selectedIndex = selectedIndex - 1);
+            if (selectedIndex < amountList.size()) {
+                amount = amountList.get(selectedIndex = selectedIndex - 1);
                 amountTxt.setText(amount.getTextAmount());
             }
         });
     }
 
-    public void onTypeChooseClick() {
+    private void onTypeChooseClick() {
         btnChargeType.setOnClickListener(v -> {
-            adapterChargeType = new AdapterChargeType();
+            adapterChargeType = new AdapterChargeType(chargeTypeList);
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_type, false).build();
 
             View view = dialog.getCustomView();
@@ -335,7 +337,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 }
 
                 selectedIndex = adapterChargeType.getSelectedPosition();
-                chargeTypes = adapterChargeType.getChargeTypes().get(selectedIndex);
+                chargeTypes = chargeTypeList.get(selectedIndex);
                 chooseType.setText(chargeTypes.getChargeType());
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -357,43 +359,45 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
     }
 
-
-
     private void setAdapterValue(@NotNull OperatorType.Type operator) {
         List<String> prices;
+        List<String> chargeType;
         switch (operator) {
             case HAMRAH_AVAL:
                 operatorType = OperatorType.Type.HAMRAH_AVAL;
                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
-
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
                 }
+                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_hamrahe_aval));
+                for (int i = 0; i < chargeType.size(); i++) {
+                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                }
 
-//                onOpereatorChange.setValue(R.array.charge_type_hamrahe_aval);
                 break;
             case IRANCELL:
                 operatorType = OperatorType.Type.IRANCELL;
                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price_irancell));
-
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
                 }
-
-//                onPriceChange.setValue(R.array.charge_price_irancell);
+                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_irancell));
+                for (int i = 0; i < chargeType.size(); i++) {
+                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                }
                 break;
             case RITEL:
                 operatorType = OperatorType.Type.RITEL;
                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
-
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
                 }
-
-//                onPriceChange.setValue(R.array.charge_price);
+                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_ritel));
+                for (int i = 0; i < chargeType.size(); i++) {
+                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                }
                 break;
         }
     }
-
 
 }
