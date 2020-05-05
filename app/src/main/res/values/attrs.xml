@@ -122,6 +122,7 @@
     <attr name="iGapTopRoundButtonPrimary" format="reference" />
     <attr name="iGapCardToCardBackground" format="reference" />
     <attr name="iGapCardToCardButtonBackground" format="reference" />
+    <attr name="iGapCardToCardButton" format="reference" />
     <attr name="iGapCardToCardIconBackground" format="reference" />
     <attr name="iGapBottomSheetHeaderLine" format="reference" />
     <attr name="iGapScrollerHandler" format="reference" />

@@ -49,6 +49,7 @@
         <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_dark</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_dark</item>
         <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_dark</item>
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_dark</item>
         <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_dark</item>
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line_dark</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark</item>
@@ -109,6 +110,7 @@
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
         <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_light</item>
         <item name="iGapCardToCardButtonBackground">
             @drawable/background_button_card_to_card_default
         </item>
@@ -163,6 +165,7 @@
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme.baseRedTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_red</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_red</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_red</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_red</item>
@@ -223,6 +226,7 @@
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme.basePinkTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_pink</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_pink</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_pink</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_pink</item>
@@ -283,6 +287,7 @@
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme.basePurpleTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_purple</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_purple</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_purple
         </item>
@@ -346,6 +351,7 @@
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme.baseBlueTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_blue</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_blue</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_blue</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_blue</item>
@@ -406,6 +412,7 @@
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme.baseGreenTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_green</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_green</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_green</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_green</item>
@@ -467,6 +474,7 @@
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme.baseAmberTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_amber</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_amber</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_amber</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_amber</item>
@@ -530,6 +538,7 @@
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme.baseOrangeTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_orange</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_orange</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_orange
         </item>
@@ -592,6 +601,7 @@
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme.baseDarkGrayTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_gray</item>
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark_gray</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark_gray
         </item>
