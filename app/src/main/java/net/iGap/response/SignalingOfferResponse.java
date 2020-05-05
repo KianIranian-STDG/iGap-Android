@@ -11,11 +11,8 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingOffer;
-import net.iGap.realm.RealmCallConfig;
-import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingOfferResponse extends MessageHandler {
@@ -32,22 +29,7 @@ public class SignalingOfferResponse extends MessageHandler {
          * if client get response from caller do this actions
          */
         if (builder.getResponse().getId().isEmpty()) {
-            String callerSdp = builder.getCallerSdp();
-            Long callerUserID = builder.getCallerUserId();
-            net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type = builder.getType();
-            DbManager.getInstance().doRealmTask(realm -> {
-                RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
-
-                if (realmCallConfig == null) {
-                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
-                } else {
-                    if (G.iSignalingOffer != null) {
-                        G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
-                    }
-                }
-            });
-
-            CallManager.getInstance().incomingCall(builder);
+            CallManager.getInstance().onOffer(builder);
         }
     }
 

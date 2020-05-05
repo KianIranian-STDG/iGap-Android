@@ -19,6 +19,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.module.enums.CallState;
 import net.iGap.observers.interfaces.ISignalingAccept;
 import net.iGap.observers.interfaces.ISignalingCandidate;
 import net.iGap.observers.interfaces.ISignalingErrore;
@@ -26,7 +27,6 @@ import net.iGap.observers.interfaces.ISignalingLeave;
 import net.iGap.observers.interfaces.ISignalingOffer;
 import net.iGap.observers.interfaces.ISignalingRinging;
 import net.iGap.observers.interfaces.ISignalingSessionHold;
-import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoSignalingLeave;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.request.RequestSignalingRinging;
@@ -56,6 +56,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         G.iSignalingErrore = this;
     }
 
+    // done
     @Override
     public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
 
@@ -100,6 +101,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
+    // done
     @Override
     public void onAccept(final String called_sdp) {
         G.handler.post(new Runnable() {
@@ -145,6 +147,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
+    //done
     @Override
     public void onCandidate(final String peerSdpMId, final int peerSdpMLineIndex, final String peerCandidate) {
         G.handler.post(new Runnable() {
@@ -157,7 +160,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
-
+    //done
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
 
@@ -207,6 +210,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     }
 
+    // done
     @Override
     public void onRinging() {
 

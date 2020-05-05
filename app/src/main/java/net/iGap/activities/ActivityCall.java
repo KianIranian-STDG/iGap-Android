@@ -828,4 +828,5 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     public interface OnFinishActivity {
         void finishActivity();
     }
+
 }

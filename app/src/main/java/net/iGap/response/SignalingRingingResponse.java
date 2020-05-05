@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoSignalingRinging;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingRingingResponse extends MessageHandler {
 
@@ -33,17 +33,7 @@ public class SignalingRingingResponse extends MessageHandler {
 
         ProtoSignalingRinging.SignalingRingingResponse.Builder builder = (ProtoSignalingRinging.SignalingRingingResponse.Builder) message;
         if (builder.getResponse().getId().isEmpty()) {
-
-            if (G.iSignalingRinging != null) {
-                G.iSignalingRinging.onRinging();
-            }
-
-            /*G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(G.context, G.context.getResources().getString(R.string.ringing), Toast.LENGTH_SHORT).show();
-                }
-            });*/
+            CallManager.getInstance().onRing();
         }
 
     }

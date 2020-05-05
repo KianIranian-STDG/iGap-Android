@@ -10,7 +10,6 @@
 
 package net.iGap.realm;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 
 import java.util.List;
@@ -40,8 +39,6 @@ public class RealmCallConfig extends RealmObject {
         callConfig.setScreen_sharing(builder.getScreenSharing());
 
         callConfig.setIceServer(asyncRealm, builder.getIceServerList());
-
-        G.needGetSignalingConfiguration = false;
 
         return callConfig;
     }

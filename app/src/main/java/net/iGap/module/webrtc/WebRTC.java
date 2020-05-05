@@ -24,6 +24,7 @@ import net.iGap.realm.RealmIceServer;
 import net.iGap.request.RequestSignalingAccept;
 import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestSignalingOffer;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
@@ -62,7 +63,9 @@ public class WebRTC {
     private PeerConnectionFactory peerConnectionFactory;
     private MediaStream mediaStream;
 
-    private String offerSdp;
+    // this is filled for offer
+    private String localSDP;
+    private String remoteSDP;
     private MediaConstraints mediaConstraints;
     private MediaConstraints audioConstraints;
     private VideoCapturer videoCapturer;
@@ -71,6 +74,8 @@ public class WebRTC {
     private EglBase.Context eglBaseContext = null;
 
     private static volatile WebRTC instance = null;
+
+    private iGapSdpObserver sdpObserver = new iGapSdpObserver();
 
     public static WebRTC getInstance() {
         WebRTC localInstance = instance;
@@ -272,7 +277,7 @@ public class WebRTC {
         }
     }
 
-    PeerConnection peerConnectionInstance() {
+    public PeerConnection peerConnectionInstance() {
         if (peerConnection == null) {
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
             DbManager.getInstance().doRealmTask(realm -> {
@@ -307,8 +312,8 @@ public class WebRTC {
         peerConnectionInstance().createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                offerSdp = sessionDescription.description;
-                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, sessionDescription.description);
+                localSDP = sessionDescription.description;
+                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, localSDP);
             }
 
             @Override
@@ -329,7 +334,7 @@ public class WebRTC {
     }
 
     public void setOfferLocalDescription() {
-        setLocalDescription(SessionDescription.Type.OFFER, offerSdp);
+        setLocalDescription(SessionDescription.Type.OFFER, localSDP);
     }
 
     public void createAnswer() {
@@ -337,7 +342,8 @@ public class WebRTC {
         peerConnectionInstance().createAnswer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                setLocalDescription(SessionDescription.Type.ANSWER, sessionDescription.description);
+                localSDP = sessionDescription.description;
+                setLocalDescription(SessionDescription.Type.ANSWER, localSDP);
                 Log.i("WWW", "onCreateSuccess sessionDescription.description : " + sessionDescription.description);
                 Log.i("WWW", "onCreateSuccess sessionDescription.type : " + sessionDescription.type);
                 acceptCall(sessionDescription.description);
@@ -443,5 +449,34 @@ public class WebRTC {
             e.printStackTrace();
         }
 
+    }
+
+    // My new code just changing the place
+
+    public void setRemoteDesc(SessionDescription sdp) {
+        peerConnection.setRemoteDescription(sdpObserver, sdp);
+    }
+
+    private class iGapSdpObserver implements SdpObserver {
+
+        @Override
+        public void onCreateSuccess(SessionDescription sessionDescription) {
+
+        }
+
+        @Override
+        public void onSetSuccess() {
+            CallManager.getInstance().onSdpSuccess();
+        }
+
+        @Override
+        public void onCreateFailure(String s) {
+            Log.i("WWW", "onOffer onCreateFailure : " + s);
+        }
+
+        @Override
+        public void onSetFailure(String s) {
+            Log.i("WWW", "onOffer onSetFailure : " + s);
+        }
     }
 }

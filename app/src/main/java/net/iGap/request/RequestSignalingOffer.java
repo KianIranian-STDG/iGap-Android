@@ -21,7 +21,6 @@ public class RequestSignalingOffer {
         builder.setType(type);
         builder.setCallerSdp(callerSdp);
 
-
         RequestWrapper requestWrapper = new RequestWrapper(901, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);

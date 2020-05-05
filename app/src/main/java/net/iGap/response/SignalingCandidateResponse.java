@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoSignalingCandidate;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingCandidateResponse extends MessageHandler {
 
@@ -34,9 +34,7 @@ public class SignalingCandidateResponse extends MessageHandler {
         ProtoSignalingCandidate.SignalingCandidateResponse.Builder builder = (ProtoSignalingCandidate.SignalingCandidateResponse.Builder) message;
 
         if (builder.getResponse().getId().isEmpty()) {
-            if (G.iSignalingCandidate != null) {
-                G.iSignalingCandidate.onCandidate(builder.getPeerSdpMId(), builder.getPeerSdpMLineIndex(), builder.getPeerCandidate());
-            }
+            CallManager.getInstance().onCandidate(builder);
         }
     }
 

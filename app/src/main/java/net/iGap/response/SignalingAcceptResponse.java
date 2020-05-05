@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoSignalingAccept;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingAcceptResponse extends MessageHandler {
 
@@ -32,10 +32,7 @@ public class SignalingAcceptResponse extends MessageHandler {
         super.handler();
         ProtoSignalingAccept.SignalingAcceptResponse.Builder builder = (ProtoSignalingAccept.SignalingAcceptResponse.Builder) message;
         if (builder.getResponse().getId().isEmpty()) {
-            String called_sdp = builder.getCalledSdp();
-            if (G.iSignalingAccept != null) {
-                G.iSignalingAccept.onAccept(called_sdp);
-            }
+            CallManager.getInstance().onAccept(builder);
         }
     }
 

@@ -155,7 +155,6 @@ public class G extends ApplicationContext {
     public static boolean latestMobileDataState;
     public static boolean showVoteChannelLayout = true;
     public static boolean showSenderNameInGroup = false;
-    public static boolean needGetSignalingConfiguration = true;
     public static boolean isInCall = false;
     public static boolean isShowRatingDialog = false;
     public static boolean isUpdateNotificaionColorMain = false;
