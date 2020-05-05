@@ -30,6 +30,7 @@ import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.fragments.FragmentPaymentChargeNewUi;
 import net.iGap.fragments.FragmentPaymentInquiryTelephone;
+import net.iGap.fragments.FragmentPaymentInternet;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
@@ -352,7 +353,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();
                 break;
             case INTERNET_PACKAGE_MENU:
-                new HelperFragment(activity.getSupportFragmentManager(), new BuyInternetPackageFragment()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInternet.newInstance()).setReplace(false).load();
                 break;
             case CHARITY:
                 try {

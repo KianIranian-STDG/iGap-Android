@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?rootBackgroundColor">
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scroll_payment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/toolbar_height"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginTop="16dp"
+                android:text="خرید بسته اینترنت"
+                android:textColor="@color/green"
+                android:textSize="@dimen/largeTextSize"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/phoneNumberInput"
+                style="@style/iGapEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="54dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:padding="8dp"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:textSize="@dimen/dp16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frame_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/shape_payment_charge"
+                android:paddingStart="@dimen/dp16"
+                android:paddingTop="@dimen/dp2"
+                android:paddingEnd="@dimen/dp16"
+                android:paddingBottom="@dimen/dp2"
+                app:layout_constraintStart_toStartOf="@+id/phoneNumberInput"
+                app:layout_constraintTop_toBottomOf="@+id/phoneNumberInput">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/iv_contact"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:text="@string/history_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:text="انتخاب از مخاطبین"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_contact"
+                    app:layout_constraintStart_toEndOf="@+id/iv_contact"
+                    app:layout_constraintTop_toTopOf="@+id/iv_contact" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frame_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/shape_payment_charge"
+                android:paddingStart="@dimen/dp16"
+                android:paddingTop="@dimen/dp2"
+                android:paddingEnd="@dimen/dp16"
+                android:paddingBottom="@dimen/dp2"
+                app:layout_constraintBottom_toBottomOf="@+id/frame_contact"
+                app:layout_constraintEnd_toEndOf="@+id/phoneNumberInput"
+                app:layout_constraintStart_toEndOf="@+id/frame_contact"
+                app:layout_constraintTop_toTopOf="@+id/frame_contact">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/iv_history"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:text="@string/history_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:text="شماره های قبلی"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_history"
+                    app:layout_constraintStart_toEndOf="@+id/iv_history"
+                    app:layout_constraintTop_toTopOf="@+id/iv_history" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:text="انتخاب اپراتور"
+                android:textSize="@dimen/largeTextSize"
+                app:layout_constraintStart_toStartOf="@+id/frame_contact"
+                app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_next"
+                style="@style/iGapButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="64dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="64dp"
+                android:text="ادامه"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="@dimen/dp16"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_hamrahAval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_topup_diselect"
+                    android:drawableEnd="@drawable/hamrahaval"
+                    android:drawableRight="@drawable/hamrahaval" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_irancell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_topup_diselect"
+                    android:drawableEnd="@drawable/hamrahaval"
+                    android:drawableRight="@drawable/hamrahaval" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_rightel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_topup_diselect"
+                    android:drawableEnd="@drawable/hamrahaval"
+                    android:drawableRight="@drawable/hamrahaval" />
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+</androidx.constraintlayout.widget.ConstraintLayout>

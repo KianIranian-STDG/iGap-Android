@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -85,6 +86,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private Amount amount;
     private ChargeType typeList;
     private ScrollView scrollView;
+    private ProgressBar progressBar;
     List<Amount> amountList = new ArrayList<>();
     List<ChargeType> chargeTypeList = new ArrayList<>();
 
@@ -131,6 +133,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         chooseType = view.findViewById(R.id.tv_choose);
         enterBtn = view.findViewById(R.id.btn_next);
         scrollView = view.findViewById(R.id.scroll_payment);
+        progressBar = view.findViewById(R.id.loadingView);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
@@ -415,6 +418,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onSaveBtnClicked() {
         enterBtn.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
             Log.i("eliya", "onSaveBtnClicked: ");
             if (G.userLogin) {
                 if (isNumeric(editTextNumber.getText().toString()) && editTextNumber.getText().length() == 11) {
@@ -513,6 +517,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 null, new ResponseCallback<MciPurchaseResponse>() {
                     @Override
                     public void onSuccess(MciPurchaseResponse data) {
+                        progressBar.setVisibility(View.GONE);
                         // observeEnabledPayment.set(true);
                         String token = data.getToken();
                         if (getActivity() != null && token != null) {
@@ -526,13 +531,15 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                     @Override
                     public void onError(String error) {
+                        progressBar.setVisibility(View.GONE);
                         //   observeEnabledPayment.set(true);
                         // showMciPaymentError.setValue(new ErrorModel("", error));
                     }
 
                     @Override
                     public void onFailed() {
-                        //ToDO: handle this event
+                        progressBar.setVisibility(View.GONE);
+                         //ToDO: handle this event
                         /*observeEnabledPayment.set(true);
                         showMciPaymentError.setValue(error);*/
                     }
@@ -548,6 +555,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     public void ShowError(String errorMessage) {
+        progressBar.setVisibility(View.GONE);
         if (errorMessage != null) {
             hideKeyboard();
             HelperError.showSnackMessage(errorMessage, false);
