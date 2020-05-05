@@ -24,11 +24,11 @@ import androidx.core.view.ViewCompat;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.Theme;
 
 import static android.view.Gravity.CENTER;
 import static android.view.Gravity.LEFT;
@@ -51,7 +51,7 @@ public class ViewMaker {
         cslum_txt_unread_message.setText(G.fragmentActivity.getResources().getString(R.string.unread_message));
         cslum_txt_unread_message.setTextColor(ContextCompat.getColor(context, R.color.white));
         LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_692.setMargins(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8));
+        layout_692.setMargins(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
         cslum_txt_unread_message.setLayoutParams(layout_692);
 
         return cslum_txt_unread_message;
