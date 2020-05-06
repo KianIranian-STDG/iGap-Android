@@ -1,4 +1,4 @@
-package net.iGap.fragments;
+package net.iGap.fragments.payment;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +27,7 @@ import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.HistoryNumber;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;

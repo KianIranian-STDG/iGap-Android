@@ -1,4 +1,4 @@
-package net.iGap.fragments;
+package net.iGap.fragments.payment;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +38,7 @@ import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.HistoryNumber;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
