@@ -11,8 +11,10 @@
 package net.iGap.response;
 
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 import net.iGap.realm.RealmCallConfig;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingGetConfigurationResponse extends MessageHandler {
     public SignalingGetConfigurationResponse(int actionId, Object protoClass, String identity) {
@@ -37,6 +39,10 @@ public class SignalingGetConfigurationResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        CallManager.getInstance().onError(majorCode, minorCode);
     }
 }
 

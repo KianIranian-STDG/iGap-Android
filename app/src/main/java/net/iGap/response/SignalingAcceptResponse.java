@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingAccept;
 import net.iGap.viewmodel.controllers.CallManager;
 
@@ -44,6 +45,10 @@ public class SignalingAcceptResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        CallManager.getInstance().onError(majorCode, minorCode);
     }
 }
 

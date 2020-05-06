@@ -10,8 +10,9 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingLeave;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingLeaveResponse extends MessageHandler {
 
@@ -30,12 +31,8 @@ public class SignalingLeaveResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
         final ProtoSignalingLeave.SignalingLeaveResponse.Builder builder = (ProtoSignalingLeave.SignalingLeaveResponse.Builder) message;
-        if (G.iSignalingLeave != null) {
-            G.iSignalingLeave.onLeave(builder.getType());
-        }
-
+        CallManager.getInstance().onLeave(builder);
     }
 
     @Override
@@ -46,6 +43,10 @@ public class SignalingLeaveResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        CallManager.getInstance().onError(majorCode, minorCode);
     }
 }
 
