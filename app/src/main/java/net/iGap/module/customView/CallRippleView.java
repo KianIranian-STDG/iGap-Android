@@ -117,8 +117,6 @@ public class CallRippleView extends FrameLayout {
                 rad = x / 2;
 
                 vibratePerformed = false;
-
-                resourceView.setAlpha(80);
                 resourceView.setRadius(rad);
                 return false;
             }
@@ -154,10 +152,6 @@ public class CallRippleView extends FrameLayout {
 
         public float getRadius() {
             return viewRadius;
-        }
-
-        public void setAlpha(int alpha) {
-            viewPaint.setAlpha(alpha);
         }
 
         @Keep
