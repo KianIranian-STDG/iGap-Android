@@ -16,6 +16,7 @@ import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
 import net.iGap.module.webrtc.CallerInfo;
@@ -71,13 +72,17 @@ public class CallManager implements EventListener {
         return localInstance;
     }
 
-    public CallManager() {
+    private CallManager() {
         DbManager.getInstance().doRealmTask(realm -> {
             currentCallConfig = realm.where(RealmCallConfig.class).findFirst();
             if (currentCallConfig == null) {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         });
+
+        currentCallerInfo = new CallerInfo();
+        currentCallerInfo.name = "Abolfazl Abbasi";
+        currentCallerInfo.userId = AccountManager.getInstance().getCurrentUser().getId();
     }
 
     /**
@@ -321,6 +326,10 @@ public class CallManager implements EventListener {
                 || "walleye".equals(Build.PRODUCT)        // Pixel 2
                 || "taimen".equals(Build.PRODUCT)        // Pixel 2 XL
                 || "blueline".equals(Build.PRODUCT)        // Pixel 3
-                || "crosshatch".equals(Build.PRODUCT);	// Pixel 3 XL
+                || "crosshatch".equals(Build.PRODUCT);    // Pixel 3 XL
+    }
+
+    public interface CallDelegate {
+        void onStateChange(int state);
     }
 }
