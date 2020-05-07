@@ -138,16 +138,21 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallDe
             declineRippleView.startAnimation();
             declineRippleView.setDelegate(this::callDecline);
             rootView.addView(declineRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 0, 36));
-        } else {
-            declineImageView = new AppCompatImageView(this);
-            declineImageView.setImageResource(R.drawable.ic_call_decline);
-            rootView.addView(declineImageView, LayoutCreator.createFrame(64, 64, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0, 0, 72));
-
-            speakerView = new AppCompatImageView(this);
-            speakerView.setImageResource(R.drawable.ic_call_speaker);
-            rootView.addView(speakerView, LayoutCreator.createFrame(32, 32, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 52, 0, 0, 82));
         }
 
+        declineImageView = new AppCompatImageView(this);
+        declineImageView.setImageResource(R.drawable.ic_call_decline);
+        rootView.addView(declineImageView, LayoutCreator.createFrame(64, 64, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0, 0, 72));
+
+        speakerView = new AppCompatImageView(this);
+        speakerView.setImageResource(R.drawable.ic_call_speaker);
+        speakerView.setScaleType(ImageView.ScaleType.CENTER);
+        rootView.addView(speakerView, LayoutCreator.createFrame(52, 52, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 64, 0, 0, 88));
+
+        bluetoothView = new AppCompatImageView(this);
+        bluetoothView.setImageResource(R.drawable.ic_call_bluetooth);
+        bluetoothView.setScaleType(ImageView.ScaleType.CENTER);
+        rootView.addView(bluetoothView, LayoutCreator.createFrame(52, 52, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 112, 0, 0, 88));
 
         return rootView;
     }
@@ -157,6 +162,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallDe
     }
 
     private void callAnswer() {
+        answerRippleView.setVisibility(View.INVISIBLE);
+        declineRippleView.setVisibility(View.INVISIBLE);
+
 
     }
 
