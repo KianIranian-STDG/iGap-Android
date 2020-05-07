@@ -24,7 +24,9 @@ import net.iGap.module.webrtc.WebRTC;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.proto.ProtoSignalingAccept;
 import net.iGap.proto.ProtoSignalingCandidate;
+import net.iGap.proto.ProtoSignalingLeave;
 import net.iGap.proto.ProtoSignalingOffer;
+import net.iGap.proto.ProtoSignalingSessionHold;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
@@ -88,7 +90,7 @@ public class CallManager implements EventListener {
     /**
      * this function is called when we are receiving a call response from others
      *
-     * @param response
+     * @param response from server
      */
     public void onOffer(ProtoSignalingOffer.SignalingOfferResponse.Builder response) {
         if (invalidCallType(response.getType()))
@@ -118,7 +120,9 @@ public class CallManager implements EventListener {
      */
     public void onRing() {
         isRinging = true;
-        G.handler.post(() -> onCallStateChanged.onCallStateChanged(CallState.RINGING));
+        if (onCallStateChanged != null) {
+            G.handler.post(() -> onCallStateChanged.onCallStateChanged(CallState.RINGING));
+        }
     }
 
     /**
@@ -131,15 +135,12 @@ public class CallManager implements EventListener {
     /**
      * this function is called after accept response comes from server
      *
-     * @param response
+     * @param response from server
      */
     public void onAccept(ProtoSignalingAccept.SignalingAcceptResponse.Builder response) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                WebRTC.getInstance().setOfferLocalDescription();
-                WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
-            }
+        G.handler.post(() -> {
+            WebRTC.getInstance().setOfferLocalDescription();
+            WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
         });
     }
 
@@ -153,7 +154,7 @@ public class CallManager implements EventListener {
     /**
      * this function is called after candidate response comes from server
      *
-     * @param builder
+     * @param builder from server
      */
     public void onCandidate(ProtoSignalingCandidate.SignalingCandidateResponse.Builder builder) {
         G.handler.post(() -> WebRTC.getInstance()
@@ -166,6 +167,184 @@ public class CallManager implements EventListener {
      */
     public void exchangeCandidate() {
 
+    }
+
+    /**
+     * this function is called after leave response comes from server in behave of other side
+     *
+     * @param builder from server
+     */
+    public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Builder builder) {
+        G.handler.post(() -> {
+            // TODO: 5/6/2020 this part needs to change based on new design
+            try {
+                AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                G.appChangeRinggerMode = false;
+                am.setRingerMode(G.mainRingerMode);
+            } catch (Exception e) {
+            }
+
+            if (onCallStateChanged != null) {
+                isRinging = false;
+                switch (builder.getType()) {
+                    case REJECTED:
+                        onCallStateChanged.onCallStateChanged(CallState.REJECT);
+                        break;
+                    case NOT_ANSWERED:
+                        onCallStateChanged.onCallStateChanged(CallState.NOT_ANSWERED);
+                        break;
+                    case UNAVAILABLE:
+                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        break;
+                    case TOO_LONG:
+                        onCallStateChanged.onCallStateChanged(CallState.TOO_LONG);
+                        break;
+                }
+                onCallStateChanged.onCallStateChanged(CallState.LEAVE_CALL);
+            }
+        });
+    }
+
+    public void LeaveCall() {
+
+    }
+
+    public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
+        if (builder.getHold()) {
+            WebRTC.getInstance().muteSound();
+            onCallStateChanged.onCallStateChanged(CallState.ON_HOLD);
+        } else {
+            WebRTC.getInstance().unMuteSound();
+            onCallStateChanged.onCallStateChanged(CallState.CONNECTED);
+        }
+//        G.onHoldBackgroundChanegeListener this needs to be deleted.
+    }
+
+    public void holdCall() {
+
+    }
+
+    public void onError(int major, int minor) {
+        int messageID = R.string.e_call_permision;
+        switch (major) {
+            case 900:
+            case 916:
+            case 907:
+                //                RINGING_BAD_PAYLOAD
+                //                LEAVE_BAD_PAYLOAD
+                //                GET_CONFIGURATION_BAD_PAYLOAD
+                messageID = R.string.call_error_badPayload;
+                break;
+            case 901:
+            case 920:
+            case 917:
+            case 914:
+            case 911:
+            case 908:
+            case 903:
+                //                OFFER_INTERNAL_SERVER_ERROR
+                //                RINGING_INTERNAL_SERVER_ERROR
+                //                ACCEPT_INTERNAL_SERVER_ERROR
+                //                CANDIDATE_INTERNAL_SERVER_ERROR
+                //                LEAVE_INTERNAL_SERVER_ERROR
+                //                SESSION_HOLD_INTERNAL_SERVER_ERROR
+                //                GET_CONFIGURATION_INTERNAL_SERVER_ERROR
+                messageID = R.string.call_error_internalServer;
+                break;
+            case 902:
+                //                OFFER_BAD_PAYLOAD
+                switch (minor) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        //                        Caller_SDP is invalid
+                        //                        Type is invalid
+                        //                        CalledUser_ID is invalid
+                        messageID = R.string.call_error_offer;
+                        break;
+                    default:
+                        messageID = R.string.call_error_badPayload;
+                        break;
+                }
+                break;
+            case 904:
+                switch (minor) {
+                    case 6:
+                        messageID = R.string.e_904_6;
+                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        break;
+                    case 7:
+                        messageID = R.string.e_904_7;
+                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        break;
+                    case 8:
+                        messageID = R.string.e_904_8;
+                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        break;
+                    case 9:
+                        messageID = R.string.e_904_9;
+                        onCallStateChanged.onCallStateChanged(CallState.BUSY);
+                        break;
+                    default:
+                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        break;
+                }
+                break;
+            case 921:
+            case 918:
+            case 915:
+            case 912:
+            case 909:
+                //                RINGING_FORBIDDEN
+                //                ACCEPT_FORBIDDEN
+                //                CANDIDATE_FORBIDDEN
+                //                LEAVE_FORBIDDEN
+                //                SESSION_HOLD_FORBIDDEN
+                //                OFFER_FORBIDDEN
+                messageID = R.string.call_error_forbidden;
+                break;
+            case 905:
+            case 906:
+                //                OFFER_PRIVACY_PROTECTION
+                //                OFFER_BLOCKED_BY_PEER
+                messageID = R.string.e_906_1;
+                break;
+            case 910:
+                //                ACCEPT_BAD_PAYLOAD
+                if (minor == 1) {
+                    //                    Called_SDP is invalid
+                    messageID = R.string.call_error_accept;
+                } else {
+                    messageID = R.string.call_error_badPayload;
+                }
+                break;
+            case 913:
+                //                CANDIDATE_BAD_PAYLOAD
+                switch (minor) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        //                        SDP_M_Line_Index is invalid
+                        //                        SDP_MID is invalid
+                        //                        Candidate is invalid
+                        messageID = R.string.call_error_candidate;
+                        break;
+                    default:
+                        messageID = R.string.call_error_badPayload;
+                        break;
+                }
+                break;
+            case 919:
+                //                SESSION_HOLD_BAD_PAYLOAD
+                if (minor == 1) {
+                    //                    Hold is invalid
+                    messageID = R.string.call_error_hold;
+                } else {
+                    messageID = R.string.call_error_badPayload;
+                }
+                break;
+        }
+        onCallStateChanged.onError(messageID, major, minor);
     }
 
     public void toggleSpeaker() {
@@ -195,7 +374,7 @@ public class CallManager implements EventListener {
     /**
      * check for acceptable modes for call
      *
-     * @param type
+     * @param type is from server
      * @return true if it is NOT secret chat and screen sharing.
      */
     private boolean invalidCallType(ProtoSignalingOffer.SignalingOffer.Type type) {
@@ -269,6 +448,8 @@ public class CallManager implements EventListener {
 
     public interface CallStateChange {
         void onCallStateChanged(CallState callState);
+
+        void onError(int messageID, int major, int minor);
     }
 
     @TargetApi(Build.VERSION_CODES.O)

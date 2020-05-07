@@ -224,6 +224,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         }, 1000);
     }
 
+    //done
     @Override
     public void onHold(Boolean hold) {
         G.handler.postDelayed(new Runnable() {

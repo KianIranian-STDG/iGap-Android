@@ -10,9 +10,9 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingSessionHold;
-import net.iGap.module.webrtc.WebRTC;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingSessionHoldResponse extends MessageHandler {
 
@@ -32,20 +32,8 @@ public class SignalingSessionHoldResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-
         ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder = (ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder) message;
-
-        boolean hold = builder.getHold();
-
-        if (hold) {
-            WebRTC.getInstance().muteSound();
-        } else {
-            WebRTC.getInstance().unMuteSound();
-        }
-
-        if (G.iSignalingSessionHold != null) {
-            G.iSignalingSessionHold.onHold(hold);
-        }
+        CallManager.getInstance().onHold(builder);
 
     }
 
@@ -57,6 +45,10 @@ public class SignalingSessionHoldResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        CallManager.getInstance().onError(majorCode, minorCode);
     }
 }
 

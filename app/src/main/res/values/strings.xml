@@ -2661,5 +2661,12 @@ Want to get it?</string>
     <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
     <string name="change_group_rights">Change group rights</string>
     <string name="owner">Owner</string>
+    <string name="call_error_internalServer">Internal server error happened.</string>
+    <string name="call_error_badPayload">Bad payload happened.</string>
+    <string name="call_error_forbidden">Your action is forbidden.</string>
+    <string name="call_error_offer">Offer is NOT possible.</string>
+    <string name="call_error_accept">Accept is NOT possible.</string>
+    <string name="call_error_candidate">Candidate is NOT possible.</string>
+    <string name="call_error_hold">Hold call is NOT possible.</string>
 
 </resources>
