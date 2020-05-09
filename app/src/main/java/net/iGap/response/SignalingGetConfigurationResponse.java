@@ -27,7 +27,7 @@ public class SignalingGetConfigurationResponse extends MessageHandler {
 
         ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder = (ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder) message;
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmCallConfig.putOrUpdate(realm, builder);
+            realm.executeTransaction(realm1 -> RealmCallConfig.putOrUpdate(realm1, builder));
         });
     }
 

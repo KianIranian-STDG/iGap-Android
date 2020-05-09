@@ -5,7 +5,12 @@ import android.graphics.Bitmap;
 public class CallerInfo {
     public String name;
     public String lastName;
+    public long userId;
     public Bitmap avatar;
+
+    public long getUserId() {
+        return userId;
+    }
 
     public Bitmap getAvatar() {
         return avatar;

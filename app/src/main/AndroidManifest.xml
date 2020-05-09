@@ -107,8 +107,7 @@
             android:name=".activities.ActivityCall"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance">
-        </activity>
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name="org.paygear.WalletActivity"
             android:screenOrientation="portrait"
@@ -217,7 +216,13 @@
         <activity
             android:name=".activities.ActivityRegistration"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.SplashActivity"
+        <activity
+            android:name=".activities.CallActivity"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -328,7 +333,7 @@
             android:exported="false"
             android:name=".api.webservice.JobServiceReconnect">
             <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
 
