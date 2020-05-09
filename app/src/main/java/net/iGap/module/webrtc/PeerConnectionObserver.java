@@ -23,7 +23,7 @@ import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.module.enums.CallState;
-import net.iGap.request.RequestSignalingCandidate;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.webrtc.AudioTrack;
 import org.webrtc.DataChannel;
@@ -78,7 +78,8 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
         Log.i("WWW", "WebRtc onIceCandidate : " + iceCandidate.toString());
-        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
+        CallManager.getInstance().exchangeCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
+//        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
     }
 
     @Override

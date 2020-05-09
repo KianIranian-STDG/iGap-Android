@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.helper.HelperError;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.request.RequestSignalingGetConfiguration;
-import net.iGap.module.webrtc.WebRTC;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class CallSelectFragment extends BaseBottomSheet {
 
@@ -69,7 +69,8 @@ public class CallSelectFragment extends BaseBottomSheet {
 
                     } else {
                         try {
-                            WebRTC.getInstance().leaveCall();
+                            // TODO: 5/9/2020 needs to review this function
+                            CallManager.getInstance().leaveCall();
                         } catch (Exception e) {
                         }
 

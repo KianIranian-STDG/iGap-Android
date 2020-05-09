@@ -359,6 +359,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         if (tmp) {
             init();
         } else {
+            // should be managed with call manager
             viewModel.leaveCall();
             finish();
         }

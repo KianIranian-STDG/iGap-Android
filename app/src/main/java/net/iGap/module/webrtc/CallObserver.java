@@ -204,6 +204,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                 }
             }, 2000);
         } catch (Exception e) {
+            // TODO: 5/9/2020 should not be here 
             WebRTC.getInstance().leaveCall();
         }
 

@@ -4,8 +4,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import net.iGap.G;
-import net.iGap.request.RequestSignalingSessionHold;
 import net.iGap.module.webrtc.WebRTC;
+import net.iGap.viewmodel.controllers.CallManager;
 
 
 public class MyPhoneStateListener extends PhoneStateListener {
@@ -46,7 +46,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
         // in this part we manage call and webRTC state when phone state changes.
         if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
 
-            new RequestSignalingSessionHold().signalingSessionHold(true);
+            CallManager.getInstance().holdCall(true);
             WebRTC.getInstance().muteSound();
             WebRTC.getInstance().pauseVideoCapture();
 
@@ -55,7 +55,8 @@ public class MyPhoneStateListener extends PhoneStateListener {
 
             if (G.isVideoCallRinging) {
                 try {
-                    WebRTC.getInstance().leaveCall();
+                    // TODO: 5/9/2020 do we need this anymore? 
+                    CallManager.getInstance().leaveCall();
                 } catch (Exception e) {
                 }
 
@@ -65,7 +66,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
             G.isVideoCallRinging = false;
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
 
-            new RequestSignalingSessionHold().signalingSessionHold(false);
+            CallManager.getInstance().holdCall(false);
             WebRTC.getInstance().unMuteSound();
             WebRTC.getInstance().startVideoCapture();
 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
+import net.iGap.helper.HelperPublicMethod;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
 import net.iGap.module.webrtc.CallerInfo;
@@ -29,8 +30,13 @@ import net.iGap.proto.ProtoSignalingSessionHold;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestSignalingAccept;
+import net.iGap.request.RequestSignalingCandidate;
 import net.iGap.request.RequestSignalingGetConfiguration;
+import net.iGap.request.RequestSignalingLeave;
+import net.iGap.request.RequestSignalingOffer;
 import net.iGap.request.RequestSignalingRinging;
+import net.iGap.request.RequestSignalingSessionHold;
 import net.iGap.viewmodel.controllers.telecom.CallConnectionService;
 
 import org.webrtc.IceCandidate;
@@ -106,8 +112,15 @@ public class CallManager implements EventListener {
     /**
      * this function is called when we are making a call to others
      */
-    public void makeOffer() {
+    public void makeOffer(long called_userId, net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type, String callerSdp) {
+        new RequestSignalingOffer().signalingOffer(called_userId, type, callerSdp);
+    }
 
+    /**
+     * this function is step 1 when making a call
+     */
+    public void startCall() {
+        WebRTC.getInstance().createOffer(callPeerId);
     }
 
     /**
@@ -118,13 +131,6 @@ public class CallManager implements EventListener {
         if (onCallStateChanged != null) {
             G.handler.post(() -> onCallStateChanged.onCallStateChanged(CallState.RINGING));
         }
-    }
-
-    /**
-     * this function is called after we receive offer and waiting for user's answer
-     */
-    public void makeRing() {
-
     }
 
     /**
@@ -142,8 +148,8 @@ public class CallManager implements EventListener {
     /**
      * this function is called when user decide to answer
      */
-    public void makeAccept() {
-
+    public void makeAccept(String sdp) {
+        new RequestSignalingAccept().signalingAccept(sdp);
     }
 
     /**
@@ -160,8 +166,8 @@ public class CallManager implements EventListener {
     /**
      * this function is called when user wants to send its candidate info to peer
      */
-    public void exchangeCandidate() {
-
+    public void exchangeCandidate(String sdpMId, int sdpMLineIndex, String candidate) {
+        new RequestSignalingCandidate().signalingCandidate(sdpMId, sdpMLineIndex, candidate);
     }
 
     /**
@@ -200,13 +206,13 @@ public class CallManager implements EventListener {
         });
     }
 
-    public void LeaveCall() {
-
+    public void leaveCall() {
+        new RequestSignalingLeave().signalingLeave();
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
         if (builder.getHold()) {
-            WebRTC.getInstance().muteSound();
+            WebRTC.getInstance().toggleSound(false);
             onCallStateChanged.onCallStateChanged(CallState.ON_HOLD);
         } else {
             WebRTC.getInstance().unMuteSound();
@@ -215,8 +221,8 @@ public class CallManager implements EventListener {
 //        G.onHoldBackgroundChanegeListener this needs to be deleted.
     }
 
-    public void holdCall() {
-
+    public void holdCall(boolean state) {
+        new RequestSignalingSessionHold().signalingSessionHold(state);
     }
 
     public void onError(int major, int minor) {
@@ -346,24 +352,24 @@ public class CallManager implements EventListener {
 
     }
 
-    public void toggleMic() {
-
+    public void toggleMic(boolean isEnable) {
+        WebRTC.getInstance().toggleSound(isEnable);
     }
 
     public void toggleCamera() {
-
+        WebRTC.getInstance().switchCamera();
     }
 
     public void endCall() {
-
+        leaveCall();
     }
 
     public void directMessage() {
-
+        HelperPublicMethod.goToChatRoom(callPeerId, null, null);
     }
 
     public void acceptCall() {
-
+        WebRTC.getInstance().createAnswer();
     }
 
     /**

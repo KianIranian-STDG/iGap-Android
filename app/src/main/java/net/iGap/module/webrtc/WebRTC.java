@@ -22,8 +22,6 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmIceServer;
 import net.iGap.request.RequestSignalingAccept;
-import net.iGap.request.RequestSignalingLeave;
-import net.iGap.request.RequestSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
 
 import org.webrtc.AudioSource;
@@ -94,12 +92,20 @@ public class WebRTC {
         return instance != null;
     }
 
-    public void muteSound() {
-
+    public void toggleSound(boolean isEnable) {
         if (mediaStream == null) {
             return;
         }
+        for (AudioTrack audioTrack : mediaStream.audioTracks) {
+            audioTrack.setEnabled(isEnable);
+        }
+    }
 
+    @Deprecated
+    public void muteSound() {
+        if (mediaStream == null) {
+            return;
+        }
         for (AudioTrack audioTrack : mediaStream.audioTracks) {
             audioTrack.setEnabled(false);
         }
@@ -113,12 +119,11 @@ public class WebRTC {
         }
     }
 
+    @Deprecated
     public void unMuteSound() {
-
         if (mediaStream == null) {
             return;
         }
-
         for (AudioTrack audioTrack : mediaStream.audioTracks) {
             audioTrack.setEnabled(true);
         }
@@ -131,6 +136,7 @@ public class WebRTC {
         mediaStream.addTrack(audioTrack);
     }
 
+    @Deprecated
     public void setCallType(ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
         this.callTYpe = callTYpe;
     }
@@ -313,7 +319,8 @@ public class WebRTC {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
                 localSDP = sessionDescription.description;
-                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, localSDP);
+                CallManager.getInstance().makeOffer(userIdCallee, callTYpe, localSDP);
+//                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, localSDP);
             }
 
             @Override
@@ -346,7 +353,8 @@ public class WebRTC {
                 setLocalDescription(SessionDescription.Type.ANSWER, localSDP);
                 Log.i("WWW", "onCreateSuccess sessionDescription.description : " + sessionDescription.description);
                 Log.i("WWW", "onCreateSuccess sessionDescription.type : " + sessionDescription.type);
-                acceptCall(sessionDescription.description);
+                CallManager.getInstance().makeAccept(sessionDescription.description);
+//                acceptCall(sessionDescription.description);
             }
 
             @Override
@@ -405,11 +413,14 @@ public class WebRTC {
         return audioConstraints;
     }
 
+    @Deprecated
     private void acceptCall(String sdp) {
         new RequestSignalingAccept().signalingAccept(sdp);
     }
 
+    @Deprecated
     public void leaveCall() {
+
         //don't need for close/dispose here, this action will be doing in onLeave callback
         //close();
         //dispose();
@@ -417,7 +428,8 @@ public class WebRTC {
          * set peer connection null for try again
          */
         //clearConnection();
-        new RequestSignalingLeave().signalingLeave();
+        new Exception("check for future");
+//        new RequestSignalingLeave().signalingLeave();
     }
 
     public void close() {
