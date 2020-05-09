@@ -58,6 +58,8 @@ public class CallManager implements EventListener {
     private boolean isRinging = false;
     private boolean isIncomeCall = false;
 
+    private boolean isMicEnable = true;
+
     private CallerInfo currentCallerInfo;
 
     private CallStateChange onCallStateChanged;
@@ -357,8 +359,9 @@ public class CallManager implements EventListener {
 
     }
 
-    public void toggleMic(boolean isEnable) {
-        WebRTC.getInstance().toggleSound(isEnable);
+    public void toggleMic() {
+        WebRTC.getInstance().toggleSound(!isMicEnable);
+        isMicEnable = !isMicEnable;
     }
 
     public void toggleCamera() {
@@ -517,6 +520,6 @@ public class CallManager implements EventListener {
     }
 
     public boolean isMicMute() {
-        return false;
+        return isMicEnable;
     }
 }
