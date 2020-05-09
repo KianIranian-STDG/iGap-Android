@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
@@ -22,6 +23,7 @@ import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.module.Theme;
 import net.iGap.module.customView.CallRippleView;
 import net.iGap.module.customView.CheckableImageView;
 import net.iGap.module.enums.CallState;
@@ -36,12 +38,13 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private ImageView userImageView;
     private ImageView declineImageView;
     private LinearLayout buttons;
+    private LinearLayout quickAnswerView;
 
     private TextView durationTextView;
     private CheckableImageView speakerView;
     private CheckableImageView micView;
     private CheckableImageView bluetoothView;
-    private ImageView quickAnswerView;
+    private ImageView camera;
     private CallRippleView answerRippleView;
     private CallRippleView declineRippleView;
 
@@ -150,10 +153,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         buttons.setVisibility(View.GONE);
         buttons.setOrientation(LinearLayout.HORIZONTAL);
 
-        quickAnswerView = new CheckableImageView(this);
-        quickAnswerView.setScaleType(ImageView.ScaleType.CENTER);
-        quickAnswerView.setImageResource(R.drawable.ic_call_bluetooth);
-        buttons.addView(quickAnswerView, LayoutCreator.createLinear(0, 64, 1f));
+        camera = new CheckableImageView(this);
+        camera.setScaleType(ImageView.ScaleType.CENTER);
+        camera.setImageResource(R.drawable.ic_call_bluetooth);
+        buttons.addView(camera, LayoutCreator.createLinear(0, 64, 1f));
 
         micView = new CheckableImageView(this);
         micView.setScaleType(ImageView.ScaleType.CENTER);
@@ -180,6 +183,21 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         rootView.addView(buttons, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, 77));
 
+        quickAnswerView = new LinearLayout(this);
+        quickAnswerView.setOrientation(LinearLayout.VERTICAL);
+
+        View view = new View(this);
+        view.setBackground(getResources().getDrawable(R.drawable.shape_call_decline));
+        view.setAlpha(0.3f);
+        quickAnswerView.addView(view, LayoutCreator.createLinear(100, 3, Gravity.CENTER));
+
+        TextView declineText = new AppCompatTextView(this);
+        declineText.setText(R.string.send_text);
+        declineText.setTextColor(Theme.getInstance().getDividerColor(this));
+        declineText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        quickAnswerView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 2, 0, 8));
+        rootView.addView(quickAnswerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+
         return rootView;
     }
 
@@ -190,6 +208,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private void answerCall() {
         answerRippleView.setVisibility(View.GONE);
         declineRippleView.setVisibility(View.GONE);
+        quickAnswerView.setVisibility(View.GONE);
         buttons.setVisibility(View.VISIBLE);
         CallManager.getInstance().acceptCall();
     }
