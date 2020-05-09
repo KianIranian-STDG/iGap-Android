@@ -195,7 +195,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         declineText.setText(R.string.send_text);
         declineText.setTextColor(Theme.getInstance().getDividerColor(this));
         declineText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        quickAnswerView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 2, 0, 8));
+        quickAnswerView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 8));
         rootView.addView(quickAnswerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
         return rootView;

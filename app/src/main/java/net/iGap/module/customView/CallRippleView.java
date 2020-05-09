@@ -143,7 +143,7 @@ public class CallRippleView extends FrameLayout {
     private void vibrate() {
         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null)
-            vibrator.vibrate(100);
+            vibrator.vibrate(50);
     }
 
     private static class RecourseView extends View {
