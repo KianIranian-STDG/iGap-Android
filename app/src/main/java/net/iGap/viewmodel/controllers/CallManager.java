@@ -510,7 +510,7 @@ public class CallManager implements EventListener {
                 || "crosshatch".equals(Build.PRODUCT);    // Pixel 3 XL
     }
 
-    public interface CallDelegate {
-        void onStateChange(int state);
+    public boolean isMicMute() {
+        return false;
     }
 }

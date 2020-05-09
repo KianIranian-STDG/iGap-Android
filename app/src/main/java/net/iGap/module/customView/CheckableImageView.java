@@ -1,0 +1,60 @@
+package net.iGap.module.customView;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Checkable;
+
+import androidx.appcompat.widget.AppCompatImageView;
+
+public class CheckableImageView extends AppCompatImageView implements Checkable {
+
+    private boolean mChecked;
+    private static final int[] CHECKED_STATE_SET = {android.R.attr.state_checked};
+
+    public CheckableImageView(Context context) {
+        this(context, null);
+    }
+
+    public CheckableImageView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public CheckableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    public int[] onCreateDrawableState(final int extraSpace) {
+        final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+        if (isChecked()) {
+            mergeDrawableStates(drawableState, CHECKED_STATE_SET);
+        }
+        return drawableState;
+    }
+
+    @Override
+    public void toggle() {
+        setChecked(!mChecked);
+    }
+
+    @Override
+    public boolean isChecked() {
+        return mChecked;
+    }
+
+    @Override
+    public void setChecked(final boolean checked) {
+        if (mChecked != checked) {
+            mChecked = checked;
+            refreshDrawableState();
+        }
+    }
+
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setCheckable(true);
+        info.setChecked(isChecked());
+    }
+}

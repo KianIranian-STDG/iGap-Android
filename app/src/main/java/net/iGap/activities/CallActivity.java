@@ -3,6 +3,7 @@ package net.iGap.activities;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -10,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
@@ -21,21 +23,25 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.customView.CallRippleView;
+import net.iGap.module.customView.CheckableImageView;
+import net.iGap.module.enums.CallState;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
 
-public class CallActivity extends ActivityEnhanced implements CallManager.CallDelegate {
+public class CallActivity extends ActivityEnhanced implements CallManager.CallStateChange {
     private FrameLayout rootView;
     private TextView nameTextView;
     private TextView callTypeTextView;
     private ImageView userImageView;
     private ImageView declineImageView;
+    private LinearLayout buttons;
 
     private TextView durationTextView;
-    private ImageView speakerView;
-    private ImageView micView;
-    private ImageView bluetoothView;
+    private CheckableImageView speakerView;
+    private CheckableImageView micView;
+    private CheckableImageView bluetoothView;
+    private ImageView quickAnswerView;
     private CallRippleView answerRippleView;
     private CallRippleView declineRippleView;
 
@@ -88,10 +94,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallDe
                 paint.setColor(0x4C000000);
                 canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
                 topGradient.setBounds(0, 0, getWidth(), LayoutCreator.dp(170));
-                topGradient.setAlpha(128);
+                topGradient.setAlpha(130);
                 topGradient.draw(canvas);
                 bottomGradient.setBounds(0, getHeight() - LayoutCreator.dp(220), getWidth(), getHeight());
-                bottomGradient.setAlpha(178);
+                bottomGradient.setAlpha(180);
                 bottomGradient.draw(canvas);
             }
         };
@@ -123,53 +129,90 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallDe
         nameTextView.setMaxLines(1);
         nameTextView.setSingleLine(true);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
-        nameTextView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
-        rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 44, 16, 0));
+        nameTextView.setGravity(Gravity.CENTER);
+        rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 72, 16, 0));
 
         if (incomingCall) {
             answerRippleView = new CallRippleView(this);
             answerRippleView.setImageResource(R.drawable.ic_call_answer);
             answerRippleView.startAnimation();
-            answerRippleView.setDelegate(this::callAnswer);
+            answerRippleView.setDelegate(this::answerCall);
             rootView.addView(answerRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 36));
 
             declineRippleView = new CallRippleView(this);
             declineRippleView.setImageResource(R.drawable.ic_call_decline);
             declineRippleView.startAnimation();
-            declineRippleView.setDelegate(this::callDecline);
+            declineRippleView.setDelegate(this::declineCall);
             rootView.addView(declineRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 0, 36));
         }
 
+        buttons = new LinearLayout(this);
+        buttons.setVisibility(View.GONE);
+        buttons.setOrientation(LinearLayout.HORIZONTAL);
+
+        quickAnswerView = new CheckableImageView(this);
+        quickAnswerView.setScaleType(ImageView.ScaleType.CENTER);
+        quickAnswerView.setImageResource(R.drawable.ic_call_bluetooth);
+        buttons.addView(quickAnswerView, LayoutCreator.createLinear(0, 64, 1f));
+
+        micView = new CheckableImageView(this);
+        micView.setScaleType(ImageView.ScaleType.CENTER);
+        micView.setImageResource(R.drawable.ic_call_mic);
+        micView.setChecked(CallManager.getInstance().isMicMute());
+        micView.setOnClickListener(v -> toggleMic());
+        buttons.addView(micView, LayoutCreator.createLinear(0, 64, 1f));
+
         declineImageView = new AppCompatImageView(this);
         declineImageView.setImageResource(R.drawable.ic_call_decline);
-        rootView.addView(declineImageView, LayoutCreator.createFrame(64, 64, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0, 0, 72));
+        buttons.addView(declineImageView, LayoutCreator.createLinear(0, 64, 1f));
 
-        speakerView = new AppCompatImageView(this);
+        speakerView = new CheckableImageView(this);
         speakerView.setImageResource(R.drawable.ic_call_speaker);
         speakerView.setScaleType(ImageView.ScaleType.CENTER);
-        rootView.addView(speakerView, LayoutCreator.createFrame(52, 52, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 64, 0, 0, 88));
+        speakerView.setChecked(isSpeakerEnable());
+        speakerView.setOnClickListener(v -> toggleSpeaker());
+        buttons.addView(speakerView, LayoutCreator.createLinear(0, 64, 1f));
 
-        bluetoothView = new AppCompatImageView(this);
+        bluetoothView = new CheckableImageView(this);
         bluetoothView.setImageResource(R.drawable.ic_call_bluetooth);
         bluetoothView.setScaleType(ImageView.ScaleType.CENTER);
-        rootView.addView(bluetoothView, LayoutCreator.createFrame(52, 52, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 112, 0, 0, 88));
+        buttons.addView(bluetoothView, LayoutCreator.createLinear(0, 64, 1f));
+
+        rootView.addView(buttons, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, 77));
 
         return rootView;
     }
 
-    private void callDecline() {
-
+    private void declineCall() {
+        CallManager.getInstance().endCall();
     }
 
-    private void callAnswer() {
-        answerRippleView.setVisibility(View.INVISIBLE);
-        declineRippleView.setVisibility(View.INVISIBLE);
+    private void answerCall() {
+        answerRippleView.setVisibility(View.GONE);
+        declineRippleView.setVisibility(View.GONE);
+        buttons.setVisibility(View.VISIBLE);
+        CallManager.getInstance().acceptCall();
+    }
 
+    private void toggleMic() {
+        CallManager.getInstance().toggleMic();
+    }
+
+    private void toggleSpeaker() {
+        CallManager.getInstance().toggleSpeaker();
+    }
+
+    private boolean isSpeakerEnable() {
+        return ((AudioManager) getSystemService(AUDIO_SERVICE)).isSpeakerphoneOn();
+    }
+
+    @Override
+    public void onCallStateChanged(CallState callState) {
 
     }
 
     @Override
-    public void onStateChange(int state) {
+    public void onError(int messageID, int major, int minor) {
 
     }
 }
