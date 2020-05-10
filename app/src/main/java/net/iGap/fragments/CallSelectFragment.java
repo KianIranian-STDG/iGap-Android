@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperError;
+import net.iGap.module.CallService;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -83,6 +85,23 @@ public class CallSelectFragment extends BaseBottomSheet {
         }
     }
 
+    private void startCall(Activity activity, long userId, ProtoSignalingOffer.SignalingOffer.Type callType) {
+        if (activity == null || userId <= 0) {
+            return;
+        }
+
+        Intent intent = new Intent(activity, CallService.class);
+        intent.putExtra(CallService.USER_ID, userId);
+        intent.putExtra(CallService.IS_INCOMING, false);
+        intent.putExtra(CallService.CALL_TYPE, callType.toString());
+
+        try {
+            activity.startService(intent);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -100,13 +119,13 @@ public class CallSelectFragment extends BaseBottomSheet {
     public void onStart() {
         super.onStart();
         voiceCall.setOnClickListener(v -> {
-            call(userId, isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+            startCall(getActivity(), userId, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
             dismiss();
         });
 
 
         videoCall.setOnClickListener(v -> {
-            call(userId, isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+            startCall(getActivity(), userId, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
             dismiss();
         });
 
