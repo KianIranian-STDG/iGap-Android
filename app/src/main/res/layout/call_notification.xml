@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_call_root_notif_bacground"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_call_notif_bacground">
+
+        <TextView
+            android:id="@+id/tv_call_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="igap secure call"
+            android:textSize="@dimen/verySmallTextSize"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+            app:layout_constraintStart_toEndOf="@+id/imageView7"
+            app:layout_constraintTop_toTopOf="@+id/imageView7"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <TextView
+            android:id="@+id/tv_call_callerName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:fontFamily="@font/main_font_bold"
+            android:maxLines="1"
+            android:text="Abolfazl Abbasi"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="22dp"
+            app:layout_constraintEnd_toStartOf="@+id/iv_call_callerAvatar"
+            app:layout_constraintStart_toStartOf="@+id/imageView7"
+            app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+        <TextView
+            android:id="@+id/tv_call_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/video_calls"
+            android:textColor="?attr/iGapSubtitleTextColor"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintEnd_toEndOf="@+id/tv_call_callerName"
+            app:layout_constraintStart_toStartOf="@+id/tv_call_callerName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_call_callerName" />
+
+        <TextView
+            android:id="@+id/tv_call_account"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="abolfazl abbasi"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintEnd_toEndOf="@+id/tv_call_callerName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_call_callerName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_call_type" />
+
+        <TextView
+            android:id="@+id/tv_call_answer"
+            android:layout_width="121dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_call_notif_answer"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Answer call"
+            android:textColor="@color/green"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_call_decline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_call_decline"
+            app:layout_constraintTop_toTopOf="@+id/tv_call_decline" />
+
+        <TextView
+            android:id="@+id/tv_call_decline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:drawableLeft="@drawable/ic_call_notif_decline"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Decline call"
+            android:textColor="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_call_answer"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_call_account" />
+
+        <ImageView
+            android:id="@+id/iv_call_callerAvatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/igap_flat_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/main_font_bold"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="@string/send_text" />
+
+</LinearLayout>
