@@ -327,7 +327,7 @@
                 android:resource="@xml/contacts" />
         </service>
         <service android:name=".module.BeepTunesPlayerService" />
-        <service android:name=".module.CallService" />
+        <service android:name=".module.webrtc.CallService" />
 
         <service
             android:exported="false"

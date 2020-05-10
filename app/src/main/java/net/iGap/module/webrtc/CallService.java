@@ -1,4 +1,4 @@
-package net.iGap.module;
+package net.iGap.module.webrtc;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -12,7 +12,6 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 import net.iGap.R;
-import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.viewmodel.controllers.CallManager;
 
