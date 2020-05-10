@@ -5,12 +5,18 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
+import net.iGap.model.AccountUser;
+import net.iGap.model.GoToMainFromRegister;
+import net.iGap.model.LocationModel;
+import net.iGap.model.UserPasswordDetail;
+import net.iGap.module.BotInit;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnInfoCountryResponse;
 import net.iGap.observers.interfaces.OnReceiveInfoLocation;
 import net.iGap.observers.interfaces.OnUserInfoResponse;
@@ -21,12 +27,6 @@ import net.iGap.observers.interfaces.OnUserRegistration;
 import net.iGap.observers.interfaces.OnUserVerification;
 import net.iGap.observers.interfaces.TwoStepVerificationGetPasswordDetail;
 import net.iGap.observers.interfaces.TwoStepVerificationVerifyPassword;
-import net.iGap.model.AccountUser;
-import net.iGap.model.GoToMainFromRegister;
-import net.iGap.model.LocationModel;
-import net.iGap.model.UserPasswordDetail;
-import net.iGap.module.BotInit;
-import net.iGap.module.SingleLiveEvent;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoUserRegister;
@@ -132,6 +132,10 @@ public class RegisterRepository {
 
     public void setRegex(String regex) {
         this.regex = regex;
+    }
+
+    public void setIsoCode(String isoCode) {
+        this.isoCode = isoCode;
     }
 
     public void setToken(String token) {
