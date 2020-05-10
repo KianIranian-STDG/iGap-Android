@@ -416,14 +416,6 @@ public class CallManager implements EventListener {
         CallSelectFragment.call(callPeerId, isIncomeCall, callType);
     }
 
-    private void startService() {
-
-    }
-
-    private void stopService() {
-
-    }
-
     public boolean isCallAlive() {
         return callAlive;
     }
@@ -437,10 +429,8 @@ public class CallManager implements EventListener {
 
     }
 
-    public void cleanUp(boolean stopService) {
-        if (stopService) {
-            stopService();
-        }
+    public void cleanUp() {
+
     }
 
     public long getCallPeerId() {
