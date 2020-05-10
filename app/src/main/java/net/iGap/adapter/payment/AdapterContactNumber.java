@@ -20,7 +20,7 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
     private int selectedPosition;
 
     public AdapterContactNumber(List<ContactNumber> contactNumbers) {
-        this.contactNumbers=contactNumbers;
+        this.contactNumbers = contactNumbers;
     }
 
     @NonNull
@@ -61,7 +61,8 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
         }
 
         public void bindNumber(ContactNumber amount) {
-            contactName.setText(amount.getPhone());
+            contactName.setText(amount.getDisplayName());
+            phoneNumber.setText(amount.getPhone());
         }
     }
 

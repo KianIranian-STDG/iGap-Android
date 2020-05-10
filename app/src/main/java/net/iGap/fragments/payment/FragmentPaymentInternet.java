@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,16 +26,26 @@ import com.google.android.material.button.MaterialButton;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
+import net.iGap.adapter.payment.Amount;
+import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.HistoryNumber;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
+import net.iGap.module.Contacts;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.realm.RealmRecentChargeNumber;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import io.realm.RealmResults;
 
 public class FragmentPaymentInternet extends BaseFragment {
 
@@ -58,6 +69,9 @@ public class FragmentPaymentInternet extends BaseFragment {
     private ContactNumber contactNumber;
     private HistoryNumber historyNumber;
     private ScrollView scrollView;
+    private View closeView, closeView2, closeView3, closeView4;
+    private OperatorType.Type operatorType;
+
     List<ContactNumber> contactNumberList = new ArrayList<>();
 
     public static FragmentPaymentInternet newInstance() {
@@ -118,12 +132,13 @@ public class FragmentPaymentInternet extends BaseFragment {
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
-            adapterContact = new AdapterContactNumber(contactNumberList);
+            new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
             View view = dialog.getCustomView();
-            closeImage1 = view.findViewById(R.id.iv_close1);
             rvContact = view.findViewById(R.id.rv_contact);
             saveBtn1 = view.findViewById(R.id.btn_dialog1);
+            closeView = view.findViewById(R.id.closeView);
+
 
             saveBtn1.setOnClickListener(v15 -> {
                 if (adapterContact.getSelectedPosition() == -1) {
@@ -131,12 +146,12 @@ public class FragmentPaymentInternet extends BaseFragment {
                 }
                 selectedIndex = adapterContact.getSelectedPosition();
                 contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
-                editTextNumber.setText(contactNumber.getPhone());
+                editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
                 dialog.dismiss();
             });
             dialog.show();
 
-            closeImage1.setOnClickListener(v12 -> dialog.dismiss());
+            closeView.setOnClickListener(v12 -> dialog.dismiss());
 
             rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             rvContact.setAdapter(adapterContact);
@@ -145,28 +160,38 @@ public class FragmentPaymentInternet extends BaseFragment {
 
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
-            adapterHistory = new AdapterHistoryNumber();
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
-            View view = dialog.getCustomView();
-            closeImage2 = view.findViewById(R.id.iv_close2);
-            rvHistory = view.findViewById(R.id.rv_history);
-            saveBtn2 = view.findViewById(R.id.btn_dialog2);
 
-            closeImage2.setOnClickListener(v12 -> dialog.dismiss());
-
-            saveBtn2.setOnClickListener(v13 -> {
-                if (adapterHistory.getSelectedPosition() == -1) {
-                    return;
-                }
-                selectedIndex = adapterHistory.getSelectedPosition();
-                historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                editTextNumber.setText(historyNumber.getHistoryNumber());
-                dialog.dismiss();
+            RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRecentChargeNumber.class).findAll();
             });
 
-            rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            rvHistory.setAdapter(adapterHistory);
-            dialog.show();
+            if (numbers == null || numbers.size() == 0) {
+                Toast.makeText(getContext(), "number is empty", Toast.LENGTH_SHORT).show();
+            } else {
+                adapterHistory = new AdapterHistoryNumber(numbers);
+
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                View view = dialog.getCustomView();
+                rvHistory = view.findViewById(R.id.rv_history);
+                saveBtn2 = view.findViewById(R.id.btn_dialog2);
+                closeView2 = view.findViewById(R.id.close_view);
+
+                closeView2.setOnClickListener(v12 -> dialog.dismiss());
+
+                saveBtn2.setOnClickListener(v13 -> {
+                    if (adapterHistory.getSelectedPosition() == -1) {
+                        return;
+                    }
+                    selectedIndex = adapterHistory.getSelectedPosition();
+                    historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
+                    editTextNumber.setText(historyNumber.getHistoryNumber());
+                    dialog.dismiss();
+                });
+
+                rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                rvHistory.setAdapter(adapterHistory);
+                dialog.show();
+            }
         });
     }
 
@@ -209,26 +234,35 @@ public class FragmentPaymentInternet extends BaseFragment {
     private void onItemOperatorSelect() {
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             int id = radioGroup.getCheckedRadioButtonId();
-            switch (id) {
-                case R.id.radio_hamrahAval:
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
-                case R.id.radio_irancell:
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
-                case R.id.radio_rightel:
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
+            if (editTextNumber.getText() != null) {
+                switch (id) {
+                    case R.id.radio_hamrahAval:
+                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        break;
+                    case R.id.radio_irancell:
+                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        break;
+                    case R.id.radio_rightel:
+                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        break;
+                }
+            } else {
+                radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
             }
+
         });
 
     }
+
+
 
 
 }

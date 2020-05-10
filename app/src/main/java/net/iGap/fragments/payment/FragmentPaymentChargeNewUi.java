@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,14 +46,18 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.realm.RealmRecentChargeNumber;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.realm.RealmResults;
 
 public class FragmentPaymentChargeNewUi extends BaseFragment {
     private LinearLayout toolbar;
@@ -91,7 +96,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private View closeView, closeView2, closeView3, closeView4;
     List<Amount> amountList = new ArrayList<>();
     List<ChargeType> chargeTypeList = new ArrayList<>();
-    List<ContactNumber> contactNumberList = new ArrayList<>();
 
     private OperatorType.Type operatorType;
 
@@ -139,7 +143,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         progressBar = view.findViewById(R.id.loadingView);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
+            enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.gray));
         }
 
         toolbar.addView(HelperToolbar.create()
@@ -168,16 +172,15 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
-            adapterContact = new AdapterContactNumber(contactNumberList);
+
+            new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
+
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
             View view = dialog.getCustomView();
             rvContact = view.findViewById(R.id.rv_contact);
             saveBtn1 = view.findViewById(R.id.btn_dialog1);
             closeView = view.findViewById(R.id.closeView);
 
-            new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
-                contactNumberList = contactNumbers;
-            });
 
             saveBtn1.setOnClickListener(v15 -> {
                 if (adapterContact.getSelectedPosition() == -1) {
@@ -185,7 +188,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 }
                 selectedIndex = adapterContact.getSelectedPosition();
                 contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
-                editTextNumber.setText(contactNumber.getPhone());
+                editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
                 dialog.dismiss();
             });
             dialog.show();
@@ -199,28 +202,38 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
-            adapterHistory = new AdapterHistoryNumber();
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
-            View view = dialog.getCustomView();
-            rvHistory = view.findViewById(R.id.rv_history);
-            saveBtn2 = view.findViewById(R.id.btn_dialog2);
-            closeView2 = view.findViewById(R.id.close_view);
 
-            closeView2.setOnClickListener(v12 -> dialog.dismiss());
-
-            saveBtn2.setOnClickListener(v13 -> {
-                if (adapterHistory.getSelectedPosition() == -1) {
-                    return;
-                }
-                selectedIndex = adapterHistory.getSelectedPosition();
-                historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                editTextNumber.setText(historyNumber.getHistoryNumber());
-                dialog.dismiss();
+            RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRecentChargeNumber.class).findAll();
             });
 
-            rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            rvHistory.setAdapter(adapterHistory);
-            dialog.show();
+            if (numbers == null || numbers.size() == 0) {
+                Toast.makeText(getContext(), "number is empty", Toast.LENGTH_SHORT).show();
+            } else {
+                adapterHistory = new AdapterHistoryNumber(numbers);
+
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                View view = dialog.getCustomView();
+                rvHistory = view.findViewById(R.id.rv_history);
+                saveBtn2 = view.findViewById(R.id.btn_dialog2);
+                closeView2 = view.findViewById(R.id.close_view);
+
+                closeView2.setOnClickListener(v12 -> dialog.dismiss());
+
+                saveBtn2.setOnClickListener(v13 -> {
+                    if (adapterHistory.getSelectedPosition() == -1) {
+                        return;
+                    }
+                    selectedIndex = adapterHistory.getSelectedPosition();
+                    historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
+                    editTextNumber.setText(historyNumber.getHistoryNumber());
+                    dialog.dismiss();
+                });
+
+                rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                rvHistory.setAdapter(adapterHistory);
+                dialog.show();
+            }
         });
     }
 
@@ -264,7 +277,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private void onItemOperatorSelect() {
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             int id = radioGroup.getCheckedRadioButtonId();
-            if (editTextNumber.getText() != null){
+            if (editTextNumber.getText() != null) {
                 switch (id) {
                     case R.id.radio_hamrahAval:
                         setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
@@ -285,7 +298,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
                         break;
                 }
-            }else {
+            } else {
                 radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
                 radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
                 radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
@@ -322,6 +335,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     priceChoose.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
                     btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.green));
                 }
+                amountTxt.setTextColor(getContext().getResources().getColor(R.color.gray));
                 chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
                 priceChoose.setClickable(false);
                 dialog.dismiss();
@@ -337,15 +351,17 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             dialog.show();
         });
         ivAdd.setOnClickListener(v -> {
-            if (selectedPriceIndex < amountList.size()) {
+            if (selectedPriceIndex + 1 < amountList.size()) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex + 1);
                 amountTxt.setText(amount.getTextAmount());
+            } else {
+                ivAdd.setClickable(false);
             }
         });
 
 
         lowView.setOnClickListener(v -> {
-            if (selectedPriceIndex < amountList.size()) {
+            if (selectedPriceIndex - 1 < amountList.size() && selectedPriceIndex > 0) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex - 1);
                 amountTxt.setText(amount.getTextAmount());
             }
@@ -377,6 +393,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                 }
                 chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
+                chooseType.setTextColor(getContext().getResources().getColor(R.color.gray));
+
                 editType.setVisibility(View.VISIBLE);
                 dialog.dismiss();
 
@@ -397,10 +415,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             case HAMRAH_AVAL:
                 operatorType = OperatorType.Type.HAMRAH_AVAL;
                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
+                amountList.clear();
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
                 }
                 chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_hamrahe_aval));
+                chargeTypeList.clear();
                 for (int i = 0; i < chargeType.size(); i++) {
                     chargeTypeList.add(new ChargeType(chargeType.get(i)));
                 }
@@ -409,10 +429,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             case IRANCELL:
                 operatorType = OperatorType.Type.IRANCELL;
                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price_irancell));
+                amountList.clear();
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
                 }
                 chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_irancell));
+                chargeTypeList.clear();
                 for (int i = 0; i < chargeType.size(); i++) {
                     chargeTypeList.add(new ChargeType(chargeType.get(i)));
                 }
@@ -420,10 +442,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             case RITEL:
                 operatorType = OperatorType.Type.RITEL;
                 prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
+                amountList.clear();
                 for (int i = 0; i < prices.size(); i++) {
                     amountList.add(new Amount(prices.get(i)));
                 }
                 chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_ritel));
+                chargeTypeList.clear();
                 for (int i = 0; i < chargeType.size(); i++) {
                     chargeTypeList.add(new ChargeType(chargeType.get(i)));
                 }
@@ -435,7 +459,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private void onSaveBtnClicked() {
         enterBtn.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
-            Log.i("eliya", "onSaveBtnClicked: ");
             if (G.userLogin) {
                 if (isNumeric(editTextNumber.getText().toString()) && editTextNumber.getText().length() == 11) {
                     if (operatorType != null) {
@@ -448,20 +471,20 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                         break;
                                     case IRANCELL:
                                         switch (selectedChargeTypeIndex) {
-                                            case 1:
+                                            case 0:
                                                 chooseChargeType = ChooseChargeType.MTN_NORMAL;
                                                 break;
-                                            case 2:
+                                            case 1:
                                                 chooseChargeType = ChooseChargeType.MTN_AMAZING;
                                                 break;
                                         }
                                         break;
                                     case RITEL:
                                         switch (selectedChargeTypeIndex) {
-                                            case 1:
+                                            case 0:
                                                 chooseChargeType = ChooseChargeType.RIGHTEL_NORMAL;
                                                 break;
-                                            case 2:
+                                            case 1:
                                                 chooseChargeType = ChooseChargeType.RIGHTEL_EXCITING;
                                                 break;
                                         }
@@ -469,19 +492,19 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 }
                                 long price = 0;
                                 switch (selectedPriceIndex) {
-                                    case 1:
+                                    case 0:
                                         price = 10000;
                                         break;
-                                    case 2:
+                                    case 1:
                                         price = 20000;
                                         break;
-                                    case 3:
+                                    case 2:
                                         price = 50000;
                                         break;
-                                    case 4:
+                                    case 3:
                                         price = 100000;
                                         break;
-                                    case 5:
+                                    case 4:
                                         price = 200000;
                                         break;
                                 }
@@ -534,11 +557,15 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     @Override
                     public void onSuccess(MciPurchaseResponse data) {
                         progressBar.setVisibility(View.GONE);
-                        // observeEnabledPayment.set(true);
                         String token = data.getToken();
                         if (getActivity() != null && token != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
                                 if (result.isSuccess()) {
+
+                                    DbManager.getInstance().doRealmTask(realm -> {
+                                        RealmRecentChargeNumber.put(realm, "0" + phoneNumber);
+                                    });
+
                                     goBack();
                                 }
                             });
@@ -548,6 +575,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     @Override
                     public void onError(String error) {
                         progressBar.setVisibility(View.GONE);
+                        Toast.makeText(_mActivity, error, Toast.LENGTH_SHORT).show();
                         //   observeEnabledPayment.set(true);
                         // showMciPaymentError.setValue(new ErrorModel("", error));
                     }

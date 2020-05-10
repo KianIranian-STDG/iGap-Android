@@ -9,27 +9,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.realm.RealmRecentChargeNumber;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmResults;
 
 public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNumber.ContactNumberViewHolder> {
     private List<HistoryNumber> historyNumberList = new ArrayList<>();
     private int selectedPosition;
 
-    public AdapterHistoryNumber() {
-        HistoryNumber amount = new HistoryNumber();
-        amount.setHistoryNumber("091211111111");
-        historyNumberList.add(amount);
-        HistoryNumber amount1 = new HistoryNumber();
-        amount1.setHistoryNumber("09122222222");
-        historyNumberList.add(amount1);
-        HistoryNumber amount2 = new HistoryNumber();
-        amount2.setHistoryNumber("091233333333");
-        historyNumberList.add(amount2);
-        HistoryNumber amount3 = new HistoryNumber();
-        amount3.setHistoryNumber("091244444444");
-        historyNumberList.add(amount3);
+    public AdapterHistoryNumber(RealmResults<RealmRecentChargeNumber> numbers) {
+        if (numbers != null && numbers.isLoaded())
+            for (int i = 0; i < numbers.size(); i++) {
+                HistoryNumber historyNumber = new HistoryNumber();
+                RealmRecentChargeNumber realmRecentChargeNumber = numbers.get(i);
+                if (realmRecentChargeNumber != null) {
+                    historyNumber.setHistoryNumber(realmRecentChargeNumber.getNumber());
+                    historyNumberList.add(historyNumber);
+                }
+            }
 
     }
 
