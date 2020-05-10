@@ -10,33 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 
+import org.paygear.fragment.MerchantsListAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNumber.HistoryNumberViewHolder> {
-    private List<ContactNumber> amountList = new ArrayList<>();
+    private List<ContactNumber> contactNumbers;
     private int selectedPosition;
 
-    public AdapterContactNumber() {
-        ContactNumber amount = new ContactNumber();
-        amount.setContactNumber("0912912912912");
-        amountList.add(amount);
-        ContactNumber amount1 = new ContactNumber();
-        amount1.setContactNumber("0935935935");
-        amountList.add(amount1);
-        ContactNumber amount2 = new ContactNumber();
-        amount2.setContactNumber("0919919919");
-        amountList.add(amount2);
-        ContactNumber amount3 = new ContactNumber();
-        amount3.setContactNumber("0935935935935");
-        amountList.add(amount3);
-        ContactNumber amount4 = new ContactNumber();
-        amount4.setContactNumber("0937937937937");
-        amountList.add(amount4);
-        ContactNumber amount5 = new ContactNumber();
-        amount5.setContactNumber("0938938938938");
-        amountList.add(amount5);
-
+    public AdapterContactNumber(List<ContactNumber> contactNumbers) {
+        this.contactNumbers=contactNumbers;
     }
 
     @NonNull
@@ -48,13 +32,13 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
     @Override
     public void onBindViewHolder(@NonNull HistoryNumberViewHolder holder, int position) {
-        holder.bindNumber(amountList.get(position));
+        holder.bindNumber(contactNumbers.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return amountList.size();
+        return contactNumbers.size();
     }
 
 
@@ -64,19 +48,20 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
         public HistoryNumberViewHolder(@NonNull View itemView) {
             super(itemView);
+
             phoneNumber = itemView.findViewById(R.id.phone_Number);
             contactName = itemView.findViewById(R.id.contact_Name);
 
             itemView.setOnClickListener(v -> {
                 selectedPosition = getAdapterPosition();
                 notifyDataSetChanged();
+
             });
 
         }
 
         public void bindNumber(ContactNumber amount) {
-            contactName.setText(amount.getContactNumber());
-            phoneNumber.setText("نازنین عمرانی");
+            contactName.setText(amount.getPhone());
         }
     }
 
@@ -84,7 +69,7 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
         return selectedPosition;
     }
 
-    public List<ContactNumber> getAmountList() {
-        return amountList;
+    public List<ContactNumber> getContactNumbers() {
+        return contactNumbers;
     }
 }

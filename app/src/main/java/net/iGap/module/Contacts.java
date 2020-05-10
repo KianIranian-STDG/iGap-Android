@@ -17,7 +17,9 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.nostra13.universalimageloader.utils.L;
 
+import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -46,7 +48,7 @@ public class Contacts {
     public static boolean getContact = true;
     public static boolean isEndLocal = false;
     public static int localPhoneContactId = 0;
-
+    private Delegate delegate;
 
     /**
      * retrieve contacts from database
@@ -221,12 +223,12 @@ public class Contacts {
     }
     */
 
-    public static void getSearchContact(String text , ContactCallback callback){
+    public static void getSearchContact(String text, ContactCallback callback) {
         if (!HelperPermission.grantedContactPermission()) {
             return;
         }
 
-        int currentItemIndex = 0 ;
+        int currentItemIndex = 0;
 
         ArrayList<String> tempList = new ArrayList<>();
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
@@ -240,7 +242,7 @@ public class Contacts {
             if (cur.getCount() > 0) {
                 while (cur.moveToNext()) {
 
-                    currentItemIndex ++ ;
+                    currentItemIndex++;
 
                     int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
 
@@ -272,7 +274,7 @@ public class Contacts {
                     }
 
                     //limit search in contact
-                    if (currentItemIndex == 300){
+                    if (currentItemIndex == 300) {
                         break;
                     }
 
@@ -369,8 +371,6 @@ public class Contacts {
     }
 
     private static void getAllPhoneContactForServer() {
-        Log.i("fetch_contact", "start");
-
         if (!HelperPermission.grantedContactPermission()) {
             return;
         }
@@ -407,14 +407,11 @@ public class Contacts {
                     while (pCur.moveToNext()) {
                         number = pCur.getString(1);
                         displayName = pCur.getString(4);
-                        // Log.i("fetch_contact" , number + " --- " + displayName);
                         contact = new StructListOfContact();
                         checkContactsData(displayName, number, contact, contactList);
                     }
                 }
                 pCur.close();
-                Log.i("fetch_contact", contactList.size() + "");
-                Log.i("import_contact", contactList.size() + "");
             }
 
             if (G.onContactFetchForServer != null) {
@@ -424,10 +421,105 @@ public class Contacts {
         } catch (Exception e) {
             //nothing
         }
-        Log.i("fetch_contact", "end");
     }
 
     private static void checkContactsData(String name, String phone, StructListOfContact itemContact, List<StructListOfContact> list) {
+
+        try {
+            if (phone != null && name != null) {
+                String[] sp = name.split(" ");
+                if (sp.length == 1) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName("");
+                    phone = normalizePhoneNumber(phone);
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                } else if (sp.length == 2) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName(sp[1]);
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                } else if (sp.length == 3) {
+                    itemContact.setFirstName(sp[0]);
+                    itemContact.setLastName(sp[1] + " " + sp[2]);
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                } else if (sp.length >= 3) {
+                    itemContact.setFirstName(name);
+                    itemContact.setLastName("");
+                    itemContact.setPhone(phone);
+                    itemContact.setDisplayName(name);
+                }
+
+                list.add(itemContact);
+            }
+        } catch (Exception e) {
+            //nothing
+        }
+    }
+
+    public void getAllPhoneContactForPayment(Delegate delegate) {
+        if (!HelperPermission.grantedContactPermission()) {
+            return;
+        }
+
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_NUMBER)) {
+            showLimitDialog();
+            return;
+        }
+
+        String[] projectionPhones = {
+                ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY,
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                ContactsContract.CommonDataKinds.Phone.TYPE,
+                ContactsContract.CommonDataKinds.Phone.LABEL,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.RawContacts.ACCOUNT_TYPE,
+        };
+
+        ArrayList<ContactNumber> contactNumbers = new ArrayList<>();
+        ContentResolver cr = G.context.getContentResolver();
+
+        try {
+            Cursor pCur = null;
+            pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projectionPhones, null, null, null);
+
+            if (pCur != null) {
+                int count = pCur.getCount();
+
+                if (count > 0) {
+                    ContactNumber contactNumber = null;
+                    String displayName;
+                    String number;
+
+                    while (pCur.moveToNext()) {
+                        number = pCur.getString(1);
+                        displayName = pCur.getString(4);
+                        contactNumber = new ContactNumber();
+                        checkContactsNumberData(displayName, number, contactNumber, contactNumbers);
+                    }
+                }
+                pCur.close();
+            }
+
+            if (delegate != null) {
+                delegate.onResult(contactNumbers);
+            }
+
+        } catch (Exception e) {
+            //nothing
+        }
+    }
+
+    public interface Delegate {
+        void onResult(List<ContactNumber> contactNumbers);
+    }
+
+    public Delegate getDelegate() {
+        return delegate;
+    }
+
+    private static void checkContactsNumberData(String name, String phone, ContactNumber itemContact, List<ContactNumber> list) {
 
         try {
             if (phone != null && name != null) {
@@ -493,4 +585,6 @@ public class Contacts {
             return null;
         }
     }
+
+
 }

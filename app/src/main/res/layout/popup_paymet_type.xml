@@ -28,6 +28,16 @@
         app:layout_constraintStart_toEndOf="@+id/iv_close4"
         app:layout_constraintTop_toTopOf="@+id/iv_close4" />
 
+
+    <View
+        android:id="@+id/close_view4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_close4"
+        app:layout_constraintEnd_toEndOf="@+id/appCompatTextView3"
+        app:layout_constraintStart_toStartOf="@+id/iv_close4"
+        app:layout_constraintTop_toTopOf="@+id/iv_close4" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_type"
         android:layout_width="match_parent"

@@ -44,6 +44,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
+import net.iGap.module.Contacts;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 
@@ -69,7 +70,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private RecyclerView rvHistory;
     private RecyclerView rvAmount;
     private AppCompatTextView amountTxt;
-    private AppCompatTextView closeImage1, closeImage2, closeImage3, closeImage4;
     private AppCompatTextView editType;
     private AppCompatTextView chooseType;
     private AppCompatImageView ivAdd;
@@ -88,8 +88,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private ChargeType typeList;
     private ScrollView scrollView;
     private ProgressBar progressBar;
+    private View closeView, closeView2, closeView3, closeView4;
     List<Amount> amountList = new ArrayList<>();
     List<ChargeType> chargeTypeList = new ArrayList<>();
+    List<ContactNumber> contactNumberList = new ArrayList<>();
 
     private OperatorType.Type operatorType;
 
@@ -166,25 +168,29 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
-            adapterContact = new AdapterContactNumber();
+            adapterContact = new AdapterContactNumber(contactNumberList);
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
             View view = dialog.getCustomView();
-            closeImage1 = view.findViewById(R.id.iv_close1);
             rvContact = view.findViewById(R.id.rv_contact);
             saveBtn1 = view.findViewById(R.id.btn_dialog1);
+            closeView = view.findViewById(R.id.closeView);
+
+            new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
+                contactNumberList = contactNumbers;
+            });
 
             saveBtn1.setOnClickListener(v15 -> {
                 if (adapterContact.getSelectedPosition() == -1) {
                     return;
                 }
                 selectedIndex = adapterContact.getSelectedPosition();
-                contactNumber = adapterContact.getAmountList().get(selectedIndex);
-                editTextNumber.setText(contactNumber.getContactNumber());
+                contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
+                editTextNumber.setText(contactNumber.getPhone());
                 dialog.dismiss();
             });
             dialog.show();
 
-            closeImage1.setOnClickListener(v12 -> dialog.dismiss());
+            closeView.setOnClickListener(v12 -> dialog.dismiss());
 
             rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             rvContact.setAdapter(adapterContact);
@@ -196,11 +202,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             adapterHistory = new AdapterHistoryNumber();
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
             View view = dialog.getCustomView();
-            closeImage2 = view.findViewById(R.id.iv_close2);
             rvHistory = view.findViewById(R.id.rv_history);
             saveBtn2 = view.findViewById(R.id.btn_dialog2);
+            closeView2 = view.findViewById(R.id.close_view);
 
-            closeImage2.setOnClickListener(v12 -> dialog.dismiss());
+            closeView2.setOnClickListener(v12 -> dialog.dismiss());
 
             saveBtn2.setOnClickListener(v13 -> {
                 if (adapterHistory.getSelectedPosition() == -1) {
@@ -258,26 +264,35 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private void onItemOperatorSelect() {
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             int id = radioGroup.getCheckedRadioButtonId();
-            switch (id) {
-                case R.id.radio_hamrahAval:
-                    setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
-                case R.id.radio_irancell:
-                    setAdapterValue(OperatorType.Type.IRANCELL);
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
-                case R.id.radio_rightel:
-                    setAdapterValue(OperatorType.Type.RITEL);
-                    radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                    radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                    break;
+            if (editTextNumber.getText() != null){
+                switch (id) {
+                    case R.id.radio_hamrahAval:
+                        setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        break;
+                    case R.id.radio_irancell:
+                        setAdapterValue(OperatorType.Type.IRANCELL);
+                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        break;
+                    case R.id.radio_rightel:
+                        setAdapterValue(OperatorType.Type.RITEL);
+                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
+                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                        break;
+                }
+            }else {
+                radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
+                ShowError("شماره تماس راوارد کنید");
+
             }
+
         });
 
     }
@@ -288,7 +303,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_amount, false).build();
             View view = dialog.getCustomView();
             rvAmount = view.findViewById(R.id.rv_amount);
-            closeImage3 = view.findViewById(R.id.iv_close3);
+            closeView3 = view.findViewById(R.id.close_view3);
             saveBtn3 = view.findViewById(R.id.btn_dialog3);
 
             saveBtn3.setOnClickListener(v1 -> {
@@ -312,7 +327,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 dialog.dismiss();
             });
 
-            closeImage3.setOnClickListener(v12 -> dialog.dismiss());
+            closeView3.setOnClickListener(v12 -> dialog.dismiss());
 
             ViewGroup.LayoutParams params = rvAmount.getLayoutParams();
             params.height = 500;
@@ -344,7 +359,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
             View view = dialog.getCustomView();
             rvAmount = view.findViewById(R.id.rv_type);
-            closeImage4 = view.findViewById(R.id.iv_close4);
+            closeView4 = view.findViewById(R.id.close_view4);
             saveBtn4 = view.findViewById(R.id.btn_dialog4);
 
             saveBtn4.setOnClickListener(v16 -> {
@@ -367,7 +382,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
             });
 
-            closeImage4.setOnClickListener(v12 -> dialog.dismiss());
+            closeView4.setOnClickListener(v12 -> dialog.dismiss());
 
             rvAmount.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             rvAmount.setAdapter(adapterChargeType);
@@ -540,7 +555,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     @Override
                     public void onFailed() {
                         progressBar.setVisibility(View.GONE);
-                         //ToDO: handle this event
+                        //ToDO: handle this event
                         /*observeEnabledPayment.set(true);
                         showMciPaymentError.setValue(error);*/
                     }

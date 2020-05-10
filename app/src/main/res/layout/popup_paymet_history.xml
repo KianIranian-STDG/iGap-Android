@@ -27,6 +27,14 @@
         app:layout_constraintStart_toEndOf="@+id/iv_close2"
         app:layout_constraintTop_toTopOf="@+id/iv_close2" />
 
+    <View
+        android:id="@+id/close_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_close2"
+        app:layout_constraintEnd_toEndOf="@+id/txt_choose2"
+        app:layout_constraintStart_toStartOf="@+id/iv_close2"
+        app:layout_constraintTop_toTopOf="@+id/iv_close2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"

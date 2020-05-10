@@ -21,10 +21,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="انتخاب از شماره های مخاطبین"
         android:layout_marginLeft="@dimen/dp8"
+        android:text="انتخاب از شماره های مخاطبین"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close1"
         app:layout_constraintStart_toEndOf="@+id/iv_close1"
+        app:layout_constraintTop_toTopOf="@+id/iv_close1" />
+
+    <View
+        android:id="@+id/closeView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_close1"
+        app:layout_constraintStart_toStartOf="@+id/iv_close1"
+        app:layout_constraintEnd_toEndOf="@+id/txt_choose1"
         app:layout_constraintTop_toTopOf="@+id/iv_close1" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -33,6 +33,9 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.observers.interfaces.ToolbarListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FragmentPaymentInternet extends BaseFragment {
 
     private LinearLayout toolbar;
@@ -55,6 +58,7 @@ public class FragmentPaymentInternet extends BaseFragment {
     private ContactNumber contactNumber;
     private HistoryNumber historyNumber;
     private ScrollView scrollView;
+    List<ContactNumber> contactNumberList = new ArrayList<>();
 
     public static FragmentPaymentInternet newInstance() {
 
@@ -114,7 +118,7 @@ public class FragmentPaymentInternet extends BaseFragment {
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
-            adapterContact = new AdapterContactNumber();
+            adapterContact = new AdapterContactNumber(contactNumberList);
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
             View view = dialog.getCustomView();
             closeImage1 = view.findViewById(R.id.iv_close1);
@@ -126,8 +130,8 @@ public class FragmentPaymentInternet extends BaseFragment {
                     return;
                 }
                 selectedIndex = adapterContact.getSelectedPosition();
-                contactNumber = adapterContact.getAmountList().get(selectedIndex);
-                editTextNumber.setText(contactNumber.getContactNumber());
+                contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
+                editTextNumber.setText(contactNumber.getPhone());
                 dialog.dismiss();
             });
             dialog.show();
