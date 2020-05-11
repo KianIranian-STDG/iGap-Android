@@ -214,7 +214,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 ShowError("لیست خالی می باشد");
             } else {
                 adapterHistory = new AdapterHistoryNumber(numbers);
-
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
                 View view = dialog.getCustomView();
                 rvHistory = view.findViewById(R.id.rv_history);
@@ -273,6 +272,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 break;
                         }
                         scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+                        hideKeyboard();
                     }
 
                 }
@@ -567,11 +567,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         if (getActivity() != null && token != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
                                 if (result.isSuccess()) {
-
                                     DbManager.getInstance().doRealmTask(realm -> {
-                                        RealmRecentChargeNumber.put(realm, "0" + phoneNumber, 0);
+                                        realm.executeTransactionAsync(realm1 -> RealmRecentChargeNumber.put(realm1, "0" + phoneNumber, 0));
                                     });
-
                                     goBack();
                                 }
                             });
@@ -584,7 +582,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         //   observeEnabledPayment.set(true);
                         hideKeyboard();
                         HelperError.showSnackMessage(error, false);
-
                     }
 
                     @Override

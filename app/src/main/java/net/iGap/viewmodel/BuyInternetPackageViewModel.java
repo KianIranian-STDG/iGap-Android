@@ -292,9 +292,6 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                         showLoadingView.set(View.INVISIBLE);
                         enabledPaymentButton.set(true);
                         goToPaymentPage.setValue(data.getToken());
-                        DbManager.getInstance().doRealmTask(realm -> {
-                            RealmRecentChargeNumber.put(realm, "0" + phoneNumber, 1);
-                        });
                     });
                 }
 

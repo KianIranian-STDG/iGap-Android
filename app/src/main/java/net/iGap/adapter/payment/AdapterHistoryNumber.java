@@ -21,7 +21,7 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
     private int selectedPosition = -1;
 
     public AdapterHistoryNumber(RealmResults<RealmRecentChargeNumber> numbers) {
-        if (numbers != null && numbers.isLoaded())
+        if (numbers != null && numbers.isLoaded()) {
             for (int i = 0; i < numbers.size(); i++) {
                 HistoryNumber historyNumber = new HistoryNumber();
                 RealmRecentChargeNumber realmRecentChargeNumber = numbers.get(i);
@@ -30,7 +30,7 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
                     historyNumberList.add(historyNumber);
                 }
             }
-
+        }
     }
 
     @NonNull
