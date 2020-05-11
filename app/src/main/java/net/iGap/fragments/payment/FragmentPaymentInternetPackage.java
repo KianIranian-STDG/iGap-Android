@@ -21,7 +21,9 @@ import com.google.android.material.button.MaterialButton;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.InternetPackageListAdapter;
 import net.iGap.adapter.MySpinnerAdapter;
+import net.iGap.adapter.PackagesFilterSpinnerAdapter;
 import net.iGap.adapter.payment.internetpackage.AdapterProposalPackage;
 import net.iGap.adapter.payment.internetpackage.AdapterRecentlyPackage;
 import net.iGap.api.apiService.BaseAPIViewFrag;
@@ -81,6 +83,8 @@ public class FragmentPaymentInternetPackage extends BaseAPIViewFrag<BuyInternetP
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        viewModel.getData();
+
         adapterRecently = new AdapterRecentlyPackage();
         binding.rvRecentlyPackage.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.rvRecentlyPackage.setAdapter(adapterRecently);
@@ -90,17 +94,21 @@ public class FragmentPaymentInternetPackage extends BaseAPIViewFrag<BuyInternetP
         binding.rvProposalPackage.setAdapter(adapterProposal);
 
 
-
-        viewModel.getTypeList().observe(getViewLifecycleOwner(), typeList -> {
-            hideKeyboard();
-            if (typeList != null) {
-                binding.spinnerSize.setAdapter(new MySpinnerAdapter(typeList));
-                binding.spinnerTime.setAdapter(new MySpinnerAdapter(typeList));
+        viewModel.getPackageFiltersList().observe(getViewLifecycleOwner(), filters -> {
+            if (filters != null) {
+                binding.spinnerTime.setAdapter(new PackagesFilterSpinnerAdapter(filters));
             } else {
-                binding.spinnerSize.setSelection(0);
                 binding.spinnerTime.setSelection(0);
             }
         });
 
+
+        viewModel.getPackageFiltersList().observe(getViewLifecycleOwner(), filters -> {
+            if (filters != null) {
+                binding.spinnerSize.setAdapter(new PackagesFilterSpinnerAdapter(filters));
+            } else {
+                binding.spinnerSize.setSelection(0);
+            }
+        });
     }
 }

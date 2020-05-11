@@ -324,7 +324,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         }
     }
 
-    private void getData() {
+    public void getData() {
         showLoadingView.set(View.VISIBLE);
         //showMainView.set(View.GONE);
         showRetryView.set(View.GONE);
