@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.HistoryNumber;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
@@ -93,8 +95,8 @@ public class FragmentPaymentInternet extends BaseFragment {
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
         frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
-        editTextNumber = view.findViewById(R.id.phoneNumberInput);
-        enterBtn = view.findViewById(R.id.btn_next);
+        editTextNumber = view.findViewById(R.id.phoneNumber);
+        enterBtn = view.findViewById(R.id.btn_nextpage);
         frameHamrah = view.findViewById(R.id.view12);
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
@@ -124,10 +126,17 @@ public class FragmentPaymentInternet extends BaseFragment {
             if (operatorType != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPaymentInternetPackage()).setReplace(false).load();
             } else {
-                Toast.makeText(getContext(), "empty number", Toast.LENGTH_SHORT).show();
+                ShowError("شماره تماس وارد نشده");
             }
 
         });
+    }
+
+    public void ShowError(String errorMessage) {
+        if (errorMessage != null) {
+            hideKeyboard();
+            HelperError.showSnackMessage(errorMessage, false);
+        }
     }
 
     private void onContactNumberButtonClick() {
@@ -235,20 +244,23 @@ public class FragmentPaymentInternet extends BaseFragment {
 
 
     private void onItemOperatorSelect() {
-        frameHamrah.setOnClickListener(v -> {
-            operatorType = OperatorType.Type.HAMRAH_AVAL;
-            setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
-        });
+        if (editTextNumber.getText() != null) {
+            frameHamrah.setOnClickListener(v -> {
+                operatorType = OperatorType.Type.HAMRAH_AVAL;
+                setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
+            });
 
-        frameRightel.setOnClickListener(v -> {
-            operatorType = OperatorType.Type.RITEL;
-            setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
-        });
+            frameRightel.setOnClickListener(v -> {
+                operatorType = OperatorType.Type.RITEL;
+                setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
+            });
 
-        frameIrancel.setOnClickListener(v -> {
-            operatorType = OperatorType.Type.IRANCELL;
-            setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
-        });
+            frameIrancel.setOnClickListener(v -> {
+                operatorType = OperatorType.Type.IRANCELL;
+                setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
+            });
+        }
+
     }
 
     private void setSelectedOperator(RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3, View view1, View view2, View view3) {
