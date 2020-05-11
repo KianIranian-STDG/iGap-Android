@@ -38,6 +38,7 @@ import net.iGap.module.Contacts;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRecentChargeNumber;
+import net.iGap.realm.RealmRecentChargeNumberFields;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -120,14 +121,18 @@ public class FragmentPaymentInternet extends BaseFragment {
                     }
                 }).getView());
 
-        enterBtn.setOnClickListener(v -> {
-            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance()).setReplace(false).load();
 
-        });
         onContactNumberButtonClick();
         onHistoryNumberButtonClick();
         onPhoneNumberInputClick();
         onItemOperatorSelect();
+        enterBtn.setOnClickListener(v -> {
+            new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPaymentInternetPackage()).setReplace(false).load();
+        });
+    }
+
+    public AppCompatEditText getEditTextNumber() {
+        return editTextNumber;
     }
 
     private void onContactNumberButtonClick() {
@@ -162,7 +167,7 @@ public class FragmentPaymentInternet extends BaseFragment {
         frameHistory.setOnClickListener(v -> {
 
             RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRecentChargeNumber.class).findAll();
+                return realm.where(RealmRecentChargeNumber.class).equalTo(RealmRecentChargeNumberFields.TYPE, 1).findAll();
             });
 
             if (numbers == null || numbers.size() == 0) {
@@ -261,8 +266,6 @@ public class FragmentPaymentInternet extends BaseFragment {
         });
 
     }
-
-
 
 
 }

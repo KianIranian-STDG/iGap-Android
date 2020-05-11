@@ -50,6 +50,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRecentChargeNumber;
+import net.iGap.realm.RealmRecentChargeNumberFields;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -204,7 +205,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameHistory.setOnClickListener(v -> {
 
             RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRecentChargeNumber.class).findAll();
+                return realm.where(RealmRecentChargeNumber.class).equalTo(RealmRecentChargeNumberFields.TYPE, 0).findAll();
             });
 
             if (numbers == null || numbers.size() == 0) {
@@ -517,8 +518,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     sendRequestCharge(RIGHTEL, chooseChargeType, editTextNumber.getText().toString().substring(1), (int) price);
                                 }
 
-                                //   hideKeyWord.setValue(true);
-                                //observeEnabledPayment.set(false);
                             } else {
                                 ShowError(getContext().getResources().getString(R.string.charge_price_error_message));
                             }
@@ -563,7 +562,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 if (result.isSuccess()) {
 
                                     DbManager.getInstance().doRealmTask(realm -> {
-                                        RealmRecentChargeNumber.put(realm, "0" + phoneNumber);
+                                        RealmRecentChargeNumber.put(realm, "0" + phoneNumber, 0);
                                     });
 
                                     goBack();

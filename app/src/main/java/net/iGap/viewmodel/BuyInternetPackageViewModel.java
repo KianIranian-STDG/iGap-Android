@@ -15,7 +15,9 @@ import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.internetPackage.InternetPackage;
 import net.iGap.model.internetPackage.InternetPackageFilter;
 import net.iGap.model.internetPackage.MciInternetPackageFilter;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.realm.RealmRecentChargeNumber;
 import net.iGap.repository.MciInternetPackageRepository;
 
 import org.jetbrains.annotations.NotNull;
@@ -193,6 +195,27 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         showPayButton.set(View.GONE);
     }
 
+    public void onTimeCLicked(int position) {
+        if (position == R.id.spinner_size && position != 0) {
+            isDaily = true;
+            typeList.setValue(daysFilter);
+            getPackageListWithFilter(position - 1);
+            showPackageList.set(View.VISIBLE);
+            internetPackageFiltered.setValue(packageListFiltered);
+        }
+        showFilterType.set(View.VISIBLE);
+        showPackageList.set(View.GONE);
+        showPayButton.set(View.GONE);
+    }
+
+    public void onPackageClicked(int position) {
+        isDaily = true;
+        typeList.setValue(daysFilter);
+        showFilterType.set(View.VISIBLE);
+        showPackageList.set(View.GONE);
+        showPayButton.set(View.GONE);
+    }
+
     public void onItemSelectedPkgTypeFilter(int position) {
 
         clearTypeChecked.setValue(true);
@@ -269,6 +292,9 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                         showLoadingView.set(View.INVISIBLE);
                         enabledPaymentButton.set(true);
                         goToPaymentPage.setValue(data.getToken());
+                        DbManager.getInstance().doRealmTask(realm -> {
+                            RealmRecentChargeNumber.put(realm, "0" + phoneNumber, 1);
+                        });
                     });
                 }
 
