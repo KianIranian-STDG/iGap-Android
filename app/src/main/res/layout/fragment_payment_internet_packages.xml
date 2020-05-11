@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -13,114 +14,117 @@
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="مرتب سازی بر اساس"
+            android:textColor="@color/green"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_packageTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="زمان"
+            app:layout_constraintStart_toStartOf="@+id/appCompatTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_packageSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="حجم"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_packageTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toEndOf="@+id/tv_packageTime"
+            app:layout_constraintTop_toTopOf="@+id/tv_packageTime"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:minHeight="@dimen/dp32"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onTimeCLicked(position)}"
+            app:layout_constraintEnd_toStartOf="@+id/spinner_size"
+            app:layout_constraintStart_toStartOf="@+id/tv_packageTime"
+            app:layout_constraintTop_toBottomOf="@+id/tv_packageTime" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_cancel_money_action"
+            app:layout_constraintBottom_toBottomOf="@id/spinner_time"
+            app:layout_constraintEnd_toEndOf="@id/spinner_time"
+            app:layout_constraintStart_toStartOf="@id/spinner_time"
+            app:layout_constraintTop_toTopOf="@id/spinner_time" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onTimeCLicked(position)}"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:minHeight="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_packageSize"
+            app:layout_constraintTop_toTopOf="@+id/spinner_time" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_cancel_money_action"
+            app:layout_constraintBottom_toBottomOf="@id/spinner_size"
+            app:layout_constraintEnd_toEndOf="@id/spinner_size"
+            app:layout_constraintStart_toStartOf="@id/spinner_size"
+            app:layout_constraintTop_toTopOf="@id/spinner_size" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp32"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:fadingEdge="vertical"
+            android:fadingEdgeLength="@dimen/dp8"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/spinner_time">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/scrollView"
-                app:layout_constraintEnd_toEndOf="@+id/scrollView"
-                app:layout_constraintStart_toStartOf="@+id/scrollView"
-                app:layout_constraintTop_toTopOf="@+id/scrollView">
+                app:layout_constraintBottom_toTopOf="@+id/btn_next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_time">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/appCompatTextView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="مرتب سازی بر اساس"
-                    android:textColor="@color/green"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_packageTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="زمان"
-                    app:layout_constraintStart_toStartOf="@+id/appCompatTextView2"
-                    app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_packageSize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="حجم"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_packageTime"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.502"
-                    app:layout_constraintStart_toEndOf="@+id/tv_packageTime"
-                    app:layout_constraintTop_toTopOf="@+id/tv_packageTime"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinner_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:minHeight="@dimen/dp32"
-                    android:onItemSelected="@{(parent,view,position,id)->viewModel.onTimeCLicked(position)}"
-                    app:layout_constraintEnd_toStartOf="@+id/spinner_size"
-                    app:layout_constraintStart_toStartOf="@+id/tv_packageTime"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_packageTime" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/background_cancel_money_action"
-                    app:layout_constraintBottom_toBottomOf="@id/spinner_time"
-                    app:layout_constraintEnd_toEndOf="@id/spinner_time"
-                    app:layout_constraintStart_toStartOf="@id/spinner_time"
-                    app:layout_constraintTop_toTopOf="@id/spinner_time" />
-
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinner_size"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:onItemSelected="@{(parent,view,position,id)->viewModel.onTimeCLicked(position)}"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:minHeight="@dimen/dp32"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_time"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tv_packageSize"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_time" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/background_cancel_money_action"
-                    app:layout_constraintBottom_toBottomOf="@id/spinner_size"
-                    app:layout_constraintEnd_toEndOf="@id/spinner_size"
-                    app:layout_constraintStart_toStartOf="@id/spinner_size"
-                    app:layout_constraintTop_toTopOf="@id/spinner_size" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="250dp"
                     android:text="بسته های اخیرا استفاده شده"
                     android:textColor="@color/green"
-                    app:layout_constraintStart_toStartOf="@+id/spinner_time"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner_time" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView5"
@@ -141,7 +145,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    app:layout_constraintEnd_toEndOf="@+id/spinner_size"
+                    app:layout_constraintEnd_toEndOf="@+id/appCompatTextView4"
                     app:layout_constraintStart_toStartOf="@+id/appCompatTextView4"
                     app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
 

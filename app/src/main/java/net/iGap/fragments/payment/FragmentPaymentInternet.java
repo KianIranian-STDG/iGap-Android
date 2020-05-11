@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +27,6 @@ import com.google.android.material.button.MaterialButton;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
-import net.iGap.adapter.payment.Amount;
-import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.HistoryNumber;
 import net.iGap.fragments.BaseFragment;
@@ -40,10 +39,8 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRecentChargeNumber;
 import net.iGap.realm.RealmRecentChargeNumberFields;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.realm.RealmResults;
@@ -69,7 +66,7 @@ public class FragmentPaymentInternet extends BaseFragment {
     private int selectedIndex;
     private ContactNumber contactNumber;
     private HistoryNumber historyNumber;
-    private ScrollView scrollView;
+    private NestedScrollView scrollView;
     private View closeView, closeView2, closeView3, closeView4;
     private OperatorType.Type operatorType;
 

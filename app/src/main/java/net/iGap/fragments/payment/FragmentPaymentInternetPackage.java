@@ -110,5 +110,6 @@ public class FragmentPaymentInternetPackage extends BaseAPIViewFrag<BuyInternetP
                 binding.spinnerSize.setSelection(0);
             }
         });
+
     }
 }
