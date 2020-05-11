@@ -244,6 +244,9 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".module.CallActionsReceiver"
+            android:exported="false" />
 
         <service android:name=".helper.ServiceContact" />
         <service android:name=".module.UploadService" />
