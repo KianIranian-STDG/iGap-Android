@@ -8,7 +8,8 @@
     </item>
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="@dimen/dp10" />
+            <stroke android:width="@dimen/dp2" android:color="@color/transparent" />
+            <corners android:radius="@dimen/dp16" />
         </shape>
     </item>
 </selector>

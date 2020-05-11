@@ -4,14 +4,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -64,10 +62,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private LinearLayout toolbar;
     private ConstraintLayout frameContact;
     private ConstraintLayout frameHistory;
+    private ConstraintLayout frameHamrah;
+    private ConstraintLayout frameIrancel;
+    private ConstraintLayout frameRightel;
     private RadioButton radioButtonHamrah;
     private RadioButton radioButtonIrancell;
     private RadioButton radioButtonRightel;
-    private RadioGroup radioGroup;
     private AdapterChargeAmount adapterAmount;
     private AdapterChargeType adapterChargeType;
     private AdapterHistoryNumber adapterHistory;
@@ -128,7 +128,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
         radioButtonIrancell = view.findViewById(R.id.radio_irancell);
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
-        radioGroup = view.findViewById(R.id.radioGroup);
         frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
         priceChoose = view.findViewById(R.id.choose_amount);
@@ -142,6 +141,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         enterBtn = view.findViewById(R.id.btn_next);
         scrollView = view.findViewById(R.id.scroll_payment);
         progressBar = view.findViewById(R.id.loadingView);
+        frameHamrah = view.findViewById(R.id.view12);
+        frameIrancel = view.findViewById(R.id.view13);
+        frameRightel = view.findViewById(R.id.view14);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.gray));
@@ -258,13 +260,16 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         setAdapterValue(opt);
                         switch (opt) {
                             case HAMRAH_AVAL:
-                                radioButtonHamrah.setChecked(true);
+                                setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                                setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
                                 break;
                             case IRANCELL:
-                                radioButtonIrancell.setChecked(true);
+                                setAdapterValue(OperatorType.Type.IRANCELL);
+                                setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
                                 break;
                             case RITEL:
-                                radioButtonRightel.setChecked(true);
+                                setAdapterValue(OperatorType.Type.RITEL);
+                                setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
                                 break;
                         }
                         scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
@@ -276,39 +281,29 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onItemOperatorSelect() {
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            int id = radioGroup.getCheckedRadioButtonId();
-            if (editTextNumber.getText() != null) {
-                switch (id) {
-                    case R.id.radio_hamrahAval:
-                        setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
-                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                        break;
-                    case R.id.radio_irancell:
-                        setAdapterValue(OperatorType.Type.IRANCELL);
-                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                        break;
-                    case R.id.radio_rightel:
-                        setAdapterValue(OperatorType.Type.RITEL);
-                        radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_select));
-                        radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                        radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                        break;
-                }
-            } else {
-                radioButtonRightel.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                radioButtonIrancell.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                radioButtonHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.shape_topup_diselect));
-                ShowError("شماره تماس راوارد کنید");
-
-            }
-
+        frameHamrah.setOnClickListener(v -> {
+            setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+            setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
         });
 
+        frameRightel.setOnClickListener(v -> {
+            setAdapterValue(OperatorType.Type.RITEL);
+            setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
+        });
+
+        frameIrancel.setOnClickListener(v -> {
+            setAdapterValue(OperatorType.Type.IRANCELL);
+            setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
+        });
+    }
+
+    private void setSelectedOperator(RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3, View view1, View view2, View view3) {
+        radioButton1.setChecked(true);
+        radioButton2.setChecked(false);
+        radioButton3.setChecked(false);
+        view1.setSelected(true);
+        view2.setSelected(false);
+        view3.setSelected(false);
     }
 
     private void onPriceChooseClick() {

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="@dimen/dp16" />
-    <padding
-        android:bottom="@dimen/dp6"
-        android:left="@dimen/dp6"
-        android:right="@dimen/dp6"
-        android:top="@dimen/dp6" />
-</shape>
