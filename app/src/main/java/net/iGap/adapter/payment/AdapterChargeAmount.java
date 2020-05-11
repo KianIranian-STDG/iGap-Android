@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmount.ChargeAmountViewHolder> {
 
-    private int selectedPosition;
+    private int selectedPosition=-1;
     private List<Amount> amountList;
 
     public AdapterChargeAmount(List<Amount> amountList) {
@@ -49,13 +49,7 @@ public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmoun
             super(itemView);
             textView = itemView.findViewById(R.id.amount);
             radioButton = itemView.findViewById(R.id.radio_amount);
-
             radioButton.setOnClickListener(v -> itemView.performClick());
-
-            itemView.setOnClickListener(v -> {
-                selectedPosition = getAdapterPosition();
-                notifyDataSetChanged();
-            });
         }
 
         public void bindAmount(Amount amount, int position) {
@@ -66,6 +60,16 @@ public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmoun
             }
 
             textView.setText(amount.getTextAmount());
+
+
+            itemView.setSelected(selectedPosition == position);
+
+            itemView.setOnClickListener(v -> {
+                int tmp = selectedPosition;
+                notifyItemChanged(tmp);
+                selectedPosition = getAdapterPosition();
+                notifyItemChanged(selectedPosition);
+            });
         }
     }
 

@@ -42,7 +42,6 @@ public class AdapterRecentlyPackage extends RecyclerView.Adapter<AdapterRecently
         public void bindProposalPackage() {
             packageSize.setText("بسته دو گیگ ماهانه ");
             packagePrice.setText("5000000 ریال  ");
-
         }
 
     }

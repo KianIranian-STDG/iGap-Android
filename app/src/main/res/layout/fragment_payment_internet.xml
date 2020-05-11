@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="خرید بسته اینترنت"
             android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"

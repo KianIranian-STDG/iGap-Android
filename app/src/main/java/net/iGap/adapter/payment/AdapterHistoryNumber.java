@@ -18,7 +18,7 @@ import io.realm.RealmResults;
 
 public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNumber.ContactNumberViewHolder> {
     private List<HistoryNumber> historyNumberList = new ArrayList<>();
-    private int selectedPosition;
+    private int selectedPosition = -1;
 
     public AdapterHistoryNumber(RealmResults<RealmRecentChargeNumber> numbers) {
         if (numbers != null && numbers.isLoaded())
@@ -42,7 +42,7 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
 
     @Override
     public void onBindViewHolder(@NonNull ContactNumberViewHolder holder, int position) {
-        holder.bindNUmber(historyNumberList.get(position));
+        holder.bindNUmber(historyNumberList.get(position), position);
     }
 
     @Override
@@ -56,15 +56,19 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
         public ContactNumberViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.number_contact);
-
-            itemView.setOnClickListener(v -> {
-                selectedPosition = getAdapterPosition();
-                notifyDataSetChanged();
-            });
         }
 
-        public void bindNUmber(HistoryNumber historyNumber) {
+        public void bindNUmber(HistoryNumber historyNumber, int position) {
             textView.setText(historyNumber.getHistoryNumber());
+
+            itemView.setSelected(selectedPosition == position);
+
+            itemView.setOnClickListener(v -> {
+                int tmp = selectedPosition;
+                notifyItemChanged(tmp);
+                selectedPosition = getAdapterPosition();
+                notifyItemChanged(selectedPosition);
+            });
         }
     }
 

@@ -211,7 +211,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             });
 
             if (numbers == null || numbers.size() == 0) {
-                Toast.makeText(getContext(), "number is empty", Toast.LENGTH_SHORT).show();
+                ShowError("لیست خالی می باشد");
             } else {
                 adapterHistory = new AdapterHistoryNumber(numbers);
 
@@ -308,44 +308,51 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onPriceChooseClick() {
         priceChoose.setOnClickListener(v -> {
-            adapterAmount = new AdapterChargeAmount(amountList);
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_amount, false).build();
-            View view = dialog.getCustomView();
-            rvAmount = view.findViewById(R.id.rv_amount);
-            closeView3 = view.findViewById(R.id.close_view3);
-            saveBtn3 = view.findViewById(R.id.btn_dialog3);
+            if (operatorType != null) {
+                adapterAmount = new AdapterChargeAmount(amountList);
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_amount, false).build();
+                View view = dialog.getCustomView();
+                rvAmount = view.findViewById(R.id.rv_amount);
+                closeView3 = view.findViewById(R.id.close_view3);
+                saveBtn3 = view.findViewById(R.id.btn_dialog3);
 
-            saveBtn3.setOnClickListener(v1 -> {
-                if (adapterAmount.getSelectedPosition() == -1) {
-                    return;
-                }
+                saveBtn3.setOnClickListener(v1 -> {
+                    if (adapterAmount.getSelectedPosition() == -1) {
+                        return;
+                    }
 
-                selectedPriceIndex = adapterAmount.getSelectedPosition();
-                amount = amountList.get(selectedPriceIndex);
-                amountTxt.setText(amount.getTextAmount());
+                    selectedPriceIndex = adapterAmount.getSelectedPosition();
+                    amount = amountList.get(selectedPriceIndex);
+                    amountTxt.setText(amount.getTextAmount());
 
-                ivAdd.setVisibility(View.VISIBLE);
-                lowView.setVisibility(View.VISIBLE);
+                    ivAdd.setVisibility(View.VISIBLE);
+                    lowView.setVisibility(View.VISIBLE);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    priceChoose.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
-                    btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.green));
-                }
-                amountTxt.setTextColor(getContext().getResources().getColor(R.color.gray));
-                chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
-                priceChoose.setClickable(false);
-                dialog.dismiss();
-            });
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        priceChoose.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
+                        btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.green));
+                    }
+                    amountTxt.setTextColor(getContext().getResources().getColor(R.color.gray));
+                    chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
+                    priceChoose.setClickable(false);
+                    dialog.dismiss();
 
-            closeView3.setOnClickListener(v12 -> dialog.dismiss());
+                });
 
-            ViewGroup.LayoutParams params = rvAmount.getLayoutParams();
-            params.height = 500;
-            rvAmount.setLayoutParams(params);
-            rvAmount.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            rvAmount.setAdapter(adapterAmount);
-            dialog.show();
+                closeView3.setOnClickListener(v12 -> dialog.dismiss());
+
+                ViewGroup.LayoutParams params = rvAmount.getLayoutParams();
+                params.height = 500;
+                rvAmount.setLayoutParams(params);
+                rvAmount.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                rvAmount.setAdapter(adapterAmount);
+                dialog.show();
+            } else {
+                ShowError("اپراتوری انتخاب نشده");
+            }
+
         });
+
         ivAdd.setOnClickListener(v -> {
             if (selectedPriceIndex + 1 < amountList.size()) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex + 1);
@@ -354,7 +361,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 ivAdd.setClickable(false);
             }
         });
-
 
         lowView.setOnClickListener(v -> {
             if (selectedPriceIndex - 1 < amountList.size() && selectedPriceIndex > 0) {
@@ -366,42 +372,48 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onChargeTypeChooseClick() {
         btnChargeType.setOnClickListener(v -> {
-            adapterChargeType = new AdapterChargeType(chargeTypeList);
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_type, false).build();
+            if (operatorType != null) {
+                adapterChargeType = new AdapterChargeType(chargeTypeList);
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_type, false).build();
 
-            View view = dialog.getCustomView();
-            rvAmount = view.findViewById(R.id.rv_type);
-            closeView4 = view.findViewById(R.id.close_view4);
-            saveBtn4 = view.findViewById(R.id.btn_dialog4);
+                View view = dialog.getCustomView();
+                rvAmount = view.findViewById(R.id.rv_type);
+                closeView4 = view.findViewById(R.id.close_view4);
+                saveBtn4 = view.findViewById(R.id.btn_dialog4);
 
-            saveBtn4.setOnClickListener(v16 -> {
-                if (adapterChargeType.getSelectedPosition() == -1) {
-                    return;
-                }
+                saveBtn4.setOnClickListener(v16 -> {
+                    if (adapterChargeType.getSelectedPosition() == -1) {
+                        return;
+                    }
 
-                selectedChargeTypeIndex = adapterChargeType.getSelectedPosition();
-                typeList = chargeTypeList.get(selectedChargeTypeIndex);
-                chooseType.setText(typeList.getChargeType());
+                    selectedChargeTypeIndex = adapterChargeType.getSelectedPosition();
+                    typeList = chargeTypeList.get(selectedChargeTypeIndex);
+                    chooseType.setText(typeList.getChargeType());
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
-                    enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.green));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
+                        enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.green));
 
-                }
-                chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
-                chooseType.setTextColor(getContext().getResources().getColor(R.color.gray));
+                    }
+                    chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
+                    chooseType.setTextColor(getContext().getResources().getColor(R.color.gray));
 
-                editType.setVisibility(View.VISIBLE);
-                dialog.dismiss();
+                    editType.setVisibility(View.VISIBLE);
+                    dialog.dismiss();
 
-            });
+                });
 
-            closeView4.setOnClickListener(v12 -> dialog.dismiss());
+                closeView4.setOnClickListener(v12 -> dialog.dismiss());
 
-            rvAmount.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            rvAmount.setAdapter(adapterChargeType);
-            dialog.show();
+                rvAmount.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                rvAmount.setAdapter(adapterChargeType);
+                dialog.show();
+            } else {
+                btnChargeType.setClickable(false);
+            }
+
         });
+
     }
 
     private void setAdapterValue(@NotNull OperatorType.Type operator) {
@@ -569,17 +581,17 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     @Override
                     public void onError(String error) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(_mActivity, error, Toast.LENGTH_SHORT).show();
                         //   observeEnabledPayment.set(true);
-                        // showMciPaymentError.setValue(new ErrorModel("", error));
+                        hideKeyboard();
+                        HelperError.showSnackMessage(error, false);
+
                     }
 
                     @Override
                     public void onFailed() {
                         progressBar.setVisibility(View.GONE);
-                        //ToDO: handle this event
-                        /*observeEnabledPayment.set(true);
-                        showMciPaymentError.setValue(error);*/
+                        /*observeEnabledPayment.set(true);*/
+                        HelperError.showSnackMessage("پاسخی دریافت نشد", false);
                     }
                 });
     }

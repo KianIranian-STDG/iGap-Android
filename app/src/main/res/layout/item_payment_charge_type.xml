@@ -4,25 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp48"
     android:layout_marginStart="@dimen/dp16"
-    android:layout_marginLeft="@dimen/dp16">
+    android:layout_marginLeft="@dimen/dp16"
+    android:background="@drawable/selector_payment_dialog_item">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/radio_amount"
-            app:layout_constraintTop_toTopOf="@+id/radio_amount" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/radio_amount"
+        app:layout_constraintTop_toTopOf="@+id/radio_amount" />
 
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/radio_amount"
-            android:checked="false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapSubtitleTextColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/radio_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:textColor="?iGapSubtitleTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:id="@+id/view_line"
         android:layout_width="0dp"

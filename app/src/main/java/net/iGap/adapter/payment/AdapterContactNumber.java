@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNumber.HistoryNumberViewHolder> {
     private List<ContactNumber> contactNumbers;
-    private int selectedPosition;
+    private int selectedPosition=-1;
 
     public AdapterContactNumber(List<ContactNumber> contactNumbers) {
         this.contactNumbers = contactNumbers;
@@ -32,7 +32,7 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
     @Override
     public void onBindViewHolder(@NonNull HistoryNumberViewHolder holder, int position) {
-        holder.bindNumber(contactNumbers.get(position));
+        holder.bindNumber(contactNumbers.get(position), position);
 
     }
 
@@ -48,21 +48,22 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
         public HistoryNumberViewHolder(@NonNull View itemView) {
             super(itemView);
-
             phoneNumber = itemView.findViewById(R.id.phone_Number);
             contactName = itemView.findViewById(R.id.contact_Name);
-
-            itemView.setOnClickListener(v -> {
-                selectedPosition = getAdapterPosition();
-                notifyDataSetChanged();
-
-            });
-
         }
 
-        public void bindNumber(ContactNumber amount) {
+        public void bindNumber(ContactNumber amount, int position) {
             contactName.setText(amount.getDisplayName());
             phoneNumber.setText(amount.getPhone());
+
+            itemView.setSelected(selectedPosition == position);
+
+            itemView.setOnClickListener(v -> {
+                int tmp = selectedPosition;
+                notifyItemChanged(tmp);
+                selectedPosition = getAdapterPosition();
+                notifyItemChanged(selectedPosition);
+            });
         }
     }
 

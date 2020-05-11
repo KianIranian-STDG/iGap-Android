@@ -20,7 +20,7 @@ import java.util.List;
 public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.ChargeTypeViewHolder> {
 
     private List<ChargeType> chargeTypes;
-    private int selectedPosition;
+    private int selectedPosition = -1;
 
     public AdapterChargeType(List<ChargeType> chargeTypes) {
         this.chargeTypes = chargeTypes;
@@ -53,12 +53,6 @@ public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.Ch
             radioButton = itemView.findViewById(R.id.radio_amount);
 
             radioButton.setOnClickListener(v -> itemView.performClick());
-
-            itemView.setOnClickListener(v -> {
-                selectedPosition = getAdapterPosition();
-                notifyDataSetChanged();
-            });
-
         }
 
         public void bindChargeType(ChargeType chargeType, int position) {
@@ -69,6 +63,16 @@ public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.Ch
             }
 
             textView.setText(chargeType.getChargeType());
+
+
+            itemView.setSelected(selectedPosition == position);
+
+            itemView.setOnClickListener(v -> {
+                int tmp = selectedPosition;
+                notifyItemChanged(tmp);
+                selectedPosition = getAdapterPosition();
+                notifyItemChanged(selectedPosition);
+            });
 
         }
 
