@@ -23,7 +23,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
-            android:text="مرتب سازی بر اساس"
+            android:text="@string/order_by"
             android:textColor="@color/green"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="زمان"
+            android:text="@string/buy_internet_package_time_type_title"
             app:layout_constraintStart_toStartOf="@+id/appCompatTextView2"
             app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
 
@@ -41,7 +41,7 @@
             android:id="@+id/tv_packageSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="حجم"
+            android:text="@string/buy_internet_package_volume_type_title"
             app:layout_constraintBottom_toBottomOf="@+id/tv_packageTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="250dp"
-                    android:text="بسته های اخیرا استفاده شده"
+                    android:text="@string/recently_used_packages"
                     android:textColor="@color/green"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:text="بسته های پیشنهادی"
+                    android:text="@string/suggested_packages"
                     android:textColor="@color/green"
                     app:layout_constraintStart_toStartOf="@+id/rv_recentlyPackage"
                     app:layout_constraintTop_toBottomOf="@+id/rv_recentlyPackage" />
@@ -177,7 +177,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="32dp"
-            android:text="ادامه"
+            android:text="@string/pu_Lets_Go"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
-        android:text="انتخاب از شماره های قبلی"
+        android:text="@string/Select_from_previous_numbers"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close2"
         app:layout_constraintStart_toEndOf="@+id/iv_close2"
         app:layout_constraintTop_toTopOf="@+id/iv_close2" />
@@ -58,7 +58,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="32dp"
-        android:text="تایید"
+        android:text="@string/ra_confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

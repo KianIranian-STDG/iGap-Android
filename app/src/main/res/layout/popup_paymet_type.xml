@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
-        android:text="انتخاب نوع شارژ"
+        android:text="@string/Select_the_type_of_charge"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close4"
         app:layout_constraintStart_toEndOf="@+id/iv_close4"
         app:layout_constraintTop_toTopOf="@+id/iv_close4" />
@@ -58,7 +58,7 @@
         android:layout_height="52dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
-        android:text="ادامه"
+        android:text="@string/pu_Lets_Go"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

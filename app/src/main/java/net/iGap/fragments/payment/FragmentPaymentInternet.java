@@ -122,11 +122,12 @@ public class FragmentPaymentInternet extends BaseFragment {
         onHistoryNumberButtonClick();
         onPhoneNumberInputClick();
         onItemOperatorSelect();
+
         enterBtn.setOnClickListener(v -> {
             if (operatorType != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPaymentInternetPackage()).setReplace(false).load();
             } else {
-                ShowError("شماره تماس وارد نشده");
+                ShowError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
             }
 
         });
@@ -175,7 +176,7 @@ public class FragmentPaymentInternet extends BaseFragment {
             });
 
             if (numbers == null || numbers.size() == 0) {
-                Toast.makeText(getContext(), "number is empty", Toast.LENGTH_SHORT).show();
+                ShowError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
             } else {
                 adapterHistory = new AdapterHistoryNumber(numbers);
 

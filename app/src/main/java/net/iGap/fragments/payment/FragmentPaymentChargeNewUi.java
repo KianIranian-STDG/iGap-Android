@@ -211,7 +211,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             });
 
             if (numbers == null || numbers.size() == 0) {
-                ShowError("لیست خالی می باشد");
+                ShowError(getString(R.string.list_empty));
             } else {
                 adapterHistory = new AdapterHistoryNumber(numbers);
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
@@ -348,7 +348,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 rvAmount.setAdapter(adapterAmount);
                 dialog.show();
             } else {
-                ShowError("اپراتوری انتخاب نشده");
+                ShowError(getContext().getResources().getString(R.string.please_select_operator));
             }
 
         });
@@ -588,7 +588,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     public void onFailed() {
                         progressBar.setVisibility(View.GONE);
                         /*observeEnabledPayment.set(true);*/
-                        HelperError.showSnackMessage("پاسخی دریافت نشد", false);
+                        ShowError(getContext().getResources().getString(R.string.server_do_not_response));
+
                     }
                 });
     }
