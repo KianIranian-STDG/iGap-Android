@@ -59,14 +59,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frame_contact"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp180"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/shape_payment_charge"
-            android:paddingStart="@dimen/dp16"
+            android:paddingStart="@dimen/dp8"
             android:paddingTop="@dimen/dp2"
-            android:paddingEnd="@dimen/dp16"
+            android:paddingEnd="@dimen/dp8"
             android:paddingBottom="@dimen/dp2"
             app:layout_constraintStart_toStartOf="@+id/phoneNumber"
             app:layout_constraintTop_toBottomOf="@+id/phoneNumber">
@@ -87,22 +86,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="@dimen/dp8"
+                android:maxLength="20"
                 android:text="@string/choose_frome_contacts"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_contact"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_contact"
                 app:layout_constraintTop_toTopOf="@+id/iv_contact" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frame_history"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp180"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:background="@drawable/shape_payment_charge"
-            android:paddingStart="@dimen/dp16"
+            android:paddingStart="@dimen/dp8"
             android:paddingTop="@dimen/dp2"
-            android:paddingEnd="@dimen/dp16"
+            android:paddingEnd="@dimen/dp8"
             android:paddingBottom="@dimen/dp2"
             app:layout_constraintBottom_toBottomOf="@+id/frame_contact"
             app:layout_constraintEnd_toEndOf="@+id/phoneNumber"
@@ -125,8 +124,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="@dimen/dp8"
+                android:maxLength="20"
                 android:text="@string/previous_numbers"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_history"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_history"
                 app:layout_constraintTop_toTopOf="@+id/iv_history" />
         </androidx.constraintlayout.widget.ConstraintLayout>
