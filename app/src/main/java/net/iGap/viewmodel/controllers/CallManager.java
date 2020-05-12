@@ -11,12 +11,14 @@ import android.os.Bundle;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -57,7 +59,7 @@ public class CallManager implements EventListener {
 
     private boolean callAlive = false;
     private boolean isRinging = false;
-    private boolean isIncomeCall = false;
+    private boolean isIncoming = false;
 
     private boolean isMicEnable = true;
 
@@ -68,6 +70,9 @@ public class CallManager implements EventListener {
     protected static final boolean USE_CONNECTION_SERVICE = isDeviceCompatibleWithConnectionServiceAPI();
 
     private static volatile CallManager instance = null;
+
+    private String TAG = "abbasiCall" + " Manager";
+
 
     // make this class singlton
     public static CallManager getInstance() {
@@ -111,7 +116,7 @@ public class CallManager implements EventListener {
         WebRTC.getInstance().setCallType(callType);
         // activate ringing state for caller.
         isRinging = true;
-        isIncomeCall = true;
+        isIncoming = true;
         new RequestSignalingRinging().signalingRinging();
         // generate SDP
         G.handler.post(() -> WebRTC.getInstance().setRemoteDesc(new SessionDescription(OFFER, response.getCallerSdp())));
@@ -127,7 +132,10 @@ public class CallManager implements EventListener {
     /**
      * this function is step 1 when making a call
      */
-    public void startCall() {
+    public void startCall(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType) {
+        Log.i(TAG, "startCall: " + callPeerId + " " + callType);
+        this.callPeerId = callPeerId;
+        this.callType = callType;
         // TODO: 5/12/2020 music player is changed and must be checked
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
@@ -135,7 +143,6 @@ public class CallManager implements EventListener {
                 MusicPlayer.pauseSoundFromIGapCall = true;
             }
         }
-
         WebRTC.getInstance().createOffer(callPeerId);
     }
 
@@ -398,7 +405,7 @@ public class CallManager implements EventListener {
     }
 
     public void onSdpSuccess() {
-        if (isIncomeCall)
+        if (isIncoming)
             openCallInterface();
         else {
             isRinging = false;
@@ -420,7 +427,7 @@ public class CallManager implements EventListener {
     }
 
     private void openCallInterface() {
-        CallSelectFragment.call(callPeerId, isIncomeCall, callType);
+        CallSelectFragment.call(callPeerId, isIncoming, callType);
     }
 
     public boolean isCallAlive() {
@@ -438,6 +445,13 @@ public class CallManager implements EventListener {
 
     public void cleanUp() {
 
+        onCallStateChanged = null;
+        WebRTC.getInstance().close();
+
+        instance = null;
+
+        Log.i(TAG, "cleanUp");
+
     }
 
     public long getCallPeerId() {
@@ -450,6 +464,10 @@ public class CallManager implements EventListener {
 
     public void setOnCallStateChanged(CallStateChange onCallStateChanged) {
         this.onCallStateChanged = onCallStateChanged;
+    }
+
+    public boolean isIncoming() {
+        return isIncoming;
     }
 
     public interface CallStateChange {

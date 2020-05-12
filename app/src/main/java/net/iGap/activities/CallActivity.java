@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +28,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.customView.CallRippleView;
 import net.iGap.module.customView.CheckableImageView;
 import net.iGap.module.enums.CallState;
+import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
@@ -50,10 +52,13 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private CallerInfo caller;
 
+    private long userId;
+    private boolean isIncoming;
+    private ProtoSignalingOffer.SignalingOffer.Type callType;
+    private boolean isVoiceCall;
     private int[] quickDeclineMessage;
     private boolean isRtl = G.isAppRtl;
-    private boolean incomingCall = true;
-    private ProtoSignalingOffer.SignalingOffer.Type callType;
+    private String TAG = "abbasiCall" + " Activity";
 
     public CallActivity() {
 
@@ -62,6 +67,21 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (CallManager.getInstance() == null)
+            finish();
+
+        if (CallService.getInstance() == null)
+            finish();
+
+        Log.i(TAG, "CallActivity onCreate ");
+
+        CallService.getInstance().setCallStateChange(this);
+
+        callType = CallManager.getInstance().getCallType();
+        userId = CallManager.getInstance().getCallPeerId();
+        isVoiceCall = callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+        isIncoming = CallManager.getInstance().isIncoming();
 
         init();
 
@@ -135,7 +155,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         nameTextView.setGravity(Gravity.CENTER);
         rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 72, 16, 0));
 
-        if (incomingCall) {
+        if (isIncoming) {
             answerRippleView = new CallRippleView(this);
             answerRippleView.setImageResource(R.drawable.ic_call_answer);
             answerRippleView.startAnimation();
@@ -150,7 +170,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         }
 
         buttons = new LinearLayout(this);
-        buttons.setVisibility(View.GONE);
+        buttons.setVisibility(isIncoming ? View.GONE : View.VISIBLE);
         buttons.setOrientation(LinearLayout.HORIZONTAL);
 
         camera = new CheckableImageView(this);
@@ -167,6 +187,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         declineImageView = new AppCompatImageView(this);
         declineImageView.setImageResource(R.drawable.ic_call_decline);
+        declineImageView.setOnClickListener(v -> endCall());
         buttons.addView(declineImageView, LayoutCreator.createLinear(0, 64, 1f));
 
         speakerView = new CheckableImageView(this);
@@ -201,6 +222,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         return rootView;
     }
 
+    private void endCall() {
+        CallManager.getInstance().endCall();
+    }
+
     private void declineCall() {
         CallManager.getInstance().endCall();
     }
@@ -227,6 +252,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     @Override
     public void onCallStateChanged(CallState callState) {
+        Log.i(TAG, "onCallStateChanged: " + callState);
+        if (callState == CallState.REJECT) {
+            finish();
+        } else if (callState == CallState.LEAVE_CALL) {
+            finish();
+        }
 
     }
 
