@@ -17,6 +17,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
@@ -127,6 +128,14 @@ public class CallManager implements EventListener {
      * this function is step 1 when making a call
      */
     public void startCall() {
+        // TODO: 5/12/2020 music player is changed and must be checked
+        if (MusicPlayer.mp != null) {
+            if (MusicPlayer.mp.isPlaying()) {
+                MusicPlayer.stopSound();
+                MusicPlayer.pauseSoundFromIGapCall = true;
+            }
+        }
+
         WebRTC.getInstance().createOffer(callPeerId);
     }
 
