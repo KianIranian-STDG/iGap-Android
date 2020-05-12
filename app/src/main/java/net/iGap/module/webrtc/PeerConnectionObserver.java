@@ -36,8 +36,6 @@ import org.webrtc.VideoSink;
 import org.webrtc.VideoTrack;
 
 import static org.webrtc.PeerConnection.IceConnectionState.CHECKING;
-import static org.webrtc.PeerConnection.IceConnectionState.CLOSED;
-import static org.webrtc.PeerConnection.IceConnectionState.COMPLETED;
 import static org.webrtc.PeerConnection.IceConnectionState.CONNECTED;
 import static org.webrtc.PeerConnection.IceConnectionState.DISCONNECTED;
 import static org.webrtc.PeerConnection.IceConnectionState.FAILED;
@@ -52,16 +50,14 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
     @Override
     public void onIceConnectionChange(final PeerConnection.IceConnectionState iceConnectionState) {
         Log.i("amini", "onIceConnectionChange : " + iceConnectionState);
-        if (G.iSignalingCallBack != null) {
-            if (iceConnectionState == CLOSED || iceConnectionState == DISCONNECTED) {
-                G.iSignalingCallBack.onStatusChanged(CallState.DISCONNECTED);
-            } else if (iceConnectionState == FAILED) {
-                G.iSignalingCallBack.onStatusChanged(CallState.FAILD);
-            } else if (iceConnectionState == CHECKING) {
-                G.iSignalingCallBack.onStatusChanged(CallState.CONNECTING);
-            } else if (iceConnectionState == CONNECTED || iceConnectionState == COMPLETED) {
-                G.iSignalingCallBack.onStatusChanged(CallState.CONNECTED);
-            }
+        if (iceConnectionState == DISCONNECTED) {
+            CallManager.getInstance().changeState(CallState.DISCONNECTED);
+        } else if (iceConnectionState == FAILED) {
+            CallManager.getInstance().changeState(CallState.FAILD);
+        } else if (iceConnectionState == CHECKING) {
+            CallManager.getInstance().changeState(CallState.CONNECTING);
+        } else if (iceConnectionState == CONNECTED) {
+            CallManager.getInstance().changeState(CallState.CONNECTED);
         }
     }
 
@@ -90,6 +86,12 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
 
     @Override
     public void onAddStream(MediaStream stream) {
+
+        if (stream.audioTracks.size() > 1 || stream.videoTracks.size() > 1) {
+            Log.d("amini", "onAddStream: Weird-looking stream");
+            return;
+        }
+
         for (AudioTrack audioTrack : stream.audioTracks) {
             audioTrack.setEnabled(true);
         }
@@ -109,7 +111,6 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
             });
 
         }
-
 
     }
 

@@ -13,6 +13,7 @@ package net.iGap.module.webrtc;
 
 import android.hardware.Camera;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import net.iGap.G;
@@ -43,14 +44,19 @@ import org.webrtc.VideoCapturer;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 import org.webrtc.voiceengine.WebRtcAudioManager;
+import org.webrtc.voiceengine.WebRtcAudioRecord;
+import org.webrtc.voiceengine.WebRtcAudioTrack;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class WebRTC {
+
+    private String tag = "amini_webrtc";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
     private static final int VIDEO_RESOLUTION_WIDTH = 720;
@@ -72,8 +78,6 @@ public class WebRTC {
     private EglBase.Context eglBaseContext = null;
 
     private static volatile WebRTC instance = null;
-
-    private iGapSdpObserver sdpObserver = new iGapSdpObserver();
 
     public static WebRTC getInstance() {
         WebRTC localInstance = instance;
@@ -234,6 +238,40 @@ public class WebRTC {
                     .setVideoDecoderFactory(defaultVideoDecoderFactory)
                     .createPeerConnectionFactory();
 
+            WebRtcAudioTrack.setErrorCallback(new WebRtcAudioTrack.ErrorCallback() {
+                @Override
+                public void onWebRtcAudioTrackInitError(String s) {
+                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioTrackStartError(WebRtcAudioTrack.AudioTrackStartErrorCode audioTrackStartErrorCode, String s) {
+                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioTrackError(String s) {
+                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                }
+            });
+
+            WebRtcAudioRecord.setErrorCallback(new WebRtcAudioRecord.WebRtcAudioRecordErrorCallback() {
+                @Override
+                public void onWebRtcAudioRecordInitError(String s) {
+                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioRecordStartError(WebRtcAudioRecord.AudioRecordStartErrorCode audioRecordStartErrorCode, String s) {
+                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioRecordError(String s) {
+                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                }
+            });
+
         }
         return peerConnectionFactory;
     }
@@ -256,6 +294,8 @@ public class WebRTC {
                 add("Pixel XL");
             }};
 
+            PeerConnectionFactory.startInternalTracingCapture(
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "webrtc-trace.txt");
 
             if (WebRtcAudioUtils.isAcousticEchoCancelerSupported()) {
                 WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
@@ -277,7 +317,6 @@ public class WebRTC {
                 WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
             }
 
-            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
         } catch (UnsatisfiedLinkError e) {
             e.printStackTrace();
         }
@@ -318,8 +357,12 @@ public class WebRTC {
         peerConnectionInstance().createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
+                if (localSDP != null) {
+                    Log.d(tag, "Multiple SDP create.");
+                    return;
+                }
                 localSDP = sessionDescription.description;
-                CallManager.getInstance().makeOffer(userIdCallee, callTYpe, localSDP);
+                CallManager.getInstance().makeOffer(userIdCallee, localSDP);
 //                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, localSDP);
             }
 
@@ -466,29 +509,26 @@ public class WebRTC {
     // My new code just changing the place
 
     public void setRemoteDesc(SessionDescription sdp) {
-        peerConnection.setRemoteDescription(sdpObserver, sdp);
-    }
+        peerConnection.setRemoteDescription(new SdpObserver() {
+            @Override
+            public void onCreateSuccess(SessionDescription sessionDescription) {
 
-    private class iGapSdpObserver implements SdpObserver {
+            }
 
-        @Override
-        public void onCreateSuccess(SessionDescription sessionDescription) {
+            @Override
+            public void onSetSuccess() {
+                CallManager.getInstance().onSdpSuccess();
+            }
 
-        }
+            @Override
+            public void onCreateFailure(String s) {
 
-        @Override
-        public void onSetSuccess() {
-            CallManager.getInstance().onSdpSuccess();
-        }
+            }
 
-        @Override
-        public void onCreateFailure(String s) {
-            Log.i("WWW", "onOffer onCreateFailure : " + s);
-        }
+            @Override
+            public void onSetFailure(String s) {
 
-        @Override
-        public void onSetFailure(String s) {
-            Log.i("WWW", "onOffer onSetFailure : " + s);
-        }
+            }
+        }, sdp);
     }
 }

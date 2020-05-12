@@ -119,8 +119,8 @@ public class CallManager implements EventListener {
     /**
      * this function is called when we are making a call to others
      */
-    public void makeOffer(long called_userId, net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type, String callerSdp) {
-        new RequestSignalingOffer().signalingOffer(called_userId, type, callerSdp);
+    public void makeOffer(long called_userId, String callerSdp) {
+        new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
     }
 
     /**
@@ -135,9 +135,7 @@ public class CallManager implements EventListener {
      */
     public void onRing() {
         isRinging = true;
-        if (onCallStateChanged != null) {
-            G.handler.post(() -> onCallStateChanged.onCallStateChanged(CallState.RINGING));
-        }
+        G.handler.post(() -> changeState(CallState.RINGING));
     }
 
     /**
@@ -192,24 +190,23 @@ public class CallManager implements EventListener {
             } catch (Exception e) {
             }
 
-            if (onCallStateChanged != null) {
-                isRinging = false;
-                switch (builder.getType()) {
-                    case REJECTED:
-                        onCallStateChanged.onCallStateChanged(CallState.REJECT);
-                        break;
-                    case NOT_ANSWERED:
-                        onCallStateChanged.onCallStateChanged(CallState.NOT_ANSWERED);
-                        break;
-                    case UNAVAILABLE:
-                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
-                        break;
-                    case TOO_LONG:
-                        onCallStateChanged.onCallStateChanged(CallState.TOO_LONG);
-                        break;
-                }
-                onCallStateChanged.onCallStateChanged(CallState.LEAVE_CALL);
+            isRinging = false;
+            switch (builder.getType()) {
+                case REJECTED:
+                    changeState(CallState.REJECT);
+                    break;
+                case NOT_ANSWERED:
+                    changeState(CallState.NOT_ANSWERED);
+                    break;
+                case UNAVAILABLE:
+                    changeState(CallState.UNAVAILABLE);
+                    break;
+                case TOO_LONG:
+                    changeState(CallState.TOO_LONG);
+                    break;
             }
+            // TODO: 5/10/2020 why ??
+            changeState(CallState.LEAVE_CALL);
         });
     }
 
@@ -220,10 +217,10 @@ public class CallManager implements EventListener {
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
         if (builder.getHold()) {
             WebRTC.getInstance().toggleSound(false);
-            onCallStateChanged.onCallStateChanged(CallState.ON_HOLD);
+            changeState(CallState.ON_HOLD);
         } else {
             WebRTC.getInstance().unMuteSound();
-            onCallStateChanged.onCallStateChanged(CallState.CONNECTED);
+            changeState(CallState.CONNECTED);
         }
 //        G.onHoldBackgroundChanegeListener this needs to be deleted.
     }
@@ -279,22 +276,22 @@ public class CallManager implements EventListener {
                 switch (minor) {
                     case 6:
                         messageID = R.string.e_904_6;
-                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        changeState(CallState.UNAVAILABLE);
                         break;
                     case 7:
                         messageID = R.string.e_904_7;
-                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        changeState(CallState.UNAVAILABLE);
                         break;
                     case 8:
                         messageID = R.string.e_904_8;
-                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        changeState(CallState.UNAVAILABLE);
                         break;
                     case 9:
                         messageID = R.string.e_904_9;
-                        onCallStateChanged.onCallStateChanged(CallState.BUSY);
+                        changeState(CallState.BUSY);
                         break;
                     default:
-                        onCallStateChanged.onCallStateChanged(CallState.UNAVAILABLE);
+                        changeState(CallState.UNAVAILABLE);
                         break;
                 }
                 break;
@@ -352,7 +349,8 @@ public class CallManager implements EventListener {
                 }
                 break;
         }
-        onCallStateChanged.onError(messageID, major, minor);
+        if (onCallStateChanged != null)
+            onCallStateChanged.onError(messageID, major, minor);
     }
 
     public void toggleSpeaker() {
@@ -449,6 +447,11 @@ public class CallManager implements EventListener {
         void onCallStateChanged(CallState callState);
 
         void onError(int messageID, int major, int minor);
+    }
+
+    public void changeState(CallState callState) {
+        if (onCallStateChanged != null)
+            onCallStateChanged.onCallStateChanged(callState);
     }
 
     @TargetApi(Build.VERSION_CODES.O)
