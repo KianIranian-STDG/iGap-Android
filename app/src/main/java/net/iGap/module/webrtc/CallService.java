@@ -10,16 +10,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import net.iGap.BuildConfig;
 import net.iGap.R;
 import net.iGap.activities.CallActivity;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.model.AccountUser;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.CallActionsReceiver;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.eventbus.EventListener;
@@ -28,7 +35,13 @@ import net.iGap.realm.RealmAvatar;
 import net.iGap.viewmodel.controllers.CallManager;
 
 public class CallService extends Service implements EventListener {
-    private static final int ID_SERVICE_NOTIFICATION = 102;
+    private final int ID_SERVICE_NOTIFICATION = 2213;
+    private final int ID_INCOMING_NOTIFICATION = 2214;
+    private final String CALL_CHANNEL = "iGapCall";
+
+    private final String ACTION_END_CALL = "net.igap.call.end";
+    private final String ACTION_ANSWER_CALL = "net.igap.call.answer";
+    private final String ACTION_DECLINE_CALL = "net.igap.call.decline";
 
     public static final String USER_ID = "userId";
     public static final String CALL_TYPE = "callType";
@@ -62,7 +75,6 @@ public class CallService extends Service implements EventListener {
     public void onCreate() {
         super.onCreate();
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
     }
 
     @Override
@@ -94,20 +106,85 @@ public class CallService extends Service implements EventListener {
         return START_STICKY;
     }
 
-    protected void showIncomingNotification() {
+    @SuppressLint("WrongConstant")
+    private void showIncomingNotification() {
+        CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
+        Intent intent = new Intent(this, CallActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 2218, intent, 0);
 
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CALL_CHANNEL)
+                .setSmallIcon(R.drawable.igap_flat_icon)
+                .setContentTitle(getResources().getString(isVoiceCall ? R.string.voice_calls : R.string.video_calls))
+                .setContentText(callerInfo.getName())
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Uri soundProviderUri = Uri.parse("content://" + BuildConfig.APPLICATION_ID + "/igap_signaling");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CALL_CHANNEL, CALL_CHANNEL, NotificationManager.IMPORTANCE_HIGH);
+            AudioAttributes attrs = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE).build();
+            channel.setSound(soundProviderUri, attrs);
+            channel.enableVibration(false);
+            channel.enableLights(false);
+            builder.setColor(0x4CAF50);
+            builder.setVibrate(new long[]{200, 200, 200, 200, 200});
+            builder.setLights(Color.RED, 1000, 1000);
+            builder.setFullScreenIntent(PendingIntent.getActivity(this, 0, intent, 0), true);
+            builder.setCategory(Notification.CATEGORY_CALL);
+            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channel.getId());
+        }
+
+        Intent endIntent = new Intent(this, CallActionsReceiver.class);
+        endIntent.setAction(ACTION_DECLINE_CALL);
+        endIntent.putExtra("callerId", callerInfo.getUserId());
+        CharSequence endTitle = getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon);
+        PendingIntent endPendingIntent = PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.addAction(R.drawable.ic_call_notif_decline, endTitle, endPendingIntent);
+
+        Intent answerIntent = new Intent(this, CallActionsReceiver.class);
+        answerIntent.setAction(ACTION_ANSWER_CALL);
+        answerIntent.putExtra("callerId", callerInfo.getUserId());
+        CharSequence answerTitle = getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon);
+        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.addAction(R.drawable.ic_call_notif_answer, answerTitle, answerPendingIntent);
+
+
+        Notification notification = builder.build();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.call_notification);
+
+            notificationView.setTextViewText(R.id.tv_call_callerName, callerInfo.getName());
+            notificationView.setTextViewText(R.id.tv_call_type, getResources().getString(isVoiceCall ? R.string.voice_calls : R.string.video_calls));
+
+            AccountUser currentUser = AccountManager.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                notificationView.setTextViewText(R.id.tv_call_account, currentUser.getName());
+            }
+
+            notificationView.setImageViewBitmap(R.id.iv_call_callerAvatar, getAvatarBitmap());
+
+            notificationView.setOnClickPendingIntent(R.id.btn_call_answer, answerPendingIntent);
+            notificationView.setOnClickPendingIntent(R.id.btn_call_decline, endPendingIntent);
+
+            notification.headsUpContentView = notification.bigContentView = notificationView;
+        }
+
+        startForeground(ID_INCOMING_NOTIFICATION, notification);
     }
 
-
     @SuppressLint("WrongConstant")
-    protected void showNotification() {
+    private void showNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
 
         Intent intent = new Intent(this, CallActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "iGapCall")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CALL_CHANNEL)
                 .setContentTitle("iGap secure call")
                 .setContentText("in " + (getResources().getString(isVoiceCall ? R.string.voice_calls : R.string.video_calls)) + " with " + callerInfo.getName())
                 .setSmallIcon(R.drawable.igap_flat_icon)
@@ -126,7 +203,7 @@ public class CallService extends Service implements EventListener {
         }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("iGapCall", "iGapCall", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(CALL_CHANNEL, CALL_CHANNEL, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
             builder.setChannelId(channel.getId());
         }
@@ -166,6 +243,9 @@ public class CallService extends Service implements EventListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        stopForeground(true);
+
         instance = null;
         CallManager.getInstance().cleanUp();
     }
@@ -175,4 +255,15 @@ public class CallService extends Service implements EventListener {
 
     }
 
+    public void onBroadcastReceived(Intent intent) {
+        if (instance != null && intent.getAction() != null)
+            if (intent.getAction().equals(ACTION_ANSWER_CALL)) {
+                Log.i(getClass().getSimpleName(), "onBroadcastReceived ACTION_ANSWER_CALL");
+            } else if (intent.getAction().equals(ACTION_DECLINE_CALL)) {
+                Log.i(getClass().getSimpleName(), "onBroadcastReceived ACTION_DECLINE_CALL");
+                onDestroy();
+            } else if (intent.getAction().equals(ACTION_END_CALL)) {
+                Log.i(getClass().getSimpleName(), "onBroadcastReceived ACTION_END_CALL");
+            }
+    }
 }
