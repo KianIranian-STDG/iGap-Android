@@ -882,7 +882,7 @@ public class FragmentChat extends BaseFragment
                         rootView.findViewById(R.id.tv_chat_sendMessagePermission).setVisibility(View.GONE);
                 }
 
-                if (getRoom().getType().equals(CHANNEL)) {
+                if (chatType == CHANNEL) {
                     if (currentRoleIsOwnerOrAdmin())
                         layoutMute.setVisibility(View.GONE);
                     else
