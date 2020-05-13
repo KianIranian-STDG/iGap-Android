@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_weather"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp60"
             android:layout_marginStart="@dimen/dp18"
             android:layout_marginLeft="@dimen/dp18"
-            android:text="@string/cloud_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="@dimen/dp8"
-            android:text="تهران"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/xlargeTextSize"
             app:layout_constraintStart_toEndOf="@+id/iv_weather"
@@ -42,7 +41,6 @@
             android:id="@+id/tv_degree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="31"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/xlargeTextSize"
             app:layout_constraintEnd_toEndOf="@+id/tv_date"
@@ -54,7 +52,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLength="35"
-            android:text="یکشنبه31تیر1398"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@+id/iv_weather"
@@ -67,17 +64,19 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp18"
         android:layout_marginRight="@dimen/dp18"
+        android:padding="@dimen/dp8"
         app:layout_constraintBottom_toBottomOf="@id/container_city"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/container_city"
         app:layout_constraintVertical_bias="0.5">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView5"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
-            android:text="@string/cloud_icon"
+            android:src="@drawable/award"
+            android:layout_marginBottom="@dimen/dp8"
             app:layout_constraintEnd_toEndOf="@+id/tv_score"
             app:layout_constraintHorizontal_bias="0.53"
             app:layout_constraintStart_toStartOf="@+id/textView8"
@@ -100,7 +99,6 @@
             android:id="@+id/tv_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
             android:textColor="@color/orange"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@+id/textView8"

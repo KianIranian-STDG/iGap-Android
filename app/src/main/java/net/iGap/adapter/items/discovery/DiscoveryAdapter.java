@@ -2,6 +2,7 @@ package net.iGap.adapter.items.discovery;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -84,10 +85,10 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-       try {
-           if (discoveryList.get(position).model == null) {
-               return 0;
-           }
+        try {
+            if (discoveryList.get(position).model == null) {
+                return 0;
+            }
             return discoveryList.get(position).model.getNumber() + 1;
 
         } catch (Exception e) {
