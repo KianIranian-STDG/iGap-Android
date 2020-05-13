@@ -56,7 +56,7 @@ import java.util.Set;
 
 public class WebRTC {
 
-    private String tag = "amini_webrtc";
+    private static String TAG = "amini_webrtc";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
     private static final int VIDEO_RESOLUTION_WIDTH = 720;
@@ -93,10 +93,12 @@ public class WebRTC {
     }
 
     public static boolean isAlive() {
+        Log.d(TAG, "isAlive: ");
         return instance != null;
     }
 
     public void toggleSound(boolean isEnable) {
+        Log.d(TAG, "toggleSound: ");
         if (mediaStream == null) {
             return;
         }
@@ -107,6 +109,7 @@ public class WebRTC {
 
     @Deprecated
     public void muteSound() {
+        Log.d(TAG, "muteSound: ");
         if (mediaStream == null) {
             return;
         }
@@ -116,6 +119,7 @@ public class WebRTC {
     }
 
     public void switchCamera() {
+        Log.d(TAG, "switchCamera: ");
         if (Camera.getNumberOfCameras() > 1) {
             if (videoCapturer instanceof CameraVideoCapturer) {
                 ((CameraVideoCapturer) videoCapturer).switchCamera(null);
@@ -125,6 +129,7 @@ public class WebRTC {
 
     @Deprecated
     public void unMuteSound() {
+        Log.d(TAG, "unMuteSound: ");
         if (mediaStream == null) {
             return;
         }
@@ -134,6 +139,7 @@ public class WebRTC {
     }
 
     private void addAudioTrack(MediaStream mediaStream) {
+        Log.d(TAG, "addAudioTrack: ");
         AudioSource audioSource = peerConnectionFactoryInstance().createAudioSource(audioConstraintsGetInstance());
         AudioTrack audioTrack = peerConnectionFactoryInstance().createAudioTrack("ARDAMSa0", audioSource);
         audioTrack.setEnabled(true);
@@ -142,16 +148,19 @@ public class WebRTC {
 
     @Deprecated
     public void setCallType(ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
+        Log.d(TAG, "setCallType: ");
         this.callTYpe = callTYpe;
     }
 
     private EglBase.Context getEglBaseContext() {
+        Log.d(TAG, "getEglBaseContext: ");
         if (eglBaseContext == null)
             eglBaseContext = EglBase.create().getEglBaseContext();
         return eglBaseContext;
     }
 
     private void addVideoTrack(MediaStream mediaStream) {
+        Log.d(TAG, "addVideoTrack: ");
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
@@ -173,6 +182,7 @@ public class WebRTC {
     }
 
     private VideoCapturer createCameraCapturer(CameraEnumerator enumerator) {
+        Log.d(TAG, "createCameraCapturer: ");
         final String[] deviceNames = enumerator.getDeviceNames();
 
         // First, try to find front facing camera
@@ -201,6 +211,7 @@ public class WebRTC {
     }
 
     public void pauseVideoCapture() {
+        Log.d(TAG, "pauseVideoCapture: ");
         if (videoCapturer != null) {
             try {
                 videoCapturer.stopCapture();
@@ -211,6 +222,7 @@ public class WebRTC {
     }
 
     public void startVideoCapture() {
+        Log.d(TAG, "startVideoCapture: ");
         if (videoCapturer != null) {
             try {
                 videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
@@ -224,6 +236,7 @@ public class WebRTC {
      * First, we initiate the PeerConnectionFactory with our application context and some options.
      */
     private PeerConnectionFactory peerConnectionFactoryInstance() {
+        Log.d(TAG, "peerConnectionFactoryInstance: ");
         if (peerConnectionFactory == null) {
 
             initializePeerConnectionFactory();
@@ -241,34 +254,34 @@ public class WebRTC {
             WebRtcAudioTrack.setErrorCallback(new WebRtcAudioTrack.ErrorCallback() {
                 @Override
                 public void onWebRtcAudioTrackInitError(String s) {
-                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
                 }
 
                 @Override
                 public void onWebRtcAudioTrackStartError(WebRtcAudioTrack.AudioTrackStartErrorCode audioTrackStartErrorCode, String s) {
-                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
                 }
 
                 @Override
                 public void onWebRtcAudioTrackError(String s) {
-                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
                 }
             });
 
             WebRtcAudioRecord.setErrorCallback(new WebRtcAudioRecord.WebRtcAudioRecordErrorCallback() {
                 @Override
                 public void onWebRtcAudioRecordInitError(String s) {
-                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
                 }
 
                 @Override
                 public void onWebRtcAudioRecordStartError(WebRtcAudioRecord.AudioRecordStartErrorCode audioRecordStartErrorCode, String s) {
-                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
                 }
 
                 @Override
                 public void onWebRtcAudioRecordError(String s) {
-                    Log.d(tag, "onWebRtcAudioTrackInitError: " + s);
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
                 }
             });
 
@@ -277,6 +290,7 @@ public class WebRTC {
     }
 
     private void initializePeerConnectionFactory() {
+        Log.d(TAG, "initializePeerConnectionFactory: ");
         try {
             Set<String> HARDWARE_AEC_BLACKLIST = new HashSet<String>() {{
                 add("Pixel");
@@ -323,6 +337,7 @@ public class WebRTC {
     }
 
     public PeerConnection peerConnectionInstance() {
+        Log.d(TAG, "peerConnectionInstance: ");
         if (peerConnection == null) {
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
             DbManager.getInstance().doRealmTask(realm -> {
@@ -354,11 +369,12 @@ public class WebRTC {
     }
 
     public void createOffer(final long userIdCallee) {
+        Log.d(TAG, "createOffer: ");
         peerConnectionInstance().createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
                 if (localSDP != null) {
-                    Log.d(tag, "Multiple SDP create.");
+                    Log.d(TAG, "Multiple SDP create.");
                     return;
                 }
                 localSDP = sessionDescription.description;
@@ -384,10 +400,12 @@ public class WebRTC {
     }
 
     public void setOfferLocalDescription() {
+        Log.d(TAG, "setOfferLocalDescription: ");
         setLocalDescription(SessionDescription.Type.OFFER, localSDP);
     }
 
     public void createAnswer() {
+        Log.d(TAG, "createAnswer: ");
 
         peerConnectionInstance().createAnswer(new SdpObserver() {
             @Override
@@ -418,6 +436,7 @@ public class WebRTC {
     }
 
     private void setLocalDescription(final SessionDescription.Type type, String sdp) {
+        Log.d(TAG, "setLocalDescription: ");
         peerConnectionInstance().setLocalDescription(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
@@ -441,6 +460,7 @@ public class WebRTC {
     }
 
     private MediaConstraints mediaConstraintsGetInstance() {
+        Log.d(TAG, "mediaConstraintsGetInstance: ");
         if (mediaConstraints == null) {
             mediaConstraints = new MediaConstraints();
             mediaConstraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
@@ -449,6 +469,7 @@ public class WebRTC {
     }
 
     private MediaConstraints audioConstraintsGetInstance() {
+        Log.d(TAG, "audioConstraintsGetInstance: ");
         if (audioConstraints == null) {
             audioConstraints = new MediaConstraints();
             audioConstraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
@@ -458,11 +479,13 @@ public class WebRTC {
 
     @Deprecated
     private void acceptCall(String sdp) {
+        Log.d(TAG, "acceptCall: ");
         new RequestSignalingAccept().signalingAccept(sdp);
     }
 
     @Deprecated
     public void leaveCall() {
+        Log.d(TAG, "leaveCall: ");
 
         //don't need for close/dispose here, this action will be doing in onLeave callback
         //close();
@@ -476,7 +499,7 @@ public class WebRTC {
     }
 
     public void close() {
-
+        Log.d(TAG, "close: ");
         ActivityCall.allowOpenCall = false;
         try {
 
@@ -509,7 +532,8 @@ public class WebRTC {
     // My new code just changing the place
 
     public void setRemoteDesc(SessionDescription sdp) {
-        peerConnection.setRemoteDescription(new SdpObserver() {
+        Log.d(TAG, "setRemoteDesc: ");
+        peerConnectionInstance().setRemoteDescription(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
 

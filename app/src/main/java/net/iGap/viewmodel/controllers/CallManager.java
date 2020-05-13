@@ -19,7 +19,6 @@ import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
@@ -71,7 +70,7 @@ public class CallManager implements EventListener {
 
     private static volatile CallManager instance = null;
 
-    private String TAG = "abbasiCall" + " Manager";
+    private static String TAG = "amini_Manager";
 
 
     // make this class singlton
@@ -89,6 +88,7 @@ public class CallManager implements EventListener {
     }
 
     private CallManager() {
+        Log.d(TAG, "CallManager: ");
         DbManager.getInstance().doRealmTask(realm -> {
             currentCallConfig = realm.where(RealmCallConfig.class).findFirst();
             if (currentCallConfig == null) {
@@ -107,6 +107,7 @@ public class CallManager implements EventListener {
      * @param response from server
      */
     public void onOffer(ProtoSignalingOffer.SignalingOfferResponse.Builder response) {
+        Log.d(TAG, "onOffer: ");
         if (invalidCallType(response.getType()))
             return;
         // set data for future use.
@@ -126,6 +127,7 @@ public class CallManager implements EventListener {
      * this function is called when we are making a call to others
      */
     public void makeOffer(long called_userId, String callerSdp) {
+        Log.d(TAG, "makeOffer: ");
         new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
     }
 
@@ -133,6 +135,7 @@ public class CallManager implements EventListener {
      * this function is step 1 when making a call
      */
     public void startCall(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType) {
+        Log.d(TAG, "startCall: **************************************************************");
         Log.i(TAG, "startCall: " + callPeerId + " " + callType);
         this.callPeerId = callPeerId;
         this.callType = callType;
@@ -150,6 +153,7 @@ public class CallManager implements EventListener {
      * this function is called after ringing response comes from server
      */
     public void onRing() {
+        Log.d(TAG, "onRing: ");
         isRinging = true;
         G.handler.post(() -> changeState(CallState.RINGING));
     }
@@ -160,6 +164,7 @@ public class CallManager implements EventListener {
      * @param response from server
      */
     public void onAccept(ProtoSignalingAccept.SignalingAcceptResponse.Builder response) {
+        Log.d(TAG, "onAccept: ");
         G.handler.post(() -> {
             WebRTC.getInstance().setOfferLocalDescription();
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
@@ -170,6 +175,7 @@ public class CallManager implements EventListener {
      * this function is called when user decide to answer
      */
     public void makeAccept(String sdp) {
+        Log.d(TAG, "makeAccept: ");
         new RequestSignalingAccept().signalingAccept(sdp);
     }
 
@@ -179,6 +185,7 @@ public class CallManager implements EventListener {
      * @param builder from server
      */
     public void onCandidate(ProtoSignalingCandidate.SignalingCandidateResponse.Builder builder) {
+        Log.d(TAG, "onCandidate: ");
         G.handler.post(() -> WebRTC.getInstance()
                 .peerConnectionInstance()
                 .addIceCandidate(new IceCandidate(builder.getPeerSdpMId(), builder.getPeerSdpMLineIndex(), builder.getPeerCandidate())));
@@ -188,6 +195,7 @@ public class CallManager implements EventListener {
      * this function is called when user wants to send its candidate info to peer
      */
     public void exchangeCandidate(String sdpMId, int sdpMLineIndex, String candidate) {
+        Log.d(TAG, "exchangeCandidate: ");
         new RequestSignalingCandidate().signalingCandidate(sdpMId, sdpMLineIndex, candidate);
     }
 
@@ -198,6 +206,7 @@ public class CallManager implements EventListener {
      */
     public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Builder builder) {
         G.handler.post(() -> {
+            Log.d(TAG, "onLeave: " + builder.getType());
             // TODO: 5/6/2020 this part needs to change based on new design
             try {
                 AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
@@ -227,10 +236,12 @@ public class CallManager implements EventListener {
     }
 
     public void leaveCall() {
+        Log.d(TAG, "leaveCall: ");
         new RequestSignalingLeave().signalingLeave();
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
+        Log.d(TAG, "onHold: ");
         if (builder.getHold()) {
             WebRTC.getInstance().toggleSound(false);
             changeState(CallState.ON_HOLD);
@@ -242,10 +253,12 @@ public class CallManager implements EventListener {
     }
 
     public void holdCall(boolean state) {
+        Log.d(TAG, "holdCall: ");
         new RequestSignalingSessionHold().signalingSessionHold(state);
     }
 
     public void onError(int major, int minor) {
+        Log.d(TAG, "onError: ");
         int messageID = R.string.e_call_permision;
         switch (major) {
             case 900:
@@ -374,6 +387,7 @@ public class CallManager implements EventListener {
     }
 
     public void toggleMic() {
+        Log.d(TAG, "toggleMic: ");
         WebRTC.getInstance().toggleSound(!isMicEnable);
         isMicEnable = !isMicEnable;
     }
@@ -383,6 +397,7 @@ public class CallManager implements EventListener {
     }
 
     public void endCall() {
+        Log.d(TAG, "endCall: ");
         leaveCall();
     }
 
@@ -391,6 +406,7 @@ public class CallManager implements EventListener {
     }
 
     public void acceptCall() {
+        Log.d(TAG, "acceptCall: ");
         WebRTC.getInstance().createAnswer();
     }
 
@@ -405,6 +421,7 @@ public class CallManager implements EventListener {
     }
 
     public void onSdpSuccess() {
+        Log.d(TAG, "onSdpSuccess: ");
         if (isIncoming)
             openCallInterface();
         else {
@@ -427,6 +444,7 @@ public class CallManager implements EventListener {
     }
 
     private void openCallInterface() {
+        Log.d(TAG, "openCallInterface: ");
         CallSelectFragment.call(callPeerId, isIncoming, callType);
     }
 
@@ -435,6 +453,7 @@ public class CallManager implements EventListener {
     }
 
     public CallerInfo getCurrentCallerInfo() {
+        Log.d(TAG, "getCurrentCallerInfo: ");
         return currentCallerInfo;
     }
 
@@ -444,14 +463,11 @@ public class CallManager implements EventListener {
     }
 
     public void cleanUp() {
-
+        Log.d(TAG, "cleanUp: ");
         onCallStateChanged = null;
         WebRTC.getInstance().close();
 
         instance = null;
-
-        Log.i(TAG, "cleanUp");
-
     }
 
     public long getCallPeerId() {

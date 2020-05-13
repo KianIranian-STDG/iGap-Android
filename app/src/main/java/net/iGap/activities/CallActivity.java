@@ -253,12 +253,15 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onCallStateChanged(CallState callState) {
         Log.i(TAG, "onCallStateChanged: " + callState);
-        if (callState == CallState.REJECT) {
-            finish();
-        } else if (callState == CallState.LEAVE_CALL) {
-            finish();
+        switch (callState) {
+            case FAILD:
+            case DISCONNECTED:
+            case LEAVE_CALL:
+            case NOT_ANSWERED:
+            case REJECT:
+            case TOO_LONG:
+                finish();
         }
-
     }
 
     @Override
