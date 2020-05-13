@@ -3,11 +3,13 @@ package net.iGap.viewmodel.controllers;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
@@ -19,9 +21,9 @@ import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
+import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
 import net.iGap.observers.eventbus.EventListener;
@@ -32,6 +34,7 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.proto.ProtoSignalingSessionHold;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestSignalingAccept;
 import net.iGap.request.RequestSignalingCandidate;
@@ -44,6 +47,9 @@ import net.iGap.viewmodel.controllers.telecom.CallConnectionService;
 
 import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
@@ -65,6 +71,9 @@ public class CallManager implements EventListener {
     private CallerInfo currentCallerInfo;
 
     private CallStateChange onCallStateChanged;
+    private Timer timer;
+    private CallTimeDelegate timeDelegate;
+    private long callStartTime;
 
     protected static final boolean USE_CONNECTION_SERVICE = isDeviceCompatibleWithConnectionServiceAPI();
 
@@ -95,10 +104,6 @@ public class CallManager implements EventListener {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         });
-
-        currentCallerInfo = new CallerInfo();
-        currentCallerInfo.name = "Abolfazl Abbasi";
-        currentCallerInfo.userId = AccountManager.getInstance().getCurrentUser().getId();
     }
 
     /**
@@ -114,11 +119,16 @@ public class CallManager implements EventListener {
         callPeerId = response.getCallerUserId();
         callType = response.getType();
 
+        setupCallerInfo(callPeerId);
+
         WebRTC.getInstance().setCallType(callType);
         // activate ringing state for caller.
         isRinging = true;
         isIncoming = true;
         new RequestSignalingRinging().signalingRinging();
+
+        G.runOnUiThread(() -> startService(callPeerId, callType, isIncoming));
+
         // generate SDP
         G.handler.post(() -> WebRTC.getInstance().setRemoteDesc(new SessionDescription(OFFER, response.getCallerSdp())));
     }
@@ -146,7 +156,39 @@ public class CallManager implements EventListener {
                 MusicPlayer.pauseSoundFromIGapCall = true;
             }
         }
+
+        setupCallerInfo(callPeerId);
+
         WebRTC.getInstance().createOffer(callPeerId);
+    }
+
+    private void setupCallerInfo(long callPeerId) {
+        currentCallerInfo = new CallerInfo();
+        currentCallerInfo.name = DbManager.getInstance().doRealmTask(realm -> {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callPeerId).findFirst();
+            if (realmRegisteredInfo != null) {
+                return realmRegisteredInfo.getDisplayName();
+            } else
+                return "";
+        });
+        currentCallerInfo.userId = callPeerId;
+    }
+
+    private void startService(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType, boolean isIncoming) {
+        if (callPeerId <= 0) {
+            return;
+        }
+
+        Intent intent = new Intent(G.currentActivity, CallService.class);
+        intent.putExtra(CallService.USER_ID, callPeerId);
+        intent.putExtra(CallService.IS_INCOMING, isIncoming);
+        intent.putExtra(CallService.CALL_TYPE, callType.toString());
+
+        try {
+            G.currentActivity.startService(intent);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -410,6 +452,29 @@ public class CallManager implements EventListener {
         WebRTC.getInstance().createAnswer();
     }
 
+    private void startTimer() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (CallService.getInstance() == null)
+                    return;
+
+                G.runOnUiThread(() -> {
+                    if (timeDelegate != null)
+                        timeDelegate.onTimeChange(getCallDuration());
+                });
+            }
+        }, 0, 1000);
+    }
+
+    private long getCallDuration() {
+        if (callStartTime == 0) {
+            return 0;
+        }
+        return SystemClock.elapsedRealtime() - callStartTime;
+    }
+
     /**
      * check for acceptable modes for call
      *
@@ -467,6 +532,12 @@ public class CallManager implements EventListener {
         onCallStateChanged = null;
         WebRTC.getInstance().close();
 
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        callStartTime = 0;
+
         instance = null;
     }
 
@@ -482,6 +553,10 @@ public class CallManager implements EventListener {
         this.onCallStateChanged = onCallStateChanged;
     }
 
+    public void setTimeDelegate(CallTimeDelegate timeDelegate) {
+        this.timeDelegate = timeDelegate;
+    }
+
     public boolean isIncoming() {
         return isIncoming;
     }
@@ -492,7 +567,18 @@ public class CallManager implements EventListener {
         void onError(int messageID, int major, int minor);
     }
 
+    public interface CallTimeDelegate {
+        void onTimeChange(long time);
+    }
+
     public void changeState(CallState callState) {
+        if (callState == CallState.CONNECTED) {
+            if (callStartTime == 0) {
+                callStartTime = SystemClock.elapsedRealtime();
+            }
+            startTimer();
+        }
+
         if (onCallStateChanged != null)
             onCallStateChanged.onCallStateChanged(callState);
     }

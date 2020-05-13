@@ -147,13 +147,16 @@ public class CallService extends Service implements EventListener, CallManager.C
             channel.setSound(soundProviderUri, attrs);
             channel.enableVibration(false);
             channel.enableLights(false);
-            builder.setColor(0x4CAF50);
-            builder.setVibrate(new long[]{200, 200, 200, 200, 200});
             builder.setLights(Color.RED, 1000, 1000);
-            builder.setFullScreenIntent(PendingIntent.getActivity(this, 0, intent, 0), true);
-            builder.setCategory(Notification.CATEGORY_CALL);
             notificationManager.createNotificationChannel(channel);
             builder.setChannelId(channel.getId());
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setColor(0xff4CAF50);
+            builder.setVibrate(new long[]{200, 200, 200, 200, 200});
+            builder.setCategory(Notification.CATEGORY_CALL);
+            builder.setFullScreenIntent(PendingIntent.getActivity(this, 0, intent, 0), true);
         }
 
         Intent endIntent = new Intent(this, CallActionsReceiver.class);
@@ -213,7 +216,7 @@ public class CallService extends Service implements EventListener, CallManager.C
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.setPriority(Notification.PRIORITY_MAX);
             Intent endIntent = new Intent(this, CallActionsReceiver.class);
-            endIntent.setAction("net.iGap.END_CALL");
+            endIntent.setAction(ACTION_END_CALL);
             NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_call_notif_decline, getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon), PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
             builder.addAction(action);
         }

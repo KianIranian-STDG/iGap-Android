@@ -24,6 +24,7 @@ import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.Theme;
 import net.iGap.module.customView.CallRippleView;
 import net.iGap.module.customView.CheckableImageView;
@@ -33,12 +34,13 @@ import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
 
-public class CallActivity extends ActivityEnhanced implements CallManager.CallStateChange {
+public class CallActivity extends ActivityEnhanced implements CallManager.CallStateChange, CallManager.CallTimeDelegate {
     private FrameLayout rootView;
     private TextView nameTextView;
     private TextView callTypeTextView;
     private ImageView userImageView;
     private ImageView declineImageView;
+    private TextView statusTextView;
     private LinearLayout buttons;
     private LinearLayout quickAnswerView;
 
@@ -77,6 +79,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         Log.i(TAG, "CallActivity onCreate ");
 
         CallService.getInstance().setCallStateChange(this);
+        CallManager.getInstance().setTimeDelegate(this);
 
         callType = CallManager.getInstance().getCallType();
         userId = CallManager.getInstance().getCallPeerId();
@@ -143,17 +146,39 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         callTypeTextView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
         rootView.addView(callTypeTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 24, 16, 0));
 
+        statusTextView = new AppCompatTextView(this);
+        statusTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        statusTextView.setTextColor(getResources().getColor(R.color.white));
+        statusTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font_bold));
+        statusTextView.setLines(1);
+        statusTextView.setMaxLines(1);
+        statusTextView.setSingleLine(true);
+        statusTextView.setEllipsize(TextUtils.TruncateAt.END);
+        statusTextView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
+        rootView.addView(statusTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 46, 16, 0));
+
+        durationTextView = new AppCompatTextView(this);
+        durationTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        durationTextView.setTextColor(getResources().getColor(R.color.white));
+        durationTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font));
+        durationTextView.setLines(1);
+        durationTextView.setMaxLines(1);
+        durationTextView.setSingleLine(true);
+        durationTextView.setEllipsize(TextUtils.TruncateAt.END);
+        durationTextView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
+        rootView.addView(durationTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 72, 16, 0));
+
         nameTextView = new TextView(this);
         nameTextView.setText(caller.getName());
         nameTextView.setTextColor(getResources().getColor(R.color.white));
-        nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 38);
+        nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 40);
         nameTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font));
         nameTextView.setLines(1);
         nameTextView.setMaxLines(1);
         nameTextView.setSingleLine(true);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         nameTextView.setGravity(Gravity.CENTER);
-        rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 72, 16, 0));
+        rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 92, 16, 0));
 
         if (isIncoming) {
             answerRippleView = new CallRippleView(this);
@@ -167,6 +192,21 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             declineRippleView.startAnimation();
             declineRippleView.setDelegate(this::declineCall);
             rootView.addView(declineRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 0, 36));
+
+            quickAnswerView = new LinearLayout(this);
+            quickAnswerView.setOrientation(LinearLayout.VERTICAL);
+
+            View view = new View(this);
+            view.setBackground(getResources().getDrawable(R.drawable.shape_call_decline));
+            view.setAlpha(0.3f);
+            quickAnswerView.addView(view, LayoutCreator.createLinear(100, 3, Gravity.CENTER));
+
+            TextView declineText = new AppCompatTextView(this);
+            declineText.setText(R.string.send_text);
+            declineText.setTextColor(Theme.getInstance().getDividerColor(this));
+            declineText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            quickAnswerView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 8));
+            rootView.addView(quickAnswerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
         }
 
         buttons = new LinearLayout(this);
@@ -204,21 +244,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         rootView.addView(buttons, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, 77));
 
-        quickAnswerView = new LinearLayout(this);
-        quickAnswerView.setOrientation(LinearLayout.VERTICAL);
-
-        View view = new View(this);
-        view.setBackground(getResources().getDrawable(R.drawable.shape_call_decline));
-        view.setAlpha(0.3f);
-        quickAnswerView.addView(view, LayoutCreator.createLinear(100, 3, Gravity.CENTER));
-
-        TextView declineText = new AppCompatTextView(this);
-        declineText.setText(R.string.send_text);
-        declineText.setTextColor(Theme.getInstance().getDividerColor(this));
-        declineText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        quickAnswerView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 8));
-        rootView.addView(quickAnswerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
-
         return rootView;
     }
 
@@ -251,21 +276,52 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     @Override
-    public void onCallStateChanged(CallState callState) {
-        Log.i(TAG, "onCallStateChanged: " + callState);
-        switch (callState) {
-            case FAILD:
-            case DISCONNECTED:
-            case LEAVE_CALL:
-            case NOT_ANSWERED:
-            case REJECT:
-            case TOO_LONG:
-                finish();
+    public void onCallStateChanged(CallState state) {
+        Log.i(TAG, "onCallStateChanged: " + state);
+
+        if (state == CallState.BUSY) {
+            statusTextView.setText("Busy");
+        } else if (state == CallState.FAILD) {
+            finish();
+        } else if (state == CallState.REJECT) {
+            finish();
+        } else if (state == CallState.ON_HOLD) {
+
+        } else if (state == CallState.CONNECTED) {
+            statusTextView.setText("Connected");
+        } else if (state == CallState.RINGING) {
+            statusTextView.setText("Ringing");
+        } else if (state == CallState.TOO_LONG) {
+            finish();
+        } else if (state == CallState.SIGNALING) {
+            statusTextView.setText("signaling");
+        } else if (state == CallState.CONNECTING) {
+            statusTextView.setText("Connecting");
+        } else if (state == CallState.LEAVE_CALL) {
+            finish();
+        } else if (state == CallState.UNAVAILABLE) {
+            finish();
+        } else if (state == CallState.DISCONNECTED) {
+            finish();
+        } else if (state == CallState.NOT_ANSWERED) {
+            statusTextView.setText("Not Answered");
+            finish();
+        } else if (state == CallState.DISCONNECTING) {
+            statusTextView.setText("Disconnecting");
+        } else if (state == CallState.INCAMING_CALL) {
+
+        } else if (state == CallState.POOR_CONNECTION) {
+            statusTextView.setText("Poor connection");
         }
     }
 
     @Override
     public void onError(int messageID, int major, int minor) {
+        Log.i(TAG, "onError: " + major + " " + minor);
+    }
 
+    @Override
+    public void onTimeChange(long time) {
+        durationTextView.setText(AndroidUtils.formatLongDuration((int) (time / 1000)));
     }
 }
