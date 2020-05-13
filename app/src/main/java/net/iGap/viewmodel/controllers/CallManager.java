@@ -127,8 +127,6 @@ public class CallManager implements EventListener {
         isIncoming = true;
         new RequestSignalingRinging().signalingRinging();
 
-        G.runOnUiThread(() -> startService(callPeerId, callType, isIncoming));
-
         // generate SDP
         G.handler.post(() -> WebRTC.getInstance().setRemoteDesc(new SessionDescription(OFFER, response.getCallerSdp())));
     }
@@ -488,7 +486,7 @@ public class CallManager implements EventListener {
     public void onSdpSuccess() {
         Log.d(TAG, "onSdpSuccess: ");
         if (isIncoming)
-            openCallInterface();
+            G.runOnUiThread(() -> startService(callPeerId, callType, isIncoming));
         else {
             isRinging = false;
             // TODO: 5/5/2020 this lines should be changed and be deleted.
