@@ -3,8 +3,8 @@ package net.iGap.module.webrtc;
 import android.graphics.Bitmap;
 
 public class CallerInfo {
-    public String name;
-    public String lastName;
+    public String name = "";
+    public String lastName = "";
     public long userId;
     public Bitmap avatar;
 

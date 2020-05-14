@@ -59,7 +59,8 @@ public class CallService extends Service implements EventListener, CallManager.C
     private NotificationManager notificationManager;
 
     private CallManager.CallStateChange callStateChange;
-    private String TAG = "abbasiCall" + " Service";
+
+    private String TAG = "iGapCall " + getClass().getSimpleName();
 
     public static CallService getInstance() {
         return instance;
@@ -89,9 +90,16 @@ public class CallService extends Service implements EventListener, CallManager.C
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        Log.i(TAG, "onStartCommand: " + intent + flags + startId);
+
         if (instance != null) {
             Log.e(TAG, "try to restart live service");
             return START_NOT_STICKY;
+        }
+
+        if (intent == null) {
+            Log.i(TAG, "onStartCommand intent null");
+            stopSelf();
         }
 
         if (intent != null) {
@@ -288,6 +296,13 @@ public class CallService extends Service implements EventListener, CallManager.C
             Log.i(TAG, "onBroadcastReceived: " + intent.getAction());
         if (intent.getAction().equals(ACTION_ANSWER_CALL)) {
             CallManager.getInstance().acceptCall();
+
+            showNotification();
+
+            Intent activityIntent = new Intent(this, CallActivity.class);
+            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(activityIntent);
+
         } else if (intent.getAction().equals(ACTION_DECLINE_CALL) || intent.getAction().equals(ACTION_END_CALL)) {
             CallManager.getInstance().endCall();
             Log.i(getClass().getSimpleName(), "onBroadcastReceived ACTION_DECLINE_CALL");

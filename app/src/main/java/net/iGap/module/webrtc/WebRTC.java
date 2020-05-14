@@ -479,7 +479,7 @@ public class WebRTC {
 
     @Deprecated
     private void acceptCall(String sdp) {
-        Log.d(TAG, "acceptCall: ");
+        Log.d(TAG, "acceptCall: " + sdp);
         new RequestSignalingAccept().signalingAccept(sdp);
     }
 
