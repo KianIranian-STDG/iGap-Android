@@ -93,8 +93,6 @@ import net.iGap.observers.interfaces.OnProgressUpdate;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
-import net.iGap.realm.RealmChannelExtra;
-import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -201,9 +199,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
                 if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
                     AbstractMessage.this.realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
-
-                RealmChannelExtra realmChannelExtra22 = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-
             } else {
                 realmRoomForwardedFrom = null;
             }
