@@ -6,6 +6,4 @@ package net.iGap.observers.eventbus;
 
 public interface EventListener {
     void receivedMessage(int id, Object... message);
-
-
 }

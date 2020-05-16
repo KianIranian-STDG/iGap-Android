@@ -2105,7 +2105,7 @@
     <string name="kuknos_viewRecoveryEP_wrongPINE">رمز ورودی صحیح نمیباشد. لطفا دوباره تلاش کنید.</string>
     <string name="kuknos_viewRecoveryEP_failTitle">خطا</string>
     <string name="kuknos_logout_title">خروج از کیف پول</string>
-    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد به حساب باید از فرایند بازیابی حساب استفاده کنید. (در صورت نداشتن رمز، 0000 را وارد کنید.)</string>
+    <string name="kuknos_logout_message">اخطار: خروج از کیف پول تمامی اطلاعات شما بر روی این دستگاه را پاک خواهد کرد و برای ورود مجدد به حساب باید از فرایند بازیابی حساب استفاده کنید.</string>
     <string name="kuknos_logout_pin">رمز ورودی</string>
     <string name="kuknos_logout_btn">خروج از کیف پول</string>
     <string name="kuknos_logout_load">خروج...</string>

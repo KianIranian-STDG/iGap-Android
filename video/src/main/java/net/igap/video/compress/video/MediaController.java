@@ -2,7 +2,6 @@ package net.igap.video.compress.video;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.graphics.Bitmap;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
@@ -256,28 +255,23 @@ public class MediaController {
     }
 
     @TargetApi(16)
-    public boolean convertVideo(final String path, String savePath, long mEndTime, OnPercentCompress onPercentCompress) {
+    public boolean convertVideo(final String path, String savePath, OnPercentCompress onPercentCompress) {
 
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(path);
-        String width = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
-        String height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
-        String rotation = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
-
-        int videoWidth = 641;
-        int videoHeight = 361;
+        String width;
+        String height;
+        String rotation;
+        long mEndTime;
         try {
-            MediaMetadataRetriever re = new MediaMetadataRetriever();
-            Bitmap bmp = null;
-            re.setDataSource(path);
-            bmp = retriever.getFrameAtTime();
-            if (bmp == null) {
-                return false;
-            }
-            videoHeight = bmp.getHeight();
-            videoWidth = bmp.getWidth();
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(path);
+            width = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+            height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+            rotation = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
+            String durationStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            mEndTime = Long.parseLong(durationStr);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+            return false;
         }
 
         long startTime = -1;
@@ -294,9 +288,6 @@ public class MediaController {
         int rotateRender = 0;
 
         if (originalWidth * originalHeight < 307200) {
-            //resultWidth = videoWidth;
-            //resultHeight = videoHeight;
-
             try {
                 copyFile(new File(path), new File(savePath));
             } catch (IOException e) {

@@ -301,6 +301,10 @@ public class Theme {
         return getDrawableAttr(context, R.attr.iGapCardToCardButtonBackground);
     }
 
+    public int getCardToCardButton(Context context) {
+        return getDrawableAttr(context, R.attr.iGapCardToCardButton);
+    }
+
     public int getCardToCardIconBackground(Context context) {
         return getDrawableAttr(context, R.attr.iGapCardToCardIconBackground);
     }

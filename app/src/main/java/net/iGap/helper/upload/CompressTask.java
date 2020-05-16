@@ -1,7 +1,9 @@
-package net.igap.video.compress;
+package net.iGap.helper.upload;
 
 import android.media.MediaMetadataRetriever;
 
+import net.iGap.helper.HelperLog;
+import net.igap.video.compress.OnCompress;
 import net.igap.video.compress.video.MediaController;
 
 
@@ -27,18 +29,14 @@ public class CompressTask extends Thread implements MediaController.OnPercentCom
         if (originalPath == null || originalPath.length() == 0)
             return;
 
-        long endTime;
         try {
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(originalPath);
-            String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-            endTime = Long.parseLong(durationStr);
         } catch (Exception e) {
-            e.printStackTrace();
-            endTime = 1;
+            HelperLog.setErrorLog(e);
         }
 
-        boolean finish = MediaController.getInstance().convertVideo(originalPath, newPath, endTime, this);
+        boolean finish = MediaController.getInstance().convertVideo(originalPath, newPath, this);
         onCompress.onCompressFinish(id, finish);
     }
 

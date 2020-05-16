@@ -219,17 +219,18 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  * if not forwarded message update structure otherwise just notify position
                  * mainMessageId == 0 means that this message not forwarded
                  */
-                if (
-                        messageInfo.mMessage.getMessageId() == messageId &&
-                                (forwardedMessageId != 0 || messageInfo.mMessage.getRoomId() == roomId)
-                ) {
+
+                // TODO: 5/16/20 must change vote structure
+                if (messageInfo.mMessage.getMessageId() == messageId && (forwardedMessageId != 0 || messageInfo.mMessage.getRoomId() == roomId)) {
                     int pos = items.indexOf(messageInfo);
-                    if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                        messageInfo.structMessage.getChannelExtra().setThumbsUp(vote);
-                    } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-                        messageInfo.structMessage.getChannelExtra().setThumbsDown(vote);
+                    if (messageInfo.structMessage.getChannelExtra() != null) {
+                        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                            messageInfo.structMessage.getChannelExtra().setThumbsUp(vote);
+                        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+                            messageInfo.structMessage.getChannelExtra().setThumbsDown(vote);
+                        }
+                        set(pos, messageInfo);
                     }
-                    set(pos, messageInfo);
                 }
             }
         }

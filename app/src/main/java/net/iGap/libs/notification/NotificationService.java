@@ -4,12 +4,12 @@ package net.iGap.libs.notification;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperNotification;
 import net.iGap.model.AccountUser;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmUserInfo;

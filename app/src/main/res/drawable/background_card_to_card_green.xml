@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="?attr/iGapSendMessageBubbleColor" />
+    <solid android:color="#b5e663" />
 
     <corners android:radius="8dp" />
 </shape>

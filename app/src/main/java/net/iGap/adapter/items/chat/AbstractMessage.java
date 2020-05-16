@@ -43,8 +43,6 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
@@ -95,8 +93,6 @@ import net.iGap.observers.interfaces.OnProgressUpdate;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
-import net.iGap.realm.RealmChannelExtra;
-import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -203,9 +199,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
                 if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
                     AbstractMessage.this.realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
-
-                RealmChannelExtra realmChannelExtra22 = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-
             } else {
                 realmRoomForwardedFrom = null;
             }
@@ -491,29 +484,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             try {
                 if (mMessage.getForwardMessage() == null && structMessage.getAdditional() != null && structMessage.getAdditional().getAdditionalType() == AdditionalType.UNDER_MESSAGE_BUTTON) {
                     HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(structMessage.getAdditional().getAdditionalData());
-                    Gson gson = new GsonBuilder().create();
-                    for (int i = 0; i < buttonList.size(); i++) {
-                        LinearLayout childLayout = MakeButtons.createLayout(((ChatItemWithTextHolder) holder).getContext());
-                        for (int j = 0; j < buttonList.get(i).length(); j++) {
-                            try {
 
-                                JSONObject json = new JSONObject(buttonList.get(i).get(j).toString());
-                                ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
-                                }.getType());
-                                if (btnEntery.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-//                                    btnEntery.setLongValue(json.getLong("value"));
+                    int rowSize = buttonList.size();
+
+                    for (int i = 0; i < rowSize; i++) {
+                        int columSize = buttonList.get(i).length();
+                        LinearLayout childLayout = MakeButtons.createLayout(((ChatItemWithTextHolder) holder).getContext());
+                        for (int j = 0; j < columSize; j++) {
+                            ButtonEntity buttonEntity = new Gson().fromJson(buttonList.get(i).get(j).toString(), ButtonEntity.class);
+                            buttonEntity.setJsonObject(buttonList.get(i).get(j).toString());
+
+                            childLayout = MakeButtons.addButtons(theme, buttonEntity, buttonList.get(i).length(), 1f, childLayout, (view, btnEntity) -> {
+                                if (FragmentChat.isInSelectionMode) {
+                                    holder.itemView.performLongClick();
+                                    return;
                                 }
-                                btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(theme, btnEntery, (view, buttonEntity) -> {
-                                    if (FragmentChat.isInSelectionMode) {
-                                        holder.itemView.performLongClick();
-                                        return;
-                                    }
-                                    mAdapter.onBotButtonClicked(() -> onBotBtnClick(view, buttonEntity));
-                                }, buttonList.get(i).length(), .75f, i, childLayout, structMessage.getAdditional().getAdditionalType());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                                mAdapter.onBotButtonClicked(() -> onBotBtnClick(view, btnEntity));
+                            });
                         }
                         withTextHolder.addButtonLayout(childLayout);
                     }

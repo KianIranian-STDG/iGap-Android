@@ -21,10 +21,10 @@ public class RequestMplGetCardToCardToken {
         void onError(int major, int minor);
     }
 
-    public boolean mplGetToken(OnMplCardToCardToken onMplCardToCardToken) {
+    public boolean mplGetToken(OnMplCardToCardToken onMplCardToCardToken, long userId) {
 
         ProtoMplGetCardToCardToken.MplGetCardToCardToken.Builder builder = ProtoMplGetCardToCardToken.MplGetCardToCardToken.newBuilder();
-
+        builder.setToUserId(userId);
         RequestWrapper requestWrapper = new RequestWrapper(9106, builder, onMplCardToCardToken);
         try {
             if (G.userLogin) {

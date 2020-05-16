@@ -26,9 +26,9 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.FontIconTextView;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +124,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 //            }
 
             innerLayout.setBackgroundResource(theme.getCardToCardBackground(innerLayout.getContext()));
-            payButton.setBackgroundResource(theme.getCardToCardButtonBackground(payButton.getContext()));
+            payButton.setBackgroundResource(theme.getCardToCardButton(payButton.getContext()));
             cardIcon.setBackgroundResource(theme.getCardToCardIconBackground(cardIcon.getContext()));
 
             set.constrainHeight(payButton.getId(), ConstraintSet.WRAP_CONTENT);

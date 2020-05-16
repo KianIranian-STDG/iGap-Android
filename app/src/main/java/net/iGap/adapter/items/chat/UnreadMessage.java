@@ -41,21 +41,13 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-        holder.txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.txtUnreadMessage.setOnClickListener(v -> {
 
-            }
         });
 
-        holder.txtUnreadMessage.setBackgroundResource(theme.getCardToCardButtonBackground(holder.txtUnreadMessage.getContext()));
+        holder.txtUnreadMessage.setBackgroundColor(theme.getPrimaryDarkColor(holder.txtUnreadMessage.getContext()));
 
-        holder.txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return true;
-            }
-        });
+        holder.txtUnreadMessage.setOnLongClickListener(v -> true);
 
         super.bindView(holder, payloads);
 

@@ -20,12 +20,14 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -38,6 +40,8 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+
+import java.util.ArrayList;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -710,6 +714,9 @@ public class RoomListCell extends FrameLayout {
                         message = lastMessage.getMessage().substring(0, 70) + "...";
                     } else
                         message = lastMessage.getMessage();
+
+                    ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(message);
+                    message = AbstractMessage.removeBoldMark(message, boldPlaces);
 
 //                    if (HelperCalander.isPersianUnicode)
 //                        message = HelperCalander.convertToUnicodeFarsiNumber(message);

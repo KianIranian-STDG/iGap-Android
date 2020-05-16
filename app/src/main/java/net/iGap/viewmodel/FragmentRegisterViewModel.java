@@ -22,19 +22,19 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.observers.interfaces.OnQrCodeNewDevice;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructCountry;
+import net.iGap.observers.interfaces.OnQrCodeNewDevice;
 import net.iGap.request.RequestQrCodeNewDevice;
 
 import org.jetbrains.annotations.NotNull;
@@ -137,6 +137,7 @@ public class FragmentRegisterViewModel extends ViewModel {
                 } else {
                     edtPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
                 }
+                repository.setIsoCode(country.getAbbreviation());
                 callbackBtnChoseCountry.set(data.getCountryName());
                 btnStartEnable.set(true);
             }
