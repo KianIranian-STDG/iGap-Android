@@ -65,7 +65,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private boolean isVoiceCall;
     private int[] quickDeclineMessage;
     private boolean isRtl = G.isAppRtl;
-    private String TAG = "amini_" + " Activity";
+
+    private String TAG = "iGapCall " + getClass().getSimpleName();
 
     public CallActivity() {
 
@@ -82,9 +83,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             finish();
 
         Log.i(TAG, "CallActivity onCreate ");
-
-        CallService.getInstance().setCallStateChange(this);
-        CallManager.getInstance().setTimeDelegate(this);
 
         callType = CallManager.getInstance().getCallType();
         userId = CallManager.getInstance().getCallPeerId();
@@ -108,6 +106,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         init();
         setContentView(createRootView());
+
+        CallService.getInstance().setCallStateChange(this);
+        CallManager.getInstance().setTimeDelegate(this);
     }
 
     private void init() {
@@ -314,6 +315,17 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onCallStateChanged(CallState state) {
         Log.i(TAG, "onCallStateChanged: " + state);
+
+        if (state != CallState.RINGING) {
+            G.runOnUiThread(() -> {
+                if (answerRippleView != null) {
+                    answerRippleView.setVisibility(View.GONE);
+                    declineRippleView.setVisibility(View.GONE);
+                    quickAnswerView.setVisibility(View.GONE);
+                    buttons.setVisibility(View.VISIBLE);
+                }
+            });
+        }
 
         if (state == CallState.BUSY) {
             statusTextView.setText("Busy");

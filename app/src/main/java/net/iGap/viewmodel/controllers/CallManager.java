@@ -79,10 +79,9 @@ public class CallManager implements EventListener {
 
     private static volatile CallManager instance = null;
 
-    private static String TAG = "amini_Manager";
+    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private CallState currentSate;
 
-
-    // make this class singlton
     public static CallManager getInstance() {
         CallManager localInstance = instance;
         if (localInstance == null) {
@@ -97,10 +96,11 @@ public class CallManager implements EventListener {
     }
 
     private CallManager() {
-        Log.d(TAG, "CallManager: ");
+        Log.d(TAG, "CallManager Constructor");
         DbManager.getInstance().doRealmTask(realm -> {
             currentCallConfig = realm.where(RealmCallConfig.class).findFirst();
             if (currentCallConfig == null) {
+                Log.i(TAG, "CallManager currentCallConfig == null");
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         });
@@ -112,7 +112,7 @@ public class CallManager implements EventListener {
      * @param response from server
      */
     public void onOffer(ProtoSignalingOffer.SignalingOfferResponse.Builder response) {
-        Log.d(TAG, "onOffer: ");
+        Log.d(TAG, "onOffer: " + response.getCallerUserId() + " " + response.getType().toString());
         if (invalidCallType(response.getType()))
             return;
         // set data for future use.
@@ -135,7 +135,7 @@ public class CallManager implements EventListener {
      * this function is called when we are making a call to others
      */
     public void makeOffer(long called_userId, String callerSdp) {
-        Log.d(TAG, "makeOffer: ");
+        Log.d(TAG, "makeOffer: " + called_userId + " " + callerSdp + " " + callType);
         new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
     }
 
@@ -177,15 +177,22 @@ public class CallManager implements EventListener {
             return;
         }
 
-        Intent intent = new Intent(G.currentActivity, CallService.class);
+        Log.i(TAG, "startService: " + callPeerId + " " + callType + " " + isIncoming);
+
+        Intent intent = new Intent(G.context, CallService.class);
         intent.putExtra(CallService.USER_ID, callPeerId);
         intent.putExtra(CallService.IS_INCOMING, isIncoming);
         intent.putExtra(CallService.CALL_TYPE, callType.toString());
 
         try {
-            G.currentActivity.startService(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                G.context.startForegroundService(intent);
+            } else {
+                G.context.startService(intent);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
+            Log.i(TAG, "startService: " + e.getMessage());
         }
     }
 
@@ -225,7 +232,7 @@ public class CallManager implements EventListener {
      * @param builder from server
      */
     public void onCandidate(ProtoSignalingCandidate.SignalingCandidateResponse.Builder builder) {
-        Log.d(TAG, "onCandidate: ");
+        Log.d(TAG, "onCandidate: " + builder.getPeerCandidate());
         G.handler.post(() -> WebRTC.getInstance()
                 .peerConnectionInstance()
                 .addIceCandidate(new IceCandidate(builder.getPeerSdpMId(), builder.getPeerSdpMLineIndex(), builder.getPeerCandidate())));
@@ -235,7 +242,7 @@ public class CallManager implements EventListener {
      * this function is called when user wants to send its candidate info to peer
      */
     public void exchangeCandidate(String sdpMId, int sdpMLineIndex, String candidate) {
-        Log.d(TAG, "exchangeCandidate: ");
+        Log.d(TAG, "exchangeCandidate: " + sdpMId + " " + sdpMLineIndex + " " + candidate);
         new RequestSignalingCandidate().signalingCandidate(sdpMId, sdpMLineIndex, candidate);
     }
 
@@ -281,7 +288,7 @@ public class CallManager implements EventListener {
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
-        Log.d(TAG, "onHold: ");
+        Log.d(TAG, "onHold: " + builder.getHold());
         if (builder.getHold()) {
             WebRTC.getInstance().toggleSound(false);
             changeState(CallState.ON_HOLD);
@@ -298,42 +305,28 @@ public class CallManager implements EventListener {
     }
 
     public void onError(int major, int minor) {
-        Log.d(TAG, "onError: ");
+        Log.d(TAG, "onError: " + major + " " + minor);
         int messageID = R.string.e_call_permision;
         switch (major) {
-            case 900:
-            case 916:
-            case 907:
-                //                RINGING_BAD_PAYLOAD
-                //                LEAVE_BAD_PAYLOAD
-                //                GET_CONFIGURATION_BAD_PAYLOAD
+            case 900://                RINGING_BAD_PAYLOAD
+            case 916://                LEAVE_BAD_PAYLOAD
+            case 907://                GET_CONFIGURATION_BAD_PAYLOAD
                 messageID = R.string.call_error_badPayload;
                 break;
-            case 901:
-            case 920:
-            case 917:
-            case 914:
-            case 911:
-            case 908:
-            case 903:
-                //                OFFER_INTERNAL_SERVER_ERROR
-                //                RINGING_INTERNAL_SERVER_ERROR
-                //                ACCEPT_INTERNAL_SERVER_ERROR
-                //                CANDIDATE_INTERNAL_SERVER_ERROR
-                //                LEAVE_INTERNAL_SERVER_ERROR
-                //                SESSION_HOLD_INTERNAL_SERVER_ERROR
-                //                GET_CONFIGURATION_INTERNAL_SERVER_ERROR
+            case 901://                OFFER_INTERNAL_SERVER_ERROR
+            case 920://                RINGING_INTERNAL_SERVER_ERROR
+            case 917://                ACCEPT_INTERNAL_SERVER_ERROR
+            case 914://                CANDIDATE_INTERNAL_SERVER_ERROR
+            case 911://                LEAVE_INTERNAL_SERVER_ERROR
+            case 908://                SESSION_HOLD_INTERNAL_SERVER_ERROR
+            case 903://                GET_CONFIGURATION_INTERNAL_SERVER_ERROR
                 messageID = R.string.call_error_internalServer;
                 break;
-            case 902:
-                //                OFFER_BAD_PAYLOAD
+            case 902://                OFFER_BAD_PAYLOAD
                 switch (minor) {
-                    case 1:
-                    case 2:
-                    case 3:
-                        //                        Caller_SDP is invalid
-                        //                        Type is invalid
-                        //                        CalledUser_ID is invalid
+                    case 1://                        Caller_SDP is invalid
+                    case 2://                        Type is invalid
+                    case 3://                        CalledUser_ID is invalid
                         messageID = R.string.call_error_offer;
                         break;
                     default:
@@ -364,27 +357,19 @@ public class CallManager implements EventListener {
                         break;
                 }
                 break;
-            case 921:
-            case 918:
-            case 915:
-            case 912:
-            case 909:
-                //                RINGING_FORBIDDEN
-                //                ACCEPT_FORBIDDEN
-                //                CANDIDATE_FORBIDDEN
-                //                LEAVE_FORBIDDEN
-                //                SESSION_HOLD_FORBIDDEN
-                //                OFFER_FORBIDDEN
+            case 921://                RINGING_FORBIDDEN
+            case 918://                ACCEPT_FORBIDDEN
+            case 915://                CANDIDATE_FORBIDDEN
+            case 912://                LEAVE_FORBIDDEN
+            case 909://                SESSION_HOLD_FORBIDDEN
                 messageID = R.string.call_error_forbidden;
                 break;
-            case 905:
-            case 906:
-                //                OFFER_PRIVACY_PROTECTION
-                //                OFFER_BLOCKED_BY_PEER
+            case 905://                OFFER_PRIVACY_PROTECTION
+            case 906://                OFFER_BLOCKED_BY_PEER
                 messageID = R.string.e_906_1;
                 break;
-            case 910:
-                //                ACCEPT_BAD_PAYLOAD
+            case 910://                ACCEPT_BAD_PAYLOAD
+
                 if (minor == 1) {
                     //                    Called_SDP is invalid
                     messageID = R.string.call_error_accept;
@@ -392,15 +377,11 @@ public class CallManager implements EventListener {
                     messageID = R.string.call_error_badPayload;
                 }
                 break;
-            case 913:
-                //                CANDIDATE_BAD_PAYLOAD
+            case 913://                CANDIDATE_BAD_PAYLOAD
                 switch (minor) {
-                    case 1:
-                    case 2:
-                    case 3:
-                        //                        SDP_M_Line_Index is invalid
-                        //                        SDP_MID is invalid
-                        //                        Candidate is invalid
+                    case 1://                        SDP_M_Line_Index is invalid
+                    case 2://                        SDP_MID is invalid
+                    case 3://                        Candidate is invalid
                         messageID = R.string.call_error_candidate;
                         break;
                     default:
@@ -408,10 +389,8 @@ public class CallManager implements EventListener {
                         break;
                 }
                 break;
-            case 919:
-                //                SESSION_HOLD_BAD_PAYLOAD
-                if (minor == 1) {
-                    //                    Hold is invalid
+            case 919://                SESSION_HOLD_BAD_PAYLOAD
+                if (minor == 1) {//                    Hold is invalid
                     messageID = R.string.call_error_hold;
                 } else {
                     messageID = R.string.call_error_badPayload;
@@ -497,6 +476,7 @@ public class CallManager implements EventListener {
                 G.appChangeRinggerMode = true;
                 am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
             } catch (Exception e) {
+                e.printStackTrace();
             }
             if (G.videoCallListener != null) {
 
@@ -547,6 +527,10 @@ public class CallManager implements EventListener {
         return callType;
     }
 
+    public CallState getCurrentSate() {
+        return currentSate;
+    }
+
     public void setOnCallStateChanged(CallStateChange onCallStateChanged) {
         this.onCallStateChanged = onCallStateChanged;
     }
@@ -570,6 +554,9 @@ public class CallManager implements EventListener {
     }
 
     public void changeState(CallState callState) {
+
+        currentSate = callState;
+
         if (callState == CallState.CONNECTED) {
             if (callStartTime == 0) {
                 callStartTime = SystemClock.elapsedRealtime();
