@@ -1,9 +1,9 @@
 package net.iGap.activities;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,10 +29,13 @@ import net.iGap.module.Theme;
 import net.iGap.module.customView.CallRippleView;
 import net.iGap.module.customView.CheckableImageView;
 import net.iGap.module.enums.CallState;
+import net.iGap.module.webrtc.AppRTCAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
+
+import java.util.Set;
 
 public class CallActivity extends ActivityEnhanced implements CallManager.CallStateChange, CallManager.CallTimeDelegate {
     private FrameLayout rootView;
@@ -54,13 +57,15 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private CallerInfo caller;
 
+    private AppRTCAudioManager audioManager = null;
+
     private long userId;
     private boolean isIncoming;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
     private boolean isVoiceCall;
     private int[] quickDeclineMessage;
     private boolean isRtl = G.isAppRtl;
-    private String TAG = "abbasiCall" + " Activity";
+    private String TAG = "amini_" + " Activity";
 
     public CallActivity() {
 
@@ -85,9 +90,23 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         userId = CallManager.getInstance().getCallPeerId();
         isVoiceCall = callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
         isIncoming = CallManager.getInstance().isIncoming();
+        // Create and audio manager that will take care of audio routing,
+        // audio modes, audio device enumeration etc.
+        audioManager = AppRTCAudioManager.create(getApplicationContext());
+        // Store existing audio settings and change audio mode to
+        // MODE_IN_COMMUNICATION for best possible VoIP performance.
+        Log.d(TAG, "Starting the audio manager...");
+        audioManager.start(new AppRTCAudioManager.AudioManagerEvents() {
+            // This method will be called each time the number of available audio
+            // devices has changed.
+            @Override
+            public void onAudioDeviceChanged(
+                    AppRTCAudioManager.AudioDevice audioDevice, Set<AppRTCAudioManager.AudioDevice> availableAudioDevices) {
+                onAudioManagerDevicesChanged(audioDevice, availableAudioDevices);
+            }
+        });
 
         init();
-
         setContentView(createRootView());
     }
 
@@ -247,6 +266,15 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         return rootView;
     }
 
+    // This method is called when the audio manager reports audio device change,
+    // e.g. from wired headset to speakerphone.
+    private void onAudioManagerDevicesChanged(
+            final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
+        Log.d(TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", "
+                + "selected: " + device);
+        // TODO(henrika): add callback handler.
+    }
+
     private void endCall() {
         CallManager.getInstance().endCall();
     }
@@ -265,14 +293,22 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void toggleMic() {
         CallManager.getInstance().toggleMic();
+        if (CallManager.getInstance().isMicMute())
+            micView.setBackgroundColor(Color.parseColor("#ffffff"));
+        else
+            micView.setBackgroundColor(Color.parseColor("#000000"));
     }
 
     private void toggleSpeaker() {
-        CallManager.getInstance().toggleSpeaker();
+        audioManager.toggleSpeakerPhone();
+        if (audioManager.isSpeakerOn())
+            speakerView.setBackgroundColor(Color.parseColor("#ffffff"));
+        else
+            speakerView.setBackgroundColor(Color.parseColor("#000000"));
     }
 
     private boolean isSpeakerEnable() {
-        return ((AudioManager) getSystemService(AUDIO_SERVICE)).isSpeakerphoneOn();
+        return /*((AudioManager) getSystemService(AUDIO_SERVICE)).isSpeakerphoneOn()*/audioManager.isSpeakerOn();
     }
 
     @Override
@@ -323,5 +359,14 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onTimeChange(long time) {
         durationTextView.setText(AndroidUtils.formatLongDuration((int) (time / 1000)));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (audioManager != null) {
+            audioManager.stop();
+            audioManager = null;
+        }
     }
 }

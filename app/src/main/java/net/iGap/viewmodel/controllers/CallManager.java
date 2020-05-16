@@ -286,7 +286,7 @@ public class CallManager implements EventListener {
             WebRTC.getInstance().toggleSound(false);
             changeState(CallState.ON_HOLD);
         } else {
-            WebRTC.getInstance().unMuteSound();
+            WebRTC.getInstance().toggleSound(true);
             changeState(CallState.CONNECTED);
         }
 //        G.onHoldBackgroundChanegeListener this needs to be deleted.
@@ -427,7 +427,7 @@ public class CallManager implements EventListener {
     }
 
     public void toggleMic() {
-        Log.d(TAG, "toggleMic: ");
+        Log.d(TAG, "toggleMic: " + isMicEnable);
         WebRTC.getInstance().toggleSound(!isMicEnable);
         isMicEnable = !isMicEnable;
     }

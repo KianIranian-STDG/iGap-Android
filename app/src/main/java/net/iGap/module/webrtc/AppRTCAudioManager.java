@@ -162,7 +162,7 @@ public class AppRTCAudioManager {
     /**
      * Construction.
      */
-    static AppRTCAudioManager create(Context context) {
+    public static AppRTCAudioManager create(Context context) {
         return new AppRTCAudioManager(context);
     }
 
@@ -423,6 +423,14 @@ public class AppRTCAudioManager {
      */
     private void unregisterReceiver(BroadcastReceiver receiver) {
         apprtcContext.unregisterReceiver(receiver);
+    }
+
+    public void toggleSpeakerPhone() {
+        audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
+    }
+
+    public boolean isSpeakerOn() {
+        return audioManager.isSpeakerphoneOn();
     }
 
     /**
