@@ -1,11 +1,11 @@
 package net.iGap.repository.kuknos;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import net.iGap.R;
 
 import org.stellar.sdk.Asset;
-import org.stellar.sdk.AssetTypeCreditAlphaNum4;
 import org.stellar.sdk.AssetTypeNative;
 import org.stellar.sdk.ChangeTrustOperation;
 import org.stellar.sdk.KeyPair;
@@ -95,11 +95,17 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
             return "" + R.string.kuknos_send_errorServer;
         }
 
-        // todo add other currency and base fee ** very IMP.
+        Asset temp;
+        Log.d("amini", "paymentToOtherXDR: " + tokenCode);
+        if (!tokenCode.equals("PMN"))
+            temp = Asset.createNonNativeAsset(tokenCode, tokenIssuer);
+        else
+            temp = new AssetTypeNative();
+
         // Start building the transaction.
         Network network = new Network(PASS_PHRASE);
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
-                .addOperation(new PaymentOperation.Builder(destination.getAccountId(), new AssetTypeNative(), amount).build())
+                .addOperation(new PaymentOperation.Builder(destination.getAccountId(), temp, amount).build())
                 // A memo allows you to add your own metadata to a transaction. It's
                 // optional and does not affect how Stellar treats the transaction.
                 .addMemo(Memo.text(memo))
@@ -178,7 +184,7 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         Server server = new Server(KUKNOS_Horizon_Server);
         Network network = new Network(PASS_PHRASE);
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
-        Asset asset = new AssetTypeCreditAlphaNum4(code, issuer);
+        Asset asset = Asset.createNonNativeAsset(code, issuer);
 
         // If there was no error, load up-to-date information on your account.
         AccountResponse sourceAccount = null;
@@ -207,13 +213,13 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         KeyPair source = KeyPair.fromSecretSeed(accountSeed);
         Asset sourceAsset;
         if (!sourceCode.equals("PMN")) {
-            sourceAsset = new AssetTypeCreditAlphaNum4(sourceCode, sourceIssuer);
+            sourceAsset = Asset.createNonNativeAsset(sourceCode, sourceIssuer);
         } else {
             sourceAsset = new AssetTypeNative();
         }
         Asset counterAsset;
         if (!counterCode.equals("PMN")) {
-            counterAsset = new AssetTypeCreditAlphaNum4(counterCode, counterIssuer);
+            counterAsset = Asset.createNonNativeAsset(counterCode, counterIssuer);
         } else {
             counterAsset = new AssetTypeNative();
         }
