@@ -498,7 +498,7 @@ public class CallManager implements EventListener {
     }
 
     public CallerInfo getCurrentCallerInfo() {
-        Log.d(TAG, "getCurrentCallerInfo: ");
+        Log.d(TAG, "getCurrentCallerInfo: " + currentCallerInfo.toString());
         return currentCallerInfo;
     }
 
