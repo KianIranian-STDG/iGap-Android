@@ -129,7 +129,7 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
                 android:maxLength="17"
-                android:text="@string/previous_numbers"
+                android:text="@string/previousـpurchases"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_history"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_history"
