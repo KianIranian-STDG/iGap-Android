@@ -117,7 +117,7 @@ public class CallService extends Service implements EventListener, CallManager.C
                 showIncomingNotification();
             } else {
                 try {
-                    PendingIntent.getActivity(CallService.this, 2214, new Intent(CallService.this, CallActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0).send();
+                    PendingIntent.getActivity(CallService.this, 2215, new Intent(CallService.this, CallActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0).send();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -136,6 +136,7 @@ public class CallService extends Service implements EventListener, CallManager.C
     @SuppressLint("WrongConstant")
     private void showIncomingNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
+
         Intent intent = new Intent(this, CallActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 2218, intent, 0);
@@ -181,6 +182,9 @@ public class CallService extends Service implements EventListener, CallManager.C
         PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.addAction(R.drawable.ic_call_notif_answer, answerTitle, answerPendingIntent);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            builder.setShowWhen(false);
+        }
 
         Notification notification = builder.build();
 
@@ -210,7 +214,7 @@ public class CallService extends Service implements EventListener, CallManager.C
     private void showNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
 
-        Log.i(TAG, "showNotification: " + callerInfo.toString());
+        Log.i(TAG, "showNotification: " + callerInfo.getName());
 
         Intent intent = new Intent(this, CallActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -311,15 +315,13 @@ public class CallService extends Service implements EventListener, CallManager.C
     }
 
     @Override
-    public void onCallStateChanged(CallState callState) {
-        Log.i(TAG, "onCallStateChanged: " + callState);
+    public void onCallStateChanged(CallState state) {
+        Log.i(TAG, "onCallStateChanged: " + state);
 
         if (callStateChange != null)
-            callStateChange.onCallStateChanged(callState);
+            callStateChange.onCallStateChanged(state);
 
-        if (callState == CallState.REJECT) {
-            onDestroy();
-        } else if (callState == CallState.LEAVE_CALL) {
+        if (state == CallState.REJECT || state == CallState.FAILD || state == CallState.TOO_LONG || state == CallState.LEAVE_CALL || state == CallState.UNAVAILABLE || state == CallState.DISCONNECTED || state == CallState.NOT_ANSWERED) {
             onDestroy();
         }
     }
