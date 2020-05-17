@@ -23,6 +23,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
+import net.iGap.module.webrtc.AppRTCAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
@@ -58,6 +59,7 @@ public class CallManager implements EventListener {
 
     private long callPeerId;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
+    AppRTCAudioManager.AudioDevice activeAudioDevice = null;
 
     private RealmRegisteredInfo info;
     private RealmCallConfig currentCallConfig;
@@ -628,5 +630,17 @@ public class CallManager implements EventListener {
 
     public boolean isMicMute() {
         return isMicEnable;
+    }
+
+    public boolean isVoiceCall() {
+        return CallManager.getInstance().getCallType() == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING;
+    }
+
+    public AppRTCAudioManager.AudioDevice getActiveAudioDevice() {
+        return activeAudioDevice;
+    }
+
+    public void setActiveAudioDevice(AppRTCAudioManager.AudioDevice activeAudioDevice) {
+        this.activeAudioDevice = activeAudioDevice;
     }
 }

@@ -55,14 +55,11 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private CallRippleView answerRippleView;
     private CallRippleView declineRippleView;
 
-    private CallerInfo caller;
-
     private AppRTCAudioManager audioManager = null;
 
-    private long userId;
+    private CallerInfo caller;
     private boolean isIncoming;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
-    private boolean isVoiceCall;
     private int[] quickDeclineMessage;
     private boolean isRtl = G.isAppRtl;
 
@@ -85,30 +82,23 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         Log.i(TAG, "CallActivity onCreate ");
 
         callType = CallManager.getInstance().getCallType();
-        userId = CallManager.getInstance().getCallPeerId();
-        isVoiceCall = callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
         isIncoming = CallManager.getInstance().isIncoming();
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
         audioManager = AppRTCAudioManager.create(getApplicationContext());
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
-        Log.d(TAG, "Starting the audio manager...");
-        audioManager.start(new AppRTCAudioManager.AudioManagerEvents() {
-            // This method will be called each time the number of available audio
-            // devices has changed.
-            @Override
-            public void onAudioDeviceChanged(
-                    AppRTCAudioManager.AudioDevice audioDevice, Set<AppRTCAudioManager.AudioDevice> availableAudioDevices) {
-                onAudioManagerDevicesChanged(audioDevice, availableAudioDevices);
-            }
-        });
 
         init();
         setContentView(createRootView());
 
         CallService.getInstance().setCallStateChange(this);
         CallManager.getInstance().setTimeDelegate(this);
+
+        Log.d(TAG, "Starting the audio manager...");
+        // This method will be called each time the number of available audio
+        // devices has changed.
+        audioManager.start(this::onAudioManagerDevicesChanged);
     }
 
     private void init() {
@@ -260,6 +250,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         bluetoothView = new CheckableImageView(this);
         bluetoothView.setImageResource(R.drawable.ic_call_bluetooth);
         bluetoothView.setScaleType(ImageView.ScaleType.CENTER);
+        bluetoothView.setOnClickListener(v -> bluetoothClick());
         buttons.addView(bluetoothView, LayoutCreator.createLinear(0, 64, 1f));
 
         rootView.addView(buttons, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, 77));
@@ -273,7 +264,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
         Log.d(TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", "
                 + "selected: " + device);
-        // TODO(henrika): add callback handler.
+        checkForBluetoothAvailability(availableDevices);
+        CallManager.getInstance().setActiveAudioDevice(device);
+    }
+
+    private void checkForBluetoothAvailability(Set<AppRTCAudioManager.AudioDevice> availableDevices) {
+        bluetoothView.setEnabled(availableDevices.contains(AppRTCAudioManager.AudioDevice.BLUETOOTH));
     }
 
     private void endCall() {
@@ -282,6 +278,24 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void declineCall() {
         CallManager.getInstance().endCall();
+    }
+
+    private void bluetoothClick() {
+        Log.d(TAG, "bluetoothClick: in here" + CallManager.getInstance().getActiveAudioDevice());
+        if (CallManager.getInstance().getActiveAudioDevice() == AppRTCAudioManager.AudioDevice.BLUETOOTH) {
+            audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
+            speakerView.setSelected(true);
+            bluetoothView.setSelected(false);
+            speakerView.setBackgroundColor(Color.parseColor("#ffffff"));
+            bluetoothView.setBackgroundColor(Color.parseColor("#000000"));
+        } else {
+            audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.BLUETOOTH);
+            speakerView.setSelected(false);
+            bluetoothView.setSelected(true);
+            speakerView.setBackgroundColor(Color.parseColor("#000000"));
+            bluetoothView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
+        CallManager.getInstance().setActiveAudioDevice(audioManager.getSelectedAudioDevice());
     }
 
     private void answerCall() {
@@ -294,18 +308,24 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void toggleMic() {
         CallManager.getInstance().toggleMic();
-        if (CallManager.getInstance().isMicMute())
+        if (CallManager.getInstance().isMicMute()) {
             micView.setBackgroundColor(Color.parseColor("#ffffff"));
-        else
+            micView.setSelected(true);
+        } else {
             micView.setBackgroundColor(Color.parseColor("#000000"));
+            micView.setSelected(false);
+        }
     }
 
     private void toggleSpeaker() {
         audioManager.toggleSpeakerPhone();
-        if (audioManager.isSpeakerOn())
+        if (audioManager.isSpeakerOn()) {
             speakerView.setBackgroundColor(Color.parseColor("#ffffff"));
-        else
+            speakerView.setSelected(true);
+        } else {
             speakerView.setBackgroundColor(Color.parseColor("#000000"));
+            speakerView.setSelected(false);
+        }
     }
 
     private boolean isSpeakerEnable() {
