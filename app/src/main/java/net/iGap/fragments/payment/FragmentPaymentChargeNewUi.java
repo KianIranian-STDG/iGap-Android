@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +40,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
 import net.iGap.module.accountManager.DbManager;
@@ -358,13 +357,17 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex + 1);
                 amountTxt.setText(amount.getTextAmount());
             } else {
-                ivAdd.setClickable(false);
+                amount = amountList.get(selectedPriceIndex);
+                amountTxt.setText(amount.getTextAmount());
             }
         });
 
         lowView.setOnClickListener(v -> {
             if (selectedPriceIndex - 1 < amountList.size() && selectedPriceIndex > 0) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex - 1);
+                amountTxt.setText(amount.getTextAmount());
+            } else {
+                amount = amountList.get(selectedPriceIndex);
                 amountTxt.setText(amount.getTextAmount());
             }
         });
