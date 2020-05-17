@@ -21,7 +21,7 @@ import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.observers.interfaces.ResponseCallback;
 
