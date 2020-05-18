@@ -327,7 +327,10 @@
     </string-array>
 
     <string-array name="charge_type_hamrahe_aval">
+        <item>@string/amazing_charge</item>
         <item>@string/normal_charge</item>
+        <item>@string/youth_charge</item>
+        <item>@string/ladies_charge</item>
     </string-array>
 
     <string-array name="charge_type_ritel">

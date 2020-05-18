@@ -1413,6 +1413,9 @@
     <string name="no_item_selected">هئچ بیر مورد سئچیلمه میشدیر</string>
     <string name="normal_cash_out">عادی پول گؤتورمک</string>
     <string name="normal_charge">معمولی شارژ</string>
+    <string name="amazing_charge">شارژ فوق العاده</string>
+    <string name="youth_charge">شارژ جوانان</string>
+    <string name="ladies_charge">شارژ بانوان</string>
     <string name="normal_error">can\&apos;t do it please try later</string>
     <string name="not_answer">جوابسیز </string>
     <string name="not_answerd_call">"الدن گئتمیش تماس"</string>

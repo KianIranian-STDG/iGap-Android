@@ -1290,6 +1290,9 @@ Want to get it?</string>
     <string name="irancell">IranCell</string>
     <string name="ritel">Ritel</string>
     <string name="normal_charge">Normal charge</string>
+    <string name="amazing_charge">Amazing charge</string>
+    <string name="youth_charge">Youth charge</string>
+    <string name="ladies_charge">Ladies charge</string>
     <string name="amazing">Amazing charge</string>
     <string name="wimax_charging">WiMAX charge</string>
     <string name="permanently_charge">Charge permanent SIM cards</string>

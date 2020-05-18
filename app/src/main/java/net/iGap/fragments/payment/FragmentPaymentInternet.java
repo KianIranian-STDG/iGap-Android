@@ -25,21 +25,15 @@ import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.ContactNumber;
-import net.iGap.adapter.payment.HistoryNumber;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.realm.RealmRecentChargeNumber;
-import net.iGap.realm.RealmRecentChargeNumberFields;
 
 
-
-import io.realm.RealmResults;
 
 public class FragmentPaymentInternet extends BaseFragment {
 
@@ -62,7 +56,6 @@ public class FragmentPaymentInternet extends BaseFragment {
     private AppCompatEditText editTextNumber;
     private int selectedIndex;
     private ContactNumber contactNumber;
-    private HistoryNumber historyNumber;
     private View closeView, closeView2;
     private OperatorType.Type operatorType;
 
@@ -165,11 +158,9 @@ public class FragmentPaymentInternet extends BaseFragment {
     }
 
     private void onHistoryNumberButtonClick() {
-        frameHistory.setOnClickListener(v -> {
+/*        frameHistory.setOnClickListener(v -> {
 
-            RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRecentChargeNumber.class).equalTo(RealmRecentChargeNumberFields.TYPE, 1).findAll();
-            });
+
 
             if (numbers == null || numbers.size() == 0) {
                 ShowError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
@@ -198,7 +189,7 @@ public class FragmentPaymentInternet extends BaseFragment {
                 rvHistory.setAdapter(adapterHistory);
                 dialog.show();
             }
-        });
+        });*/
     }
 
     private void onPhoneNumberInputClick() {

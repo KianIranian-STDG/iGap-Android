@@ -1115,6 +1115,9 @@
     <string name="irancell">IRANCELL</string>
     <string name="ritel">Rightel</string>
     <string name="normal_charge">Нормальная зарядка</string>
+    <string name="amazing_charge">Супер заряд</string>
+    <string name="youth_charge">Молодежный заряд</string>
+    <string name="ladies_charge">Женский заряд</string>
     <string name="amazing">выгодная зарядка</string>
     <string name="wimax_charging">WiMAX зарядка</string>
     <string name="permanently_charge">зарядка постоянные SIM-карты</string>

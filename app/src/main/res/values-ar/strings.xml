@@ -2194,7 +2194,10 @@
     <string name="hamrahe_aval">همراه اول</string>
     <string name="irancell">ایرانسل</string>
     <string name="ritel">رایتل</string>
-    <string name="normal_charge">شحنة عادية</string>
+    <string name="normal_charge">التهمة العادية</string>
+    <string name="amazing_charge">تهمة عظمى</string>
+    <string name="youth_charge">تهمة الشباب</string>
+    <string name="ladies_charge">تهمة المرأة</string>
     <string name="amazing">تهمة مذهلة</string>
     <string name="wimax_charging">شحن وایمکس</string>
     <string name="permanently_charge">قم بشحن بطاقة  بشكل دائم</string>

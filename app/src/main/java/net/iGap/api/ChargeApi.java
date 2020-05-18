@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.model.paymentPackage.ChargeFavorite;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.paymentPackage.InternetPackage;
@@ -24,6 +25,15 @@ public interface ChargeApi {
                                             @Field("type") String type,
                                             @Field("tel_num") String phoneNumber,
                                             @Field("cost") int cost);
+
+    @POST("{operator}/topup/set-favorite")
+    Call<MciPurchaseResponse> setFavoriteChargeNumber(@Path("operator") String operator,
+                                                      @Field("phone_number") String phoneNumber,
+                                                      @Field("charge_type") String chargeType,
+                                                      @Field("amount") String amount);
+
+    @GET("topup/get-favorite")
+    Call<ChargeFavorite> getFavoriteChargeNUmber();
 
     @GET("{operator}/internet-package/categories")
     Call<List<MciInternetPackageFilter>> getInternetPackageFilterList(@Path("operator") String operator);

@@ -51,8 +51,6 @@ public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.Ch
             super(itemView);
             textView = itemView.findViewById(R.id.amount);
             radioButton = itemView.findViewById(R.id.radio_amount);
-
-            radioButton.setOnClickListener(v -> itemView.performClick());
         }
 
         public void bindChargeType(ChargeType chargeType, int position) {
@@ -62,11 +60,9 @@ public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.Ch
                 radioButton.setChecked(false);
             }
 
+            radioButton.setOnClickListener(v -> itemView.performClick());
             textView.setText(chargeType.getChargeType());
-
-
             itemView.setSelected(selectedPosition == position);
-
             itemView.setOnClickListener(v -> {
                 int tmp = selectedPosition;
                 notifyItemChanged(tmp);

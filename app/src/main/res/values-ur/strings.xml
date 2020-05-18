@@ -1112,6 +1112,9 @@
     <string name="irancell">ئیرانسێل</string>
     <string name="ritel">رایتێل</string>
     <string name="normal_charge">شارژی ئاسایی</string>
+    <string name="amazing_charge">شارژ فوق العاده</string>
+    <string name="youth_charge">شارژ جوانان</string>
+    <string name="ladies_charge">شارژ بانوان</string>
     <string name="amazing">سەرسووڕهێنەر</string>
     <string name="wimax_charging">شارژی وایمەکس</string>
     <string name="permanently_charge">شارژی سیم­کارتی دایمی</string>

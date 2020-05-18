@@ -33,21 +33,18 @@ import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.Amount;
 import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
-import net.iGap.adapter.payment.HistoryNumber;
-import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.paymentPackage.ChargeFavorite;
+import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
-import net.iGap.module.accountManager.DbManager;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.realm.RealmRecentChargeNumber;
-import net.iGap.realm.RealmRecentChargeNumberFields;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +52,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragmentPaymentChargeNewUi extends BaseFragment {
     private LinearLayout toolbar;
@@ -88,15 +87,17 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private int selectedChargeTypeIndex;
     private int selectedPriceIndex;
     private ContactNumber contactNumber;
-    private HistoryNumber historyNumber;
+    private FavoriteNumber historyNumber;
     private Amount amount;
     private ChargeType typeList;
     private ScrollView scrollView;
     private ProgressBar progressBar;
+    private LinearLayout linearWarning;
     private View closeView, closeView2, closeView3, closeView4;
-    List<Amount> amountList = new ArrayList<>();
-    List<ChargeType> chargeTypeList = new ArrayList<>();
-
+    private List<Amount> amountList = new ArrayList<>();
+    private List<ChargeType> chargeTypeList = new ArrayList<>();
+    private List<FavoriteNumber> historyNumberList = new ArrayList<>();
+    private ChargeApi chargeApi;
     private OperatorType.Type operatorType;
 
     public static final String MCI = "mci";
@@ -143,6 +144,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameHamrah = view.findViewById(R.id.view12);
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
+        linearWarning = view.findViewById(R.id.llWarning);
+
+        chargeApi = new RetrofitFactory().getChargeRetrofit();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.gray));
@@ -174,9 +178,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
-
             new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
-
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
             View view = dialog.getCustomView();
             rvContact = view.findViewById(R.id.rv_contact);
@@ -204,37 +206,41 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
+            chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<ChargeFavorite>() {
+                @Override
+                public void onResponse(Call<ChargeFavorite> call, Response<ChargeFavorite> response) {
+                    if (response.isSuccessful()) {
+                        historyNumberList = response.body().getData();
+                    }
+                }
 
-            RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRecentChargeNumber.class).equalTo(RealmRecentChargeNumberFields.TYPE, 0).findAll();
+                @Override
+                public void onFailure(Call<ChargeFavorite> call, Throwable t) {
+
+                }
+            });
+            adapterHistory = new AdapterHistoryNumber(historyNumberList);
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+            View view = dialog.getCustomView();
+            rvHistory = view.findViewById(R.id.rv_history);
+            saveBtn2 = view.findViewById(R.id.btn_dialog2);
+            closeView2 = view.findViewById(R.id.close_view);
+
+            closeView2.setOnClickListener(v12 -> dialog.dismiss());
+
+            saveBtn2.setOnClickListener(v13 -> {
+                if (adapterHistory.getSelectedPosition() == -1) {
+                    return;
+                }
+                selectedIndex = adapterHistory.getSelectedPosition();
+                historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
+                editTextNumber.setText(historyNumber.getPhoneNumber());
+                dialog.dismiss();
             });
 
-            if (numbers == null || numbers.size() == 0) {
-                ShowError(getString(R.string.list_empty));
-            } else {
-                adapterHistory = new AdapterHistoryNumber(numbers);
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
-                View view = dialog.getCustomView();
-                rvHistory = view.findViewById(R.id.rv_history);
-                saveBtn2 = view.findViewById(R.id.btn_dialog2);
-                closeView2 = view.findViewById(R.id.close_view);
-
-                closeView2.setOnClickListener(v12 -> dialog.dismiss());
-
-                saveBtn2.setOnClickListener(v13 -> {
-                    if (adapterHistory.getSelectedPosition() == -1) {
-                        return;
-                    }
-                    selectedIndex = adapterHistory.getSelectedPosition();
-                    historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                    editTextNumber.setText(historyNumber.getHistoryNumber());
-                    dialog.dismiss();
-                });
-
-                rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                rvHistory.setAdapter(adapterHistory);
-                dialog.show();
-            }
+            rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+            rvHistory.setAdapter(adapterHistory);
+            dialog.show();
         });
     }
 
@@ -251,7 +257,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (editTextNumber.getText().length() == 11) {
+                if (editTextNumber.getText().length() == 4) {
                     String number = editTextNumber.getText().toString().substring(0, 4);
                     OperatorType.Type opt = new OperatorType().getOperation(number);
                     if (opt != null) {
@@ -270,13 +276,20 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
                                 break;
                         }
-                        scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
-                        hideKeyboard();
+
                     }
 
                 }
+                if (editTextNumber.getText().length() == 11) {
+                    scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+                    hideKeyboard();
+                    linearWarning.setVisibility(View.VISIBLE);
+                }
+
+
             }
         });
+
     }
 
     private void onItemOperatorSelect() {
@@ -378,7 +391,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             if (operatorType != null) {
                 adapterChargeType = new AdapterChargeType(chargeTypeList);
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_type, false).build();
-
                 View view = dialog.getCustomView();
                 rvAmount = view.findViewById(R.id.rv_type);
                 closeView4 = view.findViewById(R.id.close_view4);
@@ -478,7 +490,20 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 ChooseChargeType chooseChargeType = null;
                                 switch (operatorType) {
                                     case HAMRAH_AVAL:
-                                        chooseChargeType = null;
+                                        switch (selectedChargeTypeIndex) {
+                                            case 0:
+                                                chooseChargeType = ChooseChargeType.MCI_NORMAL;
+                                                break;
+                                            case 1:
+                                                chooseChargeType = ChooseChargeType.MCI_AMAZING;
+                                                break;
+                                            case 2:
+                                                chooseChargeType = ChooseChargeType.MCI_YOUTH;
+                                                break;
+                                            case 3:
+                                                chooseChargeType = ChooseChargeType.MCI_LADIES;
+                                                break;
+                                        }
                                         break;
                                     case IRANCELL:
                                         switch (selectedChargeTypeIndex) {
@@ -556,45 +581,35 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     enum ChooseChargeType {
-        MTN_NORMAL, MTN_AMAZING, RIGHTEL_NORMAL, RIGHTEL_EXCITING;
+        MTN_NORMAL, MTN_AMAZING, RIGHTEL_NORMAL, RIGHTEL_EXCITING, MCI_NORMAL, MCI_AMAZING, MCI_YOUTH, MCI_LADIES
     }
 
     private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
-        new ApiInitializer<MciPurchaseResponse>().initAPI(
-                new RetrofitFactory().getChargeRetrofit().topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price),
-                null, new ResponseCallback<MciPurchaseResponse>() {
-                    @Override
-                    public void onSuccess(MciPurchaseResponse data) {
-                        progressBar.setVisibility(View.GONE);
-                        String token = data.getToken();
-                        if (getActivity() != null && token != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
-                                if (result.isSuccess()) {
-                                    DbManager.getInstance().doRealmTask(realm -> {
-                                        realm.executeTransactionAsync(realm1 -> RealmRecentChargeNumber.put(realm1, "0" + phoneNumber, 0));
-                                    });
-                                    goBack();
-                                }
-                            });
-                        }
+        chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
+            @Override
+            public void onResponse(Call<MciPurchaseResponse> call, Response<MciPurchaseResponse> response) {
+                if (response.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
+                    String token = response.body().getToken();
+                    if (getActivity() != null && token != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
+                            if (result.isSuccess()) {
+                                chargeApi.setFavoriteChargeNumber(operator, phoneNumber, chargeType != null ? chargeType.name() : null, String.valueOf(price));
+                            }
+                        });
                     }
+                    goBack();
+                }
+            }
 
-                    @Override
-                    public void onError(String error) {
-                        progressBar.setVisibility(View.GONE);
-                        //   observeEnabledPayment.set(true);
-                        hideKeyboard();
-                        HelperError.showSnackMessage(error, false);
-                    }
+            @Override
+            public void onFailure(Call<MciPurchaseResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                hideKeyboard();
+                HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
+            }
+        });
 
-                    @Override
-                    public void onFailed() {
-                        progressBar.setVisibility(View.GONE);
-                        /*observeEnabledPayment.set(true);*/
-                        ShowError(getContext().getResources().getString(R.string.server_do_not_response));
-
-                    }
-                });
     }
 
     private void goBack() {
