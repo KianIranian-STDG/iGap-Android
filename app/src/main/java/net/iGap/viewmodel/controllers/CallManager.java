@@ -59,15 +59,15 @@ public class CallManager implements EventListener {
 
     private long callPeerId;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
-    AppRTCAudioManager.AudioDevice activeAudioDevice = null;
+    private AppRTCAudioManager.AudioDevice activeAudioDevice = null;
 
     private RealmRegisteredInfo info;
     private RealmCallConfig currentCallConfig;
 
-    private boolean callAlive = false;
-    private boolean isRinging = false;
-    private boolean isIncoming = false;
-
+    private boolean callAlive;
+    private boolean isRinging;
+    private boolean isIncoming;
+    private boolean isCallHold;
     private boolean isMicEnable = true;
 
     private CallerInfo currentCallerInfo;
@@ -137,8 +137,10 @@ public class CallManager implements EventListener {
      * this function is called when we are making a call to others
      */
     public void makeOffer(long called_userId, String callerSdp) {
-        Log.d(TAG, "makeOffer: " + called_userId + " " + callerSdp + " " + callType);
-        new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
+        if (CallService.getInstance() != null) {
+            Log.d(TAG, "makeOffer: " + called_userId + " " + callerSdp + " " + callType);
+            new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
+        }
     }
 
     /**
@@ -543,6 +545,10 @@ public class CallManager implements EventListener {
 
     public boolean isIncoming() {
         return isIncoming;
+    }
+
+    public boolean isCallInHold() {
+        return isCallHold;
     }
 
     public interface CallStateChange {

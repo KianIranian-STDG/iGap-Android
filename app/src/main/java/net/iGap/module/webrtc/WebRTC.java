@@ -55,7 +55,7 @@ import java.util.Set;
 
 public class WebRTC {
 
-    private static String TAG = "amini_webrtc";
+    private static String TAG = "iGapCall " + "WebRTC";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
     private static final int VIDEO_RESOLUTION_WIDTH = 720;
@@ -371,7 +371,7 @@ public class WebRTC {
     }
 
     public void createOffer(final long userIdCallee) {
-        Log.d(TAG, "createOffer: ");
+        Log.d(TAG, "createOffer: " + userIdCallee);
         peerConnectionInstance().createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
@@ -379,6 +379,8 @@ public class WebRTC {
                     Log.d(TAG, "Multiple SDP create.");
                     return;
                 }
+
+                Log.i(TAG, "create Offer on Create Success: " + sessionDescription.description);
                 localSDP = sessionDescription.description;
                 CallManager.getInstance().makeOffer(userIdCallee, localSDP);
 //                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, localSDP);

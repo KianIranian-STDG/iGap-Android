@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import net.iGap.BuildConfig;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.CallActivity;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -319,7 +320,7 @@ public class CallService extends Service implements EventListener, CallManager.C
         Log.i(TAG, "onCallStateChanged: " + state);
 
         if (callStateChange != null)
-            callStateChange.onCallStateChanged(state);
+            G.runOnUiThread(() -> callStateChange.onCallStateChanged(state));
 
         if (state == CallState.REJECT || state == CallState.FAILD || state == CallState.TOO_LONG || state == CallState.LEAVE_CALL || state == CallState.UNAVAILABLE || state == CallState.DISCONNECTED || state == CallState.NOT_ANSWERED) {
             onDestroy();

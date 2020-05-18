@@ -1,7 +1,6 @@
 package net.iGap.activities;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +21,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -28,7 +29,8 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.Theme;
 import net.iGap.module.customView.CallRippleView;
-import net.iGap.module.customView.CheckableImageView;
+import net.iGap.module.customView.TextImageView;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.enums.CallState;
 import net.iGap.module.webrtc.AppRTCAudioManager;
 import net.iGap.module.webrtc.CallService;
@@ -40,6 +42,8 @@ import net.iGap.viewmodel.controllers.CallManager;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoFrame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class CallActivity extends ActivityEnhanced implements CallManager.CallStateChange, CallManager.CallTimeDelegate {
@@ -49,14 +53,16 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private ImageView userImageView;
     private ImageView declineImageView;
     private TextView statusTextView;
-    private LinearLayout buttons;
-    private LinearLayout quickAnswerView;
+    private LinearLayout buttonsGridView;
+    private LinearLayout quickDeclineView;
 
     private TextView durationTextView;
-    private CheckableImageView speakerView;
-    private CheckableImageView micView;
-    private CheckableImageView bluetoothView;
-    private ImageView camera;
+    private TextImageView speakerView;
+    private TextImageView directView;
+    private TextImageView micView;
+    private TextImageView bluetoothView;
+    private TextImageView cameraView;
+    private TextImageView holdView;
     private CallRippleView answerRippleView;
     private CallRippleView declineRippleView;
 
@@ -68,7 +74,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private CallerInfo caller;
     private boolean isIncoming;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
-    private int[] quickDeclineMessage;
     private boolean isRtl = G.isAppRtl;
 
     private String TAG = "iGapCall " + getClass().getSimpleName();
@@ -97,23 +102,26 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
 
+        Log.d(TAG, "Starting the audio manager...");
+        // This method will be called each time the number of available audio
+        // devices has changed.
+        audioManager.start(this::onAudioManagerDevicesChanged);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
         init();
         setContentView(createRootView());
 
         CallService.getInstance().setCallStateChange(this);
         CallManager.getInstance().setTimeDelegate(this);
 
-        Log.d(TAG, "Starting the audio manager...");
-        // This method will be called each time the number of available audio
-        // devices has changed.
-        audioManager.start(this::onAudioManagerDevicesChanged);
         checkPermissions();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!CallManager.getInstance().isVoiceCall()) {
+        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             Log.d(TAG, "onResume: start capture");
             WebRTC.getInstance().startVideoCapture();
         }
@@ -121,7 +129,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void checkPermissions() {
         PermissionHelper permissionHelper = new PermissionHelper(this);
-        if (!CallManager.getInstance().isVoiceCall()) {
+        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             if (permissionHelper.grantCameraAndVoicePermission()) {
                 init();
             }
@@ -135,13 +143,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private void init() {
         caller = CallManager.getInstance().getCurrentCallerInfo();
         callType = CallManager.getInstance().getCallType();
-
-        quickDeclineMessage = new int[]{
-                R.string.message_decline_please_text_me,
-                R.string.message_decline_Please_call_later,
-                R.string.message_decline_call_later,
-                R.string.message_decline_write_new
-        };
     }
 
     private View createRootView() {
@@ -150,9 +151,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         rootView.setFitsSystemWindows(true);
         rootView.setClipToPadding(false);
 
-        if (!CallManager.getInstance().isVoiceCall()) {
+        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             surfaceRemote = new SurfaceViewRenderer(this);
-            surfaceRemote.setVisibility(View.VISIBLE);
+            surfaceRemote.setVisibility(View.GONE);
+            surfaceRemote.setOnClickListener(v -> hideIcons());
             rootView.addView(surfaceRemote, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
 
             surfaceLocal = new SurfaceViewRenderer(this);
@@ -200,11 +202,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 bottomGradient.draw(canvas);
             }
         };
-
         userImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
         avatarHandler.getAvatar(new ParamWithAvatarType(userImageView, caller.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
-
         rootView.addView(userImageView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
         callTypeTextView = new TextView(this);
@@ -266,59 +265,127 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             declineRippleView.setDelegate(this::declineCall);
             rootView.addView(declineRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 0, 36));
 
-            quickAnswerView = new LinearLayout(this);
-            quickAnswerView.setOrientation(LinearLayout.VERTICAL);
+            quickDeclineView = new LinearLayout(this);
+            quickDeclineView.setOrientation(LinearLayout.VERTICAL);
+            quickDeclineView.setOnClickListener(v -> onQuickDeclineClick());
 
             View view = new View(this);
             view.setBackground(getResources().getDrawable(R.drawable.shape_call_decline));
             view.setAlpha(0.3f);
-            quickAnswerView.addView(view, LayoutCreator.createLinear(100, 3, Gravity.CENTER));
+            quickDeclineView.addView(view, LayoutCreator.createLinear(100, 3, Gravity.CENTER));
 
             TextView declineText = new AppCompatTextView(this);
             declineText.setText(R.string.send_text);
             declineText.setTextColor(Theme.getInstance().getDividerColor(this));
             declineText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-            quickAnswerView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 8));
-            rootView.addView(quickAnswerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+            quickDeclineView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 8));
+
+            rootView.addView(quickDeclineView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
         }
 
-        buttons = new LinearLayout(this);
-        buttons.setVisibility(isIncoming ? View.GONE : View.VISIBLE);
-        buttons.setOrientation(LinearLayout.HORIZONTAL);
+        buttonsGridView = new LinearLayout(this);
+        buttonsGridView.setOrientation(LinearLayout.VERTICAL);
+        buttonsGridView.setVisibility(isIncoming ? View.GONE : View.VISIBLE);
 
-        camera = new CheckableImageView(this);
-        camera.setScaleType(ImageView.ScaleType.CENTER);
-        camera.setImageResource(R.drawable.ic_call_bluetooth);
-        buttons.addView(camera, LayoutCreator.createLinear(0, 64, 1f));
+        LinearLayout row1 = new LinearLayout(this);
+        row1.setOrientation(LinearLayout.HORIZONTAL);
+        buttonsGridView.addView(row1, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 0));
 
-        micView = new CheckableImageView(this);
-        micView.setScaleType(ImageView.ScaleType.CENTER);
+        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            cameraView = new TextImageView(this);
+            cameraView.setText(R.string.camera);
+            cameraView.setTextColor(getResources().getColor(R.color.white));
+            cameraView.setOnClickListener(v -> toggleCamera());
+            cameraView.setImageResource(R.drawable.ic_call_camera);
+            row1.addView(cameraView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
+        }
+
+        holdView = new TextImageView(this);
+        holdView.setText("Hold");
+        holdView.setViewColor(CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        holdView.setOnClickListener(v -> toggleCamera());
+        holdView.setImageResource(R.drawable.ic_call_hold);
+        row1.addView(holdView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
+
+        directView = new TextImageView(this);
+        directView.setText("Message");
+        directView.setTextColor(getResources().getColor(R.color.white));
+        directView.setOnClickListener(v -> toggleCamera());
+        directView.setImageResource(R.drawable.ic_call_chat);
+        directView.setOnClickListener(v -> goToChat());
+        row1.addView(directView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
+
+        LinearLayout row2 = new LinearLayout(this);
+        row2.setOrientation(LinearLayout.HORIZONTAL);
+        buttonsGridView.addView(row2, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
+
+        micView = new TextImageView(this);
         micView.setImageResource(R.drawable.ic_call_mic);
-        micView.setChecked(CallManager.getInstance().isMicMute());
+        micView.setText("Mic");
+        micView.setViewColor(CallManager.getInstance().isMicMute() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
         micView.setOnClickListener(v -> toggleMic());
-        buttons.addView(micView, LayoutCreator.createLinear(0, 64, 1f));
+        row2.addView(micView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
+
+        speakerView = new TextImageView(this);
+        speakerView.setImageResource(R.drawable.ic_call_speaker);
+        speakerView.setText(R.string.speacker);
+        speakerView.setViewColor(isSpeakerEnable() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        speakerView.setOnClickListener(v -> toggleSpeaker());
+        row2.addView(speakerView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
+
+        bluetoothView = new TextImageView(this);
+        bluetoothView.setImageResource(R.drawable.ic_call_bluetooth);
+        bluetoothView.setText(R.string.bluetooth);
+        bluetoothView.setViewColor(CallManager.getInstance().getActiveAudioDevice() == AppRTCAudioManager.AudioDevice.BLUETOOTH ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        bluetoothView.setOnClickListener(v -> bluetoothClick());
+        row2.addView(bluetoothView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
         declineImageView = new AppCompatImageView(this);
         declineImageView.setImageResource(R.drawable.ic_call_decline);
         declineImageView.setOnClickListener(v -> endCall());
-        buttons.addView(declineImageView, LayoutCreator.createLinear(0, 64, 1f));
+        buttonsGridView.addView(declineImageView, LayoutCreator.createLinear(64, 64, Gravity.CENTER, 0, 48, 0, 0));
 
-        speakerView = new CheckableImageView(this);
-        speakerView.setImageResource(R.drawable.ic_call_speaker);
-        speakerView.setScaleType(ImageView.ScaleType.CENTER);
-        speakerView.setChecked(isSpeakerEnable());
-        speakerView.setOnClickListener(v -> toggleSpeaker());
-        buttons.addView(speakerView, LayoutCreator.createLinear(0, 64, 1f));
-
-        bluetoothView = new CheckableImageView(this);
-        bluetoothView.setImageResource(R.drawable.ic_call_bluetooth);
-        bluetoothView.setScaleType(ImageView.ScaleType.CENTER);
-        bluetoothView.setOnClickListener(v -> bluetoothClick());
-        buttons.addView(bluetoothView, LayoutCreator.createLinear(0, 64, 1f));
-
-        rootView.addView(buttons, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, 77));
+        rootView.addView(buttonsGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 32, 0, 32, 62));
 
         return rootView;
+    }
+
+    private void goToChat() {
+        if (caller.userId > 0)
+            HelperPublicMethod.goToChatRoom(caller.getUserId(), null, null);
+    }
+
+    private void onQuickDeclineClick() {
+
+        List<Integer> message = new ArrayList<>();
+
+        message.add(R.string.message_decline_please_text_me);
+        message.add(R.string.message_decline_Please_call_later);
+        message.add(R.string.message_decline_call_later);
+        message.add(R.string.message_decline_write_new);
+
+        new BottomSheetFragment().setListDataWithResourceId(this, message, -1, position -> {
+            CallManager.getInstance().endCall();
+            if (position == 3) {
+                HelperPublicMethod.goToChatRoom(caller.getUserId(), null, null);
+            } else {
+                HelperPublicMethod.goToChatRoomWithMessage(this, caller.getUserId(), getResources().getString(message.get(position)), null, null);
+            }
+        }).show(getSupportFragmentManager(), null);
+    }
+
+    private void toggleCamera() {
+        CallManager.getInstance().toggleCamera();
+    }
+
+    private void hideIcons() {
+        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            if (buttonsGridView.getVisibility() == View.VISIBLE) {
+                buttonsGridView.setVisibility(View.GONE);
+            } else {
+                buttonsGridView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     // This method is called when the audio manager reports audio device change,
@@ -347,16 +414,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         Log.d(TAG, "bluetoothClick: in here" + CallManager.getInstance().getActiveAudioDevice());
         if (CallManager.getInstance().getActiveAudioDevice() == AppRTCAudioManager.AudioDevice.BLUETOOTH) {
             audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
-            speakerView.setSelected(true);
-            bluetoothView.setSelected(false);
-            speakerView.setBackgroundColor(Color.parseColor("#ffffff"));
-            bluetoothView.setBackgroundColor(Color.parseColor("#000000"));
+            bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
         } else {
             audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.BLUETOOTH);
-            speakerView.setSelected(false);
-            bluetoothView.setSelected(true);
-            speakerView.setBackgroundColor(Color.parseColor("#000000"));
-            bluetoothView.setBackgroundColor(Color.parseColor("#ffffff"));
+            bluetoothView.setViewColor(getResources().getColor(R.color.white));
         }
         CallManager.getInstance().setActiveAudioDevice(audioManager.getSelectedAudioDevice());
     }
@@ -364,35 +425,24 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private void answerCall() {
         answerRippleView.setVisibility(View.GONE);
         declineRippleView.setVisibility(View.GONE);
-        quickAnswerView.setVisibility(View.GONE);
-        buttons.setVisibility(View.VISIBLE);
+        quickDeclineView.setVisibility(View.GONE);
+        declineImageView.setVisibility(View.VISIBLE);
+        buttonsGridView.setVisibility(View.VISIBLE);
         CallManager.getInstance().acceptCall();
     }
 
     private void toggleMic() {
         CallManager.getInstance().toggleMic();
-        if (CallManager.getInstance().isMicMute()) {
-            micView.setBackgroundColor(Color.parseColor("#ffffff"));
-            micView.setSelected(true);
-        } else {
-            micView.setBackgroundColor(Color.parseColor("#000000"));
-            micView.setSelected(false);
-        }
+        micView.setViewColor(CallManager.getInstance().isMicMute() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
     }
 
     private void toggleSpeaker() {
         audioManager.toggleSpeakerPhone();
-        if (audioManager.isSpeakerOn()) {
-            speakerView.setBackgroundColor(Color.parseColor("#ffffff"));
-            speakerView.setSelected(true);
-        } else {
-            speakerView.setBackgroundColor(Color.parseColor("#000000"));
-            speakerView.setSelected(false);
-        }
+        speakerView.setViewColor(isSpeakerEnable() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
     }
 
     private boolean isSpeakerEnable() {
-        return /*((AudioManager) getSystemService(AUDIO_SERVICE)).isSpeakerphoneOn()*/audioManager.isSpeakerOn();
+        return audioManager.isSpeakerOn();
     }
 
     @Override
@@ -400,14 +450,13 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         Log.i(TAG, "onCallStateChanged: " + state);
 
         if (state != CallState.RINGING) {
-            G.runOnUiThread(() -> {
-                if (answerRippleView != null) {
-                    answerRippleView.setVisibility(View.GONE);
-                    declineRippleView.setVisibility(View.GONE);
-                    quickAnswerView.setVisibility(View.GONE);
-                    buttons.setVisibility(View.VISIBLE);
-                }
-            });
+            if (answerRippleView != null) {
+                answerRippleView.setVisibility(View.GONE);
+                declineRippleView.setVisibility(View.GONE);
+                quickDeclineView.setVisibility(View.GONE);
+                declineImageView.setVisibility(View.VISIBLE);
+                buttonsGridView.setVisibility(View.VISIBLE);
+            }
         }
 
         if (state == CallState.BUSY) {
@@ -420,12 +469,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         } else if (state == CallState.CONNECTED) {
             statusTextView.setText("Connected");
-            G.runOnUiThread(() -> {
-                if (!CallManager.getInstance().isVoiceCall()) {
-                    surfaceRemote.setVisibility(View.VISIBLE);
-                    surfaceLocal.setVisibility(View.VISIBLE);
-                }
-            });
+
+            if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                surfaceRemote.setVisibility(View.VISIBLE);
+                surfaceLocal.setVisibility(View.VISIBLE);
+                userImageView.setVisibility(View.GONE);
+            }
         } else if (state == CallState.RINGING) {
             statusTextView.setText("Ringing");
         } else if (state == CallState.TOO_LONG) {
@@ -465,15 +514,20 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        CallService.getInstance().setCallStateChange(null);
+        CallManager.getInstance().setTimeDelegate(null);
+
         if (audioManager != null) {
             audioManager.stop();
             audioManager = null;
         }
-        if (!CallManager.getInstance().isVoiceCall()) {
+
+        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             if (surfaceRemote != null)
                 surfaceRemote.release();
             if (surfaceLocal != null)
-                surfaceRemote.release();
+                surfaceLocal.release();
         }
     }
 }
