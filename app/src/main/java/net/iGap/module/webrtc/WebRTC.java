@@ -13,7 +13,6 @@ package net.iGap.module.webrtc;
 
 import android.hardware.Camera;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 
 import net.iGap.G;
@@ -41,6 +40,7 @@ import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
+import org.webrtc.VideoFrame;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 import org.webrtc.voiceengine.WebRtcAudioManager;
@@ -48,7 +48,6 @@ import org.webrtc.voiceengine.WebRtcAudioRecord;
 import org.webrtc.voiceengine.WebRtcAudioTrack;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,6 +65,7 @@ public class WebRTC {
     private PeerConnection peerConnection;
     private PeerConnectionFactory peerConnectionFactory;
     private MediaStream mediaStream;
+    private VideoFrameListener frameListener;
 
     // this is filled for offer
     private String localSDP;
@@ -152,7 +152,7 @@ public class WebRTC {
         this.callTYpe = callTYpe;
     }
 
-    private EglBase.Context getEglBaseContext() {
+    public EglBase.Context getEglBaseContext() {
         Log.d(TAG, "getEglBaseContext: ");
         if (eglBaseContext == null)
             eglBaseContext = EglBase.create().getEglBaseContext();
@@ -162,7 +162,7 @@ public class WebRTC {
     private void addVideoTrack(MediaStream mediaStream) {
         Log.d(TAG, "addVideoTrack: ");
 
-        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+        if (CallManager.getInstance().getCallType() == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
             VideoSource videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
             SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", getEglBaseContext());
@@ -172,9 +172,11 @@ public class WebRTC {
             videoTrackFromCamera.setEnabled(true);
 
             videoTrackFromCamera.addSink(videoFrame -> {
-                if (G.onVideoCallFrame != null) {
-                    G.onVideoCallFrame.onPeerFrame(videoFrame);
-                }
+                if (frameListener != null)
+                    frameListener.onLocalFrame(videoFrame);
+//                if (G.onVideoCallFrame != null) {
+//                    G.onVideoCallFrame.onPeerFrame(videoFrame);
+//                }
             });
 
             mediaStream.addTrack(videoTrackFromCamera);
@@ -308,8 +310,8 @@ public class WebRTC {
                 add("Pixel XL");
             }};
 
-            PeerConnectionFactory.startInternalTracingCapture(
-                    Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "webrtc-trace.txt");
+//            PeerConnectionFactory.startInternalTracingCapture(
+//                    Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "webrtc-trace.txt");
 
             if (WebRtcAudioUtils.isAcousticEchoCancelerSupported()) {
                 WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
@@ -554,5 +556,19 @@ public class WebRTC {
 
             }
         }, sdp);
+    }
+
+    public interface VideoFrameListener {
+        void onLocalFrame(VideoFrame frame);
+
+        void onRemoteFrame(VideoFrame frame);
+    }
+
+    public void setFrameListener(VideoFrameListener frameListener) {
+        this.frameListener = frameListener;
+    }
+
+    public VideoFrameListener getFrameListener() {
+        return frameListener;
     }
 }

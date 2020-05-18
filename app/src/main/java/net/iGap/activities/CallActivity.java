@@ -22,6 +22,7 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.AndroidUtils;
@@ -32,8 +33,12 @@ import net.iGap.module.enums.CallState;
 import net.iGap.module.webrtc.AppRTCAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
+import net.iGap.module.webrtc.WebRTC;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
+
+import org.webrtc.SurfaceViewRenderer;
+import org.webrtc.VideoFrame;
 
 import java.util.Set;
 
@@ -54,6 +59,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private ImageView camera;
     private CallRippleView answerRippleView;
     private CallRippleView declineRippleView;
+
+    private SurfaceViewRenderer surfaceRemote;
+    private SurfaceViewRenderer surfaceLocal;
 
     private AppRTCAudioManager audioManager = null;
 
@@ -99,6 +107,29 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         // This method will be called each time the number of available audio
         // devices has changed.
         audioManager.start(this::onAudioManagerDevicesChanged);
+        checkPermissions();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!CallManager.getInstance().isVoiceCall()) {
+            Log.d(TAG, "onResume: start capture");
+            WebRTC.getInstance().startVideoCapture();
+        }
+    }
+
+    private void checkPermissions() {
+        PermissionHelper permissionHelper = new PermissionHelper(this);
+        if (!CallManager.getInstance().isVoiceCall()) {
+            if (permissionHelper.grantCameraAndVoicePermission()) {
+                init();
+            }
+        } else {
+            if (permissionHelper.grantVoicePermission()) {
+                init();
+            }
+        }
     }
 
     private void init() {
@@ -118,6 +149,38 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         rootView.setBackgroundColor(0);
         rootView.setFitsSystemWindows(true);
         rootView.setClipToPadding(false);
+
+        if (!CallManager.getInstance().isVoiceCall()) {
+            surfaceRemote = new SurfaceViewRenderer(this);
+            surfaceRemote.setVisibility(View.VISIBLE);
+            rootView.addView(surfaceRemote, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
+
+            surfaceLocal = new SurfaceViewRenderer(this);
+            surfaceLocal.setVisibility(View.VISIBLE);
+            rootView.addView(surfaceLocal, LayoutCreator.createFrame(100, 140, Gravity.TOP, 8, 8, 8, 8));
+
+            surfaceLocal.init(WebRTC.getInstance().getEglBaseContext(), null);
+            surfaceLocal.setEnableHardwareScaler(true);
+            surfaceLocal.setMirror(true);
+            surfaceLocal.setZOrderMediaOverlay(true);
+            surfaceLocal.setZOrderOnTop(true);
+
+            surfaceRemote.init(WebRTC.getInstance().getEglBaseContext(), null);
+            surfaceRemote.setEnableHardwareScaler(true);
+            surfaceRemote.setMirror(false);
+
+            WebRTC.getInstance().setFrameListener(new WebRTC.VideoFrameListener() {
+                @Override
+                public void onLocalFrame(VideoFrame frame) {
+                    surfaceLocal.onFrame(frame);
+                }
+
+                @Override
+                public void onRemoteFrame(VideoFrame frame) {
+                    surfaceRemote.onFrame(frame);
+                }
+            });
+        }
 
         userImageView = new AppCompatImageView(this) {
             private Drawable topGradient = getResources().getDrawable(R.drawable.gradient_top);
@@ -260,8 +323,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     // This method is called when the audio manager reports audio device change,
     // e.g. from wired headset to speakerphone.
-    private void onAudioManagerDevicesChanged(
-            final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
+    private void onAudioManagerDevicesChanged(final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
         Log.d(TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", "
                 + "selected: " + device);
         checkForBluetoothAvailability(availableDevices);
@@ -269,7 +331,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void checkForBluetoothAvailability(Set<AppRTCAudioManager.AudioDevice> availableDevices) {
-        bluetoothView.setEnabled(availableDevices.contains(AppRTCAudioManager.AudioDevice.BLUETOOTH));
+        if (bluetoothView != null)
+            bluetoothView.setEnabled(availableDevices.contains(AppRTCAudioManager.AudioDevice.BLUETOOTH));
     }
 
     private void endCall() {
@@ -357,6 +420,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         } else if (state == CallState.CONNECTED) {
             statusTextView.setText("Connected");
+            G.runOnUiThread(() -> {
+                if (!CallManager.getInstance().isVoiceCall()) {
+                    surfaceRemote.setVisibility(View.VISIBLE);
+                    surfaceLocal.setVisibility(View.VISIBLE);
+                }
+            });
         } else if (state == CallState.RINGING) {
             statusTextView.setText("Ringing");
         } else if (state == CallState.TOO_LONG) {
@@ -399,6 +468,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         if (audioManager != null) {
             audioManager.stop();
             audioManager = null;
+        }
+        if (!CallManager.getInstance().isVoiceCall()) {
+            if (surfaceRemote != null)
+                surfaceRemote.release();
+            if (surfaceLocal != null)
+                surfaceRemote.release();
         }
     }
 }

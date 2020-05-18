@@ -21,7 +21,6 @@ package net.iGap.module.webrtc;
 
 import android.util.Log;
 
-import net.iGap.G;
 import net.iGap.module.enums.CallState;
 import net.iGap.viewmodel.controllers.CallManager;
 
@@ -42,14 +41,16 @@ import static org.webrtc.PeerConnection.IceConnectionState.FAILED;
 
 public class PeerConnectionObserver implements PeerConnection.Observer {
 
+    private String TAG = "iGapCall " + getClass().getSimpleName();
+    
     @Override
     public void onSignalingChange(PeerConnection.SignalingState signalingState) {
-        Log.i("amini", "onSignalingChange : " + signalingState);
+        Log.i(TAG, "onSignalingChange : " + signalingState);
     }
 
     @Override
     public void onIceConnectionChange(final PeerConnection.IceConnectionState iceConnectionState) {
-        Log.i("amini", "onIceConnectionChange : " + iceConnectionState);
+        Log.i(TAG, "onIceConnectionChange : " + iceConnectionState);
         if (iceConnectionState == DISCONNECTED) {
             CallManager.getInstance().changeState(CallState.DISCONNECTED);
         } else if (iceConnectionState == FAILED) {
@@ -63,17 +64,17 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
 
     @Override
     public void onIceConnectionReceivingChange(boolean b) {
-        Log.i("amini", "onIceConnectionReceivingChange : " + b);
+        Log.i(TAG, "onIceConnectionReceivingChange : " + b);
     }
 
     @Override
     public void onIceGatheringChange(PeerConnection.IceGatheringState iceGatheringState) {
-        Log.i("amini", "onIceGatheringChange : " + iceGatheringState);
+        Log.i(TAG, "onIceGatheringChange : " + iceGatheringState);
     }
 
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
-        Log.i("WWW", "WebRtc onIceCandidate : " + iceCandidate.toString());
+        Log.i(TAG, "WebRtc onIceCandidate : " + iceCandidate.toString());
         CallManager.getInstance().exchangeCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
 //        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
     }
@@ -88,7 +89,7 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
     public void onAddStream(MediaStream stream) {
 
         if (stream.audioTracks.size() > 1 || stream.videoTracks.size() > 1) {
-            Log.d("amini", "onAddStream: Weird-looking stream");
+            Log.d(TAG, "onAddStream: Weird-looking stream");
             return;
         }
 
@@ -103,10 +104,14 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
             videoTrack.addSink(new VideoSink() {
                 @Override
                 public void onFrame(VideoFrame videoFrame) {
-
-                    if (G.onVideoCallFrame != null) {
-                        G.onVideoCallFrame.onRemoteFrame(videoFrame);
+                    Log.d(TAG, "onFrame: in remote frame");
+                    if (WebRTC.getInstance().getFrameListener() != null) {
+                        Log.d(TAG, "onFrame: remote frame set.");
+                        WebRTC.getInstance().getFrameListener().onRemoteFrame(videoFrame);
                     }
+//                    if (G.onVideoCallFrame != null) {
+//                        G.onVideoCallFrame.onRemoteFrame(videoFrame);
+//                    }
                 }
             });
 
