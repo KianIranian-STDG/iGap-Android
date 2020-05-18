@@ -38,8 +38,6 @@ import net.iGap.realm.RealmRecentChargeNumber;
 import net.iGap.realm.RealmRecentChargeNumberFields;
 
 
-import java.util.ArrayList;
-import java.util.List;
 
 import io.realm.RealmResults;
 
@@ -67,8 +65,6 @@ public class FragmentPaymentInternet extends BaseFragment {
     private HistoryNumber historyNumber;
     private View closeView, closeView2;
     private OperatorType.Type operatorType;
-
-    List<ContactNumber> contactNumberList = new ArrayList<>();
 
     public static FragmentPaymentInternet newInstance() {
 
