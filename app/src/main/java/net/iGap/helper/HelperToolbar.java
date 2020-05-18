@@ -52,6 +52,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.paygear.WalletActivity;
 
@@ -756,7 +757,7 @@ public class HelperToolbar {
     }
 
     public void checkIsAvailableOnGoingCall() {
-        callLayout.setVisibility(G.isInCall ? View.VISIBLE : View.GONE);
+        callLayout.setVisibility(CallManager.getInstance().isCallAlive() ? View.VISIBLE : View.GONE);
     }
 
     private void setMediaLayout() {

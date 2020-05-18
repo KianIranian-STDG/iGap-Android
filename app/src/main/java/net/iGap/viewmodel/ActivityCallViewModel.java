@@ -53,6 +53,7 @@ import java.util.TimerTask;
 
 import io.realm.Realm;
 
+@Deprecated
 public class ActivityCallViewModel extends ViewModel implements BluetoothProfile.ServiceListener {
 
     public ObservableInt showPeerSurface = new ObservableInt(View.GONE);

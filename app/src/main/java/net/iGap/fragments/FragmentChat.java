@@ -309,6 +309,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
@@ -1281,7 +1282,7 @@ public class FragmentChat extends BaseFragment
             MusicPlayer.chatLayout = null;
             MusicPlayer.shearedMediaLayout = null;
 
-            if (!G.isInCall && MusicPlayer.mp != null && MusicPlayer.mainLayout != null) {
+            if (!CallManager.getInstance().isCallAlive() && MusicPlayer.mp != null && MusicPlayer.mainLayout != null) {
                 MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
                 MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
                 MusicPlayer.playerStateChangeListener.postValue(false);

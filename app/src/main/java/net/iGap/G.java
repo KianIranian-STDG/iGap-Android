@@ -22,7 +22,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -97,10 +96,10 @@ public class G extends ApplicationContext {
     public static Context context;
     public static Handler handler;
     public static boolean isCalling = false;
+    @Deprecated
     public static boolean isVideoCallRinging = false;
     //public static OnRejectCallStatus onRejectCallStatus;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
-    public static LayoutInflater inflater;
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static List<Long> smsNumbers = new ArrayList<>();
     public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
@@ -155,6 +154,7 @@ public class G extends ApplicationContext {
     public static boolean latestMobileDataState;
     public static boolean showVoteChannelLayout = true;
     public static boolean showSenderNameInGroup = false;
+    @Deprecated
     public static boolean isInCall = false;
     public static boolean isShowRatingDialog = false;
     public static boolean isUpdateNotificaionColorMain = false;
@@ -292,9 +292,13 @@ public class G extends ApplicationContext {
     public static OnPushLoginToken onPushLoginToken;
     public static OnPushTwoStepVerification onPushTwoStepVerification;
     public static IClientSearchUserName onClientSearchUserName;
+    @Deprecated
     public static OnCallLeaveView onCallLeaveView;
+    @Deprecated
     public static OnVideoCallFrame onVideoCallFrame;
+    @Deprecated
     public static ICallFinish iCallFinishChat;
+    @Deprecated
     public static ICallFinish iCallFinishMain;
     //    public static IMainFinish iMainFinish;
 //    public static IActivityFinish iActivityFinish;
@@ -339,14 +343,22 @@ public class G extends ApplicationContext {
     public static OnMplTransaction onMplTransaction;
     public static OnMplTransactionInfo onMplTransactionInfo;
     /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
+    @Deprecated
     public static ISignalingOffer iSignalingOffer;
+    @Deprecated
     public static ISignalingRinging iSignalingRinging;
+    @Deprecated
     public static ISignalingAccept iSignalingAccept;
+    @Deprecated
     public static ISignalingCandidate iSignalingCandidate;
+    @Deprecated
     public static ISignalingLeave iSignalingLeave;
+    @Deprecated
     public static ISignalingSessionHold iSignalingSessionHold;
     public static ISignalingGetCallLog iSignalingGetCallLog;
+    @Deprecated
     public static ISignalingCallBack iSignalingCallBack;
+    @Deprecated
     public static ISignalingErrore iSignalingErrore;
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
@@ -360,9 +372,12 @@ public class G extends ApplicationContext {
     /*public static boolean isBluetoothConnected = false;
     public static boolean isHandsFreeConnected = false;*/
     /*public static SpeakerControlListener speakerControlListener;*/
+    @Deprecated
     public static VideoCallListener videoCallListener;
     public static RefreshWalletBalance refreshWalletBalance;
+    @Deprecated
     public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
+    @Deprecated
     public static boolean isWebRtcConnected = false;
     public static boolean isDepricatedApp = false;
     public static int rotationState;
@@ -481,7 +496,6 @@ public class G extends ApplicationContext {
         }
 
         handler = new Handler();
-        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         new Thread(new Runnable() {
             @Override

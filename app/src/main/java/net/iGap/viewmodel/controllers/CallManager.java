@@ -28,6 +28,7 @@ import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
 import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoSignalingAccept;
 import net.iGap.proto.ProtoSignalingCandidate;
 import net.iGap.proto.ProtoSignalingLeave;
@@ -64,7 +65,7 @@ public class CallManager implements EventListener {
     private RealmRegisteredInfo info;
     private RealmCallConfig currentCallConfig;
 
-    private boolean callAlive;
+    private boolean isCallActive;
     private boolean isRinging;
     private boolean isIncoming;
     private boolean isCallHold;
@@ -127,6 +128,8 @@ public class CallManager implements EventListener {
         // activate ringing state for caller.
         isRinging = true;
         isIncoming = true;
+        isCallActive = true;
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
         new RequestSignalingRinging().signalingRinging();
 
         // generate SDP
@@ -139,6 +142,9 @@ public class CallManager implements EventListener {
     public void makeOffer(long called_userId, String callerSdp) {
         if (CallService.getInstance() != null) {
             Log.d(TAG, "makeOffer: " + called_userId + " " + callerSdp + " " + callType);
+            isRinging = true;
+            isCallActive = true;
+            EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
             new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
         }
     }
@@ -205,7 +211,6 @@ public class CallManager implements EventListener {
      */
     public void onRing() {
         Log.d(TAG, "onRing: ");
-        isRinging = true;
         G.handler.post(() -> changeState(CallState.RINGING));
     }
 
@@ -216,6 +221,7 @@ public class CallManager implements EventListener {
      */
     public void onAccept(ProtoSignalingAccept.SignalingAcceptResponse.Builder response) {
         Log.d(TAG, "onAccept: ");
+        isRinging = false;
         G.handler.post(() -> {
             WebRTC.getInstance().setOfferLocalDescription();
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
@@ -227,6 +233,7 @@ public class CallManager implements EventListener {
      */
     public void makeAccept(String sdp) {
         Log.d(TAG, "makeAccept: ");
+        isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
     }
 
@@ -265,8 +272,10 @@ public class CallManager implements EventListener {
                 am.setRingerMode(G.mainRingerMode);
             } catch (Exception e) {
             }
-
+            // call is declined in ringing mode
             isRinging = false;
+            isCallActive = false;
+            EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
             switch (builder.getType()) {
                 case REJECTED:
                     changeState(CallState.REJECT);
@@ -280,15 +289,20 @@ public class CallManager implements EventListener {
                 case TOO_LONG:
                     changeState(CallState.TOO_LONG);
                     break;
+                default:
+                    changeState(CallState.LEAVE_CALL);
+                    break;
             }
-            // TODO: 5/10/2020 why ??
-            changeState(CallState.LEAVE_CALL);
         });
     }
 
     public void leaveCall() {
         Log.d(TAG, "leaveCall: ");
         new RequestSignalingLeave().signalingLeave();
+        // call is declined in ringing mode
+        isRinging = false;
+        isCallActive = false;
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
@@ -471,9 +485,6 @@ public class CallManager implements EventListener {
         if (isIncoming)
             G.runOnUiThread(() -> startService(callPeerId, callType, isIncoming));
         else {
-            isRinging = false;
-            // TODO: 5/5/2020 this lines should be changed and be deleted.
-            G.isVideoCallRinging = false;
             try {
                 AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                 G.mainRingerMode = am.getRingerMode();
@@ -481,10 +492,6 @@ public class CallManager implements EventListener {
                 am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-            if (G.videoCallListener != null) {
-
-                G.videoCallListener.notifyBackgroundChange();
             }
             // until here
         }
@@ -496,7 +503,7 @@ public class CallManager implements EventListener {
     }
 
     public boolean isCallAlive() {
-        return callAlive;
+        return isCallActive;
     }
 
     public CallerInfo getCurrentCallerInfo() {
@@ -648,5 +655,9 @@ public class CallManager implements EventListener {
 
     public void setActiveAudioDevice(AppRTCAudioManager.AudioDevice activeAudioDevice) {
         this.activeAudioDevice = activeAudioDevice;
+    }
+
+    public boolean isRinging() {
+        return isRinging;
     }
 }

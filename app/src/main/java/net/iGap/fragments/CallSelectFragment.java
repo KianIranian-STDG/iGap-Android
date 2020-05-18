@@ -43,7 +43,7 @@ public class CallSelectFragment extends BaseBottomSheet {
 
         if (G.userLogin) {
 
-            if (!G.isInCall) {
+            if (!CallManager.getInstance().isCallAlive()) {
                 DbManager.getInstance().doRealmTask(realm -> {
                     RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
 

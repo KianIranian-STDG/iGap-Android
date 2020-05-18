@@ -47,13 +47,12 @@ public class MyPhoneStateListener extends PhoneStateListener {
         if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
 
             CallManager.getInstance().holdCall(true);
-            WebRTC.getInstance().muteSound();
+            WebRTC.getInstance().toggleSound(false);
             WebRTC.getInstance().pauseVideoCapture();
 
             G.isCalling = true;
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-
-            if (G.isVideoCallRinging) {
+            if (CallManager.getInstance().isRinging()) {
                 try {
                     // TODO: 5/9/2020 do we need this anymore? 
                     CallManager.getInstance().leaveCall();
@@ -61,13 +60,11 @@ public class MyPhoneStateListener extends PhoneStateListener {
                 }
 
             }
-
             G.isCalling = true;
-            G.isVideoCallRinging = false;
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
 
             CallManager.getInstance().holdCall(false);
-            WebRTC.getInstance().unMuteSound();
+            WebRTC.getInstance().toggleSound(true);
             WebRTC.getInstance().startVideoCapture();
 
             G.isCalling = false;
