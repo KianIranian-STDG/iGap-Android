@@ -257,7 +257,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (editTextNumber.getText().length() == 4) {
+                if (editTextNumber.getText().length() == 4 || editTextNumber.getText().length() == 11) {
                     String number = editTextNumber.getText().toString().substring(0, 4);
                     OperatorType.Type opt = new OperatorType().getOperation(number);
                     if (opt != null) {
@@ -492,16 +492,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     case HAMRAH_AVAL:
                                         switch (selectedChargeTypeIndex) {
                                             case 0:
-                                                chooseChargeType = ChooseChargeType.MCI_NORMAL;
+                                                chooseChargeType = ChooseChargeType.DIRECT;
                                                 break;
                                             case 1:
-                                                chooseChargeType = ChooseChargeType.MCI_AMAZING;
+                                                chooseChargeType = ChooseChargeType.YOUTH;
                                                 break;
                                             case 2:
-                                                chooseChargeType = ChooseChargeType.MCI_YOUTH;
-                                                break;
-                                            case 3:
-                                                chooseChargeType = ChooseChargeType.MCI_LADIES;
+                                                chooseChargeType = ChooseChargeType.LADIES;
                                                 break;
                                         }
                                         break;
@@ -581,7 +578,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     enum ChooseChargeType {
-        MTN_NORMAL, MTN_AMAZING, RIGHTEL_NORMAL, RIGHTEL_EXCITING, MCI_NORMAL, MCI_AMAZING, MCI_YOUTH, MCI_LADIES
+        MTN_NORMAL, MTN_AMAZING, RIGHTEL_NORMAL, RIGHTEL_EXCITING, DIRECT, AMAZING, YOUTH, LADIES
     }
 
     private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
