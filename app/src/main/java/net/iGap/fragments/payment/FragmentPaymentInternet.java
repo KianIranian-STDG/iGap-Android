@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,18 +26,24 @@ import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.ContactNumber;
-import net.iGap.adapter.payment.HistoryNumber;
+import net.iGap.api.ChargeApi;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
+import net.iGap.model.paymentPackage.FavoriteNumber;
+import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.module.Contacts;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.realm.RealmRecentChargeNumber;
-import net.iGap.realm.RealmRecentChargeNumberFields;
+import net.iGap.realm.RealmRegisteredInfo;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static net.iGap.helper.HelperString.isNumeric;
 import static net.iGap.model.OperatorType.Type.HAMRAH_AVAL;
@@ -72,7 +80,6 @@ public class FragmentPaymentInternet extends BaseFragment {
     private AppCompatEditText editTextNumber;
     private int selectedIndex;
     private ContactNumber contactNumber;
-    private HistoryNumber historyNumber;
     private View closeView, closeView2;
     private OperatorType.Type operatorType;
     private RadioGroup rdGroup;
@@ -82,6 +89,10 @@ public class FragmentPaymentInternet extends BaseFragment {
     private RadioButton rbTdLtePermanent;
     private RadioButton rbData;
     private String simType = SIM_TYPE_CREDIT;
+    private ChargeApi chargeApi;
+    private FavoriteNumber historyNumber;
+    private ProgressBar progressBar;
+    private MaterialDesignTextView btnRemoveSearch;
 
     public static FragmentPaymentInternet newInstance() {
 
@@ -119,6 +130,22 @@ public class FragmentPaymentInternet extends BaseFragment {
         rbTdLteCredit = view.findViewById(R.id.rbTdLteCredit);
         rbTdLtePermanent = view.findViewById(R.id.rbTdLtePermanent);
         rbData = view.findViewById(R.id.rbData);
+        progressBar = view.findViewById(R.id.loadingView);
+        btnRemoveSearch = view.findViewById(R.id.btnRemoveSearch);
+
+        chargeApi = new RetrofitFactory().getChargeRetrofit();
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
+            editTextNumber.setText(userInfo.getPhoneNumber());
+            String number = userInfo.getPhoneNumber();
+            editTextNumber.setText(number
+                    .replace("98", "0")
+                    .replace("+98", "0")
+                    .replace("0098", "0")
+                    .replace(" ", "")
+                    .replace("-", ""));
+        });
 
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -135,6 +162,10 @@ public class FragmentPaymentInternet extends BaseFragment {
                     }
                 }).getView());
 
+        btnRemoveSearch.setOnClickListener(v -> {
+            editTextNumber.setText(null);
+            btnRemoveSearch.setVisibility(View.GONE);
+        });
 
         onContactNumberButtonClick();
         onHistoryNumberButtonClick();
@@ -260,7 +291,45 @@ public class FragmentPaymentInternet extends BaseFragment {
 
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
+                @Override
+                public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
+                    if (response.isSuccessful()) {
+                        progressBar.setVisibility(View.GONE);
+                        adapterHistory = new AdapterHistoryNumber(response.body().getData());
+                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                        View view = dialog.getCustomView();
+                        rvHistory = view.findViewById(R.id.rv_history);
+                        saveBtn2 = view.findViewById(R.id.btn_dialog2);
+                        closeView2 = view.findViewById(R.id.iv_close2);
+                        closeView2.setOnClickListener(v12 -> dialog.dismiss());
 
+                        saveBtn2.setOnClickListener(v13 -> {
+                            if (adapterHistory.getSelectedPosition() == -1) {
+                                return;
+                            }
+                            selectedIndex = adapterHistory.getSelectedPosition();
+                            historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
+                            editTextNumber.setText(historyNumber.getPhoneNumber());
+                            dialog.dismiss();
+                        });
+
+                        rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                        rvHistory.setAdapter(adapterHistory);
+                        dialog.show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    HelperError.showSnackMessage("شماره ای از قبل موجود نیست", false);
+
+                }
+            });
         });
     }
 
@@ -272,7 +341,11 @@ public class FragmentPaymentInternet extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (s.length() > 0 && btnRemoveSearch.getVisibility() == View.GONE) {
+                    btnRemoveSearch.setVisibility(View.VISIBLE);
+                }
+                if (s.length() == 0)
+                    btnRemoveSearch.setVisibility(View.GONE);
             }
 
             @Override
