@@ -1,5 +1,6 @@
 package net.iGap.activities;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -78,6 +80,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private boolean isRtl = G.isAppRtl;
 
     private String TAG = "iGapCall " + getClass().getSimpleName();
+    public static final String CALL_TIMER_BROADCAST = "CALL_TIMER_BROADCAST";
+    public static final String TIMER_TEXT = "timer";
+
+    private LocalBroadcastManager localBroadcastManager;
 
     public CallActivity() {
 
@@ -114,6 +120,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         CallService.getInstance().setCallStateChange(this);
         CallManager.getInstance().setTimeDelegate(this);
+
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         checkPermissions();
     }
@@ -562,7 +570,13 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onTimeChange(long time) {
         Log.i(TAG, "on Time Change: " + AndroidUtils.formatLongDuration((int) (time / 1000)));
-        durationTextView.setText(AndroidUtils.formatLongDuration((int) (time / 1000)));
+        String humanReadableTime = AndroidUtils.formatLongDuration((int) (time / 1000));
+        // update time in activity
+        durationTextView.setText(humanReadableTime);
+        // update time for toolbar
+        Intent intent = new Intent(CALL_TIMER_BROADCAST);
+        intent.putExtra(TIMER_TEXT, time);
+        localBroadcastManager.sendBroadcast(intent);
     }
 
     @Override

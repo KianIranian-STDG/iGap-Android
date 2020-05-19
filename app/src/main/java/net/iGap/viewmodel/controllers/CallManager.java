@@ -130,7 +130,6 @@ public class CallManager implements EventListener {
         isRinging = true;
         isIncoming = true;
         isCallActive = true;
-        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
         new RequestSignalingRinging().signalingRinging();
 
         // generate SDP
@@ -150,7 +149,6 @@ public class CallManager implements EventListener {
             Log.d(TAG, "makeOffer: " + called_userId + " " + callerSdp + " " + callType);
             isRinging = true;
             isCallActive = true;
-            EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
             new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
         }
     }
@@ -232,6 +230,7 @@ public class CallManager implements EventListener {
             WebRTC.getInstance().setOfferLocalDescription();
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
         });
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
     }
 
     /**
@@ -241,6 +240,7 @@ public class CallManager implements EventListener {
         Log.d(TAG, "makeAccept: ");
         isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
+        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
     }
 
     /**
@@ -526,14 +526,15 @@ public class CallManager implements EventListener {
     public void cleanUp() {
         Log.d(TAG, "cleanUp: ");
         onCallStateChanged = null;
+        isCallActive = false;
+        isRinging = false;
+        isCallHold = false;
+        isIncoming = false;
+        isMicEnable = false;
         WebRTC.getInstance().close();
-
-        if (timer != null) {
+        if (timer != null)
             timer.cancel();
-        }
-
         callStartTime = 0;
-
         instance = null;
     }
 

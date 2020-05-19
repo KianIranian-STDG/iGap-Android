@@ -40,6 +40,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
+import net.iGap.activities.CallActivity;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PassCode;
@@ -50,6 +51,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.module.webrtc.CallService;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.viewmodel.controllers.CallManager;
@@ -735,8 +737,12 @@ public class HelperToolbar {
             ActivityCall.stripLayoutChat = view.getCallLayout();
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
-
+            txtCallActivityBack.setOnClickListener(v -> {
+                if (CallService.getInstance() != null) {
+                    mContext.startActivity(new Intent(G.fragmentActivity, CallActivity.class));
+                }
+            });
+//            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
             checkIsAvailableOnGoingCall();
 
         } else if (isSharedMedia) {
@@ -748,8 +754,12 @@ public class HelperToolbar {
             ActivityCall.stripLayoutMain = view.getCallLayout();
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
-
+            txtCallActivityBack.setOnClickListener(v -> {
+                if (CallService.getInstance() != null) {
+                    mContext.startActivity(new Intent(G.fragmentActivity, CallActivity.class));
+                }
+            });
+//            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
         }
 
         MusicPlayer.setMusicPlayer(musicLayout);
