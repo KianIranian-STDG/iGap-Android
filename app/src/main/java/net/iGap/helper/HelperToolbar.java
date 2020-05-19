@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -715,7 +714,6 @@ public class HelperToolbar {
         callTimerReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("amini", "onReceive: in here.");
                 if (intent.getAction() == null || intent.getExtras() == null) return;
                 if (intent.getAction().equals(CallActivity.CALL_TIMER_BROADCAST)) {
                     String time = intent.getExtras().getString(CallActivity.TIMER_TEXT, "");

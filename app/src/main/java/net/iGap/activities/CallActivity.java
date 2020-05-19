@@ -587,7 +587,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         durationTextView.setText(humanReadableTime);
         // update time for toolbar
         Intent intent = new Intent(CALL_TIMER_BROADCAST);
-        intent.putExtra(TIMER_TEXT, time);
+        intent.putExtra(TIMER_TEXT, humanReadableTime);
         localBroadcastManager.sendBroadcast(intent);
     }
 
