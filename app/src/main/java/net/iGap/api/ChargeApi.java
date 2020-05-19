@@ -11,6 +11,7 @@ import net.iGap.model.paymentPackage.MciInternetPackageFilter;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -30,7 +31,7 @@ public interface ChargeApi {
                                             @Field("cost") int cost);
 
     @POST("{operator}/topup/set-favorite")
-    Call<MciPurchaseResponse> setFavoriteChargeNumber(@Body JsonObject jsonObject);
+    Call<ResponseBody> setFavoriteChargeNumber(@Path("operator") String operator,@Body JsonObject jsonObject);
 
     @GET("topup/get-favorite")
     Call<GetFavoriteNumber> getFavoriteChargeNUmber();

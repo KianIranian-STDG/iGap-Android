@@ -24,7 +24,7 @@
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/payment_toolbar"
         app:layout_constraintVertical_bias="1.0">
@@ -48,14 +48,11 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/phoneNumberInput"
-                style="@style/iGapEditTextStyle"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:gravity="start"
                 android:hint="@string/phone"
                 android:inputType="phone"
@@ -64,10 +61,23 @@
                 android:paddingLeft="@dimen/dp10"
                 android:paddingRight="@dimen/dp10"
                 android:textSize="@dimen/dp16"
-                app:layout_constraintEnd_toEndOf="@+id/textView2"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/close_icon"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                android:layout_marginRight="16dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/close_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/close_icon"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/phoneNumberInput"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/phoneNumberInput" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/frame_contact"
@@ -114,15 +124,17 @@
                 android:id="@+id/frame_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/shape_payment_charge"
                 android:paddingStart="@dimen/dp8"
                 android:paddingTop="@dimen/dp2"
                 android:paddingEnd="@dimen/dp8"
                 android:paddingBottom="@dimen/dp2"
                 app:layout_constraintBottom_toBottomOf="@+id/frame_contact"
-                app:layout_constraintEnd_toEndOf="@+id/phoneNumberInput"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/frame_contact"
-                app:layout_constraintWidth_percent="4.5">
+                app:layout_constraintWidth_percent="4.5"
+                android:layout_marginRight="16dp">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/iv_history"
@@ -241,7 +253,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/dp4"
-                android:text="انتخاب نوع شارژ"
+                android:text="@string/Select_the_type_of_charge"
                 android:textColor="@color/green"
                 app:layout_constraintBottom_toBottomOf="@+id/btn_charge_type"
                 app:layout_constraintEnd_toEndOf="@+id/btn_charge_type"
@@ -397,7 +409,10 @@
                 android:backgroundTint="@color/orange"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:paddingTop="@dimen/dp1"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingBottom="@dimen/dp1"
                 android:visibility="visible"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

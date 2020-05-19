@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +23,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.JsonObject;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.payment.AdapterChargeAmount;
 import net.iGap.adapter.payment.AdapterChargeType;
 import net.iGap.adapter.payment.AdapterContactNumber;
@@ -40,6 +44,7 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
@@ -47,20 +52,21 @@ import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Field;
-import retrofit2.http.Path;
 
 public class FragmentPaymentChargeNewUi extends BaseFragment {
     private LinearLayout toolbar;
@@ -82,6 +88,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private AppCompatTextView amountTxt;
     private AppCompatTextView editType;
     private AppCompatTextView chooseType;
+    private AppCompatTextView removeNumber;
     private AppCompatImageView ivAdd;
     private AppCompatImageView lowView;
     private MaterialButton saveBtn1, saveBtn2, saveBtn3, saveBtn4;
@@ -150,18 +157,15 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
         linearWarning = view.findViewById(R.id.llWarning);
+        removeNumber = view.findViewById(R.id.close_icon);
         chargeApi = new RetrofitFactory().getChargeRetrofit();
 
         DbManager.getInstance().doRealmTask(realm -> {
             userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
-            editTextNumber.setText(userInfo.getPhoneNumber());
-            String number = userInfo.getPhoneNumber();
-            editTextNumber.setText(number
-                    .replace("98", "0")
-                    .replace("+98", "0")
-                    .replace("0098", "0")
-                    .replace(" ", "")
+            editTextNumber.setText(userInfo.getPhoneNumber().replace("98", "0").replace("+98", "0").replace("0098", "0").replace(" ", "")
                     .replace("-", ""));
+
+
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -183,6 +187,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     }
                 }).getView());
 
+        removeNumber.setOnClickListener(view1 -> editTextNumber.setText(" "));
+
         onChargeTypeChooseClick();
         onContactNumberButtonClick();
         onHistoryNumberButtonClick();
@@ -194,27 +200,40 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
-            new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
-            View view = dialog.getCustomView();
-            rvContact = view.findViewById(R.id.rv_contact);
-            saveBtn1 = view.findViewById(R.id.btn_dialog1);
-            closeView = view.findViewById(R.id.closeView);
+            try {
+                HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
+                    @Override
+                    public void Allow() {
+                        new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
+                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
+                        View view = dialog.getCustomView();
+                        rvContact = view.findViewById(R.id.rv_contact);
+                        saveBtn1 = view.findViewById(R.id.btn_dialog1);
+                        closeView = view.findViewById(R.id.closeView);
 
-            saveBtn1.setOnClickListener(v15 -> {
-                if (adapterContact.getSelectedPosition() == -1) {
-                    return;
-                }
-                selectedIndex = adapterContact.getSelectedPosition();
-                contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
-                editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
-                dialog.dismiss();
-            });
-            dialog.show();
+                        saveBtn1.setOnClickListener(v15 -> {
+                            if (adapterContact.getSelectedPosition() == -1) {
+                                return;
+                            }
+                            selectedIndex = adapterContact.getSelectedPosition();
+                            contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
+                            editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
+                            dialog.dismiss();
+                        });
+                        dialog.show();
 
-            closeView.setOnClickListener(v12 -> dialog.dismiss());
-            rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            rvContact.setAdapter(adapterContact);
+                        closeView.setOnClickListener(v12 -> dialog.dismiss());
+                        rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                        rvContact.setAdapter(adapterContact);
+                    }
+
+                    @Override
+                    public void deny() {
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -224,7 +243,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
                 public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
-                    if (response.isSuccessful()) {
+                    if (response.isSuccessful() && response.body().getData() != null) {
                         progressBar.setVisibility(View.GONE);
                         adapterHistory = new AdapterHistoryNumber(response.body().getData());
                         MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
@@ -240,7 +259,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             }
                             selectedIndex = adapterHistory.getSelectedPosition();
                             historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                            editTextNumber.setText(historyNumber.getPhoneNumber());
+                            editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
+
                             dialog.dismiss();
                         });
 
@@ -255,11 +275,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), t.toString(), Toast.LENGTH_LONG).show();
-                    HelperError.showSnackMessage("شماره ای از قبل موجود نیست", false);
+                    ShowError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
 
                 }
             });
-
 
         });
 
@@ -285,6 +304,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onPhoneNumberInput() {
+        if (editTextNumber.getText().length() > 0)
+            removeNumber.setVisibility(View.VISIBLE);
+        removeNumber.setOnClickListener(view1 -> {
+            editTextNumber.setText(" ");
+            removeNumber.setVisibility(View.GONE);
+        });
         if (editTextNumber.getText().length() == 4 || editTextNumber.getText().length() == 11) {
             String number = editTextNumber.getText().toString().substring(0, 4);
             OperatorType.Type opt = new OperatorType().getOperation(number);
@@ -311,6 +336,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             hideKeyboard();
             linearWarning.setVisibility(View.VISIBLE);
         }
+
     }
 
     private void onItemOperatorSelect() {
@@ -603,13 +629,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("operator", operator);
-        jsonObject.addProperty("phone_number", phoneNumber);
-        jsonObject.addProperty("charge_type", chargeType.toString());
-        jsonObject.addProperty("amount", amount.getTextAmount());
-        chargeApi.setFavoriteChargeNumber(jsonObject);
-
         chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
             @Override
             public void onResponse(Call<MciPurchaseResponse> call, Response<MciPurchaseResponse> response) {
@@ -619,6 +638,27 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     if (getActivity() != null && token != null) {
                         new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
                             if (result.isSuccess()) {
+                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title("مایل هستید شماره ی شارژ شونده ذخیره شود؟")
+                                        .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                                        .positiveText(R.string.ok)
+                                        .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+                                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                                    dialog.dismiss();
+                                    JsonObject jsonObject = new JsonObject();
+                                    jsonObject.addProperty("phone_number", phoneNumber);
+                                    jsonObject.addProperty("charge_type", chargeType.toString());
+                                    jsonObject.addProperty("amount", price);
+                                    chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
+                                        }
+                                    });
+                                });
                             }
                         });
                     }

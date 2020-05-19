@@ -11,8 +11,7 @@ class ApiStatic {
     static final String KUKNOS_URL = BASE_URL + "kuknos/" + VERSION;
     static final String PAYMENT_URL = BASE_URL + SERVICES + VERSION + "payment/";
     static final String ATI_URL = BASE_URL + SERVICES + VERSION + "ati/";
-//    static final String CHARGE_URL = BASE_URL + SERVICES + VERSION;
-    static final String CHARGE_URL = "http://192.168.8.66:3004/v1.0/";
+    static final String CHARGE_URL = BASE_URL + SERVICES + VERSION;
     static final String CPAY_URL = BASE_URL + SERVICES + VERSION + "ati/c-pay/";
     static final String CHARITY_URL = BASE_URL + SERVICES + VERSION + "charity/";
     static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
