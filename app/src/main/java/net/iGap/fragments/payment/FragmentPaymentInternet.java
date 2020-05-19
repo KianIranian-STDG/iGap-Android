@@ -7,9 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.Toast;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,17 +24,36 @@ import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.ContactNumber;
+import net.iGap.adapter.payment.HistoryNumber;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.realm.RealmRecentChargeNumber;
+import net.iGap.realm.RealmRecentChargeNumberFields;
 
 
+import io.realm.RealmResults;
+
+import static net.iGap.helper.HelperString.isNumeric;
+import static net.iGap.model.OperatorType.Type.HAMRAH_AVAL;
+import static net.iGap.model.OperatorType.Type.IRANCELL;
+import static net.iGap.model.OperatorType.Type.RITEL;
+import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MCI;
+import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
+import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.RIGHTEL;
 
 public class FragmentPaymentInternet extends BaseFragment {
+
+    public static final String SIM_TYPE_CREDIT = "CREDIT";
+    public static final String SIM_TYPE_PERMANENT = "PERMANENT";
+    public static final String SIM_TYPE_TD_LTE_CREDIT = "CREDIT_TD_LTE";
+    public static final String SIM_TYPE_TD_LTE_PERMANENT = "PERMANENT_TD_LTE";
+    public static final String SIM_TYPE_DATA = "DATA";
 
     private LinearLayout toolbar;
     private ConstraintLayout frameContact;
@@ -56,8 +74,16 @@ public class FragmentPaymentInternet extends BaseFragment {
     private AppCompatEditText editTextNumber;
     private int selectedIndex;
     private ContactNumber contactNumber;
+    private HistoryNumber historyNumber;
     private View closeView, closeView2;
     private OperatorType.Type operatorType;
+    private RadioGroup rdGroup;
+    private RadioButton rbCredit;
+    private RadioButton rbPermanent;
+    private RadioButton rbTdLteCredit;
+    private RadioButton rbTdLtePermanent;
+    private RadioButton rbData;
+    private String simType = SIM_TYPE_CREDIT;
 
     public static FragmentPaymentInternet newInstance() {
 
@@ -89,7 +115,12 @@ public class FragmentPaymentInternet extends BaseFragment {
         frameHamrah = view.findViewById(R.id.view12);
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
-
+        rdGroup = view.findViewById(R.id.rdGroup);
+        rbCredit = view.findViewById(R.id.rbCredit);
+        rbPermanent = view.findViewById(R.id.rbPermanent);
+        rbTdLteCredit = view.findViewById(R.id.rbTdLteCredit);
+        rbTdLtePermanent = view.findViewById(R.id.rbTdLtePermanent);
+        rbData = view.findViewById(R.id.rbData);
 
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -114,12 +145,84 @@ public class FragmentPaymentInternet extends BaseFragment {
 
         enterBtn.setOnClickListener(v -> {
             if (operatorType != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPaymentInternetPackage()).setReplace(false).load();
+                if (editTextNumber.getText() == null) {
+                    editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
+                    return;
+                }
+                String phoneNumber = editTextNumber.getText().toString().trim();
+                if (!isNumeric(phoneNumber) || phoneNumber.length() < 11) {
+                    editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
+                    return;
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance(phoneNumber, convertOperatorToString(operatorType), simType)).setReplace(false).load();
             } else {
-                ShowError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
+                ShowError(getResources().getString(R.string.sim_type_not_choosed));
             }
-
         });
+
+        radioButtonHamrah.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                operatorType = HAMRAH_AVAL;
+                updateRadioGroup(operatorType);
+            }
+        });
+
+        radioButtonIrancell.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                operatorType = IRANCELL;
+                updateRadioGroup(operatorType);
+            }
+        });
+
+        radioButtonRightel.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                operatorType = RITEL;
+                updateRadioGroup(operatorType);
+            }
+        });
+
+        rbCredit.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                simType = SIM_TYPE_CREDIT;
+            }
+        });
+
+        rbPermanent.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                simType = SIM_TYPE_PERMANENT;
+            }
+        });
+
+        rbTdLteCredit.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                simType = SIM_TYPE_TD_LTE_CREDIT;
+            }
+        });
+
+        rbTdLtePermanent.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                simType = SIM_TYPE_TD_LTE_PERMANENT;
+            }
+        });
+
+        rbData.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                simType = SIM_TYPE_DATA;
+            }
+        });
+    }
+
+    private String convertOperatorToString(OperatorType.Type opt) {
+        switch (opt) {
+            case RITEL:
+                return RIGHTEL;
+            case IRANCELL:
+                return MTN;
+
+            case HAMRAH_AVAL:
+                return MCI;
+        }
+        return MTN;
     }
 
     public void ShowError(String errorMessage) {
@@ -158,12 +261,14 @@ public class FragmentPaymentInternet extends BaseFragment {
     }
 
     private void onHistoryNumberButtonClick() {
-/*        frameHistory.setOnClickListener(v -> {
+        frameHistory.setOnClickListener(v -> {
 
-
+            RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRecentChargeNumber.class).equalTo(RealmRecentChargeNumberFields.TYPE, 1).findAll();
+            });
 
             if (numbers == null || numbers.size() == 0) {
-                ShowError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
+                ShowError(getContext().getResources().getString(R.string.list_empty));
             } else {
                 adapterHistory = new AdapterHistoryNumber(numbers);
 
@@ -189,7 +294,7 @@ public class FragmentPaymentInternet extends BaseFragment {
                 rvHistory.setAdapter(adapterHistory);
                 dialog.show();
             }
-        });*/
+        });
     }
 
     private void onPhoneNumberInputClick() {
@@ -211,18 +316,19 @@ public class FragmentPaymentInternet extends BaseFragment {
                     if (opt != null) {
                         switch (opt) {
                             case HAMRAH_AVAL:
-                                operatorType = OperatorType.Type.HAMRAH_AVAL;
+                                operatorType = HAMRAH_AVAL;
                                 setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
                                 break;
                             case IRANCELL:
-                                operatorType = OperatorType.Type.IRANCELL;
+                                operatorType = IRANCELL;
                                 setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
                                 break;
                             case RITEL:
-                                operatorType = OperatorType.Type.RITEL;
+                                operatorType = RITEL;
                                 setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
                                 break;
                         }
+                        updateRadioGroup(opt);
                     }
 
                 }
@@ -230,21 +336,39 @@ public class FragmentPaymentInternet extends BaseFragment {
         });
     }
 
+    private void updateRadioGroup(OperatorType.Type opt) {
+        rbCredit.setVisibility(View.VISIBLE);
+        rbPermanent.setVisibility(View.VISIBLE);
+        if (opt == RITEL) {
+            rbTdLteCredit.setVisibility(View.GONE);
+            rbTdLtePermanent.setVisibility(View.GONE);
+            rbData.setVisibility(View.VISIBLE);
+        } else if (opt == IRANCELL) {
+            rbData.setVisibility(View.GONE);
+            rbTdLtePermanent.setVisibility(View.VISIBLE);
+            rbTdLteCredit.setVisibility(View.VISIBLE);
+        } else if (opt == HAMRAH_AVAL) {
+            rbData.setVisibility(View.GONE);
+            rbTdLtePermanent.setVisibility(View.GONE);
+            rbTdLteCredit.setVisibility(View.GONE);
+        }
+    }
+
 
     private void onItemOperatorSelect() {
         if (editTextNumber.getText() != null) {
             frameHamrah.setOnClickListener(v -> {
-                operatorType = OperatorType.Type.HAMRAH_AVAL;
+                operatorType = HAMRAH_AVAL;
                 setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
             });
 
             frameRightel.setOnClickListener(v -> {
-                operatorType = OperatorType.Type.RITEL;
+                operatorType = RITEL;
                 setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
             });
 
             frameIrancel.setOnClickListener(v -> {
-                operatorType = OperatorType.Type.IRANCELL;
+                operatorType = IRANCELL;
                 setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
             });
         }

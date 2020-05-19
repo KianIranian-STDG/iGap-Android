@@ -2673,5 +2673,8 @@ Want to get it?</string>
     <string name="order_by">Order by</string>
     <string name="recently_used_packages">Recently used packages</string>
     <string name="suggested_packages">Suggested packages</string>
+    <string name="other_internet_packages">بسته های دیگر</string>
+    <string name="all_packages">همه بسته ها</string>
+    <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
 
 </resources>

@@ -127,7 +127,7 @@ public class RetrofitFactory {
 
     public ChargeApi getChargeRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(ApiStatic.CHARGE_URL)
+                .baseUrl("http://192.168.8.66:3004/v1.0/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
                 .build()

@@ -194,7 +194,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
     }
 
     public void onTimeCLicked(int position) {
-        if (position == R.id.spinner_size && position != 0) {
+        if (position == R.id.spinner_traffic && position != 0) {
             isDaily = true;
             typeList.setValue(daysFilter);
             getPackageListWithFilter(position - 1);

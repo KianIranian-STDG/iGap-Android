@@ -4,8 +4,17 @@
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/toolbar_height"
     android:background="?rootBackgroundColor">
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/appCompatTextView2"
@@ -13,18 +22,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/order_by"
+        android:layout_marginTop="16dp"
+        android:text="@string/buy_internet_package_title"
         android:textColor="@color/green"
+        android:textSize="@dimen/largeTextSize"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_packageTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/buy_internet_package_time_type_title"
+        android:text="@string/order_by"
         app:layout_constraintStart_toStartOf="@+id/appCompatTextView2"
         app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
 
@@ -34,24 +44,21 @@
         android:layout_height="wrap_content"
         android:text="@string/buy_internet_package_volume_type_title"
         app:layout_constraintBottom_toBottomOf="@+id/tv_packageTime"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toEndOf="@+id/tv_packageTime"
-        app:layout_constraintTop_toTopOf="@+id/tv_packageTime"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="@id/spinner_traffic"
+        app:layout_constraintTop_toTopOf="@+id/tv_packageTime" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/spinner_time"
         android:layout_width="0dp"
         android:layout_height="38dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:minHeight="@dimen/dp32"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_size"
-        app:layout_constraintStart_toStartOf="@+id/tv_packageTime"
-        app:layout_constraintTop_toBottomOf="@+id/tv_packageTime" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".0"
+        app:layout_constraintStart_toStartOf="@id/tv_packageTime"
+        app:layout_constraintTop_toBottomOf="@+id/tv_packageTime"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".425" />
 
     <View
         android:layout_width="0dp"
@@ -63,26 +70,27 @@
         app:layout_constraintTop_toTopOf="@id/spinner_time" />
 
     <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_size"
+        android:id="@+id/spinner_traffic"
         android:layout_width="0dp"
         android:layout_height="38dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:minHeight="@dimen/dp32"
-        app:layout_constraintBottom_toBottomOf="@+id/spinner_time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_packageSize"
-        app:layout_constraintTop_toTopOf="@+id/spinner_time" />
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinner_time"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".425" />
 
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_cancel_money_action"
-        app:layout_constraintBottom_toBottomOf="@id/spinner_size"
-        app:layout_constraintEnd_toEndOf="@id/spinner_size"
-        app:layout_constraintStart_toStartOf="@id/spinner_size"
-        app:layout_constraintTop_toTopOf="@id/spinner_size" />
+        app:layout_constraintBottom_toBottomOf="@id/spinner_traffic"
+        app:layout_constraintEnd_toEndOf="@id/spinner_traffic"
+        app:layout_constraintStart_toStartOf="@id/spinner_traffic"
+        app:layout_constraintTop_toTopOf="@id/spinner_traffic" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -92,7 +100,7 @@
         android:fadingEdge="vertical"
         android:fadingEdgeLength="@dimen/dp8"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/btn_next"
+        app:layout_constraintBottom_toTopOf="@+id/btn_pay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_time">
@@ -100,45 +108,22 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/btn_next"
+            app:layout_constraintBottom_toTopOf="@+id/btn_pay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner_time">
 
-
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/appCompatTextView4"
+                android:id="@+id/suggested_packages_textView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="250dp"
-                android:text="@string/recently_used_packages"
-                android:textColor="@color/green"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/appCompatTextView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/suggested_packages"
-                android:textColor="@color/green"
-                app:layout_constraintStart_toStartOf="@+id/rv_recentlyPackage"
-                app:layout_constraintTop_toBottomOf="@+id/rv_recentlyPackage" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_recentlyPackage"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/appCompatTextView4"
-                app:layout_constraintStart_toStartOf="@+id/appCompatTextView4"
-                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
+                android:text="@string/suggested_packages"
+                android:textColor="@color/green"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_proposalPackage"
@@ -148,16 +133,40 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/appCompatTextView5"
-                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView5" />
+                app:layout_constraintStart_toStartOf="@+id/suggested_packages_textView"
+                app:layout_constraintTop_toBottomOf="@+id/suggested_packages_textView" />
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/other_packages_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:text="@string/all_packages"
+                android:textColor="@color/green"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/rv_proposalPackage"
+                app:layout_constraintTop_toBottomOf="@+id/rv_proposalPackage" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_otherPackage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/other_packages_textView"
+                app:layout_constraintStart_toStartOf="@+id/other_packages_textView"
+                app:layout_constraintTop_toBottomOf="@+id/other_packages_textView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_next"
+        android:id="@+id/btn_pay"
         style="@style/iGapButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -165,8 +174,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="@string/pu_Lets_Go"
+        android:layout_marginBottom="8dp"
+        android:text="@string/pay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -181,17 +190,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/retryView"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="@dimen/dp48"
-        android:layout_height="@dimen/dp48"
-        android:onClick="@{()->viewModel.onRetryClick()}"
-        android:text="@string/retry_icon"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/loadingView"
-        app:layout_constraintEnd_toEndOf="@id/loadingView"
-        app:layout_constraintStart_toStartOf="@id/loadingView"
-        app:layout_constraintTop_toTopOf="@id/loadingView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

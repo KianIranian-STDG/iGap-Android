@@ -148,7 +148,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         editTextNumber = view.findViewById(R.id.phoneNumberInput);
         editType = view.findViewById(R.id.iv_edit);
         chooseType = view.findViewById(R.id.tv_choose);
-        enterBtn = view.findViewById(R.id.btn_next);
+        enterBtn = view.findViewById(R.id.btn_pay);
         scrollView = view.findViewById(R.id.scroll_payment);
         progressBar = view.findViewById(R.id.loadingView);
         frameHamrah = view.findViewById(R.id.view12);
