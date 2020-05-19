@@ -260,6 +260,10 @@ z
         <item name="android:textColor">?iGapPrimaryIconTextColor</item>
     </style>
 
+    <style name="WarningTextViewInternetPayment">
+        <item name="android:textColor">@color/secondary_text_light</item>
+    </style>
+
     <style name="Widget.WaveView" parent="@android:style/Widget">
         <item name="waveStrokeWidth">1dp</item>
         <item name="wavesColor">@color/black</item>
