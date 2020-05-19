@@ -16,10 +16,10 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -68,6 +68,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView2"
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".9" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/btnRemoveSearch"
+                    android:layout_width="@dimen/toolbar_icon_size"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:text="@string/md_close_button"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/phoneNumber"
+                    app:layout_constraintRight_toRightOf="@id/phoneNumber"
+                    app:layout_constraintTop_toTopOf="@id/phoneNumber" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/frame_contact"
@@ -348,9 +360,9 @@
 
                     <RadioButton
                         android:id="@+id/rbCredit"
-                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="true"
                         android:text="سیمکارت اعتباری" />
 
                     <RadioButton
@@ -381,4 +393,15 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
