@@ -2,7 +2,9 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.module.webrtc.CallService;
@@ -29,6 +32,8 @@ public class CallSelectFragment extends BaseBottomSheet {
     private long userId;
     private boolean isIncomingCall;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
+    private Intent intent;
+    private Activity activity;
 
 
     public static CallSelectFragment getInstance(long userId, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callType) {
@@ -90,16 +95,49 @@ public class CallSelectFragment extends BaseBottomSheet {
             return;
         }
 
-        Intent intent = new Intent(activity, CallService.class);
+        this.activity = activity;
+        intent = new Intent(activity, CallService.class);
         intent.putExtra(CallService.USER_ID, userId);
         intent.putExtra(CallService.IS_INCOMING, false);
         intent.putExtra(CallService.CALL_TYPE, callType.toString());
+
+        if (!checkPermissions(callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING))
+            return;
 
         try {
             activity.startService(intent);
         } catch (Throwable e) {
             e.printStackTrace();
         }
+        dismiss();
+    }
+
+    private boolean checkPermissions(boolean isVideoCall) {
+        Log.d("amini", "checkPermissions: in here");
+        PermissionHelper permissionHelper = new PermissionHelper(getActivity(), CallSelectFragment.this);
+        if (isVideoCall)
+            return permissionHelper.grantCameraAndVoicePermission();
+        else
+            return permissionHelper.grantVoicePermission();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("amini", "onRequestPermissionsResult: in permission");
+        boolean tmp = true;
+        for (int grantResult : grantResults) {
+            tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
+        }
+        if (tmp) {
+            try {
+                activity.startService(intent);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        } else {
+
+        }
+        dismiss();
     }
 
     @Nullable
@@ -120,13 +158,11 @@ public class CallSelectFragment extends BaseBottomSheet {
         super.onStart();
         voiceCall.setOnClickListener(v -> {
             startCall(getActivity(), userId, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-            dismiss();
         });
 
 
         videoCall.setOnClickListener(v -> {
             startCall(getActivity(), userId, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-            dismiss();
         });
 
 

@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -479,7 +480,7 @@ public class HelperToolbar {
         if (mContext == null || callTimerReceiver == null) {
             return;
         }
-        IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
+        IntentFilter intentFilter = new IntentFilter(CallActivity.CALL_TIMER_BROADCAST);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(callTimerReceiver, intentFilter);
     }
 
@@ -714,9 +715,10 @@ public class HelperToolbar {
         callTimerReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d("amini", "onReceive: in here.");
                 if (intent.getAction() == null || intent.getExtras() == null) return;
-                if (intent.getAction().equals(ActivityCall.CALL_TIMER_BROADCAST)) {
-                    String time = intent.getExtras().getString(ActivityCall.TIMER_TEXT, "");
+                if (intent.getAction().equals(CallActivity.CALL_TIMER_BROADCAST)) {
+                    String time = intent.getExtras().getString(CallActivity.TIMER_TEXT, "");
                     mTxtCallTimer.setText(time);
                 }
             }

@@ -35,6 +35,8 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.viewmodel.controllers.CallManager;
 
+import java.util.Set;
+
 public class CallService extends Service implements EventListener, CallManager.CallStateChange {
     private final int ID_SERVICE_NOTIFICATION = 2213;
     private final int ID_INCOMING_NOTIFICATION = 2214;
@@ -61,6 +63,9 @@ public class CallService extends Service implements EventListener, CallManager.C
     private CallManager.CallStateChange callStateChange;
 
     private String TAG = "iGapCall " + getClass().getSimpleName();
+
+    private AppRTCAudioManager appRTCAudioManager = null;
+    private AppRTCAudioManager.AudioManagerEvents audioManagerEvents;
 
     public static CallService getInstance() {
         return instance;
@@ -129,6 +134,23 @@ public class CallService extends Service implements EventListener, CallManager.C
             activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(activityIntent);
         }
+
+        // Create and audio manager that will take care of audio routing,
+        // audio modes, audio device enumeration etc.
+        appRTCAudioManager = AppRTCAudioManager.create(getApplicationContext());
+        // Store existing audio settings and change audio mode to
+        // MODE_IN_COMMUNICATION for best possible VoIP performance.
+        Log.d(TAG, "Starting the audio manager...");
+        // This method will be called each time the number of available audio
+        // devices has changed.
+        appRTCAudioManager.start(new AppRTCAudioManager.AudioManagerEvents() {
+            @Override
+            public void onAudioDeviceChanged(AppRTCAudioManager.AudioDevice selectedAudioDevice, Set<AppRTCAudioManager.AudioDevice> availableAudioDevices) {
+                if (audioManagerEvents != null)
+                    audioManagerEvents.onAudioDeviceChanged(selectedAudioDevice, availableAudioDevices);
+                CallManager.getInstance().setActiveAudioDevice(selectedAudioDevice);
+            }
+        });
 
         return START_STICKY;
     }
@@ -280,6 +302,11 @@ public class CallService extends Service implements EventListener, CallManager.C
         super.onDestroy();
         Log.i(TAG, "onDestroy: ");
 
+        if (appRTCAudioManager != null) {
+            appRTCAudioManager.stop();
+            appRTCAudioManager = null;
+        }
+
         stopForeground(true);
 
         callStateChange = null;
@@ -330,5 +357,25 @@ public class CallService extends Service implements EventListener, CallManager.C
     public void onError(int messageID, int major, int minor) {
         if (callStateChange != null)
             callStateChange.onError(messageID, major, minor);
+    }
+
+    public void setAudioDevice(AppRTCAudioManager.AudioDevice selectedAudioDevice) {
+        appRTCAudioManager.setDefaultAudioDevice(selectedAudioDevice);
+    }
+
+    public AppRTCAudioManager.AudioDevice getActiveAudioDevice() {
+        return appRTCAudioManager.getSelectedAudioDevice();
+    }
+
+    public void toggleSpeaker() {
+        appRTCAudioManager.toggleSpeakerPhone();
+    }
+
+    public boolean isSpeakerEnable() {
+        return appRTCAudioManager.isSpeakerOn();
+    }
+
+    public void setAudioManagerEvents(AppRTCAudioManager.AudioManagerEvents audioManagerEvents) {
+        this.audioManagerEvents = audioManagerEvents;
     }
 }

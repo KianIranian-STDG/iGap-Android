@@ -1,6 +1,7 @@
 package net.iGap.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
@@ -72,7 +74,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private SurfaceViewRenderer surfaceRemote;
     private SurfaceViewRenderer surfaceLocal;
 
-    private AppRTCAudioManager audioManager = null;
+
 
     private CallerInfo caller;
     private boolean isIncoming;
@@ -100,16 +102,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         callType = CallManager.getInstance().getCallType();
         isIncoming = CallManager.getInstance().isIncoming();
-        // Create and audio manager that will take care of audio routing,
-        // audio modes, audio device enumeration etc.
-        audioManager = AppRTCAudioManager.create(getApplicationContext());
-        // Store existing audio settings and change audio mode to
-        // MODE_IN_COMMUNICATION for best possible VoIP performance.
-
-        Log.d(TAG, "Starting the audio manager...");
-        // This method will be called each time the number of available audio
-        // devices has changed.
-        audioManager.start(this::onAudioManagerDevicesChanged);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
@@ -123,19 +115,37 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
-        checkPermissions();
+        // here we check for any audio changes.
+        if (CallService.getInstance() != null)
+            CallService.getInstance().setAudioManagerEvents(new AppRTCAudioManager.AudioManagerEvents() {
+                @Override
+                public void onAudioDeviceChanged(AppRTCAudioManager.AudioDevice selectedAudioDevice, Set<AppRTCAudioManager.AudioDevice> availableAudioDevices) {
+                    checkForBluetoothAvailability(availableAudioDevices);
+                }
+            });
     }
 
-    private void checkPermissions() {
+    private boolean checkPermissions() {
         PermissionHelper permissionHelper = new PermissionHelper(this);
-        if (isVideoCall()) {
-            if (permissionHelper.grantCameraAndVoicePermission()) {
-                init();
-            }
+        if (isVideoCall())
+            return permissionHelper.grantCameraAndVoicePermission();
+        else
+            return permissionHelper.grantVoicePermission();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean tmp = true;
+        for (int grantResult : grantResults) {
+            tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
+        }
+        if (tmp) {
+            if (isIncoming)
+                answerCall();
         } else {
-            if (permissionHelper.grantVoicePermission()) {
-                init();
-            }
+            // should be managed with call manager
+            CallManager.getInstance().leaveCall();
+            finish();
         }
     }
 
@@ -414,14 +424,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         }
     }
 
-    // This method is called when the audio manager reports audio device change,
-    // e.g. from wired headset to speakerphone.
-    private void onAudioManagerDevicesChanged(final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
-        Log.d(TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", " + "selected: " + device);
-        checkForBluetoothAvailability(availableDevices);
-        CallManager.getInstance().setActiveAudioDevice(device);
-    }
-
     private void checkForBluetoothAvailability(Set<AppRTCAudioManager.AudioDevice> availableDevices) {
         if (bluetoothView != null)
             bluetoothView.setEnabled(availableDevices.contains(AppRTCAudioManager.AudioDevice.BLUETOOTH));
@@ -439,16 +441,22 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private void bluetoothClick() {
         Log.d(TAG, "bluetoothClick: in here" + CallManager.getInstance().getActiveAudioDevice());
         if (CallManager.getInstance().getActiveAudioDevice() == AppRTCAudioManager.AudioDevice.BLUETOOTH) {
-            audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
+            if (CallService.getInstance() != null)
+                CallService.getInstance().setAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
             bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
         } else {
-            audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.BLUETOOTH);
+            if (CallService.getInstance() != null)
+                CallService.getInstance().setAudioDevice(AppRTCAudioManager.AudioDevice.BLUETOOTH);
             bluetoothView.setViewColor(getResources().getColor(R.color.white));
         }
-        CallManager.getInstance().setActiveAudioDevice(audioManager.getSelectedAudioDevice());
+        if (CallService.getInstance() != null)
+            CallManager.getInstance().setActiveAudioDevice(CallService.getInstance().getActiveAudioDevice());
     }
 
     private void answerCall() {
+        // for video and audio we must check for permissions
+        if (!checkPermissions())
+            return;
         answerRippleView.setEnabled(false);
         answerRippleView.setVisibility(View.GONE);
         declineRippleView.setVisibility(View.GONE);
@@ -464,7 +472,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void toggleSpeaker() {
-        audioManager.toggleSpeakerPhone();
+        if (CallService.getInstance() == null)
+            return;
+        CallService.getInstance().toggleSpeaker();
         speakerView.setViewColor(isSpeakerEnable() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
     }
 
@@ -494,7 +504,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private boolean isSpeakerEnable() {
-        return audioManager.isSpeakerOn();
+        if (CallService.getInstance() == null)
+            return false;
+        return CallService.getInstance().isSpeakerEnable();
     }
 
     private boolean isVideoCall() {
@@ -582,11 +594,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if (audioManager != null) {
-            audioManager.stop();
-            audioManager = null;
-        }
 
         if (isVideoCall()) {
             if (surfaceRemote != null) {
