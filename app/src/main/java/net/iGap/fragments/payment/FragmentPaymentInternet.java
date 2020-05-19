@@ -32,7 +32,6 @@ import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
 import net.iGap.observers.interfaces.ToolbarListener;
 
-
 import io.realm.RealmResults;
 
 import static net.iGap.helper.HelperString.isNumeric;
