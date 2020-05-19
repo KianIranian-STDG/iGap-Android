@@ -1,80 +1,79 @@
 
 package net.iGap.model.paymentPackage;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class FavoriteNumber {
 
     @SerializedName("amount")
-    private Long amount;
+    private Long mAmount;
     @SerializedName("charge_type")
-    private String chargeType;
+    private String mChargeType;
     @SerializedName("charge_type_description")
-    private String chargeTypeDescription;
-    @Expose
-    private String operator;
+    private String mChargeTypeDescription;
+    @SerializedName("operator")
+    private String mOperator;
     @SerializedName("operator_title")
-    private String operatorTitle;
+    private String mOperatorTitle;
     @SerializedName("phone_number")
-    private String phoneNumber;
-    @Expose
-    private String type;
+    private String mPhoneNumber;
+    @SerializedName("type")
+    private String mType;
 
     public Long getAmount() {
-        return amount;
+        return mAmount;
     }
 
     public void setAmount(Long amount) {
-        this.amount = amount;
+        mAmount = amount;
     }
 
     public String getChargeType() {
-        return chargeType;
+        return mChargeType;
     }
 
     public void setChargeType(String chargeType) {
-        this.chargeType = chargeType;
+        mChargeType = chargeType;
     }
 
     public String getChargeTypeDescription() {
-        return chargeTypeDescription;
+        return mChargeTypeDescription;
     }
 
     public void setChargeTypeDescription(String chargeTypeDescription) {
-        this.chargeTypeDescription = chargeTypeDescription;
+        mChargeTypeDescription = chargeTypeDescription;
     }
 
     public String getOperator() {
-        return operator;
+        return mOperator;
     }
 
     public void setOperator(String operator) {
-        this.operator = operator;
+        mOperator = operator;
     }
 
     public String getOperatorTitle() {
-        return operatorTitle;
+        return mOperatorTitle;
     }
 
     public void setOperatorTitle(String operatorTitle) {
-        this.operatorTitle = operatorTitle;
+        mOperatorTitle = operatorTitle;
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return mPhoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        mPhoneNumber = phoneNumber;
     }
 
     public String getType() {
-        return type;
+        return mType;
     }
 
     public void setType(String type) {
-        this.type = type;
+        mType = type;
     }
 
 }

@@ -32,8 +32,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close1"
-        app:layout_constraintStart_toStartOf="@+id/iv_close1"
         app:layout_constraintEnd_toEndOf="@+id/txt_choose1"
+        app:layout_constraintStart_toStartOf="@+id/iv_close1"
         app:layout_constraintTop_toTopOf="@+id/iv_close1" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -45,9 +45,11 @@
         android:layout_marginEnd="@dimen/dp16"
         android:layout_marginBottom="@dimen/dp32"
         android:background="@drawable/shape_payment_dialog"
+        android:padding="@dimen/dp2"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btn_dialog1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="@dimen/dp300"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_choose1" />
 

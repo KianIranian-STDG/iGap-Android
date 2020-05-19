@@ -20,7 +20,7 @@ import java.util.List;
 public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.ChargeTypeViewHolder> {
 
     private List<ChargeType> chargeTypes;
-    private int selectedPosition = -1;
+    private int selectedPosition = 0;
 
     public AdapterChargeType(List<ChargeType> chargeTypes) {
         this.chargeTypes = chargeTypes;

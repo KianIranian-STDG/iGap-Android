@@ -15,7 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <ScrollView
         android:id="@+id/scroll_payment"
         android:layout_width="match_parent"
@@ -96,6 +95,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_contact"
+                    style="?iGapSubtitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -136,6 +136,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_history"
+                    style="?iGapSubtitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -394,10 +395,10 @@
                 android:layout_marginRight="@dimen/dp8"
                 android:background="@drawable/shape_payment_charge"
                 android:backgroundTint="@color/orange"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="@dimen/dp2"
-                android:gravity="center_horizontal"
-                android:visibility="gone"
+                android:padding="@dimen/dp4"
+                android:visibility="visible"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view12"
@@ -408,21 +409,22 @@
                     style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginEnd="@dimen/dp2"
+                    android:layout_marginRight="@dimen/dp8"
                     android:text="@string/error_icon2"
                     android:textColor="@color/white" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView6"
+                    style="?iGapSubtitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/dp2"
+                    android:layout_marginLeft="@dimen/dp2"
                     android:maxLines="1"
-                    android:layout_marginStart="@dimen/dp8"
                     android:text="در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:layout_marginLeft="@dimen/dp8" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -437,4 +439,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/payment_toolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

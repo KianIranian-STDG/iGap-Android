@@ -40,15 +40,18 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
     }
 
     public class ContactNumberViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView;
+        private TextView amount;
+        private TextView phoneNumber;
 
         public ContactNumberViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.number_contact);
+            phoneNumber = itemView.findViewById(R.id.amount_contact);
+            amount = itemView.findViewById(R.id.number_contact);
         }
 
         public void bindNUmber(FavoriteNumber historyNumber, int position) {
-            textView.setText(historyNumber.getPhoneNumber());
+            phoneNumber.setText(historyNumber.getPhoneNumber());
+            amount.setText(historyNumber.getAmount().toString() + itemView.getContext().getString(R.string.rial));
             itemView.setSelected(selectedPosition == position);
             itemView.setOnClickListener(v -> {
                 int tmp = selectedPosition;

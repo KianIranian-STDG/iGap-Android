@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.JsonObject;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -39,12 +41,14 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.model.paymentPackage.ChargeFavorite;
 import net.iGap.model.paymentPackage.FavoriteNumber;
+import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.realm.RealmRegisteredInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -55,6 +59,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Field;
+import retrofit2.http.Path;
 
 public class FragmentPaymentChargeNewUi extends BaseFragment {
     private LinearLayout toolbar;
@@ -83,9 +89,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private MaterialButton btnChargeType;
     private MaterialButton enterBtn;
     private AppCompatEditText editTextNumber;
-    private int selectedIndex;
-    private int selectedChargeTypeIndex;
-    private int selectedPriceIndex;
     private ContactNumber contactNumber;
     private FavoriteNumber historyNumber;
     private Amount amount;
@@ -96,10 +99,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private View closeView, closeView2, closeView3, closeView4;
     private List<Amount> amountList = new ArrayList<>();
     private List<ChargeType> chargeTypeList = new ArrayList<>();
-    private List<FavoriteNumber> historyNumberList = new ArrayList<>();
     private ChargeApi chargeApi;
     private OperatorType.Type operatorType;
-
+    private RealmRegisteredInfo userInfo;
+    private int selectedIndex;
+    private int selectedChargeTypeIndex;
+    private int selectedPriceIndex;
     public static final String MCI = "mci";
     public static final String MTN = "mtn";
     public static final String RIGHTEL = "rightel";
@@ -145,8 +150,19 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
         linearWarning = view.findViewById(R.id.llWarning);
-
         chargeApi = new RetrofitFactory().getChargeRetrofit();
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
+            editTextNumber.setText(userInfo.getPhoneNumber());
+            String number = userInfo.getPhoneNumber();
+            editTextNumber.setText(number
+                    .replace("98", "0")
+                    .replace("+98", "0")
+                    .replace("0098", "0")
+                    .replace(" ", "")
+                    .replace("-", ""));
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.gray));
@@ -185,7 +201,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             saveBtn1 = view.findViewById(R.id.btn_dialog1);
             closeView = view.findViewById(R.id.closeView);
 
-
             saveBtn1.setOnClickListener(v15 -> {
                 if (adapterContact.getSelectedPosition() == -1) {
                     return;
@@ -198,7 +213,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             dialog.show();
 
             closeView.setOnClickListener(v12 -> dialog.dismiss());
-
             rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             rvContact.setAdapter(adapterContact);
         });
@@ -206,45 +220,53 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
-            chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<ChargeFavorite>() {
+            progressBar.setVisibility(View.VISIBLE);
+            chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
-                public void onResponse(Call<ChargeFavorite> call, Response<ChargeFavorite> response) {
+                public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
                     if (response.isSuccessful()) {
-                        historyNumberList = response.body().getData();
+                        progressBar.setVisibility(View.GONE);
+                        adapterHistory = new AdapterHistoryNumber(response.body().getData());
+                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                        View view = dialog.getCustomView();
+                        rvHistory = view.findViewById(R.id.rv_history);
+                        saveBtn2 = view.findViewById(R.id.btn_dialog2);
+                        closeView2 = view.findViewById(R.id.iv_close2);
+                        closeView2.setOnClickListener(v12 -> dialog.dismiss());
+
+                        saveBtn2.setOnClickListener(v13 -> {
+                            if (adapterHistory.getSelectedPosition() == -1) {
+                                return;
+                            }
+                            selectedIndex = adapterHistory.getSelectedPosition();
+                            historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
+                            editTextNumber.setText(historyNumber.getPhoneNumber());
+                            dialog.dismiss();
+                        });
+
+                        rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                        rvHistory.setAdapter(adapterHistory);
+                        dialog.show();
+
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ChargeFavorite> call, Throwable t) {
+                public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), t.toString(), Toast.LENGTH_LONG).show();
+                    HelperError.showSnackMessage("شماره ای از قبل موجود نیست", false);
 
                 }
             });
-            adapterHistory = new AdapterHistoryNumber(historyNumberList);
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
-            View view = dialog.getCustomView();
-            rvHistory = view.findViewById(R.id.rv_history);
-            saveBtn2 = view.findViewById(R.id.btn_dialog2);
-            closeView2 = view.findViewById(R.id.close_view);
 
-            closeView2.setOnClickListener(v12 -> dialog.dismiss());
 
-            saveBtn2.setOnClickListener(v13 -> {
-                if (adapterHistory.getSelectedPosition() == -1) {
-                    return;
-                }
-                selectedIndex = adapterHistory.getSelectedPosition();
-                historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                editTextNumber.setText(historyNumber.getPhoneNumber());
-                dialog.dismiss();
-            });
-
-            rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            rvHistory.setAdapter(adapterHistory);
-            dialog.show();
         });
+
     }
 
     private void onPhoneNumberInputClick() {
+        onPhoneNumberInput();
         editTextNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -257,39 +279,38 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (editTextNumber.getText().length() == 4 || editTextNumber.getText().length() == 11) {
-                    String number = editTextNumber.getText().toString().substring(0, 4);
-                    OperatorType.Type opt = new OperatorType().getOperation(number);
-                    if (opt != null) {
-                        setAdapterValue(opt);
-                        switch (opt) {
-                            case HAMRAH_AVAL:
-                                setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
-                                setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
-                                break;
-                            case IRANCELL:
-                                setAdapterValue(OperatorType.Type.IRANCELL);
-                                setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
-                                break;
-                            case RITEL:
-                                setAdapterValue(OperatorType.Type.RITEL);
-                                setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
-                                break;
-                        }
-
-                    }
-
-                }
-                if (editTextNumber.getText().length() == 11) {
-                    scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
-                    hideKeyboard();
-                    linearWarning.setVisibility(View.VISIBLE);
-                }
-
-
+                onPhoneNumberInput();
             }
         });
+    }
 
+    private void onPhoneNumberInput() {
+        if (editTextNumber.getText().length() == 4 || editTextNumber.getText().length() == 11) {
+            String number = editTextNumber.getText().toString().substring(0, 4);
+            OperatorType.Type opt = new OperatorType().getOperation(number);
+            if (opt != null) {
+                setAdapterValue(opt);
+                switch (opt) {
+                    case HAMRAH_AVAL:
+                        setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                        setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
+                        break;
+                    case IRANCELL:
+                        setAdapterValue(OperatorType.Type.IRANCELL);
+                        setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
+                        break;
+                    case RITEL:
+                        setAdapterValue(OperatorType.Type.RITEL);
+                        setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
+                        break;
+                }
+            }
+        }
+        if (editTextNumber.getText().length() == 11) {
+            scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+            hideKeyboard();
+            linearWarning.setVisibility(View.VISIBLE);
+        }
     }
 
     private void onItemOperatorSelect() {
@@ -478,7 +499,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         }
     }
 
-
     private void onSaveBtnClicked() {
         enterBtn.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
@@ -566,6 +586,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 ShowError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
             }
         });
+
     }
 
     public static boolean isNumeric(String strNum) {
@@ -582,6 +603,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("operator", operator);
+        jsonObject.addProperty("phone_number", phoneNumber);
+        jsonObject.addProperty("charge_type", chargeType.toString());
+        jsonObject.addProperty("amount", amount.getTextAmount());
+        chargeApi.setFavoriteChargeNumber(jsonObject);
+
         chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
             @Override
             public void onResponse(Call<MciPurchaseResponse> call, Response<MciPurchaseResponse> response) {
@@ -591,7 +619,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     if (getActivity() != null && token != null) {
                         new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
                             if (result.isSuccess()) {
-                                chargeApi.setFavoriteChargeNumber(operator, phoneNumber, chargeType != null ? chargeType.name() : null, String.valueOf(price));
                             }
                         });
                     }
