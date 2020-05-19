@@ -220,6 +220,7 @@
             android:name=".activities.CallActivity"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:excludeFromRecents="true"
+            android:screenOrientation="locked"
             android:launchMode="singleInstance" />
         <activity
             android:name=".activities.SplashActivity"
