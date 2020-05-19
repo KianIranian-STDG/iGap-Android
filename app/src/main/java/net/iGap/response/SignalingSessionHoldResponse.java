@@ -16,30 +16,15 @@ import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingSessionHoldResponse extends MessageHandler {
 
-    public int actionId;
-    public Object message;
-    public String identity;
-
     public SignalingSessionHoldResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
     public void handler() {
         super.handler();
-
         ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder = (ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder) message;
         CallManager.getInstance().onHold(builder);
-
-    }
-
-    @Override
-    public void timeOut() {
-        super.timeOut();
     }
 
     @Override

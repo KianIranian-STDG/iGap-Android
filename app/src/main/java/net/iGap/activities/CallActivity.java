@@ -21,6 +21,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.PermissionHelper;
@@ -86,9 +87,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (CallManager.getInstance() == null)
-            finish();
-
         if (CallService.getInstance() == null)
             finish();
 
@@ -112,24 +110,17 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         init();
         setContentView(createRootView());
 
+        onCallStateChanged(CallManager.getInstance().getCurrentSate()); // for reopen activity
+
         CallService.getInstance().setCallStateChange(this);
         CallManager.getInstance().setTimeDelegate(this);
 
         checkPermissions();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            Log.d(TAG, "onResume: start capture");
-            WebRTC.getInstance().startVideoCapture();
-        }
-    }
-
     private void checkPermissions() {
         PermissionHelper permissionHelper = new PermissionHelper(this);
-        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+        if (isVideoCall()) {
             if (permissionHelper.grantCameraAndVoicePermission()) {
                 init();
             }
@@ -151,7 +142,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         rootView.setFitsSystemWindows(true);
         rootView.setClipToPadding(false);
 
-        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+        if (isVideoCall()) {
             surfaceRemote = new SurfaceViewRenderer(this);
             surfaceRemote.setVisibility(View.GONE);
             surfaceRemote.setOnClickListener(v -> hideIcons());
@@ -161,13 +152,25 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             surfaceLocal.setVisibility(View.VISIBLE);
             rootView.addView(surfaceLocal, LayoutCreator.createFrame(100, 140, Gravity.TOP, 8, 8, 8, 8));
 
-            surfaceLocal.init(WebRTC.getInstance().getEglBaseContext(), null);
+            try {
+                surfaceLocal.init(WebRTC.getInstance().getEglBaseContext(), null);
+            } catch (Exception e) {// for android version 4 on huawei device
+                e.printStackTrace();
+                HelperLog.setErrorLog(e);
+                CallManager.getInstance().endCall();
+            }
             surfaceLocal.setEnableHardwareScaler(true);
             surfaceLocal.setMirror(true);
             surfaceLocal.setZOrderMediaOverlay(true);
             surfaceLocal.setZOrderOnTop(true);
 
-            surfaceRemote.init(WebRTC.getInstance().getEglBaseContext(), null);
+            try {
+                surfaceRemote.init(WebRTC.getInstance().getEglBaseContext(), null);
+            } catch (Exception e) {// for android version 4 on huawei device
+                e.printStackTrace();
+                HelperLog.setErrorLog(e);
+                CallManager.getInstance().endCall();
+            }
             surfaceRemote.setEnableHardwareScaler(true);
             surfaceRemote.setMirror(false);
 
@@ -207,7 +210,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         rootView.addView(userImageView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
         callTypeTextView = new TextView(this);
-        callTypeTextView.setText(callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING ? R.string.video_calls : R.string.voice_calls);
+        callTypeTextView.setText(isVideoCall() ? R.string.video_calls : R.string.voice_calls);
         callTypeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         callTypeTextView.setTextColor(getResources().getColor(R.color.white));
         callTypeTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font));
@@ -291,7 +294,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         row1.setOrientation(LinearLayout.HORIZONTAL);
         buttonsGridView.addView(row1, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 0));
 
-        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+        if (isVideoCall()) {
             cameraView = new TextImageView(this);
             cameraView.setText(R.string.camera);
             cameraView.setTextColor(getResources().getColor(R.color.white));
@@ -303,7 +306,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         holdView = new TextImageView(this);
         holdView.setText("Hold");
         holdView.setViewColor(CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
-        holdView.setOnClickListener(v -> toggleCamera());
+        holdView.setOnClickListener(v -> holdCall());
         holdView.setImageResource(R.drawable.ic_call_hold);
         row1.addView(holdView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
@@ -317,7 +320,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         LinearLayout row2 = new LinearLayout(this);
         row2.setOrientation(LinearLayout.HORIZONTAL);
-        buttonsGridView.addView(row2, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
+        buttonsGridView.addView(row2, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 0));
 
         micView = new TextImageView(this);
         micView.setImageResource(R.drawable.ic_call_mic);
@@ -342,12 +345,19 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         declineImageView = new AppCompatImageView(this);
         declineImageView.setImageResource(R.drawable.ic_call_decline);
-        declineImageView.setOnClickListener(v -> endCall());
+        declineImageView.setOnClickListener(v -> {
+            declineImageView.setEnabled(false);
+            endCall();
+        });
         buttonsGridView.addView(declineImageView, LayoutCreator.createLinear(64, 64, Gravity.CENTER, 0, 48, 0, 0));
 
         rootView.addView(buttonsGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 32, 0, 32, 62));
 
         return rootView;
+    }
+
+    private void holdCall() {
+        CallManager.getInstance().holdCall(!CallManager.getInstance().isCallInHold());
     }
 
     private void goToChat() {
@@ -379,11 +389,19 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void hideIcons() {
-        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+        if (isVideoCall()) {
             if (buttonsGridView.getVisibility() == View.VISIBLE) {
                 buttonsGridView.setVisibility(View.GONE);
+                nameTextView.setVisibility(View.GONE);
+                callTypeTextView.setVisibility(View.GONE);
+                statusTextView.setVisibility(View.GONE);
+                durationTextView.setVisibility(View.GONE);
             } else {
                 buttonsGridView.setVisibility(View.VISIBLE);
+                nameTextView.setVisibility(View.VISIBLE);
+                callTypeTextView.setVisibility(View.VISIBLE);
+                statusTextView.setVisibility(View.VISIBLE);
+                durationTextView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -391,8 +409,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     // This method is called when the audio manager reports audio device change,
     // e.g. from wired headset to speakerphone.
     private void onAudioManagerDevicesChanged(final AppRTCAudioManager.AudioDevice device, final Set<AppRTCAudioManager.AudioDevice> availableDevices) {
-        Log.d(TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", "
-                + "selected: " + device);
+        Log.d(TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", " + "selected: " + device);
         checkForBluetoothAvailability(availableDevices);
         CallManager.getInstance().setActiveAudioDevice(device);
     }
@@ -407,6 +424,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void declineCall() {
+        declineImageView.setEnabled(false);
         CallManager.getInstance().endCall();
     }
 
@@ -423,6 +441,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void answerCall() {
+        answerRippleView.setEnabled(false);
         answerRippleView.setVisibility(View.GONE);
         declineRippleView.setVisibility(View.GONE);
         quickDeclineView.setVisibility(View.GONE);
@@ -441,73 +460,108 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         speakerView.setViewColor(isSpeakerEnable() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
     }
 
+    private void notAnswered() {
+        buttonsGridView.setVisibility(View.GONE);
+        durationTextView.setVisibility(View.GONE);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isVideoCall()) {
+            Log.d(TAG, "onResume: start capture");
+            WebRTC.getInstance().startVideoCapture();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isVideoCall()) {
+            Log.d(TAG, "onPause: pause capture");
+            WebRTC.getInstance().pauseVideoCapture();
+        }
+    }
+
     private boolean isSpeakerEnable() {
         return audioManager.isSpeakerOn();
+    }
+
+    private boolean isVideoCall() {
+        return callType != null && callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
     }
 
     @Override
     public void onCallStateChanged(CallState state) {
         Log.i(TAG, "onCallStateChanged: " + state);
 
-        if (state != CallState.RINGING) {
-            if (answerRippleView != null) {
-                answerRippleView.setVisibility(View.GONE);
-                declineRippleView.setVisibility(View.GONE);
-                quickDeclineView.setVisibility(View.GONE);
-                declineImageView.setVisibility(View.VISIBLE);
-                buttonsGridView.setVisibility(View.VISIBLE);
+        if (isFinishing())
+            return;
+
+        G.runOnUiThread(() -> {
+            if (state != CallState.RINGING) {
+                if (answerRippleView != null) {
+                    answerRippleView.setVisibility(View.GONE);
+                    declineRippleView.setVisibility(View.GONE);
+                    quickDeclineView.setVisibility(View.GONE);
+                    declineImageView.setVisibility(View.VISIBLE);
+                    buttonsGridView.setVisibility(View.VISIBLE);
+                }
             }
-        }
 
-        if (state == CallState.BUSY) {
-            statusTextView.setText("Busy");
-        } else if (state == CallState.FAILD) {
-            finish();
-        } else if (state == CallState.REJECT) {
-            finish();
-        } else if (state == CallState.ON_HOLD) {
+            if (state == CallState.BUSY) {
+                statusTextView.setText("Busy");
+            } else if (state == CallState.FAILD) {
+                finish();
+            } else if (state == CallState.REJECT) {
+                finish();
+            } else if (state == CallState.ON_HOLD) {
+                holdView.setViewColor(CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+            } else if (state == CallState.CONNECTED) {
+                statusTextView.setText("Connected");
 
-        } else if (state == CallState.CONNECTED) {
-            statusTextView.setText("Connected");
+                if (isVideoCall()) {
+                    surfaceRemote.setVisibility(View.VISIBLE);
+                    surfaceLocal.setVisibility(View.VISIBLE);
+                    userImageView.setVisibility(View.GONE);
+                }
+            } else if (state == CallState.RINGING) {
+                statusTextView.setText("Ringing");
+            } else if (state == CallState.TOO_LONG) {
+                finish();
+            } else if (state == CallState.SIGNALING) {
+                statusTextView.setText("Signaling");
+            } else if (state == CallState.CONNECTING) {
+                statusTextView.setText("Connecting");
+            } else if (state == CallState.LEAVE_CALL) {
+                finish();
+            } else if (state == CallState.UNAVAILABLE) {
+                finish();
+            } else if (state == CallState.DISCONNECTED) {
+                finish();
+            } else if (state == CallState.NOT_ANSWERED) {
+                statusTextView.setText("Not Answered");
+                notAnswered();
+            } else if (state == CallState.DISCONNECTING) {
+                statusTextView.setText("Disconnecting");
+            } else if (state == CallState.INCAMING_CALL) {
 
-            if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-                surfaceRemote.setVisibility(View.VISIBLE);
-                surfaceLocal.setVisibility(View.VISIBLE);
-                userImageView.setVisibility(View.GONE);
+            } else if (state == CallState.POOR_CONNECTION) {
+                statusTextView.setText("Poor connection");
             }
-        } else if (state == CallState.RINGING) {
-            statusTextView.setText("Ringing");
-        } else if (state == CallState.TOO_LONG) {
-            finish();
-        } else if (state == CallState.SIGNALING) {
-            statusTextView.setText("signaling");
-        } else if (state == CallState.CONNECTING) {
-            statusTextView.setText("Connecting");
-        } else if (state == CallState.LEAVE_CALL) {
-            finish();
-        } else if (state == CallState.UNAVAILABLE) {
-            finish();
-        } else if (state == CallState.DISCONNECTED) {
-            finish();
-        } else if (state == CallState.NOT_ANSWERED) {
-            statusTextView.setText("Not Answered");
-            finish();
-        } else if (state == CallState.DISCONNECTING) {
-            statusTextView.setText("Disconnecting");
-        } else if (state == CallState.INCAMING_CALL) {
-
-        } else if (state == CallState.POOR_CONNECTION) {
-            statusTextView.setText("Poor connection");
-        }
+        });
     }
 
     @Override
     public void onError(int messageID, int major, int minor) {
-        Log.i(TAG, "onError: " + major + " " + minor);
+        Log.e(TAG, "onError: " + major + " " + minor + " " + getResources().getString(messageID));
     }
 
     @Override
     public void onTimeChange(long time) {
+        Log.i(TAG, "on Time Change: " + AndroidUtils.formatLongDuration((int) (time / 1000)));
         durationTextView.setText(AndroidUtils.formatLongDuration((int) (time / 1000)));
     }
 
@@ -515,19 +569,20 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     protected void onDestroy() {
         super.onDestroy();
 
-        CallService.getInstance().setCallStateChange(null);
-        CallManager.getInstance().setTimeDelegate(null);
-
         if (audioManager != null) {
             audioManager.stop();
             audioManager = null;
         }
 
-        if (callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            if (surfaceRemote != null)
+        if (isVideoCall()) {
+            if (surfaceRemote != null) {
                 surfaceRemote.release();
-            if (surfaceLocal != null)
+                surfaceRemote = null;
+            }
+            if (surfaceLocal != null) {
                 surfaceLocal.release();
+                surfaceLocal = null;
+            }
         }
     }
 }

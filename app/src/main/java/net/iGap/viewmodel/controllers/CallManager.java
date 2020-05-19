@@ -121,6 +121,7 @@ public class CallManager implements EventListener {
         // set data for future use.
         callPeerId = response.getCallerUserId();
         callType = response.getType();
+        String callerSdp = response.getCallerSdp();
 
         setupCallerInfo(callPeerId);
 
@@ -133,14 +134,19 @@ public class CallManager implements EventListener {
         new RequestSignalingRinging().signalingRinging();
 
         // generate SDP
-        G.handler.post(() -> WebRTC.getInstance().setRemoteDesc(new SessionDescription(OFFER, response.getCallerSdp())));
+        try {
+            WebRTC.getInstance().setRemoteDesc(new SessionDescription(OFFER, callerSdp));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Toast.makeText(G.context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
      * this function is called when we are making a call to others
      */
     public void makeOffer(long called_userId, String callerSdp) {
-        if (CallService.getInstance() != null) {
+        if (CallService.getInstance() != null && callType != null && called_userId != 0) {
             Log.d(TAG, "makeOffer: " + called_userId + " " + callerSdp + " " + callType);
             isRinging = true;
             isCallActive = true;
@@ -297,7 +303,7 @@ public class CallManager implements EventListener {
     }
 
     public void leaveCall() {
-        Log.d(TAG, "leaveCall: ");
+        Log.d(TAG, "leave Call");
         new RequestSignalingLeave().signalingLeave();
         // call is declined in ringing mode
         isRinging = false;
@@ -307,6 +313,8 @@ public class CallManager implements EventListener {
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
         Log.d(TAG, "onHold: " + builder.getHold());
+        isCallHold = builder.getHold();
+
         if (builder.getHold()) {
             WebRTC.getInstance().toggleSound(false);
             changeState(CallState.ON_HOLD);
@@ -318,7 +326,7 @@ public class CallManager implements EventListener {
     }
 
     public void holdCall(boolean state) {
-        Log.d(TAG, "holdCall: ");
+        Log.d(TAG, "holdCall: " + state);
         new RequestSignalingSessionHold().signalingSessionHold(state);
     }
 
@@ -507,7 +515,6 @@ public class CallManager implements EventListener {
     }
 
     public CallerInfo getCurrentCallerInfo() {
-        Log.d(TAG, "getCurrentCallerInfo: " + currentCallerInfo.toString());
         return currentCallerInfo;
     }
 

@@ -540,7 +540,7 @@ public class WebRTC {
         peerConnectionInstance().setRemoteDescription(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-
+                Log.i(TAG, "onCreateSuccess: ");
             }
 
             @Override
@@ -550,12 +550,12 @@ public class WebRTC {
 
             @Override
             public void onCreateFailure(String s) {
-
+                Log.i(TAG, "onCreateFailure: ");
             }
 
             @Override
             public void onSetFailure(String s) {
-
+                Log.i(TAG, "onSetFailure: ");
             }
         }, sdp);
     }
