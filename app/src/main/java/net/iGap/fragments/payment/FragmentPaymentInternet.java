@@ -37,8 +37,6 @@ import net.iGap.realm.RealmRecentChargeNumber;
 import net.iGap.realm.RealmRecentChargeNumberFields;
 
 
-import io.realm.RealmResults;
-
 import static net.iGap.helper.HelperString.isNumeric;
 import static net.iGap.model.OperatorType.Type.HAMRAH_AVAL;
 import static net.iGap.model.OperatorType.Type.IRANCELL;
@@ -263,37 +261,6 @@ public class FragmentPaymentInternet extends BaseFragment {
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
 
-            RealmResults<RealmRecentChargeNumber> numbers = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRecentChargeNumber.class).equalTo(RealmRecentChargeNumberFields.TYPE, 1).findAll();
-            });
-
-            if (numbers == null || numbers.size() == 0) {
-                ShowError(getContext().getResources().getString(R.string.list_empty));
-            } else {
-                adapterHistory = new AdapterHistoryNumber(numbers);
-
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
-                View view = dialog.getCustomView();
-                rvHistory = view.findViewById(R.id.rv_history);
-                saveBtn2 = view.findViewById(R.id.btn_dialog2);
-                closeView2 = view.findViewById(R.id.close_view);
-
-                closeView2.setOnClickListener(v12 -> dialog.dismiss());
-
-                saveBtn2.setOnClickListener(v13 -> {
-                    if (adapterHistory.getSelectedPosition() == -1) {
-                        return;
-                    }
-                    selectedIndex = adapterHistory.getSelectedPosition();
-                    historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                    editTextNumber.setText(historyNumber.getHistoryNumber());
-                    dialog.dismiss();
-                });
-
-                rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                rvHistory.setAdapter(adapterHistory);
-                dialog.show();
-            }
         });
     }
 
