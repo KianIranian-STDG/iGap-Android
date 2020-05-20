@@ -28,7 +28,6 @@ import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.webrtc.CallObserver;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
@@ -89,7 +88,6 @@ public final class StartupActions {
         new Thread(this::configDownloadManager).start();
         new Thread(this::manageTime).start();
         new Thread(StartupActions::getiGapAccountInstance).start();
-        new Thread(CallObserver::new).start();
 
         if (G.ISRealmOK/*realmConfiguration()*/) {
             DbManager.getInstance().doRealmTask(realm -> {

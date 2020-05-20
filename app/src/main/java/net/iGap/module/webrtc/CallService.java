@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -33,17 +34,18 @@ import net.iGap.helper.HelperLog;
 import net.iGap.model.AccountUser;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CallActionsReceiver;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.viewmodel.controllers.CallManager;
 
-import java.util.Set;
+import static android.app.Notification.DEFAULT_SOUND;
+import static android.app.Notification.DEFAULT_VIBRATE;
 
-public class CallService extends Service implements EventListener, CallManager.CallStateChange {
+public class CallService extends Service implements CallManager.CallStateChange {
     private final int ID_SERVICE_NOTIFICATION = 2213;
     private final int ID_INCOMING_NOTIFICATION = 2214;
     private final String CALL_CHANNEL = "iGapCall";
@@ -58,10 +60,12 @@ public class CallService extends Service implements EventListener, CallManager.C
 
     private long userId;
     private boolean isIncoming;
+    private boolean callActivityViable;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
     private boolean isVoiceCall;
     private MediaPlayer player;
     private Vibrator vibrator;
+    private SharedPreferences sharedPreferences;
 
     private CallAudioManager appRTCAudioManager = null;
     private CallAudioManager.AudioManagerEvents audioManagerEvents;
@@ -83,6 +87,7 @@ public class CallService extends Service implements EventListener, CallManager.C
     }
 
     public void setCallStateChange(CallManager.CallStateChange callStateChange) {
+        Log.i(TAG, "setCallStateChange: " + callStateChange);
         this.callStateChange = callStateChange;
     }
 
@@ -97,6 +102,7 @@ public class CallService extends Service implements EventListener, CallManager.C
         super.onCreate();
         Log.i(TAG, "onCreate: ");
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
@@ -126,17 +132,18 @@ public class CallService extends Service implements EventListener, CallManager.C
         CallManager.getInstance().setOnCallStateChanged(this);
         initialAudioManager();
 
-        if (G.currentActivity instanceof ActivityMain) {
-            Intent activityIntent = new Intent(this, CallActivity.class);
-            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(activityIntent);
-        }
-
         if (isIncoming) {
             playSoundAndVibration();
+            if (G.currentActivity instanceof ActivityMain) {
+                callActivityViable = true;
+                Intent activityIntent = new Intent(this, CallActivity.class);
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(activityIntent);
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 showIncomingNotification();
-            } else {
+            } else if (!callActivityViable) {
                 try {
                     PendingIntent.getActivity(CallService.this, 2215, new Intent(CallService.this, CallActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0).send();
                 } catch (Exception e) {
@@ -145,7 +152,7 @@ public class CallService extends Service implements EventListener, CallManager.C
             }
         } else {
             CallManager.getInstance().startCall(userId, callType);
-            showNotification();
+            showInCallNotification();
             Intent activityIntent = new Intent(this, CallActivity.class);
             activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(activityIntent);
@@ -155,7 +162,6 @@ public class CallService extends Service implements EventListener, CallManager.C
     }
 
     // functions for playing audio files in different stages of call
-
     private void initialAudioManager() {
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
@@ -165,14 +171,12 @@ public class CallService extends Service implements EventListener, CallManager.C
         Log.d(TAG, "Starting the audio manager...");
         // This method will be called each time the number of available audio
         // devices has changed.
-        appRTCAudioManager.start(new CallAudioManager.AudioManagerEvents() {
-            @Override
-            public void onAudioDeviceChanged(CallAudioManager.AudioDevice selectedAudioDevice, Set<CallAudioManager.AudioDevice> availableAudioDevices) {
-                if (audioManagerEvents != null)
-                    audioManagerEvents.onAudioDeviceChanged(selectedAudioDevice, availableAudioDevices);
-                CallManager.getInstance().setActiveAudioDevice(selectedAudioDevice);
-            }
+        appRTCAudioManager.start((selectedAudioDevice, availableAudioDevices) -> {
+            if (audioManagerEvents != null)
+                audioManagerEvents.onAudioDeviceChanged(selectedAudioDevice, availableAudioDevices);
+            CallManager.getInstance().setActiveAudioDevice(selectedAudioDevice);
         });
+
         if (isVoiceCall)
             setAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
     }
@@ -292,6 +296,8 @@ public class CallService extends Service implements EventListener, CallManager.C
     private void showIncomingNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
 
+        Log.i(TAG, "showIncomingNotification: " + callerInfo.getName());
+
         Intent intent = new Intent(this, CallActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 2218, intent, 0);
@@ -300,20 +306,41 @@ public class CallService extends Service implements EventListener, CallManager.C
                 .setSmallIcon(R.drawable.igap_flat_icon)
                 .setContentTitle(getResources().getString(isVoiceCall ? R.string.voice_calls : R.string.video_calls))
                 .setContentText(callerInfo.getName())
+                .setDefaults(DEFAULT_SOUND | DEFAULT_VIBRATE) //for heads-up notification
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         Uri soundProviderUri = Uri.parse("content://" + getPackageName() + "/" + R.raw.tone);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CALL_CHANNEL, CALL_CHANNEL, NotificationManager.IMPORTANCE_HIGH);
-            AudioAttributes attrs = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE).build();
-            channel.setSound(soundProviderUri, attrs);
-            channel.enableVibration(false);
-            channel.enableLights(false);
-            builder.setLights(Color.RED, 1000, 1000);
-            notificationManager.createNotificationChannel(channel);
-            builder.setChannelId(channel.getId());
+            boolean createNewChannel = true;
+            int channelIndex = sharedPreferences.getInt(SHP_SETTING.KEY_CALL_NOTIFICATION, 0);
+
+            NotificationChannel existingChannel = notificationManager.getNotificationChannel(CALL_CHANNEL + channelIndex);
+
+            if (existingChannel != null) {
+                if (existingChannel.getImportance() < NotificationManager.IMPORTANCE_HIGH || !soundProviderUri.equals(existingChannel.getSound()) || existingChannel.getVibrationPattern() != null || existingChannel.shouldVibrate()) {
+                    notificationManager.deleteNotificationChannel(CALL_CHANNEL + channelIndex);
+                    channelIndex++;
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_CALL_NOTIFICATION, channelIndex).apply();
+                } else {
+                    createNewChannel = false;
+                }
+            }
+            if (createNewChannel) {
+                NotificationChannel channel = new NotificationChannel(CALL_CHANNEL + channelIndex, CALL_CHANNEL, NotificationManager.IMPORTANCE_HIGH);
+                AudioAttributes attrs = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE).build();
+                channel.setSound(soundProviderUri, attrs);
+                channel.enableVibration(false);
+                channel.enableLights(false);
+                channel.setShowBadge(true);
+                channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                builder.setLights(Color.RED, 1000, 1000);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            builder.setChannelId(CALL_CHANNEL + channelIndex);
+
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setSound(soundProviderUri, AudioManager.STREAM_RING);
         }
@@ -368,10 +395,10 @@ public class CallService extends Service implements EventListener, CallManager.C
     }
 
     @SuppressLint("WrongConstant")
-    private void showNotification() {
+    private void showInCallNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
 
-        Log.i(TAG, "showNotification: " + callerInfo.getName());
+        Log.i(TAG, "showInCallNotification: " + callerInfo.getName());
 
         Intent intent = new Intent(this, CallActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -395,7 +422,7 @@ public class CallService extends Service implements EventListener, CallManager.C
         }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(CALL_CHANNEL, CALL_CHANNEL, NotificationManager.IMPORTANCE_LOW);
+            NotificationChannel notificationChannel = new NotificationChannel("iGap default", "iGapDefault", NotificationManager.IMPORTANCE_LOW);
             notificationManager.createNotificationChannel(notificationChannel);
             builder.setChannelId(notificationChannel.getId());
         }
@@ -437,6 +464,9 @@ public class CallService extends Service implements EventListener, CallManager.C
         super.onDestroy();
         Log.i(TAG, "onDestroy: ");
 
+        if (callStateChange != null)
+            callStateChange.onCallStateChanged(CallState.LEAVE_CALL);
+
         if (appRTCAudioManager != null) {
             appRTCAudioManager.stop();
             appRTCAudioManager = null;
@@ -454,11 +484,6 @@ public class CallService extends Service implements EventListener, CallManager.C
         Log.i(TAG, "-----------------------------------------------------");
     }
 
-    @Override
-    public void receivedMessage(int id, Object... message) {
-
-    }
-
     public void onBroadcastReceived(Intent intent) {
         if (instance != null && intent != null && intent.getAction() != null) {
             Log.i(TAG, "onBroadcastReceived: " + intent.getAction());
@@ -467,8 +492,6 @@ public class CallService extends Service implements EventListener, CallManager.C
 
             if (intent.getAction().equals(ACTION_ANSWER_CALL)) {
                 CallManager.getInstance().acceptCall();
-
-                showNotification();
 
                 Intent activityIntent = new Intent(this, CallActivity.class);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -491,6 +514,7 @@ public class CallService extends Service implements EventListener, CallManager.C
 
         if (state == CallState.CONNECTED) {
             stopSoundAndVibrate();
+            showInCallNotification();
         }
 
         if (state == CallState.DISCONNECTED) {
@@ -504,6 +528,7 @@ public class CallService extends Service implements EventListener, CallManager.C
 
     @Override
     public void onError(int messageID, int major, int minor) {
+        Log.i(TAG, "onError: " + major + " " + minor);
         if (callStateChange != null)
             callStateChange.onError(messageID, major, minor);
     }

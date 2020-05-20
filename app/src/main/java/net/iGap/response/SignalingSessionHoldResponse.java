@@ -15,7 +15,6 @@ import net.iGap.proto.ProtoSignalingSessionHold;
 import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingSessionHoldResponse extends MessageHandler {
-
     public SignalingSessionHoldResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
     }
@@ -33,7 +32,7 @@ public class SignalingSessionHoldResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        CallManager.getInstance().onError(majorCode, minorCode);
+        CallManager.getInstance().onError(actionId, majorCode, minorCode);
     }
 }
 

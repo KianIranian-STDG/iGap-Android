@@ -17,7 +17,6 @@ import android.util.Log;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.module.enums.CallState;
 import net.iGap.observers.interfaces.ISignalingAccept;
@@ -44,6 +43,7 @@ import static net.iGap.G.iSignalingSessionHold;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
+@Deprecated
 public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignalingRinging, ISignalingAccept, ISignalingCandidate, ISignalingLeave, ISignalingSessionHold {
 
     public CallObserver() {
@@ -83,7 +83,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
                     @Override
                     public void onSetSuccess() {
-                        CallSelectFragment.call(called_userId, true, type);
+//                        CallSelectFragment.call(called_userId, true, type);
                     }
 
                     @Override

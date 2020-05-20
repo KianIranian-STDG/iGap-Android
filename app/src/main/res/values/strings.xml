@@ -2668,5 +2668,7 @@ Want to get it?</string>
     <string name="call_error_accept">Accept is NOT possible.</string>
     <string name="call_error_candidate">Candidate is NOT possible.</string>
     <string name="call_error_hold">Hold call is NOT possible.</string>
+    <string name="mic">Mic</string>
+    <string name="hold">Hold</string>
 
 </resources>

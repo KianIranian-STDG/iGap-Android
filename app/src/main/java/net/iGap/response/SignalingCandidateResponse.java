@@ -15,17 +15,8 @@ import net.iGap.proto.ProtoSignalingCandidate;
 import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingCandidateResponse extends MessageHandler {
-
-    public int actionId;
-    public Object message;
-    public String identity;
-
     public SignalingCandidateResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
@@ -40,17 +31,12 @@ public class SignalingCandidateResponse extends MessageHandler {
     }
 
     @Override
-    public void timeOut() {
-        super.timeOut();
-    }
-
-    @Override
     public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        CallManager.getInstance().onError(majorCode, minorCode);
+        CallManager.getInstance().onError(actionId, majorCode, minorCode);
     }
 }
 

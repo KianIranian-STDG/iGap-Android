@@ -1,5 +1,6 @@
 package net.iGap.viewmodel.controllers;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,7 +19,6 @@ import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
@@ -27,7 +27,6 @@ import net.iGap.module.webrtc.CallAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoSignalingAccept;
 import net.iGap.proto.ProtoSignalingCandidate;
@@ -53,10 +52,12 @@ import org.webrtc.SessionDescription;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Nullable;
+
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
-public class CallManager implements EventListener {
+public class CallManager {
 
     private long callPeerId;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
@@ -71,6 +72,7 @@ public class CallManager implements EventListener {
     private boolean isCallHold;
     private boolean isMicEnable = true;
 
+    @Nullable
     private CallerInfo currentCallerInfo;
 
     private CallStateChange onCallStateChanged;
@@ -337,8 +339,8 @@ public class CallManager implements EventListener {
         new RequestSignalingSessionHold().signalingSessionHold(state);
     }
 
-    public void onError(int major, int minor) {
-        Log.d(TAG, "onError: " + major + " " + minor);
+    public void onError(int actionId, int major, int minor) {
+        Log.d(TAG, "Error -> " + actionId + " " + major + " " + minor);
         int messageID = R.string.e_call_permision;
         switch (major) {
             case 900://                RINGING_BAD_PAYLOAD
@@ -515,22 +517,12 @@ public class CallManager implements EventListener {
         }
     }
 
-    private void openCallInterface() {
-        Log.d(TAG, "openCallInterface: ");
-        CallSelectFragment.call(callPeerId, isIncoming, callType);
-    }
-
     public boolean isCallAlive() {
         return isCallActive;
     }
 
     public CallerInfo getCurrentCallerInfo() {
         return currentCallerInfo;
-    }
-
-    @Override
-    public void receivedMessage(int id, Object... message) {
-
     }
 
     public void cleanUp() {
@@ -601,6 +593,7 @@ public class CallManager implements EventListener {
             onCallStateChanged.onCallStateChanged(callState);
     }
 
+    @SuppressLint("MissingPermission")
     @TargetApi(Build.VERSION_CODES.O)
     private void placeOutgoingCall(Context mContext) {
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
@@ -628,7 +621,7 @@ public class CallManager implements EventListener {
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    protected PhoneAccountHandle addAccountToTelecomManager(Context mContext) {
+    private PhoneAccountHandle addAccountToTelecomManager(Context mContext) {
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
         PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(mContext, CallConnectionService.class), "1001");
         DbManager.getInstance().doRealmTask(realm -> {

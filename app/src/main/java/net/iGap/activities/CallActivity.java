@@ -251,6 +251,15 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         statusTextView.setSingleLine(true);
         statusTextView.setEllipsize(TextUtils.TruncateAt.END);
         statusTextView.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
+
+        if (isIncoming && CallManager.getInstance().getCurrentSate() == CallState.CONNECTED) {
+            statusTextView.setText(R.string.connected);
+        } else if (isIncoming) {
+            statusTextView.setText(R.string.incoming_call);
+        } else {
+            statusTextView.setText(R.string.connecting);
+        }
+
         rootView.addView(statusTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 46, 16, 0));
 
         durationTextView = new AppCompatTextView(this);
@@ -276,17 +285,19 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         nameTextView.setGravity(Gravity.CENTER);
         rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, isVideoCall() ? 172 : 92, 16, 0));
 
-        if (isIncoming) {
+        if (isIncoming && isIncomingCallAndNotAnswered) {
             answerRippleView = new CallRippleView(this);
             answerRippleView.setImageResource(R.drawable.ic_call_answer);
             answerRippleView.startAnimation();
             answerRippleView.setDelegate(this::answerCall);
+            answerRippleView.setOnClickListener(v -> answerCall());
             rootView.addView(answerRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 36));
 
             declineRippleView = new CallRippleView(this);
             declineRippleView.setImageResource(R.drawable.ic_call_decline);
             declineRippleView.startAnimation();
             declineRippleView.setDelegate(this::declineCall);
+            declineRippleView.setOnClickListener(v -> declineCall());
             rootView.addView(declineRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 0, 36));
 
             quickDeclineView = new LinearLayout(this);
@@ -323,7 +334,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         buttonsGridView = new LinearLayout(this);
         buttonsGridView.setOrientation(LinearLayout.VERTICAL);
-        buttonsGridView.setVisibility(isIncoming ? View.GONE : View.VISIBLE);
+        buttonsGridView.setVisibility(isIncoming && isIncomingCallAndNotAnswered ? View.GONE : View.VISIBLE);
 
         LinearLayout row1 = new LinearLayout(this);
         row1.setOrientation(LinearLayout.HORIZONTAL);
@@ -339,14 +350,25 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         }
 
         holdView = new TextImageView(this);
-        holdView.setText("Hold");
+        holdView.setText(R.string.hold);
         holdView.setViewColor(CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
         holdView.setOnClickListener(v -> holdCall());
         holdView.setImageResource(R.drawable.ic_call_hold);
+        holdView.setViewColor(CallManager.getInstance().isCallAlive() ? CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white) : getResources().getColor(R.color.gray_9d));
         row1.addView(holdView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
+        if (CallManager.getInstance().isCallAlive()) {
+            if (CallManager.getInstance().isCallInHold()) {
+                holdView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+            } else {
+                holdView.setViewColor(getResources().getColor(R.color.white));
+            }
+        } else {
+            holdView.setViewColor(getResources().getColor(R.color.gray_4c));
+        }
+
         TextImageView directView = new TextImageView(this);
-        directView.setText("Message");
+        directView.setText(R.string.message);
         directView.setTextColor(getResources().getColor(R.color.white));
         directView.setOnClickListener(v -> toggleCamera());
         directView.setImageResource(R.drawable.ic_call_chat);
@@ -359,7 +381,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         micView = new TextImageView(this);
         micView.setImageResource(R.drawable.ic_call_mic);
-        micView.setText("Mic");
+        micView.setText(R.string.mic);
         micView.setViewColor(CallManager.getInstance().isMicMute() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
         micView.setOnClickListener(v -> toggleMic());
         row2.addView(micView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
@@ -391,7 +413,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void holdCall() {
-        CallManager.getInstance().holdCall(!CallManager.getInstance().isCallInHold());
+        if (CallManager.getInstance().getCurrentSate() == CallState.CONNECTED || CallManager.getInstance().getCurrentSate() == CallState.ON_HOLD)
+            CallManager.getInstance().holdCall(!CallManager.getInstance().isCallInHold());
     }
 
     private void goToChat() {
@@ -557,18 +580,27 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             }
 
             if (state == CallState.BUSY) {
-                statusTextView.setText("Busy");
+                statusTextView.setText(getResources().getString(R.string.busy));
             } else if (state == CallState.FAILD) {
-                statusTextView.setText("Fail");
+                statusTextView.setText(getResources().getString(R.string.faild));
                 notAnswered();
             } else if (state == CallState.REJECT) {
-                statusTextView.setText("Rejected");
+                statusTextView.setText(getResources().getString(R.string.reject));
                 notAnswered();
             } else if (state == CallState.ON_HOLD) {
                 boolean callHold = CallManager.getInstance().isCallInHold();
 
-                statusTextView.setText(callHold ? "Hold" : "Connected");
-                holdView.setViewColor(callHold ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+                statusTextView.setText(callHold ? getResources().getString(R.string.on_hold) : getResources().getString(R.string.connected));
+
+                if (CallManager.getInstance().isCallAlive()) {
+                    if (CallManager.getInstance().isCallInHold()) {
+                        holdView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+                    } else {
+                        holdView.setViewColor(getResources().getColor(R.color.white));
+                    }
+                } else {
+                    holdView.setViewColor(getResources().getColor(R.color.gray_9d));
+                }
 
                 if (isVideoCall()) {
                     WebRTC.getInstance().holdVideoCall(callHold);
@@ -577,15 +609,18 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 }
 
             } else if (state == CallState.CONNECTED) {
-                statusTextView.setText("Connected");
+                statusTextView.setText(getResources().getString(R.string.connected));
 
                 if (isVideoCall()) {
                     surfaceRemote.setVisibility(View.VISIBLE);
                     surfaceLocal.setVisibility(View.VISIBLE);
                     userImageView.setVisibility(View.GONE);
                 }
+
+                holdView.setViewColor(getResources().getColor(R.color.white));
+
             } else if (state == CallState.RINGING) {
-                statusTextView.setText("Ringing");
+                statusTextView.setText(getResources().getString(R.string.ringing));
 //
 //                if (buttonsGridView.getVisibility() == View.GONE) {
 //                    buttonsGridView.setVisibility(View.VISIBLE);
@@ -600,12 +635,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 //                }
 
             } else if (state == CallState.TOO_LONG) {
-                statusTextView.setText("Answering Too Long Time");
+                statusTextView.setText(getResources().getString(R.string.too_long));
                 notAnswered();
             } else if (state == CallState.SIGNALING) {
-                statusTextView.setText("Signaling");
+                statusTextView.setText(getResources().getString(R.string.signaling));
             } else if (state == CallState.CONNECTING) {
-                statusTextView.setText("Connecting");
+                statusTextView.setText(getResources().getString(R.string.connecting_call));
             } else if (state == CallState.LEAVE_CALL) {
                 finish();
             } else if (state == CallState.UNAVAILABLE) {
@@ -613,14 +648,14 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             } else if (state == CallState.DISCONNECTED) {
                 finish();
             } else if (state == CallState.NOT_ANSWERED) {
-                statusTextView.setText("Not Answered");
+                statusTextView.setText(getResources().getString(R.string.not_answerd_call));
                 notAnswered();
             } else if (state == CallState.DISCONNECTING) {
-                statusTextView.setText("Disconnecting");
+                statusTextView.setText(getResources().getString(R.string.disconnecting));
             } else if (state == CallState.INCAMING_CALL) {
 
             } else if (state == CallState.POOR_CONNECTION) {
-                statusTextView.setText("Poor connection");
+                statusTextView.setText(getResources().getString(R.string.poor_connection));
             }
         });
     }
