@@ -76,18 +76,21 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
                 packageList = data.getData();
                 updateInternetPackager(-1, -1);
                 loadingVisibility.setValue(false);
+                isDataLoaded.setValue(true);
             }
 
             @Override
             public void onError(String error) {
                 showRequestErrorMessage.setValue(error);
                 loadingVisibility.setValue(false);
+                isDataLoaded.setValue(true);
             }
 
             @Override
             public void onFailed() {
                 loadingVisibility.setValue(false);
                 showErrorMessage.setValue(R.string.time_out_error);
+                isDataLoaded.setValue(true);
             }
         });
     }
