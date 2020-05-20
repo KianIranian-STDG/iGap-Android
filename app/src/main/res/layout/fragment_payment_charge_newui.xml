@@ -40,7 +40,7 @@
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginTop="24dp"
                 android:text="@string/topUp_title"
-                android:textColor="@color/green"
+                android:textColor="?iGapButtonTextColor"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -256,7 +256,7 @@
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/dp4"
                 android:text="@string/Select_the_type_of_charge"
-                android:textColor="@color/green"
+                android:textColor="?iGapButtonTextColor"
                 app:layout_constraintBottom_toBottomOf="@+id/btn_charge_type"
                 app:layout_constraintEnd_toEndOf="@+id/btn_charge_type"
                 app:layout_constraintStart_toStartOf="@+id/btn_charge_type"

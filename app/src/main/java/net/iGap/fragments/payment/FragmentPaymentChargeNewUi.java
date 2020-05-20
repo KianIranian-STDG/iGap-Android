@@ -646,7 +646,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     if (getActivity() != null && token != null) {
                         new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
                             if (result.isSuccess()) {
-                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title("مایل هستید شماره ی شارژ شونده ذخیره شود؟")
+                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title("مایل به ذخیره سازی خرید در تاریخچه می باشید")
                                         .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
                                         .positiveText(R.string.ok)
                                         .onNegative((dialog1, which) -> dialog1.dismiss()).show();
