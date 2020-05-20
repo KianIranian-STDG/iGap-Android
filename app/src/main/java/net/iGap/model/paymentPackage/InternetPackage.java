@@ -14,6 +14,8 @@ public class InternetPackage {
     private String trafficId;
     @SerializedName("duration")
     private String durationId;
+    @SerializedName("isSpecial")
+    private boolean isSpecial;
 
     public String getTrafficId() {
         return trafficId;
@@ -33,5 +35,9 @@ public class InternetPackage {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isSpecial() {
+        return isSpecial;
     }
 }

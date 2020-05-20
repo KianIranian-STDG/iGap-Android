@@ -85,6 +85,7 @@
     <attr name="iGapLogoutButtonColor" format="reference|color" />
     <attr name="iGapCardViewColor" format="reference|color" />
     <attr name="iGapEditTxtColor" format="reference|color" />
+    <attr name="iGapRadioButtonUncheckedColor" format="reference|color" />
     <!--chat item color-->
     <attr name="iGapReceivedMessageTextColor" format="reference|color" />
     <attr name="iGapReceivedOtherTextColor" format="reference|color" />

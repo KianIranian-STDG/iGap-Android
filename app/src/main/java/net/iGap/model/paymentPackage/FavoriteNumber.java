@@ -17,14 +17,20 @@ public class FavoriteNumber {
     private String mOperatorTitle;
     @SerializedName("phone_number")
     private String mPhoneNumber;
+    @SerializedName("package_type")
+    private String mPackageType;
     @SerializedName("type")
     private String mType;
+
+    public void setPackageType(String mPackageType) {
+        this.mPackageType = mPackageType;
+    }
 
     public Long getAmount() {
         return mAmount;
     }
 
-    public void setAmount(Long amount) {
+public void setAmount(Long amount) {
         mAmount = amount;
     }
 
@@ -76,4 +82,7 @@ public class FavoriteNumber {
         mType = type;
     }
 
+    public String getPackageType() {
+        return mPackageType;
+    }
 }

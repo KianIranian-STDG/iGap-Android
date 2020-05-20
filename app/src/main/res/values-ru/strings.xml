@@ -2000,4 +2000,10 @@
     <string name="order_by">Сортировать по</string>
     <string name="recently_used_packages">Недавно использованные пакеты</string>
     <string name="suggested_packages">Предлагаемые пакеты</string>
+    <string name="credit_sim">предоплаченная SIM-карта</string>
+    <string name="other_internet_packages">Другие пакеты</string>
+    <string name="all_packages">Все пакеты</string>
+    <string name="sim_type_not_choosed">Тип SIM-карты не указан</string>
+    <string name="no_history_found">​​История не найдена</string>
+    <string name="no_number_found">Там нет предварительного номера</string>
 </resources>

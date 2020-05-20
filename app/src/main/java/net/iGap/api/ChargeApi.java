@@ -31,10 +31,16 @@ public interface ChargeApi {
                                             @Field("cost") int cost);
 
     @POST("{operator}/topup/set-favorite")
-    Call<ResponseBody> setFavoriteChargeNumber(@Path("operator") String operator,@Body JsonObject jsonObject);
+    Call<ResponseBody> setFavoriteChargeNumber(@Path("operator") String operator, @Body JsonObject jsonObject);
+
+    @POST("{operator}/internet-package/set-favorite")
+    Call<ResponseBody> setFavoriteInternetPackage(@Path("operator") String operator, @Body JsonObject jsonObject);
 
     @GET("topup/get-favorite")
     Call<GetFavoriteNumber> getFavoriteChargeNUmber();
+
+    @GET("internet-package/get-favorite")
+    Call<GetFavoriteNumber> getFavoriteInternetPackage();
 
     @GET("{operator}/internet-package/categories")
     Call<List<MciInternetPackageFilter>> getInternetPackageFilterList(@Path("operator") String operator);
