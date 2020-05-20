@@ -80,6 +80,7 @@
                     android:padding="8dp"
                     android:text="@string/md_close_button"
                     android:textColor="?attr/iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/phoneNumber"
                     app:layout_constraintRight_toRightOf="@id/phoneNumber"
                     app:layout_constraintTop_toTopOf="@id/phoneNumber" />

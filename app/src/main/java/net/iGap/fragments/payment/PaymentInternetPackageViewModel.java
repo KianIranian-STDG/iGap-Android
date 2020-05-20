@@ -1,7 +1,5 @@
 package net.iGap.fragments.payment;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -19,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static net.iGap.module.SmsRetriver.AppSignatureHashHelper.TAG;
 
 public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
     private MutableLiveData<List<MciInternetPackageFilter>> timeFilterListObservable = new MutableLiveData<>();
@@ -70,6 +66,7 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
+                showErrorMessage.setValue(R.string.time_out_error);
             }
         });
 
@@ -90,6 +87,7 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
             @Override
             public void onFailed() {
                 loadingVisibility.setValue(false);
+                showErrorMessage.setValue(R.string.time_out_error);
             }
         });
     }
@@ -154,7 +152,7 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
 
     public void requestPayment() {
         if (selectedPackageType < -9) {
-            showErrorMessage.setValue(R.string.error);
+            showErrorMessage.setValue(R.string.no_package_selected);
             return;
         }
         loadingVisibility.setValue(true);
@@ -178,6 +176,7 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
                     @Override
                     public void onFailed() {
                         loadingVisibility.setValue(false);
+                        showErrorMessage.setValue(R.string.time_out_error);
                     }
                 });
     }

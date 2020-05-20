@@ -2683,5 +2683,7 @@ Want to get it?</string>
     <string name="data_sim">Data SIM</string>
     <string name="no_history_found">No history found</string>
     <string name="no_number_found">No number found</string>
+    <string name="save_internet_package_dialog">Do you want to save bought package?</string>
+    <string name="no_package_selected">No package selected</string>
 
 </resources>

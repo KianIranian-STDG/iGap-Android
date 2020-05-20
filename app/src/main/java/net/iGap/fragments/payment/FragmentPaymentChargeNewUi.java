@@ -603,36 +603,36 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("operator", operator);
-        jsonObject.addProperty("phone_number", phoneNumber);
-        jsonObject.addProperty("charge_type", chargeType.toString());
-        jsonObject.addProperty("amount", amount.getTextAmount());
-        chargeApi.setFavoriteChargeNumber(jsonObject);
-
-        chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
-            @Override
-            public void onResponse(Call<MciPurchaseResponse> call, Response<MciPurchaseResponse> response) {
-                if (response.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
-                    String token = response.body().getToken();
-                    if (getActivity() != null && token != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
-                            if (result.isSuccess()) {
-                            }
-                        });
-                    }
-                    goBack();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MciPurchaseResponse> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                hideKeyboard();
-                HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
-            }
-        });
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty("operator", operator);
+//        jsonObject.addProperty("phone_number", phoneNumber);
+//        jsonObject.addProperty("charge_type", chargeType.toString());
+//        jsonObject.addProperty("amount", amount.getTextAmount());
+//        chargeApi.setFavoriteChargeNumber(jsonObject);
+//
+//        chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
+//            @Override
+//            public void onResponse(Call<MciPurchaseResponse> call, Response<MciPurchaseResponse> response) {
+//                if (response.isSuccessful()) {
+//                    progressBar.setVisibility(View.GONE);
+//                    String token = response.body().getToken();
+//                    if (getActivity() != null && token != null) {
+//                        new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
+//                            if (result.isSuccess()) {
+//                            }
+//                        });
+//                    }
+//                    goBack();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MciPurchaseResponse> call, Throwable t) {
+//                progressBar.setVisibility(View.GONE);
+//                hideKeyboard();
+//                HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
+//            }
+//        });
 
     }
 

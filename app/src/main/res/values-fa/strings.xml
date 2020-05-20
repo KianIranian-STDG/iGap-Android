@@ -2625,4 +2625,6 @@
     <string name="data_sim">سیمکارت دیتا</string>
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
     <string name="no_number_found">شماره ای از قبل موجود نیست</string>
+    <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
+    <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
 </resources>
