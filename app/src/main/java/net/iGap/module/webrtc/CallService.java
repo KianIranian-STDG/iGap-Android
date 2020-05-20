@@ -124,7 +124,7 @@ public class CallService extends Service implements EventListener, CallManager.C
 
         instance = this;
         CallManager.getInstance().setOnCallStateChanged(this);
-
+        initialAudioManager();
 
         if (G.currentActivity instanceof ActivityMain) {
             Intent activityIntent = new Intent(this, CallActivity.class);
@@ -151,11 +151,15 @@ public class CallService extends Service implements EventListener, CallManager.C
             startActivity(activityIntent);
         }
 
+        return START_STICKY;
+    }
+
+    // functions for playing audio files in different stages of call
+
+    private void initialAudioManager() {
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
         appRTCAudioManager = CallAudioManager.create(getApplicationContext());
-        if (isVoiceCall)
-            setAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(TAG, "Starting the audio manager...");
@@ -169,11 +173,9 @@ public class CallService extends Service implements EventListener, CallManager.C
                 CallManager.getInstance().setActiveAudioDevice(selectedAudioDevice);
             }
         });
-
-        return START_STICKY;
+        if (isVoiceCall)
+            setAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
     }
-
-    // functions for playing audio files in different stages of call
 
     private void playSoundAndVibration() {
         boolean canPlay = false;
