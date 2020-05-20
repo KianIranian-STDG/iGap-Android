@@ -238,42 +238,43 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             progressBar.setVisibility(View.VISIBLE);
             chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
-                public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
+                public void onResponse(@NonNull Call<GetFavoriteNumber> call, @NonNull Response<GetFavoriteNumber> response) {
                     progressBar.setVisibility(View.GONE);
-                    if (response.isSuccessful() && response.body().getData() != null) {
-                        adapterHistory = new AdapterHistoryNumber(response.body().getData());
-                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
-                        View view = dialog.getCustomView();
-                        rvHistory = view.findViewById(R.id.rv_history);
-                        saveBtn2 = view.findViewById(R.id.btn_dialog2);
-                        closeView2 = view.findViewById(R.id.iv_close2);
-                        closeView2.setOnClickListener(v12 -> dialog.dismiss());
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        if (response.body().getData().size() > 0) {
+                            adapterHistory = new AdapterHistoryNumber(response.body().getData());
+                            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                            View view = dialog.getCustomView();
+                            rvHistory = view.findViewById(R.id.rv_history);
+                            saveBtn2 = view.findViewById(R.id.btn_dialog2);
+                            closeView2 = view.findViewById(R.id.iv_close2);
+                            closeView2.setOnClickListener(v12 -> dialog.dismiss());
 
-                        saveBtn2.setOnClickListener(v13 -> {
-                            if (adapterHistory.getSelectedPosition() == -1) {
-                                return;
-                            }
-                            selectedIndex = adapterHistory.getSelectedPosition();
-                            historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                            editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
-                            amountTxt.setText(historyNumber.getAmount().toString());
-                            chooseType.setText(historyNumber.getChargeTypeDescription());
-                            dialog.dismiss();
-                        });
+                            saveBtn2.setOnClickListener(v13 -> {
+                                if (adapterHistory.getSelectedPosition() == -1) {
+                                    return;
+                                }
+                                selectedIndex = adapterHistory.getSelectedPosition();
+                                historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
+                                editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
+                                amountTxt.setText(historyNumber.getAmount().toString());
+                                chooseType.setText(historyNumber.getChargeTypeDescription());
+                                dialog.dismiss();
+                            });
 
-                        rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                        rvHistory.setAdapter(adapterHistory);
-                        dialog.show();
-
-                    } else {
-                        ShowError((getContext().getResources().getString(R.string.list_empty)));
+                            rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                            rvHistory.setAdapter(adapterHistory);
+                            dialog.show();
+                        } else {
+                            showError((getContext().getResources().getString(R.string.list_empty)));
+                        }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
                     progressBar.setVisibility(View.GONE);
-                    ShowError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
+                    showError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
 
                 }
             });
@@ -308,7 +309,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             if (editTextNumber.getText().length() == 11 || editTextNumber.getText().length() == 4) {
                 if (editTextNumber.getText().length() == 11) {
                     scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
-                    hideKeyboard();
                     linearWarning.setVisibility(View.VISIBLE);
                 }
                 String number = editTextNumber.getText().toString().substring(0, 4);
@@ -334,7 +334,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             removeNumber.setOnClickListener(view1 -> {
                 editTextNumber.setText("");
                 removeNumber.setVisibility(View.GONE);
-                if (editTextNumber.getText().toString() == "") {
+                if (editTextNumber.getText().toString().equals("")) {
                     radioButtonHamrah.setChecked(false);
                     radioButtonIrancell.setChecked(false);
                     radioButtonRightel.setChecked(false);
@@ -415,7 +415,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 rvAmount.setAdapter(adapterAmount);
                 dialog.show();
             } else {
-                ShowError(getContext().getResources().getString(R.string.please_select_operator));
+                showError(getContext().getResources().getString(R.string.please_select_operator));
             }
 
         });
@@ -604,19 +604,19 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 }
 
                             } else {
-                                ShowError(getContext().getResources().getString(R.string.charge_price_error_message));
+                                showError(getContext().getResources().getString(R.string.charge_price_error_message));
                             }
                         } else {
-                            ShowError(getContext().getResources().getString(R.string.charge_type_error_message));
+                            showError(getContext().getResources().getString(R.string.charge_type_error_message));
                         }
                     } else {
-                        ShowError(getContext().getResources().getString(R.string.please_select_operator));
+                        showError(getContext().getResources().getString(R.string.please_select_operator));
                     }
                 } else {
-                    ShowError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
+                    showError(getContext().getResources().getString(R.string.phone_number_is_not_valid));
                 }
             } else {
-                ShowError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
+                showError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
             }
         });
         progressBar.setVisibility(View.GONE);
@@ -694,7 +694,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
     }
 
-    public void ShowError(String errorMessage) {
+    private void showError(String errorMessage) {
         progressBar.setVisibility(View.GONE);
         if (errorMessage != null) {
             hideKeyboard();
