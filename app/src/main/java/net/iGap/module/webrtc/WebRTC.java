@@ -55,11 +55,11 @@ import java.util.Set;
 
 public class WebRTC {
 
-    private static String TAG = "iGapCall " + "WebRTC";
+    private static String TAG = "iGapCall" + " WebRTC";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
-    private static final int VIDEO_RESOLUTION_WIDTH = 720;
-    private static final int VIDEO_RESOLUTION_HEIGHT = 480;
+    private static final int VIDEO_RESOLUTION_WIDTH = 1920;
+    private static final int VIDEO_RESOLUTION_HEIGHT = 1080;
     private static final int FPS = 30;
 
     private PeerConnection peerConnection;
@@ -224,7 +224,7 @@ public class WebRTC {
     }
 
     public void startVideoCapture() {
-        Log.d(TAG, "startVideoCapture: ");
+        Log.d(TAG, "startVideoCapture: " + VIDEO_RESOLUTION_WIDTH + " " + VIDEO_RESOLUTION_HEIGHT + " " + FPS);
         if (videoCapturer != null) {
             try {
                 videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
@@ -509,26 +509,29 @@ public class WebRTC {
 
             if (videoCapturer != null) {
                 videoCapturer.stopCapture();
+                videoCapturer.dispose();
                 videoCapturer = null;
             }
 
             if (peerConnection != null) {
                 peerConnection.close();
                 peerConnection.dispose();
+                peerConnection = null;
             }
 
             if (peerConnectionFactory != null) {
                 peerConnectionFactory.dispose();
+                peerConnectionFactory = null;
             }
 
-            peerConnectionFactory = null;
-            peerConnection = null;
             instance = null;
 
         } catch (RuntimeException e) {
             e.printStackTrace();
+            Log.e(TAG, "close: " + e.getMessage());
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Log.e(TAG, "close: " + e.getMessage());
         }
 
     }
@@ -558,6 +561,14 @@ public class WebRTC {
                 Log.i(TAG, "onSetFailure: ");
             }
         }, sdp);
+    }
+
+    public void holdVideoCall(boolean callHold) {
+        if (callHold) {
+            pauseVideoCapture();
+        } else {
+            startVideoCapture();
+        }
     }
 
     public interface VideoFrameListener {

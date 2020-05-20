@@ -121,6 +121,7 @@ public class CallManager implements EventListener {
         // set data for future use.
         callPeerId = response.getCallerUserId();
         callType = response.getType();
+        currentSate = CallState.INCAMING_CALL;
         String callerSdp = response.getCallerSdp();
 
         setupCallerInfo(callPeerId);
@@ -312,17 +313,10 @@ public class CallManager implements EventListener {
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
-        Log.d(TAG, "onHold: " + builder.getHold());
+        Log.d(TAG, "onHold: lastState -> " + isCallHold + " current state -> " + builder.getHold());
         isCallHold = builder.getHold();
-
-        if (builder.getHold()) {
-            WebRTC.getInstance().toggleSound(false);
-            changeState(CallState.ON_HOLD);
-        } else {
-            WebRTC.getInstance().toggleSound(true);
-            changeState(CallState.CONNECTED);
-        }
-//        G.onHoldBackgroundChanegeListener this needs to be deleted.
+        changeState(CallState.ON_HOLD);
+        WebRTC.getInstance().toggleSound(!isCallHold);
     }
 
     public void holdCall(boolean state) {

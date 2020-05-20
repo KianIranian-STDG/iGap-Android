@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -52,7 +53,6 @@ import java.util.List;
 import java.util.Set;
 
 public class CallActivity extends ActivityEnhanced implements CallManager.CallStateChange, CallManager.CallTimeDelegate {
-    private FrameLayout rootView;
     private TextView nameTextView;
     private TextView callTypeTextView;
     private ImageView userImageView;
@@ -60,13 +60,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private TextView statusTextView;
     private LinearLayout buttonsGridView;
     private LinearLayout quickDeclineView;
-
+    private ImageView cancelImageView;
+    private ImageView callAgainImageView;
     private TextView durationTextView;
     private TextImageView speakerView;
-    private TextImageView directView;
     private TextImageView micView;
     private TextImageView bluetoothView;
-    private TextImageView cameraView;
     private TextImageView holdView;
     private CallRippleView answerRippleView;
     private CallRippleView declineRippleView;
@@ -75,9 +74,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private SurfaceViewRenderer surfaceLocal;
 
 
-
     private CallerInfo caller;
     private boolean isIncoming;
+    private boolean isIncomingCallAndNotAnswered;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
     private boolean isRtl = G.isAppRtl;
 
@@ -95,20 +94,27 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (CallService.getInstance() == null)
+        if (CallService.getInstance() == null) {
+            Log.e(TAG, "on Create SERVICE == NULL");
             finish();
+        }
+
+        if (!CallManager.getInstance().isCallAlive()) {
+            Log.e(TAG, "on Create isCallAlive == false");
+            finish();
+        }
 
         Log.i(TAG, "CallActivity onCreate ");
 
         callType = CallManager.getInstance().getCallType();
         isIncoming = CallManager.getInstance().isIncoming();
+        isIncomingCallAndNotAnswered = isIncoming && CallManager.getInstance().getCurrentSate() != CallState.CONNECTED;
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         init();
         setContentView(createRootView());
 
-        onCallStateChanged(CallManager.getInstance().getCurrentSate()); // for reopen activity
 
         CallService.getInstance().setCallStateChange(this);
         CallManager.getInstance().setTimeDelegate(this);
@@ -117,12 +123,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         // here we check for any audio changes.
         if (CallService.getInstance() != null)
-            CallService.getInstance().setAudioManagerEvents(new AppRTCAudioManager.AudioManagerEvents() {
-                @Override
-                public void onAudioDeviceChanged(AppRTCAudioManager.AudioDevice selectedAudioDevice, Set<AppRTCAudioManager.AudioDevice> availableAudioDevices) {
-                    checkForBluetoothAvailability(availableAudioDevices);
-                }
-            });
+            CallService.getInstance().setAudioManagerEvents((selectedAudioDevice, availableAudioDevices) -> checkForBluetoothAvailability(availableAudioDevices));
     }
 
     private boolean checkPermissions() {
@@ -155,7 +156,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private View createRootView() {
-        rootView = new FrameLayout(this);
+        FrameLayout rootView = new FrameLayout(this);
         rootView.setBackgroundColor(0);
         rootView.setFitsSystemWindows(true);
         rootView.setClipToPadding(false);
@@ -168,7 +169,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
             surfaceLocal = new SurfaceViewRenderer(this);
             surfaceLocal.setVisibility(View.VISIBLE);
-            rootView.addView(surfaceLocal, LayoutCreator.createFrame(100, 140, Gravity.TOP, 8, 8, 8, 8));
+            rootView.addView(surfaceLocal, LayoutCreator.createFrame(100, 140, Gravity.TOP | (isRtl ? Gravity.LEFT : Gravity.RIGHT), 8, 8, 8, 8));
 
             try {
                 surfaceLocal.init(WebRTC.getInstance().getEglBaseContext(), null);
@@ -271,7 +272,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         nameTextView.setSingleLine(true);
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         nameTextView.setGravity(Gravity.CENTER);
-        rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 92, 16, 0));
+        rootView.addView(nameTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, isVideoCall() ? 172 : 92, 16, 0));
 
         if (isIncoming) {
             answerRippleView = new CallRippleView(this);
@@ -302,6 +303,20 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             quickDeclineView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 8));
 
             rootView.addView(quickDeclineView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+        } else {
+            cancelImageView = new AppCompatImageView(this);
+            cancelImageView.setImageResource(R.drawable.ic_call_cancel);
+            cancelImageView.setVisibility(View.GONE);
+            cancelImageView.setOnClickListener(v -> finish());
+//            rootView.addView(cancelImageView, LayoutCreator.createFrame(64, 64, Gravity.BOTTOM, 62, 0, 0, 62));
+
+            callAgainImageView = new AppCompatImageView(this);
+            callAgainImageView.setImageResource(R.drawable.ic_call_answer);
+            callAgainImageView.setVisibility(View.GONE);
+            callAgainImageView.setOnClickListener(v -> {
+                CallManager.getInstance().startCall(caller.getUserId(), callType);
+            });
+//            rootView.addView(callAgainImageView, LayoutCreator.createFrame(64, 64, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 62, 62));
         }
 
         buttonsGridView = new LinearLayout(this);
@@ -313,7 +328,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         buttonsGridView.addView(row1, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 0));
 
         if (isVideoCall()) {
-            cameraView = new TextImageView(this);
+            TextImageView cameraView = new TextImageView(this);
             cameraView.setText(R.string.camera);
             cameraView.setTextColor(getResources().getColor(R.color.white));
             cameraView.setOnClickListener(v -> toggleCamera());
@@ -328,7 +343,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         holdView.setImageResource(R.drawable.ic_call_hold);
         row1.addView(holdView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
-        directView = new TextImageView(this);
+        TextImageView directView = new TextImageView(this);
         directView.setText("Message");
         directView.setTextColor(getResources().getColor(R.color.white));
         directView.setOnClickListener(v -> toggleCamera());
@@ -364,7 +379,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         declineImageView = new AppCompatImageView(this);
         declineImageView.setImageResource(R.drawable.ic_call_decline);
         declineImageView.setOnClickListener(v -> {
-            declineImageView.setEnabled(false);
             endCall();
         });
         buttonsGridView.addView(declineImageView, LayoutCreator.createLinear(64, 64, Gravity.CENTER, 0, 48, 0, 0));
@@ -385,7 +399,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void onQuickDeclineClick() {
 
-        List<Integer> message = new ArrayList<>();
+        List<Integer> message = new ArrayList<>(4);
 
         message.add(R.string.message_decline_please_text_me);
         message.add(R.string.message_decline_Please_call_later);
@@ -434,7 +448,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void declineCall() {
-        declineImageView.setEnabled(false);
         CallManager.getInstance().endCall();
     }
 
@@ -457,7 +470,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         // for video and audio we must check for permissions
         if (!checkPermissions())
             return;
-        answerRippleView.setEnabled(false);
+
         answerRippleView.setVisibility(View.GONE);
         declineRippleView.setVisibility(View.GONE);
         quickDeclineView.setVisibility(View.GONE);
@@ -479,10 +492,17 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void notAnswered() {
-        buttonsGridView.setVisibility(View.GONE);
-        durationTextView.setVisibility(View.GONE);
+//        buttonsGridView.setVisibility(View.GONE);
+//        durationTextView.setVisibility(View.GONE);
+        finish();
 
-
+//        if (cancelImageView != null) {
+//            cancelImageView.setVisibility(View.VISIBLE);
+//        }
+//
+//        if (callAgainImageView != null) {
+//            callAgainImageView.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Override
@@ -534,11 +554,23 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             if (state == CallState.BUSY) {
                 statusTextView.setText("Busy");
             } else if (state == CallState.FAILD) {
-                finish();
+                statusTextView.setText("Fail");
+                notAnswered();
             } else if (state == CallState.REJECT) {
-                finish();
+                statusTextView.setText("Rejected");
+                notAnswered();
             } else if (state == CallState.ON_HOLD) {
-                holdView.setViewColor(CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+                boolean callHold = CallManager.getInstance().isCallInHold();
+
+                statusTextView.setText(callHold ? "Hold" : "Connected");
+                holdView.setViewColor(callHold ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+
+                if (isVideoCall()) {
+                    WebRTC.getInstance().holdVideoCall(callHold);
+                    surfaceRemote.setVisibility(callHold ? View.GONE : View.VISIBLE);
+                    userImageView.setVisibility(callHold ? View.VISIBLE : View.GONE);
+                }
+
             } else if (state == CallState.CONNECTED) {
                 statusTextView.setText("Connected");
 
@@ -549,8 +581,22 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 }
             } else if (state == CallState.RINGING) {
                 statusTextView.setText("Ringing");
+//
+//                if (buttonsGridView.getVisibility() == View.GONE) {
+//                    buttonsGridView.setVisibility(View.VISIBLE);
+//                }
+//
+//                if (cancelImageView != null) {
+//                    cancelImageView.setVisibility(View.GONE);
+//                }
+//
+//                if (callAgainImageView != null) {
+//                    callAgainImageView.setVisibility(View.GONE);
+//                }
+
             } else if (state == CallState.TOO_LONG) {
-                finish();
+                statusTextView.setText("Answering Too Long Time");
+                notAnswered();
             } else if (state == CallState.SIGNALING) {
                 statusTextView.setText("Signaling");
             } else if (state == CallState.CONNECTING) {
@@ -577,6 +623,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onError(int messageID, int major, int minor) {
         Log.e(TAG, "onError: " + major + " " + minor + " " + getResources().getString(messageID));
+        Toast.makeText(this, "ERROR -> " + getResources().getString(messageID), Toast.LENGTH_SHORT).show();
     }
 
     @Override
