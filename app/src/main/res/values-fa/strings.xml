@@ -2615,4 +2615,14 @@
     <string name="order_by">مرتب سازی بر اساس</string>
     <string name="recently_used_packages">بسته های اخیرا استفاده شده</string>
     <string name="suggested_packages">بسته های پیشنهادی</string>
+    <string name="other_internet_packages">بسته های دیگر</string>
+    <string name="all_packages">همه بسته ها</string>
+    <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
+    <string name="credit_sim">سیمکارت اعتباری</string>
+    <string name="permanent_sim">سیمکارت دائمی</string>
+    <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>
+    <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
+    <string name="data_sim">سیمکارت دیتا</string>
+    <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
+    <string name="no_number_found">شماره ای از قبل موجود نیست</string>
 </resources>

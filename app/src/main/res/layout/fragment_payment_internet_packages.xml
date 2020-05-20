@@ -109,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/dp8"
                 android:text="@string/suggested_packages"
                 android:textColor="@color/green"
                 android:visibility="gone"
