@@ -10,42 +10,29 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingLeave;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingLeaveResponse extends MessageHandler {
-
-    public int actionId;
-    public Object message;
-    public String identity;
-
     public SignalingLeaveResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
     public void handler() {
         super.handler();
-
         final ProtoSignalingLeave.SignalingLeaveResponse.Builder builder = (ProtoSignalingLeave.SignalingLeaveResponse.Builder) message;
-        if (G.iSignalingLeave != null) {
-            G.iSignalingLeave.onLeave(builder.getType());
-        }
-
-    }
-
-    @Override
-    public void timeOut() {
-        super.timeOut();
+        CallManager.getInstance().onLeave(builder);
     }
 
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        CallManager.getInstance().onError(actionId, majorCode, minorCode);
     }
 }
 

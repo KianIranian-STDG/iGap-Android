@@ -58,7 +58,10 @@ public class PermissionHelper {
         if (hasPermissions(Permissions)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(activity, Permissions, VoicePermissionRequestCode);
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, VoicePermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, VoicePermissionRequestCode);
             return false;
         }
     }

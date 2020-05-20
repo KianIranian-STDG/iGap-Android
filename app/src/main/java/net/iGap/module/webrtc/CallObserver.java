@@ -17,8 +17,8 @@ import android.util.Log;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.module.enums.CallState;
 import net.iGap.observers.interfaces.ISignalingAccept;
 import net.iGap.observers.interfaces.ISignalingCandidate;
 import net.iGap.observers.interfaces.ISignalingErrore;
@@ -26,7 +26,6 @@ import net.iGap.observers.interfaces.ISignalingLeave;
 import net.iGap.observers.interfaces.ISignalingOffer;
 import net.iGap.observers.interfaces.ISignalingRinging;
 import net.iGap.observers.interfaces.ISignalingSessionHold;
-import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoSignalingLeave;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.request.RequestSignalingRinging;
@@ -44,6 +43,7 @@ import static net.iGap.G.iSignalingSessionHold;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
+@Deprecated
 public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignalingRinging, ISignalingAccept, ISignalingCandidate, ISignalingLeave, ISignalingSessionHold {
 
     public CallObserver() {
@@ -56,6 +56,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         G.iSignalingErrore = this;
     }
 
+    // done
     @Override
     public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
 
@@ -82,7 +83,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
                     @Override
                     public void onSetSuccess() {
-                        CallSelectFragment.call(called_userId, true, type);
+//                        CallSelectFragment.call(called_userId, true, type);
                     }
 
                     @Override
@@ -100,6 +101,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
+    // done
     @Override
     public void onAccept(final String called_sdp) {
         G.handler.post(new Runnable() {
@@ -145,6 +147,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
+    //done
     @Override
     public void onCandidate(final String peerSdpMId, final int peerSdpMLineIndex, final String peerCandidate) {
         G.handler.post(new Runnable() {
@@ -157,7 +160,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
-
+    //done
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
 
@@ -201,12 +204,14 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                 }
             }, 2000);
         } catch (Exception e) {
+            // TODO: 5/9/2020 should not be here 
             WebRTC.getInstance().leaveCall();
         }
 
 
     }
 
+    // done
     @Override
     public void onRinging() {
 
@@ -220,6 +225,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         }, 1000);
     }
 
+    //done
     @Override
     public void onHold(Boolean hold) {
         G.handler.postDelayed(new Runnable() {

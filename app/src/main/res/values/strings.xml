@@ -2690,5 +2690,14 @@ Want to get it?</string>
     <string name="no_package_selected">No package selected</string>
     <string name="save_purchase">Do you want to save the purchase in history?</string>
     <string name="tarabord">If you have transferred, select your new operator</string>
+    <string name="call_error_internalServer">Internal server error happened.</string>
+    <string name="call_error_badPayload">Bad payload happened.</string>
+    <string name="call_error_forbidden">Your action is forbidden.</string>
+    <string name="call_error_offer">Offer is NOT possible.</string>
+    <string name="call_error_accept">Accept is NOT possible.</string>
+    <string name="call_error_candidate">Candidate is NOT possible.</string>
+    <string name="call_error_hold">Hold call is NOT possible.</string>
+    <string name="mic">Mic</string>
+    <string name="hold">Hold</string>
 
 </resources>

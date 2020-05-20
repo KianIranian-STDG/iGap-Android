@@ -2632,4 +2632,6 @@
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
     <string name="save_purchase">آیا مایل به ذخیره خرید در تاریخچه میباشید؟</string>
     <string name="tarabord">در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید</string>
+    <string name="mic">میکروفن</string>
+    <string name="hold">نگه‌داشتن</string>
 </resources>

@@ -42,8 +42,8 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestSignalingGetLog;
-import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
@@ -53,6 +53,7 @@ import java.util.TimerTask;
 
 import io.realm.Realm;
 
+@Deprecated
 public class ActivityCallViewModel extends ViewModel implements BluetoothProfile.ServiceListener {
 
     public ObservableInt showPeerSurface = new ObservableInt(View.GONE);
@@ -108,6 +109,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     private int secend = 0;
     private int minute = 0;
 
+    @Deprecated
     public ActivityCallViewModel(long userId, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
 
         this.userId = userId;
@@ -393,7 +395,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
                         }, 1000);*/
                         if (!isSendLeave) {
-                            new RequestSignalingLeave().signalingLeave();
+                            CallManager.getInstance().leaveCall();
                         }
                         isConnected = false;
                         break;
@@ -413,7 +415,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         setPhoneSpeaker();
                         playSound.postValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
-                        new RequestSignalingLeave().signalingLeave();
+                        CallManager.getInstance().leaveCall();
 
                         isConnected = false;
                         stopTimer();
@@ -522,6 +524,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
         EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
+        //moved to call manager
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
@@ -654,6 +657,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         }
     }
 
+    @Deprecated
     public void leaveCall() {
         G.isInCall = false;
         EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
@@ -678,6 +682,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         isMuteMusic.setValue(false);
         new RequestSignalingGetLog().signalingGetLog(0, 1);
         if (!isSendLeave) {
+            // TODO: 5/9/2020 why here??
             WebRTC.getInstance().leaveCall();
         }
         if (G.onHoldBackgroundChanegeListener != null) {

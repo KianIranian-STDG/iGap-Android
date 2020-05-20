@@ -3263,4 +3263,7 @@
     <string name="no_number_found">شماره ای از قبل موجود نیست</string>
     <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
+    <string name="mic">Mic</string>
+    <string name="hold">Hold</string>
+
 </resources>

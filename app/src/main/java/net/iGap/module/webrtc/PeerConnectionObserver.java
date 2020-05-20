@@ -21,9 +21,8 @@ package net.iGap.module.webrtc;
 
 import android.util.Log;
 
-import net.iGap.G;
 import net.iGap.module.enums.CallState;
-import net.iGap.request.RequestSignalingCandidate;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.webrtc.AudioTrack;
 import org.webrtc.DataChannel;
@@ -36,49 +35,48 @@ import org.webrtc.VideoSink;
 import org.webrtc.VideoTrack;
 
 import static org.webrtc.PeerConnection.IceConnectionState.CHECKING;
-import static org.webrtc.PeerConnection.IceConnectionState.CLOSED;
-import static org.webrtc.PeerConnection.IceConnectionState.COMPLETED;
 import static org.webrtc.PeerConnection.IceConnectionState.CONNECTED;
 import static org.webrtc.PeerConnection.IceConnectionState.DISCONNECTED;
 import static org.webrtc.PeerConnection.IceConnectionState.FAILED;
 
 public class PeerConnectionObserver implements PeerConnection.Observer {
 
+    private String TAG = "iGapCall " + getClass().getSimpleName();
+    
     @Override
     public void onSignalingChange(PeerConnection.SignalingState signalingState) {
-        Log.i("amini", "onSignalingChange : " + signalingState);
+        Log.i(TAG, "onSignalingChange : " + signalingState);
     }
 
     @Override
     public void onIceConnectionChange(final PeerConnection.IceConnectionState iceConnectionState) {
-        Log.i("amini", "onIceConnectionChange : " + iceConnectionState);
-        if (G.iSignalingCallBack != null) {
-            if (iceConnectionState == CLOSED || iceConnectionState == DISCONNECTED) {
-                G.iSignalingCallBack.onStatusChanged(CallState.DISCONNECTED);
-            } else if (iceConnectionState == FAILED) {
-                G.iSignalingCallBack.onStatusChanged(CallState.FAILD);
-            } else if (iceConnectionState == CHECKING) {
-                G.iSignalingCallBack.onStatusChanged(CallState.CONNECTING);
-            } else if (iceConnectionState == CONNECTED || iceConnectionState == COMPLETED) {
-                G.iSignalingCallBack.onStatusChanged(CallState.CONNECTED);
-            }
+        Log.i(TAG, "onIceConnectionChange : " + iceConnectionState);
+        if (iceConnectionState == DISCONNECTED) {
+            CallManager.getInstance().changeState(CallState.DISCONNECTED);
+        } else if (iceConnectionState == FAILED) {
+            CallManager.getInstance().changeState(CallState.FAILD);
+        } else if (iceConnectionState == CHECKING) {
+            CallManager.getInstance().changeState(CallState.CONNECTING);
+        } else if (iceConnectionState == CONNECTED) {
+            CallManager.getInstance().changeState(CallState.CONNECTED);
         }
     }
 
     @Override
     public void onIceConnectionReceivingChange(boolean b) {
-        Log.i("amini", "onIceConnectionReceivingChange : " + b);
+        Log.i(TAG, "onIceConnectionReceivingChange : " + b);
     }
 
     @Override
     public void onIceGatheringChange(PeerConnection.IceGatheringState iceGatheringState) {
-        Log.i("amini", "onIceGatheringChange : " + iceGatheringState);
+        Log.i(TAG, "onIceGatheringChange : " + iceGatheringState);
     }
 
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
-        Log.i("WWW", "WebRtc onIceCandidate : " + iceCandidate.toString());
-        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
+        Log.i(TAG, "WebRtc onIceCandidate : " + iceCandidate.toString());
+        CallManager.getInstance().exchangeCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
+//        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
     }
 
     @Override
@@ -89,6 +87,12 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
 
     @Override
     public void onAddStream(MediaStream stream) {
+
+        if (stream.audioTracks.size() > 1 || stream.videoTracks.size() > 1) {
+            Log.d(TAG, "onAddStream: Weird-looking stream");
+            return;
+        }
+
         for (AudioTrack audioTrack : stream.audioTracks) {
             audioTrack.setEnabled(true);
         }
@@ -100,15 +104,18 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
             videoTrack.addSink(new VideoSink() {
                 @Override
                 public void onFrame(VideoFrame videoFrame) {
-
-                    if (G.onVideoCallFrame != null) {
-                        G.onVideoCallFrame.onRemoteFrame(videoFrame);
+                    Log.d(TAG, "onFrame: in remote frame");
+                    if (WebRTC.getInstance().getFrameListener() != null) {
+                        Log.d(TAG, "onFrame: remote frame set.");
+                        WebRTC.getInstance().getFrameListener().onRemoteFrame(videoFrame);
                     }
+//                    if (G.onVideoCallFrame != null) {
+//                        G.onVideoCallFrame.onRemoteFrame(videoFrame);
+//                    }
                 }
             });
 
         }
-
 
     }
 

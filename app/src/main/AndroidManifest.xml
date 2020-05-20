@@ -107,8 +107,7 @@
             android:name=".activities.ActivityCall"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance">
-        </activity>
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name="org.paygear.WalletActivity"
             android:screenOrientation="portrait"
@@ -217,7 +216,14 @@
         <activity
             android:name=".activities.ActivityRegistration"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.SplashActivity"
+        <activity
+            android:name=".activities.CallActivity"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
+            android:excludeFromRecents="true"
+            android:screenOrientation="locked"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -239,6 +245,9 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".module.CallActionsReceiver"
+            android:exported="false" />
 
         <service android:name=".helper.ServiceContact" />
         <service android:name=".module.UploadService" />
@@ -322,12 +331,21 @@
                 android:resource="@xml/contacts" />
         </service>
         <service android:name=".module.BeepTunesPlayerService" />
+        <service android:name=".module.webrtc.CallService" />
 
         <service
             android:exported="false"
             android:name=".api.webservice.JobServiceReconnect">
             <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".viewmodel.controllers.telecom.CallConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
     </application>

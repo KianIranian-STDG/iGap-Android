@@ -40,6 +40,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
+import net.iGap.activities.CallActivity;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PassCode;
@@ -50,8 +51,10 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.module.webrtc.CallService;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.paygear.WalletActivity;
 
@@ -476,7 +479,7 @@ public class HelperToolbar {
         if (mContext == null || callTimerReceiver == null) {
             return;
         }
-        IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
+        IntentFilter intentFilter = new IntentFilter(CallActivity.CALL_TIMER_BROADCAST);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(callTimerReceiver, intentFilter);
     }
 
@@ -712,8 +715,8 @@ public class HelperToolbar {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction() == null || intent.getExtras() == null) return;
-                if (intent.getAction().equals(ActivityCall.CALL_TIMER_BROADCAST)) {
-                    String time = intent.getExtras().getString(ActivityCall.TIMER_TEXT, "");
+                if (intent.getAction().equals(CallActivity.CALL_TIMER_BROADCAST)) {
+                    String time = intent.getExtras().getString(CallActivity.TIMER_TEXT, "");
                     mTxtCallTimer.setText(time);
                 }
             }
@@ -734,8 +737,12 @@ public class HelperToolbar {
             ActivityCall.stripLayoutChat = view.getCallLayout();
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
-
+            txtCallActivityBack.setOnClickListener(v -> {
+                if (CallService.getInstance() != null) {
+                    mContext.startActivity(new Intent(G.fragmentActivity, CallActivity.class));
+                }
+            });
+//            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
             checkIsAvailableOnGoingCall();
 
         } else if (isSharedMedia) {
@@ -747,8 +754,12 @@ public class HelperToolbar {
             ActivityCall.stripLayoutMain = view.getCallLayout();
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
-
+            txtCallActivityBack.setOnClickListener(v -> {
+                if (CallService.getInstance() != null) {
+                    mContext.startActivity(new Intent(G.fragmentActivity, CallActivity.class));
+                }
+            });
+//            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
         }
 
         MusicPlayer.setMusicPlayer(musicLayout);
@@ -756,7 +767,7 @@ public class HelperToolbar {
     }
 
     public void checkIsAvailableOnGoingCall() {
-        callLayout.setVisibility(G.isInCall ? View.VISIBLE : View.GONE);
+        callLayout.setVisibility(CallManager.getInstance().isCallAlive() ? View.VISIBLE : View.GONE);
     }
 
     private void setMediaLayout() {

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#E1E1E1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_call_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_app_icon"
+        android:layout_alignBottom="@+id/iv_app_icon"
+        android:layout_toRightOf="@+id/iv_app_icon"
+        android:gravity="center"
+        android:text="iGap secure call"
+        android:textSize="@dimen/verySmallTextSize" />
+
+    <LinearLayout
+        android:id="@+id/ll_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_app_icon"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/iv_call_callerAvatar"
+        android:orientation="vertical"
+        android:paddingLeft="16dp">
+
+        <TextView
+            android:id="@+id/tv_call_callerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/main_font_bold"
+            android:maxLines="1"
+            android:text="Abolfazl Abbasi"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/tv_call_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/video_calls"
+            android:textSize="@dimen/smallTextSize" />
+
+        <TextView
+            android:id="@+id/tv_call_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="abolfazl abbasi"
+            android:textSize="@dimen/smallTextSize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_call_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_info"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="8dp"
+        android:baselineAligned="false"
+        android:weightSum="2">
+
+        <FrameLayout
+            android:id="@+id/btn_call_answer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_call_notif_answer"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Answer call"
+                android:textColor="@color/green" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_call_decline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_call_notif_decline"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Decline call"
+                android:textColor="@color/red" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_call_callerAvatar"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="16dp" />
+
+    <ImageView
+        android:id="@+id/iv_app_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="8dp"
+        android:src="@drawable/igap_flat_icon" />
+</RelativeLayout>
