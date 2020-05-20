@@ -109,6 +109,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     private int secend = 0;
     private int minute = 0;
 
+    @Deprecated
     public ActivityCallViewModel(long userId, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
 
         this.userId = userId;

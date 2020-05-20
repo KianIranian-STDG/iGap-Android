@@ -60,10 +60,11 @@ public class CallService extends Service implements EventListener, CallManager.C
     private boolean isIncoming;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
     private boolean isVoiceCall;
-    private MediaPlayer ringtonePlayer;
-    private AudioManager audioManager;
+    private MediaPlayer player;
     private Vibrator vibrator;
 
+    private CallAudioManager appRTCAudioManager = null;
+    private CallAudioManager.AudioManagerEvents audioManagerEvents;
 
     private static CallService instance;
 
@@ -72,9 +73,6 @@ public class CallService extends Service implements EventListener, CallManager.C
     private CallManager.CallStateChange callStateChange;
 
     private String TAG = "iGapCall " + getClass().getSimpleName();
-
-    private AppRTCAudioManager appRTCAudioManager = null;
-    private AppRTCAudioManager.AudioManagerEvents audioManagerEvents;
 
     public static CallService getInstance() {
         return instance;
@@ -99,9 +97,7 @@ public class CallService extends Service implements EventListener, CallManager.C
         super.onCreate();
         Log.i(TAG, "onCreate: ");
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
     }
 
     @Override
@@ -157,15 +153,17 @@ public class CallService extends Service implements EventListener, CallManager.C
 
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
-        appRTCAudioManager = AppRTCAudioManager.create(getApplicationContext());
+        appRTCAudioManager = CallAudioManager.create(getApplicationContext());
+        if (isVoiceCall)
+            setAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(TAG, "Starting the audio manager...");
         // This method will be called each time the number of available audio
         // devices has changed.
-        appRTCAudioManager.start(new AppRTCAudioManager.AudioManagerEvents() {
+        appRTCAudioManager.start(new CallAudioManager.AudioManagerEvents() {
             @Override
-            public void onAudioDeviceChanged(AppRTCAudioManager.AudioDevice selectedAudioDevice, Set<AppRTCAudioManager.AudioDevice> availableAudioDevices) {
+            public void onAudioDeviceChanged(CallAudioManager.AudioDevice selectedAudioDevice, Set<CallAudioManager.AudioDevice> availableAudioDevices) {
                 if (audioManagerEvents != null)
                     audioManagerEvents.onAudioDeviceChanged(selectedAudioDevice, availableAudioDevices);
                 CallManager.getInstance().setActiveAudioDevice(selectedAudioDevice);
@@ -175,9 +173,11 @@ public class CallService extends Service implements EventListener, CallManager.C
         return START_STICKY;
     }
 
+    // functions for playing audio files in different stages of call
+
     private void playSoundAndVibration() {
         boolean canPlay = false;
-        switch (audioManager.getRingerMode()) {
+        switch (appRTCAudioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
                 canPlay = false;
                 break;
@@ -194,7 +194,7 @@ public class CallService extends Service implements EventListener, CallManager.C
                 break;
         }
 
-        if (audioManager.isWiredHeadsetOn()) {
+        if (appRTCAudioManager.hasWiredHeadset()) {
             canPlay = true;
         }
 
@@ -210,33 +210,79 @@ public class CallService extends Service implements EventListener, CallManager.C
                     e.printStackTrace();
                 }
 
-                if (ringtonePlayer == null) {
-                    ringtonePlayer = new MediaPlayer();
+                if (player == null) {
+                    player = new MediaPlayer();
                 } else {
-                    if (ringtonePlayer.isPlaying()) {
-                        ringtonePlayer.stop();
-                        ringtonePlayer.reset();
+                    if (player.isPlaying()) {
+                        player.stop();
+                        player.reset();
                     }
                 }
 
                 if (path == null) {
-                    ringtonePlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tone));
+                    player.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tone));
                 } else {
-                    ringtonePlayer.setDataSource(this, alert);
+                    player.setDataSource(this, alert);
                 }
 
-                if (audioManager.isWiredHeadsetOn()) {
-                    ringtonePlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                if (appRTCAudioManager.hasWiredHeadset()) {
+                    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
                 } else {
-                    ringtonePlayer.setAudioStreamType(AudioManager.STREAM_RING);
+                    player.setAudioStreamType(AudioManager.STREAM_RING);
                 }
 
-                ringtonePlayer.setLooping(true);
-                ringtonePlayer.prepare();
-                ringtonePlayer.start();
+                player.setLooping(true);
+                player.prepare();
+                player.start();
             } catch (Exception e) {
                 HelperLog.setErrorLog(e);
             }
+        }
+    }
+
+    public void stopSoundAndVibrate() {
+        try {
+            if (player != null) {
+                player.stop();
+                player.release();
+                player = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (vibrator != null) {
+                vibrator.cancel();
+                vibrator = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playSoundWithRes(int sound, boolean isLoopActive) {
+        playSoundWithUri(Uri.parse("android.resource://" + getPackageName() + "/" + sound), isLoopActive);
+    }
+
+    public void playSoundWithUri(Uri sound, boolean isLoopActive) {
+        if (player == null) {
+            player = new MediaPlayer();
+        } else {
+            if (player.isPlaying()) {
+                player.stop();
+                player.reset();
+            }
+        }
+        try {
+            player.setDataSource(this, sound);
+            player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+            if (isLoopActive)
+                player.setLooping(true);
+            player.prepare();
+            player.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -434,27 +480,6 @@ public class CallService extends Service implements EventListener, CallManager.C
         }
     }
 
-    private void stopSoundAndVibrate() {
-        try {
-            if (ringtonePlayer != null) {
-                ringtonePlayer.stop();
-                ringtonePlayer.release();
-                ringtonePlayer = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (vibrator != null) {
-                vibrator.cancel();
-                vibrator = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onCallStateChanged(CallState state) {
         Log.i(TAG, "onCallStateChanged: " + state);
@@ -462,8 +487,12 @@ public class CallService extends Service implements EventListener, CallManager.C
         if (callStateChange != null)
             callStateChange.onCallStateChanged(state);
 
-        if (state != CallState.RINGING) {
+        if (state == CallState.CONNECTED) {
             stopSoundAndVibrate();
+        }
+
+        if (state == CallState.DISCONNECTED) {
+            playSoundWithRes(R.raw.igap_discounect, false);
         }
 
         if (state == CallState.REJECT || state == CallState.FAILD || state == CallState.TOO_LONG || state == CallState.LEAVE_CALL || state == CallState.UNAVAILABLE || state == CallState.DISCONNECTED || state == CallState.NOT_ANSWERED) {
@@ -477,11 +506,13 @@ public class CallService extends Service implements EventListener, CallManager.C
             callStateChange.onError(messageID, major, minor);
     }
 
-    public void setAudioDevice(AppRTCAudioManager.AudioDevice selectedAudioDevice) {
-        appRTCAudioManager.setDefaultAudioDevice(selectedAudioDevice);
+    // related functions for controlling audio device within call
+
+    public void setAudioDevice(CallAudioManager.AudioDevice selectedAudioDevice) {
+        appRTCAudioManager.selectAudioDevice(selectedAudioDevice);
     }
 
-    public AppRTCAudioManager.AudioDevice getActiveAudioDevice() {
+    public CallAudioManager.AudioDevice getActiveAudioDevice() {
         return appRTCAudioManager.getSelectedAudioDevice();
     }
 
@@ -493,7 +524,7 @@ public class CallService extends Service implements EventListener, CallManager.C
         return appRTCAudioManager.isSpeakerOn();
     }
 
-    public void setAudioManagerEvents(AppRTCAudioManager.AudioManagerEvents audioManagerEvents) {
+    public void setAudioManagerEvents(CallAudioManager.AudioManagerEvents audioManagerEvents) {
         this.audioManagerEvents = audioManagerEvents;
     }
 }

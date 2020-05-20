@@ -23,7 +23,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
-import net.iGap.module.webrtc.AppRTCAudioManager;
+import net.iGap.module.webrtc.CallAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
@@ -60,7 +60,7 @@ public class CallManager implements EventListener {
 
     private long callPeerId;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
-    private AppRTCAudioManager.AudioDevice activeAudioDevice = null;
+    private CallAudioManager.AudioDevice activeAudioDevice = null;
 
     private RealmRegisteredInfo info;
     private RealmCallConfig currentCallConfig;
@@ -115,6 +115,7 @@ public class CallManager implements EventListener {
      * @param response from server
      */
     public void onOffer(ProtoSignalingOffer.SignalingOfferResponse.Builder response) {
+        Log.d(TAG, "startCall: **************************************************************");
         Log.d(TAG, "onOffer: " + response.getCallerUserId() + " " + response.getType().toString());
         if (invalidCallType(response.getType()))
             return;
@@ -169,7 +170,9 @@ public class CallManager implements EventListener {
                 MusicPlayer.pauseSoundFromIGapCall = true;
             }
         }
-
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().playSoundWithRes(R.raw.igap_signaling, true);
+        }
         setupCallerInfo(callPeerId);
 
         WebRTC.getInstance().createOffer(callPeerId);
@@ -217,6 +220,9 @@ public class CallManager implements EventListener {
     public void onRing() {
         Log.d(TAG, "onRing: ");
         G.handler.post(() -> changeState(CallState.RINGING));
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().playSoundWithRes(R.raw.igap_ringing, true);
+        }
     }
 
     /**
@@ -232,6 +238,9 @@ public class CallManager implements EventListener {
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
         });
         EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
+        }
     }
 
     /**
@@ -242,6 +251,10 @@ public class CallManager implements EventListener {
         isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
         EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().stopSoundAndVibrate();
+            CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
+        }
     }
 
     /**
@@ -371,6 +384,9 @@ public class CallManager implements EventListener {
                     case 9:
                         messageID = R.string.e_904_9;
                         changeState(CallState.BUSY);
+                        if (CallService.getInstance() != null) {
+                            CallService.getInstance().playSoundWithRes(R.raw.igap_busy, false);
+                        }
                         break;
                     default:
                         changeState(CallState.UNAVAILABLE);
@@ -651,11 +667,11 @@ public class CallManager implements EventListener {
         return CallManager.getInstance().getCallType() == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING;
     }
 
-    public AppRTCAudioManager.AudioDevice getActiveAudioDevice() {
+    public CallAudioManager.AudioDevice getActiveAudioDevice() {
         return activeAudioDevice;
     }
 
-    public void setActiveAudioDevice(AppRTCAudioManager.AudioDevice activeAudioDevice) {
+    public void setActiveAudioDevice(CallAudioManager.AudioDevice activeAudioDevice) {
         this.activeAudioDevice = activeAudioDevice;
     }
 

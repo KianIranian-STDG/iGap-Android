@@ -35,7 +35,7 @@ import java.util.Set;
  * AppRTCProximitySensor manages functions related to Bluetoth devices in the
  * AppRTC demo.
  */
-public class AppRTCBluetoothManager {
+public class CallBluetoothManager {
     private static final String TAG = "AppRTCBluetoothManager";
 
     // Timeout interval for starting or stopping audio to a Bluetooth SCO device.
@@ -64,7 +64,7 @@ public class AppRTCBluetoothManager {
     }
 
     private final Context apprtcContext;
-    private final AppRTCAudioManager apprtcAudioManager;
+    private final CallAudioManager apprtcAudioManager;
     private final AudioManager audioManager;
     private final Handler handler;
 
@@ -193,12 +193,12 @@ public class AppRTCBluetoothManager {
     /**
      * Construction.
      */
-    static AppRTCBluetoothManager create(Context context, AppRTCAudioManager audioManager) {
+    static CallBluetoothManager create(Context context, CallAudioManager audioManager) {
         Log.d(TAG, "create" + AppRTCUtils.getThreadInfo());
-        return new AppRTCBluetoothManager(context, audioManager);
+        return new CallBluetoothManager(context, audioManager);
     }
 
-    protected AppRTCBluetoothManager(Context context, AppRTCAudioManager audioManager) {
+    protected CallBluetoothManager(Context context, CallAudioManager audioManager) {
         Log.d(TAG, "ctor");
         ThreadUtils.checkIsOnMainThread();
         apprtcContext = context;

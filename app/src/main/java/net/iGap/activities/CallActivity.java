@@ -38,7 +38,7 @@ import net.iGap.module.customView.CallRippleView;
 import net.iGap.module.customView.TextImageView;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.enums.CallState;
-import net.iGap.module.webrtc.AppRTCAudioManager;
+import net.iGap.module.webrtc.CallAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
@@ -123,7 +123,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         // here we check for any audio changes.
         if (CallService.getInstance() != null)
-            CallService.getInstance().setAudioManagerEvents((selectedAudioDevice, availableAudioDevices) -> checkForBluetoothAvailability(availableAudioDevices));
+            CallService.getInstance().setAudioManagerEvents((selectedAudioDevice, availableAudioDevices) -> {
+                checkForBluetoothAvailability(availableAudioDevices);
+            });
     }
 
     private boolean checkPermissions() {
@@ -372,7 +374,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         bluetoothView = new TextImageView(this);
         bluetoothView.setImageResource(R.drawable.ic_call_bluetooth);
         bluetoothView.setText(R.string.bluetooth);
-        bluetoothView.setViewColor(CallManager.getInstance().getActiveAudioDevice() == AppRTCAudioManager.AudioDevice.BLUETOOTH ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        bluetoothView.setViewColor(CallManager.getInstance().getActiveAudioDevice() == CallAudioManager.AudioDevice.BLUETOOTH ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
         bluetoothView.setOnClickListener(v -> bluetoothClick());
         row2.addView(bluetoothView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
@@ -438,9 +440,11 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         }
     }
 
-    private void checkForBluetoothAvailability(Set<AppRTCAudioManager.AudioDevice> availableDevices) {
-        if (bluetoothView != null)
-            bluetoothView.setEnabled(availableDevices.contains(AppRTCAudioManager.AudioDevice.BLUETOOTH));
+    private void checkForBluetoothAvailability(Set<CallAudioManager.AudioDevice> availableDevices) {
+        if (bluetoothView != null && availableDevices.contains(CallAudioManager.AudioDevice.BLUETOOTH)) {
+            bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+            speakerView.setViewColor(getResources().getColor(R.color.white));
+        }
     }
 
     private void endCall() {
@@ -452,15 +456,16 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void bluetoothClick() {
-        Log.d(TAG, "bluetoothClick: in here" + CallManager.getInstance().getActiveAudioDevice());
-        if (CallManager.getInstance().getActiveAudioDevice() == AppRTCAudioManager.AudioDevice.BLUETOOTH) {
+        if (CallManager.getInstance().getActiveAudioDevice() == CallAudioManager.AudioDevice.BLUETOOTH) {
             if (CallService.getInstance() != null)
-                CallService.getInstance().setAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
-            bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+                CallService.getInstance().setAudioDevice(CallAudioManager.AudioDevice.SPEAKER_PHONE);
+            bluetoothView.setViewColor(getResources().getColor(R.color.white));
+            speakerView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
         } else {
             if (CallService.getInstance() != null)
-                CallService.getInstance().setAudioDevice(AppRTCAudioManager.AudioDevice.BLUETOOTH);
-            bluetoothView.setViewColor(getResources().getColor(R.color.white));
+                CallService.getInstance().setAudioDevice(CallAudioManager.AudioDevice.BLUETOOTH);
+            bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+            speakerView.setViewColor(getResources().getColor(R.color.white));
         }
         if (CallService.getInstance() != null)
             CallManager.getInstance().setActiveAudioDevice(CallService.getInstance().getActiveAudioDevice());
