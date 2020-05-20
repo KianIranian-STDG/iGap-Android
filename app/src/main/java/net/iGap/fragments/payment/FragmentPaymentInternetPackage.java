@@ -186,12 +186,11 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
 
         paymentInternetPackageViewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
-                savePayment(currentInternetPackage.getCost());
 
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), true, token, result -> {
                     if (result.isSuccess()) {
                         if (currentInternetPackage != null) {
-                            savePayment(currentInternetPackage.getCost());
+                            savePayment();
                         }
                         if (getActivity() != null)
                             getActivity().onBackPressed();
@@ -285,23 +284,29 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
         }
     }
 
-    public void savePayment(int price) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("phone_number", phoneNumber);
-        jsonObject.addProperty("package_type", String.valueOf(currentInternetPackage.getType()));
-        jsonObject.addProperty("charge_type", simType);
-        chargeApi.setFavoriteInternetPackage(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
-                loadingView.setVisibility(View.GONE);
-            }
+    public void savePayment() {
+        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.save_purchase))
+                .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                .positiveText(R.string.ok)
+                .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("phone_number", phoneNumber);
+            jsonObject.addProperty("package_type", String.valueOf(currentInternetPackage.getType()));
+            jsonObject.addProperty("charge_type", simType);
+            chargeApi.setFavoriteInternetPackage(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                    loadingView.setVisibility(View.GONE);
+                }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                loadingView.setVisibility(View.GONE);
-                HelperError.showSnackMessage(getResources().getString(R.string.server_do_not_response), false);
-            }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    loadingView.setVisibility(View.GONE);
+                    HelperError.showSnackMessage(getResources().getString(R.string.server_do_not_response), false);
+                }
+            });
+            dialog.dismiss();
         });
-
     }
 }

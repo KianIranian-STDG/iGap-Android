@@ -2685,5 +2685,6 @@ Want to get it?</string>
     <string name="no_number_found">No number found</string>
     <string name="save_internet_package_dialog">Do you want to save bought package?</string>
     <string name="no_package_selected">No package selected</string>
+    <string name="save_purchase">Do you want to save the purchase in history?</string>
 
 </resources>

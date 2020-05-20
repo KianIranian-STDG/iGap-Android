@@ -35,6 +35,7 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.FavoriteNumber;
@@ -44,6 +45,7 @@ import net.iGap.module.Contacts;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -51,6 +53,7 @@ import net.iGap.repository.MciInternetPackageRepository;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -401,29 +404,42 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
-            new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
-            View view = dialog.getCustomView();
-            rvContact = view.findViewById(R.id.rv_contact);
-            saveBtn1 = view.findViewById(R.id.btn_dialog1);
-            closeView = view.findViewById(R.id.closeView);
+            try {
+                HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
+                    @Override
+                    public void Allow() {
+                        new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
+                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
+                        View view = dialog.getCustomView();
+                        rvContact = view.findViewById(R.id.rv_contact);
+                        saveBtn1 = view.findViewById(R.id.btn_dialog1);
+                        closeView = view.findViewById(R.id.closeView);
 
 
-            saveBtn1.setOnClickListener(v15 -> {
-                if (adapterContact.getSelectedPosition() == -1) {
-                    return;
-                }
-                selectedIndex = adapterContact.getSelectedPosition();
-                contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
-                editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
-                dialog.dismiss();
-            });
-            dialog.show();
+                        saveBtn1.setOnClickListener(v15 -> {
+                            if (adapterContact.getSelectedPosition() == -1) {
+                                return;
+                            }
+                            selectedIndex = adapterContact.getSelectedPosition();
+                            contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
+                            editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
+                            dialog.dismiss();
+                        });
+                        dialog.show();
 
-            closeView.setOnClickListener(v12 -> dialog.dismiss());
+                        closeView.setOnClickListener(v12 -> dialog.dismiss());
 
-            rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            rvContact.setAdapter(adapterContact);
+                        rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                        rvContact.setAdapter(adapterContact);
+                    }
+
+                    @Override
+                    public void deny() {
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -497,6 +513,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
             @Override
             public void afterTextChanged(Editable s) {
+                favoriteNumber = null;
                 if (editTextNumber.getText().length() == 11) {
                     String number = editTextNumber.getText().toString().substring(0, 4);
                     OperatorType.Type opt = new OperatorType().getOperation(number);
