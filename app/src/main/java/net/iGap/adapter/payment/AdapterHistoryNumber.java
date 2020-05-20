@@ -51,7 +51,7 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
 
         public void bindNUmber(FavoriteNumber historyNumber, int position) {
             phoneNumber.setText(historyNumber.getPhoneNumber());
-            amount.setText(historyNumber.getAmount().toString() + itemView.getContext().getString(R.string.rial));
+            amount.setText(historyNumber.getAmount() != null ? historyNumber.getAmount().toString() + itemView.getContext().getString(R.string.rial) : "");
             itemView.setSelected(selectedPosition == position);
             itemView.setOnClickListener(v -> {
                 int tmp = selectedPosition;

@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.button.MaterialButton;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
@@ -38,11 +39,15 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.Contacts;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.repository.MciInternetPackageRepository;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +67,7 @@ import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MCI;
 import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
 import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.RIGHTEL;
 
-public class FragmentPaymentInternet extends BaseFragment {
+public class FragmentPaymentInternet extends BaseFragment implements HandShakeCallback {
 
     public static final String SIM_TYPE_CREDIT = "CREDIT";
     public static final String SIM_TYPE_PERMANENT = "PERMANENT";
@@ -102,10 +107,12 @@ public class FragmentPaymentInternet extends BaseFragment {
     private FavoriteNumber historyNumber;
     private ProgressBar progressBar;
     private MaterialDesignTextView btnRemoveSearch;
+    private MciInternetPackageRepository repository;
 
     private List<Amount> amountList = new ArrayList<>();
     private List<ChargeType> chargeTypeList = new ArrayList<>();
     private ScrollView scrollView;
+    private FavoriteNumber favoriteNumber;
 
     public static FragmentPaymentInternet newInstance() {
 
@@ -148,6 +155,7 @@ public class FragmentPaymentInternet extends BaseFragment {
         btnRemoveSearch = view.findViewById(R.id.btnRemoveSearch);
 
         chargeApi = new RetrofitFactory().getChargeRetrofit();
+        repository = MciInternetPackageRepository.getInstance();
 
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
@@ -189,6 +197,10 @@ public class FragmentPaymentInternet extends BaseFragment {
         onItemOperatorSelect();
 
         enterBtn.setOnClickListener(v -> {
+            if (this.favoriteNumber != null) {
+                requestPayment(favoriteNumber);
+                return;
+            }
             if (operatorType != null) {
                 if (editTextNumber.getText() == null) {
                     editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
@@ -255,6 +267,40 @@ public class FragmentPaymentInternet extends BaseFragment {
                 simType = SIM_TYPE_DATA;
             }
         });
+    }
+
+    private void requestPayment(FavoriteNumber favoriteNumber) {
+        progressBar.setVisibility(View.VISIBLE);
+        repository.purchaseInternetPackage(favoriteNumber.getOperator(), favoriteNumber.getPhoneNumber().substring(1),
+                String.valueOf(favoriteNumber.getPackageType()), this, new ResponseCallback<MciPurchaseResponse>() {
+                    @Override
+                    public void onSuccess(MciPurchaseResponse data) {
+                        G.handler.post(() -> {
+                            if (getActivity() != null && data.getToken() != null) {
+                                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), true, data.getToken(), result -> {
+                                    if (result.isSuccess()) {
+
+                                        if (getActivity() != null)
+                                            getActivity().onBackPressed();
+                                    }
+                                });
+                            }
+                            progressBar.setVisibility(View.GONE);
+                        });
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        HelperError.showSnackMessage(error, false);
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        progressBar.setVisibility(View.GONE);
+                        HelperError.showSnackMessage(getContext().getResources().getString(R.string.time_out_error), false);
+                    }
+                });
     }
 
     private void onPhoneNumberInput() {
@@ -384,10 +430,10 @@ public class FragmentPaymentInternet extends BaseFragment {
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
-            chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
+            chargeApi.getFavoriteInternetPackage().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
                 public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
-                    if (response.isSuccessful()) {
+                    if (response.isSuccessful() && response.body().getData() != null) {
                         progressBar.setVisibility(View.GONE);
                         adapterHistory = new AdapterHistoryNumber(response.body().getData());
                         MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
@@ -404,6 +450,7 @@ public class FragmentPaymentInternet extends BaseFragment {
                             selectedIndex = adapterHistory.getSelectedPosition();
                             historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
                             editTextNumber.setText(historyNumber.getPhoneNumber());
+                            setFavoriteNumber(historyNumber);
                             dialog.dismiss();
                         });
 
@@ -427,6 +474,11 @@ public class FragmentPaymentInternet extends BaseFragment {
             });
         });
     }
+
+    private void setFavoriteNumber(FavoriteNumber historyNumber) {
+        this.favoriteNumber = historyNumber;
+    }
+
 
     private void onPhoneNumberInputClick() {
         editTextNumber.addTextChangedListener(new TextWatcher() {

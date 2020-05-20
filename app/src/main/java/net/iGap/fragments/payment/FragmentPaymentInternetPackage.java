@@ -17,16 +17,30 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.JsonObject;
 
 import net.iGap.R;
 import net.iGap.adapter.MySpinnerAdapter;
 import net.iGap.adapter.payment.internetpackage.AdapterInternetPackage;
+import net.iGap.api.ChargeApi;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.paymentPackage.InternetPackage;
 import net.iGap.observers.interfaces.ToolbarListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static net.iGap.fragments.payment.FragmentPaymentInternet.SIM_TYPE_CREDIT;
 import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
@@ -52,6 +66,11 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     private MaterialButton btnPay;
     private ProgressBar loadingView;
     private NestedScrollView scrollView;
+    private ChargeApi chargeApi;
+    private String operator;
+    private String simType;
+    private String phoneNumber;
+    private InternetPackage currentInternetPackage;
 
     public static FragmentPaymentInternetPackage newInstance(String phoneNumber, String operator, String simType) {
 
@@ -69,9 +88,6 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String operator = MTN;
-        String simType = SIM_TYPE_CREDIT;
-        String phoneNumber = null;
         if (getArguments() != null) {
             operator = getArguments().getString(PARAM_OPERATOR, MTN);
             simType = getArguments().getString(PARAM_SIM_TYPE);
@@ -99,6 +115,9 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
         btnPay = view.findViewById(R.id.btn_pay);
         loadingView = view.findViewById(R.id.loadingView);
         scrollView = view.findViewById(R.id.scrollView);
+
+        chargeApi = new RetrofitFactory().getChargeRetrofit();
+
         return view;
     }
 
@@ -167,9 +186,15 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
 
         paymentInternetPackageViewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
+                savePayment(currentInternetPackage.getCost());
+
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), true, token, result -> {
-                    if (getActivity() != null && result.isSuccess()) {
-                        getActivity().onBackPressed();
+                    if (result.isSuccess()) {
+                        if (currentInternetPackage != null) {
+                            savePayment(currentInternetPackage.getCost());
+                        }
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
                     }
                 });
             }
@@ -243,6 +268,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
             rvSuggested.setLayoutManager(new LinearLayoutManager(getContext()));
             rvSuggested.setAdapter(adapterProposal);
             adapterProposal.setSelectedListener(item -> {
+                currentInternetPackage = item;
                 paymentInternetPackageViewModel.setPackageType(item);
                 adapterOthers.unSelectCurrent();
             });
@@ -252,9 +278,30 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
             rvOtherPackages.setLayoutManager(new LinearLayoutManager(getContext()));
             rvOtherPackages.setAdapter(adapterOthers);
             adapterOthers.setSelectedListener(item -> {
+                currentInternetPackage = item;
                 paymentInternetPackageViewModel.setPackageType(item);
                 adapterProposal.unSelectCurrent();
             });
         }
+    }
+
+    public void savePayment(int price) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("phone_number", phoneNumber);
+        jsonObject.addProperty("package_type", String.valueOf(currentInternetPackage.getType()));
+        jsonObject.addProperty("charge_type", simType);
+        chargeApi.setFavoriteInternetPackage(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                loadingView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                loadingView.setVisibility(View.GONE);
+                HelperError.showSnackMessage(getResources().getString(R.string.server_do_not_response), false);
+            }
+        });
+
     }
 }
