@@ -1,7 +1,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">;
     <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <solid android:color="#A1CD95" />
+            <solid android:color="?iGapButtonColor" />
         </shape>
     </item>
     <item>

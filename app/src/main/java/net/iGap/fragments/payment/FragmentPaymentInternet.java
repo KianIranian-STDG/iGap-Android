@@ -483,9 +483,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                 @Override
                 public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), t.toString(), Toast.LENGTH_LONG).show();
                     HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
-
                 }
             });
         });
