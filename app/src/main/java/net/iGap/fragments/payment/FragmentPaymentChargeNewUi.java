@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,10 +43,10 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
-import net.iGap.model.OperatorType;
 import net.iGap.module.Contacts;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -160,8 +158,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
         DbManager.getInstance().doRealmTask(realm -> {
             userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
-            editTextNumber.setText(userInfo.getPhoneNumber().replace("98", "0").replace("+98", "0").replace("0098", "0").replace(" ", "")
-                    .replace("-", ""));
+            if (userInfo != null)
+                editTextNumber.setText(userInfo.getPhoneNumber().replace("98", "0").replace("+98", "0").replace("0098", "0").replace(" ", "")
+                        .replace("-", ""));
             onPhoneNumberInput();
         });
 
@@ -646,7 +645,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     if (getActivity() != null && token != null) {
                         new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
                             if (result.isSuccess()) {
-                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title("مایل به ذخیره سازی خرید در تاریخچه می باشید")
+                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(R.string.save_purchase)
                                         .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
                                         .positiveText(R.string.ok)
                                         .onNegative((dialog1, which) -> dialog1.dismiss()).show();
