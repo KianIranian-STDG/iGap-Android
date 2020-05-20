@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,8 @@ import com.google.android.material.button.MaterialButton;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
+import net.iGap.adapter.payment.Amount;
+import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
@@ -40,6 +43,12 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,6 +103,10 @@ public class FragmentPaymentInternet extends BaseFragment {
     private ProgressBar progressBar;
     private MaterialDesignTextView btnRemoveSearch;
 
+    private List<Amount> amountList = new ArrayList<>();
+    private List<ChargeType> chargeTypeList = new ArrayList<>();
+    private ScrollView scrollView;
+
     public static FragmentPaymentInternet newInstance() {
 
         Bundle args = new Bundle();
@@ -126,6 +139,7 @@ public class FragmentPaymentInternet extends BaseFragment {
         frameRightel = view.findViewById(R.id.view14);
         rdGroup = view.findViewById(R.id.rdGroup);
         rbCredit = view.findViewById(R.id.rbCredit);
+        scrollView = view.findViewById(R.id.scroll_payment);
         rbPermanent = view.findViewById(R.id.rbPermanent);
         rbTdLteCredit = view.findViewById(R.id.rbTdLteCredit);
         rbTdLtePermanent = view.findViewById(R.id.rbTdLtePermanent);
@@ -145,6 +159,7 @@ public class FragmentPaymentInternet extends BaseFragment {
                     .replace("0098", "0")
                     .replace(" ", "")
                     .replace("-", ""));
+            onPhoneNumberInput();
         });
 
         toolbar.addView(HelperToolbar.create()
@@ -239,6 +254,82 @@ public class FragmentPaymentInternet extends BaseFragment {
                 simType = SIM_TYPE_DATA;
             }
         });
+    }
+
+    private void onPhoneNumberInput() {
+        if (editTextNumber.getText().length() == 4 || editTextNumber.getText().length() == 11) {
+            String number = editTextNumber.getText().toString().substring(0, 4);
+            OperatorType.Type opt = new OperatorType().getOperation(number);
+            if (opt != null) {
+                setAdapterValue(opt);
+                switch (opt) {
+                    case HAMRAH_AVAL:
+                        setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                        setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
+                        break;
+                    case IRANCELL:
+                        setAdapterValue(OperatorType.Type.IRANCELL);
+                        setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
+                        break;
+                    case RITEL:
+                        setAdapterValue(OperatorType.Type.RITEL);
+                        setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
+                        break;
+                }
+                updateRadioGroup(opt);
+            }
+        }
+        if (editTextNumber.getText().length() == 11) {
+            scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+            hideKeyboard();
+        }
+    }
+
+    private void setAdapterValue(@NotNull OperatorType.Type operator) {
+        List<String> prices;
+        List<String> chargeType;
+        switch (operator) {
+            case HAMRAH_AVAL:
+                operatorType = OperatorType.Type.HAMRAH_AVAL;
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
+                amountList.clear();
+                for (int i = 0; i < prices.size(); i++) {
+                    amountList.add(new Amount(prices.get(i)));
+                }
+                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_hamrahe_aval));
+                chargeTypeList.clear();
+                for (int i = 0; i < chargeType.size(); i++) {
+                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                }
+
+                break;
+            case IRANCELL:
+                operatorType = OperatorType.Type.IRANCELL;
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price_irancell));
+                amountList.clear();
+                for (int i = 0; i < prices.size(); i++) {
+                    amountList.add(new Amount(prices.get(i)));
+                }
+                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_irancell));
+                chargeTypeList.clear();
+                for (int i = 0; i < chargeType.size(); i++) {
+                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                }
+                break;
+            case RITEL:
+                operatorType = OperatorType.Type.RITEL;
+                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
+                amountList.clear();
+                for (int i = 0; i < prices.size(); i++) {
+                    amountList.add(new Amount(prices.get(i)));
+                }
+                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_ritel));
+                chargeTypeList.clear();
+                for (int i = 0; i < chargeType.size(); i++) {
+                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                }
+                break;
+        }
     }
 
     private String convertOperatorToString(OperatorType.Type opt) {

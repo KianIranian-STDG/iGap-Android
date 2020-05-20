@@ -14,6 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scroll_payment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,6 +47,7 @@
                     android:text="@string/buy_internet_package_title"
                     android:textColor="@color/green"
                     android:textSize="@dimen/largeTextSize"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,8 +73,8 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/btnRemoveSearch"
-                    android:layout_width="@dimen/toolbar_icon_size"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:background="@null"
                     android:padding="8dp"
                     android:text="@string/md_close_button"

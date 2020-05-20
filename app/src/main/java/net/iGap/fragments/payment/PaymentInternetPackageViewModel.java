@@ -31,6 +31,7 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<String> showRequestErrorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> loadingVisibility = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isDataLoaded = new MutableLiveData<>();
 
     private List<MciInternetPackageFilter> timeFilters;
     private List<MciInternetPackageFilter> trafficFilters;
@@ -60,18 +61,15 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
             @Override
             public void onSuccess(List<MciInternetPackageFilter> data) {
                 fillTimeAndTraffic(data);
-                loadingVisibility.setValue(false);
             }
 
             @Override
             public void onError(String error) {
                 showRequestErrorMessage.setValue(error);
-                loadingVisibility.setValue(false);
             }
 
             @Override
             public void onFailed() {
-                loadingVisibility.setValue(false);
             }
         });
 
@@ -80,16 +78,18 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
             public void onSuccess(BaseIGashtResponse<InternetPackage> data) {
                 packageList = data.getData();
                 updateInternetPackager(-1, -1);
+                loadingVisibility.setValue(false);
             }
 
             @Override
             public void onError(String error) {
                 showRequestErrorMessage.setValue(error);
+                loadingVisibility.setValue(false);
             }
 
             @Override
             public void onFailed() {
-                Log.i(TAG, "onFailed: ");
+                loadingVisibility.setValue(false);
             }
         });
     }
@@ -106,21 +106,6 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
         if (packageList == null || timeFilters == null || trafficFilters == null)
             return;
 
-        for (int i = 0; i < packageList.size(); i++) {
-            if (timePosition >= 0 && timePosition < timeFilters.size() && packageList.get(i).getDurationId() != null && packageList.get(i).getDurationId().equals(timeFilters.get(timePosition).getId())) {
-                if (packageList.get(i).isSpecial())
-                    packageListSuggested.add(packageList.get(i));
-                else
-                    packageListOthers.add(packageList.get(i));
-            }
-            if (trafficPosition >= 0 && trafficPosition < trafficFilters.size() && packageList.get(i).getTrafficId() != null && packageList.get(i).getTrafficId().equals(trafficFilters.get(trafficPosition).getId())) {
-                if (packageList.get(i).isSpecial())
-                    packageListSuggested.add(packageList.get(i));
-                else
-                    packageListOthers.add(packageList.get(i));
-            }
-        }
-
         if (timePosition < 0 && trafficPosition < 0) {
             packageListSuggested.clear();
             packageListOthers.clear();
@@ -131,8 +116,40 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
                     packageListOthers.add(packageList.get(i));
                 }
             }
+        } else if (timePosition >= 0 && trafficPosition >= 0) {
+            for (int i = 0; i < packageList.size(); i++) {
+                if (packageList.get(i).getDurationId() != null &&
+                        packageList.get(i).getDurationId().equals(timeFilters.get(timePosition).getId()) &&
+                        packageList.get(i).getTrafficId() != null &&
+                        packageList.get(i).getTrafficId().equals(trafficFilters.get(trafficPosition).getId())) {
+
+                    if (packageList.get(i).isSpecial())
+                        packageListSuggested.add(packageList.get(i));
+                    else
+                        packageListOthers.add(packageList.get(i));
+                }
+            }
+        } else {
+            for (int i = 0; i < packageList.size(); i++) {
+                if (timePosition >= 0 && timePosition < timeFilters.size() &&
+                        packageList.get(i).getDurationId() != null &&
+                        packageList.get(i).getDurationId().equals(timeFilters.get(timePosition).getId())) {
+                    if (packageList.get(i).isSpecial())
+                        packageListSuggested.add(packageList.get(i));
+                    else
+                        packageListOthers.add(packageList.get(i));
+                } else if (trafficPosition >= 0 && trafficPosition < trafficFilters.size() &&
+                        packageList.get(i).getTrafficId() != null &&
+                        packageList.get(i).getTrafficId().equals(trafficFilters.get(trafficPosition).getId())) {
+                    if (packageList.get(i).isSpecial())
+                        packageListSuggested.add(packageList.get(i));
+                    else
+                        packageListOthers.add(packageList.get(i));
+                }
+            }
         }
         notifyPackageListFiltered(packageListSuggested, packageListOthers);
+        isDataLoaded.setValue(true);
     }
 
     public void requestPayment() {
@@ -210,6 +227,10 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
 
     public LiveData<Boolean> getLoadingVisibility() {
         return loadingVisibility;
+    }
+
+    public LiveData<Boolean> getIsDataLoaded() {
+        return isDataLoaded;
     }
 
     public void setSimType(String simType) {
