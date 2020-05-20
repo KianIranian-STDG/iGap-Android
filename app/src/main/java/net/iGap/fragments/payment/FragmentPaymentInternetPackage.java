@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     private LinearLayout toolbar;
     private MaterialButton btnPay;
     private ProgressBar loadingView;
+    private NestedScrollView scrollView;
 
     public static FragmentPaymentInternetPackage newInstance(String phoneNumber, String operator, String simType) {
 
@@ -96,6 +98,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
         toolbar = view.findViewById(R.id.toolbar);
         btnPay = view.findViewById(R.id.btn_pay);
         loadingView = view.findViewById(R.id.loadingView);
+        scrollView = view.findViewById(R.id.scrollView);
         return view;
     }
 
@@ -188,6 +191,14 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
             } else {
                 loadingView.setVisibility(View.GONE);
                 btnPay.setEnabled(true);
+            }
+        });
+
+        paymentInternetPackageViewModel.getIsDataLoaded().observe(getViewLifecycleOwner(), isDataLoaded -> {
+            if (isDataLoaded != null && isDataLoaded) {
+                loadingView.setVisibility(View.GONE);
+                scrollView.setVisibility(View.VISIBLE);
+                btnPay.setVisibility(View.VISIBLE);
             }
         });
 
