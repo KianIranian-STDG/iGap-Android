@@ -261,6 +261,9 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 if (data.isPaymentSuccess()) {
                     paymentStatusTextColor.set(R.color.green);
                     paymentStateIcon.set(R.string.check_icon);
+                } else if (data.isPaymentUnknown()) {
+                    paymentStatusTextColor.set(R.color.orange);
+                    paymentStateIcon.set(R.string.error_icon2);
                 } else {
                     paymentStatusTextColor.set(R.color.red);
                     paymentStateIcon.set(R.string.close_icon);
