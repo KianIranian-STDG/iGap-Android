@@ -26,4 +26,8 @@ public class CheckOrderStatusResponse {
     public boolean isPaymentSuccess() {
         return status.equals("SUCCESS");
     }
+
+    public boolean isPaymentUnknown() {
+        return status.equals("PAID");
+    }
 }
