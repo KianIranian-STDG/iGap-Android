@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?rootBackgroundColor">
 
     <LinearLayout
         android:id="@+id/toolbar"
@@ -78,7 +79,7 @@
                     android:background="@null"
                     android:padding="8dp"
                     android:text="@string/md_close_button"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/iGapTitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@id/phoneNumber"
                     app:layout_constraintRight_toRightOf="@id/phoneNumber"
                     app:layout_constraintTop_toTopOf="@id/phoneNumber" />
@@ -120,6 +121,7 @@
                         android:layout_marginRight="4dp"
                         android:maxLength="17"
                         android:text="@string/choose_frome_contacts"
+                        android:textColor="?attr/iGapTitleTextColor"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_contact"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_contact"
@@ -163,6 +165,7 @@
                         android:layout_marginRight="4dp"
                         android:maxLength="17"
                         android:text="@string/previousـpurchases"
+                        android:textColor="?attr/iGapTitleTextColor"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_history"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_history"
@@ -175,6 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
                     android:text="@string/operator_selection"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     app:layout_constraintStart_toStartOf="@+id/frame_contact"
                     app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
@@ -365,31 +369,36 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:text="سیمکارت اعتباری" />
+                        android:text="@string/credit_sim"
+                        android:textColor="?attr/iGapTitleTextColor" />
 
                     <RadioButton
                         android:id="@+id/rbPermanent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="سیمکارت دائمی" />
+                        android:text="@string/permanent_sim"
+                        android:textColor="?attr/iGapTitleTextColor" />
 
                     <RadioButton
                         android:id="@+id/rbTdLteCredit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="سیمکارت اعتباری TDLTE" />
+                        android:text="@string/credit_tdlte_sim"
+                        android:textColor="?attr/iGapTitleTextColor" />
 
                     <RadioButton
                         android:id="@+id/rbTdLtePermanent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="سیمکارت دائمی TDLTE" />
+                        android:text="@string/tdlte_permanent_sim"
+                        android:textColor="?attr/iGapTitleTextColor" />
 
                     <RadioButton
                         android:id="@+id/rbData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="سیمکارت دیتا" />
+                        android:text="@string/data_sim"
+                        android:textColor="?attr/iGapTitleTextColor" />
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -160,6 +160,7 @@ public class FragmentPaymentInternet extends BaseFragment {
                     .replace(" ", "")
                     .replace("-", ""));
             onPhoneNumberInput();
+            editTextNumber.setSelection(editTextNumber.getText() == null ? 0 : editTextNumber.getText().length());
         });
 
         toolbar.addView(HelperToolbar.create()
@@ -410,6 +411,9 @@ public class FragmentPaymentInternet extends BaseFragment {
                         rvHistory.setAdapter(adapterHistory);
                         dialog.show();
 
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
                     }
                 }
 
@@ -417,7 +421,7 @@ public class FragmentPaymentInternet extends BaseFragment {
                 public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), t.toString(), Toast.LENGTH_LONG).show();
-                    HelperError.showSnackMessage("شماره ای از قبل موجود نیست", false);
+                    HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
 
                 }
             });

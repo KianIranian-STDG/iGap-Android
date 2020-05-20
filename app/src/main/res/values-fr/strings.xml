@@ -2233,4 +2233,8 @@
     <string name="order_by">Trier par</string>
     <string name="recently_used_packages">Paquets récemment utilisés</string>
     <string name="suggested_packages">Forfaits suggérés</string>
+    <string name="other_internet_packages">بسته های دیگر</string>
+    <string name="all_packages">همه بسته ها</string>
+    <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
+    <string name="credit_sim">سیمکارت اعتباری</string>
 </resources>

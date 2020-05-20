@@ -22,6 +22,8 @@ public class AdapterInternetPackage extends RecyclerView.Adapter<AdapterInternet
     private OnItemSelectedListener<InternetPackage> selectedListener;
 
     public void setData(List<InternetPackage> data) {
+        prevSelectedPosition = -1;
+        currentlySelectedPosition = -1;
         this.data = data;
         notifyDataSetChanged();
     }
