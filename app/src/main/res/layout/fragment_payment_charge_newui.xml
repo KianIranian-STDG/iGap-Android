@@ -451,7 +451,7 @@
                     android:maxLines="1"
                     android:text="@string/tarabord"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
