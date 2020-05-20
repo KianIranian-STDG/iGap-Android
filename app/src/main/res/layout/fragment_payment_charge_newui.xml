@@ -71,9 +71,9 @@
                 android:layout_height="32dp"
                 android:background="@null"
                 android:padding="8dp"
-                android:visibility="invisible"
                 android:text="@string/md_close_button"
                 android:textColor="?iGapSubtitleTextColor"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/phoneNumberInput"
                 app:layout_constraintRight_toRightOf="@id/phoneNumberInput"
                 app:layout_constraintTop_toTopOf="@id/phoneNumberInput" />
@@ -92,16 +92,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/phoneNumberInput"
                 app:layout_constraintWidth_percent="4.5">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_contact"
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:text="@string/history_icon"
-                    android:textColor="?iGapSubtitleTextColor"
+                    android:layout_width="@dimen/dp24"
+                    android:layout_height="@dimen/dp24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_contact_new" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_contact"
@@ -136,16 +134,14 @@
                 app:layout_constraintTop_toTopOf="@+id/frame_contact"
                 app:layout_constraintWidth_percent="4.5">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_history"
-                    style="@style/myIconTextViewStyle"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:text="@string/history_icon"
-                    android:textColor="?iGapSubtitleTextColor"
+                    android:layout_width="@dimen/dp24"
+                    android:layout_height="@dimen/dp24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_recent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_history"
