@@ -31,7 +31,6 @@ import com.google.gson.JsonObject;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.payment.AdapterChargeAmount;
 import net.iGap.adapter.payment.AdapterChargeType;
 import net.iGap.adapter.payment.AdapterContactNumber;
@@ -129,8 +128,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_payment_charge_newui, container, false);
-        return view;
+        return LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_payment_charge_newui, container, false);
     }
 
     @Override
@@ -157,19 +155,18 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
         linearWarning = view.findViewById(R.id.llWarning);
-        removeNumber = view.findViewById(R.id.close_icon);
+        removeNumber = view.findViewById(R.id.btnRemoveSearch);
         chargeApi = new RetrofitFactory().getChargeRetrofit();
 
         DbManager.getInstance().doRealmTask(realm -> {
             userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
             editTextNumber.setText(userInfo.getPhoneNumber().replace("98", "0").replace("+98", "0").replace("0098", "0").replace(" ", "")
                     .replace("-", ""));
-
-
+            onPhoneNumberInput();
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.gray));
+            enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.gray_6c));
         }
 
         toolbar.addView(HelperToolbar.create()
@@ -187,8 +184,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     }
                 }).getView());
 
-        removeNumber.setOnClickListener(view1 -> editTextNumber.setText(" "));
-
         onChargeTypeChooseClick();
         onContactNumberButtonClick();
         onHistoryNumberButtonClick();
@@ -200,12 +195,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onContactNumberButtonClick() {
         frameContact.setOnClickListener(v -> {
+            hideKeyboard();
             try {
                 HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
                     @Override
                     public void Allow() {
                         new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
-                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
+                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
                         View view = dialog.getCustomView();
                         rvContact = view.findViewById(R.id.rv_contact);
                         saveBtn1 = view.findViewById(R.id.btn_dialog1);
@@ -239,12 +235,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onHistoryNumberButtonClick() {
         frameHistory.setOnClickListener(v -> {
+            hideKeyboard();
             progressBar.setVisibility(View.VISIBLE);
             chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
                 public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
+                    progressBar.setVisibility(View.GONE);
                     if (response.isSuccessful() && response.body().getData() != null) {
-                        progressBar.setVisibility(View.GONE);
                         adapterHistory = new AdapterHistoryNumber(response.body().getData());
                         MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
                         View view = dialog.getCustomView();
@@ -260,7 +257,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             selectedIndex = adapterHistory.getSelectedPosition();
                             historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
                             editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
-
+                            amountTxt.setText(historyNumber.getAmount().toString());
+                            chooseType.setText(historyNumber.getChargeTypeDescription());
                             dialog.dismiss();
                         });
 
@@ -268,13 +266,14 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         rvHistory.setAdapter(adapterHistory);
                         dialog.show();
 
+                    } else {
+                        ShowError((getContext().getResources().getString(R.string.list_empty)));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), t.toString(), Toast.LENGTH_LONG).show();
                     ShowError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
 
                 }
@@ -285,7 +284,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onPhoneNumberInputClick() {
-        onPhoneNumberInput();
         editTextNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -293,50 +291,62 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                onPhoneNumberInput();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                onPhoneNumberInput();
             }
         });
     }
 
     private void onPhoneNumberInput() {
-        if (editTextNumber.getText().length() > 0)
+        if (editTextNumber.getText().length() > 0) {
             removeNumber.setVisibility(View.VISIBLE);
-        removeNumber.setOnClickListener(view1 -> {
-            editTextNumber.setText(" ");
-            removeNumber.setVisibility(View.GONE);
-        });
-        if (editTextNumber.getText().length() == 4 || editTextNumber.getText().length() == 11) {
-            String number = editTextNumber.getText().toString().substring(0, 4);
-            OperatorType.Type opt = new OperatorType().getOperation(number);
-            if (opt != null) {
-                setAdapterValue(opt);
-                switch (opt) {
-                    case HAMRAH_AVAL:
-                        setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
-                        setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
-                        break;
-                    case IRANCELL:
-                        setAdapterValue(OperatorType.Type.IRANCELL);
-                        setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
-                        break;
-                    case RITEL:
-                        setAdapterValue(OperatorType.Type.RITEL);
-                        setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
-                        break;
+            if (editTextNumber.getText().length() == 10)
+                if (editTextNumber.getText().charAt(0) != '0')
+                    editTextNumber.setText("0" + editTextNumber.getText().toString());
+            if (editTextNumber.getText().length() == 11 || editTextNumber.getText().length() == 4) {
+                if (editTextNumber.getText().length() == 11) {
+                    scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+                    hideKeyboard();
+                    linearWarning.setVisibility(View.VISIBLE);
+                }
+                String number = editTextNumber.getText().toString().substring(0, 4);
+                OperatorType.Type opt = new OperatorType().getOperation(number);
+                if (opt != null) {
+                    setAdapterValue(opt);
+                    switch (opt) {
+                        case HAMRAH_AVAL:
+                            setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                            setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
+                            break;
+                        case IRANCELL:
+                            setAdapterValue(OperatorType.Type.IRANCELL);
+                            setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
+                            break;
+                        case RITEL:
+                            setAdapterValue(OperatorType.Type.RITEL);
+                            setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
+                            break;
+                    }
                 }
             }
-        }
-        if (editTextNumber.getText().length() == 11) {
-            scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
-            hideKeyboard();
-            linearWarning.setVisibility(View.VISIBLE);
-        }
+            removeNumber.setOnClickListener(view1 -> {
+                editTextNumber.setText("");
+                removeNumber.setVisibility(View.GONE);
+                if (editTextNumber.getText().toString() == "") {
+                    radioButtonHamrah.setChecked(false);
+                    radioButtonIrancell.setChecked(false);
+                    radioButtonRightel.setChecked(false);
+                    frameHamrah.setSelected(false);
+                    frameRightel.setSelected(false);
+                    frameIrancel.setSelected(false);
+                }
 
+                openKeyBoard();
+            });
+        }
     }
 
     private void onItemOperatorSelect() {
@@ -388,10 +398,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     lowView.setVisibility(View.VISIBLE);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        priceChoose.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
+                        priceChoose.setBackgroundTintList(getContext().getColorStateList(R.color.border_editText));
                         btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.green));
                     }
-                    amountTxt.setTextColor(getContext().getResources().getColor(R.color.gray));
                     chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
                     priceChoose.setClickable(false);
                     dialog.dismiss();
@@ -453,12 +462,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     chooseType.setText(typeList.getChargeType());
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.background_editText));
+                        btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.border_editText));
                         enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.green));
 
                     }
                     chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
-                    chooseType.setTextColor(getContext().getResources().getColor(R.color.gray));
 
                     editType.setVisibility(View.VISIBLE);
                     dialog.dismiss();
@@ -612,7 +620,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 ShowError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
             }
         });
-
+        progressBar.setVisibility(View.GONE);
     }
 
     public static boolean isNumeric(String strNum) {
@@ -643,6 +651,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                         .positiveText(R.string.ok)
                                         .onNegative((dialog1, which) -> dialog1.dismiss()).show();
                                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                                    progressBar.setVisibility(View.VISIBLE);
                                     dialog.dismiss();
                                     JsonObject jsonObject = new JsonObject();
                                     jsonObject.addProperty("phone_number", phoneNumber);
@@ -651,10 +660,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            progressBar.setVisibility(View.GONE);
                                         }
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            progressBar.setVisibility(View.GONE);
                                             HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
                                         }
                                     });

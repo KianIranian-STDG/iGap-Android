@@ -17,9 +17,8 @@
 
     <ScrollView
         android:id="@+id/scroll_payment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/toolbar_height"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,36 +47,36 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/phoneNumberInput"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="start"
+                android:layout_marginTop="16dp"
+                android:gravity="left"
                 android:hint="@string/phone"
                 android:inputType="phone"
                 android:maxLength="11"
                 android:padding="8dp"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingRight="@dimen/dp10"
+                android:paddingStart="@dimen/dp10"
+                android:paddingEnd="@dimen/dp10"
                 android:textSize="@dimen/dp16"
-                app:layout_constraintEnd_toStartOf="@+id/close_icon"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
-                android:layout_marginRight="16dp" />
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".9" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/close_icon"
-                style="@style/myIconTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/close_icon"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/phoneNumberInput"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/phoneNumberInput" />
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/btnRemoveSearch"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:padding="8dp"
+                android:visibility="invisible"
+                android:text="@string/md_close_button"
+                android:textColor="?iGapSubtitleTextColor"
+                app:layout_constraintBottom_toBottomOf="@id/phoneNumberInput"
+                app:layout_constraintRight_toRightOf="@id/phoneNumberInput"
+                app:layout_constraintTop_toTopOf="@id/phoneNumberInput" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/frame_contact"
@@ -99,13 +98,13 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:text="@string/history_icon"
+                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_contact"
-                    style="?iGapSubtitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -114,6 +113,7 @@
                     android:maxLength="17"
                     android:minWidth="@dimen/dp100"
                     android:text="@string/choose_frome_contacts"
+                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_contact"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_contact"
@@ -125,6 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/shape_payment_charge"
                 android:paddingStart="@dimen/dp8"
                 android:paddingTop="@dimen/dp2"
@@ -133,8 +134,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/frame_contact"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/frame_contact"
-                app:layout_constraintWidth_percent="4.5"
-                android:layout_marginRight="16dp">
+                app:layout_constraintWidth_percent="4.5">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/iv_history"
@@ -142,13 +142,13 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:text="@string/history_icon"
+                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_history"
-                    style="?iGapSubtitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -158,6 +158,7 @@
                     android:maxLength="17"
                     android:minWidth="@dimen/dp100"
                     android:text="@string/previousـpurchases"
+                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_history"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_history"
@@ -170,6 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
                 android:text="@string/operator_selection"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintStart_toStartOf="@+id/frame_contact"
                 app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
@@ -287,6 +289,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="32dp"
                 android:text="@string/payment_continue_title"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

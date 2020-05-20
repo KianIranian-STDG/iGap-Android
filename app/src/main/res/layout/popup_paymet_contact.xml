@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dp16"
+    android:paddingEnd="@dimen/dp16">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/iv_close1"
@@ -12,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp16"
         android:text="@string/close_icon"
+        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
-        android:text="@string/Select_from_contact_numbers"
+        android:text="@string/Select_from_previous_numbers"
+        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close1"
         app:layout_constraintStart_toEndOf="@+id/iv_close1"
         app:layout_constraintTop_toTopOf="@+id/iv_close1" />
@@ -49,17 +53,19 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btn_dialog1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="@dimen/dp300"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_choose1" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_dialog1"
         style="@style/iGapButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp16"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/ra_confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

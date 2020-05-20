@@ -7,7 +7,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/number_contact"
-        style="?iGapSubtitleTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -20,7 +19,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/amount_contact"
-        style="?iGapSubtitleTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

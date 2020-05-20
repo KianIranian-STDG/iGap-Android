@@ -13,17 +13,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/close_icon"
+        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt_choose3"
-        style="?iGapTitleTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
         android:text="@string/select_the_amount"
+        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close3"
         app:layout_constraintStart_toEndOf="@+id/iv_close3"
         app:layout_constraintTop_toTopOf="@+id/iv_close3" />
@@ -41,7 +42,9 @@
         android:id="@+id/rv_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp16"
         android:layout_marginBottom="@dimen/dp32"
         android:scrollbars="none"
         android:visibility="visible"

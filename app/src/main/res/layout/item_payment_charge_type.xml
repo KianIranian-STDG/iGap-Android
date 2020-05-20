@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp48"
-    android:layout_marginStart="@dimen/dp16"
-    android:layout_marginLeft="@dimen/dp16"
     android:background="@drawable/selector_payment_dialog_item">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/radio_amount"
         app:layout_constraintTop_toTopOf="@+id/radio_amount" />
