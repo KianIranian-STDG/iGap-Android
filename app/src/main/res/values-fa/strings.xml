@@ -2628,4 +2628,5 @@
     <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
     <string name="save_purchase">آیا مایل به ذخیره خرید در تاریخچه میباشید؟</string>
+    <string name="tarabord">در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید</string>
 </resources>

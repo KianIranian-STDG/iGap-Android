@@ -102,15 +102,14 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".425">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_contact"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:text="@string/history_icon"
+                        android:layout_width="@dimen/dp24"
+                        android:layout_height="@dimen/dp24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_contact_new" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_contact"
@@ -146,15 +145,14 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".425">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_history"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:text="@string/history_icon"
+                        android:layout_width="@dimen/dp24"
+                        android:layout_height="@dimen/dp24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_recent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_history"
@@ -203,6 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_topup_operator"
+                    android:padding="@dimen/dp4"
                     android:paddingStart="@dimen/dp1"
                     android:paddingTop="@dimen/dp6"
                     android:paddingEnd="@dimen/dp1"
@@ -224,8 +223,10 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="54dp"
                         android:layout_height="54dp"
+                        android:layout_marginTop="@dimen/dp2"
                         android:layout_marginEnd="@dimen/dp8"
                         android:layout_marginRight="@dimen/dp8"
+                        android:layout_marginBottom="@dimen/dp2"
                         android:src="@drawable/irancell_logo"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -239,6 +240,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_topup_operator"
+                    android:padding="@dimen/dp4"
                     android:paddingStart="@dimen/dp1"
                     android:paddingTop="@dimen/dp6"
                     android:paddingEnd="@dimen/dp1"
@@ -259,8 +261,10 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="54dp"
                         android:layout_height="54dp"
+                        android:layout_marginTop="@dimen/dp2"
                         android:layout_marginEnd="@dimen/dp8"
                         android:layout_marginRight="@dimen/dp8"
+                        android:layout_marginBottom="@dimen/dp2"
                         android:src="@drawable/rightel_logo"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -275,6 +279,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp24"
                     android:background="@drawable/selector_topup_operator"
+                    android:padding="@dimen/dp4"
                     android:paddingStart="@dimen/dp1"
                     android:paddingTop="@dimen/dp6"
                     android:paddingEnd="@dimen/dp1"
@@ -294,8 +299,10 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="54dp"
                         android:layout_height="54dp"
+                        android:layout_marginTop="@dimen/dp2"
                         android:layout_marginEnd="@dimen/dp8"
                         android:layout_marginRight="@dimen/dp8"
+                        android:layout_marginBottom="@dimen/dp2"
                         android:src="@drawable/hamraheaval_logo"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

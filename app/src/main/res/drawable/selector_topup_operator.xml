@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <stroke android:width="@dimen/dp2" android:color="?iGapButtonTextColor" />
+            <stroke android:width="@dimen/dp2" android:color="?iGapButtonColor" />
             <corners android:radius="@dimen/dp16" />
         </shape>
     </item>
