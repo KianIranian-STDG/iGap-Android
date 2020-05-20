@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
-import net.iGap.model.internetPackage.InternetPackage;
+import net.iGap.model.paymentPackage.InternetPackage;
 
 import java.util.List;
 

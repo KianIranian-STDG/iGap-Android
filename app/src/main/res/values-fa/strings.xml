@@ -1252,7 +1252,11 @@
     <string name="irancell">ایرانسل</string>
     <string name="ritel">رایتل</string>
     <string name="normal_charge">شارژ معمولی</string>
+    <string name="amazing_charge">شارژ فوق العاده</string>
+    <string name="youth_charge">شارژ جوانان</string>
+    <string name="ladies_charge">شارژ بانوان</string>
     <string name="amazing">شگفت انگیز</string>
+    <string name="Exciting">شور انگیز</string>
     <string name="wimax_charging">شارژ وایمکس</string>
     <string name="permanently_charge">شارژ سیم کارت دائمی</string>
 
@@ -2603,4 +2607,28 @@
     <string name="kuknos_buy_noPrice">قیمت این توکن موجود نیست.</string>
     <string name="kuknos_NewAsset_title">دارایی های جدید</string>
     <string name="kuknos_addAsset_alreadyTrusted">شما هم اکنون این توکن را در کیف پول خود دارید.</string>
+    <string name="choose_frome_contacts">انتخاب مخاطبین</string>
+    <string name="previousـpurchases">خرید های قبلی</string>
+    <string name="operator_selection">انتخاب اپراتور</string>
+    <string name="select_the_amount">انتخاب مبلغ</string>
+    <string name="Select_from_contact_numbers">انتخاب از شماره های مخاطبین</string>
+    <string name="list_empty">در لیست شما شماره ای از قبل وجود ندارد</string>
+    <string name="Select_from_previous_numbers">انتخاب از شماره های قبلی</string>
+    <string name="Select_the_type_of_charge">انتخاب نوع شارژ</string>
+    <string name="order_by">مرتب سازی بر اساس</string>
+    <string name="recently_used_packages">بسته های اخیرا استفاده شده</string>
+    <string name="suggested_packages">بسته های پیشنهادی</string>
+    <string name="other_internet_packages">بسته های دیگر</string>
+    <string name="all_packages">همه بسته ها</string>
+    <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
+    <string name="credit_sim">سیمکارت اعتباری</string>
+    <string name="permanent_sim">سیمکارت دائمی</string>
+    <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>
+    <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
+    <string name="data_sim">سیمکارت دیتا</string>
+    <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
+    <string name="no_number_found">شماره ای از قبل موجود نیست</string>
+    <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
+    <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
+    <string name="save_purchase">آیا مایل به ذخیره خرید در تاریخچه میباشید؟</string>
 </resources>

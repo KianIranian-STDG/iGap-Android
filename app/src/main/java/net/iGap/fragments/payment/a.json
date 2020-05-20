@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "type": "internet-package",
+      "phone_number": "09387804231",
+      "operator": "mtn",
+      "operator_title": "ایرانسل",
+      "charge_type": "CREDIT",
+      "charge_type_description": "اعتباری",
+      "package_type": "63051",
+      "package_description": "دائمی - بسته 3ماهه 18 گیگابایت"
+    }
+  ]
+}

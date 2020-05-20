@@ -23,12 +23,12 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.fragments.BuyInternetPackageFragment;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
-import net.iGap.fragments.FragmentPaymentCharge;
+import net.iGap.fragments.payment.FragmentPaymentChargeNewUi;
 import net.iGap.fragments.FragmentPaymentInquiryTelephone;
+import net.iGap.fragments.payment.FragmentPaymentInternet;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
@@ -55,7 +55,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
-import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
@@ -142,6 +142,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case WEB_VIEW_LINK:/** tested title needed**/
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
+
                 } else {
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentWebView.newInstance(discoveryField.value, discoveryField.refresh, discoveryField.param)).setReplace(false).load();
                 }
@@ -150,9 +151,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(activity, discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
                 break;
             case TOPUP_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentCharge.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentChargeNewUi.newInstance()).setReplace(false).load();
                 break;
             case BILL_MENU:/** tested **/
+
                 try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
@@ -349,7 +351,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();
                 break;
             case INTERNET_PACKAGE_MENU:
-                new HelperFragment(activity.getSupportFragmentManager(), new BuyInternetPackageFragment()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInternet.newInstance()).setReplace(false).load();
                 break;
             case CHARITY:
                 try {

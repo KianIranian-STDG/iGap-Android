@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?rootBackgroundColor">
+
+    <LinearLayout
+        android:id="@+id/payment_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scroll_payment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/payment_toolbar"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginTop="24dp"
+                android:text="@string/topUp_title"
+                android:textColor="@color/green"
+                android:textSize="@dimen/largeTextSize"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/phoneNumberInput"
+                style="@style/iGapEditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="left"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:padding="8dp"
+                android:paddingStart="@dimen/dp10"
+                android:paddingEnd="@dimen/dp10"
+                android:textSize="@dimen/dp16"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".9" />
+
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/btnRemoveSearch"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:padding="8dp"
+                android:visibility="invisible"
+                android:text="@string/md_close_button"
+                android:textColor="?iGapSubtitleTextColor"
+                app:layout_constraintBottom_toBottomOf="@id/phoneNumberInput"
+                app:layout_constraintRight_toRightOf="@id/phoneNumberInput"
+                app:layout_constraintTop_toTopOf="@id/phoneNumberInput" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frame_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/shape_payment_charge"
+                android:paddingStart="@dimen/dp8"
+                android:paddingTop="@dimen/dp2"
+                android:paddingEnd="@dimen/dp8"
+                android:paddingBottom="@dimen/dp2"
+                app:layout_constraintStart_toStartOf="@+id/phoneNumberInput"
+                app:layout_constraintTop_toBottomOf="@+id/phoneNumberInput"
+                app:layout_constraintWidth_percent="4.5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/iv_contact"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:text="@string/history_icon"
+                    android:textColor="?iGapSubtitleTextColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:maxLength="17"
+                    android:minWidth="@dimen/dp100"
+                    android:text="@string/choose_frome_contacts"
+                    android:textColor="?iGapSubtitleTextColor"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_contact"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_contact"
+                    app:layout_constraintTop_toTopOf="@+id/iv_contact" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frame_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/shape_payment_charge"
+                android:paddingStart="@dimen/dp8"
+                android:paddingTop="@dimen/dp2"
+                android:paddingEnd="@dimen/dp8"
+                android:paddingBottom="@dimen/dp2"
+                app:layout_constraintBottom_toBottomOf="@+id/frame_contact"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/frame_contact"
+                app:layout_constraintWidth_percent="4.5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/iv_history"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:text="@string/history_icon"
+                    android:textColor="?iGapSubtitleTextColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:maxLength="17"
+                    android:minWidth="@dimen/dp100"
+                    android:text="@string/previousـpurchases"
+                    android:textColor="?iGapSubtitleTextColor"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_history"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_history"
+                    app:layout_constraintTop_toTopOf="@+id/iv_history" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:text="@string/operator_selection"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/largeTextSize"
+                app:layout_constraintStart_toStartOf="@+id/frame_contact"
+                app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_amount_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:elevation="@dimen/dp4"
+                android:text="@string/select_the_amount"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
+                app:layout_constraintEnd_toEndOf="@+id/choose_amount"
+                app:layout_constraintStart_toStartOf="@+id/choose_amount"
+                app:layout_constraintTop_toTopOf="@+id/choose_amount"
+                tools:layout_editor_absoluteX="242dp"
+                tools:layout_editor_absoluteY="386dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/add_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/dp4"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_amount_btn"
+                app:layout_constraintEnd_toStartOf="@+id/tv_amount_btn"
+                app:layout_constraintStart_toStartOf="@+id/choose_amount"
+                app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
+                app:srcCompat="@drawable/ic_action_add_white" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/low_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/dp4"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_amount_btn"
+                app:layout_constraintEnd_toEndOf="@+id/choose_amount"
+                app:layout_constraintStart_toEndOf="@+id/tv_amount_btn"
+                app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
+                app:srcCompat="@drawable/ic_action_remove_white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/choose_amount"
+                style="@style/iGapButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="64dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_charge_type"
+                app:layout_constraintEnd_toEndOf="@+id/view13"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/view13"
+                app:layout_constraintTop_toBottomOf="@+id/view13"
+                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintWidth_percent=".6" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_charge_type"
+                style="@style/iGapButtonStroke"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp48"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="68dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_pay"
+                app:layout_constraintEnd_toEndOf="@+id/btn_pay"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/btn_pay"
+                app:layout_constraintTop_toBottomOf="@+id/choose_amount"
+                app:layout_constraintWidth_percent=".6" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_choose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/dp4"
+                android:text="@string/Select_the_type_of_charge"
+                android:textColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_charge_type"
+                app:layout_constraintEnd_toEndOf="@+id/btn_charge_type"
+                app:layout_constraintStart_toStartOf="@+id/btn_charge_type"
+                app:layout_constraintTop_toTopOf="@+id/btn_charge_type" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/iv_edit"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:elevation="@dimen/dp4"
+                android:text="@string/edit_icon"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_choose"
+                app:layout_constraintEnd_toStartOf="@+id/tv_choose"
+                app:layout_constraintTop_toTopOf="@+id/tv_choose" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_pay"
+                style="@style/iGapButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="32dp"
+                android:text="@string/payment_continue_title"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_charge_type" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_topup_operator"
+                android:paddingStart="@dimen/dp4"
+                android:paddingTop="@dimen/dp6"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingBottom="@dimen/dp6"
+                app:layout_constraintBottom_toBottomOf="@+id/view12"
+                app:layout_constraintEnd_toStartOf="@+id/view14"
+                app:layout_constraintStart_toEndOf="@+id/view12"
+                app:layout_constraintTop_toTopOf="@+id/view12">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_irancell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:src="@drawable/irancell_logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/radio_irancell"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_topup_operator"
+                android:paddingStart="@dimen/dp4"
+                android:paddingTop="@dimen/dp6"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingBottom="@dimen/dp6"
+                app:layout_constraintBottom_toBottomOf="@+id/view13"
+                app:layout_constraintEnd_toEndOf="@+id/frame_history"
+                app:layout_constraintTop_toTopOf="@+id/view13">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_rightel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:src="@drawable/rightel_logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/radio_rightel"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp24"
+                android:background="@drawable/selector_topup_operator"
+                android:paddingStart="@dimen/dp4"
+                android:paddingTop="@dimen/dp6"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingBottom="@dimen/dp6"
+                app:layout_constraintStart_toStartOf="@+id/appCompatTextView"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_hamrahAval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:src="@drawable/hamraheaval_logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/radio_hamrahAval"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/llWarning"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp8"
+                android:background="@drawable/shape_payment_charge"
+                android:backgroundTint="@color/orange"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/dp4"
+                android:paddingTop="@dimen/dp1"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingBottom="@dimen/dp1"
+                android:visibility="visible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view12"
+                app:layout_constraintWidth_percent=".9">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/appCompatTextView7"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp2"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:text="@string/error_icon2"
+                    android:textColor="@color/white" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/appCompatTextView6"
+                    style="?iGapSubtitleTextColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp2"
+                    android:layout_marginLeft="@dimen/dp2"
+                    android:maxLines="1"
+                    android:text="در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payment_toolbar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,11 +3,11 @@ package net.iGap.repository;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.igasht.BaseIGashtResponse;
-import net.iGap.model.internetPackage.InternetPackage;
-import net.iGap.model.internetPackage.InternetPackageFilter;
-import net.iGap.model.internetPackage.MciInternetPackageFilter;
+import net.iGap.model.paymentPackage.InternetPackage;
+import net.iGap.model.paymentPackage.InternetPackageFilter;
+import net.iGap.model.paymentPackage.MciInternetPackageFilter;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 

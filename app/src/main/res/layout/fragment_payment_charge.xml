@@ -104,6 +104,7 @@
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/fpc_spinner_operator"
             android:layout_width="0dp"
+            android:background="@color/green"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/dp44"
             android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelecteSpinerOperator(position)}"
