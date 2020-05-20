@@ -401,6 +401,7 @@ public class CallManager {
             case 912://                LEAVE_FORBIDDEN
             case 909://                SESSION_HOLD_FORBIDDEN
                 messageID = R.string.call_error_forbidden;
+                changeState(CallState.DISCONNECTED);
                 break;
             case 905://                OFFER_PRIVACY_PROTECTION
             case 906://                OFFER_BLOCKED_BY_PEER
