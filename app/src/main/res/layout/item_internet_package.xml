@@ -8,18 +8,18 @@
     android:layout_marginTop="@dimen/dp8"
     android:layout_marginEnd="@dimen/dp2"
     android:layout_marginBottom="@dimen/dp8"
-    android:background="@drawable/shape_payment_internet"
+    android:background="@drawable/shape_payment_internet_light"
     android:elevation="@dimen/dp2"
     android:padding="@dimen/dp8">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/internet_package"
-        style="?iGapSubtitleTextColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:gravity="start"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/package_price"
@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
