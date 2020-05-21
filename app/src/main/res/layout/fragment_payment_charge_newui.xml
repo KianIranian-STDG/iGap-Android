@@ -50,7 +50,7 @@
                 style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:gravity="left"
                 android:hint="@string/phone"
                 android:inputType="phone"
@@ -176,15 +176,14 @@
                 app:layout_constraintStart_toStartOf="@+id/frame_contact"
                 app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
 
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_amount_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:elevation="@dimen/dp4"
-                android:text="@string/select_the_amount"
-                android:textColor="@color/white"
+                android:textColor="?iGapButtonTextColor"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
                 app:layout_constraintEnd_toEndOf="@+id/choose_amount"
                 app:layout_constraintStart_toStartOf="@+id/choose_amount"
@@ -202,7 +201,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/tv_amount_btn"
                 app:layout_constraintStart_toStartOf="@+id/choose_amount"
                 app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
-                app:srcCompat="@drawable/ic_action_add_white" />
+                app:srcCompat="@drawable/ic_add_gray" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/low_amount"
@@ -214,17 +213,19 @@
                 app:layout_constraintEnd_toEndOf="@+id/choose_amount"
                 app:layout_constraintStart_toEndOf="@+id/tv_amount_btn"
                 app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
-                app:srcCompat="@drawable/ic_action_remove_white" />
+                app:srcCompat="@drawable/ic_remove_gray" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/choose_amount"
-                style="@style/iGapButton"
+                style="@style/iGapButtonStroke"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="64dp"
                 android:layout_marginEnd="16dp"
+                android:text="@string/select_the_amount"
+                android:textColor="?iGapButtonTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/btn_charge_type"
                 app:layout_constraintEnd_toEndOf="@+id/view13"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -243,39 +244,14 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="68dp"
+                android:text="@string/Select_the_type_of_charge"
+                android:textColor="?iGapButtonTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/btn_pay"
                 app:layout_constraintEnd_toEndOf="@+id/btn_pay"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/btn_pay"
                 app:layout_constraintTop_toBottomOf="@+id/choose_amount"
                 app:layout_constraintWidth_percent=".6" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_choose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:elevation="@dimen/dp4"
-                android:text="@string/Select_the_type_of_charge"
-                android:textColor="?iGapButtonTextColor"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_charge_type"
-                app:layout_constraintEnd_toEndOf="@+id/btn_charge_type"
-                app:layout_constraintStart_toStartOf="@+id/btn_charge_type"
-                app:layout_constraintTop_toTopOf="@+id/btn_charge_type" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/iv_edit"
-                style="@style/myIconTextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:elevation="@dimen/dp4"
-                android:text="@string/edit_icon"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_choose"
-                app:layout_constraintEnd_toStartOf="@+id/tv_choose"
-                app:layout_constraintTop_toTopOf="@+id/tv_choose" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_pay"

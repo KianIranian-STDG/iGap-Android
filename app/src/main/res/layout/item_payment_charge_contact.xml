@@ -12,10 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="@dimen/dp16"
+        android:ellipsize="end"
+        android:gravity="clip_vertical"
+        android:maxLength="15"
         android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/contact_Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/contact_Name" />
+        app:layout_constraintTop_toTopOf="@+id/contact_Name"
+        app:layout_constraintWidth_percent="5" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/contact_Name"
@@ -24,11 +28,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="@dimen/dp16"
+        android:ellipsize="end"
         android:gravity="clip_vertical"
+        android:maxLength="15"
         android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="5" />
 
     <View
         android:layout_width="0dp"
