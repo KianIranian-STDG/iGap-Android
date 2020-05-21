@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,11 +73,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private RecyclerView rvContact;
     private RecyclerView rvHistory;
     private RecyclerView rvAmount;
-    private AppCompatTextView amountTxt;
     private AppCompatTextView removeNumber;
     private AppCompatImageView ivAdd;
     private AppCompatImageView lowView;
-    private MaterialButton priceChoose;
+    private MaterialButton chosePriceTextView;
     private MaterialButton btnChargeType;
     private MaterialButton enterBtn;
     private AppCompatEditText editTextNumber;
@@ -86,7 +84,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private FavoriteNumber historyNumber;
     private Amount amount;
     private ChargeType typeList;
-    private ScrollView scrollView;
     private FrameLayout progressBar;
     private LinearLayout linearWarning;
     private List<Amount> amountList = new ArrayList<>();
@@ -123,14 +120,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
         View frameContact = view.findViewById(R.id.frame_contact);
         View frameHistory = view.findViewById(R.id.frame_history);
-        priceChoose = view.findViewById(R.id.choose_amount);
+        chosePriceTextView = view.findViewById(R.id.choose_amount);
         btnChargeType = view.findViewById(R.id.btn_charge_type);
         ivAdd = view.findViewById(R.id.add_amount);
         lowView = view.findViewById(R.id.low_amount);
-        amountTxt = view.findViewById(R.id.tv_amount_btn);
         editTextNumber = view.findViewById(R.id.phoneNumberInput);
         enterBtn = view.findViewById(R.id.btn_pay);
-        scrollView = view.findViewById(R.id.scroll_payment);
         progressBar = view.findViewById(R.id.loadingView);
         frameHamrah = view.findViewById(R.id.view12);
         frameIrancel = view.findViewById(R.id.view13);
@@ -143,8 +138,15 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
-            if (userInfo != null)
+            if (userInfo != null && editTextNumber.getText() != null) {
                 editTextNumber.setText(userInfo.getPhoneNumber().replace("98", "0").replace("+98", "0").replace("0098", "0").replace(" ", "").replace("-", ""));
+
+                String number = editTextNumber.getText().toString().substring(0, 4);
+                OperatorType.Type operator = new OperatorType().getOperation(number);
+                if (operator != null) {
+                    changeOperator(operator);
+                }
+            }
         });
 
         toolbar.addView(HelperToolbar.create()
@@ -220,14 +222,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     selectedIndex = adapterContactNumber.getSelectedPosition();
                                     contactNumber = adapterContactNumber.getContactNumbers().get(selectedIndex);
                                     editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
-                                    ivAdd.setVisibility(View.GONE);
-                                    lowView.setVisibility(View.GONE);
-                                    amountTxt.setVisibility(View.GONE);
-                                    btnChargeType.setText(R.string.Select_the_type_of_charge);
-                                    priceChoose.setText(R.string.select_the_amount);
+
+                                    clearAmountAndType();
 
                                     OperatorType.Type opt = new OperatorType().getOperation(editTextNumber.getText().toString().substring(0, 4));
-
                                     if (opt != null) {
                                         changeOperator(opt);
                                     }
@@ -253,10 +251,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameHistory.setOnClickListener(v -> {
             hideKeyboard();
             progressBar.setVisibility(View.VISIBLE);
+            frameHistory.setEnabled(false);
             chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
                 public void onResponse(@NonNull Call<GetFavoriteNumber> call, @NonNull Response<GetFavoriteNumber> response) {
                     progressBar.setVisibility(View.GONE);
+                    frameHistory.setEnabled(true);
                     if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                         if (response.body().getData().size() > 0) {
 
@@ -282,9 +282,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                         historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
 
                                         editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
-                                        amountTxt.setText(String.valueOf(historyNumber.getAmount()));
-                                        priceChoose.setText("");
-                                        btnChargeType.setText(historyNumber.getChargeType());
+                                        chosePriceTextView.setText(String.valueOf(historyNumber.getAmount()));
+
+                                        setChargeType(historyNumber.getChargeType());//can write better code with use key value container
 
                                         dialog.dismiss();
                                     }
@@ -299,6 +299,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                 @Override
                 public void onFailure(@NonNull Call<GetFavoriteNumber> call, @NonNull Throwable t) {
+                    frameHistory.setEnabled(true);
                     progressBar.setVisibility(View.GONE);
                     showError(getContext().getResources().getString(R.string.there_is_no_connection_to_server));
 
@@ -323,7 +324,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                     if (editTextNumber.getText().length() == 11 || editTextNumber.getText().length() == 4) {
                         if (editTextNumber.getText().length() == 11) {
-                            scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
                             linearWarning.setVisibility(View.VISIBLE);
                         }
                         String number = editTextNumber.getText().toString().substring(0, 4);
@@ -332,17 +332,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             changeOperator(operator);
                         }
                     }
-                    removeNumber.setOnClickListener(view1 -> {
-                        editTextNumber.setText("");
-
-                        removeNumber.setVisibility(View.INVISIBLE);
-
-                        if (editTextNumber.getText().toString().equals("")) {
-                            changeOperator(OperatorType.Type.UNKNOWN);
-                        }
-
-                        openKeyBoard();
-                    });
                 }
             }
 
@@ -356,29 +345,56 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameRightel.setOnClickListener(v -> changeOperator(OperatorType.Type.RITEL));
         frameIrancel.setOnClickListener(v -> changeOperator(OperatorType.Type.IRANCELL));
 
+        removeNumber.setOnClickListener(view1 -> {
+            editTextNumber.setText("");
+
+            removeNumber.setVisibility(View.INVISIBLE);
+
+            if (editTextNumber.getText() != null && editTextNumber.getText().toString().equals("")) {
+                changeOperator(OperatorType.Type.UNKNOWN);
+            }
+
+            openKeyBoard();
+        });
+
         enterBtn.setOnClickListener(v -> onSaveBtnClicked());
-        priceChoose.setOnClickListener(v -> chosePriceClicked());
+        chosePriceTextView.setOnClickListener(v -> chosePriceClicked());
 
         ivAdd.setOnClickListener(v -> {
             if (selectedPriceIndex + 1 < amountList.size()) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex + 1);
-                amountTxt.setText(amount.getTextAmount());
+                chosePriceTextView.setText(amount.getTextAmount());
             } else {
                 amount = amountList.get(selectedPriceIndex);
-                amountTxt.setText(amount.getTextAmount());
+                chosePriceTextView.setText(amount.getTextAmount());
             }
         });
 
         lowView.setOnClickListener(v -> {
             if (selectedPriceIndex - 1 < amountList.size() && selectedPriceIndex > 0) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex - 1);
-                amountTxt.setText(amount.getTextAmount());
+                chosePriceTextView.setText(amount.getTextAmount());
             } else {
                 amount = amountList.get(selectedPriceIndex);
-                amountTxt.setText(amount.getTextAmount());
+                chosePriceTextView.setText(amount.getTextAmount());
             }
         });
+    }
 
+    private void setChargeType(String chargeType) {
+        if (chargeType.equals(ChooseChargeType.MTN_NORMAL.toString()) || chargeType.equals(ChooseChargeType.RIGHTEL_NORMAL.toString()) || chargeType.equals(ChooseChargeType.DIRECT.toString())) {
+            btnChargeType.setText(getResources().getString(R.string.normal_charge));
+        } else if (chargeType.equals(ChooseChargeType.MTN_AMAZING.toString())) {
+            btnChargeType.setText(getResources().getString(R.string.amazing));
+        } else if (chargeType.equals(ChooseChargeType.RIGHTEL_EXCITING.toString())) {
+            btnChargeType.setText(getResources().getString(R.string.Exciting));
+        } else if (chargeType.equals(ChooseChargeType.AMAZING.toString())) {
+            btnChargeType.setText(getResources().getString(R.string.amazing));
+        } else if (chargeType.equals(ChooseChargeType.YOUTH.toString())) {
+            btnChargeType.setText(getResources().getString(R.string.youth_charge));
+        } else if (chargeType.equals(ChooseChargeType.LADIES.toString())) {
+            btnChargeType.setText(getResources().getString(R.string.ladies_charge));
+        }
     }
 
     private void chosePriceClicked() {
@@ -402,12 +418,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                         ivAdd.setVisibility(View.VISIBLE);
                         lowView.setVisibility(View.VISIBLE);
-                        amountTxt.setVisibility(View.VISIBLE);
                         selectedPriceIndex = adapterAmount.getSelectedPosition();
                         amount = amountList.get(selectedPriceIndex);
-                        amountTxt.setText(amount.getTextAmount());
-                        priceChoose.setText("");
-                        priceChoose.setClickable(false);
+                        chosePriceTextView.setText(amount.getTextAmount());
+                        chosePriceTextView.setEnabled(false);
                         dialog.dismiss();
                     }
                 });
@@ -421,6 +435,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void changeOperator(OperatorType.Type operator) {
+        if (currentOperator == operator)
+            return;
+
+        clearAmountAndType();
+
         currentOperator = operator;
 
         radioButtonHamrah.setChecked(currentOperator == OperatorType.Type.HAMRAH_AVAL);
@@ -432,6 +451,18 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         radioButtonRightel.setChecked(currentOperator == OperatorType.Type.RITEL);
         frameRightel.setSelected(currentOperator == OperatorType.Type.RITEL);
         setAdapterValue(operator);
+    }
+
+    private void clearAmountAndType() {
+        chosePriceTextView.setText(R.string.select_the_amount);
+        btnChargeType.setText(R.string.Select_the_type_of_charge);
+        chosePriceTextView.setEnabled(true);
+
+        ivAdd.setVisibility(View.GONE);
+        lowView.setVisibility(View.GONE);
+
+        typeList = null;
+        amount = null;
     }
 
     private void setAdapterValue(@NotNull OperatorType.Type operator) {
@@ -591,25 +622,29 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                         .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
                                         .positiveText(R.string.ok)
                                         .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+
                                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
                                     progressBar.setVisibility(View.VISIBLE);
-                                    dialog.dismiss();
-                                    JsonObject jsonObject = new JsonObject();
-                                    jsonObject.addProperty("phone_number", phoneNumber);
-                                    jsonObject.addProperty("charge_type", chargeType.toString());
-                                    jsonObject.addProperty("amount", price);
-                                    chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                                            progressBar.setVisibility(View.GONE);
-                                        }
+                                    if (chargeType != null) {
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("phone_number", phoneNumber);
+                                        jsonObject.addProperty("charge_type", chargeType.toString());
+                                        jsonObject.addProperty("amount", price);
 
-                                        @Override
-                                        public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                                            progressBar.setVisibility(View.GONE);
-                                            HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
-                                        }
-                                    });
+                                        chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                                                progressBar.setVisibility(View.GONE);
+                                            }
+
+                                            @Override
+                                            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                                                progressBar.setVisibility(View.GONE);
+                                                HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
+                                            }
+                                        });
+                                    }
+                                    dialog.dismiss();
                                 });
                             }
                         });

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?rootBackgroundColor">
@@ -180,43 +179,30 @@
                 app:layout_constraintStart_toStartOf="@+id/frame_contact"
                 app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_amount_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:elevation="@dimen/dp4"
-                android:textColor="?iGapButtonTextColor"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
-                app:layout_constraintEnd_toEndOf="@+id/choose_amount"
-                app:layout_constraintStart_toStartOf="@+id/choose_amount"
-                app:layout_constraintTop_toTopOf="@+id/choose_amount"
-                tools:layout_editor_absoluteX="242dp"
-                tools:layout_editor_absoluteY="386dp" />
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/add_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginLeft="44dp"
                 android:elevation="@dimen/dp4"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_amount_btn"
-                app:layout_constraintEnd_toStartOf="@+id/tv_amount_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
                 app:layout_constraintStart_toStartOf="@+id/choose_amount"
-                app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
+                app:layout_constraintTop_toTopOf="@+id/choose_amount"
                 app:srcCompat="@drawable/ic_add_gray" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/low_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="44dp"
+                android:layout_marginRight="44dp"
                 android:elevation="@dimen/dp4"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_amount_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
                 app:layout_constraintEnd_toEndOf="@+id/choose_amount"
-                app:layout_constraintStart_toEndOf="@+id/tv_amount_btn"
-                app:layout_constraintTop_toTopOf="@+id/tv_amount_btn"
+                app:layout_constraintTop_toTopOf="@+id/choose_amount"
                 app:srcCompat="@drawable/ic_remove_gray" />
 
             <com.google.android.material.button.MaterialButton
