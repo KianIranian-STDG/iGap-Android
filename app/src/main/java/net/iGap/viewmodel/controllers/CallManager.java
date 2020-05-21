@@ -330,7 +330,7 @@ public class CallManager {
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
         Log.d(TAG, "onHold: lastState -> " + isCallHold + " current state -> " + builder.getHold());
         isCallHold = builder.getHold();
-        changeState(CallState.ON_HOLD);
+        changeState(isCallHold ? CallState.ON_HOLD : CallState.CONNECTED);
         WebRTC.getInstance().toggleSound(!isCallHold);
     }
 
