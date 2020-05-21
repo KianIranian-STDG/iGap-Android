@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.paymentPackage.InternetPackage;
+import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.OnItemSelectedListener;
 
 import java.util.List;
@@ -94,7 +96,10 @@ public class AdapterInternetPackage extends RecyclerView.Adapter<AdapterInternet
             if (getAdapterPosition() == currentlySelectedPosition) {
                 clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet_selected));
             } else {
-                clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet));
+                if (G.themeColor == Theme.DARK)
+                    clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet_dark));
+                else
+                    clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet_light));
             }
         }
     }

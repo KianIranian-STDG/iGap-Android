@@ -408,7 +408,14 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                 HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
                     @Override
                     public void Allow() {
-                        new Contacts().getAllPhoneContactForPayment(contactNumbers -> adapterContact = new AdapterContactNumber(contactNumbers));
+                        new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
+                            if (contactNumbers.size() == 0) {
+                                HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
+                                progressBar.setVisibility(View.GONE);
+                                return;
+                            }
+                            adapterContact = new AdapterContactNumber(contactNumbers);
+                        });
                         MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
                         View view = dialog.getCustomView();
                         rvContact = view.findViewById(R.id.rv_contact);
@@ -449,9 +456,16 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             chargeApi.getFavoriteInternetPackage().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
                 public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
-                    if (response.isSuccessful() && response.body().getData() != null) {
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        List<FavoriteNumber> numbers = response.body().getData();
+                        if (numbers.size() == 0) {
+                            HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
+                            progressBar.setVisibility(View.GONE);
+                            return;
+                        }
+
                         progressBar.setVisibility(View.GONE);
-                        adapterHistory = new AdapterHistoryNumber(response.body().getData());
+                        adapterHistory = new AdapterHistoryNumber(numbers);
                         MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
                         View view = dialog.getCustomView();
                         rvHistory = view.findViewById(R.id.rv_history);
