@@ -7,27 +7,33 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/number_contact"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:ellipsize="end"
         android:gravity="clip_vertical"
+        android:maxLength="15"
         android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="5" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/amount_contact"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:ellipsize="end"
         android:gravity="clip_vertical"
+        android:maxLength="15"
         android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="5" />
 
     <View
         android:id="@+id/view_line"

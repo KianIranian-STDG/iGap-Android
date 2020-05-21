@@ -83,8 +83,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private RecyclerView rvHistory;
     private RecyclerView rvAmount;
     private AppCompatTextView amountTxt;
-    private AppCompatTextView editType;
-    private AppCompatTextView chooseType;
     private AppCompatTextView removeNumber;
     private AppCompatImageView ivAdd;
     private AppCompatImageView lowView;
@@ -144,8 +142,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         lowView = view.findViewById(R.id.low_amount);
         amountTxt = view.findViewById(R.id.tv_amount_btn);
         editTextNumber = view.findViewById(R.id.phoneNumberInput);
-        editType = view.findViewById(R.id.iv_edit);
-        chooseType = view.findViewById(R.id.tv_choose);
         enterBtn = view.findViewById(R.id.btn_pay);
         scrollView = view.findViewById(R.id.scroll_payment);
         progressBar = view.findViewById(R.id.loadingView);
@@ -163,10 +159,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         .replace("-", ""));
             onPhoneNumberInput();
         });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.gray_6c));
-        }
 
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -213,6 +205,30 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             selectedIndex = adapterContact.getSelectedPosition();
                             contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
                             editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
+                            ivAdd.setVisibility(View.GONE);
+                            lowView.setVisibility(View.GONE);
+                            amountTxt.setVisibility(View.GONE);
+                            btnChargeType.setText(R.string.Select_the_type_of_charge);
+                            priceChoose.setText(R.string.select_the_amount);
+
+                            OperatorType.Type opt = new OperatorType().getOperation(editTextNumber.getText().toString().substring(0, 4));
+                            if (opt != null) {
+                                setAdapterValue(opt);
+                                switch (opt) {
+                                    case HAMRAH_AVAL:
+                                        setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
+                                        setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
+                                        break;
+                                    case IRANCELL:
+                                        setAdapterValue(OperatorType.Type.IRANCELL);
+                                        setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
+                                        break;
+                                    case RITEL:
+                                        setAdapterValue(OperatorType.Type.RITEL);
+                                        setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
+                                        break;
+                                }
+                            }
                             dialog.dismiss();
                         });
                         dialog.show();
@@ -258,7 +274,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
                                 editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
                                 amountTxt.setText(historyNumber.getAmount().toString());
-                                chooseType.setText(historyNumber.getChargeTypeDescription());
+                                priceChoose.setText("");
+
+                                btnChargeType.setText(historyNumber.getChargeType());
                                 dialog.dismiss();
                             });
 
@@ -284,6 +302,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onPhoneNumberInputClick() {
+        onPhoneNumberInput();
         editTextNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -384,29 +403,22 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 closeView3 = view.findViewById(R.id.close_view3);
                 saveBtn3 = view.findViewById(R.id.btn_dialog3);
 
+                closeView3.setOnClickListener(v12 -> dialog.dismiss());
                 saveBtn3.setOnClickListener(v1 -> {
                     if (adapterAmount.getSelectedPosition() == -1) {
                         return;
                     }
-
+                    ivAdd.setVisibility(View.VISIBLE);
+                    lowView.setVisibility(View.VISIBLE);
+                    amountTxt.setVisibility(View.VISIBLE);
                     selectedPriceIndex = adapterAmount.getSelectedPosition();
                     amount = amountList.get(selectedPriceIndex);
                     amountTxt.setText(amount.getTextAmount());
-
-                    ivAdd.setVisibility(View.VISIBLE);
-                    lowView.setVisibility(View.VISIBLE);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        priceChoose.setBackgroundTintList(getContext().getColorStateList(R.color.border_editText));
-                        btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.green));
-                    }
-                    chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
+                    priceChoose.setText("");
                     priceChoose.setClickable(false);
                     dialog.dismiss();
-
                 });
 
-                closeView3.setOnClickListener(v12 -> dialog.dismiss());
 
                 ViewGroup.LayoutParams params = rvAmount.getLayoutParams();
                 params.height = 500;
@@ -451,6 +463,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 closeView4 = view.findViewById(R.id.close_view4);
                 saveBtn4 = view.findViewById(R.id.btn_dialog4);
 
+                closeView4.setOnClickListener(v12 -> dialog.dismiss());
                 saveBtn4.setOnClickListener(v16 -> {
                     if (adapterChargeType.getSelectedPosition() == -1) {
                         return;
@@ -458,21 +471,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                     selectedChargeTypeIndex = adapterChargeType.getSelectedPosition();
                     typeList = chargeTypeList.get(selectedChargeTypeIndex);
-                    chooseType.setText(typeList.getChargeType());
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        btnChargeType.setBackgroundTintList(getContext().getColorStateList(R.color.border_editText));
-                        enterBtn.setBackgroundTintList(getContext().getColorStateList(R.color.green));
-
-                    }
-                    chooseType.setTextColor(getContext().getResources().getColor(R.color.white));
-
-                    editType.setVisibility(View.VISIBLE);
                     dialog.dismiss();
-
+                    btnChargeType.setText(typeList.getChargeType());
                 });
-
-                closeView4.setOnClickListener(v12 -> dialog.dismiss());
 
                 rvAmount.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                 rvAmount.setAdapter(adapterChargeType);
