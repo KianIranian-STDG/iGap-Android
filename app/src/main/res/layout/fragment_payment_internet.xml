@@ -23,8 +23,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <androidx.constraintlayout.widget.ConstraintLayout
             style="@style/IGapRootViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,13 +36,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/topUp_title"
                     android:textColor="?iGapButtonTextColor"
                     android:textSize="@dimen/largeTextSize"
@@ -55,8 +55,9 @@
                     style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:gravity="left"
                     android:hint="@string/phone"
                     android:inputType="phone"
                     android:maxLength="11"
@@ -64,44 +65,45 @@
                     android:paddingStart="@dimen/dp10"
                     android:paddingEnd="@dimen/dp10"
                     android:textSize="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    app:layout_constraintWidth_default="percent"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintEnd_toStartOf="@+id/btnRemoveSearch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/btnRemoveSearch"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="@dimen/dp52"
                     android:background="@null"
+                    android:gravity="center"
                     android:padding="8dp"
                     android:text="@string/md_close_button"
                     android:textColor="?iGapSubtitleTextColor"
-                    app:layout_constraintBottom_toBottomOf="@id/phoneNumber"
-                    app:layout_constraintRight_toRightOf="@id/phoneNumber"
-                    app:layout_constraintTop_toTopOf="@id/phoneNumber" />
+                    android:textSize="@dimen/dp24"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneNumber"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/phoneNumber"
+                    app:layout_constraintTop_toTopOf="@+id/phoneNumber" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/frame_contact"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/shape_payment_charge"
                     android:paddingStart="@dimen/dp8"
                     android:paddingTop="@dimen/dp2"
                     android:paddingEnd="@dimen/dp8"
-                    android:paddingBottom="@dimen/dp2"
-                    app:layout_constraintEnd_toEndOf="@id/phoneNumber"
-                    app:layout_constraintHorizontal_bias="0"
-                    app:layout_constraintStart_toStartOf="@+id/phoneNumber"
+                    app:layout_constraintEnd_toStartOf="@+id/frame_history"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/phoneNumber"
-                    app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".425">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_contact"
                         android:layout_width="@dimen/dp24"
+                        android:layout_gravity="center_vertical"
                         android:layout_height="@dimen/dp24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -116,36 +118,35 @@
                         android:layout_marginLeft="4dp"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:maxLength="17"
+                        android:layout_gravity="center_vertical"
                         android:text="@string/choose_frome_contacts"
                         android:textColor="?attr/iGapTitleTextColor"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_contact"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_contact"
                         app:layout_constraintTop_toTopOf="@+id/iv_contact" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/frame_history"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_payment_charge"
                     android:paddingStart="@dimen/dp8"
                     android:paddingTop="@dimen/dp2"
                     android:paddingEnd="@dimen/dp8"
-                    android:paddingBottom="@dimen/dp2"
                     app:layout_constraintBottom_toBottomOf="@+id/frame_contact"
-                    app:layout_constraintEnd_toEndOf="@+id/phoneNumber"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintStart_toStartOf="@id/phoneNumber"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/frame_contact"
                     app:layout_constraintTop_toTopOf="@+id/frame_contact"
-                    app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".425">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_history"
                         android:layout_width="@dimen/dp24"
                         android:layout_height="@dimen/dp24"
+                        android:layout_gravity="center_vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -158,6 +159,7 @@
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginEnd="4dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="4dp"
                         android:maxLength="17"
                         android:text="@string/previousـpurchases"
@@ -166,7 +168,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_history"
                         app:layout_constraintTop_toTopOf="@+id/iv_history" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView"
@@ -361,9 +363,10 @@
 
                 <RadioGroup
                     android:id="@+id/rdGroup"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
+                    android:padding="@dimen/dp4"
                     app:layout_constraintHorizontal_bias=".9"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -373,6 +376,7 @@
                         android:id="@+id/rbCredit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp4"
                         android:checked="true"
                         android:text="@string/credit_sim"
                         android:textColor="?attr/iGapTitleTextColor" />
@@ -381,6 +385,7 @@
                         android:id="@+id/rbPermanent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp4"
                         android:text="@string/permanent_sim"
                         android:textColor="?attr/iGapTitleTextColor" />
 
@@ -388,6 +393,7 @@
                         android:id="@+id/rbTdLteCredit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp4"
                         android:text="@string/credit_tdlte_sim"
                         android:textColor="?attr/iGapTitleTextColor" />
 
@@ -395,6 +401,7 @@
                         android:id="@+id/rbTdLtePermanent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp4"
                         android:text="@string/tdlte_permanent_sim"
                         android:textColor="?attr/iGapTitleTextColor" />
 
@@ -402,6 +409,7 @@
                         android:id="@+id/rbData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp4"
                         android:text="@string/data_sim"
                         android:textColor="?attr/iGapTitleTextColor" />
                 </RadioGroup>
@@ -410,14 +418,22 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <ProgressBar
+    <FrameLayout
         android:id="@+id/loadingView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
+        android:background="@drawable/shape_payment_charge"
+        android:padding="@dimen/dp12"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/scroll_payment">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

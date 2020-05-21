@@ -3,13 +3,12 @@ package net.iGap.fragments.payment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +47,8 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.repository.MciInternetPackageRepository;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -65,14 +66,14 @@ import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.RIGHTEL;
 
 public class FragmentPaymentInternet extends BaseFragment implements HandShakeCallback {
 
-    public static final String SIM_TYPE_CREDIT = "CREDIT";
+    static final String SIM_TYPE_CREDIT = "CREDIT";
     public static final String SIM_TYPE_PERMANENT = "PERMANENT";
     public static final String SIM_TYPE_TD_LTE_CREDIT = "CREDIT_TD_LTE";
     public static final String SIM_TYPE_TD_LTE_PERMANENT = "PERMANENT_TD_LTE";
     public static final String SIM_TYPE_DATA = "DATA";
 
-    private ConstraintLayout frameContact;
-    private ConstraintLayout frameHistory;
+    private View frameContact;
+    private View frameHistory;
     private ConstraintLayout frameHamrah;
     private ConstraintLayout frameIrancel;
     private ConstraintLayout frameRightel;
@@ -91,7 +92,6 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private ContactNumber contactNumber;
     private View closeView, closeView2;
     private OperatorType.Type operatorType;
-    private RadioGroup rdGroup;
     private RadioButton rbCredit;
     private RadioButton rbPermanent;
     private RadioButton rbTdLteCredit;
@@ -100,7 +100,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private String simType = SIM_TYPE_CREDIT;
     private ChargeApi chargeApi;
     private FavoriteNumber historyNumber;
-    private ProgressBar progressBar;
+    private View progressBar;
     private MaterialDesignTextView btnRemoveSearch;
     private MciInternetPackageRepository repository;
     private ScrollView scrollView;
@@ -130,7 +130,6 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         frameHamrah = view.findViewById(R.id.view12);
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
-        rdGroup = view.findViewById(R.id.rdGroup);
         rbCredit = view.findViewById(R.id.rbCredit);
         scrollView = view.findViewById(R.id.scroll_payment);
         rbPermanent = view.findViewById(R.id.rbPermanent);
@@ -142,6 +141,8 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
         chargeApi = new RetrofitFactory().getChargeRetrofit();
         repository = MciInternetPackageRepository.getInstance();
+
+        editTextNumber.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
 
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
@@ -174,7 +175,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
         btnRemoveSearch.setOnClickListener(v -> {
             editTextNumber.setText(null);
-            btnRemoveSearch.setVisibility(View.GONE);
+            btnRemoveSearch.setVisibility(View.INVISIBLE);
         });
 
         onContactNumberButtonClick();
@@ -387,7 +388,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             progressBar.setVisibility(View.VISIBLE);
             chargeApi.getFavoriteInternetPackage().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
-                public void onResponse(Call<GetFavoriteNumber> call, Response<GetFavoriteNumber> response) {
+                public void onResponse(@NotNull Call<GetFavoriteNumber> call, @NotNull Response<GetFavoriteNumber> response) {
                     if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                         List<FavoriteNumber> numbers = response.body().getData();
                         if (numbers.size() == 0) {
@@ -458,7 +459,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             @Override
             public void afterTextChanged(Editable s) {
                 favoriteNumber = null;
-                if (editTextNumber.getText().length() == 11) {
+                if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
                     String number = editTextNumber.getText().toString().substring(0, 4);
                     OperatorType.Type opt = new OperatorType().getOperation(number);
                     if (opt != null) {

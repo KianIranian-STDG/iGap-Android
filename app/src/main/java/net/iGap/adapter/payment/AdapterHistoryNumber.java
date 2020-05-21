@@ -39,23 +39,22 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
         return historyNumberList.size();
     }
 
-    public class ContactNumberViewHolder extends RecyclerView.ViewHolder {
+    class ContactNumberViewHolder extends RecyclerView.ViewHolder {
         private TextView amount;
         private TextView phoneNumber;
 
-        public ContactNumberViewHolder(@NonNull View itemView) {
+        ContactNumberViewHolder(@NonNull View itemView) {
             super(itemView);
             phoneNumber = itemView.findViewById(R.id.amount_contact);
             amount = itemView.findViewById(R.id.number_contact);
         }
 
-        public void bindNUmber(FavoriteNumber historyNumber, int position) {
+        void bindNUmber(FavoriteNumber historyNumber, int position) {
             phoneNumber.setText(historyNumber.getPhoneNumber());
             amount.setText(historyNumber.getAmount() != null ? historyNumber.getAmount().toString() + itemView.getContext().getString(R.string.rial) : "");
             itemView.setSelected(selectedPosition == position);
             itemView.setOnClickListener(v -> {
-                int tmp = selectedPosition;
-                notifyItemChanged(tmp);
+                notifyItemChanged(selectedPosition);
                 selectedPosition = getAdapterPosition();
                 notifyItemChanged(selectedPosition);
             });
