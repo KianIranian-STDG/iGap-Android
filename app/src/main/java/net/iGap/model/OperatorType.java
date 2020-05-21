@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class OperatorType {
 
     public enum Type {
-        HAMRAH_AVAL, IRANCELL, RITEL
+        HAMRAH_AVAL, IRANCELL, RITEL, UNKNOWN
     }
 
     private HashMap<String, Type> phoneMap = new HashMap<String, Type>() {

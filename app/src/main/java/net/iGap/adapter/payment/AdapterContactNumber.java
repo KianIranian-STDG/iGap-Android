@@ -10,16 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 
-import org.paygear.fragment.MerchantsListAdapter;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNumber.HistoryNumberViewHolder> {
     private List<ContactNumber> contactNumbers;
-    private int selectedPosition=-1;
+    private int selectedPosition = -1;
 
     public AdapterContactNumber(List<ContactNumber> contactNumbers) {
+        this.contactNumbers = contactNumbers;
+    }
+
+    public AdapterContactNumber() {
+    }
+
+    public void setContactNumbers(List<ContactNumber> contactNumbers) {
         this.contactNumbers = contactNumbers;
     }
 
@@ -42,17 +46,17 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
     }
 
 
-    public class HistoryNumberViewHolder extends RecyclerView.ViewHolder {
+    class HistoryNumberViewHolder extends RecyclerView.ViewHolder {
         private TextView phoneNumber;
         private TextView contactName;
 
-        public HistoryNumberViewHolder(@NonNull View itemView) {
+        HistoryNumberViewHolder(@NonNull View itemView) {
             super(itemView);
             phoneNumber = itemView.findViewById(R.id.phone_Number);
             contactName = itemView.findViewById(R.id.contact_Name);
         }
 
-        public void bindNumber(ContactNumber amount, int position) {
+        void bindNumber(ContactNumber amount, int position) {
             contactName.setText(amount.getDisplayName());
             phoneNumber.setText(amount.getPhone());
 

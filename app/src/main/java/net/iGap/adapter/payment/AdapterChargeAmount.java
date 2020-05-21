@@ -10,14 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.news.NewsList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmount.ChargeAmountViewHolder> {
 
-    private int selectedPosition=0;
+    private int selectedPosition = 0;
     private List<Amount> amountList;
 
     public AdapterChargeAmount(List<Amount> amountList) {
@@ -41,32 +39,23 @@ public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmoun
         return amountList.size();
     }
 
-    public class ChargeAmountViewHolder extends RecyclerView.ViewHolder {
+    class ChargeAmountViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
         private RadioButton radioButton;
 
-        public ChargeAmountViewHolder(@NonNull View itemView) {
+        ChargeAmountViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.amount);
             radioButton = itemView.findViewById(R.id.radio_amount);
             radioButton.setOnClickListener(v -> itemView.performClick());
         }
 
-        public void bindAmount(Amount amount, int position) {
-            if (selectedPosition == position) {
-                radioButton.setChecked(true);
-            } else {
-                radioButton.setChecked(false);
-            }
-
+        void bindAmount(Amount amount, int position) {
+            radioButton.setChecked(selectedPosition == position);
             textView.setText(amount.getTextAmount());
 
-
-            itemView.setSelected(selectedPosition == position);
-
             itemView.setOnClickListener(v -> {
-                int tmp = selectedPosition;
-                notifyItemChanged(tmp);
+                notifyItemChanged(selectedPosition);
                 selectedPosition = getAdapterPosition();
                 notifyItemChanged(selectedPosition);
             });
