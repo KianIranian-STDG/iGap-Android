@@ -1,6 +1,5 @@
 package net.iGap.fragments.payment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -637,9 +636,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
+        enterBtn.setEnabled(false);
         chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
             @Override
-            public void onResponse(Call<MciPurchaseResponse> call, Response<MciPurchaseResponse> response) {
+            public void onResponse(@NonNull Call<MciPurchaseResponse> call, @NonNull Response<MciPurchaseResponse> response) {
+                enterBtn.setEnabled(true);
                 if (response.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
                     String token = response.body().getToken();
@@ -659,12 +660,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     jsonObject.addProperty("amount", price);
                                     chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
                                         @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                                             progressBar.setVisibility(View.GONE);
                                         }
 
                                         @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                                             progressBar.setVisibility(View.GONE);
                                             HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
                                         }
@@ -678,7 +679,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Call<MciPurchaseResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MciPurchaseResponse> call, @NonNull Throwable t) {
+                enterBtn.setEnabled(true);
                 progressBar.setVisibility(View.GONE);
                 hideKeyboard();
                 HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);

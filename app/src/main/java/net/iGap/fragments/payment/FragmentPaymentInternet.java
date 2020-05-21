@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,8 +26,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryNumber;
-import net.iGap.adapter.payment.Amount;
-import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
@@ -51,11 +48,7 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.repository.MciInternetPackageRepository;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,7 +71,6 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     public static final String SIM_TYPE_TD_LTE_PERMANENT = "PERMANENT_TD_LTE";
     public static final String SIM_TYPE_DATA = "DATA";
 
-    private LinearLayout toolbar;
     private ConstraintLayout frameContact;
     private ConstraintLayout frameHistory;
     private ConstraintLayout frameHamrah;
@@ -111,32 +103,23 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private ProgressBar progressBar;
     private MaterialDesignTextView btnRemoveSearch;
     private MciInternetPackageRepository repository;
-
-    private List<Amount> amountList = new ArrayList<>();
-    private List<ChargeType> chargeTypeList = new ArrayList<>();
     private ScrollView scrollView;
     private FavoriteNumber favoriteNumber;
 
     public static FragmentPaymentInternet newInstance() {
-
-        Bundle args = new Bundle();
-
-        FragmentPaymentInternet fragment = new FragmentPaymentInternet();
-        fragment.setArguments(args);
-        return fragment;
+        return new FragmentPaymentInternet();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_payment_internet, container, false);
-        return view;
+        return LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_payment_internet, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(R.id.toolbar);
+        LinearLayout toolbar = view.findViewById(R.id.toolbar);
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
         radioButtonIrancell = view.findViewById(R.id.radio_irancell);
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
@@ -311,18 +294,14 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             String number = editTextNumber.getText().toString().substring(0, 4);
             OperatorType.Type opt = new OperatorType().getOperation(number);
             if (opt != null) {
-                setAdapterValue(opt);
                 switch (opt) {
                     case HAMRAH_AVAL:
-                        setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
                         setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
                         break;
                     case IRANCELL:
-                        setAdapterValue(OperatorType.Type.IRANCELL);
                         setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
                         break;
                     case RITEL:
-                        setAdapterValue(OperatorType.Type.RITEL);
                         setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
                         break;
                 }
@@ -332,53 +311,6 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         if (editTextNumber.getText().length() == 11) {
             scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
             hideKeyboard();
-        }
-    }
-
-    private void setAdapterValue(@NotNull OperatorType.Type operator) {
-        List<String> prices;
-        List<String> chargeType;
-        switch (operator) {
-            case HAMRAH_AVAL:
-                operatorType = OperatorType.Type.HAMRAH_AVAL;
-                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
-                amountList.clear();
-                for (int i = 0; i < prices.size(); i++) {
-                    amountList.add(new Amount(prices.get(i)));
-                }
-                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_hamrahe_aval));
-                chargeTypeList.clear();
-                for (int i = 0; i < chargeType.size(); i++) {
-                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
-                }
-
-                break;
-            case IRANCELL:
-                operatorType = OperatorType.Type.IRANCELL;
-                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price_irancell));
-                amountList.clear();
-                for (int i = 0; i < prices.size(); i++) {
-                    amountList.add(new Amount(prices.get(i)));
-                }
-                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_irancell));
-                chargeTypeList.clear();
-                for (int i = 0; i < chargeType.size(); i++) {
-                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
-                }
-                break;
-            case RITEL:
-                operatorType = OperatorType.Type.RITEL;
-                prices = Arrays.asList(getResources().getStringArray(R.array.charge_price));
-                amountList.clear();
-                for (int i = 0; i < prices.size(); i++) {
-                    amountList.add(new Amount(prices.get(i)));
-                }
-                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_ritel));
-                chargeTypeList.clear();
-                for (int i = 0; i < chargeType.size(); i++) {
-                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
-                }
-                break;
         }
     }
 
