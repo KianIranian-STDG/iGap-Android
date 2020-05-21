@@ -30,8 +30,6 @@ import org.webrtc.IceCandidate;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.RtpReceiver;
-import org.webrtc.VideoFrame;
-import org.webrtc.VideoSink;
 import org.webrtc.VideoTrack;
 
 import static org.webrtc.PeerConnection.IceConnectionState.CHECKING;
@@ -42,7 +40,7 @@ import static org.webrtc.PeerConnection.IceConnectionState.FAILED;
 public class PeerConnectionObserver implements PeerConnection.Observer {
 
     private String TAG = "iGapCall " + getClass().getSimpleName();
-    
+
     @Override
     public void onSignalingChange(PeerConnection.SignalingState signalingState) {
         Log.i(TAG, "onSignalingChange : " + signalingState);
@@ -97,22 +95,19 @@ public class PeerConnectionObserver implements PeerConnection.Observer {
             audioTrack.setEnabled(true);
         }
 
-        if (stream.videoTracks != null && stream.videoTracks.size() == 1) {
+        if (stream.videoTracks.size() == 1) {
             VideoTrack videoTrack = stream.videoTracks.get(0);
             videoTrack.setEnabled(true);
 
-            videoTrack.addSink(new VideoSink() {
-                @Override
-                public void onFrame(VideoFrame videoFrame) {
-                    Log.d(TAG, "onFrame: in remote frame");
-                    if (WebRTC.getInstance().getFrameListener() != null) {
-                        Log.d(TAG, "onFrame: remote frame set.");
-                        WebRTC.getInstance().getFrameListener().onRemoteFrame(videoFrame);
-                    }
+            videoTrack.addSink(videoFrame -> {
+                Log.d(TAG, "onFrame: in remote frame");
+                if (WebRTC.getInstance().getFrameListener() != null) {
+                    Log.d(TAG, "onFrame: remote frame set.");
+                    WebRTC.getInstance().getFrameListener().onRemoteFrame(videoFrame);
+                }
 //                    if (G.onVideoCallFrame != null) {
 //                        G.onVideoCallFrame.onRemoteFrame(videoFrame);
 //                    }
-                }
             });
 
         }

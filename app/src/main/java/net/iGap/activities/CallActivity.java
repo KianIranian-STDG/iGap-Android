@@ -77,10 +77,11 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private CallerInfo caller;
     private boolean isIncoming;
     private boolean isIncomingCallAndNotAnswered;
+    private boolean isIncomingCallAndAnswered;
     private ProtoSignalingOffer.SignalingOffer.Type callType;
     private boolean isRtl = G.isAppRtl;
 
-    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private String TAG = "CallActivity ";
     public static final String CALL_TIMER_BROADCAST = "CALL_TIMER_BROADCAST";
     public static final String TIMER_TEXT = "timer";
 
@@ -109,6 +110,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         callType = CallManager.getInstance().getCallType();
         isIncoming = CallManager.getInstance().isIncoming();
         isIncomingCallAndNotAnswered = isIncoming && CallManager.getInstance().getCurrentSate() != CallState.CONNECTED;
+        isIncomingCallAndAnswered = isIncoming && CallManager.getInstance().getCurrentSate() == CallState.CONNECTED;
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
@@ -165,7 +167,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         if (isVideoCall()) {
             surfaceRemote = new SurfaceViewRenderer(this);
-            surfaceRemote.setVisibility(View.GONE);
+            surfaceRemote.setVisibility(isIncomingCallAndAnswered ? View.VISIBLE : View.GONE);
             surfaceRemote.setOnClickListener(v -> hideIcons());
             rootView.addView(surfaceRemote, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
 
@@ -178,6 +180,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             } catch (Exception e) {// for android version 4 on huawei device
                 e.printStackTrace();
                 HelperLog.setErrorLog(e);
+                Toast.makeText(this, getResources().getString(R.string.not_success), Toast.LENGTH_SHORT).show();
                 CallManager.getInstance().endCall();
             }
             surfaceLocal.setEnableHardwareScaler(true);
@@ -190,6 +193,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             } catch (Exception e) {// for android version 4 on huawei device
                 e.printStackTrace();
                 HelperLog.setErrorLog(e);
+                Toast.makeText(this, getResources().getString(R.string.not_success), Toast.LENGTH_SHORT).show();
                 CallManager.getInstance().endCall();
             }
             surfaceRemote.setEnableHardwareScaler(true);
@@ -198,12 +202,14 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             WebRTC.getInstance().setFrameListener(new WebRTC.VideoFrameListener() {
                 @Override
                 public void onLocalFrame(VideoFrame frame) {
-                    surfaceLocal.onFrame(frame);
+                    if (surfaceLocal != null)
+                        surfaceLocal.onFrame(frame);
                 }
 
                 @Override
                 public void onRemoteFrame(VideoFrame frame) {
-                    surfaceRemote.onFrame(frame);
+                    if (surfaceRemote != null)
+                        surfaceRemote.onFrame(frame);
                 }
             });
         }
@@ -227,6 +233,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             }
         };
         userImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        if (isVideoCall())
+            userImageView.setVisibility(isIncomingCallAndAnswered ? View.GONE : View.VISIBLE);
         avatarHandler.getAvatar(new ParamWithAvatarType(userImageView, caller.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
         rootView.addView(userImageView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 

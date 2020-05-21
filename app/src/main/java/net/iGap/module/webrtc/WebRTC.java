@@ -17,6 +17,7 @@ import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityCall;
+import net.iGap.helper.IGLog;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
@@ -55,7 +56,7 @@ import java.util.Set;
 
 public class WebRTC {
 
-    private static String TAG = "iGapCall" + " WebRTC";
+    private static String TAG = "WebRTC ";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
     private static final int VIDEO_RESOLUTION_WIDTH = 1920;
@@ -564,6 +565,7 @@ public class WebRTC {
     }
 
     public void holdVideoCall(boolean callHold) {
+        IGLog.e(TAG + "holdVideoCall" + callHold);
         if (callHold) {
             pauseVideoCapture();
         } else {
