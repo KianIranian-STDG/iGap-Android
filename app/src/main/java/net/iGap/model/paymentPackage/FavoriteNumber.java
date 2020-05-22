@@ -21,6 +21,8 @@ public class FavoriteNumber {
     private String mPackageType;
     @SerializedName("type")
     private String mType;
+    @SerializedName("package_description")
+    private String packageDescription;
 
     public void setPackageType(String mPackageType) {
         this.mPackageType = mPackageType;
@@ -30,12 +32,20 @@ public class FavoriteNumber {
         return mAmount;
     }
 
-public void setAmount(Long amount) {
+    public void setAmount(Long amount) {
         mAmount = amount;
     }
 
     public String getChargeType() {
         return mChargeType;
+    }
+
+    public void setPackageDescription(String packageDescription) {
+        this.packageDescription = packageDescription;
+    }
+
+    public String getPackageDescription() {
+        return packageDescription;
     }
 
     public void setChargeType(String chargeType) {

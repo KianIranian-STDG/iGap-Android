@@ -1,6 +1,5 @@
 package net.iGap.fragments.payment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +42,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static net.iGap.fragments.payment.FragmentPaymentInternet.SIM_TYPE_CREDIT;
 import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
 
 public class FragmentPaymentInternetPackage extends BaseFragment {

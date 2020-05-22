@@ -1,6 +1,5 @@
 package net.iGap.adapter.payment;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.iGap.module.structs.StructListOfContact;
@@ -58,7 +57,6 @@ public class ContactNumber {
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
-    
 
     @Override
     public boolean equals(@Nullable Object obj) {

@@ -9,12 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.ScrollView;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +23,7 @@ import com.google.android.material.button.MaterialButton;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterContactNumber;
-import net.iGap.adapter.payment.AdapterHistoryNumber;
+import net.iGap.adapter.payment.AdapterHistoryPackage;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
@@ -36,16 +35,13 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
-import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.Contacts;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.repository.MciInternetPackageRepository;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -66,45 +62,30 @@ import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.RIGHTEL;
 
 public class FragmentPaymentInternet extends BaseFragment implements HandShakeCallback {
 
-    static final String SIM_TYPE_CREDIT = "CREDIT";
-    public static final String SIM_TYPE_PERMANENT = "PERMANENT";
-    public static final String SIM_TYPE_TD_LTE_CREDIT = "CREDIT_TD_LTE";
-    public static final String SIM_TYPE_TD_LTE_PERMANENT = "PERMANENT_TD_LTE";
-    public static final String SIM_TYPE_DATA = "DATA";
+    private static final String SIM_TYPE_CREDIT = "CREDIT";
+    private static final String SIM_TYPE_PERMANENT = "PERMANENT";
+    private static final String SIM_TYPE_TD_LTE_CREDIT = "CREDIT_TD_LTE";
+    private static final String SIM_TYPE_TD_LTE_PERMANENT = "PERMANENT_TD_LTE";
+    private static final String SIM_TYPE_DATA = "DATA";
 
-    private View frameContact;
     private View frameHistory;
-    private ConstraintLayout frameHamrah;
-    private ConstraintLayout frameIrancel;
-    private ConstraintLayout frameRightel;
+    private View frameHamrah;
+    private View frameIrancel;
+    private View frameRightel;
     private RadioButton radioButtonHamrah;
     private RadioButton radioButtonIrancell;
     private RadioButton radioButtonRightel;
-    private AdapterHistoryNumber adapterHistory;
-    private AdapterContactNumber adapterContact;
-    private RecyclerView rvContact;
-    private RecyclerView rvHistory;
-    private MaterialButton enterBtn;
-    private MaterialButton saveBtn1;
-    private MaterialButton saveBtn2;
-    private AppCompatEditText editTextNumber;
-    private int selectedIndex;
-    private ContactNumber contactNumber;
-    private View closeView, closeView2;
-    private OperatorType.Type operatorType;
+    private AppCompatEditText numberEditText;
+    private OperatorType.Type currentOperator;
     private RadioButton rbCredit;
     private RadioButton rbPermanent;
     private RadioButton rbTdLteCredit;
     private RadioButton rbTdLtePermanent;
     private RadioButton rbData;
-    private String simType = SIM_TYPE_CREDIT;
+    private String currentSimType = SIM_TYPE_CREDIT;
     private ChargeApi chargeApi;
     private FavoriteNumber historyNumber;
     private View progressBar;
-    private MaterialDesignTextView btnRemoveSearch;
-    private MciInternetPackageRepository repository;
-    private ScrollView scrollView;
-    private FavoriteNumber favoriteNumber;
 
     public static FragmentPaymentInternet newInstance() {
         return new FragmentPaymentInternet();
@@ -119,43 +100,44 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         LinearLayout toolbar = view.findViewById(R.id.toolbar);
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
         radioButtonIrancell = view.findViewById(R.id.radio_irancell);
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
-        frameContact = view.findViewById(R.id.frame_contact);
+        View frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
-        editTextNumber = view.findViewById(R.id.phoneNumber);
-        enterBtn = view.findViewById(R.id.btn_nextpage);
+        numberEditText = view.findViewById(R.id.phoneNumber);
+        MaterialButton goNextButton = view.findViewById(R.id.btn_nextpage);
         frameHamrah = view.findViewById(R.id.view12);
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
         rbCredit = view.findViewById(R.id.rbCredit);
-        scrollView = view.findViewById(R.id.scroll_payment);
+        RadioGroup radioGroup = view.findViewById(R.id.rdGroup);
         rbPermanent = view.findViewById(R.id.rbPermanent);
         rbTdLteCredit = view.findViewById(R.id.rbTdLteCredit);
         rbTdLtePermanent = view.findViewById(R.id.rbTdLtePermanent);
         rbData = view.findViewById(R.id.rbData);
         progressBar = view.findViewById(R.id.loadingView);
-        btnRemoveSearch = view.findViewById(R.id.btnRemoveSearch);
+        MaterialDesignTextView btnRemoveSearch = view.findViewById(R.id.btnRemoveSearch);
 
         chargeApi = new RetrofitFactory().getChargeRetrofit();
-        repository = MciInternetPackageRepository.getInstance();
-
-        editTextNumber.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+        numberEditText.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
 
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
-            editTextNumber.setText(userInfo.getPhoneNumber());
-            String number = userInfo.getPhoneNumber();
-            editTextNumber.setText(number
-                    .replace("98", "0")
-                    .replace("+98", "0")
-                    .replace("0098", "0")
-                    .replace(" ", "")
-                    .replace("-", ""));
-            onPhoneNumberInput();
-            editTextNumber.setSelection(editTextNumber.getText() == null ? 0 : editTextNumber.getText().length());
+            if (userInfo != null) {
+                numberEditText.setText(userInfo.getPhoneNumber());
+                String number = userInfo.getPhoneNumber();
+                numberEditText.setText(number
+                        .replace("98", "0")
+                        .replace("+98", "0")
+                        .replace("0098", "0")
+                        .replace(" ", "")
+                        .replace("-", ""));
+                onPhoneNumberInput();
+                numberEditText.setSelection(numberEditText.getText() == null ? 0 : numberEditText.getText().length());
+            }
         });
 
         toolbar.addView(HelperToolbar.create()
@@ -174,144 +156,126 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                 }).getView());
 
         btnRemoveSearch.setOnClickListener(v -> {
-            editTextNumber.setText(null);
+            numberEditText.setText(null);
             btnRemoveSearch.setVisibility(View.INVISIBLE);
         });
 
-        onContactNumberButtonClick();
-        onHistoryNumberButtonClick();
-        onPhoneNumberInputClick();
-        onItemOperatorSelect();
-
-        enterBtn.setOnClickListener(v -> {
-            if (this.favoriteNumber != null) {
-                requestPayment(favoriteNumber);
-                return;
+        numberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-            if (operatorType != null) {
-                if (editTextNumber.getText() == null) {
-                    editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0 && btnRemoveSearch.getVisibility() == View.INVISIBLE) {
+                    btnRemoveSearch.setVisibility(View.VISIBLE);
+                }
+                if (s.length() == 0)
+                    btnRemoveSearch.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (numberEditText.getText() != null && numberEditText.getText().length() == 11) {
+                    String number = numberEditText.getText().toString().substring(0, 4);
+                    OperatorType.Type opt = new OperatorType().getOperation(number);
+                    if (opt != null) {
+                        changeOperator(opt);
+                    }
+                }
+            }
+        });
+
+        frameContact.setOnClickListener(v -> onContactNumberButtonClick());
+        frameHistory.setOnClickListener(v -> onHistoryNumberButtonClick());
+        frameHamrah.setOnClickListener(v -> changeOperator(HAMRAH_AVAL));
+        frameRightel.setOnClickListener(v -> changeOperator(RITEL));
+        frameIrancel.setOnClickListener(v -> changeOperator(IRANCELL));
+
+        goNextButton.setOnClickListener(v -> {
+            if (currentOperator != null) {
+                if (numberEditText.getText() == null) {
+                    numberEditText.setError(getString(R.string.phone_number_is_not_valid));
                     return;
                 }
-                String phoneNumber = editTextNumber.getText().toString().trim();
+                String phoneNumber = numberEditText.getText().toString().trim();
                 if (!isNumeric(phoneNumber) || phoneNumber.length() < 11) {
-                    editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
+                    numberEditText.setError(getString(R.string.phone_number_is_not_valid));
                     return;
                 }
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance(phoneNumber, convertOperatorToString(operatorType), simType)).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance(phoneNumber, convertOperatorToString(currentOperator), currentSimType)).setReplace(false).load();
             } else {
-                ShowError(getResources().getString(R.string.sim_type_not_choosed));
+                showError(getResources().getString(R.string.sim_type_not_choosed));
             }
         });
 
-        radioButtonHamrah.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                operatorType = HAMRAH_AVAL;
-                updateRadioGroup(operatorType);
-            }
-        });
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> changeSimType());
 
-        radioButtonIrancell.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                operatorType = IRANCELL;
-                updateRadioGroup(operatorType);
-            }
-        });
 
-        radioButtonRightel.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                operatorType = RITEL;
-                updateRadioGroup(operatorType);
-            }
-        });
-
-        rbCredit.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                simType = SIM_TYPE_CREDIT;
-            }
-        });
-
-        rbPermanent.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                simType = SIM_TYPE_PERMANENT;
-            }
-        });
-
-        rbTdLteCredit.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                simType = SIM_TYPE_TD_LTE_CREDIT;
-            }
-        });
-
-        rbTdLtePermanent.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                simType = SIM_TYPE_TD_LTE_PERMANENT;
-            }
-        });
-
-        rbData.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                simType = SIM_TYPE_DATA;
-            }
-        });
     }
 
-    private void requestPayment(FavoriteNumber favoriteNumber) {
-        progressBar.setVisibility(View.VISIBLE);
-        repository.purchaseInternetPackage(favoriteNumber.getOperator(), favoriteNumber.getPhoneNumber().substring(1),
-                String.valueOf(favoriteNumber.getPackageType()), this, new ResponseCallback<MciPurchaseResponse>() {
-                    @Override
-                    public void onSuccess(MciPurchaseResponse data) {
-                        G.handler.post(() -> {
-                            if (getActivity() != null && data.getToken() != null) {
-                                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), true, data.getToken(), result -> {
-                                    if (result.isSuccess()) {
-
-                                        if (getActivity() != null)
-                                            getActivity().onBackPressed();
-                                    }
-                                });
-                            }
-                            progressBar.setVisibility(View.GONE);
-                        });
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        HelperError.showSnackMessage(error, false);
-                        progressBar.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailed() {
-                        progressBar.setVisibility(View.GONE);
-                        HelperError.showSnackMessage(getContext().getResources().getString(R.string.time_out_error), false);
-                    }
-                });
+    private void changeSimType() {
+        if (rbCredit.isChecked()) {
+            currentSimType = SIM_TYPE_CREDIT;
+        } else if (rbPermanent.isChecked()) {
+            currentSimType = SIM_TYPE_PERMANENT;
+        } else if (rbTdLteCredit.isChecked()) {
+            currentSimType = SIM_TYPE_TD_LTE_CREDIT;
+        } else if (rbTdLtePermanent.isChecked()) {
+            currentSimType = SIM_TYPE_TD_LTE_PERMANENT;
+        } else if (rbData.isChecked()) {
+            currentSimType = SIM_TYPE_DATA;
+        }
     }
 
     private void onPhoneNumberInput() {
-        if (editTextNumber.getText() != null && editTextNumber.getText().length() == 4 || editTextNumber.getText().length() == 11) {
-            String number = editTextNumber.getText().toString().substring(0, 4);
+        if (numberEditText.getText() != null && numberEditText.getText().length() == 4 || numberEditText.getText().length() == 11) {
+            String number = numberEditText.getText().toString().substring(0, 4);
             OperatorType.Type opt = new OperatorType().getOperation(number);
             if (opt != null) {
-                switch (opt) {
-                    case HAMRAH_AVAL:
-                        setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
-                        break;
-                    case IRANCELL:
-                        setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
-                        break;
-                    case RITEL:
-                        setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
-                        break;
-                }
-                updateRadioGroup(opt);
+                changeOperator(opt);
             }
         }
-        if (editTextNumber.getText().length() == 11) {
-            scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
+
+        if (numberEditText.getText().length() == 11) {
             hideKeyboard();
+        }
+    }
+
+
+    private void changeOperator(OperatorType.Type operator) {
+        if (currentOperator == operator)
+            return;
+
+        currentOperator = operator;
+
+        radioButtonHamrah.setChecked(currentOperator == OperatorType.Type.HAMRAH_AVAL);
+        frameHamrah.setSelected(currentOperator == OperatorType.Type.HAMRAH_AVAL);
+
+        radioButtonIrancell.setChecked(currentOperator == OperatorType.Type.IRANCELL);
+        frameIrancel.setSelected(currentOperator == OperatorType.Type.IRANCELL);
+
+        radioButtonRightel.setChecked(currentOperator == OperatorType.Type.RITEL);
+        frameRightel.setSelected(currentOperator == OperatorType.Type.RITEL);
+
+        rbCredit.setVisibility(View.VISIBLE);
+        rbPermanent.setVisibility(View.VISIBLE);
+
+        rbCredit.setChecked(true);
+        currentSimType = SIM_TYPE_CREDIT;
+
+        if (currentOperator == RITEL) {
+            rbTdLteCredit.setVisibility(View.GONE);
+            rbTdLtePermanent.setVisibility(View.GONE);
+            rbData.setVisibility(View.VISIBLE);
+        } else if (currentOperator == IRANCELL) {
+            rbData.setVisibility(View.GONE);
+            rbTdLtePermanent.setVisibility(View.VISIBLE);
+            rbTdLteCredit.setVisibility(View.VISIBLE);
+        } else if (currentOperator == HAMRAH_AVAL) {
+            rbData.setVisibility(View.GONE);
+            rbTdLtePermanent.setVisibility(View.GONE);
+            rbTdLteCredit.setVisibility(View.GONE);
         }
     }
 
@@ -328,7 +292,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         return MTN;
     }
 
-    public void ShowError(String errorMessage) {
+    private void showError(String errorMessage) {
         if (errorMessage != null) {
             hideKeyboard();
             HelperError.showSnackMessage(errorMessage, false);
@@ -336,201 +300,107 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     }
 
     private void onContactNumberButtonClick() {
-        frameContact.setOnClickListener(v -> {
-            try {
-                HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
-                    @Override
-                    public void Allow() {
+        try {
+            HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
+                    View contactDialogView = dialog.getCustomView();
+
+                    if (contactDialogView != null) {
+                        RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
+                        contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                        AdapterContactNumber adapterContact = new AdapterContactNumber();
+                        contactRecyclerView.setAdapter(adapterContact);
+
                         new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
                             if (contactNumbers.size() == 0) {
                                 HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
                                 progressBar.setVisibility(View.GONE);
-                                return;
+                            } else {
+                                adapterContact.setContactNumbers(contactNumbers);
                             }
-                            adapterContact = new AdapterContactNumber(contactNumbers);
                         });
-                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, true).build();
-                        View view = dialog.getCustomView();
-                        rvContact = view.findViewById(R.id.rv_contact);
-                        saveBtn1 = view.findViewById(R.id.btn_dialog1);
-                        closeView = view.findViewById(R.id.closeView);
 
-
-                        saveBtn1.setOnClickListener(v15 -> {
+                        contactDialogView.findViewById(R.id.btn_dialog1).setOnClickListener(v15 -> {
                             if (adapterContact.getSelectedPosition() == -1) {
                                 return;
                             }
-                            selectedIndex = adapterContact.getSelectedPosition();
-                            contactNumber = adapterContact.getContactNumbers().get(selectedIndex);
-                            editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
+
+                            ContactNumber contactNumber = adapterContact.getContactNumbers().get(adapterContact.getSelectedPosition());
+                            numberEditText.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
+
                             dialog.dismiss();
                         });
-                        dialog.show();
 
-                        closeView.setOnClickListener(v12 -> dialog.dismiss());
-
-                        rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                        rvContact.setAdapter(adapterContact);
+                        contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
                     }
+                    dialog.show();
+                }
 
-                    @Override
-                    public void deny() {
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+                @Override
+                public void deny() {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void onHistoryNumberButtonClick() {
-        frameHistory.setOnClickListener(v -> {
-            progressBar.setVisibility(View.VISIBLE);
-            chargeApi.getFavoriteInternetPackage().enqueue(new Callback<GetFavoriteNumber>() {
-                @Override
-                public void onResponse(@NotNull Call<GetFavoriteNumber> call, @NotNull Response<GetFavoriteNumber> response) {
-                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                        List<FavoriteNumber> numbers = response.body().getData();
-                        if (numbers.size() == 0) {
-                            HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
-                            progressBar.setVisibility(View.GONE);
-                            return;
-                        }
-
-                        progressBar.setVisibility(View.GONE);
-                        adapterHistory = new AdapterHistoryNumber(numbers);
-                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
-                        View view = dialog.getCustomView();
-                        rvHistory = view.findViewById(R.id.rv_history);
-                        saveBtn2 = view.findViewById(R.id.btn_dialog2);
-                        closeView2 = view.findViewById(R.id.iv_close2);
-                        closeView2.setOnClickListener(v12 -> dialog.dismiss());
-
-                        saveBtn2.setOnClickListener(v13 -> {
-                            if (adapterHistory.getSelectedPosition() == -1) {
-                                return;
-                            }
-                            selectedIndex = adapterHistory.getSelectedPosition();
-                            historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
-                            editTextNumber.setText(historyNumber.getPhoneNumber());
-                            setFavoriteNumber(historyNumber);
-                            dialog.dismiss();
-                        });
-
-                        rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                        rvHistory.setAdapter(adapterHistory);
-                        dialog.show();
-
-                    } else {
+        frameHistory.setEnabled(false);
+        progressBar.setVisibility(View.VISIBLE);
+        chargeApi.getFavoriteInternetPackage().enqueue(new Callback<GetFavoriteNumber>() {
+            @Override
+            public void onResponse(@NotNull Call<GetFavoriteNumber> call, @NotNull Response<GetFavoriteNumber> response) {
+                frameHistory.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    List<FavoriteNumber> numbers = response.body().getData();
+                    if (numbers.size() == 0) {
                         progressBar.setVisibility(View.GONE);
                         HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
-                    }
-                }
+                    } else {
+                        progressBar.setVisibility(View.GONE);
 
-                @Override
-                public void onFailure(Call<GetFavoriteNumber> call, Throwable t) {
+                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                        View historyDialogView = dialog.getCustomView();
+
+                        if (historyDialogView != null) {
+                            AdapterHistoryPackage adapterHistory = new AdapterHistoryPackage(numbers);
+
+                            RecyclerView rvHistory = historyDialogView.findViewById(R.id.rv_history);
+                            rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                            rvHistory.setAdapter(adapterHistory);
+
+                            historyDialogView.findViewById(R.id.btn_dialog2).setOnClickListener(v13 -> {
+                                if (adapterHistory.getSelectedPosition() == -1) {
+                                    return;
+                                }
+
+                                historyNumber = adapterHistory.getHistoryNumberList().get(adapterHistory.getSelectedPosition());
+                                numberEditText.setText(historyNumber.getPhoneNumber());
+
+                                dialog.dismiss();
+                            });
+
+                            historyDialogView.findViewById(R.id.iv_close2).setOnClickListener(v12 -> dialog.dismiss());
+                        }
+
+                        dialog.show();
+                    }
+                } else {
                     progressBar.setVisibility(View.GONE);
                     HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
                 }
-            });
-        });
-    }
-
-    private void setFavoriteNumber(FavoriteNumber historyNumber) {
-        this.favoriteNumber = historyNumber;
-    }
-
-
-    private void onPhoneNumberInputClick() {
-        editTextNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0 && btnRemoveSearch.getVisibility() == View.GONE) {
-                    btnRemoveSearch.setVisibility(View.VISIBLE);
-                }
-                if (s.length() == 0)
-                    btnRemoveSearch.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                favoriteNumber = null;
-                if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
-                    String number = editTextNumber.getText().toString().substring(0, 4);
-                    OperatorType.Type opt = new OperatorType().getOperation(number);
-                    if (opt != null) {
-                        switch (opt) {
-                            case HAMRAH_AVAL:
-                                operatorType = HAMRAH_AVAL;
-                                setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
-                                break;
-                            case IRANCELL:
-                                operatorType = IRANCELL;
-                                setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
-                                break;
-                            case RITEL:
-                                operatorType = RITEL;
-                                setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
-                                break;
-                        }
-                        updateRadioGroup(opt);
-                    }
-
-                }
+            public void onFailure(@NotNull Call<GetFavoriteNumber> call, @NotNull Throwable t) {
+                frameHistory.setEnabled(true);
+                progressBar.setVisibility(View.GONE);
+                HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
             }
         });
     }
-
-    private void updateRadioGroup(OperatorType.Type opt) {
-        rbCredit.setVisibility(View.VISIBLE);
-        rbPermanent.setVisibility(View.VISIBLE);
-        if (opt == RITEL) {
-            rbTdLteCredit.setVisibility(View.GONE);
-            rbTdLtePermanent.setVisibility(View.GONE);
-            rbData.setVisibility(View.VISIBLE);
-        } else if (opt == IRANCELL) {
-            rbData.setVisibility(View.GONE);
-            rbTdLtePermanent.setVisibility(View.VISIBLE);
-            rbTdLteCredit.setVisibility(View.VISIBLE);
-        } else if (opt == HAMRAH_AVAL) {
-            rbData.setVisibility(View.GONE);
-            rbTdLtePermanent.setVisibility(View.GONE);
-            rbTdLteCredit.setVisibility(View.GONE);
-        }
-    }
-
-
-    private void onItemOperatorSelect() {
-        if (editTextNumber.getText() != null) {
-            frameHamrah.setOnClickListener(v -> {
-                operatorType = HAMRAH_AVAL;
-                setSelectedOperator(radioButtonHamrah, radioButtonIrancell, radioButtonRightel, frameHamrah, frameIrancel, frameRightel);
-            });
-
-            frameRightel.setOnClickListener(v -> {
-                operatorType = RITEL;
-                setSelectedOperator(radioButtonRightel, radioButtonIrancell, radioButtonHamrah, frameRightel, frameIrancel, frameHamrah);
-            });
-
-            frameIrancel.setOnClickListener(v -> {
-                operatorType = IRANCELL;
-                setSelectedOperator(radioButtonIrancell, radioButtonHamrah, radioButtonRightel, frameIrancel, frameHamrah, frameRightel);
-            });
-        }
-
-    }
-
-    private void setSelectedOperator(RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3, View view1, View view2, View view3) {
-        radioButton1.setChecked(true);
-        radioButton2.setChecked(false);
-        radioButton3.setChecked(false);
-        view1.setSelected(true);
-        view2.setSelected(false);
-        view3.setSelected(false);
-    }
-
 }
