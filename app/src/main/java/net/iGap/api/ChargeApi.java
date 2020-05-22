@@ -2,15 +2,16 @@ package net.iGap.api;
 
 import com.google.gson.JsonObject;
 
-import net.iGap.model.paymentPackage.GetFavoriteNumber;
-import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.igasht.BaseIGashtResponse;
+import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.InternetPackage;
 import net.iGap.model.paymentPackage.InternetPackageFilter;
 import net.iGap.model.paymentPackage.MciInternetPackageFilter;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,10 +26,10 @@ public interface ChargeApi {
 
     @FormUrlEncoded
     @POST("{operator}/topup/purchase")
-    Call<MciPurchaseResponse> topUpPurchase(@Path("operator") String operator,
-                                            @Field("type") String type,
-                                            @Field("tel_num") String phoneNumber,
-                                            @Field("cost") int cost);
+    Single<MciPurchaseResponse> topUpPurchase(@Path("operator") String operator,
+                                              @Field("type") String type,
+                                              @Field("tel_num") String phoneNumber,
+                                              @Field("cost") int cost);
 
     @POST("{operator}/topup/set-favorite")
     Call<ResponseBody> setFavoriteChargeNumber(@Path("operator") String operator, @Body JsonObject jsonObject);

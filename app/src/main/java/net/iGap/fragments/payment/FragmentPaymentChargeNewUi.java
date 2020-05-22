@@ -49,6 +49,7 @@ import net.iGap.module.Contacts;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +59,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,11 +95,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private ChargeApi chargeApi;
     private OperatorType.Type currentOperator;
     private int selectedIndex;
-    private int selectedChargeTypeIndex;
-    private int selectedPriceIndex;
+    private int selectedChargeTypeIndex = -1;
+    private int selectedPriceIndex = -1;
     private static final String MCI = "mci";
     private static final String MTN = "mtn";
     private static final String RIGHTEL = "rightel";
+
+    private CompositeDisposable compositeDisposable;
 
     public static FragmentPaymentChargeNewUi newInstance() {
         return new FragmentPaymentChargeNewUi();
@@ -113,6 +119,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
         if (getContext() == null)
             return;
+
+        compositeDisposable = new CompositeDisposable();
 
         LinearLayout toolbar = view.findViewById(R.id.payment_toolbar);
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
@@ -140,11 +148,14 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
             if (userInfo != null && editTextNumber.getText() != null) {
                 editTextNumber.setText(userInfo.getPhoneNumber().replace("98", "0").replace("+98", "0").replace("0098", "0").replace(" ", "").replace("-", ""));
-
-                String number = editTextNumber.getText().toString().substring(0, 4);
-                OperatorType.Type operator = new OperatorType().getOperation(number);
-                if (operator != null) {
-                    changeOperator(operator);
+                if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
+                    String number = editTextNumber.getText().toString().substring(0, 4);
+                    OperatorType.Type operator = new OperatorType().getOperation(number);
+                    if (operator != null) {
+                        changeOperator(operator);
+                    }
+                } else {
+                    showError(getResources().getString(R.string.ivnalid_data_provided));
                 }
             }
         });
@@ -225,9 +236,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                                     clearAmountAndType();
 
-                                    OperatorType.Type opt = new OperatorType().getOperation(editTextNumber.getText().toString().substring(0, 4));
-                                    if (opt != null) {
-                                        changeOperator(opt);
+                                    if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
+                                        OperatorType.Type opt = new OperatorType().getOperation(editTextNumber.getText().toString().substring(0, 4));
+                                        if (opt != null) {
+                                            changeOperator(opt);
+                                        }
+                                    } else {
+                                        showError(getResources().getString(R.string.ivnalid_data_provided));
                                     }
 
                                     dialog.dismiss();
@@ -282,7 +297,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                         historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
 
                                         editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
-                                        chosePriceTextView.setText(String.valueOf(historyNumber.getAmount()));
+                                        chosePriceTextView.setText(String.format("%s %s", historyNumber.getAmount(), getResources().getString(R.string.rials)));
 
                                         setChargeType(historyNumber.getChargeType());//can write better code with use key value container
 
@@ -510,7 +525,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onSaveBtnClicked() {
-        progressBar.setVisibility(View.VISIBLE);
         if (editTextNumber.getText() != null && isNumeric(editTextNumber.getText().toString()) && editTextNumber.getText().length() == 11) {
             if (currentOperator != null) {
                 if (selectedChargeTypeIndex != -1) {
@@ -607,61 +621,59 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void sendRequestCharge(String operator, ChooseChargeType chargeType, String phoneNumber, int price) {
+        progressBar.setVisibility(View.VISIBLE);
         enterBtn.setEnabled(false);
-        chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MciPurchaseResponse> call, @NonNull Response<MciPurchaseResponse> response) {
-                enterBtn.setEnabled(true);
-                if (response.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
-                    String token = response.body().getToken();
-                    if (getActivity() != null && token != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), token, result -> {
-                            if (result.isSuccess()) {
-                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(R.string.save_purchase)
-                                        .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
-                                        .positiveText(R.string.ok)
-                                        .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+        chargeApi.topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new IGSingleObserver<MciPurchaseResponse>(compositeDisposable) {
+                    @Override
+                    public void onSuccess(MciPurchaseResponse mciPurchaseResponse) {
+                        progressBar.setVisibility(View.GONE);
+                        if (getActivity() != null && mciPurchaseResponse.getToken() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), mciPurchaseResponse.getToken(), result -> {
+                                if (result.isSuccess()) {
+                                    MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(R.string.save_purchase)
+                                            .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                                            .positiveText(R.string.ok)
+                                            .onNegative((dialog1, which) -> dialog1.dismiss()).show();
 
-                                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-                                    progressBar.setVisibility(View.VISIBLE);
-                                    if (chargeType != null) {
-                                        JsonObject jsonObject = new JsonObject();
-                                        jsonObject.addProperty("phone_number", phoneNumber);
-                                        jsonObject.addProperty("charge_type", chargeType.toString());
-                                        jsonObject.addProperty("amount", price);
+                                    dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                                        progressBar.setVisibility(View.VISIBLE);
+                                        if (chargeType != null) {
+                                            JsonObject jsonObject = new JsonObject();
+                                            jsonObject.addProperty("phone_number", phoneNumber);
+                                            jsonObject.addProperty("charge_type", chargeType.toString());
+                                            jsonObject.addProperty("amount", price);
 
-                                        chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                                                progressBar.setVisibility(View.GONE);
-                                            }
+                                            chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                                                    progressBar.setVisibility(View.GONE);
+                                                }
 
-                                            @Override
-                                            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                                                progressBar.setVisibility(View.GONE);
-                                                HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
-                                            }
-                                        });
-                                    }
-                                    dialog.dismiss();
-                                });
-                            }
-                        });
+                                                @Override
+                                                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                                                    progressBar.setVisibility(View.GONE);
+                                                    HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
+                                                }
+                                            });
+                                        }
+                                        dialog.dismiss();
+                                    });
+                                }
+                            });
+                        }
+                        goBack();
                     }
-                    goBack();
-                }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<MciPurchaseResponse> call, @NonNull Throwable t) {
-                enterBtn.setEnabled(true);
-                progressBar.setVisibility(View.GONE);
-                hideKeyboard();
-                HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
-            }
-        });
-
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        enterBtn.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void goBack() {
@@ -677,6 +689,15 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         if (errorMessage != null) {
             hideKeyboard();
             HelperError.showSnackMessage(errorMessage, false);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
         }
     }
 }

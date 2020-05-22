@@ -1265,13 +1265,13 @@
     <string name="unsuccessful">موفقیت آمیز نبود</string>
     <string name="disabled_qr_voucher">متاسفانه این کیوآر قابل استفاده نیست یا قبلا استفاده شده است</string>
 
-    <string name="charge_1"> 10.000 ریالی</string>
-    <string name="charge_2"> 20.000 ریالی</string>
-    <string name="charge_5"> 50.000 ریالی</string>
-    <string name="charge_10"> 100.000 ریالی</string>
-    <string name="charge_20"> 200.000 ریالی</string>
-    <string name="charge_50"> 500.000 ریالی</string>
-    <string name="charge_100"> 1.000.000 ریالی</string>
+    <string name="charge_1"> 10.000 ریال</string>
+    <string name="charge_2"> 20.000 ریال</string>
+    <string name="charge_5"> 50.000 ریال</string>
+    <string name="charge_10"> 100.000 ریال</string>
+    <string name="charge_20"> 200.000 ریال</string>
+    <string name="charge_50"> 500.000 ریال</string>
+    <string name="charge_100"> 1.000.000 ریال</string>
 
     <string name="value_added">ارزش افزوده</string>
     <string name="charge_1_ir">10.000 ریالی +  9%  ارزش افزوده = 10.900 ریال</string>

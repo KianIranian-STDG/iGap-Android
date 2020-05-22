@@ -17,17 +17,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
-import net.iGap.observers.interfaces.ResponseCallback;
 
 import org.jetbrains.annotations.NotNull;
 
-
+@Deprecated
 public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
 
     public static final String MCI = "mci";
@@ -276,28 +272,28 @@ public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
     }
 
     private void sendRequestCharge(String operator, ChargeType chargeType, String phoneNumber, int price) {
-        new ApiInitializer<MciPurchaseResponse>().initAPI(
-                new RetrofitFactory().getChargeRetrofit().topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price),
-                this, new ResponseCallback<MciPurchaseResponse>() {
-                    @Override
-                    public void onSuccess(MciPurchaseResponse data) {
-                        observeEnabledPayment.set(true);
-                        goToPaymentPage.setValue(data.getToken());
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        observeEnabledPayment.set(true);
-                        showMciPaymentError.setValue(new ErrorModel("", error));
-                    }
-
-                    @Override
-                    public void onFailed() {
-                        //ToDO: handle this event
-                        /*observeEnabledPayment.set(true);
-                        showMciPaymentError.setValue(error);*/
-                    }
-                });
+//        new ApiInitializer<MciPurchaseResponse>().initAPI(
+//                new RetrofitFactory().getChargeRetrofit().topUpPurchase(operator, chargeType != null ? chargeType.name() : null, phoneNumber, price),
+//                this, new ResponseCallback<MciPurchaseResponse>() {
+//                    @Override
+//                    public void onSuccess(MciPurchaseResponse data) {
+//                        observeEnabledPayment.set(true);
+//                        goToPaymentPage.setValue(data.getToken());
+//                    }
+//
+//                    @Override
+//                    public void onError(String error) {
+//                        observeEnabledPayment.set(true);
+//                        showMciPaymentError.setValue(new ErrorModel("", error));
+//                    }
+//
+//                    @Override
+//                    public void onFailed() {
+//                        //ToDO: handle this event
+//                        /*observeEnabledPayment.set(true);
+//                        showMciPaymentError.setValue(error);*/
+//                    }
+//                });
     }
 
     enum ChargeType {

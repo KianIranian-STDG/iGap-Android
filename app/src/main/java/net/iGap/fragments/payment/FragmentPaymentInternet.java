@@ -230,7 +230,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     }
 
     private void onPhoneNumberInput() {
-        if (numberEditText.getText() != null && numberEditText.getText().length() == 4 || numberEditText.getText().length() == 11) {
+        if (numberEditText.getText() != null && numberEditText.getText().length() == 4 || numberEditText.getText() != null && numberEditText.getText().length() == 11) {
             String number = numberEditText.getText().toString().substring(0, 4);
             OperatorType.Type opt = new OperatorType().getOperation(number);
             if (opt != null) {
@@ -238,7 +238,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             }
         }
 
-        if (numberEditText.getText().length() == 11) {
+        if (numberEditText.getText() != null && numberEditText.getText().length() == 11) {
             hideKeyboard();
         }
     }
