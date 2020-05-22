@@ -177,6 +177,9 @@ public class CallService extends Service implements CallManager.CallStateChange 
             if (audioManagerEvents != null)
                 audioManagerEvents.onAudioDeviceChanged(selectedAudioDevice, availableAudioDevices);
             CallManager.getInstance().setActiveAudioDevice(selectedAudioDevice);
+            if (isVoiceCall) {
+                toggleSpeaker();
+            }
         });
 
         if (isVoiceCall)
