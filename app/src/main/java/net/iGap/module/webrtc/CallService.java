@@ -42,6 +42,8 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.viewmodel.controllers.CallManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import static android.app.Notification.DEFAULT_SOUND;
 import static android.app.Notification.DEFAULT_VIBRATE;
 
@@ -506,7 +508,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
     }
 
     @Override
-    public void onCallStateChanged(CallState state) {
+    public void onCallStateChanged(@NotNull CallState state) {
         Log.i(TAG, "onCallStateChanged: " + state);
 
         if (callStateChange != null)

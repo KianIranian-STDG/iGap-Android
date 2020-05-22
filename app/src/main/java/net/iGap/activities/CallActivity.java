@@ -611,7 +611,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 }
 
                 if (isVideoCall()) {
-                    WebRTC.getInstance().holdVideoCall(callHold);
                     surfaceRemote.setVisibility(callHold ? View.GONE : View.VISIBLE);
                     userImageView.setVisibility(callHold ? View.VISIBLE : View.GONE);
                 }
@@ -620,6 +619,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 statusTextView.setText(getResources().getString(R.string.connected));
 
                 if (isVideoCall()) {
+                    WebRTC.getInstance().holdVideoCall(CallManager.getInstance().isCallInHold());
                     surfaceRemote.setVisibility(View.VISIBLE);
                     surfaceLocal.setVisibility(View.VISIBLE);
                     userImageView.setVisibility(View.GONE);

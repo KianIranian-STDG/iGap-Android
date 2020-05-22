@@ -52,6 +52,7 @@ import org.webrtc.SessionDescription;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static org.webrtc.SessionDescription.Type.ANSWER;
@@ -70,6 +71,7 @@ public class CallManager {
     private boolean isRinging;
     private boolean isIncoming;
     private boolean isCallHold;
+    private boolean iHoldCall = true;
     private boolean isMicEnable = true;
 
     @Nullable
@@ -330,13 +332,15 @@ public class CallManager {
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
         Log.d(TAG, "onHold: lastState -> " + isCallHold + " current state -> " + builder.getHold());
         isCallHold = builder.getHold();
+        iHoldCall = !builder.getResponse().getId().isEmpty();
         changeState(isCallHold ? CallState.ON_HOLD : CallState.CONNECTED);
         WebRTC.getInstance().toggleSound(!isCallHold);
     }
 
     public void holdCall(boolean state) {
         Log.d(TAG, "holdCall: " + state);
-        new RequestSignalingSessionHold().signalingSessionHold(state);
+        if (iHoldCall)
+            new RequestSignalingSessionHold().signalingSessionHold(state);
     }
 
     public void onError(int actionId, int major, int minor) {
@@ -438,10 +442,6 @@ public class CallManager {
         }
         if (onCallStateChanged != null)
             onCallStateChanged.onError(messageID, major, minor);
-    }
-
-    public void toggleSpeaker() {
-
     }
 
     public void toggleMic() {
@@ -570,7 +570,7 @@ public class CallManager {
     }
 
     public interface CallStateChange {
-        void onCallStateChanged(CallState callState);
+        void onCallStateChanged(@Nonnull CallState callState);
 
         void onError(int messageID, int major, int minor);
     }
@@ -588,13 +588,14 @@ public class CallManager {
                 callStartTime = SystemClock.elapsedRealtime();
             }
             startTimer();
+            iHoldCall = true;
         }
 
         if (onCallStateChanged != null)
             onCallStateChanged.onCallStateChanged(callState);
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "WrongConstant"})
     @TargetApi(Build.VERSION_CODES.O)
     private void placeOutgoingCall(Context mContext) {
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
@@ -608,6 +609,7 @@ public class CallManager {
         tm.placeCall(Uri.fromParts("tel", "+98" + info.getPhoneNumber(), null), extras);
     }
 
+    @SuppressLint("WrongConstant")
     @TargetApi(Build.VERSION_CODES.O)
     private void placeIncomingCall(Context mContext) {
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
@@ -621,6 +623,7 @@ public class CallManager {
         tm.addNewIncomingCall(phoneAccountHandle, extras);
     }
 
+    @SuppressLint("WrongConstant")
     @TargetApi(Build.VERSION_CODES.O)
     private PhoneAccountHandle addAccountToTelecomManager(Context mContext) {
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
