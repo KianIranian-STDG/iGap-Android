@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -51,7 +52,10 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
 
         void bindNUmber(FavoriteNumber historyNumber, int position) {
             phoneNumber.setText(historyNumber.getPhoneNumber());
-            amount.setText(historyNumber.getAmount() != null ? historyNumber.getAmount().toString() + itemView.getContext().getString(R.string.rial) : "");
+            DecimalFormat df = new DecimalFormat(",###");
+            String price = df.format(historyNumber.getAmount());
+
+            amount.setText(String.format("%s %s", price, itemView.getContext().getResources().getString(R.string.rial)));
             itemView.setSelected(selectedPosition == position);
             itemView.setOnClickListener(v -> {
                 notifyItemChanged(selectedPosition);
