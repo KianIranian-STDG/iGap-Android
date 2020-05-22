@@ -1,11 +1,14 @@
-package net.iGap.fragments.payment;
+package net.iGap.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.JsonObject;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.paymentPackage.InternetPackage;
 import net.iGap.model.paymentPackage.MciInternetPackageFilter;
@@ -17,6 +20,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
     private MutableLiveData<List<MciInternetPackageFilter>> timeFilterListObservable = new MutableLiveData<>();
@@ -245,5 +253,25 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void savePayment() {
+        loadingVisibility.setValue(true);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("phone_number", phoneNumber);
+        jsonObject.addProperty("package_type", String.valueOf(selectedPackageType));
+        jsonObject.addProperty("charge_type", simType);
+        new RetrofitFactory().getChargeRetrofit().setFavoriteInternetPackage(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                loadingVisibility.setValue(false);
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
+                loadingVisibility.setValue(false);
+                showErrorMessage.setValue(R.string.server_do_not_response);
+            }
+        });
     }
 }

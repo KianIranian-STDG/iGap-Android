@@ -13,19 +13,28 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.paymentPackage.InternetPackage;
 import net.iGap.module.Theme;
-import net.iGap.observers.interfaces.OnItemSelectedListener;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-public class AdapterInternetPackage extends RecyclerView.Adapter<AdapterInternetPackage.ProposalPackageViewHolder> {
+public class InternetPackageAdapter extends RecyclerView.Adapter<InternetPackageAdapter.ProposalPackageViewHolder> {
     private List<InternetPackage> data;
     private int prevSelectedPosition = -1;
     private int currentlySelectedPosition = -1;
     private OnItemSelectedListener<InternetPackage> selectedListener;
 
-    public void setData(List<InternetPackage> data) {
+    public void setData(List<InternetPackage> data, int selectedType) {
         prevSelectedPosition = -1;
         currentlySelectedPosition = -1;
+
+        if (selectedType != -1 && data.size() > 0)
+            for (int i = 0; i < data.size(); i++) {
+                if (data.get(i).getType() == selectedType) {
+                    currentlySelectedPosition = i;
+                    break;
+                }
+            }
+
         this.data = data;
         notifyDataSetChanged();
     }
@@ -65,13 +74,13 @@ public class AdapterInternetPackage extends RecyclerView.Adapter<AdapterInternet
         notifyItemChanged(prev);
     }
 
-    public class ProposalPackageViewHolder extends RecyclerView.ViewHolder {
+    class ProposalPackageViewHolder extends RecyclerView.ViewHolder {
         private InternetPackage internetPackage;
         private ConstraintLayout clParent;
         private TextView packageSize;
         private TextView packagePrice;
 
-        public ProposalPackageViewHolder(@NonNull View itemView) {
+        ProposalPackageViewHolder(@NonNull View itemView) {
             super(itemView);
             clParent = itemView.findViewById(R.id.clParent);
             packageSize = itemView.findViewById(R.id.internet_package);
@@ -88,10 +97,13 @@ public class AdapterInternetPackage extends RecyclerView.Adapter<AdapterInternet
             });
         }
 
-        public void bindProposalPackage(InternetPackage internetPackage) {
+        void bindProposalPackage(InternetPackage internetPackage) {
             this.internetPackage = internetPackage;
             packageSize.setText(internetPackage.getDescription());
-            packagePrice.setText(String.format("%d %s", internetPackage.getCost(), itemView.getContext().getResources().getString(R.string.rial)));
+            DecimalFormat df = new DecimalFormat(",###");
+            String price = df.format(internetPackage.getCost());
+
+            packagePrice.setText(String.format("%s %s", price, itemView.getContext().getResources().getString(R.string.rial)));
 
             if (getAdapterPosition() == currentlySelectedPosition) {
                 clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet_selected));
@@ -103,4 +115,17 @@ public class AdapterInternetPackage extends RecyclerView.Adapter<AdapterInternet
             }
         }
     }
+
+    public int getCurrentlySelectedPosition() {
+        return currentlySelectedPosition;
+    }
+
+    public List<InternetPackage> getData() {
+        return data;
+    }
+
+    public interface OnItemSelectedListener<T> {
+        void onItemSelected(T item);
+    }
+
 }

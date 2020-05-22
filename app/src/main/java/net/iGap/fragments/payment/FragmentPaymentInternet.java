@@ -203,7 +203,8 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                     numberEditText.setError(getString(R.string.phone_number_is_not_valid));
                     return;
                 }
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance(phoneNumber, convertOperatorToString(currentOperator), currentSimType)).setReplace(false).load();
+                int packageType = historyNumber != null ? Integer.parseInt(historyNumber.getPackageType()) : -1;
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance(phoneNumber, convertOperatorToString(currentOperator), currentSimType, packageType)).setAnimated(false).setReplace(false).load();
             } else {
                 showError(getResources().getString(R.string.sim_type_not_choosed));
             }
