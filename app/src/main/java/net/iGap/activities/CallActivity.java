@@ -81,7 +81,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private ProtoSignalingOffer.SignalingOffer.Type callType;
     private boolean isRtl = G.isAppRtl;
 
-    private String TAG = "CallActivity ";
+    private String TAG = "iGapCall CallActivity ";
     public static final String CALL_TIMER_BROADCAST = "CALL_TIMER_BROADCAST";
     public static final String TIMER_TEXT = "timer";
 
@@ -94,7 +94,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "CallActivity onCreate ");
+        Log.i(TAG, "start onCreate ");
 
         if (CallService.getInstance() == null) {
             Log.e(TAG, "on Create SERVICE == NULL");
@@ -106,7 +106,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             finish();
         }
 
-        CallService.getInstance().setCallStateChange(this);
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().setCallStateChange(this);
+        }
         CallManager.getInstance().setTimeDelegate(this);
 
         callType = CallManager.getInstance().getCallType();
@@ -122,10 +124,14 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         // here we check for any audio changes.
-        if (CallService.getInstance() != null)
+        if (CallService.getInstance() != null) {
             CallService.getInstance().setAudioManagerEvents((selectedAudioDevice, availableAudioDevices) -> {
                 checkForBluetoothAvailability(availableAudioDevices);
             });
+            checkForBluetoothAvailability(CallService.getInstance().getActiveAudioDevices());
+        }
+
+        Log.i(TAG, "onCreate finish");
     }
 
     private boolean checkPermissions() {
@@ -240,9 +246,14 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             userImageView.setVisibility(isIncomingCallAndAnswered ? View.GONE : View.VISIBLE);
 
         if (caller != null) {
-            avatarHandler.getAvatar(new ParamWithInitBitmap(userImageView, caller.getUserId()).initBitmap(null).showMain().onInitSet(() -> {
-                userImageView.setBackgroundColor(Color.parseColor(caller.color));
-            }));
+            try {
+                avatarHandler.getAvatar(new ParamWithInitBitmap(userImageView, caller.getUserId()).initBitmap(null).showMain().onInitSet(() -> {
+                    if (caller.color != null && caller.color.length() > 0)
+                        userImageView.setBackgroundColor(Color.parseColor(caller.color));
+                }));
+            } catch (Exception e) {//must be refactor avatar handler
+                e.printStackTrace();
+            }
         }
         rootView.addView(userImageView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
@@ -481,8 +492,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void checkForBluetoothAvailability(Set<CallAudioManager.AudioDevice> availableDevices) {
         if (bluetoothView != null && availableDevices.contains(CallAudioManager.AudioDevice.BLUETOOTH)) {
+            bluetoothView.setEnabled(true);
             bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
             speakerView.setViewColor(getResources().getColor(R.color.white));
+        } else {
+            bluetoothView.setViewColor(getResources().getColor(R.color.kuknos_gray));
+            bluetoothView.setEnabled(false);
         }
     }
 
@@ -605,6 +620,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 notAnswered();
             } else if (state == CallState.ON_HOLD) {
                 boolean callHold = CallManager.getInstance().isCallInHold();
+                boolean iHoldCall = CallManager.getInstance().iHoldCall();
 
                 statusTextView.setText(callHold ? getResources().getString(R.string.on_hold) : getResources().getString(R.string.connected));
 
@@ -616,6 +632,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                     }
                 } else {
                     holdView.setViewColor(getResources().getColor(R.color.gray_9d));
+                }
+
+                if (callHold && !iHoldCall && caller != null) {
+                    Toast.makeText(this, "Call held by " + caller.getName(), Toast.LENGTH_SHORT).show();
                 }
 
                 if (isVideoCall()) {
