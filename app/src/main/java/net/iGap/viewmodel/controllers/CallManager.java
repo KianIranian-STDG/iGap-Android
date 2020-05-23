@@ -572,6 +572,10 @@ public class CallManager {
         return isCallHold;
     }
 
+    public boolean iHoldCall() {
+        return iHoldCall;
+    }
+
     public interface CallStateChange {
         void onCallStateChanged(@Nonnull CallState callState);
 

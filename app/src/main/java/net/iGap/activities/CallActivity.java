@@ -244,9 +244,14 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             userImageView.setVisibility(isIncomingCallAndAnswered ? View.GONE : View.VISIBLE);
 
         if (caller != null) {
-            avatarHandler.getAvatar(new ParamWithInitBitmap(userImageView, caller.getUserId()).initBitmap(null).showMain().onInitSet(() -> {
-                userImageView.setBackgroundColor(Color.parseColor(caller.color));
-            }));
+            try {
+                avatarHandler.getAvatar(new ParamWithInitBitmap(userImageView, caller.getUserId()).initBitmap(null).showMain().onInitSet(() -> {
+                    if (caller.color != null && caller.color.length() > 0)
+                        userImageView.setBackgroundColor(Color.parseColor(caller.color));
+                }));
+            } catch (Exception e) {//must be refactor avatar handler
+                e.printStackTrace();
+            }
         }
         rootView.addView(userImageView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
@@ -609,6 +614,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 notAnswered();
             } else if (state == CallState.ON_HOLD) {
                 boolean callHold = CallManager.getInstance().isCallInHold();
+                boolean iHoldCall = CallManager.getInstance().iHoldCall();
 
                 statusTextView.setText(callHold ? getResources().getString(R.string.on_hold) : getResources().getString(R.string.connected));
 
@@ -620,6 +626,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                     }
                 } else {
                     holdView.setViewColor(getResources().getColor(R.color.gray_9d));
+                }
+
+                if (callHold && !iHoldCall && caller != null) {
+                    Toast.makeText(this, "Call held by " + caller.getName(), Toast.LENGTH_SHORT).show();
                 }
 
                 if (isVideoCall()) {
