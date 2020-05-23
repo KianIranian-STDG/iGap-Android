@@ -413,11 +413,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void setPhoneNumberEditText(String phone) {
+        phone = phone.replace("+", "");
+
         if (phone.contains("+") && !phone.contains("+98")) {
             showError(getResources().getString(R.string.phone_number_is_not_valid));
             return;
         }
-
 
         editTextNumber.setText(phone.replace("98", "0")
                 .replace("+98", "0")
@@ -492,9 +493,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
         typeList = null;
         amount = null;
-
-        selectedPriceIndex = -1;
-        selectedChargeTypeIndex = -1;
     }
 
     private void setAdapterValue(@NotNull OperatorType.Type operator) {

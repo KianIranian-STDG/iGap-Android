@@ -361,11 +361,12 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     }
 
     private void setPhoneNumberEditText(String phone) {
+        phone = phone.replace("+", "");
+
         if (phone.contains("+") && !phone.contains("+98")) {
             showError(getResources().getString(R.string.phone_number_is_not_valid));
             return;
         }
-
 
         numberEditText.setText(phone.replace("98", "0")
                 .replace("+98", "0")
