@@ -42,9 +42,10 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     private static final String PARAM_SIM_TYPE = "PARAM_SIM_TYPE";
     private static final String PARAM_PHONE_NUMBER = "PARAM_PHONE_NUMBER";
     private static final String PARAM_PACKAGE_TYPE = "PARAM_PACKAGE_TYPE";
+    public static final int OFFSET =  -20;
 
     private PaymentInternetPackageViewModel viewModel;
-    private InternetPackageAdapter proposalAdapter;
+    private InternetPackageAdapter suggestedAdapter;
     private InternetPackageAdapter othersAdapter;
     private RecyclerView suggestedRecyclerView;
     private RecyclerView otherPackagesRecyclerView;
@@ -162,7 +163,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
             suggestedRecyclerView.setVisibility(View.VISIBLE);
             suggestedTextView.setVisibility(View.VISIBLE);
 
-            proposalAdapter.setData(internetPackages, packageType);
+            suggestedAdapter.setData(internetPackages, packageType);
         });
 
 
@@ -251,8 +252,8 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     }
 
     private void dataDidLoad() {
-        if (packageType != -1 && proposalAdapter.getCurrentlySelectedPosition() != -1) {
-            viewModel.setPackageType(currentInternetPackage = proposalAdapter.getData().get(proposalAdapter.getCurrentlySelectedPosition()));
+        if (packageType != -1 && suggestedAdapter.getCurrentlySelectedPosition() != -1) {
+            viewModel.setPackageType(currentInternetPackage = suggestedAdapter.getData().get(suggestedAdapter.getCurrentlySelectedPosition()));
             scrollToSuggestion(true);
         } else if (packageType != -1 && othersAdapter.getCurrentlySelectedPosition() != -1) {
             viewModel.setPackageType(currentInternetPackage = othersAdapter.getData().get(othersAdapter.getCurrentlySelectedPosition()));
@@ -270,11 +271,11 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     }
 
     private void setupRecyclerViews() {
-        if (proposalAdapter == null) {
-            proposalAdapter = new InternetPackageAdapter();
+        if (suggestedAdapter == null) {
+            suggestedAdapter = new InternetPackageAdapter();
             suggestedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            suggestedRecyclerView.setAdapter(proposalAdapter);
-            proposalAdapter.setSelectedListener(item -> {
+            suggestedRecyclerView.setAdapter(suggestedAdapter);
+            suggestedAdapter.setSelectedListener(item -> {
                 currentInternetPackage = item;
                 viewModel.setPackageType(item);
                 othersAdapter.unSelectCurrent();
@@ -287,7 +288,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
             othersAdapter.setSelectedListener(item -> {
                 currentInternetPackage = item;
                 viewModel.setPackageType(item);
-                proposalAdapter.unSelectCurrent();
+                suggestedAdapter.unSelectCurrent();
             });
         }
     }
@@ -300,14 +301,22 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
             try {
                 inScroll = true;
                 if (inSuggestion) {
-                    RecyclerListView.ViewHolder viewHolder = suggestedRecyclerView.findViewHolderForAdapterPosition(proposalAdapter.getCurrentlySelectedPosition());
+                    RecyclerListView.ViewHolder viewHolder = suggestedRecyclerView.findViewHolderForAdapterPosition(suggestedAdapter.getCurrentlySelectedPosition());
                     if (viewHolder != null) {
-                        scrollView.scrollTo((int) viewHolder.itemView.getX(), (int) viewHolder.itemView.getY() + 300);
+                        int y = (int) viewHolder.itemView.getY() + suggestedRecyclerView.getTop() + OFFSET;
+                        int x = (int) viewHolder.itemView.getX();
+                        if (scrollView.getScrollY() > y && scrollView.getScrollY() < y + 600) {
+                            scrollView.smoothScrollTo(x, y);
+                        }
                     }
                 } else {
                     RecyclerListView.ViewHolder viewHolder = otherPackagesRecyclerView.findViewHolderForAdapterPosition(othersAdapter.getCurrentlySelectedPosition());
                     if (viewHolder != null) {
-                        scrollView.scrollTo((int) viewHolder.itemView.getX(), (int) (viewHolder.itemView.getY() + suggestedRecyclerView.getBottom() + 600));
+                        int y = (int) (viewHolder.itemView.getY() + otherPackagesRecyclerView.getTop()) + OFFSET;
+                        int x = (int) viewHolder.itemView.getX();
+                        if (scrollView.getScrollY() < y || scrollView.getScrollY() > y + 600) {
+                            scrollView.smoothScrollTo(x, y);
+                        }
                     }
                 }
             } catch (Exception e) {
