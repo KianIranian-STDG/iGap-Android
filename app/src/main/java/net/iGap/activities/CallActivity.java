@@ -124,10 +124,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         // here we check for any audio changes.
-        if (CallService.getInstance() != null)
+        if (CallService.getInstance() != null) {
             CallService.getInstance().setAudioManagerEvents((selectedAudioDevice, availableAudioDevices) -> {
                 checkForBluetoothAvailability(availableAudioDevices);
             });
+            checkForBluetoothAvailability(CallService.getInstance().getActiveAudioDevices());
+        }
 
         Log.i(TAG, "onCreate finish");
     }
@@ -490,8 +492,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void checkForBluetoothAvailability(Set<CallAudioManager.AudioDevice> availableDevices) {
         if (bluetoothView != null && availableDevices.contains(CallAudioManager.AudioDevice.BLUETOOTH)) {
+            bluetoothView.setEnabled(true);
             bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
             speakerView.setViewColor(getResources().getColor(R.color.white));
+        } else {
+            bluetoothView.setViewColor(getResources().getColor(R.color.kuknos_gray));
+            bluetoothView.setEnabled(false);
         }
     }
 
