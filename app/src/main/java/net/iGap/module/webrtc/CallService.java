@@ -410,7 +410,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CALL_CHANNEL)
                 .setContentTitle("iGap secure call")
-                .setContentText("in " + (getResources().getString(isVoiceCall ? R.string.voice_calls : R.string.video_calls)) + " with " + callerInfo.getName())
+                .setContentText("in " + (isVoiceCall ? "iGap voice call" : "iGap video call") + " with " + callerInfo.getName())
                 .setSmallIcon(R.drawable.igap_flat_icon)
                 .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
 
@@ -418,7 +418,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
             builder.setPriority(Notification.PRIORITY_MAX);
             Intent endIntent = new Intent(this, CallActionsReceiver.class);
             endIntent.setAction(ACTION_END_CALL);
-            NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_call_notif_decline, getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon), PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_call_notif_decline, "End Call", PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
             builder.addAction(action);
         }
 
