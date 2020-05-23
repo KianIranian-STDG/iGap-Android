@@ -127,14 +127,8 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
             if (userInfo != null) {
-                numberEditText.setText(userInfo.getPhoneNumber());
                 String number = userInfo.getPhoneNumber();
-                numberEditText.setText(number
-                        .replace("98", "0")
-                        .replace("+98", "0")
-                        .replace("0098", "0")
-                        .replace(" ", "")
-                        .replace("-", ""));
+                setPhoneNumberEditText(number);
                 onPhoneNumberInput();
                 numberEditText.setSelection(numberEditText.getText() == null ? 0 : numberEditText.getText().length());
             }
@@ -203,6 +197,10 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                     numberEditText.setError(getString(R.string.phone_number_is_not_valid));
                     return;
                 }
+                if (!isNumberFromIran(phoneNumber)) {
+                    numberEditText.setError(getString(R.string.phone_number_is_not_valid));
+                    return;
+                }
                 int packageType = historyNumber != null ? Integer.parseInt(historyNumber.getPackageType()) : -1;
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance(phoneNumber, convertOperatorToString(currentOperator), currentSimType, packageType)).setAnimated(false).setReplace(false).load();
             } else {
@@ -213,6 +211,19 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> changeSimType());
 
 
+    }
+
+    private boolean isNumberFromIran(String phoneNumber) {
+        if (phoneNumber.trim().charAt(0) == '0' && (new OperatorType().isValidType(phoneNumber.substring(0, 4)) || new OperatorType().isValidType(phoneNumber.substring(0, 5))))
+            return true;
+
+        String standardize = phoneNumber.replace("98", "0")
+                .replace("+98", "0")
+                .replace("0098", "0")
+                .replace(" ", "")
+                .replace("-", "");
+
+        return new OperatorType().isValidType(standardize.substring(0, 4)) || new OperatorType().isValidType(phoneNumber.substring(0, 5));
     }
 
     private void changeSimType() {
@@ -329,7 +340,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                             }
 
                             ContactNumber contactNumber = adapterContact.getContactNumbers().get(adapterContact.getSelectedPosition());
-                            numberEditText.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
+                            setPhoneNumberEditText(contactNumber.getPhone().trim());
 
                             dialog.dismiss();
                         });
@@ -347,6 +358,20 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setPhoneNumberEditText(String phone) {
+        if (phone.contains("+") && !phone.contains("+98")) {
+            showError(getResources().getString(R.string.phone_number_is_not_valid));
+            return;
+        }
+
+
+        numberEditText.setText(phone.replace("98", "0")
+                .replace("+98", "0")
+                .replace("0098", "0")
+                .replace(" ", "")
+                .replace("-", ""));
     }
 
     private void onHistoryNumberButtonClick() {
@@ -380,7 +405,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                                 }
 
                                 historyNumber = adapterHistory.getHistoryNumberList().get(adapterHistory.getSelectedPosition());
-                                numberEditText.setText(historyNumber.getPhoneNumber());
+                                setPhoneNumberEditText(historyNumber.getPhoneNumber());
 
                                 dialog.dismiss();
                             });
