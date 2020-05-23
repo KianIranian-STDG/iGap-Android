@@ -94,6 +94,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "CallActivity onCreate ");
 
         if (CallService.getInstance() == null) {
             Log.e(TAG, "on Create SERVICE == NULL");
@@ -105,7 +106,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             finish();
         }
 
-        Log.i(TAG, "CallActivity onCreate ");
+        CallService.getInstance().setCallStateChange(this);
+        CallManager.getInstance().setTimeDelegate(this);
 
         callType = CallManager.getInstance().getCallType();
         isIncoming = CallManager.getInstance().isIncoming();
@@ -116,10 +118,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         init();
         setContentView(createRootView());
-
-
-        CallService.getInstance().setCallStateChange(this);
-        CallManager.getInstance().setTimeDelegate(this);
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -160,6 +158,11 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private View createRootView() {
+        Log.i(TAG, "start createRootView");
+
+        if (CallService.getInstance() == null)
+            finish();
+
         FrameLayout rootView = new FrameLayout(this);
         rootView.setBackgroundColor(0);
         rootView.setFitsSystemWindows(true);
@@ -676,7 +679,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onError(int messageID, int major, int minor) {
         Log.e(TAG, "onError: " + major + " " + minor + " " + getResources().getString(messageID));
-        Toast.makeText(this, "ERROR -> " + getResources().getString(messageID), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -692,8 +694,15 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        Log.i(TAG, "finish: service state -> " + (CallService.getInstance() == null));
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
 
         if (isVideoCall()) {
             if (surfaceRemote != null) {
