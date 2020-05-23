@@ -143,7 +143,6 @@ public class CallManager {
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(OFFER, callerSdp));
         } catch (NullPointerException e) {
             e.printStackTrace();
-            Toast.makeText(G.context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -184,15 +183,14 @@ public class CallManager {
 
     private void setupCallerInfo(long callPeerId) {
         currentCallerInfo = new CallerInfo();
-        RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callPeerId).findFirst();
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callPeerId).findFirst();
+            if (realmRegisteredInfo != null) {
+                currentCallerInfo.name = realmRegisteredInfo.getDisplayName();
+                currentCallerInfo.color = realmRegisteredInfo.getColor();
+            }
+            currentCallerInfo.userId = callPeerId;
         });
-
-        if (realmRegisteredInfo != null) {
-            currentCallerInfo.name = realmRegisteredInfo.getDisplayName();
-            currentCallerInfo.color = realmRegisteredInfo.getColor();
-        }
-        currentCallerInfo.userId = callPeerId;
     }
 
     private void startService(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType, boolean isIncoming) {
