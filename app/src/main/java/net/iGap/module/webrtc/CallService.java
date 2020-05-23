@@ -44,6 +44,8 @@ import net.iGap.viewmodel.controllers.CallManager;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 import static android.app.Notification.DEFAULT_SOUND;
 import static android.app.Notification.DEFAULT_VIBRATE;
 
@@ -69,7 +71,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private Vibrator vibrator;
     private SharedPreferences sharedPreferences;
 
-    private CallAudioManager appRTCAudioManager = null;
+    private CallAudioManager audioManager = null;
     private CallAudioManager.AudioManagerEvents audioManagerEvents;
 
     private static CallService instance;
@@ -167,28 +169,25 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private void initialAudioManager() {
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
-        appRTCAudioManager = CallAudioManager.create(getApplicationContext());
+        audioManager = CallAudioManager.create(getApplicationContext());
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(TAG, "Starting the audio manager...");
         // This method will be called each time the number of available audio
         // devices has changed.
-        appRTCAudioManager.start((selectedAudioDevice, availableAudioDevices) -> {
+        if (isVoiceCall)
+            audioManager.setDefaultAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
+
+        audioManager.start((selectedAudioDevice, availableAudioDevices) -> {
             if (audioManagerEvents != null)
                 audioManagerEvents.onAudioDeviceChanged(selectedAudioDevice, availableAudioDevices);
             CallManager.getInstance().setActiveAudioDevice(selectedAudioDevice);
-            if (isVoiceCall) {
-                toggleSpeaker();
-            }
         });
-
-        if (isVoiceCall)
-            setAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
     }
 
     private void playSoundAndVibration() {
         boolean canPlay = false;
-        switch (appRTCAudioManager.getRingerMode()) {
+        switch (audioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
                 canPlay = false;
                 break;
@@ -205,7 +204,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
                 break;
         }
 
-        if (appRTCAudioManager.hasWiredHeadset()) {
+        if (audioManager.hasWiredHeadset()) {
             canPlay = true;
         }
 
@@ -236,7 +235,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
                     player.setDataSource(this, alert);
                 }
 
-                if (appRTCAudioManager.hasWiredHeadset()) {
+                if (audioManager.hasWiredHeadset()) {
                     player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
                 } else {
                     player.setAudioStreamType(AudioManager.STREAM_RING);
@@ -472,9 +471,9 @@ public class CallService extends Service implements CallManager.CallStateChange 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(CallState.LEAVE_CALL);
 
-        if (appRTCAudioManager != null) {
-            appRTCAudioManager.stop();
-            appRTCAudioManager = null;
+        if (audioManager != null) {
+            audioManager.stop();
+            audioManager = null;
         }
 
         stopForeground(true);
@@ -541,22 +540,26 @@ public class CallService extends Service implements CallManager.CallStateChange 
     // related functions for controlling audio device within call
 
     public void setAudioDevice(CallAudioManager.AudioDevice selectedAudioDevice) {
-        appRTCAudioManager.selectAudioDevice(selectedAudioDevice);
+        audioManager.selectAudioDevice(selectedAudioDevice);
     }
 
     public CallAudioManager.AudioDevice getActiveAudioDevice() {
-        return appRTCAudioManager.getSelectedAudioDevice();
+        return audioManager.getSelectedAudioDevice();
     }
 
     public void toggleSpeaker() {
-        appRTCAudioManager.toggleSpeakerPhone();
+        audioManager.toggleSpeakerPhone();
     }
 
     public boolean isSpeakerEnable() {
-        return appRTCAudioManager.isSpeakerOn();
+        return audioManager.isSpeakerOn();
     }
 
     public void setAudioManagerEvents(CallAudioManager.AudioManagerEvents audioManagerEvents) {
         this.audioManagerEvents = audioManagerEvents;
+    }
+
+    public Set<CallAudioManager.AudioDevice> getActiveAudioDevices() {
+        return audioManager.getAudioDevices();
     }
 }
