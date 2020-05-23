@@ -492,6 +492,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
         typeList = null;
         amount = null;
+
+        selectedPriceIndex = -1;
+        selectedChargeTypeIndex = -1;
     }
 
     private void setAdapterValue(@NotNull OperatorType.Type operator) {
