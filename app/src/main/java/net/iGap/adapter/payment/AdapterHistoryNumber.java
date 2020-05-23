@@ -53,6 +53,9 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
         void bindNUmber(FavoriteNumber historyNumber, int position) {
             phoneNumber.setText(historyNumber.getPhoneNumber());
             DecimalFormat df = new DecimalFormat(",###");
+            if (historyNumber.getAmount() == null)
+                return;
+
             String price = df.format(historyNumber.getAmount());
 
             amount.setText(String.format("%s %s", price, itemView.getContext().getResources().getString(R.string.rial)));
