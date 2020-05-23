@@ -81,7 +81,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private ProtoSignalingOffer.SignalingOffer.Type callType;
     private boolean isRtl = G.isAppRtl;
 
-    private String TAG = "CallActivity ";
+    private String TAG = "iGapCall CallActivity ";
     public static final String CALL_TIMER_BROADCAST = "CALL_TIMER_BROADCAST";
     public static final String TIMER_TEXT = "timer";
 
@@ -94,7 +94,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "CallActivity onCreate ");
+        Log.i(TAG, "start onCreate ");
 
         if (CallService.getInstance() == null) {
             Log.e(TAG, "on Create SERVICE == NULL");
@@ -106,7 +106,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             finish();
         }
 
-        CallService.getInstance().setCallStateChange(this);
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().setCallStateChange(this);
+        }
         CallManager.getInstance().setTimeDelegate(this);
 
         callType = CallManager.getInstance().getCallType();
@@ -126,6 +128,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             CallService.getInstance().setAudioManagerEvents((selectedAudioDevice, availableAudioDevices) -> {
                 checkForBluetoothAvailability(availableAudioDevices);
             });
+
+        Log.i(TAG, "onCreate finish");
     }
 
     private boolean checkPermissions() {
