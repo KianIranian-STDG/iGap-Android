@@ -147,7 +147,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
             if (userInfo != null && editTextNumber.getText() != null) {
-                editTextNumber.setText(userInfo.getPhoneNumber().replace("98", "0").replace("+98", "0").replace("0098", "0").replace(" ", "").replace("-", ""));
+                setPhoneNumberEditText(userInfo.getPhoneNumber());
                 if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
                     String number = editTextNumber.getText().toString().substring(0, 4);
                     OperatorType.Type operator = new OperatorType().getOperation(number);
@@ -232,7 +232,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                                     selectedIndex = adapterContactNumber.getSelectedPosition();
                                     contactNumber = adapterContactNumber.getContactNumbers().get(selectedIndex);
-                                    editTextNumber.setText(contactNumber.getPhone().replace(" ", "").replace("-", "").replace("+98", "0"));
+                                    setPhoneNumberEditText(contactNumber.getPhone());
 
                                     clearAmountAndType();
 
@@ -296,7 +296,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                         selectedIndex = adapterHistory.getSelectedPosition();
                                         historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
 
-                                        editTextNumber.setText(historyNumber.getPhoneNumber().replace(" ", "").replace("-", "").replace("+98", "0"));
+                                        setPhoneNumberEditText(historyNumber.getPhoneNumber());
                                         chosePriceTextView.setText(String.format("%s %s", historyNumber.getAmount(), getResources().getString(R.string.rials)));
 
                                         setChargeType(historyNumber.getChargeType());//can write better code with use key value container
@@ -412,6 +412,20 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         }
     }
 
+    private void setPhoneNumberEditText(String phone) {
+        if (phone.contains("+") && !phone.contains("+98")) {
+            showError(getResources().getString(R.string.phone_number_is_not_valid));
+            return;
+        }
+
+
+        editTextNumber.setText(phone.replace("98", "0")
+                .replace("+98", "0")
+                .replace("0098", "0")
+                .replace(" ", "")
+                .replace("-", ""));
+    }
+
     private void chosePriceClicked() {
         if (currentOperator != null) {
             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_amount, false).build();
@@ -525,6 +539,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onSaveBtnClicked() {
+
+        if (editTextNumber.getText() != null && !isNumberFromIran(editTextNumber.getText().toString())) {
+            editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
+            return;
+        }
         if (editTextNumber.getText() != null && isNumeric(editTextNumber.getText().toString()) && editTextNumber.getText().length() == 11) {
             if (currentOperator != null) {
                 if (selectedChargeTypeIndex != -1) {
@@ -661,6 +680,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                         }
                                         dialog.dismiss();
                                     });
+                                } else {
+                                    enterBtn.setEnabled(true);
                                 }
                             });
                         }
@@ -690,6 +711,19 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             hideKeyboard();
             HelperError.showSnackMessage(errorMessage, false);
         }
+    }
+
+    private boolean isNumberFromIran(String phoneNumber) {
+        if (phoneNumber.trim().charAt(0) == '0' && (new OperatorType().isValidType(phoneNumber.substring(0, 4)) || new OperatorType().isValidType(phoneNumber.substring(0, 5))))
+            return true;
+
+        String standardize = phoneNumber.replace("98", "0")
+                .replace("+98", "0")
+                .replace("0098", "0")
+                .replace(" ", "")
+                .replace("-", "");
+
+        return new OperatorType().isValidType(standardize.substring(0, 4)) || new OperatorType().isValidType(phoneNumber.substring(0, 5));
     }
 
     @Override
