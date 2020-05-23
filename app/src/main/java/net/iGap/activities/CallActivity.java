@@ -3,6 +3,7 @@ package net.iGap.activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -30,8 +31,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.Theme;
 import net.iGap.module.customView.CallRippleView;
@@ -235,7 +235,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         userImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         if (isVideoCall())
             userImageView.setVisibility(isIncomingCallAndAnswered ? View.GONE : View.VISIBLE);
-        avatarHandler.getAvatar(new ParamWithAvatarType(userImageView, caller.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+
+        if (caller != null) {
+            avatarHandler.getAvatar(new ParamWithInitBitmap(userImageView, caller.getUserId()).initBitmap(null).showMain().onInitSet(() -> {
+                userImageView.setBackgroundColor(Color.parseColor(caller.color));
+            }));
+        }
         rootView.addView(userImageView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
         callTypeTextView = new TextView(this);

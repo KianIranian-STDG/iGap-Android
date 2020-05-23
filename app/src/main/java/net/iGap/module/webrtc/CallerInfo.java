@@ -7,9 +7,14 @@ public class CallerInfo {
     public String lastName = "";
     public long userId;
     public Bitmap avatar;
+    public String color = "";
 
     public long getUserId() {
         return userId;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public Bitmap getAvatar() {

@@ -184,13 +184,14 @@ public class CallManager {
 
     private void setupCallerInfo(long callPeerId) {
         currentCallerInfo = new CallerInfo();
-        currentCallerInfo.name = DbManager.getInstance().doRealmTask(realm -> {
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callPeerId).findFirst();
-            if (realmRegisteredInfo != null) {
-                return realmRegisteredInfo.getDisplayName();
-            } else
-                return "";
+        RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callPeerId).findFirst();
         });
+
+        if (realmRegisteredInfo != null) {
+            currentCallerInfo.name = realmRegisteredInfo.getDisplayName();
+            currentCallerInfo.color = realmRegisteredInfo.getColor();
+        }
         currentCallerInfo.userId = callPeerId;
     }
 
