@@ -322,11 +322,13 @@ public class CallManager {
 
     public void leaveCall() {
         Log.d(TAG, "leave Call");
-        new RequestSignalingLeave().signalingLeave();
-        // call is declined in ringing mode
-        isRinging = false;
-        isCallActive = false;
-        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
+        if (isRinging || isCallActive) {
+            new RequestSignalingLeave().signalingLeave();
+            // call is declined in ringing mode
+            isRinging = false;
+            isCallActive = false;
+            EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
+        }
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
