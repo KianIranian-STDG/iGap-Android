@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
-        android:text="@string/Select_from_previous_numbers"
+        android:text="@string/contacts"
         android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close1"
         app:layout_constraintStart_toEndOf="@+id/iv_close1"

@@ -15,10 +15,11 @@ import java.util.List;
 
 public class AdapterChargeAmount extends RecyclerView.Adapter<AdapterChargeAmount.ChargeAmountViewHolder> {
 
-    private int selectedPosition = 0;
+    private int selectedPosition;
     private List<Amount> amountList;
 
-    public AdapterChargeAmount(List<Amount> amountList) {
+    public AdapterChargeAmount(List<Amount> amountList, int selectedPosition) {
+        this.selectedPosition = selectedPosition;
         this.amountList = amountList;
     }
 
