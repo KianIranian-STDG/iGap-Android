@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -67,6 +68,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.model.OperatorType.Type.IRANCELL;
+import static net.iGap.model.OperatorType.Type.RITEL;
+
 public class FragmentPaymentChargeNewUi extends BaseFragment {
     private View frameHamrah;
     private View frameIrancel;
@@ -102,6 +106,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private static final String RIGHTEL = "rightel";
 
     private CompositeDisposable compositeDisposable;
+    private TextWatcher textWatcher;
 
     public static FragmentPaymentChargeNewUi newInstance() {
         return new FragmentPaymentChargeNewUi();
@@ -218,6 +223,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                         if (contactDialogView != null) {
                             rvContact = contactDialogView.findViewById(R.id.rv_contact);
+                            EditText editText = contactDialogView.findViewById(R.id.etSearch);
                             rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                             rvContact.setAdapter(new AdapterContactNumber());
 
@@ -248,6 +254,27 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     dialog.dismiss();
                                 });
                             }
+                            if (textWatcher != null)
+                                editText.removeTextChangedListener(textWatcher);
+
+                            textWatcher = new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    if (adapterContactNumber != null)
+                                        adapterContactNumber.search(s.toString());
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+
+                                }
+                            };
+                            editText.addTextChangedListener(textWatcher);
                             contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
                         }
                         dialog.show();
@@ -295,6 +322,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                                         selectedIndex = adapterHistory.getSelectedPosition();
                                         historyNumber = adapterHistory.getHistoryNumberList().get(selectedIndex);
+                                        updatePaymentConfig(historyNumber);
 
                                         setPhoneNumberEditText(historyNumber.getPhoneNumber());
                                         chosePriceTextView.setText(String.format("%s %s", historyNumber.getAmount(), getResources().getString(R.string.rials)));
@@ -357,8 +385,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         });
 
         frameHamrah.setOnClickListener(v -> changeOperator(OperatorType.Type.HAMRAH_AVAL));
-        frameRightel.setOnClickListener(v -> changeOperator(OperatorType.Type.RITEL));
-        frameIrancel.setOnClickListener(v -> changeOperator(OperatorType.Type.IRANCELL));
+        frameRightel.setOnClickListener(v -> changeOperator(RITEL));
+        frameIrancel.setOnClickListener(v -> changeOperator(IRANCELL));
 
         removeNumber.setOnClickListener(view1 -> {
             editTextNumber.setText("");
@@ -379,6 +407,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             if (selectedPriceIndex + 1 < amountList.size()) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex + 1);
                 chosePriceTextView.setText(amount.getTextAmount());
+                historyNumber = null;
             } else {
                 amount = amountList.get(selectedPriceIndex);
                 chosePriceTextView.setText(amount.getTextAmount());
@@ -389,11 +418,83 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             if (selectedPriceIndex - 1 < amountList.size() && selectedPriceIndex > 0) {
                 amount = amountList.get(selectedPriceIndex = selectedPriceIndex - 1);
                 chosePriceTextView.setText(amount.getTextAmount());
+                historyNumber = null;
             } else {
                 amount = amountList.get(selectedPriceIndex);
                 chosePriceTextView.setText(amount.getTextAmount());
             }
         });
+    }
+
+    private void updatePaymentConfig(FavoriteNumber historyNumber) {
+        selectedPriceIndex = findPriceIndex(historyNumber.getAmount());
+        currentOperator = findOperatorType(historyNumber.getOperator());
+        selectedChargeTypeIndex = findChargeType(historyNumber.getChargeType());
+    }
+
+    private int findChargeType(String chargeType) {
+        switch (currentOperator) {
+            case HAMRAH_AVAL:
+                switch (chargeType) {
+                    case "DIRECT":
+                        return 0;
+                    case "YOUTH":
+                        return 1;
+                    case "LADIES":
+                        return 2;
+                }
+                break;
+            case IRANCELL:
+                switch (chargeType) {
+                    case "MTN_NORMAL":
+                        return 0;
+                    case "MTN_AMAZING":
+                        return 1;
+                }
+                break;
+            case RITEL:
+                switch (chargeType) {
+                    case "RIGHTEL_NORMAL":
+                        return 0;
+                    case "RIGHTEL_EXCITING":
+                        return 1;
+                }
+        }
+        return 0;
+    }
+
+    private OperatorType.Type findOperatorType(String operator) {
+        switch (operator) {
+            case MCI:
+                currentOperator = OperatorType.Type.HAMRAH_AVAL;
+                break;
+            case MTN:
+                currentOperator = IRANCELL;
+                break;
+            case RIGHTEL:
+                currentOperator = RITEL;
+                break;
+        }
+
+        return currentOperator;
+    }
+
+    private int findPriceIndex(Long amount) {
+        if (amount == null)
+            return 0;
+
+        if (amount == 10000) {
+            return 0;
+        } else if (amount == 20000) {
+            return 1;
+        } else if (amount == 50000) {
+            return 2;
+        } else if (amount == 100000) {
+            return 3;
+        } else if (amount == 200000) {
+            return 4;
+        }
+        return 0;
     }
 
     private void setChargeType(String chargeType) {
@@ -475,11 +576,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         radioButtonHamrah.setChecked(currentOperator == OperatorType.Type.HAMRAH_AVAL);
         frameHamrah.setSelected(currentOperator == OperatorType.Type.HAMRAH_AVAL);
 
-        radioButtonIrancell.setChecked(currentOperator == OperatorType.Type.IRANCELL);
-        frameIrancel.setSelected(currentOperator == OperatorType.Type.IRANCELL);
+        radioButtonIrancell.setChecked(currentOperator == IRANCELL);
+        frameIrancel.setSelected(currentOperator == IRANCELL);
 
-        radioButtonRightel.setChecked(currentOperator == OperatorType.Type.RITEL);
-        frameRightel.setSelected(currentOperator == OperatorType.Type.RITEL);
+        radioButtonRightel.setChecked(currentOperator == RITEL);
+        frameRightel.setSelected(currentOperator == RITEL);
         setAdapterValue(operator);
     }
 
@@ -606,9 +707,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                         if (currentOperator == OperatorType.Type.HAMRAH_AVAL) {
                             sendRequestCharge(MCI, chooseChargeType, editTextNumber.getText().toString().substring(1), (int) price);
-                        } else if (currentOperator == OperatorType.Type.IRANCELL) {
+                        } else if (currentOperator == IRANCELL) {
                             sendRequestCharge(MTN, chooseChargeType, editTextNumber.getText().toString().substring(1), (int) price);
-                        } else if (currentOperator == OperatorType.Type.RITEL) {
+                        } else if (currentOperator == RITEL) {
                             sendRequestCharge(RIGHTEL, chooseChargeType, editTextNumber.getText().toString().substring(1), (int) price);
                         }
 
