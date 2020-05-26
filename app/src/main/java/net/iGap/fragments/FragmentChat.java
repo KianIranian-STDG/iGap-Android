@@ -1115,33 +1115,30 @@ public class FragmentChat extends BaseFragment
         initCallbacks();
         HelperNotification.getInstance().isChatRoomNow = true;
 
-        onUpdateUserOrRoomInfo = new OnUpdateUserOrRoomInfo() {
-            @Override
-            public void onUpdateUserOrRoomInfo(final String messageId) {
+        onUpdateUserOrRoomInfo = messageId -> {
 
-                if (messageId != null && messageId.length() > 0) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+            if (messageId != null && messageId.length() > 0) {
+                G.handler.post(() -> {
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (linearLayoutManager != null) {
+                        int start = linearLayoutManager.findFirstVisibleItemPosition();
 
-                            if (start < 0) {
-                                start = 0;
-                            }
+                        if (start < 0) {
+                            start = 0;
+                        }
 
-                            for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
-                                try {
-                                    if (mAdapter.getItem(i).mMessage != null && (mAdapter.getItem(i).mMessage.getMessageId() + "").equals(messageId)) {
-                                        mAdapter.notifyItemChanged(i);
-                                        break;
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                        for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
+                            try {
+                                if (mAdapter.getItem(i).mMessage != null && (mAdapter.getItem(i).mMessage.getMessageId() + "").equals(messageId)) {
+                                    mAdapter.notifyItemChanged(i);
+                                    break;
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         };
 
