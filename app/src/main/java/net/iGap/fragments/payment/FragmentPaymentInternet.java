@@ -219,8 +219,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         if (phoneNumber.trim().charAt(0) == '0' && (new OperatorType().isValidType(phoneNumber.substring(0, 4)) || new OperatorType().isValidType(phoneNumber.substring(0, 5))))
             return true;
 
-        String standardize = phoneNumber.replace("98", "0")
-                .replace("+98", "0")
+        String standardize = phoneNumber.replace("+98", "0")
                 .replace("0098", "0")
                 .replace(" ", "")
                 .replace("-", "");
@@ -393,8 +392,11 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             return;
         }
 
-        numberEditText.setText(phone.replace("98", "0")
-                .replace("+98", "0")
+        if (phone.startsWith("98")) {
+            phone = "0".concat(phone.substring(2));
+        }
+
+        numberEditText.setText(phone.replace("+98", "0")
                 .replace("0098", "0")
                 .replace(" ", "")
                 .replace("-", ""));

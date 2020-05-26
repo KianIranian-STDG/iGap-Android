@@ -159,8 +159,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     if (operator != null) {
                         changeOperator(operator);
                     }
-                } else {
-                    showError(getResources().getString(R.string.ivnalid_data_provided));
                 }
             }
         });
@@ -521,9 +519,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             return;
         }
 
-        editTextNumber.setText(phone.replace("98", "0")
-                .replace("+98", "0")
-                .replace("0098", "0")
+        if (phone.startsWith("98")) {
+            phone = "0".concat(phone.substring(2));
+        }
+
+        editTextNumber.setText(phone.replace("+98", "0")
                 .replace(" ", "")
                 .replace("-", ""));
     }
@@ -592,6 +592,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         ivAdd.setVisibility(View.GONE);
         lowView.setVisibility(View.GONE);
 
+        selectedChargeTypeIndex = -1;
+        selectedPriceIndex = -1;
+
         typeList = null;
         amount = null;
     }
@@ -642,10 +645,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
     private void onSaveBtnClicked() {
 
-        if (editTextNumber.getText() != null && !isNumberFromIran(editTextNumber.getText().toString())) {
+        if (editTextNumber.getText() != null && (editTextNumber.getText().toString().equals("") || !isNumberFromIran(editTextNumber.getText().toString()))) {
             editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
             return;
         }
+
         if (editTextNumber.getText() != null && isNumeric(editTextNumber.getText().toString()) && editTextNumber.getText().length() == 11) {
             if (currentOperator != null) {
                 if (selectedChargeTypeIndex != -1) {
@@ -819,9 +823,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         if (phoneNumber.trim().charAt(0) == '0' && (new OperatorType().isValidType(phoneNumber.substring(0, 4)) || new OperatorType().isValidType(phoneNumber.substring(0, 5))))
             return true;
 
-        String standardize = phoneNumber.replace("98", "0")
-                .replace("+98", "0")
-                .replace("0098", "0")
+        String standardize = phoneNumber.replace("+98", "0")
                 .replace(" ", "")
                 .replace("-", "");
 

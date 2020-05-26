@@ -43,7 +43,7 @@
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp48"
+        android:layout_height="@dimen/dp44"
         android:layout_marginTop="@dimen/dp24"
         android:background="@drawable/search_contact_background"
         android:gravity="center"
