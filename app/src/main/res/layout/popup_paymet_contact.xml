@@ -43,14 +43,14 @@
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp52"
+        android:layout_height="@dimen/dp48"
         android:layout_marginTop="@dimen/dp24"
         android:background="@drawable/search_contact_background"
         android:gravity="center"
         android:hint="@string/search"
         app:layout_constraintLeft_toLeftOf="@id/rv_contact"
         app:layout_constraintRight_toRightOf="@id/rv_contact"
-        app:layout_constraintTop_toBottomOf="@id/closeView"/>
+        app:layout_constraintTop_toBottomOf="@id/closeView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contact"
@@ -58,6 +58,7 @@
         android:layout_height="@dimen/dp300"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
+        android:layout_marginTop="@dimen/dp8"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="@dimen/dp32"

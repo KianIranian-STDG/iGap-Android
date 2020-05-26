@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNumber.HistoryNumberViewHolder> {
@@ -45,6 +47,7 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
     public void setContactNumbers(List<ContactNumber> contactNumbers) {
         this.contactNumbers = contactNumbers;
+        Collections.sort(this.contactNumbers, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
     }
 
     @NonNull
@@ -89,7 +92,7 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
         void bindNumber(ContactNumber amount, int position) {
             contactName.setText(amount.getDisplayName());
-            phoneNumber.setText(amount.getPhone());
+            phoneNumber.setText(amount.getPhone().replace(" ", ""));
 
             itemView.setSelected(selectedPosition == position);
         }
