@@ -135,6 +135,8 @@ public class FragmentPaymentBill extends BaseFragment {
                 hideKeyboard();
             }
         });
+
+        viewModel.getBillTypeImage().observe(getViewLifecycleOwner(), integer -> billBinding.billTypeImage.setImageResource(integer));
     }
 
     @Override
