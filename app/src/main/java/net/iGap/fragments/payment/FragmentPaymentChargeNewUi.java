@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -105,6 +106,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private static final String RIGHTEL = "rightel";
 
     private CompositeDisposable compositeDisposable;
+    private TextWatcher textWatcher;
 
     public static FragmentPaymentChargeNewUi newInstance() {
         return new FragmentPaymentChargeNewUi();
@@ -221,6 +223,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                         if (contactDialogView != null) {
                             rvContact = contactDialogView.findViewById(R.id.rv_contact);
+                            EditText editText = contactDialogView.findViewById(R.id.etSearch);
                             rvContact.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                             rvContact.setAdapter(new AdapterContactNumber());
 
@@ -251,6 +254,27 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     dialog.dismiss();
                                 });
                             }
+                            if (textWatcher != null)
+                                editText.removeTextChangedListener(textWatcher);
+
+                            textWatcher = new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    if (adapterContactNumber != null)
+                                        adapterContactNumber.search(s.toString());
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+
+                                }
+                            };
+                            editText.addTextChangedListener(textWatcher);
                             contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
                         }
                         dialog.show();

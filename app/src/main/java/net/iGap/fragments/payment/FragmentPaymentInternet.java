@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -86,6 +87,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private ChargeApi chargeApi;
     private FavoriteNumber historyNumber;
     private View progressBar;
+    private TextWatcher watcher;
 
     public static FragmentPaymentInternet newInstance() {
         return new FragmentPaymentInternet();
@@ -321,9 +323,32 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
                     if (contactDialogView != null) {
                         RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
+                        EditText editText = contactDialogView.findViewById(R.id.etSearch);
                         contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                         AdapterContactNumber adapterContact = new AdapterContactNumber();
                         contactRecyclerView.setAdapter(adapterContact);
+
+                        if (watcher != null)
+                            editText.removeTextChangedListener(watcher);
+
+                        watcher = new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                if (s != null)
+                                    adapterContact.search(s.toString());
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        };
+                        editText.addTextChangedListener(watcher);
 
                         new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
                             if (contactNumbers.size() == 0) {

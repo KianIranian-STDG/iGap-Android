@@ -10,11 +10,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNumber.HistoryNumberViewHolder> {
     private List<ContactNumber> contactNumbers;
+    private List<ContactNumber> searchedNumbers;
+    private boolean shouldSearch = false;
     private int selectedPosition = -1;
+
+    public void search(String search) {
+        if (contactNumbers == null || contactNumbers.size() == 0)
+            return;
+
+        searchedNumbers = new ArrayList<>();
+        search = search.trim().toLowerCase();
+        for (int i = 0; i < contactNumbers.size(); i++) {
+            String keyToSearch = contactNumbers.get(i).getFirstName() + contactNumbers.get(i).getLastName() + contactNumbers.get(i).getDisplayName() + contactNumbers.get(i).getPhone();
+            keyToSearch = keyToSearch.trim().toLowerCase();
+            if (keyToSearch.contains(search)) {
+                searchedNumbers.add(contactNumbers.get(i));
+            }
+        }
+        shouldSearch = true;
+        notifyDataSetChanged();
+    }
 
     public AdapterContactNumber(List<ContactNumber> contactNumbers) {
         this.contactNumbers = contactNumbers;
@@ -36,13 +56,16 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
 
     @Override
     public void onBindViewHolder(@NonNull HistoryNumberViewHolder holder, int position) {
-        holder.bindNumber(contactNumbers.get(position), position);
+        if (shouldSearch)
+            holder.bindNumber(searchedNumbers.get(position), position);
+        else
+            holder.bindNumber(contactNumbers.get(position), position);
 
     }
 
     @Override
     public int getItemCount() {
-        return contactNumbers.size();
+        return shouldSearch ? searchedNumbers == null ? 0 : searchedNumbers.size() : contactNumbers == null ? 0 : contactNumbers.size();
     }
 
 
@@ -54,6 +77,14 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
             super(itemView);
             phoneNumber = itemView.findViewById(R.id.phone_Number);
             contactName = itemView.findViewById(R.id.contact_Name);
+
+            itemView.setOnClickListener(v -> {
+                int tmp = selectedPosition;
+                if (tmp >= 0)
+                    notifyItemChanged(tmp);
+                selectedPosition = getAdapterPosition();
+                notifyItemChanged(selectedPosition);
+            });
         }
 
         void bindNumber(ContactNumber amount, int position) {
@@ -61,13 +92,6 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
             phoneNumber.setText(amount.getPhone());
 
             itemView.setSelected(selectedPosition == position);
-
-            itemView.setOnClickListener(v -> {
-                int tmp = selectedPosition;
-                notifyItemChanged(tmp);
-                selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
-            });
         }
     }
 
@@ -76,6 +100,8 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
     }
 
     public List<ContactNumber> getContactNumbers() {
+        if (shouldSearch)
+            return searchedNumbers;
         return contactNumbers;
     }
 }
