@@ -245,16 +245,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         if (isVideoCall())
             userImageView.setVisibility(isIncomingCallAndAnswered ? View.GONE : View.VISIBLE);
 
-        if (caller != null) {
-            try {
-                avatarHandler.getAvatar(new ParamWithInitBitmap(userImageView, caller.getUserId()).initBitmap(null).showMain().onInitSet(() -> {
-                    if (caller.color != null && caller.color.length() > 0)
-                        userImageView.setBackgroundColor(Color.parseColor(caller.color));
-                }));
-            } catch (Exception e) {//must be refactor avatar handler
-                e.printStackTrace();
-            }
-        }
         rootView.addView(userImageView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
         callTypeTextView = new TextView(this);
@@ -301,7 +291,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         rootView.addView(durationTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 72, 16, 0));
 
         nameTextView = new TextView(this);
-        nameTextView.setText(caller.getName());
         nameTextView.setTextColor(getResources().getColor(R.color.white));
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 40);
         nameTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font));
@@ -436,6 +425,19 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         rootView.addView(buttonsGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 32, 0, 32, 62));
 
+
+        if (caller != null) {
+            nameTextView.setText(caller.getName());
+            try {
+                avatarHandler.getAvatar(new ParamWithInitBitmap(userImageView, caller.getUserId()).initBitmap(null).showMain().onInitSet(() -> {
+                    if (caller.color != null && caller.color.length() > 0)
+                        userImageView.setBackgroundColor(Color.parseColor(caller.color));
+                }));
+            } catch (Exception e) {//must be refactor avatar handler
+                e.printStackTrace();
+            }
+        }
+
         return rootView;
     }
 
@@ -445,7 +447,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void goToChat() {
-        if (caller.userId > 0)
+        if (caller != null && caller.userId > 0)
             HelperPublicMethod.goToChatRoom(caller.getUserId(), null, null);
     }
 
