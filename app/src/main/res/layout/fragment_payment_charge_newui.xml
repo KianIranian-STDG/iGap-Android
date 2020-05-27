@@ -24,8 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/payment_toolbar"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@id/payment_toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -181,83 +180,73 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/add_amount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="44dp"
-                android:layout_marginLeft="44dp"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:background="@drawable/shape_stroke_green"
                 android:elevation="@dimen/dp4"
+                android:padding="@dimen/dp6"
                 app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
-                app:layout_constraintStart_toStartOf="@+id/choose_amount"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/choose_amount"
                 app:layout_constraintTop_toTopOf="@+id/choose_amount"
                 app:srcCompat="@drawable/ic_add_gray" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/low_amount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="44dp"
-                android:layout_marginRight="44dp"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:background="@drawable/shape_stroke_red"
                 android:elevation="@dimen/dp4"
+                android:padding="@dimen/dp6"
                 app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
-                app:layout_constraintEnd_toEndOf="@+id/choose_amount"
+                app:layout_constraintEnd_toStartOf="@+id/choose_amount"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/choose_amount"
                 app:srcCompat="@drawable/ic_remove_gray" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/choose_amount"
                 style="@style/iGapButtonStroke"
-                android:layout_width="match_parent"
+                android:layout_width="247dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/dp16"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/select_the_amount"
                 android:textColor="?iGapButtonTextColor"
                 android:textSize="@dimen/largeTextSize"
-                app:layout_constraintBottom_toTopOf="@+id/btn_charge_type"
-                app:layout_constraintEnd_toEndOf="@+id/view13"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/view13"
+                app:layout_constraintEnd_toStartOf="@+id/add_amount"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/low_amount"
                 app:layout_constraintTop_toBottomOf="@+id/llWarning"
-                app:layout_constraintVertical_bias="1.0"
                 app:layout_constraintWidth_percent=".6" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_charge_type"
                 style="@style/iGapButtonStroke"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/dp48"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginBottom="68dp"
                 android:text="@string/Select_the_type_of_charge"
                 android:textColor="?iGapButtonTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/btn_pay"
-                app:layout_constraintEnd_toEndOf="@+id/btn_pay"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/btn_pay"
-                app:layout_constraintTop_toBottomOf="@+id/choose_amount"
-                app:layout_constraintWidth_percent=".6" />
+                app:layout_constraintEnd_toEndOf="@+id/add_amount"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/low_amount"
+                app:layout_constraintTop_toBottomOf="@+id/choose_amount" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_pay"
                 style="@style/iGapButton"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/payment_continue_title"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_amount"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/low_amount"
                 app:layout_constraintTop_toBottomOf="@+id/btn_charge_type" />
 
             <LinearLayout
