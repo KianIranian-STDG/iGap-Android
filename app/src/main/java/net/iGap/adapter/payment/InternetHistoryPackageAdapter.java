@@ -10,20 +10,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.model.paymentPackage.FavoriteNumber;
-import net.iGap.observers.interfaces.IOnItemClickListener;
 
 import java.util.List;
 
 
-public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPackage.ContactNumberViewHolder> {
+public class InternetHistoryPackageAdapter extends RecyclerView.Adapter<InternetHistoryPackageAdapter.ContactNumberViewHolder> {
     private List<FavoriteNumber> historyNumberList;
-    private IOnItemClickListener<Integer> onItemClickListener;
+    private IOnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(IOnItemClickListener<Integer> onItemClickListener) {
+    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public AdapterHistoryPackage(List<FavoriteNumber> historyNumberList) {
+    public InternetHistoryPackageAdapter(List<FavoriteNumber> historyNumberList) {
         this.historyNumberList = historyNumberList;
     }
 
@@ -63,6 +62,10 @@ public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPa
             phoneNumberTextView.setText(historyNumber.getPhoneNumber());
             detailTextView.setText(historyNumber.getPackageDescription());
         }
+    }
+
+    public interface IOnItemClickListener {
+        void onItemClicked(int position);
     }
 
     public List<FavoriteNumber> getHistoryNumberList() {

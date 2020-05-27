@@ -23,9 +23,9 @@ import com.google.android.material.button.MaterialButton;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.payment.AdapterHistoryPackage;
 import net.iGap.adapter.payment.ChargeContactNumberAdapter;
 import net.iGap.adapter.payment.ContactNumber;
+import net.iGap.adapter.payment.InternetHistoryPackageAdapter;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.BaseFragment;
@@ -428,7 +428,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                         View historyDialogView = dialog.getCustomView();
 
                         if (historyDialogView != null) {
-                            AdapterHistoryPackage adapterHistory = new AdapterHistoryPackage(numbers);
+                            InternetHistoryPackageAdapter adapterHistory = new InternetHistoryPackageAdapter(numbers);
                             adapterHistory.setOnItemClickListener(position -> {
                                 selectedHistoryPosition = position;
                                 onHistoryItemClicked(adapterHistory);
@@ -459,7 +459,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         });
     }
 
-    private void onHistoryItemClicked(AdapterHistoryPackage adapterHistory) {
+    private void onHistoryItemClicked(InternetHistoryPackageAdapter adapterHistory) {
         if (selectedHistoryPosition == -1) {
             return;
         }
