@@ -75,6 +75,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
 
     private CallerInfo caller;
+    private boolean isFrontCamera = true;
     private boolean isIncoming;
     private boolean isIncomingCallAndNotAnswered;
     private boolean isIncomingCallAndAnswered;
@@ -193,7 +194,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 CallManager.getInstance().endCall();
             }
             surfaceLocal.setEnableHardwareScaler(true);
-            surfaceLocal.setMirror(true);
+            surfaceLocal.setMirror(isFrontCamera);
             surfaceLocal.setZOrderMediaOverlay(true);
             surfaceLocal.setZOrderOnTop(true);
 
@@ -471,6 +472,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void toggleCamera() {
+        surfaceLocal.setMirror(isFrontCamera = !isFrontCamera);
         CallManager.getInstance().toggleCamera();
     }
 
