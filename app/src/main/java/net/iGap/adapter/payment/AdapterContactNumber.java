@@ -41,18 +41,17 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
         if (contactNumbers == null || contactNumbers.size() == 0)
             return;
 
-        List<ContactNumber> temp = contactNumbers;
-        Collections.sort(temp, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
+        Collections.sort(contactNumbers, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
         if (this.contactNumbers == null)
             this.contactNumbers = new ArrayList<>();
 
         this.contactNumbers.clear();
         int lastIndex = 0;
-        this.contactNumbers.add(temp.get(lastIndex));
-        for (int i = 1; i < temp.size(); i++) {
-            if (!temp.get(lastIndex).getDisplayName().equals(temp.get(i).getDisplayName())) {
+        this.contactNumbers.add(contactNumbers.get(lastIndex));
+        for (int i = 1; i < contactNumbers.size(); i++) {
+            if (!contactNumbers.get(lastIndex).getDisplayName().equals(contactNumbers.get(i).getDisplayName())) {
                 lastIndex = i;
-                this.contactNumbers.add(temp.get(lastIndex));
+                this.contactNumbers.add(contactNumbers.get(lastIndex));
             }
         }
     }
