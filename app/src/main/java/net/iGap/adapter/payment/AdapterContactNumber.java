@@ -38,8 +38,23 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
     }
 
     public void setContactNumbers(List<ContactNumber> contactNumbers) {
-        this.contactNumbers = contactNumbers;
-        Collections.sort(this.contactNumbers, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
+        if (contactNumbers == null || contactNumbers.size() == 0)
+            return;
+
+        List<ContactNumber> temp = contactNumbers;
+        Collections.sort(temp, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
+        if (this.contactNumbers == null)
+            this.contactNumbers = new ArrayList<>();
+
+        this.contactNumbers.clear();
+        int lastIndex = 0;
+        this.contactNumbers.add(temp.get(lastIndex));
+        for (int i = 1; i < temp.size(); i++) {
+            if (!temp.get(lastIndex).getDisplayName().equals(temp.get(i).getDisplayName())) {
+                lastIndex = i;
+                this.contactNumbers.add(temp.get(lastIndex));
+            }
+        }
     }
 
     @NonNull
