@@ -36,7 +36,7 @@ import net.iGap.viewmodel.PaymentInternetPackageViewModel;
 
 import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
 
-public class FragmentPaymentInternetPackage extends BaseFragment {
+public class PaymentInternetPackageFragment extends BaseFragment {
 
     private static final String PARAM_OPERATOR = "PARAM_OPERATOR";
     private static final String PARAM_SIM_TYPE = "PARAM_SIM_TYPE";
@@ -66,7 +66,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     private boolean inScroll;
     private InternetPackage currentInternetPackage;
 
-    public static FragmentPaymentInternetPackage newInstance(String phoneNumber, String operator, String simType, int packageType) {
+    public static PaymentInternetPackageFragment newInstance(String phoneNumber, String operator, String simType, int packageType) {
 
         Bundle args = new Bundle();
         args.putString(PARAM_PHONE_NUMBER, phoneNumber);
@@ -74,7 +74,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
         args.putString(PARAM_SIM_TYPE, simType);
         args.putInt(PARAM_PACKAGE_TYPE, packageType);
 
-        FragmentPaymentInternetPackage fragment = new FragmentPaymentInternetPackage();
+        PaymentInternetPackageFragment fragment = new PaymentInternetPackageFragment();
         fragment.setArguments(args);
         return fragment;
     }

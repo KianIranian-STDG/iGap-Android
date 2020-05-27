@@ -437,7 +437,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void updatePaymentConfig(FavoriteNumber historyNumber) {
-        currentOperator = findOperatorType(historyNumber.getOperator());
+        changeOperator(findOperatorType(historyNumber.getOperator()));
         selectedChargeTypeIndex = findChargeType(historyNumber.getChargeType());
     }
 
@@ -473,19 +473,13 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private OperatorType.Type findOperatorType(String operator) {
-        switch (operator) {
-            case MCI:
-                currentOperator = OperatorType.Type.HAMRAH_AVAL;
-                break;
-            case MTN:
-                currentOperator = IRANCELL;
-                break;
-            case RIGHTEL:
-                currentOperator = RITEL;
-                break;
-        }
+        if (operator.equals(MCI))
+            return OperatorType.Type.HAMRAH_AVAL;
+        else if (operator.equals(MTN))
+            return IRANCELL;
+        else
+            return RITEL;
 
-        return currentOperator;
     }
 
     private void setChargeType(String chargeType) {

@@ -206,7 +206,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                     return;
                 }
                 int packageType = historyNumber != null ? Integer.parseInt(historyNumber.getPackageType()) : -1;
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInternetPackage.newInstance(phoneNumber, convertOperatorToString(currentOperator), currentSimType, packageType)).setAnimated(false).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), PaymentInternetPackageFragment.newInstance(phoneNumber, convertOperatorToString(currentOperator), currentSimType, packageType)).setAnimated(false).setReplace(false).load();
             } else {
                 showError(getResources().getString(R.string.sim_type_not_choosed));
             }
