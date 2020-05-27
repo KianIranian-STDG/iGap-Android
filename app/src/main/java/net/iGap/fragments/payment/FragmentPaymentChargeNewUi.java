@@ -30,9 +30,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.payment.AdapterChargeAmount;
 import net.iGap.adapter.payment.AdapterChargeType;
-import net.iGap.adapter.payment.AdapterContactNumber;
-import net.iGap.adapter.payment.AdapterHistoryNumber;
 import net.iGap.adapter.payment.Amount;
+import net.iGap.adapter.payment.ChargeContactNumberAdapter;
+import net.iGap.adapter.payment.ChargeHistoryNumberAdapter;
 import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.api.ChargeApi;
@@ -68,7 +68,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static net.iGap.helper.HelperString.isNumeric;
 import static net.iGap.model.OperatorType.Type.IRANCELL;
 import static net.iGap.model.OperatorType.Type.RITEL;
 
@@ -235,7 +234,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
                             EditText editText = contactDialogView.findViewById(R.id.etSearch);
                             contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                            AdapterContactNumber adapter = new AdapterContactNumber();
+                            ChargeContactNumberAdapter adapter = new ChargeContactNumberAdapter();
                             contactRecyclerView.setAdapter(adapter);
                             adapter.setOnItemClickListener(position -> {
                                 contactPositionClicked = position;
@@ -243,7 +242,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 dialog.dismiss();
                             });
 
-                            AdapterContactNumber adapterContactNumber = (AdapterContactNumber) contactRecyclerView.getAdapter();
+                            ChargeContactNumberAdapter adapterContactNumber = (ChargeContactNumberAdapter) contactRecyclerView.getAdapter();
                             if (adapterContactNumber != null) {
                                 new Contacts().getAllPhoneContactForPayment(adapterContactNumber::setContactNumbers);
                             }
@@ -301,7 +300,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             if (historyDialogView != null) {
                                 buyHistoryRecyclerView = historyDialogView.findViewById(R.id.rv_history);
                                 buyHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                                AdapterHistoryNumber adapter = new AdapterHistoryNumber(response.body().getData());
+                                ChargeHistoryNumberAdapter adapter = new ChargeHistoryNumberAdapter(response.body().getData());
                                 adapter.setOnItemClickListener(position -> {
                                     historyItemClicked = position;
                                     onHistoryItemClicked();
@@ -398,7 +397,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onHistoryItemClicked() {
-        AdapterHistoryNumber adapterHistory = (AdapterHistoryNumber) buyHistoryRecyclerView.getAdapter();
+        ChargeHistoryNumberAdapter adapterHistory = (ChargeHistoryNumberAdapter) buyHistoryRecyclerView.getAdapter();
 
         if (adapterHistory != null) {
             if (historyItemClicked == -1) {
@@ -417,7 +416,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         }
     }
 
-    private void onContactItemClicked(AdapterContactNumber adapter) {
+    private void onContactItemClicked(ChargeContactNumberAdapter adapter) {
         if (contactPositionClicked == -1) {
             return;
         }

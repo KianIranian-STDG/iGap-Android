@@ -10,21 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.model.paymentPackage.FavoriteNumber;
-import net.iGap.observers.interfaces.IOnItemClickListener;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
 
-public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNumber.ContactNumberViewHolder> {
+public class ChargeHistoryNumberAdapter extends RecyclerView.Adapter<ChargeHistoryNumberAdapter.ContactNumberViewHolder> {
     private List<FavoriteNumber> historyNumberList;
-    private IOnItemClickListener<Integer> onItemClickListener;
+    private IOnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(IOnItemClickListener<Integer> onItemClickListener) {
+    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public AdapterHistoryNumber(List<FavoriteNumber> historyNumberList) {
+    public ChargeHistoryNumberAdapter(List<FavoriteNumber> historyNumberList) {
         this.historyNumberList = historyNumberList;
     }
 
@@ -71,6 +70,10 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
 
             amount.setText(String.format("%s %s", price, itemView.getContext().getResources().getString(R.string.rial)));
         }
+    }
+
+    public interface IOnItemClickListener {
+        void onItemClicked(int position);
     }
 
     public List<FavoriteNumber> getHistoryNumberList() {

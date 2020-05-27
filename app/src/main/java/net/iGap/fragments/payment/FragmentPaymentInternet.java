@@ -23,8 +23,8 @@ import com.google.android.material.button.MaterialButton;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.payment.AdapterContactNumber;
 import net.iGap.adapter.payment.AdapterHistoryPackage;
+import net.iGap.adapter.payment.ChargeContactNumberAdapter;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
@@ -326,7 +326,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                         RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
                         EditText editText = contactDialogView.findViewById(R.id.etSearch);
                         contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                        AdapterContactNumber adapterContact = new AdapterContactNumber();
+                        ChargeContactNumberAdapter adapterContact = new ChargeContactNumberAdapter();
                         adapterContact.setOnItemClickListener(position -> {
                             clickedPosition = position;
                             onContactClicked(adapterContact);
@@ -381,7 +381,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         }
     }
 
-    private void onContactClicked(AdapterContactNumber adapterContact) {
+    private void onContactClicked(ChargeContactNumberAdapter adapterContact) {
         if (clickedPosition == -1) {
             return;
         }

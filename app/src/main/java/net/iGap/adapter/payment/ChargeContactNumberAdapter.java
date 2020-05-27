@@ -9,19 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.observers.interfaces.IOnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNumber.HistoryNumberViewHolder> {
+public class ChargeContactNumberAdapter extends RecyclerView.Adapter<ChargeContactNumberAdapter.HistoryNumberViewHolder> {
     private List<ContactNumber> contactNumbers;
     private List<ContactNumber> searchedNumbers;
     private boolean shouldSearch = false;
-    private IOnItemClickListener<Integer> onItemClickListener;
+    private IOnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(IOnItemClickListener<Integer> onItemClickListener) {
+    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -103,6 +102,10 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
             contactName.setText(amount.getDisplayName());
             phoneNumber.setText(amount.getPhone().replace(" ", "").replace("+98", "0"));
         }
+    }
+
+    public interface IOnItemClickListener {
+        void onItemClicked(int position);
     }
 
     public List<ContactNumber> getContactNumbers() {
