@@ -2537,6 +2537,7 @@
     <string name="payment_price_rial">المبلغ المدفوع بالريال</string>
     <string name="price_rial">مبشر (ریال)</string>
     <string name="amount_must_be_greater_1000">يجب أن يكون المبلغ أكثر من 1000 ريال</string>
+    <string name="amount_must_be_greater_10000">يجب أن يكون المبلغ أكثر من 10000 ريال</string>
     <string name="amount_not_valid">أدخل المبلغ بشكل صحيح</string>
     <string name="payment_history">سجل المعاملات</string>
     <string name="set_card_pin">تحديد كلمة السر الأمن</string>

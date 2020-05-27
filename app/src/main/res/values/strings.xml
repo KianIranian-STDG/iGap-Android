@@ -1342,7 +1342,7 @@ Want to get it?</string>
     <string name="transfer_to_dialog">Transfer to :%s</string>
     <string name="am_money">money</string>
     <string name="trace_number">Trace number</string>
-    <string name="amount_2">amount :</string>
+    <string name="amount_2">amount:</string>
     <string name="payment_canceled">payment is canceled</string>
     <string name="PayGear_unavailable">PayGear is unavailable</string>
     <string name="bills_inquiry_mci">MCI subscribers bill inquiry </string>
@@ -1624,6 +1624,7 @@ Want to get it?</string>
     <string name="payment_price_rial">Payment Price (Rial)</string>
     <string name="price_rial">Amount (Rial)</string>
     <string name="amount_must_be_greater_1000">Amount must be greter than 1000 rials</string>
+    <string name="amount_must_be_greater_10000">Amount must be greter than 10000 rials</string>
     <string name="amount_not_valid">Amount is not valid</string>
     <string name="payment_history">Payment History</string>
     <string name="set_card_pin">Set Passcode</string>

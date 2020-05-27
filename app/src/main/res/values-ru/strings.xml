@@ -1390,6 +1390,7 @@
     <string name="payment_price_rial">Сумма, уплаченная в риалах</string>
     <string name="price_rial">Сумма (риалы)</string>
     <string name="amount_must_be_greater_1000">Сумма должна превышать 1000 риалов</string>
+    <string name="amount_must_be_greater_10000">Сумма должна превышать 10000 риалов</string>
     <string name="amount_not_valid">Введите сумму правильно</string>
     <string name="payment_history">История транзакций</string>
     <string name="set_card_pin">Определить пароль безопасности</string>

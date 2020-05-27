@@ -1595,6 +1595,7 @@
     <string name="payment_price_rial">مبلغ پرداختی به ریال</string>
     <string name="price_rial">مبلغ (ریال)</string>
     <string name="amount_must_be_greater_1000">مبلغ باید بیشتر از 1000 ریال باشد</string>
+    <string name="amount_must_be_greater_10000">مبلغ باید بیشتر از 10000 ریال باشد</string>
     <string name="amount_not_valid">مبلغ را صحیح وارد کنید</string>
     <string name="payment_history">تاریخچه تراکنش‌ها</string>
     <string name="set_card_pin">تعریف رمز امنیتی</string>
