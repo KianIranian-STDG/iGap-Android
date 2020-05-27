@@ -68,6 +68,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.helper.HelperString.isNumeric;
 import static net.iGap.model.OperatorType.Type.IRANCELL;
 import static net.iGap.model.OperatorType.Type.RITEL;
 
@@ -92,7 +93,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private ChargeType typeList;
     private FrameLayout progressBar;
     private LinearLayout linearWarning;
-    private List<Amount> amountList = new ArrayList<>(4);
+    private List<Amount> amountList = new ArrayList<>();
     private List<ChargeType> chargeTypeList = new ArrayList<>();
     private ChargeApi chargeApi;
     private OperatorType.Type currentOperator;
@@ -105,6 +106,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private TextWatcher textWatcher;
 
     private int amountDefaultIndex = 2; //50,000 rials index in array for default value
+    private int contactPositionClicked = -1;
+    private int historyItemClicked = -1;
 
     public static FragmentPaymentChargeNewUi newInstance() {
         return new FragmentPaymentChargeNewUi();
@@ -116,6 +119,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         amountList.add(new Amount(20000));
         amountList.add(new Amount(50000));
         amountList.add(new Amount(100000));
+        amountList.add(new Amount(200000));
 
         currentAmount = amountList.get(amountDefaultIndex);
     }
@@ -231,33 +235,17 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
                             EditText editText = contactDialogView.findViewById(R.id.etSearch);
                             contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                            contactRecyclerView.setAdapter(new AdapterContactNumber());
+                            AdapterContactNumber adapter = new AdapterContactNumber();
+                            contactRecyclerView.setAdapter(adapter);
+                            adapter.setOnItemClickListener(position -> {
+                                contactPositionClicked = position;
+                                onContactItemClicked(adapter);
+                                dialog.dismiss();
+                            });
 
                             AdapterContactNumber adapterContactNumber = (AdapterContactNumber) contactRecyclerView.getAdapter();
                             if (adapterContactNumber != null) {
                                 new Contacts().getAllPhoneContactForPayment(adapterContactNumber::setContactNumbers);
-
-                                contactDialogView.findViewById(R.id.btn_dialog1).setOnClickListener(v15 -> {
-                                    if (adapterContactNumber.getSelectedPosition() == -1) {
-                                        return;
-                                    }
-
-                                    contactNumber = adapterContactNumber.getContactNumbers().get(adapterContactNumber.getSelectedPosition());
-                                    setPhoneNumberEditText(contactNumber.getPhone());
-
-                                    clearAmountAndType();
-
-                                    if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
-                                        OperatorType.Type opt = new OperatorType().getOperation(editTextNumber.getText().toString().substring(0, 4));
-                                        if (opt != null) {
-                                            changeOperator(opt);
-                                        }
-                                    } else {
-                                        showError(getResources().getString(R.string.ivnalid_data_provided));
-                                    }
-
-                                    dialog.dismiss();
-                                });
                             }
                             if (textWatcher != null)
                                 editText.removeTextChangedListener(textWatcher);
@@ -313,31 +301,16 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                             if (historyDialogView != null) {
                                 buyHistoryRecyclerView = historyDialogView.findViewById(R.id.rv_history);
                                 buyHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                                buyHistoryRecyclerView.setAdapter(new AdapterHistoryNumber(response.body().getData()));
+                                AdapterHistoryNumber adapter = new AdapterHistoryNumber(response.body().getData());
+                                adapter.setOnItemClickListener(position -> {
+                                    historyItemClicked = position;
+                                    onHistoryItemClicked();
+                                    dialog.dismiss();
+                                });
+
+                                buyHistoryRecyclerView.setAdapter(adapter);
 
                                 historyDialogView.findViewById(R.id.iv_close2).setOnClickListener(v12 -> dialog.dismiss());
-
-                                historyDialogView.findViewById(R.id.btn_dialog2).setOnClickListener(v13 -> {
-                                    AdapterHistoryNumber adapterHistory = (AdapterHistoryNumber) buyHistoryRecyclerView.getAdapter();
-
-                                    if (adapterHistory != null) {
-                                        if (adapterHistory.getSelectedPosition() == -1) {
-                                            return;
-                                        }
-
-                                        historyNumber = adapterHistory.getHistoryNumberList().get(adapterHistory.getSelectedPosition());
-                                        updatePaymentConfig(historyNumber);
-
-                                        currentAmount = new Amount(historyNumber.getAmount());
-
-                                        setPhoneNumberEditText(historyNumber.getPhoneNumber());
-                                        chosePriceTextView.setText(currentAmount.getTextAmount());
-
-                                        setChargeType(historyNumber.getChargeType());//can write better code with use key value container
-
-                                        dialog.dismiss();
-                                    }
-                                });
                             }
                             dialog.show();
                         } else {
@@ -422,6 +395,46 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 historyNumber = null;
             }
         });
+    }
+
+    private void onHistoryItemClicked() {
+        AdapterHistoryNumber adapterHistory = (AdapterHistoryNumber) buyHistoryRecyclerView.getAdapter();
+
+        if (adapterHistory != null) {
+            if (historyItemClicked == -1) {
+                return;
+            }
+
+            historyNumber = adapterHistory.getHistoryNumberList().get(historyItemClicked);
+            updatePaymentConfig(historyNumber);
+
+            currentAmount = new Amount(historyNumber.getAmount());
+
+            setPhoneNumberEditText(historyNumber.getPhoneNumber());
+            chosePriceTextView.setText(currentAmount.getTextAmount());
+
+            setChargeType(historyNumber.getChargeType());//can write better code with use key value container
+        }
+    }
+
+    private void onContactItemClicked(AdapterContactNumber adapter) {
+        if (contactPositionClicked == -1) {
+            return;
+        }
+
+        contactNumber = adapter.getContactNumbers().get(contactPositionClicked);
+        setPhoneNumberEditText(contactNumber.getPhone());
+
+        clearAmountAndType();
+
+        if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
+            OperatorType.Type opt = new OperatorType().getOperation(editTextNumber.getText().toString().substring(0, 4));
+            if (opt != null) {
+                changeOperator(opt);
+            }
+        } else {
+            showError(getResources().getString(R.string.ivnalid_data_provided));
+        }
     }
 
     private void updatePaymentConfig(FavoriteNumber historyNumber) {
@@ -596,7 +609,14 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     private void onSaveBtnClicked() {
+        if (editTextNumber.getText() == null)
+            return;
 
+        String phoneNumber = editTextNumber.getText().toString().trim();
+        if (!isNumeric(phoneNumber) || phoneNumber.length() < 11) {
+            editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
+            return;
+        }
         if (editTextNumber.getText() != null && (editTextNumber.getText().toString().equals("") || !isNumberFromIran(editTextNumber.getText().toString()))) {
             editTextNumber.setError(getString(R.string.phone_number_is_not_valid));
             return;
@@ -762,7 +782,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 .replace(" ", "")
                 .replace("-", "");
 
-        return new OperatorType().isValidType(standardize.substring(0, 4)) || new OperatorType().isValidType(phoneNumber.substring(0, 5));
+        return new OperatorType().isValidType(standardize.substring(0, 4));
     }
 
     @Override

@@ -10,13 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.model.paymentPackage.FavoriteNumber;
+import net.iGap.observers.interfaces.IOnItemClickListener;
 
 import java.util.List;
 
 
 public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPackage.ContactNumberViewHolder> {
     private List<FavoriteNumber> historyNumberList;
-    private int selectedPosition = -1;
+    private IOnItemClickListener<Integer> onItemClickListener;
+
+    public void setOnItemClickListener(IOnItemClickListener<Integer> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public AdapterHistoryPackage(List<FavoriteNumber> historyNumberList) {
         this.historyNumberList = historyNumberList;
@@ -31,7 +36,7 @@ public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPa
 
     @Override
     public void onBindViewHolder(@NonNull ContactNumberViewHolder holder, int position) {
-        holder.bindNUmber(historyNumberList.get(position), position);
+        holder.bindNUmber(historyNumberList.get(position));
     }
 
     @Override
@@ -47,22 +52,17 @@ public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPa
             super(itemView);
             phoneNumberTextView = itemView.findViewById(R.id.tv_itemInternetPackage_number);
             detailTextView = itemView.findViewById(R.id.tv_itemInternetPackage_detail);
-        }
 
-        void bindNUmber(FavoriteNumber historyNumber, int position) {
-            phoneNumberTextView.setText(historyNumber.getPhoneNumber());
-            detailTextView.setText(historyNumber.getPackageDescription());
-            itemView.setSelected(selectedPosition == position);
             itemView.setOnClickListener(v -> {
-                notifyItemChanged(selectedPosition);
-                selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClicked(getAdapterPosition());
             });
         }
-    }
 
-    public int getSelectedPosition() {
-        return selectedPosition;
+        void bindNUmber(FavoriteNumber historyNumber) {
+            phoneNumberTextView.setText(historyNumber.getPhoneNumber());
+            detailTextView.setText(historyNumber.getPackageDescription());
+        }
     }
 
     public List<FavoriteNumber> getHistoryNumberList() {

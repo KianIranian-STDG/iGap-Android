@@ -88,6 +88,8 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private FavoriteNumber historyNumber;
     private View progressBar;
     private TextWatcher watcher;
+    private int clickedPosition = -1;
+    private int selectedHistoryPosition = -1;
 
     public static FragmentPaymentInternet newInstance() {
         return new FragmentPaymentInternet();
@@ -325,6 +327,12 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                         EditText editText = contactDialogView.findViewById(R.id.etSearch);
                         contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                         AdapterContactNumber adapterContact = new AdapterContactNumber();
+                        adapterContact.setOnItemClickListener(position -> {
+                            clickedPosition = position;
+                            onContactClicked(adapterContact);
+                            dialog.dismiss();
+                        });
+
                         contactRecyclerView.setAdapter(adapterContact);
 
                         if (watcher != null)
@@ -358,17 +366,6 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                             }
                         });
 
-                        contactDialogView.findViewById(R.id.btn_dialog1).setOnClickListener(v15 -> {
-                            if (adapterContact.getSelectedPosition() == -1) {
-                                return;
-                            }
-
-                            ContactNumber contactNumber = adapterContact.getContactNumbers().get(adapterContact.getSelectedPosition());
-                            setPhoneNumberEditText(contactNumber.getPhone().trim());
-
-                            dialog.dismiss();
-                        });
-
                         contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
                     }
                     dialog.show();
@@ -382,6 +379,16 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void onContactClicked(AdapterContactNumber adapterContact) {
+        if (clickedPosition == -1) {
+            return;
+        }
+
+        ContactNumber contactNumber = adapterContact.getContactNumbers().get(clickedPosition);
+        setPhoneNumberEditText(contactNumber.getPhone().trim());
+
     }
 
     private void setPhoneNumberEditText(String phone) {
@@ -422,21 +429,15 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
                         if (historyDialogView != null) {
                             AdapterHistoryPackage adapterHistory = new AdapterHistoryPackage(numbers);
+                            adapterHistory.setOnItemClickListener(position -> {
+                                selectedHistoryPosition = position;
+                                onHistoryItemClicked(adapterHistory);
+                                dialog.dismiss();
+                            });
 
                             RecyclerView rvHistory = historyDialogView.findViewById(R.id.rv_history);
                             rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                             rvHistory.setAdapter(adapterHistory);
-
-                            historyDialogView.findViewById(R.id.btn_dialog2).setOnClickListener(v13 -> {
-                                if (adapterHistory.getSelectedPosition() == -1) {
-                                    return;
-                                }
-
-                                historyNumber = adapterHistory.getHistoryNumberList().get(adapterHistory.getSelectedPosition());
-                                setPhoneNumberEditText(historyNumber.getPhoneNumber());
-
-                                dialog.dismiss();
-                            });
 
                             historyDialogView.findViewById(R.id.iv_close2).setOnClickListener(v12 -> dialog.dismiss());
                         }
@@ -456,5 +457,14 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                 HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
             }
         });
+    }
+
+    private void onHistoryItemClicked(AdapterHistoryPackage adapterHistory) {
+        if (selectedHistoryPosition == -1) {
+            return;
+        }
+
+        historyNumber = adapterHistory.getHistoryNumberList().get(selectedHistoryPosition);
+        setPhoneNumberEditText(historyNumber.getPhoneNumber());
     }
 }

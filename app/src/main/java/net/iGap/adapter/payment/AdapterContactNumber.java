@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.observers.interfaces.IOnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +19,11 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
     private List<ContactNumber> contactNumbers;
     private List<ContactNumber> searchedNumbers;
     private boolean shouldSearch = false;
-    private int selectedPosition = -1;
+    private IOnItemClickListener<Integer> onItemClickListener;
+
+    public void setOnItemClickListener(IOnItemClickListener<Integer> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public void search(String search) {
         if (contactNumbers == null || contactNumbers.size() == 0)
@@ -66,9 +71,9 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
     @Override
     public void onBindViewHolder(@NonNull HistoryNumberViewHolder holder, int position) {
         if (shouldSearch)
-            holder.bindNumber(searchedNumbers.get(position), position);
+            holder.bindNumber(searchedNumbers.get(position));
         else
-            holder.bindNumber(contactNumbers.get(position), position);
+            holder.bindNumber(contactNumbers.get(position));
 
     }
 
@@ -88,24 +93,16 @@ public class AdapterContactNumber extends RecyclerView.Adapter<AdapterContactNum
             contactName = itemView.findViewById(R.id.contact_Name);
 
             itemView.setOnClickListener(v -> {
-                int tmp = selectedPosition;
-                if (tmp >= 0)
-                    notifyItemChanged(tmp);
-                selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClicked(getAdapterPosition());
+                }
             });
         }
 
-        void bindNumber(ContactNumber amount, int position) {
+        void bindNumber(ContactNumber amount) {
             contactName.setText(amount.getDisplayName());
             phoneNumber.setText(amount.getPhone().replace(" ", "").replace("+98", "0"));
-
-            itemView.setSelected(selectedPosition == position);
         }
-    }
-
-    public int getSelectedPosition() {
-        return selectedPosition;
     }
 
     public List<ContactNumber> getContactNumbers() {

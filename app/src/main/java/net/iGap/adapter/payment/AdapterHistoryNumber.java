@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.model.paymentPackage.FavoriteNumber;
+import net.iGap.observers.interfaces.IOnItemClickListener;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -17,7 +18,11 @@ import java.util.List;
 
 public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNumber.ContactNumberViewHolder> {
     private List<FavoriteNumber> historyNumberList;
-    private int selectedPosition = -1;
+    private IOnItemClickListener<Integer> onItemClickListener;
+
+    public void setOnItemClickListener(IOnItemClickListener<Integer> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public AdapterHistoryNumber(List<FavoriteNumber> historyNumberList) {
         this.historyNumberList = historyNumberList;
@@ -48,6 +53,12 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
             super(itemView);
             phoneNumber = itemView.findViewById(R.id.amount_contact);
             amount = itemView.findViewById(R.id.number_contact);
+
+            itemView.setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClicked(getAdapterPosition());
+                }
+            });
         }
 
         void bindNUmber(FavoriteNumber historyNumber, int position) {
@@ -59,17 +70,7 @@ public class AdapterHistoryNumber extends RecyclerView.Adapter<AdapterHistoryNum
             String price = df.format(historyNumber.getAmount());
 
             amount.setText(String.format("%s %s", price, itemView.getContext().getResources().getString(R.string.rial)));
-            itemView.setSelected(selectedPosition == position);
-            itemView.setOnClickListener(v -> {
-                notifyItemChanged(selectedPosition);
-                selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
-            });
         }
-    }
-
-    public int getSelectedPosition() {
-        return selectedPosition;
     }
 
     public List<FavoriteNumber> getHistoryNumberList() {
