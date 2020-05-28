@@ -21,6 +21,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.viewmodel.controllers.CallManager;
 
 /**
  * manage connection state for showing state in main page
@@ -32,6 +33,7 @@ public class HelperConnectionState {
     public static void connectionState(final ConnectionState connectionState) {
 
         if (connectionState != ConnectionState.IGAP) {
+            CallManager.getInstance().leaveCall();
             if (G.onCallLeaveView != null) {
                 G.onCallLeaveView.onLeaveView("SocketDisconnect");
             }

@@ -7,13 +7,13 @@ import com.google.gson.Gson;
 
 import net.iGap.Config;
 import net.iGap.R;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.helper.HelperCalander;
-import net.iGap.repository.MobileBankRepository;
 import net.iGap.model.mobileBank.BankCardAuth;
 import net.iGap.model.mobileBank.BankCardBalance;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
 import net.iGap.module.mobileBank.RSACipher;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.MobileBankRepository;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -171,7 +171,7 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
         String tempAuth = getAuth();
         if (tempAuth == null)
             return;
-        MobileBankRepository.getInstance().hotCard(cardNumber.get().replace("-", ""), tempAuth, "", this, new ResponseCallback<BaseMobileBankResponse>() {
+        MobileBankRepository.getInstance().hotCard(cardNumber.get().replace("-", ""), "", tempAuth, this, new ResponseCallback<BaseMobileBankResponse>() {
             @Override
             public void onSuccess(BaseMobileBankResponse data) {
                 complete.setValue("success");

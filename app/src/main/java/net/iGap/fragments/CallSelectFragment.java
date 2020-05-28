@@ -1,85 +1,100 @@
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
+import net.iGap.activities.CallActivity;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.module.dialog.BaseBottomSheet;
-import net.iGap.helper.HelperError;
+import net.iGap.module.webrtc.CallService;
 import net.iGap.proto.ProtoSignalingOffer;
-import net.iGap.realm.RealmCallConfig;
-import net.iGap.request.RequestSignalingGetConfiguration;
-import net.iGap.module.webrtc.WebRTC;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class CallSelectFragment extends BaseBottomSheet {
 
     private View voiceCall;
     private View videoCall;
     private long userId;
-    private boolean isIncomingCall;
-    private ProtoSignalingOffer.SignalingOffer.Type callType;
+    private Intent intent;
+    private Activity activity;
 
 
     public static CallSelectFragment getInstance(long userId, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callType) {
         CallSelectFragment transferAction = new CallSelectFragment();
         transferAction.userId = userId;
-        transferAction.isIncomingCall = isIncomingCall;
-        transferAction.callType = callType;
         return transferAction;
     }
 
     public static void call(long userID, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
 
+    }
+
+    private void startCall(Activity activity, long userId, ProtoSignalingOffer.SignalingOffer.Type callType) {
+        if (activity == null || userId <= 0) {
+            return;
+        }
+        this.activity = activity;
+
         if (G.userLogin) {
+            if (CallManager.getInstance().getCallPeerId() == userId) {
+                Intent activityIntent = new Intent(getActivity(), CallActivity.class);
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(activityIntent);
+            } else if (!CallManager.getInstance().isCallAlive()) {
+                intent = new Intent(activity, CallService.class);
+                intent.putExtra(CallService.USER_ID, userId);
+                intent.putExtra(CallService.IS_INCOMING, false);
+                intent.putExtra(CallService.CALL_TYPE, callType.toString());
 
-            if (!G.isInCall) {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
+                if (!checkPermissions(callType == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING))
+                    return;
 
-                    if (realmCallConfig == null) {
-                        new RequestSignalingGetConfiguration().signalingGetConfiguration();
-                        HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                    } else if (!G.isCalling) {
-                        if (G.currentActivity != null) {
-                            Intent intent = new Intent(G.currentActivity, ActivityCall.class);
-                            intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                            intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                            intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                            ActivityCall.isGoingfromApp = true;
-                            G.currentActivity.startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(G.context, ActivityCall.class);
-                            intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                            intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                            intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            ActivityCall.isGoingfromApp = true;
-                            G.context.startActivity(intent);
-                        }
-
-
-                    } else {
-                        try {
-                            WebRTC.getInstance().leaveCall();
-                        } catch (Exception e) {
-                        }
-
-                    }
-                });
+                try {
+                    activity.startService(intent);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         } else {
-
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+            Toast.makeText(getContext(), "NOT ALLOWED", Toast.LENGTH_SHORT).show();
         }
+
+        dismiss();
+    }
+
+    private boolean checkPermissions(boolean isVideoCall) {
+        PermissionHelper permissionHelper = new PermissionHelper(getActivity(), CallSelectFragment.this);
+        if (isVideoCall)
+            return permissionHelper.grantCameraAndVoicePermission();
+        else
+            return permissionHelper.grantVoicePermission();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean tmp = true;
+        for (int grantResult : grantResults) {
+            tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
+        }
+        if (tmp) {
+            try {
+                activity.startService(intent);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+        dismiss();
     }
 
     @Nullable
@@ -98,18 +113,8 @@ public class CallSelectFragment extends BaseBottomSheet {
     @Override
     public void onStart() {
         super.onStart();
-        voiceCall.setOnClickListener(v -> {
-            call(userId, isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-            dismiss();
-        });
-
-
-        videoCall.setOnClickListener(v -> {
-            call(userId, isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-            dismiss();
-        });
-
-
+        voiceCall.setOnClickListener(v -> startCall(getActivity(), userId, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING));
+        videoCall.setOnClickListener(v -> startCall(getActivity(), userId, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING));
     }
 
     @Override

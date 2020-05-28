@@ -2,8 +2,6 @@ package net.iGap.model.payment;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.iGap.model.payment.PaymentInfo;
-
 public class CheckOrderStatusResponse {
 
     @SerializedName("status")
@@ -26,6 +24,10 @@ public class CheckOrderStatusResponse {
     }
 
     public boolean isPaymentSuccess() {
-        return status.equals("SUCCESS") || status.equals("PAID");
+        return status.equals("SUCCESS");
+    }
+
+    public boolean isPaymentUnknown() {
+        return status.equals("PAID");
     }
 }

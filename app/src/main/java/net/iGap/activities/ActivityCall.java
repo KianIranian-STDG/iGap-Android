@@ -77,6 +77,7 @@ import java.util.List;
 
 import static android.bluetooth.BluetoothProfile.HEADSET;
 
+@Deprecated
 public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame, BluetoothProfile.ServiceListener {
 
     public static final String CALL_TIMER_BROADCAST = "CALL_TIMER_BROADCAST";
@@ -359,6 +360,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         if (tmp) {
             init();
         } else {
+            // should be managed with call manager
             viewModel.leaveCall();
             finish();
         }
@@ -828,4 +830,5 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     public interface OnFinishActivity {
         void finishActivity();
     }
+
 }

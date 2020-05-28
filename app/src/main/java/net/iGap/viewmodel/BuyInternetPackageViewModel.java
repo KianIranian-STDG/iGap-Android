@@ -9,12 +9,12 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.model.igasht.BaseIGashtResponse;
-import net.iGap.model.internetPackage.InternetPackage;
-import net.iGap.model.internetPackage.InternetPackageFilter;
-import net.iGap.model.internetPackage.MciInternetPackageFilter;
+import net.iGap.model.paymentPackage.InternetPackage;
+import net.iGap.model.paymentPackage.InternetPackageFilter;
+import net.iGap.model.paymentPackage.MciInternetPackageFilter;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.MciInternetPackageRepository;
 
@@ -193,6 +193,27 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         showPayButton.set(View.GONE);
     }
 
+    public void onTimeCLicked(int position) {
+        if (position == R.id.spinner_traffic && position != 0) {
+            isDaily = true;
+            typeList.setValue(daysFilter);
+            getPackageListWithFilter(position - 1);
+            showPackageList.set(View.VISIBLE);
+            internetPackageFiltered.setValue(packageListFiltered);
+        }
+        showFilterType.set(View.VISIBLE);
+        showPackageList.set(View.GONE);
+        showPayButton.set(View.GONE);
+    }
+
+    public void onPackageClicked(int position) {
+        isDaily = true;
+        typeList.setValue(daysFilter);
+        showFilterType.set(View.VISIBLE);
+        showPackageList.set(View.GONE);
+        showPayButton.set(View.GONE);
+    }
+
     public void onItemSelectedPkgTypeFilter(int position) {
 
         clearTypeChecked.setValue(true);
@@ -298,7 +319,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         }
     }
 
-    private void getData() {
+    public void getData() {
         showLoadingView.set(View.VISIBLE);
         //showMainView.set(View.GONE);
         showRetryView.set(View.GONE);

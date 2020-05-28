@@ -7,7 +7,9 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.helper.IGLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
@@ -17,6 +19,10 @@ public class SplashActivity extends ActivityEnhanced {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e("Splash activity on create");
+        }
 
         if (G.ISRealmOK) {
             DbManager.getInstance().doRealmTask(realm -> {
@@ -65,6 +71,15 @@ public class SplashActivity extends ActivityEnhanced {
                 startActivity(intent);
                 finish();
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e("Splash activity on destroy");
         }
     }
 }

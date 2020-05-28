@@ -10,53 +10,29 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingSessionHold;
-import net.iGap.module.webrtc.WebRTC;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingSessionHoldResponse extends MessageHandler {
-
-    public int actionId;
-    public Object message;
-    public String identity;
-
     public SignalingSessionHoldResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
     public void handler() {
         super.handler();
-
-
         ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder = (ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder) message;
-
-        boolean hold = builder.getHold();
-
-        if (hold) {
-            WebRTC.getInstance().muteSound();
-        } else {
-            WebRTC.getInstance().unMuteSound();
-        }
-
-        if (G.iSignalingSessionHold != null) {
-            G.iSignalingSessionHold.onHold(hold);
-        }
-
-    }
-
-    @Override
-    public void timeOut() {
-        super.timeOut();
+        CallManager.getInstance().onHold(builder);
     }
 
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        CallManager.getInstance().onError(actionId, majorCode, minorCode);
     }
 }
 

@@ -196,7 +196,7 @@
                     android:onClick="@{()->fragment.onSearchBillsBtnClick()}"
                     android:text="@string/elecBill_main_billSearch"
                     android:textSize="@dimen/dp16"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginStart="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"

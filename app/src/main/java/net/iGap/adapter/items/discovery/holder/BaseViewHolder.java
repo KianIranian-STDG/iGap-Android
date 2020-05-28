@@ -7,7 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,11 +29,9 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.fragments.BuyInternetPackageFragment;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
-import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.fragments.FragmentPaymentInquiryTelephone;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
@@ -44,6 +48,8 @@ import net.iGap.fragments.kuknos.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.news.NewsMainFrag;
+import net.iGap.fragments.payment.FragmentPaymentChargeNewUi;
+import net.iGap.fragments.payment.FragmentPaymentInternet;
 import net.iGap.fragments.poll.ChartFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
@@ -55,7 +61,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
-import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
@@ -73,10 +79,6 @@ import org.json.JSONObject;
 import org.paygear.WalletActivity;
 
 import java.io.IOException;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
@@ -142,6 +144,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case WEB_VIEW_LINK:/** tested title needed**/
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
+
                 } else {
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentWebView.newInstance(discoveryField.value, discoveryField.refresh, discoveryField.param)).setReplace(false).load();
                 }
@@ -150,9 +153,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(activity, discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
                 break;
             case TOPUP_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentCharge.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentChargeNewUi.newInstance()).setReplace(false).load();
                 break;
             case BILL_MENU:/** tested **/
+
                 try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
@@ -180,7 +184,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case BLOCKCHAIN:
 //                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
 //                } else {
 //                    HelperError.showSnackMessage("", true);
 //                }
@@ -349,13 +353,41 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();
                 break;
             case INTERNET_PACKAGE_MENU:
-                new HelperFragment(activity.getSupportFragmentManager(), new BuyInternetPackageFragment()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInternet.newInstance()).setReplace(false).load();
                 break;
             case CHARITY:
                 try {
-                    HelperUrl.showIndeterminateProgressDialog(activity);
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
-                    sendRequestGetCharityPaymentToken(activity, jsonObject.getString("charityId"), jsonObject.getInt("price"));
+                    if (jsonObject.getInt("price") == 0) {
+                        new MaterialDialog.Builder(activity).title(activity.getResources().getString(R.string.insert_amount_in_rial))
+                                .customView(R.layout.charity_custom_amount, false)
+                                .positiveText(activity.getResources().getString(R.string.B_ok))
+                                .negativeText(activity.getResources().getString(R.string.B_cancel))
+                                .onPositive((dialog, which) -> {
+                                    EditText editText = dialog.getView().findViewById(R.id.editText);
+                                    if (editText.getText() != null) {
+                                        if (editText.getText().toString().length() > 0) {
+                                            int price = Integer.parseInt(editText.getText().toString());
+                                            if (price > 10000) {
+                                                HelperUrl.showIndeterminateProgressDialog(activity);
+                                                try {
+                                                    dialog.cancel();
+                                                    sendRequestGetCharityPaymentToken(activity, jsonObject.getString("charityId"), price);
+                                                } catch (JSONException e) {
+                                                    HelperUrl.closeDialogWaiting();
+                                                    e.printStackTrace();
+                                                }
+                                            } else {
+                                                Toast.makeText(activity, activity.getResources().getString(R.string.amount_must_be_greater_10000), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+                                }).build()
+                                .show();
+                    } else {
+                        HelperUrl.showIndeterminateProgressDialog(activity);
+                        sendRequestGetCharityPaymentToken(activity, jsonObject.getString("charityId"), jsonObject.getInt("price"));
+                    }
                 } catch (JSONException e) {
                     HelperUrl.closeDialogWaiting();
                     e.printStackTrace();

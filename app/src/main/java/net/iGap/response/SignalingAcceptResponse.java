@@ -10,21 +10,13 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingAccept;
+import net.iGap.viewmodel.controllers.CallManager;
 
 public class SignalingAcceptResponse extends MessageHandler {
-
-    public int actionId;
-    public Object message;
-    public String identity;
-
     public SignalingAcceptResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
@@ -32,21 +24,17 @@ public class SignalingAcceptResponse extends MessageHandler {
         super.handler();
         ProtoSignalingAccept.SignalingAcceptResponse.Builder builder = (ProtoSignalingAccept.SignalingAcceptResponse.Builder) message;
         if (builder.getResponse().getId().isEmpty()) {
-            String called_sdp = builder.getCalledSdp();
-            if (G.iSignalingAccept != null) {
-                G.iSignalingAccept.onAccept(called_sdp);
-            }
+            CallManager.getInstance().onAccept(builder);
         }
-    }
-
-    @Override
-    public void timeOut() {
-        super.timeOut();
     }
 
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        CallManager.getInstance().onError(actionId, majorCode, minorCode);
     }
 }
 

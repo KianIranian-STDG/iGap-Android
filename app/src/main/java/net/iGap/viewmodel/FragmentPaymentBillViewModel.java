@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentPaymentBillViewModel extends ViewModel {
 
-    private ObservableInt billTypeImage = new ObservableInt(R.mipmap.empty);
     private ObservableInt haveAmount = new ObservableInt(View.VISIBLE);
     private ObservableInt showLoadingView = new ObservableInt(View.INVISIBLE);
     private ObservableInt showScannerButton = new ObservableInt(View.GONE);
@@ -39,6 +38,7 @@ public class FragmentPaymentBillViewModel extends ViewModel {
     private MutableLiveData<Boolean> goToScannerPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     private MutableLiveData<Boolean> hideKeyword = new MutableLiveData<>();
+    private MutableLiveData<Integer> billTypeImage = new MutableLiveData<>();
 
     private boolean isPolice;
 
@@ -48,7 +48,7 @@ public class FragmentPaymentBillViewModel extends ViewModel {
 
         if (isPolice) {
             haveAmount.set(View.GONE);
-            billTypeImage.set(R.mipmap.trafic_police);
+            billTypeImage.setValue(R.mipmap.trafic_police);
         } else {
             showScannerButton.set(View.VISIBLE);
         }
@@ -66,7 +66,7 @@ public class FragmentPaymentBillViewModel extends ViewModel {
         }
     }
 
-    public ObservableInt getBillTypeImage() {
+    public MutableLiveData<Integer> getBillTypeImage() {
         return billTypeImage;
     }
 
@@ -117,10 +117,15 @@ public class FragmentPaymentBillViewModel extends ViewModel {
     public void onTextChangedBillId(String s) {
         if (!isPolice) {
             if (s.length() == 13) {
-                billTypeImage.set(getCompany(s.substring(11, 12)));
-            } else {
-                billTypeImage.set(R.mipmap.empty);
+                billTypeImage.setValue(getCompany(s.substring(11, 12)));
             }
+        }
+    }
+
+    public void onTextChangedPaymentCode(String s) {
+        if (s != null && s.length() > 5 && s.length() < 12) {
+            int price = Integer.parseInt(s.substring(0, s.length() - 5)) * 1000;
+            billAmount.set(new HelperNumerical().getCommaSeparatedPrice(price));
         }
     }
 
@@ -190,7 +195,7 @@ public class FragmentPaymentBillViewModel extends ViewModel {
                 }
                 this.billId.set(billId);
                 this.payId.set(payId);
-                this.billTypeImage.set(getCompany(company_type));
+                this.billTypeImage.setValue(getCompany(company_type));
                 this.haveAmount.set(View.VISIBLE);
                 this.billAmount.set(new HelperNumerical().getCommaSeparatedPrice((Integer.parseInt(price) * 1000)));
             }

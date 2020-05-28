@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="@dimen/dp8"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btn_pay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/btn_pay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_time">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_packageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/order_by"
+                android:textColor="?attr/iGapTitleTextColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_packageSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buy_internet_package_volume_type_title"
+                android:textColor="?attr/iGapTitleTextColor"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_packageTime"
+                app:layout_constraintStart_toStartOf="@id/spinner_traffic"
+                app:layout_constraintTop_toTopOf="@+id/tv_packageTime" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner_time"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:minHeight="@dimen/dp32"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias=".0"
+                app:layout_constraintStart_toStartOf="@id/tv_packageTime"
+                app:layout_constraintTop_toBottomOf="@+id/tv_packageTime"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".425" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/background_cancel_money_action"
+                app:layout_constraintBottom_toBottomOf="@id/spinner_time"
+                app:layout_constraintEnd_toEndOf="@id/spinner_time"
+                app:layout_constraintStart_toStartOf="@id/spinner_time"
+                app:layout_constraintTop_toTopOf="@id/spinner_time" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner_traffic"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:minHeight="@dimen/dp32"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/spinner_time"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".425" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/background_cancel_money_action"
+                app:layout_constraintBottom_toBottomOf="@id/spinner_traffic"
+                app:layout_constraintEnd_toEndOf="@id/spinner_traffic"
+                app:layout_constraintStart_toStartOf="@id/spinner_traffic"
+                app:layout_constraintTop_toTopOf="@id/spinner_traffic" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/suggested_packages_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/dp8"
+                android:text="@string/suggested_packages"
+                android:textColor="@color/green"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinner_traffic" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_proposalPackage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/suggested_packages_textView"
+                app:layout_constraintTop_toBottomOf="@+id/suggested_packages_textView" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/other_packages_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:text="@string/all_packages"
+                android:textColor="@color/green"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/rv_proposalPackage"
+                app:layout_constraintTop_toBottomOf="@+id/rv_proposalPackage" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_otherPackage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/other_packages_textView"
+                app:layout_constraintStart_toStartOf="@+id/other_packages_textView"
+                app:layout_constraintTop_toBottomOf="@+id/other_packages_textView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_pay"
+        style="@style/iGapButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/pay"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_payment_charge"
+        android:padding="@dimen/dp12"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

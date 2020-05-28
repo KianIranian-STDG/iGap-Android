@@ -85,13 +85,18 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
             time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(convertTime(temp[1].substring(0, 7))) : convertTime(temp[1].substring(0, 7)));
             DecimalFormat df = new DecimalFormat("#,##0.00");
             if (model.getType() != null && model.getType().equals("create_account")) {
-                amount.setText(HelperCalander.isPersianUnicode ?
+                amount.setText((HelperCalander.isPersianUnicode ?
                         HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getStartingBalance())))
-                        : df.format(Double.valueOf(model.getStartingBalance())));
+                        : df.format(Double.valueOf(model.getStartingBalance()))) + " PMN");
             } else {
-                amount.setText(HelperCalander.isPersianUnicode ?
+                String currency;
+                if (model.getAsset().getType().equals("native"))
+                    currency = "PMN";
+                else
+                    currency = model.getAssetCode();
+                amount.setText((HelperCalander.isPersianUnicode ?
                         HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getAmount())))
-                        : df.format(Double.valueOf(model.getAmount())));
+                        : df.format(Double.valueOf(model.getAmount()))) + " " + currency);
             }
             if (model.getType() != null && model.getType().equals("create_account")) {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_receive));

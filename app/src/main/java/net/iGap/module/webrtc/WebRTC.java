@@ -15,15 +15,15 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.activities.ActivityCall;
+import net.iGap.helper.IGLog;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmIceServer;
 import net.iGap.request.RequestSignalingAccept;
-import net.iGap.request.RequestSignalingLeave;
-import net.iGap.request.RequestSignalingOffer;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
@@ -41,9 +41,12 @@ import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
+import org.webrtc.VideoFrame;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 import org.webrtc.voiceengine.WebRtcAudioManager;
+import org.webrtc.voiceengine.WebRtcAudioRecord;
+import org.webrtc.voiceengine.WebRtcAudioTrack;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.util.ArrayList;
@@ -53,47 +56,71 @@ import java.util.Set;
 
 public class WebRTC {
 
+    private static String TAG = "WebRTC ";
+
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
-    private static final int VIDEO_RESOLUTION_WIDTH = 720;
-    private static final int VIDEO_RESOLUTION_HEIGHT = 480;
+    private static final int VIDEO_RESOLUTION_WIDTH = 1920;
+    private static final int VIDEO_RESOLUTION_HEIGHT = 1080;
     private static final int FPS = 30;
 
     private PeerConnection peerConnection;
     private PeerConnectionFactory peerConnectionFactory;
     private MediaStream mediaStream;
+    private VideoFrameListener frameListener;
 
-    private String offerSdp;
+    // this is filled for offer
+    private String localSDP;
+    private String remoteSDP;
     private MediaConstraints mediaConstraints;
     private MediaConstraints audioConstraints;
     private VideoCapturer videoCapturer;
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
-    private static WebRTC webRTCInstance;
     private EglBase.Context eglBaseContext = null;
 
+    private static volatile WebRTC instance = null;
+
     public static WebRTC getInstance() {
-        if (webRTCInstance == null) {
-            webRTCInstance = new WebRTC();
+        WebRTC localInstance = instance;
+        if (localInstance == null) {
+            synchronized (WebRTC.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new WebRTC();
+                }
+            }
         }
-        return webRTCInstance;
+        return localInstance;
     }
 
     public static boolean isAlive() {
-        return webRTCInstance != null;
+        Log.d(TAG, "isAlive: ");
+        return instance != null;
     }
 
-    public void muteSound() {
-
+    public void toggleSound(boolean isEnable) {
+        Log.d(TAG, "toggleSound: ");
         if (mediaStream == null) {
             return;
         }
+        for (AudioTrack audioTrack : mediaStream.audioTracks) {
+            audioTrack.setEnabled(isEnable);
+        }
+    }
 
+    @Deprecated
+    public void muteSound() {
+        Log.d(TAG, "muteSound: ");
+        if (mediaStream == null) {
+            return;
+        }
         for (AudioTrack audioTrack : mediaStream.audioTracks) {
             audioTrack.setEnabled(false);
         }
     }
 
     public void switchCamera() {
+        Log.d(TAG, "switchCamera: ");
         if (Camera.getNumberOfCameras() > 1) {
             if (videoCapturer instanceof CameraVideoCapturer) {
                 ((CameraVideoCapturer) videoCapturer).switchCamera(null);
@@ -101,37 +128,42 @@ public class WebRTC {
         }
     }
 
+    @Deprecated
     public void unMuteSound() {
-
+        Log.d(TAG, "unMuteSound: ");
         if (mediaStream == null) {
             return;
         }
-
         for (AudioTrack audioTrack : mediaStream.audioTracks) {
             audioTrack.setEnabled(true);
         }
     }
 
     private void addAudioTrack(MediaStream mediaStream) {
+        Log.d(TAG, "addAudioTrack: ");
         AudioSource audioSource = peerConnectionFactoryInstance().createAudioSource(audioConstraintsGetInstance());
         AudioTrack audioTrack = peerConnectionFactoryInstance().createAudioTrack("ARDAMSa0", audioSource);
         audioTrack.setEnabled(true);
         mediaStream.addTrack(audioTrack);
     }
 
+    @Deprecated
     public void setCallType(ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
+        Log.d(TAG, "setCallType: ");
         this.callTYpe = callTYpe;
     }
 
-    private EglBase.Context getEglBaseContext() {
+    public EglBase.Context getEglBaseContext() {
+        Log.d(TAG, "getEglBaseContext: ");
         if (eglBaseContext == null)
             eglBaseContext = EglBase.create().getEglBaseContext();
         return eglBaseContext;
     }
 
     private void addVideoTrack(MediaStream mediaStream) {
+        Log.d(TAG, "addVideoTrack: ");
 
-        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+        if (CallManager.getInstance().getCallType() == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
             VideoSource videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
             SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", getEglBaseContext());
@@ -141,9 +173,11 @@ public class WebRTC {
             videoTrackFromCamera.setEnabled(true);
 
             videoTrackFromCamera.addSink(videoFrame -> {
-                if (G.onVideoCallFrame != null) {
-                    G.onVideoCallFrame.onPeerFrame(videoFrame);
-                }
+                if (frameListener != null)
+                    frameListener.onLocalFrame(videoFrame);
+//                if (G.onVideoCallFrame != null) {
+//                    G.onVideoCallFrame.onPeerFrame(videoFrame);
+//                }
             });
 
             mediaStream.addTrack(videoTrackFromCamera);
@@ -151,6 +185,7 @@ public class WebRTC {
     }
 
     private VideoCapturer createCameraCapturer(CameraEnumerator enumerator) {
+        Log.d(TAG, "createCameraCapturer: ");
         final String[] deviceNames = enumerator.getDeviceNames();
 
         // First, try to find front facing camera
@@ -179,6 +214,7 @@ public class WebRTC {
     }
 
     public void pauseVideoCapture() {
+        Log.d(TAG, "pauseVideoCapture: ");
         if (videoCapturer != null) {
             try {
                 videoCapturer.stopCapture();
@@ -189,6 +225,7 @@ public class WebRTC {
     }
 
     public void startVideoCapture() {
+        Log.d(TAG, "startVideoCapture: " + VIDEO_RESOLUTION_WIDTH + " " + VIDEO_RESOLUTION_HEIGHT + " " + FPS);
         if (videoCapturer != null) {
             try {
                 videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
@@ -202,6 +239,7 @@ public class WebRTC {
      * First, we initiate the PeerConnectionFactory with our application context and some options.
      */
     private PeerConnectionFactory peerConnectionFactoryInstance() {
+        Log.d(TAG, "peerConnectionFactoryInstance: ");
         if (peerConnectionFactory == null) {
 
             initializePeerConnectionFactory();
@@ -216,11 +254,46 @@ public class WebRTC {
                     .setVideoDecoderFactory(defaultVideoDecoderFactory)
                     .createPeerConnectionFactory();
 
+            WebRtcAudioTrack.setErrorCallback(new WebRtcAudioTrack.ErrorCallback() {
+                @Override
+                public void onWebRtcAudioTrackInitError(String s) {
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioTrackStartError(WebRtcAudioTrack.AudioTrackStartErrorCode audioTrackStartErrorCode, String s) {
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioTrackError(String s) {
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
+                }
+            });
+
+            WebRtcAudioRecord.setErrorCallback(new WebRtcAudioRecord.WebRtcAudioRecordErrorCallback() {
+                @Override
+                public void onWebRtcAudioRecordInitError(String s) {
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioRecordStartError(WebRtcAudioRecord.AudioRecordStartErrorCode audioRecordStartErrorCode, String s) {
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
+                }
+
+                @Override
+                public void onWebRtcAudioRecordError(String s) {
+                    Log.d(TAG, "onWebRtcAudioTrackInitError: " + s);
+                }
+            });
+
         }
         return peerConnectionFactory;
     }
 
     private void initializePeerConnectionFactory() {
+        Log.d(TAG, "initializePeerConnectionFactory: ");
         try {
             Set<String> HARDWARE_AEC_BLACKLIST = new HashSet<String>() {{
                 add("Pixel");
@@ -238,6 +311,8 @@ public class WebRTC {
                 add("Pixel XL");
             }};
 
+//            PeerConnectionFactory.startInternalTracingCapture(
+//                    Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "webrtc-trace.txt");
 
             if (WebRtcAudioUtils.isAcousticEchoCancelerSupported()) {
                 WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
@@ -259,13 +334,13 @@ public class WebRTC {
                 WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
             }
 
-            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
         } catch (UnsatisfiedLinkError e) {
             e.printStackTrace();
         }
     }
 
-    PeerConnection peerConnectionInstance() {
+    public PeerConnection peerConnectionInstance() {
+        Log.d(TAG, "peerConnectionInstance: ");
         if (peerConnection == null) {
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
             DbManager.getInstance().doRealmTask(realm -> {
@@ -297,11 +372,19 @@ public class WebRTC {
     }
 
     public void createOffer(final long userIdCallee) {
+        Log.d(TAG, "createOffer: " + userIdCallee);
         peerConnectionInstance().createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                offerSdp = sessionDescription.description;
-                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, sessionDescription.description);
+                if (localSDP != null) {
+                    Log.d(TAG, "Multiple SDP create.");
+                    return;
+                }
+
+                Log.i(TAG, "create Offer on Create Success: " + sessionDescription.description);
+                localSDP = sessionDescription.description;
+                CallManager.getInstance().makeOffer(userIdCallee, localSDP);
+//                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, localSDP);
             }
 
             @Override
@@ -322,18 +405,22 @@ public class WebRTC {
     }
 
     public void setOfferLocalDescription() {
-        setLocalDescription(SessionDescription.Type.OFFER, offerSdp);
+        Log.d(TAG, "setOfferLocalDescription: ");
+        setLocalDescription(SessionDescription.Type.OFFER, localSDP);
     }
 
     public void createAnswer() {
+        Log.d(TAG, "createAnswer: ");
 
         peerConnectionInstance().createAnswer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                setLocalDescription(SessionDescription.Type.ANSWER, sessionDescription.description);
+                localSDP = sessionDescription.description;
+                setLocalDescription(SessionDescription.Type.ANSWER, localSDP);
                 Log.i("WWW", "onCreateSuccess sessionDescription.description : " + sessionDescription.description);
                 Log.i("WWW", "onCreateSuccess sessionDescription.type : " + sessionDescription.type);
-                acceptCall(sessionDescription.description);
+                CallManager.getInstance().makeAccept(sessionDescription.description);
+//                acceptCall(sessionDescription.description);
             }
 
             @Override
@@ -354,6 +441,7 @@ public class WebRTC {
     }
 
     private void setLocalDescription(final SessionDescription.Type type, String sdp) {
+        Log.d(TAG, "setLocalDescription: ");
         peerConnectionInstance().setLocalDescription(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
@@ -377,6 +465,7 @@ public class WebRTC {
     }
 
     private MediaConstraints mediaConstraintsGetInstance() {
+        Log.d(TAG, "mediaConstraintsGetInstance: ");
         if (mediaConstraints == null) {
             mediaConstraints = new MediaConstraints();
             mediaConstraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
@@ -385,6 +474,7 @@ public class WebRTC {
     }
 
     private MediaConstraints audioConstraintsGetInstance() {
+        Log.d(TAG, "audioConstraintsGetInstance: ");
         if (audioConstraints == null) {
             audioConstraints = new MediaConstraints();
             audioConstraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
@@ -392,11 +482,16 @@ public class WebRTC {
         return audioConstraints;
     }
 
+    @Deprecated
     private void acceptCall(String sdp) {
+        Log.d(TAG, "acceptCall: " + sdp);
         new RequestSignalingAccept().signalingAccept(sdp);
     }
 
+    @Deprecated
     public void leaveCall() {
+        Log.d(TAG, "leaveCall: ");
+
         //don't need for close/dispose here, this action will be doing in onLeave callback
         //close();
         //dispose();
@@ -404,37 +499,91 @@ public class WebRTC {
          * set peer connection null for try again
          */
         //clearConnection();
-        new RequestSignalingLeave().signalingLeave();
+        new Exception("check for future");
+//        new RequestSignalingLeave().signalingLeave();
     }
 
     public void close() {
-
+        Log.d(TAG, "close: ");
         ActivityCall.allowOpenCall = false;
         try {
 
             if (videoCapturer != null) {
                 videoCapturer.stopCapture();
+                videoCapturer.dispose();
                 videoCapturer = null;
             }
 
             if (peerConnection != null) {
                 peerConnection.close();
                 peerConnection.dispose();
+                peerConnection = null;
             }
 
             if (peerConnectionFactory != null) {
                 peerConnectionFactory.dispose();
+                peerConnectionFactory = null;
             }
 
-            peerConnectionFactory = null;
-            peerConnection = null;
-            webRTCInstance = null;
+            instance = null;
 
         } catch (RuntimeException e) {
             e.printStackTrace();
+            Log.e(TAG, "close: " + e.getMessage());
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Log.e(TAG, "close: " + e.getMessage());
         }
 
+    }
+
+    // My new code just changing the place
+
+    public void setRemoteDesc(SessionDescription sdp) {
+        Log.d(TAG, "setRemoteDesc: ");
+        peerConnectionInstance().setRemoteDescription(new SdpObserver() {
+            @Override
+            public void onCreateSuccess(SessionDescription sessionDescription) {
+                Log.i(TAG, "onCreateSuccess: ");
+            }
+
+            @Override
+            public void onSetSuccess() {
+                CallManager.getInstance().onSdpSuccess();
+            }
+
+            @Override
+            public void onCreateFailure(String s) {
+                Log.i(TAG, "onCreateFailure: ");
+            }
+
+            @Override
+            public void onSetFailure(String s) {
+                Log.i(TAG, "onSetFailure: ");
+            }
+        }, sdp);
+    }
+
+    public void holdVideoCall(boolean callHold) {
+        IGLog.e(TAG + "holdVideoCall" + callHold);
+        if (callHold) {
+            pauseVideoCapture();
+        } else {
+            startVideoCapture();
+        }
+    }
+
+    public interface VideoFrameListener {
+        void onLocalFrame(VideoFrame frame);
+
+        void onRemoteFrame(VideoFrame frame);
+    }
+
+    public void setFrameListener(VideoFrameListener frameListener) {
+        this.frameListener = frameListener;
+    }
+
+    public VideoFrameListener getFrameListener() {
+        return frameListener;
     }
 }

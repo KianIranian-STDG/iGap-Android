@@ -98,7 +98,7 @@ public class UserLoginResponse extends MessageHandler {
          * (( hint : call following request after set G.userLogin=true ))
          */
         DbManager.getInstance().doRealmTask(realm -> {
-            if (G.needGetSignalingConfiguration || realm.where(RealmCallConfig.class).findFirst() == null) {
+            if (realm.where(RealmCallConfig.class).findFirst() == null) {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         });

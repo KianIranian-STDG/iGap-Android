@@ -1,4 +1,14 @@
-package net.iGap.module;
+/*
+ *  Copyright 2016 The WebRTC Project Authors. All rights reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree. An additional intellectual property rights grant can be found
+ *  in the file PATENTS.  All contributing project authors may
+ *  be found in the AUTHORS file in the root of the source tree.
+ */
+
+package net.iGap.module.webrtc;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -10,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
@@ -24,7 +35,7 @@ import java.util.Set;
  * AppRTCProximitySensor manages functions related to Bluetoth devices in the
  * AppRTC demo.
  */
-public class BluetoothManager {
+public class CallBluetoothManager {
     private static final String TAG = "AppRTCBluetoothManager";
 
     // Timeout interval for starting or stopping audio to a Bluetooth SCO device.
@@ -53,8 +64,8 @@ public class BluetoothManager {
     }
 
     private final Context apprtcContext;
-    private final AudioManager apprtcAudioManager;
-    private final android.media.AudioManager audioManager;
+    private final CallAudioManager apprtcAudioManager;
+    private final AudioManager audioManager;
     private final Handler handler;
 
     int scoConnectionAttempts;
@@ -182,12 +193,12 @@ public class BluetoothManager {
     /**
      * Construction.
      */
-    static BluetoothManager create(Context context, AudioManager audioManager) {
-        //   Log.d(TAG, "create" + AppRTCUtils.getThreadInfo());
-        return new BluetoothManager(context, audioManager);
+    static CallBluetoothManager create(Context context, CallAudioManager audioManager) {
+        Log.d(TAG, "create" + AppRTCUtils.getThreadInfo());
+        return new CallBluetoothManager(context, audioManager);
     }
 
-    public BluetoothManager(Context context, AudioManager audioManager) {
+    protected CallBluetoothManager(Context context, CallAudioManager audioManager) {
         Log.d(TAG, "ctor");
         ThreadUtils.checkIsOnMainThread();
         apprtcContext = context;
@@ -388,8 +399,8 @@ public class BluetoothManager {
     /**
      * Stubs for test mocks.
      */
-    protected android.media.AudioManager getAudioManager(Context context) {
-        return (android.media.AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    protected AudioManager getAudioManager(Context context) {
+        return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     protected void registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
@@ -436,7 +447,7 @@ public class BluetoothManager {
     private void updateAudioDeviceState() {
         ThreadUtils.checkIsOnMainThread();
         Log.d(TAG, "updateAudioDeviceState");
-        // apprtcAudioManager.updateAudioDeviceState();
+        apprtcAudioManager.updateAudioDeviceState();
     }
 
     /**

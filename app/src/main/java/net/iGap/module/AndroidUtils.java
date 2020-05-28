@@ -56,6 +56,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -806,5 +807,26 @@ public final class AndroidUtils {
         return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
     }
 
+    public static String formatShortDuration(int duration) {
+        return formatDuration(duration, false);
+    }
 
+    public static String formatLongDuration(int duration) {
+        return formatDuration(duration, true);
+    }
+
+    private static String formatDuration(int duration, boolean isLong) {
+        int h = duration / 3600;
+        int m = duration / 60 % 60;
+        int s = duration % 60;
+        if (h == 0) {
+            if (isLong) {
+                return String.format(Locale.US, "%02d:%02d", m, s);
+            } else {
+                return String.format(Locale.US, "%d:%02d", m, s);
+            }
+        } else {
+            return String.format(Locale.US, "%d:%02d:%02d", h, m, s);
+        }
+    }
 }

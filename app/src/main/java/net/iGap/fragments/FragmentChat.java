@@ -99,6 +99,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
+import net.iGap.activities.CallActivity;
 import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.ItemBottomSheetForward;
@@ -309,6 +310,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
@@ -1113,33 +1115,30 @@ public class FragmentChat extends BaseFragment
         initCallbacks();
         HelperNotification.getInstance().isChatRoomNow = true;
 
-        onUpdateUserOrRoomInfo = new OnUpdateUserOrRoomInfo() {
-            @Override
-            public void onUpdateUserOrRoomInfo(final String messageId) {
+        onUpdateUserOrRoomInfo = messageId -> {
 
-                if (messageId != null && messageId.length() > 0) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+            if (messageId != null && messageId.length() > 0) {
+                G.handler.post(() -> {
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (linearLayoutManager != null) {
+                        int start = linearLayoutManager.findFirstVisibleItemPosition();
 
-                            if (start < 0) {
-                                start = 0;
-                            }
+                        if (start < 0) {
+                            start = 0;
+                        }
 
-                            for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
-                                try {
-                                    if (mAdapter.getItem(i).mMessage != null && (mAdapter.getItem(i).mMessage.getMessageId() + "").equals(messageId)) {
-                                        mAdapter.notifyItemChanged(i);
-                                        break;
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                        for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
+                            try {
+                                if (mAdapter.getItem(i).mMessage != null && (mAdapter.getItem(i).mMessage.getMessageId() + "").equals(messageId)) {
+                                    mAdapter.notifyItemChanged(i);
+                                    break;
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         };
 
@@ -1281,7 +1280,7 @@ public class FragmentChat extends BaseFragment
             MusicPlayer.chatLayout = null;
             MusicPlayer.shearedMediaLayout = null;
 
-            if (!G.isInCall && MusicPlayer.mp != null && MusicPlayer.mainLayout != null) {
+            if (!CallManager.getInstance().isCallAlive() && MusicPlayer.mp != null && MusicPlayer.mainLayout != null) {
                 MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
                 MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
                 MusicPlayer.playerStateChangeListener.postValue(false);
@@ -9362,12 +9361,20 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
-        if (getFragmentManager() != null)
-            selectFragment.show(getFragmentManager(), null);
+        if (CallManager.getInstance().getCallPeerId() == chatPeerId) {
+            Intent activityIntent = new Intent(getActivity(), CallActivity.class);
+            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(activityIntent);
+        } else if (!CallManager.getInstance().isCallAlive()) {
+            CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
+            if (getFragmentManager() != null)
+                selectFragment.show(getFragmentManager(), null);
 
-        if (keyboardViewVisible) {
-            hideKeyboard();
+            if (keyboardViewVisible) {
+                hideKeyboard();
+            }
+        } else {
+            Toast.makeText(getContext(), "NOT ALLOWED", Toast.LENGTH_SHORT).show();
         }
     }
 

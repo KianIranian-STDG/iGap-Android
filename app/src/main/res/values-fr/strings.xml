@@ -1115,7 +1115,11 @@
     <string name="irancell">Irancell</string>
     <string name="ritel">Rightel</string>
     <string name="normal_charge">recherche normal</string>
+    <string name="amazing_charge">Super charge</string>
+    <string name="youth_charge">Frais pour les jeunes</string>
+    <string name="ladies_charge">Charge pour les femmes</string>
     <string name="amazing">Merveilleux</string>
+    <string name="Exciting">Merveilleux</string>
     <string name="wimax_charging">rechercher de  WiMAX </string>
     <string name="permanently_charge">recharge des cartes de SIM permanentes</string>
     <string name="get_gifts">recevoir votre cadeau</string>
@@ -2218,4 +2222,21 @@
     <string name="edit_member_rights">Edit Member Rights</string>
     <string name="edit_room_rights">Déterminer l\'accès public du groupe</string>
     <string name="restrictions_on_sending_messages">Ограничения на отправку сообщений!</string>
+    <string name="choose_frome_contacts">Sélectionnez parmi les contacts</string>
+    <string name="previousـpurchases">Achats antérieurs</string>
+    <string name="operator_selection">Sélection de l\'opérateur</string>
+    <string name="select_the_amount">Sélectionnez le montant</string>
+    <string name="Select_from_contact_numbers">Choisissez parmi les numéros de contact</string>
+    <string name="list_empty">Il n\'y a pas de pré-numéro dans votre liste</string>
+    <string name="Select_from_previous_numbers">Sélectionner parmi les numéros précédents</string>
+    <string name="Select_the_type_of_charge">Sélectionnez le type de charge</string>
+    <string name="order_by">Trier par</string>
+    <string name="recently_used_packages">Paquets récemment utilisés</string>
+    <string name="suggested_packages">Forfaits suggérés</string>
+    <string name="other_internet_packages">بسته های دیگر</string>
+    <string name="all_packages">همه بسته ها</string>
+    <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
+    <string name="credit_sim">سیمکارت اعتباری</string>
+    <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
+    <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
 </resources>

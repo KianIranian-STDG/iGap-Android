@@ -21,6 +21,7 @@ public class SHP_SETTING {
     public static final String KEY_REALM_DELETE_ALL = "KEY_REALM_DELETE_ALL";
 
     public static final String DELETE_FOLDER_BACKGROUND = "delete_folder_background";
+    public static final String KEY_CALL_NOTIFICATION = "calls_notification_channel";
 
     public static String KEY_LOCK_STARTUP_STATE = "lock_startup_state";
     public static final String FILE_NAME = "setting";

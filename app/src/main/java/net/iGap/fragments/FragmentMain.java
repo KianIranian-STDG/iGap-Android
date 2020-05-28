@@ -79,6 +79,7 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.response.ClientGetRoomListResponse;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -369,7 +370,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
                 }
-                if (G.isInCall && isChatMultiSelectEnable) {
+                if (CallManager.getInstance().isCallAlive() && isChatMultiSelectEnable) {
                     setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
@@ -378,7 +379,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-                } else if (G.isInCall) {
+                } else if (CallManager.getInstance().isCallAlive()) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
                 } else if (isChatMultiSelectEnable) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
@@ -430,7 +431,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
                 //check if music player was enable disable scroll detecting for search box
-                if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
+                if (CallManager.getInstance().isCallAlive() || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
                     if (mHelperToolbar.getmSearchBox() != null) {
                         if (!mHelperToolbar.getmSearchBox().isShown()) {
                             mHelperToolbar.animateSearchBox(false, 0, 0);

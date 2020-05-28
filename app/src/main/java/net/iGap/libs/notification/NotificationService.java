@@ -1,6 +1,8 @@
 package net.iGap.libs.notification;
 
 
+import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -13,6 +15,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.viewmodel.controllers.CallManager;
 
 import org.json.JSONArray;
 
@@ -23,6 +26,9 @@ public class NotificationService extends FirebaseMessagingService {
     private final static String MESSAGE_ID = "messageId";
     private final static String MESSAGE_TYPE = "loc_key";
     private final static String USER_ID = "userId";
+
+    private static final String TYPE = "type";
+    private static final String SIGNALING_OFFER = "SIGNALING_OFFER";
 
     @Override
     public void onNewToken(String mToken) {
@@ -44,6 +50,15 @@ public class NotificationService extends FirebaseMessagingService {
 
         if (remoteMessage.getNotification() != null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)) {
             HelperNotification.sendDeepLink(remoteMessage.getData(), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        }
+
+        if (remoteMessage.getData().containsKey(TYPE) && remoteMessage.getData().containsKey(USER_ID)) {
+            String type = remoteMessage.getData().get(TYPE);
+            Log.i("iGapCall", "on Message Received " + type);
+            if (type != null && type.equals(SIGNALING_OFFER)) {
+                Log.i("iGapCall", "on Message Received " + type + " " + remoteMessage.getData().get(USER_ID));
+                CallManager.getInstance();
+            }
         }
 
         if (remoteMessage.getData().containsKey(MESSAGE_ID)) {

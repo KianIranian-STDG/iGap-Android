@@ -1,6 +1,6 @@
 package net.iGap.api;
 
-import net.iGap.model.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.MciPurchaseResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

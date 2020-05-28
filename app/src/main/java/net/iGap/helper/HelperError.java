@@ -11,7 +11,6 @@
 package net.iGap.helper;
 
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -703,18 +702,10 @@ public class HelperError {
         }
 
         if (message.length() > 0 && G.currentActivity != null) {
-            G.currentActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
-                    snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
+            G.currentActivity.runOnUiThread(() -> {
+                final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
+                snack.setAction(R.string.cancel, view -> snack.dismiss());
+                snack.show();
             });
         }
     }

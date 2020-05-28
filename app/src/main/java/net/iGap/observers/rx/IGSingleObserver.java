@@ -1,12 +1,11 @@
 package net.iGap.observers.rx;
 
 
-import android.widget.Toast;
-
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.ExceptionMessageFactory;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.IGLog;
 import net.iGap.observers.eventbus.EventManager;
 
@@ -38,7 +37,7 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
         e.printStackTrace();
 //        EventBus.getDefault().post(new AaException(ExceptionMessageFactory.getMessage(e)));
         ErrorModel errorModel = ExceptionMessageFactory.getMessage(e);
-        G.runOnUiThread(() -> Toast.makeText(G.context, errorModel.getMessage(), Toast.LENGTH_SHORT).show());
+        G.runOnUiThread(() -> HelperError.showSnackMessage(errorModel.getMessage(), false));
 
         EventManager.getInstance().postEvent(EventManager.IG_ERROR, e);
     }

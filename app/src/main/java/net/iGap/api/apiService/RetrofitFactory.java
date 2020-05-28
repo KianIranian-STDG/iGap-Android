@@ -129,6 +129,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.CHARGE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(getHttpClient())
                 .build()
                 .create(ChargeApi.class);
