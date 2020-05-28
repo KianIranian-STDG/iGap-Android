@@ -80,7 +80,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
     private CallManager.CallStateChange callStateChange;
 
-    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private String TAG = "iGapCall " + "CallService";
 
     public static CallService getInstance() {
         return instance;

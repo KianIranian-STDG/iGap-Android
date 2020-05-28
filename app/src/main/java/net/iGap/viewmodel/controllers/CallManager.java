@@ -193,16 +193,17 @@ public class CallManager {
         });
     }
 
-    private void startService(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType, boolean isIncoming) {
-        if (callPeerId <= 0) {
+    private void startService(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType) {
+        if (callPeerId <= 0 || callType == null) {
+            Log.e(TAG, "startService returned " + callPeerId + " " + callType);
             return;
         }
 
-        Log.i(TAG, "startService: " + callPeerId + " " + callType + " " + isIncoming);
+        Log.i(TAG, "startService: " + callPeerId + " " + callType);
 
         Intent intent = new Intent(G.context, CallService.class);
         intent.putExtra(CallService.USER_ID, callPeerId);
-        intent.putExtra(CallService.IS_INCOMING, isIncoming);
+        intent.putExtra(CallService.IS_INCOMING, true);
         intent.putExtra(CallService.CALL_TYPE, callType.toString());
 
         try {
@@ -504,18 +505,20 @@ public class CallManager {
 
     public void onSdpSuccess() {
         Log.d(TAG, "onSdpSuccess: ");
-        if (isIncoming)
-            G.runOnUiThread(() -> startService(callPeerId, callType, isIncoming));
-        else {
-            try {
-                AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-                G.mainRingerMode = am.getRingerMode();
-                G.appChangeRinggerMode = true;
-                am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (isCallActive) {
+            if (isIncoming)
+                startService(callPeerId, callType);
+            else {
+                try {
+                    AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                    G.mainRingerMode = am.getRingerMode();
+                    G.appChangeRinggerMode = true;
+                    am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                // until here
             }
-            // until here
         }
     }
 

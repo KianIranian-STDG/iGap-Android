@@ -60,8 +60,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private TextView statusTextView;
     private LinearLayout buttonsGridView;
     private LinearLayout quickDeclineView;
-    private ImageView cancelImageView;
-    private ImageView callAgainImageView;
     private TextView durationTextView;
     private TextImageView speakerView;
     private TextImageView micView;
@@ -334,13 +332,13 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
             rootView.addView(quickDeclineView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
         } else {
-            cancelImageView = new AppCompatImageView(this);
+            ImageView cancelImageView = new AppCompatImageView(this);
             cancelImageView.setImageResource(R.drawable.ic_call_cancel);
             cancelImageView.setVisibility(View.GONE);
             cancelImageView.setOnClickListener(v -> finish());
 //            rootView.addView(cancelImageView, LayoutCreator.createFrame(64, 64, Gravity.BOTTOM, 62, 0, 0, 62));
 
-            callAgainImageView = new AppCompatImageView(this);
+            ImageView callAgainImageView = new AppCompatImageView(this);
             callAgainImageView.setImageResource(R.drawable.ic_call_answer);
             callAgainImageView.setVisibility(View.GONE);
             callAgainImageView.setOnClickListener(v -> {
