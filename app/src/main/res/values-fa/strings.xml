@@ -2298,11 +2298,14 @@
     <string name="add_new_account">افزودن حساب جدید</string>
     <string name="profile">نمایه</string>
 
-    <string name="elecBill_Entry_lengthError">شناسه قبض باید 13 کاراکتر باشد.</string>
+    <string name="elecBill_Entry_lengthError">شناسه نباید خالی باشد.</string>
+    <string name="elecBill_EntryService_lengthError">شناسه قبض باید 13 کاراکتر باشد.</string>
+    <string name="elecBill_EntryPhone_lengthError">شماره تلفن باید ۱۱ کاراکتر باشد.</string>
     <string name="elecBill_Entry_barcodeError">اسکن بارکد انجام نشد. لطفا دوباره تلاش کنید.</string>
-    <string name="elecBill_Entry_companyError">از این بخش تنها برای پرداخت قبض برق استفاده کنید.</string>
-    <string name="elecBill_main_billTitle">استعلام و پرداخت سریع قبض برق</string>
+    <string name="elecBill_Entry_companyError">این قبض یافت نشد.</string>
+    <string name="elecBill_main_billTitle">استعلام و پرداخت سریع قبض</string>
     <string name="elecBill_main_billIDHint">شناسه قبض</string>
+    <string name="elecBill_main_billIDHint2">شماره تلفن</string>
     <string name="elecBill_main_billPay">استعلام</string>
     <string name="elecBill_main_billMyList">قبض های من</string>
     <string name="elecBill_main_billSearch">جستجوی قبض</string>
@@ -2369,6 +2372,11 @@
     <string name="elecBill_error_notPossible">این عملیات در حال حاضر امکان پذیر نیست.</string>
     <string name="elecBill_success_title">موفقیت</string>
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
+    <string name="elecBill_main_serviceMode">قبوض خدماتی</string>
+    <string name="elecBill_main_PhoneMode">قبوض موبایل و تلفن</string>
+    <string name="elecBill_main_billTypeTitle">نوع قبض: </string>
+    <string name="elecBill_main_billPhoneTitle">لطفا شماره تلفن ثابت یا موبایل مورد نظر خود را وارد کنید.\nنمونه شماره تلفن: ********۰۲۱\nنمونه شماره موبایل: *********۰۹</string>
+
     <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
     <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
@@ -2634,4 +2642,8 @@
     <string name="tarabord">در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید</string>
     <string name="mic">میکروفن</string>
     <string name="hold">نگه‌داشتن</string>
+    <string-array name="billsOptions">
+        <item>برق</item>
+        <item>گاز</item>
+    </string-array>
 </resources>

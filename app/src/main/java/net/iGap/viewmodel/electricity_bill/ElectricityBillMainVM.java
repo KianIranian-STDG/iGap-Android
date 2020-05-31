@@ -2,14 +2,16 @@ package net.iGap.viewmodel.electricity_bill;
 
 import android.view.View;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperNumerical;
 
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+
 public class ElectricityBillMainVM extends BaseAPIViewModel {
+
+    public enum BillType {ELECTRICITY, GAS, PHONE, MOBILE}
 
     private ObservableField<String> billID;
     private ObservableField<Integer> billIDError;
@@ -17,6 +19,8 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
     private ObservableField<Integer> progressVisibility;
 
     private MutableLiveData<Boolean> goToBillDetailFrag;
+
+    private BillType type = BillType.ELECTRICITY;
 
     private String billPayID = null;
     private String billPrice = null;
@@ -32,9 +36,21 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
     }
 
     public void inquiryBill() {
-        if (billID.get() == null || billID.get().isEmpty() || billID.get().length() < 13) {
+        if (billID.get() == null || billID.get().isEmpty()) {
             activateError(R.string.elecBill_Entry_lengthError);
             return;
+        }
+        if (type == BillType.ELECTRICITY || type == BillType.GAS) {
+            if (billID.get().length() < 13) {
+                activateError(R.string.elecBill_EntryService_lengthError);
+                return;
+            }
+        }
+        if (type == BillType.PHONE || type == BillType.MOBILE) {
+            if (billID.get().length() < 11) {
+                activateError(R.string.elecBill_EntryPhone_lengthError);
+                return;
+            }
         }
         progressVisibility.set(View.VISIBLE);
         goToBillDetailFrag.setValue(true);
@@ -112,5 +128,13 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
 
     public MutableLiveData<Boolean> getGoToBillDetailFrag() {
         return goToBillDetailFrag;
+    }
+
+    public void setType(BillType type) {
+        this.type = type;
+    }
+
+    public BillType getType() {
+        return type;
     }
 }

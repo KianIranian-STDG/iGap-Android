@@ -2344,11 +2344,14 @@ Want to get it?</string>
     <string name="add_new_account">Add New Account</string>
     <string name="profile">Profile</string>
 
-    <string name="elecBill_Entry_lengthError">Bill ID must be 13 character.</string>
+    <string name="elecBill_Entry_lengthError">Number must NOT be empty.</string>
+    <string name="elecBill_EntryService_lengthError">Bill ID must be 13 character.</string>
+    <string name="elecBill_EntryPhone_lengthError">Phone number must be 11 character.</string>
     <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
-    <string name="elecBill_Entry_companyError">We only support Electricity Bill.</string>
-    <string name="elecBill_main_billTitle">Electricity Bill Inquiry and quick payment</string>
-    <string name="elecBill_main_billIDHint">Electricity Bill Number</string>
+    <string name="elecBill_Entry_companyError">We do NOT support this Bill.</string>
+    <string name="elecBill_main_billTitle">Bill Inquiry and quick payment</string>
+    <string name="elecBill_main_billIDHint">Bill ID</string>
+    <string name="elecBill_main_billIDHint2">Phone Number</string>
     <string name="elecBill_main_billPay">Inquiry My Bill</string>
     <string name="elecBill_main_billMyList">My Electricity Bills</string>
     <string name="elecBill_main_billSearch">Search Bills</string>
@@ -2415,6 +2418,10 @@ Want to get it?</string>
     <string name="elecBill_error_notPossible">This action is Not available at the moment.</string>
     <string name="elecBill_success_title">Success</string>
     <string name="elecBill_success_pay">Payment is successful.</string>
+    <string name="elecBill_main_serviceMode">Service Bills</string>
+    <string name="elecBill_main_PhoneMode">Phone Bills</string>
+    <string name="elecBill_main_billTypeTitle">Bill type: </string>
+    <string name="elecBill_main_billPhoneTitle">Please enter your phone number or mobile number: \nPhone number sample: 021********\nMobile number sample: 09*********</string>
     <!--<string name="news_latest">Latest</string>
        <string name="news_MHits">Most-Watched</string>
        <string name="news_ergent">Most_Read</string>
@@ -2699,5 +2706,8 @@ Want to get it?</string>
     <string name="call_error_hold">Hold call is NOT possible.</string>
     <string name="mic">Mic</string>
     <string name="hold">Hold</string>
-
+    <string-array name="billsOptions">
+        <item>Electricity</item>
+        <item>Gas</item>
+    </string-array>
 </resources>
