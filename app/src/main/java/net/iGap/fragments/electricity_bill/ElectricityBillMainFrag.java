@@ -12,6 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -23,11 +28,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.electricity_bill.ElectricityBillMainVM;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
 
 import static net.iGap.activities.ActivityMain.electricityBillRequestCodeQrCode;
 
@@ -91,9 +91,13 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
                 switch (position) {
                     case 0:
                         viewModel.setType(ElectricityBillMainVM.BillType.ELECTRICITY);
+                        binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint));
+                        binding.billIdHolder.setCounterMaxLength(13);
                         break;
                     case 1:
                         viewModel.setType(ElectricityBillMainVM.BillType.GAS);
+                        binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint3));
+                        binding.billIdHolder.setCounterMaxLength(12);
                         break;
                 }
             }

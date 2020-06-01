@@ -2352,6 +2352,7 @@ Want to get it?</string>
     <string name="elecBill_main_billTitle">Bill Inquiry and quick payment</string>
     <string name="elecBill_main_billIDHint">Bill ID</string>
     <string name="elecBill_main_billIDHint2">Phone Number</string>
+    <string name="elecBill_main_billIDHint3">Subscription Number</string>
     <string name="elecBill_main_billPay">Inquiry My Bill</string>
     <string name="elecBill_main_billMyList">My Electricity Bills</string>
     <string name="elecBill_main_billSearch">Search Bills</string>

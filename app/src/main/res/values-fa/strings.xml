@@ -2306,6 +2306,7 @@
     <string name="elecBill_main_billTitle">استعلام و پرداخت سریع قبض</string>
     <string name="elecBill_main_billIDHint">شناسه قبض</string>
     <string name="elecBill_main_billIDHint2">شماره تلفن</string>
+    <string name="elecBill_main_billIDHint3">کد اشتراک</string>
     <string name="elecBill_main_billPay">استعلام</string>
     <string name="elecBill_main_billMyList">قبض های من</string>
     <string name="elecBill_main_billSearch">جستجوی قبض</string>
