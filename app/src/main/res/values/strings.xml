@@ -2357,6 +2357,7 @@ Want to get it?</string>
     <string name="elecBill_main_billSearch">Search Bills</string>
     <string name="elecBill_main_billBranchInfo">Electricity Branching Info</string>
     <string name="elecBill_pay_billID">Bill ID</string>
+    <string name="elecBill_pay_billPhoneNumber">Phone Number</string>
     <string name="elecBill_pay_billPayID">Bill Pay ID</string>
     <string name="elecBill_pay_billPrice">Total due</string>
     <string name="elecBill_pay_billTime">Time Limit</string>

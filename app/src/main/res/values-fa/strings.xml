@@ -2311,6 +2311,7 @@
     <string name="elecBill_main_billSearch">جستجوی قبض</string>
     <string name="elecBill_main_billBranchInfo">اطلاعات انشعاب</string>
     <string name="elecBill_pay_billID">شناسه قبض</string>
+    <string name="elecBill_pay_billPhoneNumber">شماره تلفن</string>
     <string name="elecBill_pay_billPayID">شناسه پرداخت قبض</string>
     <string name="elecBill_pay_billPrice">مبلغ</string>
     <string name="elecBill_pay_billTime">مهلت پرداخت</string>

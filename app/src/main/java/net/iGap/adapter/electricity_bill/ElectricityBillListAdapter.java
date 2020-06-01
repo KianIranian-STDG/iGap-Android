@@ -60,7 +60,8 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title, billID, billPayID, billPrice, billTime, billPayID2, billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle;
+        private TextView title, billID, billPayID, billPrice, billTime, billPayID2,
+                billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle, billPhone, billPhoneTitle;
         private ProgressBar progressPID, progressP, progressT;
         private Button pay, showDetail;
         private TextView delete, edit;
@@ -88,6 +89,9 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
             billPayTitle2 = itemView.findViewById(R.id.billPayIDTitle2);
             billTimeTitle = itemView.findViewById(R.id.billTimeTitle);
             billPriceTitle = itemView.findViewById(R.id.billPriceTitle);
+            billPhone = itemView.findViewById(R.id.billPhone);
+            billPhoneTitle = itemView.findViewById(R.id.billPhoneTitle);
+
             df = new DecimalFormat(",###");
         }
 
@@ -98,6 +102,8 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 progressT.setVisibility(View.GONE);
                 billPayID2.setVisibility(View.GONE);
                 billPayTitle2.setVisibility(View.GONE);
+                billPhoneTitle.setVisibility(View.GONE);
+                billPhone.setVisibility(View.GONE);
 
                 title.setText(bill.get(position).getBillTitle());
                 if (HelperCalander.isPersianUnicode) {
@@ -154,8 +160,15 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 progressPID.setVisibility(View.GONE);
                 progressP.setVisibility(View.GONE);
                 progressT.setVisibility(View.GONE);
-                billPayID2.setVisibility(View.VISIBLE);
-                billPayTitle2.setVisibility(View.VISIBLE);
+                // TODO: 6/1/2020 this 4 lines for pay ID
+                //****
+                billPayID2.setVisibility(View.GONE);
+                billPayTitle2.setVisibility(View.GONE);
+                billPayTitle.setVisibility(View.GONE);
+                billPayID.setVisibility(View.GONE);
+                //****
+                billPhoneTitle.setVisibility(View.VISIBLE);
+                billPhone.setVisibility(View.VISIBLE);
 
                 billPriceTitle.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayLastTerm));
                 billTimeTitle.setText(context.getResources().getText(R.string.elecBill_pay_billPrice)
@@ -174,6 +187,9 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                             + " " + context.getResources().getString(R.string.rial));
                     billTime.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getMidTerm().getAmount())))
                             + " " + context.getResources().getString(R.string.rial));
+                    billPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(
+                            (bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + " "))
+                                    + bill.get(position).getPhoneNumber()));
                 } else {
                     billID.setText(debit.getLastTerm().getBillID());
                     billPayID.setText(debit.getLastTerm().getPayID());
@@ -182,6 +198,8 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                             + " " + context.getResources().getString(R.string.rial));
                     billTime.setText(df.format(Integer.parseInt(debit.getMidTerm().getAmount()))
                             + " " + context.getResources().getString(R.string.rial));
+                    billPhone.setText((bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + "-"))
+                            + bill.get(position).getPhoneNumber());
                 }
 
                 if (bill.get(position).getBillType().equals("MOBILE_MCI"))
