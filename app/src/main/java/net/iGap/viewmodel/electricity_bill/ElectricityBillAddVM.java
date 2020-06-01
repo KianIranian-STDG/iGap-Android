@@ -9,11 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.repository.ElectricityBillAPIRepository;
-import net.iGap.realm.RealmElectricityBill;
-import net.iGap.model.electricity_bill.BillRegister;
+import net.iGap.model.electricity_bill.BillInfo;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.realm.RealmElectricityBill;
+import net.iGap.repository.ElectricityBillAPIRepository;
 
 public class ElectricityBillAddVM extends BaseAPIViewModel {
 
@@ -44,7 +44,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
     private MutableLiveData<String> successM;
     private MutableLiveData<Integer> errorRequestFailed;
 
-    private BillRegister info;
+    private BillInfo info;
     private boolean editMode = false;
 
     public ElectricityBillAddVM() {
@@ -76,11 +76,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         successM = new MutableLiveData<>();
         errorRequestFailed = new MutableLiveData<>();
 
-        info = new BillRegister();
-        info.setEmailEnable(false);
-        info.setAppEnable(false);
-        info.setPrintEnable(false);
-        info.setSMSEnable(false);
+        info = new BillInfo();
     }
 
     public void addBill() {
@@ -89,9 +85,9 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
             progressVisibility.set(View.GONE);
             return;
         }
-        info.setID(billID.get());
+        info.setBillID(billID.get());
         info.setMobileNum(billPhone.get());
-        info.setNID(billUserID.get());
+//        info.setNID(billUserID.get());
         info.setTitle(billName.get());
 
         if (editMode)
@@ -197,8 +193,8 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
                 billEmailErrorEnable.set(true);
                 return false;
             }
-            info.setEmail(billEmail.get());
-            info.setEmailEnable(true);
+//            info.setEmail(billEmail.get());
+//            info.setEmailEnable(true);
         }
         return true;
     }

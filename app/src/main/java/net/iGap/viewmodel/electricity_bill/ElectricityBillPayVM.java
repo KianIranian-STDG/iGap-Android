@@ -10,13 +10,13 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.repository.ElectricityBillAPIRepository;
 import net.iGap.model.electricity_bill.Bill;
-import net.iGap.model.electricity_bill.BranchDebit;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.model.electricity_bill.LastBillData;
+import net.iGap.model.electricity_bill.ServiceDebit;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.ElectricityBillAPIRepository;
 import net.iGap.request.RequestMplGetBillToken;
 
 public class ElectricityBillPayVM extends BaseAPIViewModel {
@@ -55,12 +55,12 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void getData() {
         progressVisibilityData.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().getBranchDebit(debit.getID(), this, new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
+        new ElectricityBillAPIRepository().getBranchDebit(debit.getID(), this, new ResponseCallback<ElectricityResponseModel<ServiceDebit>>() {
             @Override
-            public void onSuccess(ElectricityResponseModel<BranchDebit> data) {
+            public void onSuccess(ElectricityResponseModel<ServiceDebit> data) {
                 progressVisibilityData.set(View.GONE);
                 if (data.getStatus() == 200) {
-                    debit = new Bill(debit.getID(), data.getData().getPaymentID(), data.getData().getTotalBillDebt(), data.getData().getPaymentDeadLineDate());
+                    debit = new Bill(debit.getID(), data.getData().getPaymentID(), data.getData().getTotalElectricityBillDebt(), data.getData().getPaymentDeadLineDate());
                     billPayID.set(data.getData().getPaymentIDConverted());
                     billPrice.set(data.getData().getTotalBillDebtConverted() + " ریال");
                     billTime.set(data.getData().getPaymentDeadLineDate());

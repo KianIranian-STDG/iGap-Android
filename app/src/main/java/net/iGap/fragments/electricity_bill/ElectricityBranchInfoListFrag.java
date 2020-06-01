@@ -12,15 +12,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.adapter.electricity_bill.ElectricityBranchInfoListAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBranchInfoListBinding;
-import net.iGap.model.electricity_bill.BranchData;
-import net.iGap.model.electricity_bill.ElectricityResponseModel;
-import net.iGap.adapter.electricity_bill.ElectricityBranchInfoListAdapter;
-import net.iGap.viewmodel.electricity_bill.ElectricityBranchInfoListVM;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
+import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.electricity_bill.ElectricityBranchInfoListVM;
 
 public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBranchInfoListVM> {
 
@@ -90,7 +90,7 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBr
         });
     }
 
-    private void initRecycler(ElectricityResponseModel<BranchData> data) {
+    private void initRecycler(ElectricityResponseModel<ElectricityBranchData> data) {
         adapter = new ElectricityBranchInfoListAdapter(getContext(), data);
         binding.billRecycler.setAdapter(adapter);
     }

@@ -17,17 +17,17 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentElecSearchListBinding;
-import net.iGap.model.electricity_bill.BranchData;
-import net.iGap.model.electricity_bill.CompanyList;
 import net.iGap.adapter.electricity_bill.ElectricityBillSearchCompanySpinnerAdapter;
 import net.iGap.adapter.electricity_bill.ElectricityBillSearchListAdapter;
-import net.iGap.viewmodel.electricity_bill.ElectricityBillSearchListVM;
+import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.databinding.FragmentElecSearchListBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.electricity_bill.CompanyList;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.electricity_bill.ElectricityBillSearchListVM;
 
 import java.util.List;
 
@@ -135,7 +135,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag<ElectricityBi
         });
     }
 
-    private void initRecycler(List<BranchData> bills) {
+    private void initRecycler(List<ElectricityBranchData> bills) {
         ElectricityBillSearchListAdapter adapter = new ElectricityBillSearchListAdapter(getContext(), bills,
                 position -> new HelperFragment(getFragmentManager(),
                         ElectricityBillPayFrag.newInstance(viewModel.getmBranchData().getValue().get(position).getBillID(), false))

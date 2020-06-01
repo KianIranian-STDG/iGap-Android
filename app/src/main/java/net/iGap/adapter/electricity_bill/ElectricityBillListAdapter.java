@@ -13,10 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.electricity_bill.BillData;
-import net.iGap.model.electricity_bill.BranchDebit;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.bill.BillList;
+import net.iGap.model.bill.Debit;
+import net.iGap.model.bill.MobileDebit;
+import net.iGap.model.electricity_bill.ServiceDebit;
+import net.iGap.module.CircleImageView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,12 +28,12 @@ import java.util.Map;
 
 public class ElectricityBillListAdapter extends RecyclerView.Adapter<ElectricityBillListAdapter.ViewHolder> {
 
-    private Map<BillData.BillDataModel, BranchDebit> mdata;
-    private List<BillData.BillDataModel> bill;
+    private Map<BillList.Bill, Debit> mdata;
+    private List<BillList.Bill> bill;
     private Context context;
     private OnItemClickListener clickListener;
 
-    public ElectricityBillListAdapter(Context context, Map<BillData.BillDataModel, BranchDebit> data, OnItemClickListener clickListener) {
+    public ElectricityBillListAdapter(Context context, Map<BillList.Bill, Debit> data, OnItemClickListener clickListener) {
         this.mdata = new HashMap<>();
         this.mdata.putAll(data);
         this.bill = new ArrayList<>(mdata.keySet());
@@ -56,10 +60,12 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title, billID, billPayID, billPrice, billTime;
+        private TextView title, billID, billPayID, billPrice, billTime, billPayID2, billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle;
         private ProgressBar progressPID, progressP, progressT;
         private Button pay, showDetail;
         private TextView delete, edit;
+        private CircleImageView logo;
+        private DecimalFormat df;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,46 +82,151 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
             progressT = itemView.findViewById(R.id.ProgressVTime);
             delete = itemView.findViewById(R.id.billDelete);
             edit = itemView.findViewById(R.id.billEdit);
-
+            logo = itemView.findViewById(R.id.billImage);
+            billPayID2 = itemView.findViewById(R.id.billPayID2);
+            billPayTitle = itemView.findViewById(R.id.billPayIDTitle);
+            billPayTitle2 = itemView.findViewById(R.id.billPayIDTitle2);
+            billTimeTitle = itemView.findViewById(R.id.billTimeTitle);
+            billPriceTitle = itemView.findViewById(R.id.billPriceTitle);
+            df = new DecimalFormat(",###");
         }
 
-        void initView(int position) {
-            if (!mdata.get(bill.get(position)).isLoading()) {
+        void initServiceView(ServiceDebit debit, int position) {
+            if (!debit.isLoading()) {
                 progressPID.setVisibility(View.GONE);
                 progressP.setVisibility(View.GONE);
                 progressT.setVisibility(View.GONE);
+                billPayID2.setVisibility(View.GONE);
+                billPayTitle2.setVisibility(View.GONE);
 
                 title.setText(bill.get(position).getBillTitle());
                 if (HelperCalander.isPersianUnicode) {
                     billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getBillID()));
-                }
-                else
+                    billPayID.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getPaymentID()));
+                    billTime.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getPaymentDeadLineDate()));
+                } else {
                     billID.setText(bill.get(position).getBillID());
+                    billPayID.setText(debit.getPaymentID());
+                    billTime.setText(debit.getPaymentDeadLineDate());
+                }
 
-                billPayID.setText(mdata.get(bill.get(position)).getPaymentIDConverted());
-                billPrice.setText(mdata.get(bill.get(position)).getTotalBillDebtConverted() + " ریال");
-                billTime.setText(mdata.get(bill.get(position)).getPaymentDeadLineDate());
+                if (bill.get(position).getBillType().equals("ELECTRICITY")) {
+                    logo.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_elc_pec));
+                    if (HelperCalander.isPersianUnicode) {
+                        billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getTotalElectricityBillDebt())))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getBillID()));
+                    } else {
+                        billPrice.setText(df.format(Integer.parseInt(debit.getTotalElectricityBillDebt()))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billID.setText(bill.get(position).getBillID());
+                    }
+                } else {
+                    logo.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_gaz_pec));
+                    if (HelperCalander.isPersianUnicode) {
+                        billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getTotalGasBillDebt())))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getSubscriptionCode()));
+                    } else {
+                        billPrice.setText(df.format(Integer.parseInt(debit.getTotalGasBillDebt()))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billID.setText(bill.get(position).getSubscriptionCode());
+                    }
+                }
             }
 
             pay.setOnClickListener(v -> {
-                if (!mdata.get(bill.get(position)).isLoading()) {
-                    clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.PAY);
-                }
-                else
+                if (!debit.isLoading()) {
+                    clickListener.onClick(bill.get(position), OnItemClickListener.Action.PAY);
+                } else
                     Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
             });
 
-            showDetail.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.SHOW_DETAIL));
+            showDetail.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.SHOW_DETAIL));
 
-            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.DELETE));
+            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.DELETE));
 
-            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.EDIT));
+            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.EDIT));
+        }
+
+        void initPhoneView(MobileDebit debit, int position) {
+            if (!debit.isLoading()) {
+                progressPID.setVisibility(View.GONE);
+                progressP.setVisibility(View.GONE);
+                progressT.setVisibility(View.GONE);
+                billPayID2.setVisibility(View.VISIBLE);
+                billPayTitle2.setVisibility(View.VISIBLE);
+
+                billPriceTitle.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayLastTerm));
+                billTimeTitle.setText(context.getResources().getText(R.string.elecBill_pay_billPrice)
+                        + " " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
+                billPayTitle.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayLastTerm));
+                billPayTitle2.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
+                title.setText(bill.get(position).getBillTitle());
+                pay.setText(context.getResources().getText(R.string.elecBill_cell_billPayPhoneLastBtn));
+                showDetail.setText(context.getResources().getText(R.string.elecBill_cell_billPayPhoneMidBtn));
+
+                if (HelperCalander.isPersianUnicode) {
+                    billID.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getLastTerm().getBillID()));
+                    billPayID.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getLastTerm().getPayID()));
+                    billPayID2.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getMidTerm().getPayID()));
+                    billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getLastTerm().getAmount())))
+                            + " " + context.getResources().getString(R.string.rial));
+                    billTime.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getMidTerm().getAmount())))
+                            + " " + context.getResources().getString(R.string.rial));
+                } else {
+                    billID.setText(debit.getLastTerm().getBillID());
+                    billPayID.setText(debit.getLastTerm().getPayID());
+                    billPayID2.setText(debit.getMidTerm().getPayID());
+                    billPrice.setText(df.format(Integer.parseInt(debit.getLastTerm().getAmount()))
+                            + " " + context.getResources().getString(R.string.rial));
+                    billTime.setText(df.format(Integer.parseInt(debit.getMidTerm().getAmount()))
+                            + " " + context.getResources().getString(R.string.rial));
+                }
+
+                if (bill.get(position).getBillType().equals("MOBILE_MCI"))
+                    logo.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_mci_pec));
+                else
+                    logo.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_telecom_pec));
+            }
+
+            pay.setOnClickListener(v -> {
+                if (!debit.isLoading()) {
+                    clickListener.onClick(bill.get(position), OnItemClickListener.Action.LAST_PAY);
+                } else
+                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            });
+
+            showDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!debit.isLoading()) {
+                        clickListener.onClick(bill.get(position), OnItemClickListener.Action.MID_PAY);
+                    } else
+                        Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.DELETE));
+
+            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.EDIT));
+        }
+
+        void initView(int position) {
+            if (mdata.get(bill.get(position)).getData() instanceof ServiceDebit) {
+                ServiceDebit serviceDebit = (ServiceDebit) mdata.get(bill.get(position)).getData();
+                initServiceView(serviceDebit, position);
+            } else {
+                MobileDebit phoneDebit = (MobileDebit) mdata.get(bill.get(position)).getData();
+                initPhoneView(phoneDebit, position);
+            }
         }
     }
 
     public interface OnItemClickListener {
-        enum Actoin {DELETE, EDIT, SHOW_DETAIL, PAY}
-        void onClick(BillData.BillDataModel item, Actoin btnAction);
+        enum Action {DELETE, EDIT, SHOW_DETAIL, PAY, MID_PAY, LAST_PAY}
+
+        void onClick(BillList.Bill item, Action btnAction);
     }
 
 }

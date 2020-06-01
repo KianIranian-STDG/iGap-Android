@@ -1,14 +1,14 @@
 package net.iGap.api;
 
 import net.iGap.model.electricity_bill.BillData;
-import net.iGap.model.electricity_bill.BranchData;
-import net.iGap.model.electricity_bill.BranchDebit;
 import net.iGap.model.electricity_bill.CompanyList;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
 import net.iGap.model.electricity_bill.ElectricityResponseList;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.model.electricity_bill.LastBillData;
 import net.iGap.model.electricity_bill.PaidBill;
 import net.iGap.model.electricity_bill.SaleBill;
+import net.iGap.model.electricity_bill.ServiceDebit;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -52,15 +52,15 @@ public interface ElecBillApi {
 
     @FormUrlEncoded
     @POST("get-branch-info")
-    Call<ElectricityResponseModel<BranchData>> getBranchInfo(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum);
+    Call<ElectricityResponseModel<ElectricityBranchData>> getBranchInfo(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum);
 
     @FormUrlEncoded
     @POST("get-branch-debit")
-    Call<ElectricityResponseModel<BranchDebit>> getBranchDebit(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum);
+    Call<ElectricityResponseModel<ServiceDebit>> getBranchDebit(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum);
 
     @FormUrlEncoded
     @POST("search-bill")
-    Call<ElectricityResponseList<BranchData>> searchBills(@Field("serial_number") String serialNum, @Field("company_code") String companyCode);
+    Call<ElectricityResponseList<ElectricityBranchData>> searchBills(@Field("serial_number") String serialNum, @Field("company_code") String companyCode);
 
     @FormUrlEncoded
     @POST("get-sale-bills")

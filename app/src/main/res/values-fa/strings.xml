@@ -2312,7 +2312,7 @@
     <string name="elecBill_main_billBranchInfo">اطلاعات انشعاب</string>
     <string name="elecBill_pay_billID">شناسه قبض</string>
     <string name="elecBill_pay_billPayID">شناسه پرداخت قبض</string>
-    <string name="elecBill_pay_billPrice">مبلغ پایان دوره</string>
+    <string name="elecBill_pay_billPrice">مبلغ</string>
     <string name="elecBill_pay_billTime">مهلت پرداخت</string>
     <string name="elecBill_pay_billPay">پرداخت</string>
     <string name="elecBill_pay_billBranchInfo">اطلاعات انشعاب</string>
@@ -2376,6 +2376,10 @@
     <string name="elecBill_main_PhoneMode">قبوض موبایل و تلفن</string>
     <string name="elecBill_main_billTypeTitle">نوع قبض: </string>
     <string name="elecBill_main_billPhoneTitle">لطفا شماره تلفن ثابت یا موبایل مورد نظر خود را وارد کنید.\nنمونه شماره تلفن: ********۰۲۱\nنمونه شماره موبایل: *********۰۹</string>
+    <string name="elecBill_cell_billPayLastTerm">پایان دوره</string>
+    <string name="elecBill_cell_billPayMidTerm">میان دوره</string>
+    <string name="elecBill_cell_billPayPhoneLastBtn">پرداخت پایان دوره</string>
+    <string name="elecBill_cell_billPayPhoneMidBtn">پرداخت میان دوره</string>
 
     <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
     <string name="delete_from_storage">حذف پیوست از حافظه</string>

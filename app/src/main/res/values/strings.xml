@@ -2422,6 +2422,10 @@ Want to get it?</string>
     <string name="elecBill_main_PhoneMode">Phone Bills</string>
     <string name="elecBill_main_billTypeTitle">Bill type: </string>
     <string name="elecBill_main_billPhoneTitle">Please enter your phone number or mobile number: \nPhone number sample: 021********\nMobile number sample: 09*********</string>
+    <string name="elecBill_cell_billPayLastTerm">last-term</string>
+    <string name="elecBill_cell_billPayMidTerm">mid-term</string>
+    <string name="elecBill_cell_billPayPhoneLastBtn">Pay Last-term</string>
+    <string name="elecBill_cell_billPayPhoneMidBtn">Pay Mid-term</string>
     <!--<string name="news_latest">Latest</string>
        <string name="news_MHits">Most-Watched</string>
        <string name="news_ergent">Most_Read</string>

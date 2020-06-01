@@ -10,16 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.electricity_bill.BranchData;
-import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
+import net.iGap.model.electricity_bill.ElectricityResponseModel;
 
 public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<ElectricityBranchInfoListAdapter.ViewHolder> {
 
-    private ElectricityResponseModel<BranchData> mdata;
+    private ElectricityResponseModel<ElectricityBranchData> mdata;
     private Context context;
 
-    public ElectricityBranchInfoListAdapter(Context context, ElectricityResponseModel<BranchData> data) {
+    public ElectricityBranchInfoListAdapter(Context context, ElectricityResponseModel<ElectricityBranchData> data) {
         this.mdata = data;
         this.context = context;
     }
