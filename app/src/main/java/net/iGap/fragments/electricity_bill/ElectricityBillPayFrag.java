@@ -22,15 +22,16 @@ import com.google.android.material.snackbar.Snackbar;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillPayBinding;
-import net.iGap.model.electricity_bill.Bill;
-import net.iGap.model.electricity_bill.LastBillData;
-import net.iGap.viewmodel.electricity_bill.ElectricityBillPayVM;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.bill.BillInfo;
+import net.iGap.model.electricity_bill.Bill;
+import net.iGap.model.electricity_bill.LastBillData;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.electricity_bill.ElectricityBillPayVM;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,23 +44,51 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
     public enum btnActions {BRANCH_INFO, ADD_LIST}
 
     private FragmentElecBillPayBinding binding;
-    private Bill bill;
+    private BillInfo bill;
     private boolean editMode;
     private static final String TAG = "ElectricityBillPayFrag";
 
+    public static ElectricityBillPayFrag newInstance(BillInfo.BillType billType, String billID, String billName, boolean editMode) {
+        BillInfo info = new BillInfo();
+        info.setBillType(billType);
+        info.setTitle(billName);
+        switch (billType) {
+            case ELECTRICITY:
+                info.setBillID(billID);
+                break;
+            case GAS:
+                info.setGasID(billID);
+                break;
+            case MOBILE:
+            case PHONE:
+                info.setPhoneNum(billID);
+                break;
+        }
+        return new ElectricityBillPayFrag(info, editMode);
+    }
+
+    @Deprecated
     public static ElectricityBillPayFrag newInstance(String billID, String billPayID, String billPrice, boolean editMode) {
         return new ElectricityBillPayFrag(new Bill(billID, billPayID, billPrice, null), editMode);
     }
 
+    @Deprecated
     public static ElectricityBillPayFrag newInstance(String billName, String billID, String billPayID, String billPrice, boolean editMode) {
         return new ElectricityBillPayFrag(new Bill(billName, billID, billPayID, billPrice, null), editMode);
     }
 
+    @Deprecated
     public static ElectricityBillPayFrag newInstance(String billID, boolean editMode) {
         return new ElectricityBillPayFrag(new Bill(billID, null, null, null), editMode);
     }
 
+    @Deprecated
     private ElectricityBillPayFrag(Bill bill, boolean editMode) {
+//        this.bill = bill;
+        this.editMode = editMode;
+    }
+
+    private ElectricityBillPayFrag(BillInfo bill, boolean editMode) {
         this.bill = bill;
         this.editMode = editMode;
     }
@@ -133,30 +162,51 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
         if (editMode)
             binding.addToList.setText(getResources().getString(R.string.elecBill_edit_Btn));
 
-        getIntent();
+        makePage();
         viewModel.getData();
     }
 
-    private void getIntent() {
-        if (HelperCalander.isPersianUnicode) {
-            viewModel.getBillID().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getID()));
-        } else
-            viewModel.getBillID().set(bill.getID());
-        if (bill.getPayID() != null) {
-            if (HelperCalander.isPersianUnicode) {
-                viewModel.getBillPayID().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getPayID()));
-            } else
-                viewModel.getBillPayID().set(bill.getPayID());
-        }
-        if (bill.getPrice() != null) {
-            if (HelperCalander.isPersianUnicode) {
-                viewModel.getBillPrice().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getPrice()));
-            } else
-                viewModel.getBillPrice().set(bill.getPrice());
-            viewModel.getProgressVisibilityData().set(View.GONE);
-        }
+    private void makePage() {
+        switch (bill.getBillType()) {
+            case ELECTRICITY:
+                if (HelperCalander.isPersianUnicode)
+                    viewModel.getBillID().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getBillID()));
+                else
+                    viewModel.getBillID().set(bill.getBillID());
+                binding.billImage.setImageDrawable(getResources().getDrawable(R.drawable.bill_elc_pec));
+                break;
+            case GAS:
+                binding.showBillImage.setVisibility(View.GONE);
+                binding.billImage.setImageDrawable(getResources().getDrawable(R.drawable.bill_gaz_pec));
+                // TODO: 6/2/2020 must activate this
+                binding.KontorInfo.setVisibility(View.GONE);
+                break;
+            case MOBILE:
+            case PHONE:
+                binding.showBillImage.setVisibility(View.GONE);
+                binding.KontorInfo.setVisibility(View.GONE);
 
-        viewModel.setDebit(new Bill(bill.getID(), bill.getPayID(), bill.getPrice(), "-"));
+                binding.billPayIDTitle.setText(getResources().getString(R.string.elecBill_pay_billPhoneNumber));
+                binding.billPriceTitle.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayLastTerm));
+                binding.billTimeTitle.setText(context.getResources().getText(R.string.elecBill_pay_billPrice) + " " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
+
+                binding.Pay2.setVisibility(View.VISIBLE);
+                binding.Pay2.setText(context.getResources().getText(R.string.elecBill_cell_billPayPhoneMidBtn));
+
+                binding.Pay.setText(context.getResources().getText(R.string.elecBill_cell_billPayPhoneLastBtn));
+
+                if (bill.getBillType() == BillInfo.BillType.PHONE) {
+                    String phoneTemp = bill.getPhoneNum();
+                    bill.setPhoneNum(phoneTemp.substring(phoneTemp.length() - 8));
+                    bill.setAreaCode(phoneTemp.substring(0, phoneTemp.length() - 8));
+                    Log.d(TAG, "makePage: " + bill.getPhoneNum());
+                    binding.billImage.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_telecom_pec));
+                } else {
+                    binding.billImage.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_mci_pec));
+                }
+                break;
+        }
+        viewModel.setInfo(bill);
     }
 
     private void showDialog(String title, String message, String btnRes) {
@@ -176,10 +226,11 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
     private void onBtnClickManger(btnActions actions) {
         switch (actions) {
             case BRANCH_INFO:
-                new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getID())).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getBillID())).setReplace(false).load();
                 break;
             case ADD_LIST:
-                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(bill.getID(), bill.getTitle(), "", editMode)).setReplace(false).load();
+                ElectricityBillAddFrag frag = ElectricityBillAddFrag.newInstance(viewModel.getInfo(), editMode);
+                frag.show(getFragmentManager(), "BillAddEdit");
                 break;
         }
     }

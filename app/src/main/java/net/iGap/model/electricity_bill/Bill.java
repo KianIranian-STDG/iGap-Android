@@ -1,5 +1,6 @@
 package net.iGap.model.electricity_bill;
 
+@Deprecated
 public class Bill {
 
     private String ID;

@@ -41,11 +41,13 @@ public class MobileDebit {
 
     public static class MobileInquiryObject {
         @SerializedName("bill_id")
-        public String billID;
+        private String billID;
         @SerializedName("pay_id")
-        public String payID;
+        private String payID;
         @SerializedName("amount")
-        public String amount;
+        private String amount;
+        @SerializedName("status")
+        private int status;
 
         public MobileInquiryObject() {
         }
@@ -73,7 +75,10 @@ public class MobileDebit {
         }
 
         public String getAmount() {
-            return amount;
+            if (status == 0)
+                return amount;
+            else
+                return "0";
         }
 
         public void setAmount(String amount) {

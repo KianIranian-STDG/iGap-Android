@@ -22,10 +22,11 @@ import net.iGap.databinding.FragmentElecBillListBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.BillList;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
-import net.iGap.model.electricity_bill.ServiceDebit;
+import net.iGap.model.bill.ServiceDebit;
 import net.iGap.module.Theme;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -165,13 +166,18 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
                             tempService.getTotalElectricityBillDebt() != null ? tempService.getTotalElectricityBillDebt() : tempService.getTotalGasBillDebt());
                     break;
                 case EDIT:
-//                    if (temp.getBillID() == null) {
-//                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
-//                        return;
-//                    }
-//                    new HelperFragment(getFragmentManager(),
-//                            ElectricityBillAddFrag.newInstance(temp.getBillID(), item.getBillTitle(),
-//                                    String.valueOf(viewModel.getNationalID()), true)).setReplace(false).load();
+                    if (item.getBillTitle() == null) {
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
+                        return;
+                    }
+                    ElectricityBillAddFrag frag = ElectricityBillAddFrag.newInstance(viewModel.getBillInfo(item), true);
+                    frag.setCompleteListener(new ElectricityBillAddFrag.CompleteListener() {
+                        @Override
+                        public void loadAgain() {
+                            viewModel.getBillsList();
+                        }
+                    });
+                    frag.show(getFragmentManager(), "BillAddEdit");
                     break;
                 case DELETE:
                     final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
@@ -189,13 +195,14 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
                     dialog.show();
                     break;
                 case SHOW_DETAIL:
-//                    if (temp.getBillID() == null) {
-//                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
-//                        return;
-//                    }
-//                    new HelperFragment(getFragmentManager(),
-//                            ElectricityBillPayFrag.newInstance(item.getBillTitle(), temp.getBillID(), temp.getPaymentIDConverted(), temp.getTotalBillDebtConverted(), true))
-//                            .setReplace(false).load();
+                    if (item.getBillTitle() == null) {
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
+                        return;
+                    }
+                    BillInfo temp = viewModel.getBillInfo(item);
+                    new HelperFragment(getFragmentManager(),
+                            ElectricityBillPayFrag.newInstance(temp.getBillType(), temp.getBillID(), temp.getTitle(), true))
+                            .setReplace(false).load();
                     break;
                 case MID_PAY:
                     MobileDebit tempMid = (MobileDebit) bills.get(item).getData();

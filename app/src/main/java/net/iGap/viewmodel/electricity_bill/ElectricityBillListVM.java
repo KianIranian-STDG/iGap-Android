@@ -9,12 +9,12 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.BillList;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
-import net.iGap.model.electricity_bill.BillInfo;
+import net.iGap.model.bill.ServiceDebit;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
-import net.iGap.model.electricity_bill.ServiceDebit;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.BillsAPIRepository;
@@ -44,6 +44,38 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         goBack = new SingleLiveEvent<>();
         errorM = new MutableLiveData<>();
         showRequestFailedError = new MutableLiveData<>();
+    }
+
+    public BillInfo getBillInfo(BillList.Bill dataModel) {
+        BillInfo temp = new BillInfo();
+        temp.setServerID(dataModel.getId());
+        switch (dataModel.getBillType()) {
+            case "ELECTRICITY":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setBillID(dataModel.getBillID());
+                temp.setBillType(BillInfo.BillType.ELECTRICITY);
+                break;
+            case "GAS":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setGasID(dataModel.getSubscriptionCode());
+                temp.setBillID(dataModel.getSubscriptionCode());
+                temp.setBillType(BillInfo.BillType.GAS);
+                break;
+            case "MOBILE_MCI":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setPhoneNum(dataModel.getPhoneNumber());
+                temp.setBillID(dataModel.getPhoneNumber());
+                temp.setBillType(BillInfo.BillType.MOBILE);
+                break;
+            case "PHONE":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setPhoneNum(dataModel.getPhoneNumber());
+                temp.setAreaCode(dataModel.getAreaCode());
+                temp.setBillID(dataModel.getAreaCode() + dataModel.getPhoneNumber());
+                temp.setBillType(BillInfo.BillType.PHONE);
+                break;
+        }
+        return temp;
     }
 
     public void getBillsList() {
@@ -98,7 +130,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
     private void getServiceDebit(BillList.Bill dataModel) {
         BillInfo info = new BillInfo();
-        info.setBillType(dataModel.getBillType());
+        info.setBillTypeString(dataModel.getBillType());
         if (dataModel.getBillType().equals("ELECTRICITY")) {
             info.setBillID(dataModel.getBillID());
             info.setMobileNum(dataModel.getMobileNumber());
@@ -143,7 +175,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
     private void getPhoneDebit(BillList.Bill dataModel) {
         BillInfo info = new BillInfo();
-        info.setBillType(dataModel.getBillType());
+        info.setBillTypeString(dataModel.getBillType());
         info.setPhoneNum(dataModel.getPhoneNumber());
         if (dataModel.getBillType().equals("PHONE")) {
             info.setAreaCode(dataModel.getAreaCode());
@@ -245,7 +277,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         progressVisibility.set(View.VISIBLE);
         BillList.Bill dataModel = item;
         BillInfo info = new BillInfo();
-        info.setBillType(dataModel.getBillType());
+        info.setBillTypeString(dataModel.getBillType());
         info.setServerID(dataModel.getId());
 
         new BillsAPIRepository().deleteBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {

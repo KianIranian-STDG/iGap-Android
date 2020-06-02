@@ -9,11 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.model.electricity_bill.BillInfo;
+import net.iGap.model.bill.BillInfo;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.realm.RealmElectricityBill;
-import net.iGap.repository.ElectricityBillAPIRepository;
+import net.iGap.repository.BillsAPIRepository;
 
 public class ElectricityBillAddVM extends BaseAPIViewModel {
 
@@ -24,18 +23,6 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
     private ObservableField<String> billName;
     private ObservableInt billNameError;
     private ObservableBoolean billNameErrorEnable;
-
-    private ObservableField<String> billPhone;
-    private ObservableInt billPhoneError;
-    private ObservableBoolean billPhoneErrorEnable;
-
-    private ObservableField<String> billUserID;
-    private ObservableInt billUserIDError;
-    private ObservableBoolean billUserIDErrorEnable;
-
-    private ObservableField<String> billEmail;
-    private ObservableInt billEmailError;
-    private ObservableBoolean billEmailErrorEnable;
 
     private ObservableField<Integer> progressVisibility;
 
@@ -53,22 +40,9 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         billIDError = new ObservableInt();
         billIDErrorEnable = new ObservableBoolean(false);
 
-        RealmElectricityBill repo = new RealmElectricityBill();
-        billPhone = new ObservableField<>(repo.getUserNum());
-        billPhoneError = new ObservableInt();
-        billPhoneErrorEnable = new ObservableBoolean(false);
-
         billName = new ObservableField<>();
         billNameError = new ObservableInt();
         billNameErrorEnable = new ObservableBoolean(false);
-
-        billUserID = new ObservableField<>("0");
-        billUserIDError = new ObservableInt();
-        billUserIDErrorEnable = new ObservableBoolean(false);
-
-        billEmail = new ObservableField<>(repo.getUserEmail());
-        billEmailError = new ObservableInt();
-        billEmailErrorEnable = new ObservableBoolean(false);
 
         progressVisibility = new ObservableField<>(View.GONE);
         goBack = new MutableLiveData<>(false);
@@ -85,11 +59,22 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
             progressVisibility.set(View.GONE);
             return;
         }
-        info.setBillID(billID.get());
-        info.setMobileNum(billPhone.get());
-//        info.setNID(billUserID.get());
         info.setTitle(billName.get());
-
+        switch (info.getBillType()) {
+            case ELECTRICITY:
+                info.setBillID(billID.get());
+                break;
+            case GAS:
+                info.setGasID(billID.get());
+                break;
+            case MOBILE:
+                info.setPhoneNum(billID.get());
+                break;
+            case PHONE:
+                info.setPhoneNum(billID.get().substring(3));
+                info.setAreaCode(billID.get().substring(0, 3));
+                break;
+        }
         if (editMode)
             editAndSaveData();
         else
@@ -98,11 +83,10 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
 
     private void sendAndSaveData() {
         progressVisibility.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().addBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
+        new BillsAPIRepository().addBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<String> data) {
-                if (data.getStatus() == 200)
-                    successM.setValue(data.getMessage());
+                successM.setValue(data.getMessage());
                 goBack.setValue(true);
                 progressVisibility.set(View.GONE);
             }
@@ -123,11 +107,10 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
 
     private void editAndSaveData() {
         progressVisibility.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().editBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
+        new BillsAPIRepository().editBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<String> data) {
-                if (data.getStatus() == 200)
-                    successM.setValue(data.getMessage());
+                successM.setValue(data.getMessage());
                 goBack.setValue(true);
                 progressVisibility.set(View.GONE);
             }
@@ -157,44 +140,23 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
             billIDErrorEnable.set(true);
             return false;
         }
-        if (billID.get().length() < 13) {
-            billIDError.set(R.string.elecBill_Entry_lengthError);
-            billIDErrorEnable.set(true);
-            return false;
-        }
-        if (billPhone.get() == null || billPhone.get().isEmpty()) {
-            billPhoneError.set(R.string.elecBill_Entry_phoneError);
-            billPhoneErrorEnable.set(true);
-            return false;
-        }
-        if (billPhone.get().length() < 11) {
-            billPhoneError.set(R.string.elecBill_Entry_phoneLengthError);
-            billPhoneErrorEnable.set(true);
-            return false;
-        }
-        if (!(billPhone.get().startsWith("09") || billPhone.get().startsWith("98"))) {
-            billPhoneError.set(R.string.elecBill_Entry_phoneFormatError);
-            billPhoneErrorEnable.set(true);
-            return false;
-        }
-        /*if (billUserID.get() == null || billUserID.get().isEmpty()) {
-            billUserIDError.set(R.string.elecBill_Entry_userIDError);
-            billUserIDErrorEnable.set(true);
-            return false;
-        }
-        if (billUserID.get().length() < 10) {
-            billUserIDError.set(R.string.elecBill_Entry_userIDLengthError);
-            billUserIDErrorEnable.set(true);
-            return false;
-        }*/
-        if (billEmail.get() != null && !billEmail.get().isEmpty()) {
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(billEmail.get()).matches()) {
-                billEmailError.set(R.string.elecBill_Entry_emailFormatError);
-                billEmailErrorEnable.set(true);
-                return false;
-            }
-//            info.setEmail(billEmail.get());
-//            info.setEmailEnable(true);
+        switch (info.getBillType()) {
+            case GAS:
+            case ELECTRICITY:
+                if (billID.get().length() < 12) {
+                    billIDError.set(R.string.elecBill_EntryService_lengthError);
+                    billIDErrorEnable.set(true);
+                    return false;
+                }
+                break;
+            case PHONE:
+            case MOBILE:
+                if (billID.get().length() < 11) {
+                    billIDError.set(R.string.elecBill_EntryPhone_lengthError);
+                    billIDErrorEnable.set(true);
+                    return false;
+                }
+                break;
         }
         return true;
     }
@@ -255,78 +217,6 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         this.billNameErrorEnable = billNameErrorEnable;
     }
 
-    public ObservableField<String> getBillPhone() {
-        return billPhone;
-    }
-
-    public void setBillPhone(ObservableField<String> billPhone) {
-        this.billPhone = billPhone;
-    }
-
-    public ObservableInt getBillPhoneError() {
-        return billPhoneError;
-    }
-
-    public void setBillPhoneError(ObservableInt billPhoneError) {
-        this.billPhoneError = billPhoneError;
-    }
-
-    public ObservableBoolean getBillPhoneErrorEnable() {
-        return billPhoneErrorEnable;
-    }
-
-    public void setBillPhoneErrorEnable(ObservableBoolean billPhoneErrorEnable) {
-        this.billPhoneErrorEnable = billPhoneErrorEnable;
-    }
-
-    public ObservableField<String> getBillUserID() {
-        return billUserID;
-    }
-
-    public void setBillUserID(ObservableField<String> billUserID) {
-        this.billUserID = billUserID;
-    }
-
-    public ObservableInt getBillUserIDError() {
-        return billUserIDError;
-    }
-
-    public void setBillUserIDError(ObservableInt billUserIDError) {
-        this.billUserIDError = billUserIDError;
-    }
-
-    public ObservableBoolean getBillUserIDErrorEnable() {
-        return billUserIDErrorEnable;
-    }
-
-    public void setBillUserIDErrorEnable(ObservableBoolean billUserIDErrorEnable) {
-        this.billUserIDErrorEnable = billUserIDErrorEnable;
-    }
-
-    public ObservableField<String> getBillEmail() {
-        return billEmail;
-    }
-
-    public void setBillEmail(ObservableField<String> billEmail) {
-        this.billEmail = billEmail;
-    }
-
-    public ObservableInt getBillEmailError() {
-        return billEmailError;
-    }
-
-    public void setBillEmailError(ObservableInt billEmailError) {
-        this.billEmailError = billEmailError;
-    }
-
-    public ObservableBoolean getBillEmailErrorEnable() {
-        return billEmailErrorEnable;
-    }
-
-    public void setBillEmailErrorEnable(ObservableBoolean billEmailErrorEnable) {
-        this.billEmailErrorEnable = billEmailErrorEnable;
-    }
-
     public MutableLiveData<Boolean> getGoBack() {
         return goBack;
     }
@@ -359,4 +249,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         return errorRequestFailed;
     }
 
+    public void setInfo(BillInfo info) {
+        this.info = info;
+    }
 }

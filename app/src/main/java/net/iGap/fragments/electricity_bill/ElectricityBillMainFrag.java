@@ -26,6 +26,7 @@ import net.iGap.databinding.FragmentElecBillMainBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.model.bill.BillInfo;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.electricity_bill.ElectricityBillMainVM;
 
@@ -90,14 +91,18 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        viewModel.setType(ElectricityBillMainVM.BillType.ELECTRICITY);
+                        viewModel.setType(BillInfo.BillType.ELECTRICITY);
                         binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint));
                         binding.billIdHolder.setCounterMaxLength(13);
+                        binding.billQRscan.setEnabled(true);
+                        binding.billQRscan.setTextColor(getResources().getColor(R.color.gray));
                         break;
                     case 1:
-                        viewModel.setType(ElectricityBillMainVM.BillType.GAS);
+                        viewModel.setType(BillInfo.BillType.GAS);
                         binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint3));
                         binding.billIdHolder.setCounterMaxLength(12);
+                        binding.billQRscan.setEnabled(false);
+                        binding.billQRscan.setTextColor(getResources().getColor(R.color.gray_300));
                         break;
                 }
             }
@@ -131,7 +136,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
             if (aBoolean) {
                 viewModel.getProgressVisibility().set(View.GONE);
                 new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(
-                        viewModel.getBillID().get(), viewModel.getBillPayID(), viewModel.getBillPrice(), false))
+                        viewModel.getType(), viewModel.getBillID().get(), null, false))
                         .setReplace(false).load();
             }
         });
@@ -145,7 +150,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
                 binding.billTypeTitle.setText(getResources().getString(R.string.elecBill_main_billTypeTitle));
                 binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint));
                 binding.billIdHolder.setCounterMaxLength(13);
-                viewModel.setType(ElectricityBillMainVM.BillType.ELECTRICITY);
+                viewModel.setType(BillInfo.BillType.ELECTRICITY);
                 break;
             case R.id.mode_phoneBill:
                 binding.billSpinner.setVisibility(View.GONE);
@@ -153,7 +158,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
                 binding.billTypeTitle.setText(getResources().getString(R.string.elecBill_main_billPhoneTitle));
                 binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint2));
                 binding.billIdHolder.setCounterMaxLength(11);
-                viewModel.setType(ElectricityBillMainVM.BillType.PHONE);
+                viewModel.setType(BillInfo.BillType.PHONE);
                 break;
         }
     }

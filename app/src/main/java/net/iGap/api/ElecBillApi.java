@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.model.bill.ServiceDebit;
 import net.iGap.model.electricity_bill.BillData;
 import net.iGap.model.electricity_bill.CompanyList;
 import net.iGap.model.electricity_bill.ElectricityBranchData;
@@ -8,7 +9,6 @@ import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.model.electricity_bill.LastBillData;
 import net.iGap.model.electricity_bill.PaidBill;
 import net.iGap.model.electricity_bill.SaleBill;
-import net.iGap.model.electricity_bill.ServiceDebit;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

@@ -1,8 +1,11 @@
-package net.iGap.model.electricity_bill;
+package net.iGap.model.bill;
 
 public class BillInfo {
 
-    private String billType;
+    public enum BillType {ELECTRICITY, GAS, PHONE, MOBILE}
+
+    private BillType billType;
+    private String billTypeString;
     private String serverID;
     private String billID;
     private String gasID;
@@ -11,9 +14,11 @@ public class BillInfo {
     private String phoneNum;
     private String areaCode;
 
-    public String getBillType() {
-        return billType;
-        /*switch (billType) {
+
+    public String getBillTypeString() {
+        if (billTypeString != null)
+            return billTypeString;
+        switch (billType) {
             case ELECTRICITY:
                 return "ELECTRICITY";
             case GAS:
@@ -24,11 +29,11 @@ public class BillInfo {
                 return "MOBILE_MCI";
             default:
                 return "";
-        }*/
+        }
     }
 
-    public void setBillType(String billType) {
-        this.billType = billType;
+    public void setBillTypeString(String billTypeString) {
+        this.billTypeString = billTypeString;
     }
 
     public String getBillID() {
@@ -85,5 +90,13 @@ public class BillInfo {
 
     public void setServerID(String serverID) {
         this.serverID = serverID;
+    }
+
+    public BillType getBillType() {
+        return billType;
+    }
+
+    public void setBillType(BillType billType) {
+        this.billType = billType;
     }
 }

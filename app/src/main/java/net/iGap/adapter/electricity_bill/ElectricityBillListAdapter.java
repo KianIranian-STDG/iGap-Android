@@ -17,7 +17,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.model.bill.BillList;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
-import net.iGap.model.electricity_bill.ServiceDebit;
+import net.iGap.model.bill.ServiceDebit;
 import net.iGap.module.CircleImageView;
 
 import java.text.DecimalFormat;
@@ -171,8 +171,7 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 billPhone.setVisibility(View.VISIBLE);
 
                 billPriceTitle.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayLastTerm));
-                billTimeTitle.setText(context.getResources().getText(R.string.elecBill_pay_billPrice)
-                        + " " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
+                billTimeTitle.setText(context.getResources().getText(R.string.elecBill_pay_billPrice) + " " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
                 billPayTitle.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayLastTerm));
                 billPayTitle2.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
                 title.setText(bill.get(position).getBillTitle());
@@ -188,7 +187,7 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                     billTime.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getMidTerm().getAmount())))
                             + " " + context.getResources().getString(R.string.rial));
                     billPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(
-                            (bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + " "))
+                            (bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + "-"))
                                     + bill.get(position).getPhoneNumber()));
                 } else {
                     billID.setText(debit.getLastTerm().getBillID());

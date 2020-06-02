@@ -3,14 +3,14 @@ package net.iGap.repository;
 import net.iGap.api.BillsApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.BillList;
 import net.iGap.model.bill.GasBranchData;
 import net.iGap.model.bill.MobileDebit;
-import net.iGap.model.electricity_bill.BillInfo;
+import net.iGap.model.bill.ServiceDebit;
 import net.iGap.model.electricity_bill.ElectricityBranchData;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.model.electricity_bill.LastBillData;
-import net.iGap.model.electricity_bill.ServiceDebit;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmElectricityBill;
@@ -29,18 +29,18 @@ public class BillsAPIRepository {
 
     public void addBill(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
         new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.addBill(
-                info.getBillType(), info.getTitle(), info.getMobileNum(), info.getBillID(),
+                info.getBillTypeString(), info.getTitle(), phone, info.getBillID(),
                 info.getGasID(), info.getPhoneNum(), info.getAreaCode()), handShakeCallback, apiResponse);
     }
 
     public void editBill(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
         new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.editBill(
-                info.getServerID(), info.getBillType(), info.getTitle(), info.getBillID(),
+                info.getServerID(), info.getBillTypeString(), info.getTitle(), info.getBillID(),
                 info.getGasID(), info.getPhoneNum(), info.getAreaCode()), handShakeCallback, apiResponse);
     }
 
     public void deleteBill(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.deleteBill(info.getServerID(), info.getBillType()), handShakeCallback, apiResponse);
+        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.deleteBill(info.getServerID(), info.getBillTypeString()), handShakeCallback, apiResponse);
     }
 
     public void getBillList(HandShakeCallback handShakeCallback, ResponseCallback<BillList> apiResponse) {
@@ -48,32 +48,32 @@ public class BillsAPIRepository {
     }
 
     public void serviceInquiry(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<ServiceDebit>> apiResponse) {
-        if (info.getBillType().equals("ELECTRICITY")) {
-            new ApiInitializer<ElectricityResponseModel<ServiceDebit>>().initAPI(apiService.inquiryElectricityBill(info.getBillType(), info.getBillID(), info.getMobileNum()), handShakeCallback, apiResponse);
-        } else if (info.getBillType().equals("GAS")) {
-            new ApiInitializer<ElectricityResponseModel<ServiceDebit>>().initAPI(apiService.inquiryGasBill(info.getBillType(), info.getGasID()), handShakeCallback, apiResponse);
+        if (info.getBillTypeString().equals("ELECTRICITY")) {
+            new ApiInitializer<ElectricityResponseModel<ServiceDebit>>().initAPI(apiService.inquiryElectricityBill(info.getBillTypeString(), info.getBillID(), info.getMobileNum() != null ? info.getMobileNum() : phone), handShakeCallback, apiResponse);
+        } else if (info.getBillTypeString().equals("GAS")) {
+            new ApiInitializer<ElectricityResponseModel<ServiceDebit>>().initAPI(apiService.inquiryGasBill(info.getBillTypeString(), info.getGasID()), handShakeCallback, apiResponse);
         }
 
     }
 
     public void phoneAndMobileInquiry(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<MobileDebit>> apiResponse) {
-        if (info.getBillType().equals("PHONE")) {
-            new ApiInitializer<ElectricityResponseModel<MobileDebit>>().initAPI(apiService.inquiryPhoneBill(info.getBillType(), info.getPhoneNum(), info.getAreaCode()), handShakeCallback, apiResponse);
-        } else if (info.getBillType().equals("MOBILE_MCI")) {
-            new ApiInitializer<ElectricityResponseModel<MobileDebit>>().initAPI(apiService.inquiryMobileBill(info.getBillType(), info.getPhoneNum()), handShakeCallback, apiResponse);
+        if (info.getBillTypeString().equals("PHONE")) {
+            new ApiInitializer<ElectricityResponseModel<MobileDebit>>().initAPI(apiService.inquiryPhoneBill(info.getBillTypeString(), info.getPhoneNum(), info.getAreaCode()), handShakeCallback, apiResponse);
+        } else if (info.getBillTypeString().equals("MOBILE_MCI")) {
+            new ApiInitializer<ElectricityResponseModel<MobileDebit>>().initAPI(apiService.inquiryMobileBill(info.getBillTypeString(), info.getPhoneNum()), handShakeCallback, apiResponse);
         }
 
     }
 
     public void getElectricityBranchInfo(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<ElectricityBranchData>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<ElectricityBranchData>>().initAPI(apiService.getElectricityBranchInfo(info.getBillType(), info.getBillID()), handShakeCallback, apiResponse);
+        new ApiInitializer<ElectricityResponseModel<ElectricityBranchData>>().initAPI(apiService.getElectricityBranchInfo(info.getBillTypeString(), info.getBillID()), handShakeCallback, apiResponse);
     }
 
     public void getGasBranchInfo(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<GasBranchData>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<GasBranchData>>().initAPI(apiService.getGasBranchInfo(info.getBillType(), info.getBillID()), handShakeCallback, apiResponse);
+        new ApiInitializer<ElectricityResponseModel<GasBranchData>>().initAPI(apiService.getGasBranchInfo(info.getBillTypeString(), info.getBillID()), handShakeCallback, apiResponse);
     }
 
     public void getLastBill(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<LastBillData>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<LastBillData>>().initAPI(apiService.getLastBill(info.getBillType(), info.getBillID()), handShakeCallback, apiResponse);
+        new ApiInitializer<ElectricityResponseModel<LastBillData>>().initAPI(apiService.getLastBill(info.getBillTypeString(), info.getBillID()), handShakeCallback, apiResponse);
     }
 }

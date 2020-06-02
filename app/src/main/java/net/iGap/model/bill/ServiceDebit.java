@@ -1,9 +1,8 @@
-package net.iGap.model.electricity_bill;
+package net.iGap.model.bill;
 
 import com.google.gson.annotations.SerializedName;
 
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperNumerical;
 
 public class ServiceDebit {
 
@@ -70,10 +69,7 @@ public class ServiceDebit {
     }
 
     public String getTotalBillDebtConverted() {
-        if (HelperCalander.isPersianUnicode) {
-            return HelperCalander.convertToUnicodeFarsiNumber(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(totalElectricityBillDebt)));
-        }
-        return new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(totalElectricityBillDebt));
+        return totalElectricityBillDebt;
     }
 
     public String getTotalElectricityBillDebt() {

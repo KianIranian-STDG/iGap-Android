@@ -2,16 +2,15 @@ package net.iGap.viewmodel.electricity_bill;
 
 import android.view.View;
 
-import net.iGap.R;
-import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.helper.HelperNumerical;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-public class ElectricityBillMainVM extends BaseAPIViewModel {
+import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.helper.HelperNumerical;
+import net.iGap.model.bill.BillInfo;
 
-    public enum BillType {ELECTRICITY, GAS, PHONE, MOBILE}
+public class ElectricityBillMainVM extends BaseAPIViewModel {
 
     private ObservableField<String> billID;
     private ObservableField<Integer> billIDError;
@@ -20,7 +19,7 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
 
     private MutableLiveData<Boolean> goToBillDetailFrag;
 
-    private BillType type = BillType.ELECTRICITY;
+    private BillInfo.BillType type = BillInfo.BillType.ELECTRICITY;
 
     private String billPayID = null;
     private String billPrice = null;
@@ -40,17 +39,21 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
             activateError(R.string.elecBill_Entry_lengthError);
             return;
         }
-        if (type == BillType.ELECTRICITY || type == BillType.GAS) {
-            if (billID.get().length() < 13) {
+        if (type == BillInfo.BillType.ELECTRICITY || type == BillInfo.BillType.GAS) {
+            if (billID.get().length() < 12) {
                 activateError(R.string.elecBill_EntryService_lengthError);
                 return;
             }
         }
-        if (type == BillType.PHONE || type == BillType.MOBILE) {
+        if (type == BillInfo.BillType.PHONE || type == BillInfo.BillType.MOBILE) {
             if (billID.get().length() < 11) {
                 activateError(R.string.elecBill_EntryPhone_lengthError);
                 return;
             }
+            if (billID.get().startsWith("09"))
+                type = BillInfo.BillType.MOBILE;
+            else
+                type = BillInfo.BillType.PHONE;
         }
         progressVisibility.set(View.VISIBLE);
         goToBillDetailFrag.setValue(true);
@@ -130,11 +133,11 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
         return goToBillDetailFrag;
     }
 
-    public void setType(BillType type) {
+    public void setType(BillInfo.BillType type) {
         this.type = type;
     }
 
-    public BillType getType() {
+    public BillInfo.BillType getType() {
         return type;
     }
 }

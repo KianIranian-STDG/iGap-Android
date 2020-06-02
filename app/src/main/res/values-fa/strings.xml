@@ -2299,7 +2299,7 @@
     <string name="profile">نمایه</string>
 
     <string name="elecBill_Entry_lengthError">شناسه نباید خالی باشد.</string>
-    <string name="elecBill_EntryService_lengthError">شناسه قبض باید 13 کاراکتر باشد.</string>
+    <string name="elecBill_EntryService_lengthError">شناسه قبض باید حداقل 12 کاراکتر باشد.</string>
     <string name="elecBill_EntryPhone_lengthError">شماره تلفن باید ۱۱ کاراکتر باشد.</string>
     <string name="elecBill_Entry_barcodeError">اسکن بارکد انجام نشد. لطفا دوباره تلاش کنید.</string>
     <string name="elecBill_Entry_companyError">این قبض یافت نشد.</string>
@@ -2328,7 +2328,7 @@
     <string name="elecBill_Entry_userIDError">لطفا کد ملی خود را وارد نمایید.</string>
     <string name="elecBill_Entry_userIDLengthError">طول کد ملی شما کافی نیست.</string>
     <string name="elecBill_Entry_emailFormatError">ساختار ایمیل شما صحیح نیست.</string>
-    <string name="elecBill_add_form">لطفا موارد خواسته شده را تکمیل کنید.</string>
+    <string name="elecBill_add_form">اطلاعات قبض</string>
     <string name="elecBill_add_name">نام قبض *</string>
     <string name="elecBill_add_billID">شناسه قبض *</string>
     <string name="elecBill_add_phone">شماره تلفن شما *</string>

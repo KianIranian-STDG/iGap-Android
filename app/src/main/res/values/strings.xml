@@ -2345,7 +2345,7 @@ Want to get it?</string>
     <string name="profile">Profile</string>
 
     <string name="elecBill_Entry_lengthError">Number must NOT be empty.</string>
-    <string name="elecBill_EntryService_lengthError">Bill ID must be 13 character.</string>
+    <string name="elecBill_EntryService_lengthError">Bill ID must be at least 12 character.</string>
     <string name="elecBill_EntryPhone_lengthError">Phone number must be 11 character.</string>
     <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
     <string name="elecBill_Entry_companyError">We do NOT support this Bill.</string>
@@ -2363,7 +2363,7 @@ Want to get it?</string>
     <string name="elecBill_pay_billPrice">Total due</string>
     <string name="elecBill_pay_billTime">Time Limit</string>
     <string name="elecBill_pay_billPay">Pay</string>
-    <string name="elecBill_pay_billBranchInfo">Electricity Branching Info</string>
+    <string name="elecBill_pay_billBranchInfo">Branch Info</string>
     <string name="elecBill_pay_billAddBillList">Add to my Bill\'s list</string>
     <string name="elecBill_pay_billImage">Show bill\'s image</string>
     <string name="elecBill_Entry_nameError">Bill\'s name can NOT be empty. for example: Home</string>
@@ -2374,7 +2374,7 @@ Want to get it?</string>
     <string name="elecBill_Entry_userIDError">Your national ID can NOT be empty.</string>
     <string name="elecBill_Entry_userIDLengthError">Your national ID must be 10 character.</string>
     <string name="elecBill_Entry_emailFormatError">Your Email format is wrong.</string>
-    <string name="elecBill_add_form">Please complete the form.</string>
+    <string name="elecBill_add_form">Bill Info</string>
     <string name="elecBill_add_name">Bill\'s name *</string>
     <string name="elecBill_add_billID">Bill\'s ID *</string>
     <string name="elecBill_add_phone">Your Mobile Number *</string>
