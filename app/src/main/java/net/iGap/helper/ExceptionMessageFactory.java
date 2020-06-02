@@ -18,15 +18,21 @@ public class ExceptionMessageFactory {
         if (throwable instanceof HttpException) {
             HttpException httpException = (HttpException) throwable;
 
-            if (httpException.response() != null && httpException.response().errorBody() != null) {
-                try {
-                    String errorBody = new String(httpException.response().errorBody().bytes());
-                    errorResponse = new Gson().fromJson(errorBody, ErrorModel.class);
-                    return errorResponse;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (httpException.code() >= 500) {
+                errorResponse.setMessage("خطای داخلی سرور");
+            } else {
+                if (httpException.response() != null && httpException.response().errorBody() != null) {
+                    try {
+                        String errorBody = new String(httpException.response().errorBody().bytes());
+                        errorResponse = new Gson().fromJson(errorBody, ErrorModel.class);
+                        return errorResponse;
+                    } catch (IOException e) {
+                        errorResponse.setMessage("خطای نامشخص");
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        errorResponse.setMessage("خطای نامشخص");
+                        e.printStackTrace();
+                    }
                 }
             }
         } else if (throwable instanceof SocketTimeoutException) {
