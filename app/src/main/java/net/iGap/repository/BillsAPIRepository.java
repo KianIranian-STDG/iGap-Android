@@ -70,7 +70,7 @@ public class BillsAPIRepository {
     }
 
     public void getGasBranchInfo(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<GasBranchData>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<GasBranchData>>().initAPI(apiService.getGasBranchInfo(info.getBillTypeString(), info.getBillID()), handShakeCallback, apiResponse);
+        new ApiInitializer<ElectricityResponseModel<GasBranchData>>().initAPI(apiService.getGasBranchInfo(info.getBillTypeString(), info.getGasID()), handShakeCallback, apiResponse);
     }
 
     public void getLastBill(BillInfo info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<LastBillData>> apiResponse) {

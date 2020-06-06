@@ -179,16 +179,20 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 showDetail.setText(context.getResources().getText(R.string.elecBill_cell_billPayPhoneMidBtn));
 
                 if (HelperCalander.isPersianUnicode) {
-                    billID.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getLastTerm().getBillID()));
-                    billPayID.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getLastTerm().getPayID()));
-                    billPayID2.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getMidTerm().getPayID()));
-                    billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getLastTerm().getAmount())))
-                            + " " + context.getResources().getString(R.string.rial));
-                    billTime.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getMidTerm().getAmount())))
-                            + " " + context.getResources().getString(R.string.rial));
-                    billPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(
-                            (bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + "-"))
-                                    + bill.get(position).getPhoneNumber()));
+                    try {
+                        billID.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getLastTerm().getBillID()));
+                        billPayID.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getLastTerm().getPayID()));
+                        billPayID2.setText(HelperCalander.convertToUnicodeFarsiNumber(debit.getMidTerm().getPayID()));
+                        billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getLastTerm().getAmount())))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billTime.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getMidTerm().getAmount())))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(
+                                (bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + "-"))
+                                        + bill.get(position).getPhoneNumber()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     billID.setText(debit.getLastTerm().getBillID());
                     billPayID.setText(debit.getLastTerm().getPayID());

@@ -178,8 +178,6 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
             case GAS:
                 binding.showBillImage.setVisibility(View.GONE);
                 binding.billImage.setImageDrawable(getResources().getDrawable(R.drawable.bill_gaz_pec));
-                // TODO: 6/2/2020 must activate this
-                binding.KontorInfo.setVisibility(View.GONE);
                 break;
             case MOBILE:
             case PHONE:
@@ -226,7 +224,14 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
     private void onBtnClickManger(btnActions actions) {
         switch (actions) {
             case BRANCH_INFO:
-                new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getBillID())).setReplace(false).load();
+                switch (bill.getBillType()) {
+                    case ELECTRICITY:
+                        new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getBillType(), bill.getBillID())).setReplace(false).load();
+                        break;
+                    case GAS:
+                        new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getBillType(), bill.getGasID())).setReplace(false).load();
+                        break;
+                }
                 break;
             case ADD_LIST:
                 ElectricityBillAddFrag frag = ElectricityBillAddFrag.newInstance(viewModel.getInfo(), editMode);
