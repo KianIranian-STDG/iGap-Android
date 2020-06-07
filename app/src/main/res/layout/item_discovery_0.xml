@@ -1,122 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_city"
-        android:layout_width="wrap_content"
+        android:id="@+id/frame_score"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_weather"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
-            android:layout_marginStart="@dimen/dp18"
-            android:layout_marginLeft="@dimen/dp18"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_cityName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="@dimen/dp8"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/xlargeTextSize"
-            app:layout_constraintStart_toEndOf="@+id/iv_weather"
-            app:layout_constraintTop_toTopOf="@+id/iv_weather" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_degree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/xlargeTextSize"
-            app:layout_constraintEnd_toEndOf="@+id/tv_date"
-            app:layout_constraintTop_toTopOf="@+id/tv_cityName" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLength="35"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_weather"
-            app:layout_constraintStart_toStartOf="@+id/tv_cityName" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp18"
-        android:layout_marginRight="@dimen/dp18"
-        android:padding="@dimen/dp8"
-        app:layout_constraintBottom_toBottomOf="@id/container_city"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/container_city"
-        app:layout_constraintVertical_bias="0.5">
-
-        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView5"
             style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:src="@drawable/award"
-            android:layout_marginBottom="@dimen/dp8"
-            app:layout_constraintEnd_toEndOf="@+id/tv_score"
-            app:layout_constraintHorizontal_bias="0.53"
-            app:layout_constraintStart_toStartOf="@+id/textView8"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/score_star_icon"
+            android:textColor="@color/green"
+            android:textSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView8"
-            android:layout_width="61dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp2"
-            android:layout_marginRight="@dimen/dp2"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="@string/payment_userScore"
-            android:textColor="@color/orange"
-            android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_score"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView5"
+            app:layout_constraintWidth_percent="0.5" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/orange"
-            android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="@+id/textView8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView8"
-            app:layout_constraintVertical_bias="1.0" />
+            android:gravity="center"
+            android:textColor="@color/green"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+            app:layout_constraintEnd_toEndOf="@+id/textView8"
+            app:layout_constraintStart_toStartOf="@+id/textView8"
+            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            tools:text="1520" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/view12"
-        android:layout_width="@dimen/dp1"
-        android:layout_height="54dp"
-        android:background="?iGapDividerLine"
-        app:layout_constraintBottom_toBottomOf="@+id/container_city"
-        app:layout_constraintEnd_toStartOf="@id/container_score"
-        app:layout_constraintHorizontal_bias="0.796"
-        app:layout_constraintStart_toEndOf="@id/container_city"
-        app:layout_constraintTop_toTopOf="@+id/container_city" />
+        android:layout_width="1dp"
+        android:layout_height="50dp"
+        android:background="?iGapSubtitleTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/frame_score"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:paddingStart="@dimen/dp16"
+        android:paddingLeft="@dimen/dp16"
+        android:text="@string/Increase_score"
+        android:textColor="@color/green"
+        android:textSize="@dimen/largeTextSize"
+        app:layout_constraintBottom_toBottomOf="@+id/view12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/view12"
+        app:layout_constraintTop_toTopOf="@+id/view12"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintWidth_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

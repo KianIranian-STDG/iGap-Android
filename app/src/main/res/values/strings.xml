@@ -758,7 +758,7 @@ Want to get it?</string>
     <string name="there_is_no_sheared_media">There are no shared media</string>
     <string name="pending">Pending</string>
     <string name="completed">Completed</string>
-    <string name="payment_userScore">Your Score: </string>
+    <string name="payment_userScore">Your Score</string>
     <string name="payment_spentScore">Spending Score: </string>
     <string name="payment_price">discount: </string>
     <!-- New String -->
@@ -2629,5 +2629,6 @@ Want to get it?</string>
     <string name="gift_card_already_in_use">This gift card is already in use!</string>
     <string name="gift_carde_sended">You already sent a gift card to someone else!</string>
     <string name="trim_error">"Trim is too short , please try with valid duration."</string>
+    <string name="Increase_score">Increase your score\n right now!</string>
 
 </resources>

@@ -2203,4 +2203,5 @@
     <string name="gift_card_already_in_use">Cette carte-cadeau est déjà utilisée!</string>
     <string name="gift_carde_sended">Vous avez déjà envoyé une carte-cadeau à quelqu autre!</string>
     <string name="trim_error">La taille est trop courte, veuillez essayer avec une durée valide.</string>
+    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
 </resources>

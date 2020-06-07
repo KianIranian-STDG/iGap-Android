@@ -3213,4 +3213,5 @@
     <string name="gift_card_already_in_use">بطاقة الهدايا هذه قيد الاستخدام بالفعل!</string>
     <string name="gift_carde_sended">لقد أرسلت بالفعل بطاقة هدايا لشخص آخر!</string>
     <string name="trim_error">التقليم قصير جدًا ، يرجى المحاولة بمدة صالحة.</string>
+    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
 </resources>
