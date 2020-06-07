@@ -1,6 +1,8 @@
 package net.iGap.adapter.items.discovery.holder;
 
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -22,8 +24,7 @@ import net.iGap.realm.RealmUserInfo;
 
 public class Type0ViewHolder extends BaseViewHolder implements HandShakeCallback {
     private WeatherApi weatherApi;
-
-    public AppCompatTextView tvCityName, tvDegree, tvDate, tvScore;
+    public AppCompatTextView tvCityName, tvDegree, tvDate, tvScore, tvContent;
     public AppCompatImageView ivWeather;
     private RealmUserInfo userInfo;
     private ConstraintLayout frameScore;
@@ -36,13 +37,13 @@ public class Type0ViewHolder extends BaseViewHolder implements HandShakeCallback
         tvDate = itemView.findViewById(R.id.tv_date);
         tvScore = itemView.findViewById(R.id.tv_score);
         frameScore = itemView.findViewById(R.id.frame_score);
+        tvContent = itemView.findViewById(R.id.textView2);
 
         weatherApi = new RetrofitFactory().getWeatherRetrofit();
 
         DbManager.getInstance().doRealmTask(realm -> {
             userInfo = realm.where(RealmUserInfo.class).findFirst();
         });
-
  /*
      weatherApi.getCities().enqueue(new Callback<List<Cities>>() {
             @Override
@@ -72,9 +73,17 @@ public class Type0ViewHolder extends BaseViewHolder implements HandShakeCallback
         });*/
     }
 
+    public void shakeView() {
+        Animation a = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shake_mode);
+        a.reset();
+        tvContent.clearAnimation();
+        tvContent.startAnimation(a);
+    }
+
     @Override
     public void bindView(DiscoveryItem item) {
         tvScore.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(userInfo.getIvandScore())) : String.valueOf(userInfo.getIvandScore()));
         frameScore.setOnClickListener(view -> new HelperFragment(G.currentActivity.getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load());
+        shakeView();
     }
 }
