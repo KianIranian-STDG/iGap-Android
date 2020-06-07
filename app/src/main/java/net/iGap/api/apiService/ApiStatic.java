@@ -17,7 +17,7 @@ class ApiStatic {
     static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
     static final String ELECTRICITY_BILL_URL = BASE_URL + "bill/" + VERSION + "api/";
-    static final String BILL_URL = BASE_URL_TEST;
+    static final String BILL_URL = BASE_URL + "bill-manager/" + VERSION;
     static final String STICKER_URL = "https://api.igap.net/sticker/" + VERSION;
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
     static final String MOBILE_BANK = BASE_URL + "parsian/" + VERSION;
