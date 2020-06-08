@@ -44,6 +44,17 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/dp20">
 
+                <View
+                    android:id="@+id/billImageBack"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:elevation="@dimen/dp4"
+                    android:padding="@dimen/dp10"
+                    android:background="@drawable/bill_round_drawable"
+                    app:layout_constraintStart_toStartOf="@+id/billImage"
+                    app:layout_constraintEnd_toEndOf="@+id/billImage"
+                    app:layout_constraintTop_toTopOf="@+id/billImage"
+                    app:layout_constraintBottom_toBottomOf="@+id/billImage" />
 
                 <net.iGap.module.CircleImageView
                     android:id="@+id/billImage"
@@ -310,10 +321,10 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Pay"
                     style="@style/iGapButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.payBill()}"
+                    android:onClick="@{()->viewmodel.payBtn(0)}"
                     android:enabled="@{viewmodel.payBtnEnable}"
                     android:text="@string/elecBill_pay_billPay"
                     android:textSize="@dimen/dp16"
@@ -321,47 +332,62 @@
                     android:layout_marginTop="@dimen/dp16"
                     android:layout_marginStart="@dimen/dp32"
                     android:layout_marginEnd="@dimen/dp32"
-                    android:layout_marginRight="@dimen/dp32"
-                    android:layout_marginLeft="@dimen/dp32"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cardHolder"
-                    app:layout_constraintBottom_toTopOf="@+id/searchBill"/>
+                    app:layout_constraintEnd_toStartOf="@+id/Pay2"
+                    app:layout_constraintTop_toBottomOf="@+id/cardHolder" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Pay2"
+                    style="@style/iGapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.payBtn(1)}"
+                    android:enabled="@{viewmodel.pay2BtnEnable}"
+                    android:text="@string/elecBill_pay_billPay"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp32"
+                    android:layout_marginRight="@dimen/dp32"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/Pay"
+                    app:layout_constraintTop_toBottomOf="@+id/cardHolder" />
 
                 <ProgressBar
                     android:id="@+id/ProgressV"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:elevation="2dp"
+                    android:elevation="5dp"
                     android:visibility="@{viewmodel.progressVisibilityPay}"
-                    app:layout_constraintBottom_toBottomOf="@+id/Pay"
-                    app:layout_constraintEnd_toEndOf="@+id/Pay"
-                    app:layout_constraintStart_toStartOf="@+id/Pay"
-                    app:layout_constraintTop_toTopOf="@+id/Pay"
+                    app:layout_constraintBottom_toBottomOf="@+id/billImage"
+                    app:layout_constraintEnd_toEndOf="@+id/billImage"
+                    app:layout_constraintStart_toStartOf="@+id/billImage"
+                    app:layout_constraintTop_toTopOf="@+id/billImage"
                     app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintWidth_percent="0.1"
-                    app:layout_constraintHorizontal_bias="0.05" />
+                    app:layout_constraintWidth_percent="0.1" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/KontorInfo"
                     style="@style/iGapOutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/dp32"
+                    android:layout_marginLeft="@dimen/dp32"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="@dimen/dp32"
+                    android:layout_marginRight="@dimen/dp32"
+                    android:ellipsize="end"
                     android:minHeight="58dp"
                     android:onClick="@{()->fragment.onBranchInfoBtnClick()}"
+                    android:singleLine="true"
                     android:text="@string/elecBill_pay_billBranchInfo"
                     android:textSize="@dimen/dp16"
                     android:visibility="visible"
-                    android:layout_marginTop="@dimen/dp32"
-                    android:layout_marginStart="@dimen/dp32"
-                    android:layout_marginEnd="@dimen/dp32"
-                    android:layout_marginRight="@dimen/dp32"
-                    android:layout_marginLeft="@dimen/dp32"
-                    android:ellipsize="end"
-                    android:singleLine="true"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Pay"/>
+                    app:layout_constraintTop_toBottomOf="@+id/Pay" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/add_to_list"

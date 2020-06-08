@@ -12,29 +12,33 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.adapter.electricity_bill.ElectricityBranchInfoListAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBranchInfoListBinding;
-import net.iGap.model.electricity_bill.BranchData;
-import net.iGap.model.electricity_bill.ElectricityResponseModel;
-import net.iGap.adapter.electricity_bill.ElectricityBranchInfoListAdapter;
-import net.iGap.viewmodel.electricity_bill.ElectricityBranchInfoListVM;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.bill.BillInfo;
+import net.iGap.model.bill.GasBranchData;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
+import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.electricity_bill.ElectricityBranchInfoListVM;
 
 public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBranchInfoListVM> {
 
     private FragmentElecBranchInfoListBinding binding;
     private ElectricityBranchInfoListAdapter adapter;
     private String billID;
+    private BillInfo.BillType type;
     private static final String TAG = "ElectricityBranchInfoLi";
 
-    public static ElectricityBranchInfoListFrag newInstance(String billID) {
-        return new ElectricityBranchInfoListFrag(billID);
+    public static ElectricityBranchInfoListFrag newInstance(BillInfo.BillType type, String billID) {
+        return new ElectricityBranchInfoListFrag(type, billID);
     }
 
-    private ElectricityBranchInfoListFrag(String billID) {
+    private ElectricityBranchInfoListFrag(BillInfo.BillType type, String billID) {
         this.billID = billID;
+        this.type = type;
     }
 
     @Override
@@ -78,11 +82,20 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBr
         binding.billRecycler.setHasFixedSize(true);
         onDataChangedListener();
         viewModel.setBillID(billID);
-        viewModel.getData();
+
+        switch (type) {
+            case GAS:
+                viewModel.getDataGas();
+                break;
+            case ELECTRICITY:
+                viewModel.getDataElec();
+                break;
+        }
     }
 
     private void onDataChangedListener() {
-        viewModel.getmData().observe(getViewLifecycleOwner(), this::initRecycler);
+        viewModel.getmDataElec().observe(getViewLifecycleOwner(), this::initRecyclerElec);
+        viewModel.getmDataGas().observe(getViewLifecycleOwner(), this::initRecyclerGas);
         viewModel.getShowRequestFailedError().observe(getViewLifecycleOwner(), errorMessageResId -> {
             if (errorMessageResId != null) {
                 HelperError.showSnackMessage(getString(errorMessageResId), false);
@@ -90,8 +103,13 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBr
         });
     }
 
-    private void initRecycler(ElectricityResponseModel<BranchData> data) {
-        adapter = new ElectricityBranchInfoListAdapter(getContext(), data);
+    private void initRecyclerElec(ElectricityResponseModel<ElectricityBranchData> data) {
+        adapter = new ElectricityBranchInfoListAdapter(getContext(), data, type);
+        binding.billRecycler.setAdapter(adapter);
+    }
+
+    private void initRecyclerGas(ElectricityResponseModel<GasBranchData> data) {
+        adapter = new ElectricityBranchInfoListAdapter(getContext(), data.getData(), type);
         binding.billRecycler.setAdapter(adapter);
     }
 

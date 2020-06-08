@@ -11,19 +11,19 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.electricity_bill.BranchData;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ElectricityBillSearchListAdapter extends RecyclerView.Adapter<ElectricityBillSearchListAdapter.ViewHolder> {
 
-    private List<BranchData> mData;
+    private List<ElectricityBranchData> mData;
     private Context context;
     private OnItemClickListener clickListener;
 
-    public ElectricityBillSearchListAdapter(Context context, List<BranchData> data, OnItemClickListener clickListener) {
+    public ElectricityBillSearchListAdapter(Context context, List<ElectricityBranchData> data, OnItemClickListener clickListener) {
         this.mData = new ArrayList<>(data);
         this.context = context;
         this.clickListener = clickListener;
