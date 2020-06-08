@@ -33,6 +33,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     private ObservableInt progressVisibilityData;
     private ObservableInt progressVisibilityPay;
     private ObservableInt progressVisibilityDownload;
+    private ObservableInt progressVisibilityRetry;
     private ObservableBoolean payBtnEnable;
     private ObservableBoolean pay2BtnEnable;
 
@@ -55,6 +56,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         progressVisibilityData = new ObservableInt(View.VISIBLE);
         progressVisibilityPay = new ObservableInt(View.GONE);
         progressVisibilityDownload = new ObservableInt(View.GONE);
+        progressVisibilityRetry = new ObservableInt(View.GONE);
         payBtnEnable = new ObservableBoolean(true);
         pay2BtnEnable = new ObservableBoolean(true);
         showRequestFailedError = new MutableLiveData<>();
@@ -63,6 +65,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void getData() {
         progressVisibilityData.set(View.VISIBLE);
+        progressVisibilityRetry.set(View.GONE);
         switch (info.getBillType()) {
             case PHONE:
             case MOBILE:
@@ -83,26 +86,32 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
                 debit = new Debit<MobileDebit>();
                 debit.setData(data.getData());
 
-                billPayID.set(HelperMobileBank.checkNumbersInMultiLangs((info.getAreaCode() != null ? info.getAreaCode() : "") + info.getPhoneNum()));
-                billID.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getLastTerm().getBillID()));
-                billPrice.set(HelperMobileBank.checkNumbersInMultiLangs(
-                        new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
-                                data.getData().getLastTerm().getAmount())) + " ریال"));
-                billTime.set(HelperMobileBank.checkNumbersInMultiLangs(
-                        new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
-                                data.getData().getMidTerm().getAmount())) + " ریال"));
+                try {
+                    billPayID.set(HelperMobileBank.checkNumbersInMultiLangs((info.getAreaCode() != null ? info.getAreaCode() : "") + info.getPhoneNum()));
+                    billID.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getLastTerm().getBillID()));
+                    billPrice.set(HelperMobileBank.checkNumbersInMultiLangs(
+                            new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
+                                    data.getData().getLastTerm().getAmount())) + " ریال"));
+                    billTime.set(HelperMobileBank.checkNumbersInMultiLangs(
+                            new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
+                                    data.getData().getMidTerm().getAmount())) + " ریال"));
+                } catch (Exception e) {
+
+                }
             }
 
             @Override
             public void onError(String error) {
                 errorM.setValue(new ErrorModel("", error));
                 progressVisibilityData.set(View.GONE);
+                progressVisibilityRetry.set(View.VISIBLE);
             }
 
             @Override
             public void onFailed() {
                 progressVisibilityData.set(View.GONE);
                 showRequestFailedError.setValue(R.string.connection_error);
+                progressVisibilityRetry.set(View.VISIBLE);
             }
         });
     }
@@ -333,5 +342,9 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void setDebit(Debit debit) {
         this.debit = debit;
+    }
+
+    public ObservableInt getProgressVisibilityRetry() {
+        return progressVisibilityRetry;
     }
 }

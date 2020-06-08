@@ -132,6 +132,8 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
         LinearLayout toolbarLayout = binding.Toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        binding.loadAgain.setOnClickListener(v -> viewModel.getData());
+
         viewModel.getBillImage().observe(getViewLifecycleOwner(), data -> downloadFile());
         viewModel.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
             switch (errorModel.getMessage()) {
