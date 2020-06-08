@@ -153,6 +153,8 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     }
 
     public void payBtn(int buttonID) {
+        if (debit == null)
+            return;
         if (buttonID == 0) {
             // main Btn for pay
             progressVisibilityPay.set(View.VISIBLE);
