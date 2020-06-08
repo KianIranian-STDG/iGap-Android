@@ -8,12 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <View
+            android:id="@+id/billImageBack"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:elevation="@dimen/dp4"
+            android:padding="@dimen/dp10"
+            android:background="@drawable/bill_round_drawable"
+            app:layout_constraintStart_toStartOf="@+id/billImage"
+            app:layout_constraintEnd_toEndOf="@+id/billImage"
+            app:layout_constraintTop_toTopOf="@+id/billImage"
+            app:layout_constraintBottom_toBottomOf="@+id/billImage" />
+
         <net.iGap.module.CircleImageView
             android:id="@+id/billImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:elevation="@dimen/dp4"
-            android:src="@drawable/bill_elc_pec"
+            android:src="@drawable/logo_igap"
             app:layout_constraintStart_toStartOf="@+id/cardHolder"
             app:layout_constraintEnd_toStartOf="@+id/cardHolder"
             app:layout_constraintTop_toTopOf="@+id/cardHolder"
@@ -70,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:justificationMode="inter_word"
-                    android:text="Elec Bill"
+                    android:text="@string/elecBill_main_billMyList"
                     android:textColor="?iGapTitleTextColor"
                     android:textStyle="bold"
                     android:textSize="@dimen/dp18"
@@ -111,7 +123,39 @@
                     android:text="@string/edit_icon"
                     android:textSize="@dimen/dp26"
                     app:layout_constraintEnd_toStartOf="@+id/billDelete"
-                    app:layout_constraintTop_toTopOf="@+id/billDelete"/>
+                    app:layout_constraintTop_toTopOf="@+id/billDelete" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billPhoneTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:justificationMode="inter_word"
+                    android:text="@string/elecBill_pay_billPhoneNumber"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="start"
+                    android:ellipsize="end"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/baseLine2"
+                    app:layout_constraintTop_toBottomOf="@+id/baseLine2" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:justificationMode="inter_word"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/billPhoneTitle"
+                    app:layout_constraintBottom_toBottomOf="@+id/billPhoneTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billIDTitle"
@@ -127,7 +171,7 @@
                     android:gravity="start"
                     android:ellipsize="end"
                     app:layout_constraintStart_toEndOf="@+id/baseLine2"
-                    app:layout_constraintTop_toBottomOf="@+id/baseLine2"/>
+                    app:layout_constraintTop_toBottomOf="@+id/billPhoneTitle" />
 
                 <View
                     android:id="@+id/followUp"
@@ -171,7 +215,24 @@
                     android:gravity="start"
                     android:ellipsize="end"
                     app:layout_constraintStart_toEndOf="@+id/baseLine2"
-                    app:layout_constraintTop_toBottomOf="@+id/followUp"/>
+                    app:layout_constraintTop_toBottomOf="@+id/followUp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billPayIDTitle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:justificationMode="inter_word"
+                    android:text="@string/elecBill_pay_billPayID"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="start"
+                    android:ellipsize="end"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/baseLine2"
+                    app:layout_constraintTop_toBottomOf="@+id/billPayIDTitle" />
 
                 <View
                     android:id="@+id/followUp4"
@@ -183,7 +244,7 @@
                     android:layout_marginEnd="@dimen/dp32"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billPayIDTitle"/>
+                    app:layout_constraintTop_toBottomOf="@+id/billPayIDTitle2" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billPayID"
@@ -198,7 +259,22 @@
                     android:layout_marginRight="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/billPayIDTitle"
-                    app:layout_constraintBottom_toBottomOf="@+id/billPayIDTitle"/>
+                    app:layout_constraintBottom_toBottomOf="@+id/billPayIDTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billPayID2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:justificationMode="inter_word"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/billPayIDTitle2"
+                    app:layout_constraintBottom_toBottomOf="@+id/billPayIDTitle2" />
 
                 <ProgressBar
                     android:id="@+id/ProgressVPay"
@@ -326,16 +402,17 @@
             android:layout_height="wrap_content"
             android:minHeight="@dimen/dp48"
             android:text="@string/elecBill_pay_billPay"
-            android:textSize="@dimen/dp16"
+            android:textSize="@dimen/dp14"
+            android:textStyle="bold"
             android:visibility="visible"
             android:layout_marginEnd="@dimen/dp16"
             android:layout_marginRight="@dimen/dp16"
-            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintWidth_percent="0.35"
             app:layout_constraintEnd_toStartOf="@+id/detail"
             app:layout_constraintStart_toStartOf="@+id/cardHolder"
             app:layout_constraintTop_toBottomOf="@+id/cardHolder"
             app:layout_constraintBottom_toBottomOf="@id/cardHolder"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
+            app:layout_constraintHorizontal_chainStyle="packed" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/detail"
@@ -344,13 +421,14 @@
             android:layout_height="wrap_content"
             android:minHeight="@dimen/dp48"
             android:text="@string/elecBill_cell_showDetail"
-            android:textSize="@dimen/dp16"
+            android:textSize="@dimen/dp14"
+            android:textStyle="bold"
             android:visibility="visible"
-            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintWidth_percent="0.35"
             app:layout_constraintEnd_toEndOf="@+id/cardHolder"
             app:layout_constraintStart_toEndOf="@+id/Pay"
             app:layout_constraintTop_toBottomOf="@+id/cardHolder"
-            app:layout_constraintBottom_toBottomOf="@id/cardHolder"/>
+            app:layout_constraintBottom_toBottomOf="@id/cardHolder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

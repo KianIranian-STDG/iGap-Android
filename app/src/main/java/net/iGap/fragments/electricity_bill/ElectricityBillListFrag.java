@@ -16,18 +16,21 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
+import net.iGap.adapter.electricity_bill.ElectricityBillListAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillListBinding;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.model.electricity_bill.BillData;
-import net.iGap.model.electricity_bill.BranchDebit;
-import net.iGap.adapter.electricity_bill.ElectricityBillListAdapter;
-import net.iGap.viewmodel.electricity_bill.ElectricityBillListVM;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.model.bill.BillInfo;
+import net.iGap.model.bill.BillList;
+import net.iGap.model.bill.Debit;
+import net.iGap.model.bill.MobileDebit;
+import net.iGap.model.bill.ServiceDebit;
+import net.iGap.module.Theme;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.electricity_bill.ElectricityBillListVM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +75,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon)
+//                .setRightIcons(R.string.more_icon)
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(new ToolbarListener() {
                     @Override
@@ -107,7 +110,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
 
         binding.billRecycler.setHasFixedSize(true);
         onDataChangedListener();
-        viewModel.getBranchData();
+        viewModel.getBillsList();
     }
 
     private void onDataChangedListener() {
@@ -153,21 +156,28 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
     }
 
 
-    private void initRecycler(Map<BillData.BillDataModel, BranchDebit> bills) {
+    private void initRecycler(Map<BillList.Bill, Debit> bills) {
         adapter = new ElectricityBillListAdapter(getContext(), bills, (item, btnAction) -> {
-            BranchDebit temp = viewModel.getmMapData().getValue().get(item);
+//            ServiceDebit temp = viewModel.getmMapData().getValue().get(item);
             switch (btnAction) {
                 case PAY:
-                    viewModel.payBill(item);
+                    ServiceDebit tempService = (ServiceDebit) bills.get(item).getData();
+                    viewModel.payServiceBill(tempService.getBillID(), tempService.getPaymentID(),
+                            tempService.getTotalElectricityBillDebt() != null ? tempService.getTotalElectricityBillDebt() : tempService.getTotalGasBillDebt());
                     break;
                 case EDIT:
-                    if (temp.getBillID() == null) {
+                    if (item.getBillTitle() == null) {
                         showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
                         return;
                     }
-                    new HelperFragment(getFragmentManager(),
-                            ElectricityBillAddFrag.newInstance(temp.getBillID(), item.getBillTitle(),
-                                    String.valueOf(viewModel.getNationalID()), true)).setReplace(false).load();
+                    ElectricityBillAddFrag frag = ElectricityBillAddFrag.newInstance(viewModel.getBillInfo(item), true);
+                    frag.setCompleteListener(new ElectricityBillAddFrag.CompleteListener() {
+                        @Override
+                        public void loadAgain() {
+                            viewModel.getBillsList();
+                        }
+                    });
+                    frag.show(getFragmentManager(), "BillAddEdit");
                     break;
                 case DELETE:
                     final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
@@ -185,13 +195,24 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
                     dialog.show();
                     break;
                 case SHOW_DETAIL:
-                    if (temp.getBillID() == null) {
+                    if (item.getBillTitle() == null) {
                         showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible), getResources().getString(R.string.ok));
                         return;
                     }
+                    BillInfo temp = viewModel.getBillInfo(item);
                     new HelperFragment(getFragmentManager(),
-                            ElectricityBillPayFrag.newInstance(item.getBillTitle(), temp.getBillID(), temp.getPaymentIDConverted(), temp.getTotalBillDebtConverted(), true))
+                            ElectricityBillPayFrag.newInstance(temp.getBillType(), temp.getBillID(), temp.getTitle(), true))
                             .setReplace(false).load();
+                    break;
+                case MID_PAY:
+                    MobileDebit tempMid = (MobileDebit) bills.get(item).getData();
+                    viewModel.payServiceBill(tempMid.getMidTerm().getBillID(), tempMid.getMidTerm().getPayID(),
+                            tempMid.getMidTerm().getAmount());
+                    break;
+                case LAST_PAY:
+                    MobileDebit tempLast = (MobileDebit) bills.get(item).getData();
+                    viewModel.payServiceBill(tempLast.getLastTerm().getBillID(), tempLast.getLastTerm().getPayID(),
+                            tempLast.getLastTerm().getAmount());
                     break;
             }
         });
@@ -213,6 +234,6 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
     }
 
     public void refreshData() {
-        viewModel.getBranchData();
+        viewModel.getBillsList();
     }
 }

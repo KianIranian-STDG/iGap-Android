@@ -8,19 +8,19 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.repository.ElectricityBillAPIRepository;
-import net.iGap.model.electricity_bill.BranchData;
 import net.iGap.model.electricity_bill.CompanyList;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
 import net.iGap.model.electricity_bill.ElectricityResponseList;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.ElectricityBillAPIRepository;
 
 import java.util.List;
 
 public class ElectricityBillSearchListVM extends BaseAPIViewModel {
 
     private MutableLiveData<CompanyList> mCompanyData;
-    private MutableLiveData<List<BranchData>> mBranchData;
+    private MutableLiveData<List<ElectricityBranchData>> mBranchData;
     private MutableLiveData<ErrorModel> errorM;
     private MutableLiveData<Integer> showRequestFailedError;
 
@@ -103,9 +103,9 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
             return;
         }
         errorVisibility.set(View.GONE);
-        new ElectricityBillAPIRepository().searchBills(billSerial.get(), String.valueOf(mCompanyData.getValue().getCompaniesList().get(companyPosition).getCode()), this, new ResponseCallback<ElectricityResponseList<BranchData>>() {
+        new ElectricityBillAPIRepository().searchBills(billSerial.get(), String.valueOf(mCompanyData.getValue().getCompaniesList().get(companyPosition).getCode()), this, new ResponseCallback<ElectricityResponseList<ElectricityBranchData>>() {
             @Override
-            public void onSuccess(ElectricityResponseList<BranchData> data) {
+            public void onSuccess(ElectricityResponseList<ElectricityBranchData> data) {
                 if (data.getStatus() == 200) {
                     if (data.getDataList().size() == 0) {
                         errorVisibility.set(View.VISIBLE);
@@ -139,11 +139,11 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
         this.mCompanyData = mCompanyData;
     }
 
-    public MutableLiveData<List<BranchData>> getmBranchData() {
+    public MutableLiveData<List<ElectricityBranchData>> getmBranchData() {
         return mBranchData;
     }
 
-    public void setmBranchData(MutableLiveData<List<BranchData>> mBranchData) {
+    public void setmBranchData(MutableLiveData<List<ElectricityBranchData>> mBranchData) {
         this.mBranchData = mBranchData;
     }
 

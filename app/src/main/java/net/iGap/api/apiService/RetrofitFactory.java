@@ -2,6 +2,7 @@ package net.iGap.api.apiService;
 
 import net.iGap.BuildConfig;
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.BillsApi;
 import net.iGap.api.CPayApi;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.CharityApi;
@@ -161,6 +162,15 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(ElecBillApi.class);
+    }
+
+    public BillsApi getBillsRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.BILL_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(BillsApi.class);
     }
 
     public MobileBankApi getMobileBankRetrofit() {

@@ -54,7 +54,7 @@
                     android:onClick="@{()->fragment.onAddNewBillBtnClick()}"
                     android:text="@string/elecBill_cell_addNewBill"
                     android:textSize="@dimen/dp16"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

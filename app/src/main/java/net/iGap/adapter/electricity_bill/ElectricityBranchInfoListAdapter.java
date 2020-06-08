@@ -10,18 +10,29 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.electricity_bill.BranchData;
-import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.bill.BillInfo;
+import net.iGap.model.bill.GasBranchData;
+import net.iGap.model.electricity_bill.ElectricityBranchData;
+import net.iGap.model.electricity_bill.ElectricityResponseModel;
 
 public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<ElectricityBranchInfoListAdapter.ViewHolder> {
 
-    private ElectricityResponseModel<BranchData> mdata;
+    private ElectricityResponseModel<ElectricityBranchData> mDataElec;
+    private GasBranchData mDataGas;
+    private BillInfo.BillType type;
     private Context context;
 
-    public ElectricityBranchInfoListAdapter(Context context, ElectricityResponseModel<BranchData> data) {
-        this.mdata = data;
+    public ElectricityBranchInfoListAdapter(Context context, ElectricityResponseModel<ElectricityBranchData> data, BillInfo.BillType type) {
+        this.mDataElec = data;
         this.context = context;
+        this.type = type;
+    }
+
+    public ElectricityBranchInfoListAdapter(Context context, GasBranchData data, BillInfo.BillType type) {
+        this.mDataGas = data;
+        this.context = context;
+        this.type = type;
     }
 
     @NonNull
@@ -33,12 +44,20 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        viewHolder.initView(position);
+        switch (type) {
+            case ELECTRICITY:
+                viewHolder.initViewElec(position);
+                break;
+            case GAS:
+                viewHolder.initViewGas(position);
+                break;
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        return 21;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +71,7 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
             desc = itemView.findViewById(R.id.billValue);
         }
 
-        void initView(int position) {
+        void initViewElec(int position) {
             switch (position) {
                 case 0:
                     title.setText("جزئیات قبض شما");
@@ -60,41 +79,37 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
                     break;
                 case 1:
                     title.setText("شناسه قبض");
-                    if (HelperCalander.isPersianUnicode) {
-                        desc.setText(HelperCalander.convertToUnicodeFarsiNumber(mdata.getData().getBillID()));
-                    }
-                    else
-                        desc.setText(mdata.getData().getBillID());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getBillID()));
                     break;
                 case 2:
                     title.setText("شناسه پرداخت");
-                    desc.setText(mdata.getData().getPaymentID());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getPaymentID()));
                     break;
                 case 3:
                     title.setText("کد شرکت توزیع");
-                    desc.setText(mdata.getData().getCompanyCode());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getCompanyCode()));
                     break;
                 case 4:
                     title.setText("شرکت توزیع");
-                    desc.setText(mdata.getData().getCompanyName());
+                    desc.setText(mDataElec.getData().getCompanyName());
                     break;
                 case 5:
                     title.setText("فاز");
-                    if (mdata.getData().getPhase().equals("1"))
+                    if (mDataElec.getData().getPhase().equals("1"))
                         desc.setText("تکفاز");
                     else
                         desc.setText("سه فاز");
                     break;
                 case 6:
                     title.setText("ولتاژ");
-                    if (mdata.getData().getVoltageType().equals("1"))
+                    if (mDataElec.getData().getVoltageType().equals("1"))
                         desc.setText("اولیه");
                     else
                         desc.setText("ثانویه");
                     break;
                 case 7:
                     title.setText("نوع تعرفه");
-                    switch (mdata.getData().getTariffType()) {
+                    switch (mDataElec.getData().getTariffType()) {
                         case "10":
                             desc.setText("خانگی");
                             break;
@@ -129,72 +144,169 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
                     break;
                 case 8:
                     title.setText("نوع مشترک");
-                    if (mdata.getData().getCustomerType() != null){
-                        if (mdata.getData().getCustomerType().equals("1")) {
+                    if (mDataElec.getData().getCustomerType() != null) {
+                        if (mDataElec.getData().getCustomerType().equals("1")) {
                             desc.setText("حقیقی");
-                        }else {
+                        } else {
                             desc.setText("حقوقی");
                         }
-                    }else {
+                    } else {
                         desc.setText("");
                     }
                     break;
                 case 9:
                     title.setText("نام مشترک");
-                    desc.setText(mdata.getData().getCustomerName() + " " + mdata.getData().getCustomerFamily());
+                    desc.setText(mDataElec.getData().getCustomerName() + " " + mDataElec.getData().getCustomerFamily());
                     break;
                 case 10:
                     title.setText("شماره مشترک");
-                    desc.setText(mdata.getData().getTelNumber());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getTelNumber()));
                     break;
                 case 11:
                     title.setText("شماره همراه مشترک");
-                    desc.setText(mdata.getData().getMobileNumber());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getMobileNumber()));
                     break;
                 case 12:
                     title.setText("آدرس محل انشعاب");
-                    desc.setText(mdata.getData().getServiceAddress());
+                    desc.setText(mDataElec.getData().getServiceAddress());
                     break;
                 case 13:
                     title.setText("کد پستی محل انشعاب");
-                    desc.setText(mdata.getData().getServicePostCode());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getServicePostCode()));
                     break;
                 case 14:
                     title.setText("محدوده جغرافیایی");
-                    if (mdata.getData().getLocation_status().equals("1"))
+                    if (mDataElec.getData().getLocation_status().equals("1"))
                         desc.setText("شهری");
-                    else if (mdata.getData().getLocation_status().equals("2"))
+                    else if (mDataElec.getData().getLocation_status().equals("2"))
                         desc.setText("روستایی");
                     else
                         desc.setText("خارج از محدوده خدمات شهری");
                     break;
                 case 15:
                     title.setText("شماره بدنه کنتور");
-                    desc.setText(mdata.getData().getSerialNumber());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getSerialNumber()));
                     break;
                 case 16:
                     title.setText("مهلت پرداخت بدهی");
-                    desc.setText(mdata.getData().getPaymentDeadLineDate());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getPaymentDeadLineDate()));
                     break;
                 case 17:
                     title.setText("آخرین تاریخ قرائت کنتور");
-                    desc.setText(mdata.getData().getLastReadDate());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getLastReadDate()));
                     break;
                 case 18:
                     title.setText("تاریخ انقضا پروانه");
-                    desc.setText(mdata.getData().getLicenseExpireDate());
+                    desc.setText(getRightUnicodeFormat(mDataElec.getData().getLicenseExpireDate()));
                     break;
                 case 19:
                     title.setText("قدرت قراردادی");
-                    desc.setText(mdata.getData().getContractDemand());
+                    desc.setText(mDataElec.getData().getContractDemand());
                     break;
+                default:
+                    title.setText("");
+                    desc.setText("");
             }
         }
-    }
 
-    public interface OnItemClickListener {
-        enum Actoin {DELETE, EDIT, SHOW_DETAIL, PAY}
-        void onClick(int position, Actoin btnAction);
+        void initViewGas(int position) {
+            switch (position) {
+                case 0:
+                    title.setText("جزئیات قبض شما");
+                    desc.setVisibility(View.GONE);
+                    break;
+                case 1:
+                    title.setText("شناسه قبض");
+                    desc.setText(getRightUnicodeFormat((mDataGas.getBillID())));
+                    break;
+                case 2:
+                    title.setText("شناسه پرداخت");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getPayID()));
+                    break;
+                case 3:
+                    title.setText("شهر");
+                    desc.setText(mDataGas.getCity());
+                    break;
+                case 4:
+                    title.setText("تعداد واحد");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getUnit()));
+                    break;
+                case 5:
+                    title.setText("شماره اشتراک");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getBuildID()));
+                    break;
+                case 6:
+                    title.setText("سریال کنتور");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getSerialNumber()));
+                    break;
+                case 7:
+                    title.setText("ظرفیت");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getCapacity()));
+                    break;
+                case 8:
+                    title.setText("نوع مصرف");
+                    desc.setText(mDataGas.getKind());
+                    break;
+                case 9:
+                    title.setText("تاریخ قرائت پیشین");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getPreviousDate().replaceAll("-", "/")));
+                    break;
+                case 10:
+                    title.setText("تاریخ قرائت فعلی");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getCurrentDate().replaceAll("-", "/")));
+                    break;
+                case 11:
+                    title.setText("رقم کنتور پیشین");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getPreviousValue()));
+                    break;
+                case 12:
+                    title.setText("رقم کنتور فعلی");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getCurrentValue()));
+                    break;
+                case 13:
+                    title.setText("مصرف");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getStandardConsumption()));
+                    break;
+                case 14:
+                    title.setText("بهای گاز مصرفی");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getGasPriceValue()) + " " + context.getResources().getString(R.string.rial));
+                    break;
+                case 15:
+                    title.setText("آبونمان");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getAbonmanValue()) + " " + context.getResources().getString(R.string.rial));
+                    break;
+                case 16:
+                    title.setText("مالیات");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getTax()) + " " + context.getResources().getString(R.string.rial));
+                    break;
+                case 17:
+                    title.setText("عوارض گازرسانی");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getVillageTax()) + " " + context.getResources().getString(R.string.rial));
+                    break;
+                case 18:
+                    title.setText("بیمه");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getAssurance()) + " " + context.getResources().getString(R.string.rial));
+                    break;
+                case 19:
+                    title.setText("کسر هزار ریال");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getCurrentRounding()) + " " + context.getResources().getString(R.string.rial));
+                    break;
+                case 20:
+                    title.setText("شماره سری");
+                    desc.setText(getRightUnicodeFormat(mDataGas.getSequenceNumber()));
+                    break;
+                default:
+                    title.setText("");
+                    desc.setText("");
+            }
+        }
+
+        String getRightUnicodeFormat(String input) {
+            if (HelperCalander.isPersianUnicode) {
+                return HelperCalander.convertToUnicodeFarsiNumber(input);
+            } else
+                return input;
+        }
     }
 
 }

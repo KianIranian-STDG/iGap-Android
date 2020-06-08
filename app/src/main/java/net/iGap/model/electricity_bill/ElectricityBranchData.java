@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BranchData {
+public class ElectricityBranchData {
 
     @SerializedName("total_register_debt")
     private int totalRegisterDebt;
@@ -122,7 +122,7 @@ public class BranchData {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         try {
-            Date mDate = sdf.parse(paymentDeadLineDate.replace("T", " ").replace("Z"," "));
+            Date mDate = sdf.parse(paymentDeadLineDate.replace("T", " ").replace("Z", " "));
             long timeInMilliseconds = mDate.getTime();
             if (HelperCalander.isPersianUnicode) {
                 return HelperCalander.convertToUnicodeFarsiNumber(HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS));
@@ -144,7 +144,7 @@ public class BranchData {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         try {
-            Date mDate = sdf.parse(lastReadDate.replace("T", " ").replace("Z"," "));
+            Date mDate = sdf.parse(lastReadDate.replace("T", " ").replace("Z", " "));
             long timeInMilliseconds = mDate.getTime();
             if (HelperCalander.isPersianUnicode) {
                 return HelperCalander.convertToUnicodeFarsiNumber(HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS));
@@ -340,7 +340,7 @@ public class BranchData {
         this.serialNumber = serialNumber;
     }
 
-    public String  getLicenseExpireDate() {
+    public String getLicenseExpireDate() {
         if (HelperCalander.isPersianUnicode) {
             return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(licenseExpireDate));
         }

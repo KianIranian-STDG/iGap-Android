@@ -8,6 +8,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -21,11 +23,12 @@ import com.google.zxing.integration.android.IntentResult;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillMainBinding;
-import net.iGap.viewmodel.electricity_bill.ElectricityBillMainVM;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.model.bill.BillInfo;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.electricity_bill.ElectricityBillMainVM;
 
 import static net.iGap.activities.ActivityMain.electricityBillRequestCodeQrCode;
 
@@ -79,6 +82,39 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
         LinearLayout toolbarLayout = binding.Toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.billsOptions, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.billSpinner.setAdapter(adapter);
+        binding.billSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        viewModel.setType(BillInfo.BillType.ELECTRICITY);
+                        binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint));
+                        binding.billIdHolder.setCounterMaxLength(13);
+                        binding.billQRscan.setEnabled(true);
+                        binding.billQRscan.setTextColor(getResources().getColor(R.color.gray));
+                        break;
+                    case 1:
+                        viewModel.setType(BillInfo.BillType.GAS);
+                        binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint3));
+                        binding.billIdHolder.setCounterMaxLength(12);
+                        binding.billQRscan.setEnabled(false);
+                        binding.billQRscan.setTextColor(getResources().getColor(R.color.gray_300));
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        binding.modeGroup.setOnCheckedChangeListener((group, checkedId) -> onModeChangeView(checkedId));
+
         binding.billIdET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,9 +135,32 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
         viewModel.getGoToBillDetailFrag().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 viewModel.getProgressVisibility().set(View.GONE);
-                new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(viewModel.getBillID().get(), viewModel.getBillPayID(), viewModel.getBillPrice(), false)).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(
+                        viewModel.getType(), viewModel.getBillID().get(), null, false))
+                        .setReplace(false).load();
             }
         });
+    }
+
+    private void onModeChangeView(int view) {
+        switch (view) {
+            case R.id.mode_serviceBill:
+                binding.billSpinner.setVisibility(View.VISIBLE);
+                binding.billQRscan.setVisibility(View.VISIBLE);
+                binding.billTypeTitle.setText(getResources().getString(R.string.elecBill_main_billTypeTitle));
+                binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint));
+                binding.billIdHolder.setCounterMaxLength(13);
+                viewModel.setType(BillInfo.BillType.ELECTRICITY);
+                break;
+            case R.id.mode_phoneBill:
+                binding.billSpinner.setVisibility(View.GONE);
+                binding.billQRscan.setVisibility(View.GONE);
+                binding.billTypeTitle.setText(getResources().getString(R.string.elecBill_main_billPhoneTitle));
+                binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint2));
+                binding.billIdHolder.setCounterMaxLength(11);
+                viewModel.setType(BillInfo.BillType.PHONE);
+                break;
+        }
     }
 
     public void onMyElecListBtnClick() {

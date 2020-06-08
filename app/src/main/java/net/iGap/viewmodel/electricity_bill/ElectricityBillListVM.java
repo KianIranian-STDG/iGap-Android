@@ -8,24 +8,25 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.repository.ElectricityBillAPIRepository;
-import net.iGap.model.electricity_bill.BillData;
-import net.iGap.model.electricity_bill.BillRegister;
-import net.iGap.model.electricity_bill.BranchDebit;
+import net.iGap.model.bill.BillInfo;
+import net.iGap.model.bill.BillList;
+import net.iGap.model.bill.Debit;
+import net.iGap.model.bill.MobileDebit;
+import net.iGap.model.bill.ServiceDebit;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.BillsAPIRepository;
+import net.iGap.repository.ElectricityBillAPIRepository;
 import net.iGap.request.RequestMplGetBillToken;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ElectricityBillListVM extends BaseAPIViewModel {
 
-    private MutableLiveData<Map<BillData.BillDataModel, BranchDebit>> mMapData;
+    private MutableLiveData<Map<BillList.Bill, Debit>> mMapData;
     private SingleLiveEvent<Boolean> goBack;
     private MutableLiveData<ErrorModel> errorM;
     private MutableLiveData<Integer> showRequestFailedError;
@@ -45,25 +46,68 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         showRequestFailedError = new MutableLiveData<>();
     }
 
-    public void getBranchData() {
+    public BillInfo getBillInfo(BillList.Bill dataModel) {
+        BillInfo temp = new BillInfo();
+        temp.setServerID(dataModel.getId());
+        switch (dataModel.getBillType()) {
+            case "ELECTRICITY":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setBillID(dataModel.getBillID());
+                temp.setBillType(BillInfo.BillType.ELECTRICITY);
+                break;
+            case "GAS":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setGasID(dataModel.getSubscriptionCode());
+                temp.setBillID(dataModel.getSubscriptionCode());
+                temp.setBillType(BillInfo.BillType.GAS);
+                break;
+            case "MOBILE_MCI":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setPhoneNum(dataModel.getPhoneNumber());
+                temp.setBillID(dataModel.getPhoneNumber());
+                temp.setBillType(BillInfo.BillType.MOBILE);
+                break;
+            case "PHONE":
+                temp.setTitle(dataModel.getBillTitle());
+                temp.setPhoneNum(dataModel.getPhoneNumber());
+                temp.setAreaCode(dataModel.getAreaCode());
+                temp.setBillID(dataModel.getAreaCode() + dataModel.getPhoneNumber());
+                temp.setBillType(BillInfo.BillType.PHONE);
+                break;
+        }
+        return temp;
+    }
+
+    public void getBillsList() {
         progressVisibility.set(View.VISIBLE);
         errorVisibility.set(View.GONE);
         showRetryView.set(View.GONE);
-        new ElectricityBillAPIRepository().getBillList(this, new ResponseCallback<ElectricityResponseModel<BillData>>() {
+        new BillsAPIRepository().getBillList(this, new ResponseCallback<BillList>() {
             @Override
-            public void onSuccess(ElectricityResponseModel<BillData> data) {
-                if (data.getStatus() == 200) {
-                    if (data.getData().getBillData().size() == 0) {
-                        errorVisibility.set(View.VISIBLE);
-                    }
-                    nationalID = Integer.valueOf(data.getData().getNID());
-                    Map<BillData.BillDataModel, BranchDebit> tmp = new HashMap<>();
-                    for (BillData.BillDataModel dataModel : data.getData().getBillData()) {
-                        tmp.put(dataModel, new BranchDebit());
-                        getDebitData(dataModel);
-                    }
-                    mMapData.setValue(tmp);
+            public void onSuccess(BillList data) {
+                if (data.getBills() == null || data.getBills().size() == 0) {
+                    errorVisibility.set(View.VISIBLE);
                 }
+                Map<BillList.Bill, Debit> tmp = new HashMap<>();
+                for (BillList.Bill dataModel : data.getBills()) {
+                    switch (dataModel.getBillType()) {
+                        case "ELECTRICITY":
+                        case "GAS":
+                            Debit<ServiceDebit> temp = new Debit<>();
+                            temp.setData(new ServiceDebit());
+                            tmp.put(dataModel, temp);
+                            getServiceDebit(dataModel);
+                            break;
+                        case "MOBILE_MCI":
+                        case "PHONE":
+                            Debit<MobileDebit> temp1 = new Debit<>();
+                            temp1.setData(new MobileDebit());
+                            tmp.put(dataModel, temp1);
+                            getPhoneDebit(dataModel);
+                            break;
+                    }
+                }
+                mMapData.setValue(tmp);
                 progressVisibility.set(View.GONE);
             }
 
@@ -84,12 +128,98 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         });
     }
 
-    private void getDebitData(@NotNull BillData.BillDataModel bill) {
-        new ElectricityBillAPIRepository().getBranchDebit(bill.getBillID(), this, new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
+    private void getServiceDebit(BillList.Bill dataModel) {
+        BillInfo info = new BillInfo();
+        info.setBillTypeString(dataModel.getBillType());
+        if (dataModel.getBillType().equals("ELECTRICITY")) {
+            info.setBillID(dataModel.getBillID());
+            info.setMobileNum(dataModel.getMobileNumber());
+        } else {
+            info.setGasID(dataModel.getSubscriptionCode());
+        }
+
+        new BillsAPIRepository().serviceInquiry(info, this, new ResponseCallback<ElectricityResponseModel<ServiceDebit>>() {
             @Override
-            public void onSuccess(ElectricityResponseModel<BranchDebit> data) {
+            public void onSuccess(ElectricityResponseModel<ServiceDebit> data) {
+                Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+                data.getData().setLoading(false);
+                tmp.put(dataModel, new Debit<>(data.getData()));
+                mMapData.setValue(tmp);
+            }
+
+            @Override
+            public void onError(String error) {
+                Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+                Debit<ServiceDebit> debitTmp = tmp.get(dataModel);
+                debitTmp.getData().setLoading(false);
+                debitTmp.getData().setTotalElectricityBillDebt("0");
+                debitTmp.getData().setTotalGasBillDebt("0");
+                debitTmp.getData().setPaymentID("0");
+                tmp.put(dataModel, debitTmp);
+                mMapData.setValue(tmp);
+            }
+
+            @Override
+            public void onFailed() {
+                Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+                Debit<ServiceDebit> debitTmp = tmp.get(dataModel);
+                debitTmp.getData().setLoading(false);
+                debitTmp.getData().setTotalElectricityBillDebt("0");
+                debitTmp.getData().setTotalGasBillDebt("0");
+                debitTmp.getData().setPaymentID("0");
+                tmp.put(dataModel, debitTmp);
+                mMapData.setValue(tmp);
+            }
+        });
+    }
+
+    private void getPhoneDebit(BillList.Bill dataModel) {
+        BillInfo info = new BillInfo();
+        info.setBillTypeString(dataModel.getBillType());
+        info.setPhoneNum(dataModel.getPhoneNumber());
+        if (dataModel.getBillType().equals("PHONE")) {
+            info.setAreaCode(dataModel.getAreaCode());
+        }
+
+        new BillsAPIRepository().phoneAndMobileInquiry(info, this, new ResponseCallback<ElectricityResponseModel<MobileDebit>>() {
+            @Override
+            public void onSuccess(ElectricityResponseModel<MobileDebit> data) {
+                Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+                data.getData().setLoading(false);
+                tmp.put(dataModel, new Debit<>(data.getData()));
+                mMapData.setValue(tmp);
+            }
+
+            @Override
+            public void onError(String error) {
+                Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+                Debit<MobileDebit> debitTmp = tmp.get(dataModel);
+                debitTmp.getData().setLoading(false);
+                debitTmp.getData().setLastTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
+                debitTmp.getData().setMidTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
+                tmp.put(dataModel, debitTmp);
+                mMapData.setValue(tmp);
+            }
+
+            @Override
+            public void onFailed() {
+                Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+                Debit<MobileDebit> debitTmp = tmp.get(dataModel);
+                debitTmp.getData().setLoading(false);
+                debitTmp.getData().setLastTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
+                debitTmp.getData().setMidTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
+                tmp.put(dataModel, debitTmp);
+                mMapData.setValue(tmp);
+            }
+        });
+    }
+
+    /*private void getDebitData(@NotNull BillData.BillDataModel bill) {
+        new ElectricityBillAPIRepository().getBranchDebit(bill.getBillID(), this, new ResponseCallback<ElectricityResponseModel<ServiceDebit>>() {
+            @Override
+            public void onSuccess(ElectricityResponseModel<ServiceDebit> data) {
                 if (data.getStatus() == 200) {
-                    Map<BillData.BillDataModel, BranchDebit> tmp = mMapData.getValue();
+                    Map<BillData.BillDataModel, ServiceDebit> tmp = mMapData.getValue();
                     data.getData().setLoading(false);
                     tmp.put(bill, data.getData());
                     mMapData.setValue(tmp);
@@ -98,10 +228,10 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String error) {
-                Map<BillData.BillDataModel, BranchDebit> tmp = mMapData.getValue();
-                BranchDebit debitTmp = tmp.get(bill);
+                Map<BillData.BillDataModel, ServiceDebit> tmp = mMapData.getValue();
+                ServiceDebit debitTmp = tmp.get(bill);
                 debitTmp.setLoading(false);
-                debitTmp.setTotalBillDebt("0");
+                debitTmp.setTotalElectricityBillDebt("0");
                 debitTmp.setPaymentID("0");
                 tmp.put(bill, debitTmp);
                 mMapData.setValue(tmp);
@@ -109,26 +239,24 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                Map<BillData.BillDataModel, BranchDebit> tmp = mMapData.getValue();
-                BranchDebit debitTmp = tmp.get(bill);
+                Map<BillData.BillDataModel, ServiceDebit> tmp = mMapData.getValue();
+                ServiceDebit debitTmp = tmp.get(bill);
                 debitTmp.setLoading(false);
-                debitTmp.setTotalBillDebt("0");
+                debitTmp.setTotalElectricityBillDebt("0");
                 debitTmp.setPaymentID("0");
                 tmp.put(bill, debitTmp);
                 mMapData.setValue(tmp);
             }
         });
-    }
+    }*/
 
-    public void payBill(BillData.BillDataModel item) {
-
-        BranchDebit tmp = mMapData.getValue().get(item);
-        if (tmp == null || tmp.getPaymentID() == null || tmp.getPaymentID().equals("") || tmp.getPaymentID().equals("null")) {
+    public void payServiceBill(String billID, String payID, String price) {
+        if (payID == null || payID.equals("") || payID.equals("null")) {
             errorM.setValue(new ErrorModel("", "003"));
             return;
         }
 
-        if (Long.parseLong(tmp.getTotalBillDebt().replace(",", "").replace(" ریال", "")) < 10000) {
+        if (Long.parseLong(price) < 10000) {
             errorM.setValue(new ErrorModel("", "004"));
             return;
         }
@@ -142,29 +270,22 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
             }
         };
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        if (tmp.getPaymentID().startsWith(tmp.getTotalBillDebt().replace("000", "").replace(",", "").replace(" ریال", ""))) {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()), Long.parseLong(tmp.getPaymentID()));
-        } else {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()),
-                    Long.parseLong(tmp.getTotalBillDebt().replace("000", "").replace(",", "").replace(" ریال", "") + tmp.getPaymentID()));
-        }
+        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID));
     }
 
-    public void deleteItem(BillData.BillDataModel item) {
+    public void deleteItem(BillList.Bill item) {
         progressVisibility.set(View.VISIBLE);
-        BillData.BillDataModel dataModel = item;
-        BillRegister info = new BillRegister();
-        info.setNID("" + nationalID);
-        info.setID(dataModel.getBillID());
+        BillList.Bill dataModel = item;
+        BillInfo info = new BillInfo();
+        info.setBillTypeString(dataModel.getBillType());
+        info.setServerID(dataModel.getId());
 
-        new ElectricityBillAPIRepository().deleteBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
+        new BillsAPIRepository().deleteBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<String> data) {
-                if (data.getStatus() == 200) {
-                    Map<BillData.BillDataModel, BranchDebit> tmp = mMapData.getValue();
-                    tmp.remove(dataModel);
-                    mMapData.setValue(tmp);
-                }
+                Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+                tmp.remove(dataModel);
+                mMapData.setValue(tmp);
                 progressVisibility.set(View.GONE);
             }
 
@@ -182,6 +303,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         });
     }
 
+    @Deprecated
     public void deleteAccount() {
         progressVisibility.set(View.VISIBLE);
         new ElectricityBillAPIRepository().deleteAccount(String.valueOf(nationalID), this, new ResponseCallback<ElectricityResponseModel<String>>() {
@@ -216,11 +338,11 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         this.progressVisibility = progressVisibility;
     }
 
-    public MutableLiveData<Map<BillData.BillDataModel, BranchDebit>> getmMapData() {
+    public MutableLiveData<Map<BillList.Bill, Debit>> getmMapData() {
         return mMapData;
     }
 
-    public void setmMapData(MutableLiveData<Map<BillData.BillDataModel, BranchDebit>> mMapData) {
+    public void setmMapData(MutableLiveData<Map<BillList.Bill, Debit>> mMapData) {
         this.mMapData = mMapData;
     }
 

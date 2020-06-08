@@ -2345,21 +2345,26 @@ Want to get it?</string>
     <string name="add_new_account">Add New Account</string>
     <string name="profile">Profile</string>
 
-    <string name="elecBill_Entry_lengthError">Bill ID must be 13 character.</string>
+    <string name="elecBill_Entry_lengthError">Number must NOT be empty.</string>
+    <string name="elecBill_EntryService_lengthError">Bill ID must be at least 12 character.</string>
+    <string name="elecBill_EntryPhone_lengthError">Phone number must be 11 character.</string>
     <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
-    <string name="elecBill_Entry_companyError">We only support Electricity Bill.</string>
-    <string name="elecBill_main_billTitle">Electricity Bill Inquiry and quick payment</string>
-    <string name="elecBill_main_billIDHint">Electricity Bill Number</string>
+    <string name="elecBill_Entry_companyError">We do NOT support this Bill.</string>
+    <string name="elecBill_main_billTitle">Bill Inquiry and quick payment</string>
+    <string name="elecBill_main_billIDHint">Bill ID</string>
+    <string name="elecBill_main_billIDHint2">Phone Number</string>
+    <string name="elecBill_main_billIDHint3">Subscription Number</string>
     <string name="elecBill_main_billPay">Inquiry My Bill</string>
     <string name="elecBill_main_billMyList">My Electricity Bills</string>
     <string name="elecBill_main_billSearch">Search Bills</string>
     <string name="elecBill_main_billBranchInfo">Electricity Branching Info</string>
     <string name="elecBill_pay_billID">Bill ID</string>
+    <string name="elecBill_pay_billPhoneNumber">Phone Number</string>
     <string name="elecBill_pay_billPayID">Bill Pay ID</string>
     <string name="elecBill_pay_billPrice">Total due</string>
     <string name="elecBill_pay_billTime">Time Limit</string>
     <string name="elecBill_pay_billPay">Pay</string>
-    <string name="elecBill_pay_billBranchInfo">Electricity Branching Info</string>
+    <string name="elecBill_pay_billBranchInfo">Branch Info</string>
     <string name="elecBill_pay_billAddBillList">Add to my Bill\'s list</string>
     <string name="elecBill_pay_billImage">Show bill\'s image</string>
     <string name="elecBill_Entry_nameError">Bill\'s name can NOT be empty. for example: Home</string>
@@ -2370,7 +2375,7 @@ Want to get it?</string>
     <string name="elecBill_Entry_userIDError">Your national ID can NOT be empty.</string>
     <string name="elecBill_Entry_userIDLengthError">Your national ID must be 10 character.</string>
     <string name="elecBill_Entry_emailFormatError">Your Email format is wrong.</string>
-    <string name="elecBill_add_form">Please complete the form.</string>
+    <string name="elecBill_add_form">Bill Info</string>
     <string name="elecBill_add_name">Bill\'s name *</string>
     <string name="elecBill_add_billID">Bill\'s ID *</string>
     <string name="elecBill_add_phone">Your Mobile Number *</string>
@@ -2416,6 +2421,14 @@ Want to get it?</string>
     <string name="elecBill_error_notPossible">This action is Not available at the moment.</string>
     <string name="elecBill_success_title">Success</string>
     <string name="elecBill_success_pay">Payment is successful.</string>
+    <string name="elecBill_main_serviceMode">Service Bills</string>
+    <string name="elecBill_main_PhoneMode">Phone Bills</string>
+    <string name="elecBill_main_billTypeTitle">Bill type: </string>
+    <string name="elecBill_main_billPhoneTitle">Please enter your phone number or mobile number: \nPhone number sample: 021********\nMobile number sample: 09*********</string>
+    <string name="elecBill_cell_billPayLastTerm">last-term</string>
+    <string name="elecBill_cell_billPayMidTerm">mid-term</string>
+    <string name="elecBill_cell_billPayPhoneLastBtn">Pay Last-term</string>
+    <string name="elecBill_cell_billPayPhoneMidBtn">Pay Mid-term</string>
     <!--<string name="news_latest">Latest</string>
        <string name="news_MHits">Most-Watched</string>
        <string name="news_ergent">Most_Read</string>
@@ -2702,4 +2715,8 @@ Want to get it?</string>
     <string name="hold">Hold</string>
     <string name="Increase_score">Increase your score\n right now!</string>
 
+    <string-array name="billsOptions">
+        <item>Electricity</item>
+        <item>Gas</item>
+    </string-array>
 </resources>

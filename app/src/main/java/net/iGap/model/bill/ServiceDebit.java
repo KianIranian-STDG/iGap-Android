@@ -1,17 +1,10 @@
-package net.iGap.model.electricity_bill;
-
-import android.text.format.DateUtils;
+package net.iGap.model.bill;
 
 import com.google.gson.annotations.SerializedName;
 
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperNumerical;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-public class BranchDebit {
+public class ServiceDebit {
 
     @SerializedName("bill_identifier")
     private String billID;
@@ -20,7 +13,9 @@ public class BranchDebit {
     @SerializedName("payment_identifier")
     private String paymentID;
     @SerializedName("total_bill_debt")
-    private String totalBillDebt;
+    private String totalElectricityBillDebt;
+    @SerializedName("payment_amount")
+    private String totalGasBillDebt;
     @SerializedName("other_account_debt")
     private String otherAccountDebt;
     @SerializedName("payment_dead_line")
@@ -38,7 +33,7 @@ public class BranchDebit {
 
     private boolean loading;
 
-    public BranchDebit() {
+    public ServiceDebit() {
         loading = true;
     }
 
@@ -74,18 +69,15 @@ public class BranchDebit {
     }
 
     public String getTotalBillDebtConverted() {
-        if (HelperCalander.isPersianUnicode) {
-            return HelperCalander.convertToUnicodeFarsiNumber(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(totalBillDebt)));
-        }
-        return new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(totalBillDebt));
+        return totalElectricityBillDebt;
     }
 
-    public String getTotalBillDebt() {
-        return totalBillDebt;
+    public String getTotalElectricityBillDebt() {
+        return totalElectricityBillDebt;
     }
 
-    public void setTotalBillDebt(String totalBillDebt) {
-        this.totalBillDebt = totalBillDebt;
+    public void setTotalElectricityBillDebt(String totalElectricityBillDebt) {
+        this.totalElectricityBillDebt = totalElectricityBillDebt;
     }
 
     public String getOtherAccountDebt() {
@@ -99,8 +91,8 @@ public class BranchDebit {
     public String getPaymentDeadLineDate() {
         if (paymentDeadLineDate == null || paymentDeadLineDate.isEmpty())
             return "";
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+        return paymentDeadLineDate.replaceAll("-", "/");
+        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         try {
             Date mDate = sdf.parse(paymentDeadLineDate.replace("T", " ").replace("Z"," "));
             long timeInMilliseconds = mDate.getTime();
@@ -111,7 +103,7 @@ public class BranchDebit {
         } catch (ParseException e) {
             e.printStackTrace();
             return "";
-        }
+        }*/
     }
 
     public void setPaymentDeadLineDate(String paymentDeadLineDate) {
@@ -164,5 +156,13 @@ public class BranchDebit {
 
     public void setLoading(boolean loading) {
         this.loading = loading;
+    }
+
+    public String getTotalGasBillDebt() {
+        return totalGasBillDebt;
+    }
+
+    public void setTotalGasBillDebt(String totalGasBillDebt) {
+        this.totalGasBillDebt = totalGasBillDebt;
     }
 }
