@@ -59,7 +59,7 @@ public class ElectricityBillAddFrag extends BaseBottomSheet {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_elec_bill_add, container, false);
-        binding.setViewmodel(viewModel);
+        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
 
@@ -97,7 +97,8 @@ public class ElectricityBillAddFrag extends BaseBottomSheet {
         viewModel.getSuccessM().observe(getViewLifecycleOwner(), message -> {
             if (message != null) {
                 showDialog(getResources().getString(R.string.elecBill_success_title), message);
-                completeListener.loadAgain();
+                if (completeListener != null)
+                    completeListener.loadAgain();
             }
         });
 

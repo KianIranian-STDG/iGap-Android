@@ -61,12 +61,13 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title, billID, billPayID, billPrice, billTime, billPayID2,
-                billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle, billPhone, billPhoneTitle;
+                billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle, billPhone, billPhoneTitle, failTxt, failIcon;
         private ProgressBar progressPID, progressP, progressT;
         private Button pay, showDetail;
         private TextView delete, edit;
         private CircleImageView logo;
         private DecimalFormat df;
+        private View failBg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,14 +93,28 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
             billPhone = itemView.findViewById(R.id.billPhone);
             billPhoneTitle = itemView.findViewById(R.id.billPhoneTitle);
 
+            failIcon = itemView.findViewById(R.id.loadAgainIcon);
+            failTxt = itemView.findViewById(R.id.loadAgain);
+            failBg = itemView.findViewById(R.id.loadBackground);
+
             df = new DecimalFormat(",###");
         }
 
         void initServiceView(ServiceDebit debit, int position) {
+            title.setText(bill.get(position).getBillTitle());
             if (!debit.isLoading()) {
                 progressPID.setVisibility(View.GONE);
                 progressP.setVisibility(View.GONE);
                 progressT.setVisibility(View.GONE);
+                if (debit.isFail()) {
+                    failIcon.setVisibility(View.VISIBLE);
+                    failTxt.setVisibility(View.VISIBLE);
+                    failBg.setVisibility(View.VISIBLE);
+                    failIcon.setOnClickListener(v -> reloadData(position));
+                    failTxt.setOnClickListener(v -> reloadData(position));
+                    failBg.setOnClickListener(v -> reloadData(position));
+                    return;
+                }
                 billPayID2.setVisibility(View.GONE);
                 billPayTitle2.setVisibility(View.GONE);
                 billPhoneTitle.setVisibility(View.GONE);
@@ -156,10 +171,20 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
         }
 
         void initPhoneView(MobileDebit debit, int position) {
+            title.setText(bill.get(position).getBillTitle());
             if (!debit.isLoading()) {
                 progressPID.setVisibility(View.GONE);
                 progressP.setVisibility(View.GONE);
                 progressT.setVisibility(View.GONE);
+                if (debit.isFail()) {
+                    failIcon.setVisibility(View.VISIBLE);
+                    failTxt.setVisibility(View.VISIBLE);
+                    failBg.setVisibility(View.VISIBLE);
+                    failIcon.setOnClickListener(v -> reloadData(position));
+                    failTxt.setOnClickListener(v -> reloadData(position));
+                    failBg.setOnClickListener(v -> reloadData(position));
+                    return;
+                }
                 // TODO: 6/1/2020 this 4 lines for pay ID
                 //****
                 billPayID2.setVisibility(View.GONE);
@@ -174,7 +199,6 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 billTimeTitle.setText(context.getResources().getText(R.string.elecBill_pay_billPrice) + " " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
                 billPayTitle.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayLastTerm));
                 billPayTitle2.append(" " + context.getResources().getText(R.string.elecBill_cell_billPayMidTerm));
-                title.setText(bill.get(position).getBillTitle());
                 pay.setText(context.getResources().getText(R.string.elecBill_cell_billPayPhoneLastBtn));
                 showDetail.setText(context.getResources().getText(R.string.elecBill_cell_billPayPhoneMidBtn));
 
@@ -242,10 +266,20 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 initPhoneView(phoneDebit, position);
             }
         }
+
+        void reloadData(int position) {
+            clickListener.onClick(bill.get(position), OnItemClickListener.Action.RELOAD);
+            failIcon.setVisibility(View.GONE);
+            failTxt.setVisibility(View.GONE);
+            failBg.setVisibility(View.GONE);
+            progressPID.setVisibility(View.VISIBLE);
+            progressP.setVisibility(View.VISIBLE);
+            progressT.setVisibility(View.VISIBLE);
+        }
     }
 
     public interface OnItemClickListener {
-        enum Action {DELETE, EDIT, SHOW_DETAIL, PAY, MID_PAY, LAST_PAY}
+        enum Action {DELETE, EDIT, SHOW_DETAIL, PAY, MID_PAY, LAST_PAY, RELOAD}
 
         void onClick(BillList.Bill item, Action btnAction);
     }

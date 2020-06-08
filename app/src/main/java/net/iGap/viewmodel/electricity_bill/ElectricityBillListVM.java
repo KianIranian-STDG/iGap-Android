@@ -78,6 +78,28 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         return temp;
     }
 
+    public void reloadData(BillList.Bill data) {
+        Map<BillList.Bill, Debit> tmp = mMapData.getValue();
+        switch (data.getBillType()) {
+            case "ELECTRICITY":
+            case "GAS":
+                ServiceDebit temp = (ServiceDebit) tmp.get(data).getData();
+                temp.setLoading(true);
+                temp.setFail(false);
+                tmp.put(data, new Debit(temp));
+                getServiceDebit(data);
+                break;
+            case "MOBILE_MCI":
+            case "PHONE":
+                MobileDebit temp1 = (MobileDebit) tmp.get(data).getData();
+                temp1.setLoading(true);
+                temp1.setFail(false);
+                tmp.put(data, new Debit(temp1));
+                getPhoneDebit(data);
+                break;
+        }
+    }
+
     public void getBillsList() {
         progressVisibility.set(View.VISIBLE);
         errorVisibility.set(View.GONE);
@@ -152,6 +174,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                 Map<BillList.Bill, Debit> tmp = mMapData.getValue();
                 Debit<ServiceDebit> debitTmp = tmp.get(dataModel);
                 debitTmp.getData().setLoading(false);
+                debitTmp.getData().setFail(true);
                 debitTmp.getData().setTotalElectricityBillDebt("0");
                 debitTmp.getData().setTotalGasBillDebt("0");
                 debitTmp.getData().setPaymentID("0");
@@ -164,6 +187,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                 Map<BillList.Bill, Debit> tmp = mMapData.getValue();
                 Debit<ServiceDebit> debitTmp = tmp.get(dataModel);
                 debitTmp.getData().setLoading(false);
+                debitTmp.getData().setFail(true);
                 debitTmp.getData().setTotalElectricityBillDebt("0");
                 debitTmp.getData().setTotalGasBillDebt("0");
                 debitTmp.getData().setPaymentID("0");
@@ -195,6 +219,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                 Map<BillList.Bill, Debit> tmp = mMapData.getValue();
                 Debit<MobileDebit> debitTmp = tmp.get(dataModel);
                 debitTmp.getData().setLoading(false);
+                debitTmp.getData().setFail(true);
                 debitTmp.getData().setLastTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
                 debitTmp.getData().setMidTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
                 tmp.put(dataModel, debitTmp);
@@ -206,6 +231,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                 Map<BillList.Bill, Debit> tmp = mMapData.getValue();
                 Debit<MobileDebit> debitTmp = tmp.get(dataModel);
                 debitTmp.getData().setLoading(false);
+                debitTmp.getData().setFail(true);
                 debitTmp.getData().setLastTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
                 debitTmp.getData().setMidTerm(new MobileDebit.MobileInquiryObject("0", "0", "0"));
                 tmp.put(dataModel, debitTmp);
