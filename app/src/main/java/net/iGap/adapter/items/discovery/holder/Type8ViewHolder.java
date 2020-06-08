@@ -23,7 +23,6 @@ public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback
     /*    private WeatherApi weatherApi;*/
     public AppCompatTextView tvCityName, tvDegree, tvDate, tvScore, tvContent;
     public AppCompatImageView ivWeather;
-    private RealmUserInfo userInfo;
 
     public Type8ViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView, activity);
@@ -36,9 +35,6 @@ public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback
 
         /*  weatherApi = new RetrofitFactory().getWeatherRetrofit();*/
 
-        DbManager.getInstance().doRealmTask(realm -> {
-            userInfo = realm.where(RealmUserInfo.class).findFirst();
-        });
  /*
      weatherApi.getCities().enqueue(new Callback<List<Cities>>() {
             @Override
@@ -67,17 +63,19 @@ public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback
         });*/
     }
 
-    public void shakeView() {
-        Animation a = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shake_mode);
-        a.reset();
-        tvContent.clearAnimation();
-        tvContent.startAnimation(a);
-    }
-
     @Override
     public void bindView(DiscoveryItem item) {
-        tvScore.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(userInfo.getIvandScore())) : String.valueOf(userInfo.getIvandScore()));
         itemView.setOnClickListener(view -> new HelperFragment(G.currentActivity.getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load());
-        shakeView();
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (userInfo != null)
+                tvScore.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(userInfo.getIvandScore())) : String.valueOf(userInfo.getIvandScore()));
+        });
+
+        Animation animation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shake_mode);
+        animation.reset();
+        tvContent.clearAnimation();
+        tvContent.startAnimation(animation);
     }
 }
