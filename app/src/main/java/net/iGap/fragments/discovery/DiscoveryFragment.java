@@ -245,9 +245,9 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     edit.putString("page0", cache).apply();
                     edit.putString("title", title).apply();
 
-                    DiscoveryItem a = new DiscoveryItem(ProtoGlobal.Discovery.newBuilder().setScale("4:1").build());
+                   /* DiscoveryItem a = new DiscoveryItem(ProtoGlobal.Discovery.newBuilder().setScale("4:1").build());
                     a.model=null;
-                    discoveryArrayList.add(0,a);
+                discoveryArrayList.add(0,a);*/
 
                 }
 
@@ -336,7 +336,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             try {
                 ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>() {
                 }.getType());
-                for (DiscoveryItem discoveryItem: discoveryArrayList) {
+                for (DiscoveryItem discoveryItem : discoveryArrayList) {
                     if (discoveryItem.scale == null || discoveryItem.model == null) {
                         return;
                     }

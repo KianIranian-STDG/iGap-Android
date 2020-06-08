@@ -22,14 +22,14 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.realm.RealmUserInfo;
 
-public class Type0ViewHolder extends BaseViewHolder implements HandShakeCallback {
+public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback {
     private WeatherApi weatherApi;
     public AppCompatTextView tvCityName, tvDegree, tvDate, tvScore, tvContent;
     public AppCompatImageView ivWeather;
     private RealmUserInfo userInfo;
     private ConstraintLayout frameScore;
 
-    public Type0ViewHolder(@NonNull View itemView, FragmentActivity activity) {
+    public Type8ViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView, activity);
      /*   ivWeather = itemView.findViewById(R.id.iv_weather);
         tvCityName = itemView.findViewById(R.id.tv_cityName);
