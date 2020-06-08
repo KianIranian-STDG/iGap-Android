@@ -1390,6 +1390,7 @@
     <string name="payment_price_rial">Сумма, уплаченная в риалах</string>
     <string name="price_rial">Сумма (риалы)</string>
     <string name="amount_must_be_greater_1000">Сумма должна превышать 1000 риалов</string>
+    <string name="amount_must_be_greater_10000">Сумма должна превышать 10000 риалов</string>
     <string name="amount_not_valid">Введите сумму правильно</string>
     <string name="payment_history">История транзакций</string>
     <string name="set_card_pin">Определить пароль безопасности</string>
@@ -2006,4 +2007,5 @@
     <string name="sim_type_not_choosed">Тип SIM-карты не указан</string>
     <string name="no_history_found">​​История не найдена</string>
     <string name="no_number_found">Там нет предварительного номера</string>
+    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
 </resources>

@@ -28,14 +28,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.module.WebAppInterface;
 import net.iGap.observers.interfaces.IOnBackPressed;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.module.WebAppInterface;
 
 import java.io.IOException;
 
@@ -282,15 +283,18 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            boolean a = HelperUrl.handleAppUrl(getActivity(), url);
-            if (a) {
-                // onBackButtonClicked(view);
-            }
             if (url.toLowerCase().equals("igap://close")) {
                 forceCloseFragment = true;
                 onLeftIconClickListener(view);
+            } else if (url.toLowerCase().contains("igap://deep_link")) {
+                if (getActivity() != null && getActivity() instanceof ActivityMain) {
+                    ActivityMain activityMain = (ActivityMain) getActivity();
+                    activityMain.handleDeepLink(url.replace("igap://deep_link?", ""));
+                    return true;
+                }
             }
-            return a;
+
+            return HelperUrl.handleAppUrl(getActivity(), url);
         }
     }
 

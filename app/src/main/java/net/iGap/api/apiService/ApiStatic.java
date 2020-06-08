@@ -22,5 +22,6 @@ class ApiStatic {
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
     static final String MOBILE_BANK = BASE_URL + "parsian/" + VERSION;
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
+    static final String WEATHER_URL = "http://192.168.8.66:7000/v1.0/";
 }
 

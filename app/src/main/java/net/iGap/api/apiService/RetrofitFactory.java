@@ -15,6 +15,7 @@ import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
 import net.iGap.api.ShahkarApi;
 import net.iGap.api.StickerApi;
+import net.iGap.api.WeatherApi;
 
 import java.util.Collections;
 
@@ -216,5 +217,14 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(ShahkarApi.class);
+    }
+
+    public WeatherApi getWeatherRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.WEATHER_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(WeatherApi.class);
     }
 }

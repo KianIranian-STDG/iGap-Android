@@ -80,7 +80,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
     private CallManager.CallStateChange callStateChange;
 
-    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private String TAG = "iGapCall " + "CallService";
 
     public static CallService getInstance() {
         return instance;
@@ -123,14 +123,13 @@ public class CallService extends Service implements CallManager.CallStateChange 
         if (intent == null) {
             Log.i(TAG, "onStartCommand intent null");
             stopSelf();
+            return START_NOT_STICKY;
         }
 
-        if (intent != null) {
-            callType = ProtoSignalingOffer.SignalingOffer.Type.valueOf(intent.getStringExtra(CALL_TYPE));
-            userId = intent.getLongExtra(USER_ID, -1);
-            isVoiceCall = callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-            isIncoming = intent.getBooleanExtra(IS_INCOMING, false);
-        }
+        callType = ProtoSignalingOffer.SignalingOffer.Type.valueOf(intent.getStringExtra(CALL_TYPE));
+        userId = intent.getLongExtra(USER_ID, -1);
+        isVoiceCall = callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+        isIncoming = intent.getBooleanExtra(IS_INCOMING, false);
 
         instance = this;
         CallManager.getInstance().setOnCallStateChanged(this);

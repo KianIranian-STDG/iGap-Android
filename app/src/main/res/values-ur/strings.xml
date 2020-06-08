@@ -1391,6 +1391,7 @@
     <string name="payment_price_rial">بڕی پارەی پێدانی بە ریاڵ</string>
     <string name="price_rial">بڕی پارە (ریاڵ)</string>
     <string name="amount_must_be_greater_1000">بڕی پارەکە دەبێ لە ١٠٠٠ ریاڵ زۆرتر بێت</string>
+    <string name="amount_must_be_greater_10000">بڕی پارەکە دەبێ لە ١٠٠۰٠ ریاڵ زۆرتر بێت</string>
     <string name="amount_not_valid">بڕی پارەکە بە دروستی بنووسە</string>
     <string name="payment_history">رێکەوتی ترانسەکشێنەکان</string>
     <string name="set_card_pin">پێناسەی کۆدی پارێزراوێتی</string>

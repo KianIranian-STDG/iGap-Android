@@ -41,6 +41,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.IGLog;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
@@ -463,8 +464,12 @@ public class G extends ApplicationContext {
 
     @Override
     public void onCreate() {
-        Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate();
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.i("Splash activity on destroy");
+        }
+
         context = getApplicationContext();
         Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
@@ -527,6 +532,13 @@ public class G extends ApplicationContext {
             new File(downloadDirectoryPath).mkdirs();
 
         Log.wtf(this.getClass().getName(), "onCreate");
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.i("------------------- CLIENT INFO -------------------");
+            IGLog.i("- account cunt ->       " + AccountManager.getInstance().getUserAccountList().size() + "                         -");
+            IGLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
+            IGLog.i("------------------- CLIENT INFO -------------------");
+        }
     }
 
     @Override

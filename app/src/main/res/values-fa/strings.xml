@@ -737,7 +737,7 @@
     <string name="your_login_code_is">"کد ورود شما هست: "</string>
     <string name="there_is_no_sheared_media">هیچ رسانه‌ای به اشتراک گذاشته نشده است.</string>
     <string name="pending">معلق</string>
-    <string name="payment_userScore">امتیاز شما:  </string>
+    <string name="payment_userScore">امتیاز شما</string>
     <string name="payment_spentScore">امتیاز مصرفی: </string>
     <string name="payment_price">تخفیف: </string>
     <string name="payment_discount_plans_title">بسته های تخفیف</string>
@@ -1595,6 +1595,7 @@
     <string name="payment_price_rial">مبلغ پرداختی به ریال</string>
     <string name="price_rial">مبلغ (ریال)</string>
     <string name="amount_must_be_greater_1000">مبلغ باید بیشتر از 1000 ریال باشد</string>
+    <string name="amount_must_be_greater_10000">مبلغ باید بیشتر از 10000 ریال باشد</string>
     <string name="amount_not_valid">مبلغ را صحیح وارد کنید</string>
     <string name="payment_history">تاریخچه تراکنش‌ها</string>
     <string name="set_card_pin">تعریف رمز امنیتی</string>
@@ -2627,7 +2628,7 @@
     <string name="select_the_amount">انتخاب مبلغ</string>
     <string name="Select_from_contact_numbers">انتخاب از شماره های مخاطبین</string>
     <string name="list_empty">در لیست شما شماره ای از قبل وجود ندارد</string>
-    <string name="Select_from_previous_numbers">انتخاب از شماره های قبلی</string>
+    <string name="Select_from_previous_numbers">انتخاب از خرید های قبلی</string>
     <string name="Select_the_type_of_charge">انتخاب نوع شارژ</string>
     <string name="order_by">مرتب سازی بر اساس</string>
     <string name="recently_used_packages">بسته های اخیرا استفاده شده</string>
@@ -2648,6 +2649,7 @@
     <string name="tarabord">در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید</string>
     <string name="mic">میکروفن</string>
     <string name="hold">نگه‌داشتن</string>
+    <string name="Increase_score">همین حالا امتیازت\n رو افزایش بده!</string>
     <string-array name="billsOptions">
         <item>برق</item>
         <item>گاز</item>

@@ -32,6 +32,7 @@ import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
@@ -39,7 +40,6 @@ import java.util.List;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
-    private static final String TAG = "abbasiDeepLink";
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
@@ -244,6 +244,11 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     String cache = gson.toJson(discoveryArrayList);
                     edit.putString("page0", cache).apply();
                     edit.putString("title", title).apply();
+
+                    /*DiscoveryItem a = new DiscoveryItem(ProtoGlobal.Discovery.newBuilder().setScale("4:1").build());
+                    a.model=null;
+                discoveryArrayList.add(0,a);*/
+
                 }
 
                 listLoaded = true;
@@ -331,7 +336,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             try {
                 ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>() {
                 }.getType());
-                for (DiscoveryItem discoveryItem: discoveryArrayList) {
+                for (DiscoveryItem discoveryItem : discoveryArrayList) {
                     if (discoveryItem.scale == null || discoveryItem.model == null) {
                         return;
                     }

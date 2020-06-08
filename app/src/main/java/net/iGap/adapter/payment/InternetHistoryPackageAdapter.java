@@ -14,11 +14,15 @@ import net.iGap.model.paymentPackage.FavoriteNumber;
 import java.util.List;
 
 
-public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPackage.ContactNumberViewHolder> {
+public class InternetHistoryPackageAdapter extends RecyclerView.Adapter<InternetHistoryPackageAdapter.ContactNumberViewHolder> {
     private List<FavoriteNumber> historyNumberList;
-    private int selectedPosition = -1;
+    private IOnItemClickListener onItemClickListener;
 
-    public AdapterHistoryPackage(List<FavoriteNumber> historyNumberList) {
+    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public InternetHistoryPackageAdapter(List<FavoriteNumber> historyNumberList) {
         this.historyNumberList = historyNumberList;
     }
 
@@ -31,7 +35,7 @@ public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPa
 
     @Override
     public void onBindViewHolder(@NonNull ContactNumberViewHolder holder, int position) {
-        holder.bindNUmber(historyNumberList.get(position), position);
+        holder.bindNUmber(historyNumberList.get(position));
     }
 
     @Override
@@ -47,22 +51,21 @@ public class AdapterHistoryPackage extends RecyclerView.Adapter<AdapterHistoryPa
             super(itemView);
             phoneNumberTextView = itemView.findViewById(R.id.tv_itemInternetPackage_number);
             detailTextView = itemView.findViewById(R.id.tv_itemInternetPackage_detail);
+
+            itemView.setOnClickListener(v -> {
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClicked(getAdapterPosition());
+            });
         }
 
-        void bindNUmber(FavoriteNumber historyNumber, int position) {
+        void bindNUmber(FavoriteNumber historyNumber) {
             phoneNumberTextView.setText(historyNumber.getPhoneNumber());
             detailTextView.setText(historyNumber.getPackageDescription());
-            itemView.setSelected(selectedPosition == position);
-            itemView.setOnClickListener(v -> {
-                notifyItemChanged(selectedPosition);
-                selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
-            });
         }
     }
 
-    public int getSelectedPosition() {
-        return selectedPosition;
+    public interface IOnItemClickListener {
+        void onItemClicked(int position);
     }
 
     public List<FavoriteNumber> getHistoryNumberList() {

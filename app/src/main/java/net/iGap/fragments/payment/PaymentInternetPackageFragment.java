@@ -36,7 +36,7 @@ import net.iGap.viewmodel.PaymentInternetPackageViewModel;
 
 import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
 
-public class FragmentPaymentInternetPackage extends BaseFragment {
+public class PaymentInternetPackageFragment extends BaseFragment {
 
     private static final String PARAM_OPERATOR = "PARAM_OPERATOR";
     private static final String PARAM_SIM_TYPE = "PARAM_SIM_TYPE";
@@ -65,8 +65,9 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     private int packageType = -1;
     private boolean inScroll;
     private InternetPackage currentInternetPackage;
+    private boolean isSelectedFromHistory = false;
 
-    public static FragmentPaymentInternetPackage newInstance(String phoneNumber, String operator, String simType, int packageType) {
+    public static PaymentInternetPackageFragment newInstance(String phoneNumber, String operator, String simType, int packageType) {
 
         Bundle args = new Bundle();
         args.putString(PARAM_PHONE_NUMBER, phoneNumber);
@@ -74,7 +75,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
         args.putString(PARAM_SIM_TYPE, simType);
         args.putInt(PARAM_PACKAGE_TYPE, packageType);
 
-        FragmentPaymentInternetPackage fragment = new FragmentPaymentInternetPackage();
+        PaymentInternetPackageFragment fragment = new PaymentInternetPackageFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,6 +89,9 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
             simType = getArguments().getString(PARAM_SIM_TYPE);
             phoneNumber = getArguments().getString(PARAM_PHONE_NUMBER);
             packageType = getArguments().getInt(PARAM_PACKAGE_TYPE);
+            if (packageType != -1) {
+                isSelectedFromHistory = true;
+            }
         }
 
         viewModel = ViewModelProviders.of(this).get(PaymentInternetPackageViewModel.class);
@@ -279,6 +283,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
                 currentInternetPackage = item;
                 viewModel.setPackageType(item);
                 othersAdapter.unSelectCurrent();
+                isSelectedFromHistory = false;
             });
         }
         if (othersAdapter == null) {
@@ -289,6 +294,7 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
                 currentInternetPackage = item;
                 viewModel.setPackageType(item);
                 suggestedAdapter.unSelectCurrent();
+                isSelectedFromHistory = false;
             });
         }
     }
@@ -328,14 +334,16 @@ public class FragmentPaymentInternetPackage extends BaseFragment {
     }
 
     private void savePayment() {
-        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.save_purchase))
-                .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
-                .positiveText(R.string.ok)
-                .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+        if (!isSelectedFromHistory) {
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.save_purchase))
+                    .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                    .positiveText(R.string.ok)
+                    .onNegative((dialog1, which) -> dialog1.dismiss()).show();
 
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-            viewModel.savePayment();
-            dialog.dismiss();
-        });
+            dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                viewModel.savePayment();
+                dialog.dismiss();
+            });
+        }
     }
 }

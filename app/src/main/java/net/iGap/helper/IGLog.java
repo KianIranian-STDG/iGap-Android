@@ -107,6 +107,24 @@ public class IGLog {
         }
     }
 
+    public static void i(final String message) {
+        if (!Config.FILE_LOG_ENABLE) {
+            return;
+        }
+
+        initied();
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " I -> : " + message + "\n");
+                    getInstance().streamWriter.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
     public static void e(final Throwable e) {
         if (!Config.FILE_LOG_ENABLE) {
             return;

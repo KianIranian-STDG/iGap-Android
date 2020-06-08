@@ -52,6 +52,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.top.lib.mpl.view.PaymentInitiator;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -82,6 +83,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.IGLog;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.model.PassCode;
@@ -262,6 +264,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e("Main activity on destroy");
+        }
+
         if (G.ISRealmOK) {
             if (myPhonStateService != null) {
                 unregisterReceiver(myPhonStateService);
@@ -314,10 +320,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private void handleDeepLink(Intent intent) {
+    public void handleDeepLink(Intent intent) {
+        if (intent != null && intent.getExtras() != null)
+            handleDeepLink(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT));
+    }
+
+    public void handleDeepLink(String uri) {
         BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (bottomNavigationFragment != null)
-            bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT), new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+            bottomNavigationFragment.autoLinkCrawler(uri, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
                 @Override
                 public void linkValid(String link) {
 
@@ -329,7 +340,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             });
     }
-
 
     private void checkIntent(Intent intent) {
 
@@ -395,6 +405,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e("Main activity on create");
+        }
+
         setContentView(R.layout.activity_main);
 
         detectDeviceType();
