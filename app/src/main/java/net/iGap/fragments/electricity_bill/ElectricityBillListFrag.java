@@ -214,6 +214,8 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
                     viewModel.payServiceBill(tempLast.getLastTerm().getBillID(), tempLast.getLastTerm().getPayID(),
                             tempLast.getLastTerm().getAmount());
                     break;
+                case RELOAD:
+                    viewModel.reloadData(item);
             }
         });
         binding.billRecycler.setAdapter(adapter);

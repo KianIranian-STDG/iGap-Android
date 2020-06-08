@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="net.iGap.viewmodel.electricity_bill.ElectricityBillAddVM" />
     </data>
 
@@ -57,8 +57,8 @@
                 android:minHeight="48dp"
                 android:hint="@string/elecBill_add_name"
                 android:textColorHint="?iGapHintTextColor"
-                app:errorText="@{viewmodel.billNameError}"
-                app:errorEnabled="@{viewmodel.billNameErrorEnable}"
+                app:errorText="@{viewModel.billNameError}"
+                app:errorEnabled="@{viewModel.billNameErrorEnable}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/billDesc">
@@ -71,7 +71,7 @@
                     android:gravity="start"
                     android:inputType="text"
                     android:minHeight="48dp"
-                    android:text="@={viewmodel.billName}"
+                    android:text="@={viewModel.billName}"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     android:imeOptions="actionNext" />
@@ -88,8 +88,8 @@
                 android:minHeight="48dp"
                 android:hint="@string/elecBill_add_billID"
                 android:textColorHint="?iGapHintTextColor"
-                app:errorText="@{viewmodel.billIDError}"
-                app:errorEnabled="@{viewmodel.billIDErrorEnable}"
+                app:errorText="@{viewModel.billIDError}"
+                app:errorEnabled="@{viewModel.billIDErrorEnable}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/billName">
@@ -102,7 +102,7 @@
                     android:gravity="start"
                     android:inputType="numberDecimal"
                     android:minHeight="48dp"
-                    android:text="@={viewmodel.billID}"
+                    android:text="@={viewModel.billID}"
                     android:textColor="?iGapTitleTextColor"
                     android:digits="0123456789"
                     android:imeOptions="actionNext"
@@ -119,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="58dp"
-                android:onClick="@{()->viewmodel.addBill()}"
+                android:onClick="@{()->viewModel.addBill()}"
                 android:text="@string/elecBill_add_addBtn"
                 android:textSize="@dimen/dp16"
                 android:visibility="visible"
@@ -136,8 +136,11 @@
                 android:id="@+id/ProgressV"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:elevation="2dp"
-                android:visibility="@{viewmodel.progressVisibility}"
+                android:elevation="4dp"
+                android:visibility="@{viewModel.progressVisibility}"
+                android:indeterminate="true"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/submitBill"
                 app:layout_constraintEnd_toEndOf="@+id/submitBill"
                 app:layout_constraintStart_toStartOf="@+id/submitBill"

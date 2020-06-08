@@ -10,9 +10,11 @@ public class MobileDebit {
     private MobileInquiryObject lastTerm;
 
     private boolean loading;
+    private boolean fail;
 
     public MobileDebit() {
         loading = true;
+        fail = false;
     }
 
     public MobileInquiryObject getMidTerm() {
@@ -37,6 +39,14 @@ public class MobileDebit {
 
     public void setLoading(boolean loading) {
         this.loading = loading;
+    }
+
+    public boolean isFail() {
+        return fail;
+    }
+
+    public void setFail(boolean fail) {
+        this.fail = fail;
     }
 
     public static class MobileInquiryObject {

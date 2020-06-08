@@ -32,9 +32,11 @@ public class ServiceDebit {
     private String lastUpdateTime;
 
     private boolean loading;
+    private boolean fail;
 
     public ServiceDebit() {
         loading = true;
+        fail = false;
     }
 
     public String getBillID() {
@@ -164,5 +166,13 @@ public class ServiceDebit {
 
     public void setTotalGasBillDebt(String totalGasBillDebt) {
         this.totalGasBillDebt = totalGasBillDebt;
+    }
+
+    public boolean isFail() {
+        return fail;
+    }
+
+    public void setFail(boolean fail) {
+        this.fail = fail;
     }
 }
