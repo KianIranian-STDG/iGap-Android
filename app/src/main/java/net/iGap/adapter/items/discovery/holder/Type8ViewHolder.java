@@ -7,14 +7,11 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.api.WeatherApi;
-import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -23,11 +20,10 @@ import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.realm.RealmUserInfo;
 
 public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback {
-    private WeatherApi weatherApi;
+    /*    private WeatherApi weatherApi;*/
     public AppCompatTextView tvCityName, tvDegree, tvDate, tvScore, tvContent;
     public AppCompatImageView ivWeather;
     private RealmUserInfo userInfo;
-    private ConstraintLayout frameScore;
 
     public Type8ViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView, activity);
@@ -36,10 +32,9 @@ public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback
         tvDegree = itemView.findViewById(R.id.tv_degree);*/
         tvDate = itemView.findViewById(R.id.tv_date);
         tvScore = itemView.findViewById(R.id.tv_score);
-        frameScore = itemView.findViewById(R.id.frame_score);
         tvContent = itemView.findViewById(R.id.textView2);
 
-        weatherApi = new RetrofitFactory().getWeatherRetrofit();
+        /*  weatherApi = new RetrofitFactory().getWeatherRetrofit();*/
 
         DbManager.getInstance().doRealmTask(realm -> {
             userInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -56,7 +51,6 @@ public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback
                 HelperError.showSnackMessage("onFailure", false);
             }
         });
-
 
         weatherApi.getWeatherInfo().enqueue(new Callback<WeatherInfo>() {
             @Override
@@ -83,7 +77,7 @@ public class Type8ViewHolder extends BaseViewHolder implements HandShakeCallback
     @Override
     public void bindView(DiscoveryItem item) {
         tvScore.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(userInfo.getIvandScore())) : String.valueOf(userInfo.getIvandScore()));
-        frameScore.setOnClickListener(view -> new HelperFragment(G.currentActivity.getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load());
+        itemView.setOnClickListener(view -> new HelperFragment(G.currentActivity.getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load());
         shakeView();
     }
 }

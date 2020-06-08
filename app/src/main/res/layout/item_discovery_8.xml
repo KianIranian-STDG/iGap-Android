@@ -7,66 +7,60 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/frame_score"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/imageView5"
+        style="@style/myIconTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="end"
+        android:text="@string/score_star_icon"
+        android:textColor="?attr/colorAccent"
+        android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.5">
+        app:layout_constraintWidth_percent="0.25" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/imageView5"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:text="@string/score_star_icon"
-            android:textColor="?attr/colorAccent"
-            android:textSize="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.5" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingEnd="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
+        android:text="@string/payment_userScore"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/largeTextSize"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintWidth_percent="0.25" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textView8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/payment_userScore"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/largeTextSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView5"
-            app:layout_constraintWidth_percent="0.5" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="?attr/colorAccent"
-            android:textSize="@dimen/largeTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-            app:layout_constraintEnd_toEndOf="@+id/textView8"
-            app:layout_constraintStart_toStartOf="@+id/textView8"
-            app:layout_constraintTop_toBottomOf="@+id/textView8"
-            tools:text="1520" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="?attr/colorAccent"
+        android:textSize="@dimen/largeTextSize"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintEnd_toEndOf="@+id/textView8"
+        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        tools:text="1520" />
 
     <View
         android:id="@+id/view12"
         android:layout_width="1dp"
         android:layout_height="50dp"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp8"
         android:background="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textView2"
-        app:layout_constraintStart_toEndOf="@+id/frame_score"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -74,8 +68,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="2"
-        android:paddingStart="@dimen/dp16"
-        android:paddingLeft="@dimen/dp16"
+        android:paddingStart="@dimen/dp8"
+        android:paddingLeft="@dimen/dp8"
         android:text="@string/Increase_score"
         android:textColor="?attr/colorAccent"
         android:textSize="@dimen/largeTextSize"

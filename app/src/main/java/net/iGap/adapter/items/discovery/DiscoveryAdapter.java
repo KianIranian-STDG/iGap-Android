@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
-import net.iGap.adapter.items.discovery.holder.Type8ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type1ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type2ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type3ViewHolder;
@@ -17,6 +16,7 @@ import net.iGap.adapter.items.discovery.holder.Type4ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type5ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type6ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type7ViewHolder;
+import net.iGap.adapter.items.discovery.holder.Type8ViewHolder;
 import net.iGap.adapter.items.discovery.holder.TypeUnknownViewHolder;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public int getItemViewType(int position) {
         try {
-          /*  if (discoveryList.get(position).model == null) {
+      /*      if (discoveryList.get(position).model == null) {
                 return 0;
             }*/
             return discoveryList.get(position).model.getNumber() + 1;
