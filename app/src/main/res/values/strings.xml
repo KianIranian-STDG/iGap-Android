@@ -758,7 +758,7 @@ Want to get it?</string>
     <string name="there_is_no_sheared_media">There are no shared media</string>
     <string name="pending">Pending</string>
     <string name="completed">Completed</string>
-    <string name="payment_userScore">Your Score: </string>
+    <string name="payment_userScore">Your Score</string>
     <string name="payment_spentScore">Spending Score: </string>
     <string name="payment_price">discount: </string>
     <!-- New String -->
@@ -2700,5 +2700,6 @@ Want to get it?</string>
     <string name="call_error_hold">Hold call is NOT possible.</string>
     <string name="mic">Mic</string>
     <string name="hold">Hold</string>
+    <string name="Increase_score">Increase your score\n right now!</string>
 
 </resources>
