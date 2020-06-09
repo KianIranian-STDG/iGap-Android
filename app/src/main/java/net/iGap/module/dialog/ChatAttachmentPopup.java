@@ -868,12 +868,12 @@ public class ChatAttachmentPopup {
 //                .lensPosition(back())     // we want back camera
                     .cameraErrorCallback(e -> {
                         fotoapparatSwitcher = null;
-                        HelperLog.setErrorLog(e);
+                        HelperLog.getInstance().setErrorLog(e);
                     })
                     .build();
         } catch (Exception e) {
             fotoapparatSwitcher = null;
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
     }

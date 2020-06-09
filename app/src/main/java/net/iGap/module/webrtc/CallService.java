@@ -244,7 +244,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
                 player.prepare();
                 player.start();
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }

@@ -78,7 +78,7 @@ public class KuknosRestoreVM extends BaseAPIViewModel {
         } catch (WalletException e) {
             error.setValue(new KuknosError(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

@@ -109,7 +109,7 @@ public class RealmUserInfo extends RealmObject {
                 if (token != null && token.length() > 0) {
                     new RequestClientRegisterDevice().clientRegisterDevice(token);
                 } else {
-                    HelperLog.setErrorLog(new Exception("FCM Token is Empty!" + token));
+                    HelperLog.getInstance().setErrorLog(new Exception("FCM Token is Empty!" + token));
                 }
             }
         });

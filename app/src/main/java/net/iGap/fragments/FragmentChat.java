@@ -2630,7 +2630,7 @@ public class FragmentChat extends BaseFragment
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                HelperLog.setErrorLog(e);
+                                HelperLog.getInstance().setErrorLog(e);
                             }
                         }
                     }
@@ -2653,7 +2653,7 @@ public class FragmentChat extends BaseFragment
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                     }
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             }
         };
@@ -4704,7 +4704,7 @@ public class FragmentChat extends BaseFragment
                     mAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }
@@ -9441,7 +9441,7 @@ public class FragmentChat extends BaseFragment
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

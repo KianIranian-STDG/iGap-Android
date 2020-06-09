@@ -118,7 +118,7 @@ public class HelperImageBackColor {
             textPaint.setStyle(Paint.Style.FILL);
             cs.drawText(alphabetName, with / 2, with / 2 + fontSize / 4, textPaint);
         } catch (NullPointerException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
         return bitmap;

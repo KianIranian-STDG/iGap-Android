@@ -254,19 +254,19 @@ public class HelperUnpackMessage {
             Method method3 = object3.getClass().getMethod("build");
             method3.invoke(object3);
         } catch (InstantiationException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         }
 
@@ -291,19 +291,19 @@ public class HelperUnpackMessage {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }
         } catch (InstantiationException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         }
         return object;

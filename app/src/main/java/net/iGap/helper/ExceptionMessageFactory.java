@@ -41,7 +41,7 @@ public class ExceptionMessageFactory {
             errorResponse.setMessage("خطای نامشخص");
         }
 
-        HelperLog.setErrorLog(new Exception(throwable.getMessage()));
+        HelperLog.getInstance().setErrorLog(new Exception(throwable.getMessage()));
 
         return errorResponse;
     }

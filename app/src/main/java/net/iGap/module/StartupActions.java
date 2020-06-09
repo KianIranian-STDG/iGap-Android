@@ -115,10 +115,10 @@ public final class StartupActions {
 
                         } catch (OutOfMemoryError error) {
                             error.printStackTrace();
-                            HelperLog.setErrorLog(new Exception(error.getMessage()));
+                            HelperLog.getInstance().setErrorLog(new Exception(error.getMessage()));
                         } catch (Exception e) {
                             e.printStackTrace();
-                            HelperLog.setErrorLog(e);
+                            HelperLog.getInstance().setErrorLog(e);
                         }
                     }
                 });
@@ -589,7 +589,7 @@ public final class StartupActions {
                         final long thresholdSize = 10 * 1024 * 1024;
 
                         if (totalBytes > 500 * 1024 * 1024) {
-                            HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            HelperLog.getInstance().setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
                         }
 
                         return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);

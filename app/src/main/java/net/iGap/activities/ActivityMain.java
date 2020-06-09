@@ -220,7 +220,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 
@@ -1285,7 +1285,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return super.dispatchTouchEvent(ev);
         } catch (IllegalArgumentException e) {
             //Fix for support lib bug, happening when onDestroy() is
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             return true;
         }
     }

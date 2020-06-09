@@ -838,7 +838,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 });
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
     }
@@ -877,7 +877,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 });
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

@@ -30,7 +30,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -1339,7 +1338,7 @@ public class HelperUrl {
                                 new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity(activity);
                             }
                         } catch (Exception e) {
-                            HelperLog.setErrorLog(e);
+                            HelperLog.getInstance().setErrorLog(e);
                             e.printStackTrace();
                         }
                     }
@@ -1377,7 +1376,7 @@ public class HelperUrl {
                                         new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
                                     }
                                 } catch (Exception e) {
-                                    HelperLog.setErrorLog(e);
+                                    HelperLog.getInstance().setErrorLog(e);
                                     e.printStackTrace();
                                 }
                             }

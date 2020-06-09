@@ -130,7 +130,7 @@ public class FileDownloadResponse extends MessageHandler {
 
         RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
         if (majorCode == 713 && (minorCode == 2 || minorCode == 5)) {
-            HelperLog.setErrorLog(new Exception("error: " + identityFileDownload.cacheId
+            HelperLog.getInstance().setErrorLog(new Exception("error: " + identityFileDownload.cacheId
                     + " offset: " + identityFileDownload.offset
                     + " size: " + identityFileDownload.size
                     + " typeDownload: " + identityFileDownload.typeDownload
