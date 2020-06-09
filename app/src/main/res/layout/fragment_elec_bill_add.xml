@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="net.iGap.viewmodel.electricity_bill.ElectricityBillAddVM" />
     </data>
 
@@ -14,255 +14,142 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- TODO clean min height-->
-
-        <LinearLayout
-            android:id="@+id/Toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dp20">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
+            <View
+                android:id="@+id/lineViewTop"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/iGapBottomSheetHeaderLine"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".34" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/billDesc"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/dp20">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp16"
+                android:layout_marginEnd="@dimen/dp16"
+                android:justificationMode="inter_word"
+                android:text="@string/elecBill_add_form"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/dp18"
+                android:gravity="center_vertical|start"
+                android:ellipsize="end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/billDesc"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/billName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginStart="@dimen/dp16"
+                android:layout_marginEnd="@dimen/dp16"
+                android:minHeight="48dp"
+                android:hint="@string/elecBill_add_name"
+                android:textColorHint="?iGapHintTextColor"
+                app:errorText="@{viewModel.billNameError}"
+                app:errorEnabled="@{viewModel.billNameErrorEnable}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/billDesc">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/billNameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp32"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:justificationMode="inter_word"
-                    android:text="@string/elecBill_add_form"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:inputType="text"
+                    android:minHeight="48dp"
+                    android:text="@={viewModel.billName}"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
-                    android:gravity="center_vertical|start"
-                    android:ellipsize="end"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:imeOptions="actionNext" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/billName"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/billId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp16"
+                android:layout_marginEnd="@dimen/dp16"
+                android:minHeight="48dp"
+                android:hint="@string/elecBill_add_billID"
+                android:textColorHint="?iGapHintTextColor"
+                app:errorText="@{viewModel.billIDError}"
+                app:errorEnabled="@{viewModel.billIDErrorEnable}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/billName">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/billidET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:inputType="numberDecimal"
                     android:minHeight="48dp"
-                    android:hint="@string/elecBill_add_name"
-                    android:textColorHint="?iGapHintTextColor"
-                    app:errorText="@{viewmodel.billNameError}"
-                    app:errorEnabled="@{viewmodel.billNameErrorEnable}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billDesc">
+                    android:text="@={viewModel.billID}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:digits="0123456789"
+                    android:imeOptions="actionNext"
+                    android:lines="1"
+                    android:maxLength="13"
+                    android:maxLines="1"
+                    android:textSize="@dimen/dp18" />
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/billNameET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="start"
-                        android:inputType="text"
-                        android:minHeight="48dp"
-                        android:text="@={viewmodel.billName}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/dp18"
-                        android:imeOptions="actionNext"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitBill"
+                style="@style/iGapButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="58dp"
+                android:onClick="@{()->viewModel.addBill()}"
+                android:text="@string/elecBill_add_addBtn"
+                android:textSize="@dimen/dp16"
+                android:visibility="visible"
+                android:layout_marginTop="@dimen/dp32"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginEnd="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:layout_marginLeft="@dimen/dp32"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/billId" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/billId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:minHeight="48dp"
-                    android:hint="@string/elecBill_add_billID"
-                    android:textColorHint="?iGapHintTextColor"
-                    app:errorText="@{viewmodel.billIDError}"
-                    app:errorEnabled="@{viewmodel.billIDErrorEnable}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billName">
+            <ProgressBar
+                android:id="@+id/ProgressV"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:elevation="4dp"
+                android:visibility="@{viewModel.progressVisibility}"
+                android:indeterminate="true"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/submitBill"
+                app:layout_constraintEnd_toEndOf="@+id/submitBill"
+                app:layout_constraintStart_toStartOf="@+id/submitBill"
+                app:layout_constraintTop_toTopOf="@+id/submitBill"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintWidth_percent="0.1"
+                app:layout_constraintHorizontal_bias="0.05" />
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/billidET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="start"
-                        android:inputType="numberDecimal"
-                        android:minHeight="48dp"
-                        android:text="@={viewmodel.billID}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:digits="0123456789"
-                        android:imeOptions="actionNext"
-                        android:lines="1"
-                        android:maxLength="13"
-                        android:maxLines="1"
-                        android:textSize="@dimen/dp18" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/billMobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:minHeight="48dp"
-                    android:hint="@string/elecBill_add_phone"
-                    android:textColorHint="?iGapHintTextColor"
-                    app:errorText="@{viewmodel.billPhoneError}"
-                    app:errorEnabled="@{viewmodel.billPhoneErrorEnable}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billId">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/billMobileET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="start"
-                        android:inputType="phone"
-                        android:minHeight="48dp"
-                        android:enabled="false"
-                        android:text="@={viewmodel.billPhone}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:digits="0123456789"
-                        android:imeOptions="actionNext"
-                        android:lines="1"
-                        android:maxLength="12"
-                        android:maxLines="1"
-                        android:textSize="@dimen/dp18" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/billUserID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:minHeight="48dp"
-                    android:hint="@string/elecBill_add_UserNID"
-                    android:textColorHint="?iGapHintTextColor"
-                    android:visibility="gone"
-                    app:errorText="@{viewmodel.billUserIDError}"
-                    app:errorEnabled="@{viewmodel.billUserIDErrorEnable}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billMobile">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/billUserIDET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="start"
-                        android:inputType="numberDecimal"
-                        android:minHeight="48dp"
-                        android:text="@={viewmodel.billUserID}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:digits="0123456789"
-                        android:imeOptions="actionNext"
-                        android:lines="1"
-                        android:maxLength="10"
-                        android:maxLines="1"
-                        android:textSize="@dimen/dp18" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/billEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:minHeight="48dp"
-                    android:hint="@string/elecBill_add_Email"
-                    android:textColorHint="?iGapHintTextColor"
-                    app:errorText="@{viewmodel.billEmailError}"
-                    app:errorEnabled="@{viewmodel.billEmailErrorEnable}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billUserID">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/billEmailET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="start"
-                        android:inputType="textEmailAddress"
-                        android:minHeight="48dp"
-                        android:text="@={viewmodel.billEmail}"
-                        android:textColor="?iGapTitleTextColor"
-                        android:imeOptions="actionDone"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:textSize="@dimen/dp18" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/submitBill"
-                    style="@style/iGapButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.addBill()}"
-                    android:text="@string/elecBill_add_addBtn"
-                    android:textSize="@dimen/dp16"
-                    android:visibility="visible"
-                    android:layout_marginTop="@dimen/dp32"
-                    android:layout_marginStart="@dimen/dp32"
-                    android:layout_marginEnd="@dimen/dp32"
-                    android:layout_marginRight="@dimen/dp32"
-                    android:layout_marginLeft="@dimen/dp32"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/billEmail"/>
-
-                <ProgressBar
-                    android:id="@+id/ProgressV"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:elevation="2dp"
-                    android:visibility="@{viewmodel.progressVisibility}"
-                    app:layout_constraintBottom_toBottomOf="@+id/submitBill"
-                    app:layout_constraintEnd_toEndOf="@+id/submitBill"
-                    app:layout_constraintStart_toStartOf="@+id/submitBill"
-                    app:layout_constraintTop_toTopOf="@+id/submitBill"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintWidth_percent="0.1"
-                    app:layout_constraintHorizontal_bias="0.05" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

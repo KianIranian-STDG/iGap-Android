@@ -10,13 +10,17 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.repository.ElectricityBillAPIRepository;
-import net.iGap.model.electricity_bill.Bill;
-import net.iGap.model.electricity_bill.BranchDebit;
+import net.iGap.helper.HelperMobileBank;
+import net.iGap.helper.HelperNumerical;
+import net.iGap.model.bill.BillInfo;
+import net.iGap.model.bill.Debit;
+import net.iGap.model.bill.MobileDebit;
+import net.iGap.model.bill.ServiceDebit;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.model.electricity_bill.LastBillData;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.BillsAPIRepository;
 import net.iGap.request.RequestMplGetBillToken;
 
 public class ElectricityBillPayVM extends BaseAPIViewModel {
@@ -25,14 +29,18 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     private ObservableField<String> billPayID;
     private ObservableField<String> billPrice;
     private ObservableField<String> billTime;
+
     private ObservableInt progressVisibilityData;
     private ObservableInt progressVisibilityPay;
     private ObservableInt progressVisibilityDownload;
+    private ObservableInt progressVisibilityRetry;
     private ObservableBoolean payBtnEnable;
+    private ObservableBoolean pay2BtnEnable;
 
     private MutableLiveData<LastBillData> billImage;
     private MutableLiveData<Integer> showRequestFailedError;
-    private Bill debit;
+    private BillInfo info;
+    private Debit debit;
     private MutableLiveData<ErrorModel> errorM;
 
     public ElectricityBillPayVM() {
@@ -43,28 +51,91 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         billTime = new ObservableField<>("-");
         billImage = new MutableLiveData<>();
         errorM = new MutableLiveData<>();
-        debit = new Bill();
+        info = new BillInfo();
 
         progressVisibilityData = new ObservableInt(View.VISIBLE);
         progressVisibilityPay = new ObservableInt(View.GONE);
         progressVisibilityDownload = new ObservableInt(View.GONE);
+        progressVisibilityRetry = new ObservableInt(View.GONE);
         payBtnEnable = new ObservableBoolean(true);
+        pay2BtnEnable = new ObservableBoolean(true);
         showRequestFailedError = new MutableLiveData<>();
 
     }
 
     public void getData() {
         progressVisibilityData.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().getBranchDebit(debit.getID(), this, new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
+        progressVisibilityRetry.set(View.GONE);
+        switch (info.getBillType()) {
+            case PHONE:
+            case MOBILE:
+                getPhoneData();
+                break;
+            case ELECTRICITY:
+            case GAS:
+                getServiceData();
+                break;
+        }
+    }
+
+    private void getPhoneData() {
+        new BillsAPIRepository().phoneAndMobileInquiry(info, this, new ResponseCallback<ElectricityResponseModel<MobileDebit>>() {
             @Override
-            public void onSuccess(ElectricityResponseModel<BranchDebit> data) {
+            public void onSuccess(ElectricityResponseModel<MobileDebit> data) {
                 progressVisibilityData.set(View.GONE);
-                if (data.getStatus() == 200) {
-                    debit = new Bill(debit.getID(), data.getData().getPaymentID(), data.getData().getTotalBillDebt(), data.getData().getPaymentDeadLineDate());
-                    billPayID.set(data.getData().getPaymentIDConverted());
-                    billPrice.set(data.getData().getTotalBillDebtConverted() + " ریال");
-                    billTime.set(data.getData().getPaymentDeadLineDate());
+                debit = new Debit<MobileDebit>();
+                debit.setData(data.getData());
+
+                try {
+                    billPayID.set(HelperMobileBank.checkNumbersInMultiLangs((info.getAreaCode() != null ? info.getAreaCode() : "") + info.getPhoneNum()));
+                    billID.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getLastTerm().getBillID()));
+                    billPrice.set(HelperMobileBank.checkNumbersInMultiLangs(
+                            new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
+                                    data.getData().getLastTerm().getAmount())) + " ریال"));
+                    billTime.set(HelperMobileBank.checkNumbersInMultiLangs(
+                            new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
+                                    data.getData().getMidTerm().getAmount())) + " ریال"));
+                } catch (Exception e) {
+
                 }
+            }
+
+            @Override
+            public void onError(String error) {
+                errorM.setValue(new ErrorModel("", error));
+                progressVisibilityData.set(View.GONE);
+                progressVisibilityRetry.set(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailed() {
+                progressVisibilityData.set(View.GONE);
+                showRequestFailedError.setValue(R.string.connection_error);
+                progressVisibilityRetry.set(View.VISIBLE);
+            }
+        });
+    }
+
+    private void getServiceData() {
+        new BillsAPIRepository().serviceInquiry(info, this, new ResponseCallback<ElectricityResponseModel<ServiceDebit>>() {
+            @Override
+            public void onSuccess(ElectricityResponseModel<ServiceDebit> data) {
+                progressVisibilityData.set(View.GONE);
+                debit = new Debit<ServiceDebit>();
+                debit.setData(data.getData());
+
+                billID.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getBillID()));
+                billPayID.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getPaymentIDConverted()));
+                if (info.getBillType() == BillInfo.BillType.ELECTRICITY)
+                    billPrice.set(
+                            HelperMobileBank.checkNumbersInMultiLangs(
+                                    new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
+                                            data.getData().getTotalBillDebtConverted())) + " ریال"));
+                else
+                    billPrice.set(HelperMobileBank.checkNumbersInMultiLangs(
+                            new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
+                                    data.getData().getTotalGasBillDebt())) + " ریال"));
+                billTime.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getPaymentDeadLineDate()));
             }
 
             @Override
@@ -81,45 +152,75 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         });
     }
 
-    public void payBill() {
+    public void payBtn(int buttonID) {
+        if (debit == null)
+            return;
+        if (buttonID == 0) {
+            // main Btn for pay
+            progressVisibilityPay.set(View.VISIBLE);
+            payBtnEnable.set(false);
+            switch (info.getBillType()) {
+                case ELECTRICITY:
+                case GAS:
+                    ServiceDebit temp = (ServiceDebit) debit.getData();
+                    if (info.getBillType() == BillInfo.BillType.ELECTRICITY)
+                        payBill(temp.getBillID(), temp.getPaymentID(), temp.getTotalElectricityBillDebt());
+                    else
+                        payBill(temp.getBillID(), temp.getPaymentID(), temp.getTotalGasBillDebt());
+                    break;
+                case MOBILE:
+                case PHONE:
+                    MobileDebit temp2 = (MobileDebit) debit.getData();
+                    payBill(temp2.getLastTerm().getBillID(), temp2.getLastTerm().getPayID(), temp2.getLastTerm().getAmount());
+                    break;
+            }
+        } else {
+            // secondary Btn for phone pay
+            progressVisibilityPay.set(View.VISIBLE);
+            pay2BtnEnable.set(false);
+            MobileDebit temp2 = (MobileDebit) debit.getData();
+            payBill(temp2.getMidTerm().getBillID(), temp2.getMidTerm().getPayID(), temp2.getMidTerm().getAmount());
+        }
+    }
 
-        if (debit.getPayID() == null || debit.getPayID().equals("") || debit.getPayID().equals("null")) {
+    private void payBill(String billID, String payID, String price) {
+
+        if (payID == null || payID.equals("") || payID.equals("null")) {
             errorM.setValue(new ErrorModel("", "001"));
             getData();
+            progressVisibilityPay.set(View.GONE);
+            payBtnEnable.set(true);
+            pay2BtnEnable.set(true);
             return;
         }
 
-        if (Long.parseLong(debit.getPrice().replace(",", "").replace(" ریال", "")) < 10000) {
+        if (Long.parseLong(price) < 10000) {
             errorM.setValue(new ErrorModel("", "002"));
+            progressVisibilityPay.set(View.GONE);
+            payBtnEnable.set(true);
+            pay2BtnEnable.set(true);
             return;
         }
-
-        progressVisibilityPay.set(View.VISIBLE);
-        payBtnEnable.set(false);
 
         G.onMplResult = error -> {
             progressVisibilityPay.set(View.GONE);
             payBtnEnable.set(true);
+            pay2BtnEnable.set(true);
             if (error) {
                 errorM.setValue(new ErrorModel("", "003"));
             }
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        if (debit.getPayID().startsWith(debit.getPrice().replace("000", "").replace(",", "").replace(" ریال", ""))) {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPayID()));
-        } else {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPrice().replace("000", "").replace(",", "").replace(" ریال", "") + debit.getPayID()));
-        }
+        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID));
     }
 
     public void showBillImage() {
         progressVisibilityDownload.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().getLastBill(debit.getID(), this, new ResponseCallback<ElectricityResponseModel<LastBillData>>() {
+        new BillsAPIRepository().getLastBill(info, this, new ResponseCallback<ElectricityResponseModel<LastBillData>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<LastBillData> data) {
-                if (data.getStatus() == 200)
-                    billImage.setValue(data.getData());
+                billImage.setValue(data.getData());
                 progressVisibilityDownload.set(View.GONE);
             }
 
@@ -131,7 +232,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
-                progressVisibilityData.set(View.GONE);
+                progressVisibilityDownload.set(View.GONE);
                 showRequestFailedError.setValue(R.string.connection_error);
             }
         });
@@ -217,15 +318,35 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         this.errorM = errorM;
     }
 
-    public Bill getDebit() {
-        return debit;
+    public BillInfo getInfo() {
+        return info;
     }
 
-    public void setDebit(Bill debit) {
-        this.debit = debit;
+    public void setInfo(BillInfo info) {
+        this.info = info;
     }
 
     public MutableLiveData<Integer> getShowRequestFailedError() {
         return showRequestFailedError;
+    }
+
+    public ObservableBoolean getPay2BtnEnable() {
+        return pay2BtnEnable;
+    }
+
+    public void setPay2BtnEnable(ObservableBoolean pay2BtnEnable) {
+        this.pay2BtnEnable = pay2BtnEnable;
+    }
+
+    public Debit getDebit() {
+        return debit;
+    }
+
+    public void setDebit(Debit debit) {
+        this.debit = debit;
+    }
+
+    public ObservableInt getProgressVisibilityRetry() {
+        return progressVisibilityRetry;
     }
 }

@@ -737,7 +737,7 @@
     <string name="your_login_code_is">"کد ورود شما هست: "</string>
     <string name="there_is_no_sheared_media">هیچ رسانه‌ای به اشتراک گذاشته نشده است.</string>
     <string name="pending">معلق</string>
-    <string name="payment_userScore">امتیاز شما:  </string>
+    <string name="payment_userScore">امتیاز شما</string>
     <string name="payment_spentScore">امتیاز مصرفی: </string>
     <string name="payment_price">تخفیف: </string>
     <string name="payment_discount_plans_title">بسته های تخفیف</string>
@@ -2299,18 +2299,23 @@
     <string name="add_new_account">افزودن حساب جدید</string>
     <string name="profile">نمایه</string>
 
-    <string name="elecBill_Entry_lengthError">شناسه قبض باید 13 کاراکتر باشد.</string>
+    <string name="elecBill_Entry_lengthError">شناسه نباید خالی باشد.</string>
+    <string name="elecBill_EntryService_lengthError">شناسه قبض باید حداقل 12 کاراکتر باشد.</string>
+    <string name="elecBill_EntryPhone_lengthError">شماره تلفن باید ۱۱ کاراکتر باشد.</string>
     <string name="elecBill_Entry_barcodeError">اسکن بارکد انجام نشد. لطفا دوباره تلاش کنید.</string>
-    <string name="elecBill_Entry_companyError">از این بخش تنها برای پرداخت قبض برق استفاده کنید.</string>
-    <string name="elecBill_main_billTitle">استعلام و پرداخت سریع قبض برق</string>
+    <string name="elecBill_Entry_companyError">این قبض یافت نشد.</string>
+    <string name="elecBill_main_billTitle">استعلام و پرداخت سریع قبض</string>
     <string name="elecBill_main_billIDHint">شناسه قبض</string>
+    <string name="elecBill_main_billIDHint2">شماره تلفن</string>
+    <string name="elecBill_main_billIDHint3">کد اشتراک</string>
     <string name="elecBill_main_billPay">استعلام</string>
     <string name="elecBill_main_billMyList">قبض های من</string>
     <string name="elecBill_main_billSearch">جستجوی قبض</string>
     <string name="elecBill_main_billBranchInfo">اطلاعات انشعاب</string>
     <string name="elecBill_pay_billID">شناسه قبض</string>
+    <string name="elecBill_pay_billPhoneNumber">شماره تلفن</string>
     <string name="elecBill_pay_billPayID">شناسه پرداخت قبض</string>
-    <string name="elecBill_pay_billPrice">مبلغ پایان دوره</string>
+    <string name="elecBill_pay_billPrice">مبلغ</string>
     <string name="elecBill_pay_billTime">مهلت پرداخت</string>
     <string name="elecBill_pay_billPay">پرداخت</string>
     <string name="elecBill_pay_billBranchInfo">اطلاعات انشعاب</string>
@@ -2324,7 +2329,7 @@
     <string name="elecBill_Entry_userIDError">لطفا کد ملی خود را وارد نمایید.</string>
     <string name="elecBill_Entry_userIDLengthError">طول کد ملی شما کافی نیست.</string>
     <string name="elecBill_Entry_emailFormatError">ساختار ایمیل شما صحیح نیست.</string>
-    <string name="elecBill_add_form">لطفا موارد خواسته شده را تکمیل کنید.</string>
+    <string name="elecBill_add_form">اطلاعات قبض</string>
     <string name="elecBill_add_name">نام قبض *</string>
     <string name="elecBill_add_billID">شناسه قبض *</string>
     <string name="elecBill_add_phone">شماره تلفن شما *</string>
@@ -2370,6 +2375,15 @@
     <string name="elecBill_error_notPossible">این عملیات در حال حاضر امکان پذیر نیست.</string>
     <string name="elecBill_success_title">موفقیت</string>
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
+    <string name="elecBill_main_serviceMode">قبوض خدماتی</string>
+    <string name="elecBill_main_PhoneMode">قبوض موبایل و تلفن</string>
+    <string name="elecBill_main_billTypeTitle">نوع قبض: </string>
+    <string name="elecBill_main_billPhoneTitle">لطفا شماره تلفن ثابت یا موبایل مورد نظر خود را وارد کنید.\nنمونه شماره تلفن: ********۰۲۱\nنمونه شماره موبایل: *********۰۹</string>
+    <string name="elecBill_cell_billPayLastTerm">پایان دوره</string>
+    <string name="elecBill_cell_billPayMidTerm">میان دوره</string>
+    <string name="elecBill_cell_billPayPhoneLastBtn">پرداخت پایان دوره</string>
+    <string name="elecBill_cell_billPayPhoneMidBtn">پرداخت میان دوره</string>
+
     <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
     <string name="delete_from_storage">حذف پیوست از حافظه</string>
     <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
@@ -2635,4 +2649,9 @@
     <string name="tarabord">در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید</string>
     <string name="mic">میکروفن</string>
     <string name="hold">نگه‌داشتن</string>
+    <string name="Increase_score">همین حالا امتیازت\n رو افزایش بده!</string>
+    <string-array name="billsOptions">
+        <item>برق</item>
+        <item>گاز</item>
+    </string-array>
 </resources>

@@ -697,6 +697,9 @@ public class HelperError {
 
     public static void showSnackMessage(final String message, boolean isVibrate) {
 
+        if (message == null)
+            return;
+
         if (isVibrate) {
             AppUtils.setVibrator(200);
         }

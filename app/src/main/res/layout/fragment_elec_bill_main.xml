@@ -77,6 +77,71 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <RadioGroup
+                            android:id="@+id/mode_group"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:checkedButton="@id/mode_serviceBill"
+                            app:layout_constraintTop_toBottomOf="@+id/billTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <RadioButton
+                                android:id="@+id/mode_serviceBill"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="start"
+                                android:textColor="?iGapSubtitleTextColor"
+                                android:textSize="@dimen/standardTextSize"
+                                android:text="@string/elecBill_main_serviceMode"
+                                android:button="@drawable/check_box_background" />
+
+                            <RadioButton
+                                android:id="@+id/mode_phoneBill"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="start"
+                                android:textColor="?iGapSubtitleTextColor"
+                                android:textSize="@dimen/standardTextSize"
+                                android:text="@string/elecBill_main_PhoneMode"
+                                android:button="@drawable/check_box_background" />
+                        </RadioGroup>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/billTypeTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginStart="@dimen/dp16"
+                            android:layout_marginEnd="@dimen/dp16"
+                            android:justificationMode="inter_word"
+                            android:text="@string/elecBill_main_billTypeTitle"
+                            android:textColor="?iGapTitleTextColor"
+                            android:textSize="@dimen/dp16"
+                            android:gravity="center"
+                            android:ellipsize="end"
+                            app:layout_constraintEnd_toStartOf="@+id/billSpinner"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/mode_group" />
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/billSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dp16"
+                            android:minHeight="@dimen/dp32"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            app:layout_constraintTop_toTopOf="@+id/billTypeTitle"
+                            app:layout_constraintBottom_toBottomOf="@+id/billTypeTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/billTypeTitle" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/billIdHolder"
                             android:layout_width="0dp"
@@ -87,13 +152,15 @@
                             android:minHeight="48dp"
                             android:hint="@string/elecBill_main_billIDHint"
                             android:textColorHint="?iGapHintTextColor"
+                            app:counterMaxLength="13"
+                            app:counterEnabled="true"
                             app:errorText="@{viewmodel.billIDError}"
                             app:errorEnabled="@{viewmodel.billIDErrorEnable}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/billQRscan"
-                            app:layout_constraintTop_toBottomOf="@+id/billTitle">
+                            app:layout_constraintTop_toBottomOf="@+id/billTypeTitle">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/billIdET"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -104,7 +171,6 @@
                                 android:inputType="numberDecimal"
                                 android:minHeight="48dp"
                                 android:lines="1"
-                                android:maxLength="13"
                                 android:maxLines="1"
                                 android:text="@={viewmodel.billID}"
                                 android:textColor="?iGapTitleTextColor"

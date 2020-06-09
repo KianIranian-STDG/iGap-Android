@@ -65,6 +65,7 @@ public class PaymentInternetPackageFragment extends BaseFragment {
     private int packageType = -1;
     private boolean inScroll;
     private InternetPackage currentInternetPackage;
+    private boolean isSelectedFromHistory = false;
 
     public static PaymentInternetPackageFragment newInstance(String phoneNumber, String operator, String simType, int packageType) {
 
@@ -88,6 +89,9 @@ public class PaymentInternetPackageFragment extends BaseFragment {
             simType = getArguments().getString(PARAM_SIM_TYPE);
             phoneNumber = getArguments().getString(PARAM_PHONE_NUMBER);
             packageType = getArguments().getInt(PARAM_PACKAGE_TYPE);
+            if (packageType != -1) {
+                isSelectedFromHistory = true;
+            }
         }
 
         viewModel = ViewModelProviders.of(this).get(PaymentInternetPackageViewModel.class);
@@ -279,6 +283,7 @@ public class PaymentInternetPackageFragment extends BaseFragment {
                 currentInternetPackage = item;
                 viewModel.setPackageType(item);
                 othersAdapter.unSelectCurrent();
+                isSelectedFromHistory = false;
             });
         }
         if (othersAdapter == null) {
@@ -289,6 +294,7 @@ public class PaymentInternetPackageFragment extends BaseFragment {
                 currentInternetPackage = item;
                 viewModel.setPackageType(item);
                 suggestedAdapter.unSelectCurrent();
+                isSelectedFromHistory = false;
             });
         }
     }
@@ -328,14 +334,16 @@ public class PaymentInternetPackageFragment extends BaseFragment {
     }
 
     private void savePayment() {
-        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.save_purchase))
-                .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
-                .positiveText(R.string.ok)
-                .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+        if (!isSelectedFromHistory) {
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.save_purchase))
+                    .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                    .positiveText(R.string.ok)
+                    .onNegative((dialog1, which) -> dialog1.dismiss()).show();
 
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-            viewModel.savePayment();
-            dialog.dismiss();
-        });
+            dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                viewModel.savePayment();
+                dialog.dismiss();
+            });
+        }
     }
 }

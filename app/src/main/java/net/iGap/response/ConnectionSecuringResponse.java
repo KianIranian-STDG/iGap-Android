@@ -59,7 +59,6 @@ public class ConnectionSecuringResponse extends MessageHandler {
 
         G.symmetricKey = HelperString.generateSymmetricKey(key);
 
-        byte[] encryption = null;
         try {
             RSAPublicKey rsaPublicKeyServer = (RSAPublicKey) HelperString.getPublicKeyFromPemFormat(publicKey);
             PublicKey pubKeyServer = KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(rsaPublicKeyServer.getModulus(), rsaPublicKeyServer.getPublicExponent()));
@@ -67,18 +66,18 @@ public class ConnectionSecuringResponse extends MessageHandler {
             RSAPublicKey rsaPublicKeyClient = (RSAPublicKey) HelperString.getPublicKeyFromPemFormat(Config.PUBLIC_KEY_CLIENT);
             PublicKey pubKeyClient = KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(rsaPublicKeyClient.getModulus(), rsaPublicKeyClient.getPublicExponent()));
 
-            encryption = AESCrypt.encryptSymmetricKey(pubKeyServer, pubKeyClient, G.symmetricKey.getEncoded(), builder.getSecondaryChunkSize());
-        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
+            byte[] encryption = AESCrypt.encryptSymmetricKey(pubKeyServer, pubKeyClient, G.symmetricKey.getEncoded(), builder.getSecondaryChunkSize());
 
-        ProtoConnectionSecuring.ConnectionSymmetricKey.Builder connectionSymmetricKey = ProtoConnectionSecuring.ConnectionSymmetricKey.newBuilder();
-        connectionSymmetricKey.setSymmetricKey(ByteString.copyFrom(encryption));
-        connectionSymmetricKey.setVersion(2);
-        RequestWrapper requestWrapper = new RequestWrapper(2, connectionSymmetricKey);
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
+            if (encryption != null) {
+                ProtoConnectionSecuring.ConnectionSymmetricKey.Builder connectionSymmetricKey = ProtoConnectionSecuring.ConnectionSymmetricKey.newBuilder();
+                connectionSymmetricKey.setSymmetricKey(ByteString.copyFrom(encryption));
+                connectionSymmetricKey.setVersion(2);
+                RequestWrapper requestWrapper = new RequestWrapper(2, connectionSymmetricKey);
+
+                RequestQueue.sendRequest(requestWrapper);
+            }
+
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
