@@ -31,7 +31,7 @@ android {
         targetSdkVersion 28
         multiDexEnabled true
         versionCode 183
-        versionName "2.1.5.beta1"
+        versionName "2.1.5.beta2"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
