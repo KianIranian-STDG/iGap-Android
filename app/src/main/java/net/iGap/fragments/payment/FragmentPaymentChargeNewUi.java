@@ -107,6 +107,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private int amountDefaultIndex = 2; //50,000 rials index in array for default value
     private int contactPositionClicked = -1;
     private int historyItemClicked = -1;
+    private boolean isSelectedFromHistory = false;
 
     public static FragmentPaymentChargeNewUi newInstance() {
         return new FragmentPaymentChargeNewUi();
@@ -304,6 +305,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                 adapter.setOnItemClickListener(position -> {
                                     historyItemClicked = position;
                                     onHistoryItemClicked();
+                                    toggleHistorySelected(true);
                                     dialog.dismiss();
                                 });
 
@@ -358,7 +360,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                toggleHistorySelected(false);
             }
         });
 
@@ -367,6 +369,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameIrancel.setOnClickListener(v -> changeOperator(IRANCELL));
 
         removeNumber.setOnClickListener(view1 -> {
+            toggleHistorySelected(false);
             editTextNumber.setText("");
 
             removeNumber.setVisibility(View.INVISIBLE);
@@ -382,6 +385,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         chosePriceTextView.setOnClickListener(v -> chosePriceClicked());
 
         amountPlusImageView.setOnClickListener(v -> {
+            toggleHistorySelected(false);
             currentAmount = new Amount(currentAmount, true);
             chosePriceTextView.setText(currentAmount.getTextAmount());
             historyNumber = null;
@@ -389,11 +393,16 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
         amountMinesImageView.setOnClickListener(v -> {
             if (currentAmount.getAmount() != 10000) {
+                toggleHistorySelected(false);
                 currentAmount = new Amount(currentAmount, false);
                 chosePriceTextView.setText(currentAmount.getTextAmount());
                 historyNumber = null;
             }
         });
+    }
+
+    private void toggleHistorySelected(boolean isSelectedFromHistory) {
+        this.isSelectedFromHistory = isSelectedFromHistory;
     }
 
     private void onHistoryItemClicked() {
@@ -601,7 +610,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         chargeTypeButton.setText(typeList.getChargeType());
     }
 
-    private void onSaveBtnClicked() {
+    private void
+    onSaveBtnClicked() {
         if (editTextNumber.getText() == null)
             return;
 
@@ -705,37 +715,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         progressBar.setVisibility(View.GONE);
                         if (getActivity() != null && mciPurchaseResponse.getToken() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), mciPurchaseResponse.getToken(), result -> {
+                                enterBtn.setEnabled(true);
                                 if (result.isSuccess()) {
-                                    MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(R.string.save_purchase)
-                                            .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
-                                            .positiveText(R.string.ok)
-                                            .onNegative((dialog1, which) -> dialog1.dismiss()).show();
-
-                                    dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-                                        progressBar.setVisibility(View.VISIBLE);
-                                        if (chargeType != null) {
-                                            JsonObject jsonObject = new JsonObject();
-                                            jsonObject.addProperty("phone_number", phoneNumber);
-                                            jsonObject.addProperty("charge_type", chargeType.toString());
-                                            jsonObject.addProperty("amount", price);
-
-                                            chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
-                                                @Override
-                                                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                }
-
-                                                @Override
-                                                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                    HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
-                                                }
-                                            });
-                                        }
-                                        dialog.dismiss();
-                                    });
-                                } else {
-                                    enterBtn.setEnabled(true);
+                                    saveBoughtChargeInHistory(chargeType, phoneNumber, price, operator);
                                 }
                             });
                         }
@@ -749,6 +731,40 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         progressBar.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    private void saveBoughtChargeInHistory(ChooseChargeType chargeType, String phoneNumber, int price, String operator) {
+        if (isSelectedFromHistory)
+            return;
+
+        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(R.string.save_purchase)
+                .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                .positiveText(R.string.ok)
+                .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
+            if (chargeType != null) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("phone_number", phoneNumber);
+                jsonObject.addProperty("charge_type", chargeType.toString());
+                jsonObject.addProperty("amount", price);
+
+                chargeApi.setFavoriteChargeNumber(operator, jsonObject).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                        progressBar.setVisibility(View.GONE);
+                        HelperError.showSnackMessage(getContext().getResources().getString(R.string.server_do_not_response), false);
+                    }
+                });
+            }
+            dialog.dismiss();
+        });
     }
 
     private void goBack() {

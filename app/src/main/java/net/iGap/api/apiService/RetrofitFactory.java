@@ -2,6 +2,7 @@ package net.iGap.api.apiService;
 
 import net.iGap.BuildConfig;
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.BillsApi;
 import net.iGap.api.CPayApi;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.CharityApi;
@@ -14,6 +15,7 @@ import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
 import net.iGap.api.ShahkarApi;
 import net.iGap.api.StickerApi;
+import net.iGap.api.WeatherApi;
 
 import java.util.Collections;
 
@@ -162,6 +164,15 @@ public class RetrofitFactory {
                 .create(ElecBillApi.class);
     }
 
+    public BillsApi getBillsRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.BILL_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(BillsApi.class);
+    }
+
     public MobileBankApi getMobileBankRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.MOBILE_BANK)
@@ -206,5 +217,14 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(ShahkarApi.class);
+    }
+
+    public WeatherApi getWeatherRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.WEATHER_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(WeatherApi.class);
     }
 }

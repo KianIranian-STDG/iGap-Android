@@ -320,10 +320,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private void handleDeepLink(Intent intent) {
+    public void handleDeepLink(Intent intent) {
+        if (intent != null && intent.getExtras() != null)
+            handleDeepLink(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT));
+    }
+
+    public void handleDeepLink(String uri) {
         BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (bottomNavigationFragment != null)
-            bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT), new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+            bottomNavigationFragment.autoLinkCrawler(uri, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
                 @Override
                 public void linkValid(String link) {
 
@@ -335,7 +340,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             });
     }
-
 
     private void checkIntent(Intent intent) {
 

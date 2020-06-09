@@ -16,7 +16,9 @@ import net.iGap.adapter.items.discovery.holder.Type4ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type5ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type6ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type7ViewHolder;
+import net.iGap.adapter.items.discovery.holder.Type8ViewHolder;
 import net.iGap.adapter.items.discovery.holder.TypeUnknownViewHolder;
+import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
 
@@ -46,6 +48,8 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         switch (i) {
+            case 0:
+                return new Type8ViewHolder(layoutInflater.inflate(R.layout.item_discovery_8, viewGroup, false), activity);
             case 1:
                 return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false), activity);
             case 2:
@@ -80,7 +84,11 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public int getItemViewType(int position) {
         try {
+            if (discoveryList.get(position).model.getNumber() == 0 && discoveryList.get(position).discoveryFields.get(0).actionType != null && discoveryList.get(position).discoveryFields.get(0).actionType.equals(ProtoGlobal.DiscoveryField.ButtonActionType.IVAND)) {
+                return 0;
+            }
             return discoveryList.get(position).model.getNumber() + 1;
+
         } catch (Exception e) {
             return -2;
         }
