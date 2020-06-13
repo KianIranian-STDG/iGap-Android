@@ -38,6 +38,7 @@ import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.module.Contacts;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -70,6 +71,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private static final String SIM_TYPE_DATA = "DATA";
 
     private View frameHistory;
+    private View frameContact;
     private View frameHamrah;
     private View frameIrancel;
     private View frameRightel;
@@ -109,7 +111,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
         radioButtonIrancell = view.findViewById(R.id.radio_irancell);
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
-        View frameContact = view.findViewById(R.id.frame_contact);
+        frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
         numberEditText = view.findViewById(R.id.phoneNumber);
         MaterialButton goNextButton = view.findViewById(R.id.btn_nextpage);
@@ -127,6 +129,57 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
         chargeApi = new RetrofitFactory().getChargeRetrofit();
         numberEditText.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+        switch (G.themeColor) {
+            case Theme.DARK:
+                frameHistory.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
+                frameContact.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
+                progressBar.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark));
+                break;
+            case Theme.AMBER:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_amber));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_amber));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_amber));
+                break;
+            case Theme.GREEN:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_green));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_green));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_green));
+                break;
+            case Theme.BLUE:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_blue));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_blue));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_blue));
+                break;
+            case Theme.PURPLE:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_purple));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_purple));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_purple));
+                break;
+            case Theme.PINK:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_pink));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_pink));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_pink));
+                break;
+            case Theme.RED:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_red));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_red));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_red));
+                break;
+            case Theme.ORANGE:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_orange));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_orange));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_orange));
+                break;
+            case Theme.GREY:
+                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
+                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
+                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
+                break;
+
+        }
 
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
