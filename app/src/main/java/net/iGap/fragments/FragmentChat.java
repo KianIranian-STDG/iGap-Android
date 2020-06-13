@@ -246,7 +246,6 @@ import net.iGap.observers.interfaces.OnMessageReceive;
 import net.iGap.observers.interfaces.OnPinedMessage;
 import net.iGap.observers.interfaces.OnSetAction;
 import net.iGap.observers.interfaces.OnUpdateUserOrRoomInfo;
-import net.iGap.observers.interfaces.OnUpdateUserStatusInChangePage;
 import net.iGap.observers.interfaces.OnUserContactsBlock;
 import net.iGap.observers.interfaces.OnUserContactsUnBlock;
 import net.iGap.observers.interfaces.OnUserInfoResponse;
@@ -1249,6 +1248,9 @@ public class FragmentChat extends BaseFragment
 
         if (keyboardView != null)
             keyboardView.onDestroyParentFragment();
+
+        G.onSetAction = null;
+        G.onUpdateUserStatusInChangePage = null;
 
         removeRoomAccessChangeListener();
     }
@@ -2703,13 +2705,10 @@ public class FragmentChat extends BaseFragment
             }
         };
 
-        G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
-            @Override
-            public void updateStatus(long peerId, String status, long lastSeen) {
-                if (chatType == CHAT) {
-                    setUserStatus(status, lastSeen);
-                    new RequestUserInfo().userInfo(peerId);
-                }
+        G.onUpdateUserStatusInChangePage = (peerId, status, lastSeen) -> {
+            if (chatType == CHAT) {
+                setUserStatus(status, lastSeen);
+                new RequestUserInfo().userInfo(peerId);
             }
         };
     }
