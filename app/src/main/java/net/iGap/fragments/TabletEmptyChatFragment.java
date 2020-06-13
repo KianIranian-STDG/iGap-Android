@@ -3,7 +3,6 @@ package net.iGap.fragments;
 import android.app.ActivityManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 
-import com.crashlytics.android.Crashlytics;
-
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 
 import java.io.File;
 
@@ -66,7 +63,6 @@ public class TabletEmptyChatFragment extends Fragment {
                     ActivityManager activityManager = (ActivityManager) getContext().getSystemService(ACTIVITY_SERVICE);
                     ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
                     activityManager.getMemoryInfo(memoryInfo);
-                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
                 }
             } else {
                 try {

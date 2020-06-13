@@ -33,7 +33,7 @@ public class CompressTask extends Thread implements MediaController.OnPercentCom
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(originalPath);
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
         boolean finish = MediaController.getInstance().convertVideo(originalPath, newPath, this);

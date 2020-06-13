@@ -46,7 +46,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
             ((RequestUserUpdateStatus.onUserStatus) identity).onUpdateUserStatus();
         } else {
             if (builder.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
-                HelperLog.setErrorLog(new Exception("Wht the hel bagi"));
+                HelperLog.getInstance().setErrorLog(new Exception("Wht the hel bagi"));
             }
         }
 

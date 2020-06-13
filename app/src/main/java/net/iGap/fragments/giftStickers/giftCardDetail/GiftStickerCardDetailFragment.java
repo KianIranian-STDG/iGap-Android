@@ -74,7 +74,7 @@ public class GiftStickerCardDetailFragment extends Fragment {
                 if (getParentFragment() instanceof MainGiftStickerCardFragment) {
                     ((MainGiftStickerCardFragment) getParentFragment()).closeFragment(true);
                 }
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         });
 

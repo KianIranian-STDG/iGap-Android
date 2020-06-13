@@ -356,7 +356,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "play", "");
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
         try {
@@ -365,7 +365,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 isPause = true;
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
     }
@@ -418,7 +418,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "pause", "");
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
         try {
@@ -430,7 +430,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
 
@@ -742,7 +742,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         }
                     }
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             }
 
@@ -1510,7 +1510,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     mSession.setPlaybackState(state);
                 } catch (Exception e) {
 
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             } else {
 
@@ -1519,7 +1519,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
                     audioManager.registerMediaButtonEventReceiver(remoteComponentName);
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             }
 
@@ -1541,7 +1541,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_STOP | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }
@@ -1571,7 +1571,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 metadataEditor.apply();
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

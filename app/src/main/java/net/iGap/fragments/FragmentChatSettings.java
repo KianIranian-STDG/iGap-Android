@@ -24,8 +24,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.crashlytics.android.Crashlytics;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.ThemeColorListAdapter;
@@ -105,7 +103,7 @@ public class FragmentChatSettings extends BaseFragment {
 
         viewModel.getGoToChatBackgroundPage().observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(),new FragmentChatBackground()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChatBackground()).setReplace(false).load();
             }
         });
 
@@ -133,12 +131,12 @@ public class FragmentChatSettings extends BaseFragment {
                         ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
                     }
                 } else {*/
-                    Fragment frg;
-                    frg = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.detach(frg);
-                    ft.attach(frg);
-                    ft.commit();
+                Fragment frg;
+                frg = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.detach(frg);
+                ft.attach(frg);
+                ft.commit();
                 /*}*/
             }
         });
@@ -173,7 +171,6 @@ public class FragmentChatSettings extends BaseFragment {
                         ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
                         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
                         activityManager.getMemoryInfo(memoryInfo);
-                        Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
                     }
                 } else {
                     try {
@@ -217,7 +214,7 @@ public class FragmentChatSettings extends BaseFragment {
         }
     }
 
-    public void chatBackgroundChange(){
+    public void chatBackgroundChange() {
         viewModel.getChatBackground();
     }
 }

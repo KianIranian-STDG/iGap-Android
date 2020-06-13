@@ -161,7 +161,7 @@ public class RealmPhoneContacts extends RealmObject {
                         notImportedList.add(_item);
                     }
                 } catch (IllegalArgumentException e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
 
             }

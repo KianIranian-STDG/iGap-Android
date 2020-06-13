@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
@@ -21,24 +20,24 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.AccountManager;
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentSettingBinding;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentSettingViewModel;
-import net.iGap.WebSocketClient;
-import net.iGap.G;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -202,7 +201,7 @@ public class FragmentSetting extends BaseFragment {
                 }
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

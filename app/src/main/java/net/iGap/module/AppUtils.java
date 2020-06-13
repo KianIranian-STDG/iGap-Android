@@ -693,7 +693,7 @@ public final class AppUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 
@@ -713,7 +713,7 @@ public final class AppUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

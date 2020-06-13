@@ -82,7 +82,7 @@ public abstract class MessageHandler {
         HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode), false);
 
         if (!G.ignoreErrorCodes.contains(majorCode)) {
-            HelperLog.setErrorLog(new Exception("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId)));
+            HelperLog.getInstance().setErrorLog(new Exception("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId)));
         }
 
 

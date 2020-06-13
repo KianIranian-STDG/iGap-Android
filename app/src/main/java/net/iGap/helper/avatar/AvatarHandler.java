@@ -180,10 +180,10 @@ public class AvatarHandler {
             }
         } else {
             if (avatarPath != null && new File(avatarPath).exists()) {
-                HelperLog.setErrorLog(new Exception("avatar " + avatarOwnerId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + "true" +
+                HelperLog.getInstance().setErrorLog(new Exception("avatar " + avatarOwnerId + " is null with path: " + avatarPath + " and isMain:" + isMain + " File Exist:" + "true" +
                         " FileSize=" + new File(avatarPath).length()));
             } else {
-                HelperLog.setErrorLog(new Exception("avatar " + avatarOwnerId + " is null with path: " + avatarPath + " and isMain:" + isMain + " file not exist"));
+                HelperLog.getInstance().setErrorLog(new Exception("avatar " + avatarOwnerId + " is null with path: " + avatarPath + " and isMain:" + isMain + " file not exist"));
             }
         }
 
@@ -399,7 +399,7 @@ public class AvatarHandler {
                     @Override
                     public void onDownload(final String filepath, final String token) {
                         if (!(new File(filepath).exists())) {
-                            HelperLog.setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                            HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                         }
 
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
@@ -572,14 +572,14 @@ public class AvatarHandler {
         public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
             if (progress >= 100) {
                 if (!(new File(filePath).exists())) {
-                    HelperLog.setErrorLog(new Exception("After Download File Not Exist Bug. Please check" + filePath));
+                    HelperLog.getInstance().setErrorLog(new Exception("After Download File Not Exist Bug. Please check" + filePath));
                 }
 
                 String _newPath = filePath.replace(G.DIR_TEMP, G.DIR_IMAGE_USER);
                 try {
                     AndroidUtils.cutFromTemp(filePath, _newPath);
                 } catch (IOException e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                     e.printStackTrace();
                 }
 

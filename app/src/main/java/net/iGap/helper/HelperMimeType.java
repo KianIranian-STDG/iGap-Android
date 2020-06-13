@@ -88,7 +88,7 @@ public class HelperMimeType {
             try {
                 uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
             } catch (IllegalArgumentException e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
                 return null;
             }
 

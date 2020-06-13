@@ -613,7 +613,7 @@ public final class AndroidUtils {
         } else if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
             return true;
         } else {
-            HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
+            HelperLog.getInstance().setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
             return false;
         }
     }

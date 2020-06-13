@@ -33,7 +33,7 @@ public class ApiInitializer<T> {
                                 @Override
                                 public void onRefreshToken(String token) {
                                     initAPI(retrofitCall.clone(), handShakeCallback, retrofitCallback);
-                                    HelperLog.setErrorLog(new Exception("update jwt token from ApiInitializer"));
+                                    HelperLog.getInstance().setErrorLog(new Exception("update jwt token from ApiInitializer"));
                                 }
 
                                 @Override
@@ -47,12 +47,12 @@ public class ApiInitializer<T> {
                     } catch (IOException e) {
                         e.printStackTrace();
                         retrofitCallback.onFailed();
-                        HelperLog.setErrorLog(e);
+                        HelperLog.getInstance().setErrorLog(e);
                     } catch (Exception e) {
                         e.printStackTrace();
                         retrofitCallback.onFailed();
-                        HelperLog.setErrorLog(e);
-                        HelperLog.setErrorLog(new Exception(retrofitCall.request().url().toString()));
+                        HelperLog.getInstance().setErrorLog(e);
+                        HelperLog.getInstance().setErrorLog(new Exception(retrofitCall.request().url().toString()));
                     }
                 }
             }

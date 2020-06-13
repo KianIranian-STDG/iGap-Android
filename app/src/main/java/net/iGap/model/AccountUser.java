@@ -163,7 +163,7 @@ public class AccountUser {
                         final long thresholdSize = 10 * 1024 * 1024;
 
                         if (totalBytes > 500 * 1024 * 1024) {
-                            HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            HelperLog.getInstance().setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
                         }
 
                         if (Config.FILE_LOG_ENABLE) {
