@@ -61,13 +61,13 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title, billID, billPayID, billPrice, billTime, billPayID2,
-                billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle, billPhone, billPhoneTitle, failTxt, failIcon;
+                billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle, billPhone, billPhoneTitle/*, failTxt, failIcon*/;
         private ProgressBar progressPID, progressP, progressT;
-        private Button pay, showDetail;
+        private Button pay, showDetail, retry;
         private TextView delete, edit;
         private CircleImageView logo;
         private DecimalFormat df;
-        private View failBg;
+//        private View failBg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,26 +93,42 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
             billPhone = itemView.findViewById(R.id.billPhone);
             billPhoneTitle = itemView.findViewById(R.id.billPhoneTitle);
 
-            failIcon = itemView.findViewById(R.id.loadAgainIcon);
+            /*failIcon = itemView.findViewById(R.id.loadAgainIcon);
             failTxt = itemView.findViewById(R.id.loadAgain);
-            failBg = itemView.findViewById(R.id.loadBackground);
+            failBg = itemView.findViewById(R.id.loadBackground);*/
+            retry = itemView.findViewById(R.id.reloadBtn);
 
             df = new DecimalFormat(",###");
         }
 
         void initServiceView(ServiceDebit debit, int position) {
             title.setText(bill.get(position).getBillTitle());
+            pay.setOnClickListener(v -> {
+                if (!debit.isLoading()) {
+                    clickListener.onClick(bill.get(position), OnItemClickListener.Action.PAY);
+                } else
+                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            });
+
+            showDetail.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.SHOW_DETAIL));
+            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.DELETE));
+            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.EDIT));
+            retry.setOnClickListener(v -> reloadData(position));
+
             if (!debit.isLoading()) {
                 progressPID.setVisibility(View.GONE);
                 progressP.setVisibility(View.GONE);
                 progressT.setVisibility(View.GONE);
                 if (debit.isFail()) {
-                    failIcon.setVisibility(View.VISIBLE);
+                    retry.setVisibility(View.VISIBLE);
+                    pay.setVisibility(View.GONE);
+                    showDetail.setVisibility(View.GONE);
+                    /*failIcon.setVisibility(View.VISIBLE);
                     failTxt.setVisibility(View.VISIBLE);
                     failBg.setVisibility(View.VISIBLE);
                     failIcon.setOnClickListener(v -> reloadData(position));
                     failTxt.setOnClickListener(v -> reloadData(position));
-                    failBg.setOnClickListener(v -> reloadData(position));
+                    failBg.setOnClickListener(v -> reloadData(position));*/
                     return;
                 }
                 billPayID2.setVisibility(View.GONE);
@@ -155,34 +171,43 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                     }
                 }
             }
-
-            pay.setOnClickListener(v -> {
-                if (!debit.isLoading()) {
-                    clickListener.onClick(bill.get(position), OnItemClickListener.Action.PAY);
-                } else
-                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
-            });
-
-            showDetail.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.SHOW_DETAIL));
-
-            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.DELETE));
-
-            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.EDIT));
         }
 
         void initPhoneView(MobileDebit debit, int position) {
             title.setText(bill.get(position).getBillTitle());
+            pay.setOnClickListener(v -> {
+                if (!debit.isLoading()) {
+                    clickListener.onClick(bill.get(position), OnItemClickListener.Action.LAST_PAY);
+                } else
+                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            });
+            showDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!debit.isLoading()) {
+                        clickListener.onClick(bill.get(position), OnItemClickListener.Action.MID_PAY);
+                    } else
+                        Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                }
+            });
+            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.DELETE));
+            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.EDIT));
+            retry.setOnClickListener(v -> reloadData(position));
+
             if (!debit.isLoading()) {
                 progressPID.setVisibility(View.GONE);
                 progressP.setVisibility(View.GONE);
                 progressT.setVisibility(View.GONE);
                 if (debit.isFail()) {
-                    failIcon.setVisibility(View.VISIBLE);
+                    retry.setVisibility(View.VISIBLE);
+                    pay.setVisibility(View.GONE);
+                    showDetail.setVisibility(View.GONE);
+                    /*failIcon.setVisibility(View.VISIBLE);
                     failTxt.setVisibility(View.VISIBLE);
                     failBg.setVisibility(View.VISIBLE);
                     failIcon.setOnClickListener(v -> reloadData(position));
                     failTxt.setOnClickListener(v -> reloadData(position));
-                    failBg.setOnClickListener(v -> reloadData(position));
+                    failBg.setOnClickListener(v -> reloadData(position));*/
                     return;
                 }
                 // TODO: 6/1/2020 this 4 lines for pay ID
@@ -234,27 +259,6 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 else
                     logo.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_telecom_pec));
             }
-
-            pay.setOnClickListener(v -> {
-                if (!debit.isLoading()) {
-                    clickListener.onClick(bill.get(position), OnItemClickListener.Action.LAST_PAY);
-                } else
-                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
-            });
-
-            showDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!debit.isLoading()) {
-                        clickListener.onClick(bill.get(position), OnItemClickListener.Action.MID_PAY);
-                    } else
-                        Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.DELETE));
-
-            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Action.EDIT));
         }
 
         void initView(int position) {
@@ -269,9 +273,12 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
 
         void reloadData(int position) {
             clickListener.onClick(bill.get(position), OnItemClickListener.Action.RELOAD);
-            failIcon.setVisibility(View.GONE);
+            retry.setVisibility(View.GONE);
+            pay.setVisibility(View.VISIBLE);
+            showDetail.setVisibility(View.VISIBLE);
+            /*failIcon.setVisibility(View.GONE);
             failTxt.setVisibility(View.GONE);
-            failBg.setVisibility(View.GONE);
+            failBg.setVisibility(View.GONE);*/
             progressPID.setVisibility(View.VISIBLE);
             progressP.setVisibility(View.VISIBLE);
             progressT.setVisibility(View.VISIBLE);
