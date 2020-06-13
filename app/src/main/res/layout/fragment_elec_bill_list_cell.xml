@@ -393,7 +393,7 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
 
-                <View
+                <!--<View
                     android:id="@+id/loadBackground"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -439,10 +439,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/loadAgain"
                     app:layout_constraintEnd_toStartOf="@+id/loadAgain"
-                    app:layout_constraintHorizontal_chainStyle="packed" />
+                    app:layout_constraintHorizontal_chainStyle="packed" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reloadBtn"
+            style="@style/iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp48"
+            android:text="@string/retry"
+            android:textSize="@dimen/dp14"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginStart="@dimen/dp16"
+            app:layout_constraintWidth_percent="0.35"
+            app:layout_constraintEnd_toEndOf="@+id/cardHolder"
+            app:layout_constraintStart_toStartOf="@+id/cardHolder"
+            app:layout_constraintTop_toBottomOf="@+id/cardHolder"
+            app:layout_constraintBottom_toBottomOf="@id/cardHolder"
+            app:layout_constraintHorizontal_chainStyle="packed" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/Pay"

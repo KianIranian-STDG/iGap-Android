@@ -321,8 +321,8 @@ public class CallManager {
     }
 
     public void leaveCall() {
-        Log.d(TAG, "leave Call");
         if (isRinging || isCallActive) {
+            Log.d(TAG, "leave Call");
             new RequestSignalingLeave().signalingLeave();
             // call is declined in ringing mode
             isRinging = false;

@@ -82,7 +82,7 @@ public class WebSocketClient {
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     /*resetMainInfo();
                     reconnect(true);*/
-                    Log.wtf(this.getClass().getName(), "onError");
+                    Log.wtf(this.getClass().getName(), "onError" + cause.getMessage());
 
 
                     if (Config.FILE_LOG_ENABLE) {
