@@ -360,7 +360,6 @@
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp8"
                 android:background="@drawable/shape_payment_charge"
-                android:backgroundTint="@color/orange"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/dp4"

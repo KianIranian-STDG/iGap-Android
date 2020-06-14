@@ -81,7 +81,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private RadioButton radioButtonHamrah;
     private RadioButton radioButtonIrancell;
     private RadioButton radioButtonRightel;
-    private RecyclerView contactRecyclerView;
     private RecyclerView buyHistoryRecyclerView;
     private RecyclerView amountRecyclerView;
     private AppCompatTextView removeNumber;
@@ -91,6 +90,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private AppCompatEditText editTextNumber;
     private ContactNumber contactNumber;
     private FavoriteNumber historyNumber;
+    private LinearLayout toolbar;
+    private AppCompatImageView amountPlusImageView;
+    private AppCompatImageView amountMinesImageView;
     private Amount currentAmount;
     private ChargeType typeList;
     private FrameLayout progressBar;
@@ -141,8 +143,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             return;
 
         compositeDisposable = new CompositeDisposable();
+        chargeApi = new RetrofitFactory().getChargeRetrofit();
 
-        LinearLayout toolbar = view.findViewById(R.id.payment_toolbar);
+        toolbar = view.findViewById(R.id.payment_toolbar);
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
         radioButtonIrancell = view.findViewById(R.id.radio_irancell);
         radioButtonRightel = view.findViewById(R.id.radio_rightel);
@@ -150,8 +153,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameHistory = view.findViewById(R.id.frame_history);
         chosePriceTextView = view.findViewById(R.id.choose_amount);
         chargeTypeButton = view.findViewById(R.id.btn_charge_type);
-        AppCompatImageView amountPlusImageView = view.findViewById(R.id.add_amount);
-        AppCompatImageView amountMinesImageView = view.findViewById(R.id.low_amount);
+        amountPlusImageView = view.findViewById(R.id.add_amount);
+        amountMinesImageView = view.findViewById(R.id.low_amount);
         editTextNumber = view.findViewById(R.id.phoneNumberInput);
         enterBtn = view.findViewById(R.id.btn_pay);
         progressBar = view.findViewById(R.id.loadingView);
@@ -160,62 +163,9 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         frameRightel = view.findViewById(R.id.view14);
         linearWarning = view.findViewById(R.id.llWarning);
         removeNumber = view.findViewById(R.id.btnRemoveSearch);
-        chargeApi = new RetrofitFactory().getChargeRetrofit();
-
         editTextNumber.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
         chosePriceTextView.setText(currentAmount.getTextAmount());
 
-        switch (G.themeColor) {
-            case Theme.DARK:
-                frameHistory.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
-                frameContact.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
-                progressBar.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark));
-                break;
-            case Theme.AMBER:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_amber));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_amber));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_amber));
-                break;
-            case Theme.GREEN:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_green));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_green));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_green));
-                break;
-            case Theme.BLUE:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_blue));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_blue));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_blue));
-                break;
-            case Theme.PURPLE:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_purple));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_purple));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_purple));
-                break;
-            case Theme.PINK:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_pink));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_pink));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_pink));
-                break;
-            case Theme.RED:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_red));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_red));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_red));
-                break;
-            case Theme.ORANGE:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_orange));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_orange));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_orange));
-                break;
-            case Theme.GREY:
-                frameHamrah.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
-                frameIrancel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
-                frameRightel.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
-                break;
-
-        }
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
             if (userInfo != null && editTextNumber.getText() != null) {
@@ -244,6 +194,12 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                         }
                     }
                 }).getView());
+
+
+        setViewBackground(frameHamrah);
+        setViewBackground(frameIrancel);
+        setViewBackground(frameRightel);
+
 
         chargeTypeButton.setOnClickListener(v -> {
             if (currentOperator != null) {
@@ -282,49 +238,51 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                 HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
                     @Override
                     public void Allow() {
-                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
-                        View contactDialogView = dialog.getCustomView();
+                        ChargeContactNumberAdapter adapter = new ChargeContactNumberAdapter();
+                            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
+                            View contactDialogView = dialog.getCustomView();
+                            if (contactDialogView != null) {
+                                RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
+                                EditText editText = contactDialogView.findViewById(R.id.etSearch);
+                                setDialogBackground(contactRecyclerView);
+                                setDialogBackground(editText);
 
-                        if (contactDialogView != null) {
-                            contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
-                            EditText editText = contactDialogView.findViewById(R.id.etSearch);
-                            contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                            ChargeContactNumberAdapter adapter = new ChargeContactNumberAdapter();
-                            contactRecyclerView.setAdapter(adapter);
-                            adapter.setOnItemClickListener(position -> {
-                                contactPositionClicked = position;
-                                onContactItemClicked(adapter);
-                                dialog.dismiss();
-                            });
+                                contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                                contactRecyclerView.setAdapter(adapter);
+                                adapter.setOnItemClickListener(position -> {
+                                    contactPositionClicked = position;
+                                    onContactItemClicked(adapter);
+                                    dialog.dismiss();
+                                });
 
-                            ChargeContactNumberAdapter adapterContactNumber = (ChargeContactNumberAdapter) contactRecyclerView.getAdapter();
-                            if (adapterContactNumber != null) {
-                                new Contacts().getAllPhoneContactForPayment(adapterContactNumber::setContactNumbers);
+                                ChargeContactNumberAdapter adapterContactNumber = (ChargeContactNumberAdapter) contactRecyclerView.getAdapter();
+                                if (adapterContactNumber != null) {
+                                    new Contacts().getAllPhoneContactForPayment(adapterContactNumber::setContactNumbers);
+                                }
+                                if (textWatcher != null)
+                                    editText.removeTextChangedListener(textWatcher);
+
+                                textWatcher = new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                        if (adapterContactNumber != null)
+                                            adapterContactNumber.search(s.toString());
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable s) {
+
+                                    }
+                                };
+                                editText.addTextChangedListener(textWatcher);
+                                contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
                             }
-                            if (textWatcher != null)
-                                editText.removeTextChangedListener(textWatcher);
-
-                            textWatcher = new TextWatcher() {
-                                @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                                }
-
-                                @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                    if (adapterContactNumber != null)
-                                        adapterContactNumber.search(s.toString());
-                                }
-
-                                @Override
-                                public void afterTextChanged(Editable s) {
-
-                                }
-                            };
-                            editText.addTextChangedListener(textWatcher);
-                            contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
-                        }
-                        dialog.show();
+                            dialog.show();
                     }
 
                     @Override
@@ -354,8 +312,10 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                             if (historyDialogView != null) {
                                 buyHistoryRecyclerView = historyDialogView.findViewById(R.id.rv_history);
+                                setDialogBackground(buyHistoryRecyclerView);
                                 buyHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                                 ChargeHistoryNumberAdapter adapter = new ChargeHistoryNumberAdapter(response.body().getData());
+                                buyHistoryRecyclerView.setAdapter(adapter);
                                 adapter.setOnItemClickListener(position -> {
                                     historyItemClicked = position;
                                     onHistoryItemClicked();
@@ -363,7 +323,6 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                                     dialog.dismiss();
                                 });
 
-                                buyHistoryRecyclerView.setAdapter(adapter);
 
                                 historyDialogView.findViewById(R.id.iv_close2).setOnClickListener(v12 -> dialog.dismiss());
                             }
@@ -454,6 +413,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
             }
         });
     }
+
 
     private void toggleHistorySelected(boolean isSelectedFromHistory) {
         this.isSelectedFromHistory = isSelectedFromHistory;
@@ -854,6 +814,75 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
             compositeDisposable = null;
+        }
+    }
+
+    public void setViewBackground(View view) {
+        switch (G.themeColor) {
+            case Theme.DARK:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark));
+                frameHistory.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
+                frameContact.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
+                break;
+            case Theme.AMBER:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_amber));
+                break;
+            case Theme.GREEN:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_green));
+                break;
+            case Theme.BLUE:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_blue));
+                break;
+            case Theme.PURPLE:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_purple));
+                break;
+            case Theme.PINK:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_pink));
+                break;
+            case Theme.RED:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_red));
+                break;
+            case Theme.ORANGE:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_orange));
+                break;
+            case Theme.GREY:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
+                break;
+        }
+    }
+
+    public void setDialogBackground(View view) {
+        switch (G.themeColor) {
+            case Theme.DARK:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_dark));
+                break;
+            case Theme.DEFAULT:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
+                break;
+            case Theme.AMBER:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_amber));
+                break;
+            case Theme.GREEN:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_green));
+                break;
+            case Theme.BLUE:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_blue));
+                break;
+            case Theme.PURPLE:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_purple));
+                break;
+            case Theme.PINK:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_pink));
+                break;
+            case Theme.RED:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_red));
+                break;
+            case Theme.ORANGE:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_orange));
+                break;
+            case Theme.GREY:
+                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_gray));
+                break;
         }
     }
 }
