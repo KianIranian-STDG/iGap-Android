@@ -111,4 +111,26 @@ public final class AESCrypt {
         }
         return null;
     }
+
+    public static byte[] encryptUpload(final SecretKeySpec key, final byte[] message, boolean addIv) throws GeneralSecurityException {
+        try {
+            final Cipher cipher = Cipher.getInstance("AES/" + G.symmetricMethod + "/PKCS5Padding");
+            SecureRandom r = new SecureRandom();
+            byte[] ivBytes = new byte[G.ivSize];
+            r.nextBytes(ivBytes);
+            IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            cipher.init(Cipher.ENCRYPT_MODE, key, ivSpec);
+            byte[] encryptMessage = cipher.doFinal(message);
+            if (addIv) {
+                return HelperNumerical.appendByteArrays(ivBytes, encryptMessage);
+            } else {
+                return encryptMessage;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

@@ -15,6 +15,7 @@ import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
 import net.iGap.api.ShahkarApi;
 import net.iGap.api.StickerApi;
+import net.iGap.api.UploadsApi;
 import net.iGap.api.WeatherApi;
 
 import java.util.Collections;
@@ -171,6 +172,15 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(BillsApi.class);
+    }
+
+    public UploadsApi getUploadRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.UPLOAD_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(UploadsApi.class);
     }
 
     public MobileBankApi getMobileBankRetrofit() {
