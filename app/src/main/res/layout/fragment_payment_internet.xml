@@ -219,6 +219,7 @@
                     android:paddingStart="@dimen/dp1"
                     android:paddingTop="@dimen/dp6"
                     android:paddingEnd="@dimen/dp1"
+                    android:background="@drawable/selector_topup_operator"
                     android:paddingBottom="@dimen/dp6"
                     app:layout_constraintBottom_toBottomOf="@+id/view12"
                     app:layout_constraintEnd_toStartOf="@+id/view14"
